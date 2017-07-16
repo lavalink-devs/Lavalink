@@ -9,12 +9,18 @@
     <packaging>pom</packaging>
     <version>1.0</version>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
     <dependencies>
         <dependency>
             <!-- audio player for discord -->
             <groupId>com.sedmelluq</groupId>
             <artifactId>lavaplayer</artifactId>
-            <version>1.2.39</version>
+            <version>1.2.42</version>
         </dependency>
         <dependency>
             <groupId>com.github.Almighty-Alpaca</groupId>
@@ -118,8 +124,8 @@
                 <version>3.6.1</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <!-- generates a property file with some information about the git this was build from-->

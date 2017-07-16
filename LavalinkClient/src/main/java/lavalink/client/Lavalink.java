@@ -34,8 +34,8 @@ public class Lavalink {
         socket.send(json.toString());
     }
 
-    public void interceptJdaAudio(JDAImpl jda) {
-        jda.getClient().getHandlers().put("VOICE_SERVER_UPDATE", new VoiceServerUpdateInterceptor(this, jda));
+    public void interceptJdaAudio(JDA jda) {
+        ((JDAImpl) jda).getClient().getHandlers().put("VOICE_SERVER_UPDATE", new VoiceServerUpdateInterceptor(this, (JDAImpl) jda));
     }
 
     public void shutdown() {

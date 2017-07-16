@@ -21,7 +21,11 @@ public class LavalinkSocket extends WebSocketClient {
     LavalinkSocket(Lavalink lavalink, URI serverUri, Draft protocolDraft, Map<String, String> headers) {
         super(serverUri, protocolDraft, headers, TIMEOUT_MS);
         this.lavalink = lavalink;
-        this.connect();
+        try {
+            this.connectBlocking();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -32,6 +36,8 @@ public class LavalinkSocket extends WebSocketClient {
     @Override
     public void onMessage(String message) {
         JSONObject json = new JSONObject(message);
+
+        log.info(message);
 
         switch (json.getString("op")) {
             case "sendWS":

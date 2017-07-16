@@ -1,6 +1,6 @@
 package lavalink.server.io;
 
-import lavalink.server.Util;
+import lavalink.server.util.Util;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -25,14 +25,19 @@ public class SocketServer extends WebSocketServer {
 
     @Override
     public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
-        int shardCount = Integer.parseInt(clientHandshake.getFieldValue("Shard-Count"));
+        try {
+            int shardCount = Integer.parseInt(clientHandshake.getFieldValue("Num-Shards"));
 
-        if (clientHandshake.getFieldValue("Authorization").equals(password)) {
-            log.info("Connection opened from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
-            contextMap.put(webSocket, new SocketContext(webSocket, shardCount));
-        } else {
-            log.error("Authentication failed from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
-            webSocket.close(AUTHORIZATION_REJECTED, "Authorization rejected");
+            if (clientHandshake.getFieldValue("Authorization").equals(password)) {
+                log.info("Connection opened from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
+                contextMap.put(webSocket, new SocketContext(webSocket, shardCount));
+            } else {
+                log.error("Authentication failed from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
+                webSocket.close(AUTHORIZATION_REJECTED, "Authorization rejected");
+            }
+        } catch (Exception e) {
+            log.error("Error when opening websocket", e);
+            webSocket.close(INTERNAL_ERROR, e.getMessage());
         }
     }
 
@@ -46,16 +51,17 @@ public class SocketServer extends WebSocketServer {
     public void onMessage(WebSocket webSocket, String s) {
         JSONObject json = new JSONObject(s);
 
+        log.info(s);
+
         if (webSocket.isClosing()) {
             log.error("Ignoring closing websocket: " + webSocket.getRemoteSocketAddress().toString());
         }
 
         switch (json.getString("op")) {
             case "connect":
-                contextMap.get(webSocket).getCore(getShardId(webSocket, json)).getConnectionManager().queueAudioConnect(
-                        json.getString("guildId"),
-                        json.getString("channelId")
-                );
+                contextMap.get(webSocket).getCore(getShardId(webSocket, json))
+                        .getAudioManager(json.getString("guildId"))
+                        .openAudioConnection(json.getString("channelId"));
                 break;
             case "voiceUpdate":
                 contextMap.get(webSocket).getCore(getShardId(webSocket, json)).provideVoiceServerUpdate(

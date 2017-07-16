@@ -1,11 +1,12 @@
 package lavalink.server.io;
 
+import net.dv8tion.jda.CoreClient;
 import org.java_websocket.WebSocket;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CoreClientImpl implements net.dv8tion.jda.CoreClient {
+public class CoreClientImpl implements CoreClient {
 
     private static final Logger log = LoggerFactory.getLogger(CoreClientImpl.class);
 
@@ -19,6 +20,7 @@ public class CoreClientImpl implements net.dv8tion.jda.CoreClient {
 
     @Override
     public void sendWS(String message) {
+        log.info(message);
         JSONObject json = new JSONObject();
         json.put("op", "sendWS");
         json.put("shardId", shardId);
@@ -30,7 +32,7 @@ public class CoreClientImpl implements net.dv8tion.jda.CoreClient {
 
     @Override
     public boolean isConnected() {
-        return false;
+        return true;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package lavalink.server;
 
 import lavalink.server.io.SocketServer;
+import lavalink.server.player.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -29,6 +30,7 @@ public class Launcher {
         SpringApplication sa = new SpringApplication(Launcher.class);
         sa.setWebEnvironment(false);
         sa.run(args);
+        new Player(null, null);
     }
 
     @Bean

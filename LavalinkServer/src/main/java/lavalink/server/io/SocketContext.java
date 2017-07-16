@@ -17,10 +17,6 @@ public class SocketContext {
         this.shardCount = shardCount;
     }
 
-    public WebSocket getSocket() {
-        return socket;
-    }
-
     Core getCore(int shardId) {
         return cores.computeIfAbsent(shardId,
                 __ -> new Core(Launcher.config.getUserId(), new CoreClientImpl(socket, shardId))

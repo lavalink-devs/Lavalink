@@ -1,4 +1,4 @@
-package lavalink.server;
+package lavalink.server.util;
 
 public class Util {
 
