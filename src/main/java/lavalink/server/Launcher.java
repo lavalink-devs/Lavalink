@@ -16,10 +16,12 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class Launcher {
 
+    public static Config config;
     public final SocketServer socketServer;
 
     @Autowired
-    public Launcher(SocketServer socketServer) {
+    public Launcher(Config config, SocketServer socketServer) {
+        Launcher.config = config;
         this.socketServer = socketServer;
     }
 
