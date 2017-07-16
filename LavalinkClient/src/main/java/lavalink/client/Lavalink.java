@@ -21,6 +21,7 @@ public class Lavalink {
 
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", password);
+        headers.put("Num-Shards", Integer.toString(numShards));
         socket = new LavalinkSocket(this, serverUri, new Draft_6455(), headers);
     }
 
