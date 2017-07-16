@@ -7,6 +7,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class Config {
 
+    private final Sources sources = new Sources();
+
+    public Sources getSources() {
+        return sources;
+    }
+
     private String userId;
 
     public String getUserId() {
@@ -15,5 +21,63 @@ public class Config {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public static class Sources {
+
+        private boolean youtube = true;
+        private boolean bandcamp = true;
+        private boolean soundcloud = true;
+        private boolean twitch = true;
+        private boolean vimeo = true;
+        private boolean http = true;
+
+        public boolean isYoutube() {
+            return youtube;
+        }
+
+        public void setYoutube(boolean youtube) {
+            this.youtube = youtube;
+        }
+
+        public boolean isBandcamp() {
+            return bandcamp;
+        }
+
+        public void setBandcamp(boolean bandcamp) {
+            this.bandcamp = bandcamp;
+        }
+
+        public boolean isSoundcloud() {
+            return soundcloud;
+        }
+
+        public void setSoundcloud(boolean soundcloud) {
+            this.soundcloud = soundcloud;
+        }
+
+        public boolean isTwitch() {
+            return twitch;
+        }
+
+        public void setTwitch(boolean twitch) {
+            this.twitch = twitch;
+        }
+
+        public boolean isVimeo() {
+            return vimeo;
+        }
+
+        public void setVimeo(boolean vimeo) {
+            this.vimeo = vimeo;
+        }
+
+        public boolean isHttp() {
+            return http;
+        }
+
+        public void setHttp(boolean http) {
+            this.http = http;
+        }
     }
 }
