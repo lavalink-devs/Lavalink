@@ -118,6 +118,8 @@
                 <version>3.6.1</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <!-- generates a property file with some information about the git this was build from-->

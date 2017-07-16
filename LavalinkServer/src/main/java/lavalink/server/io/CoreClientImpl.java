@@ -1,6 +1,7 @@
 package lavalink.server.io;
 
 import org.java_websocket.WebSocket;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,15 +10,23 @@ public class CoreClientImpl implements net.dv8tion.jda.CoreClient {
     private static final Logger log = LoggerFactory.getLogger(CoreClientImpl.class);
 
     private final WebSocket socket;
+    private int shardId;
 
-    public CoreClientImpl(WebSocket socket) {
+    CoreClientImpl(WebSocket socket, int shardId) {
         this.socket = socket;
+        this.shardId = shardId;
     }
 
     @Override
-    public void sendWS(String s) {
-        log.info("SEND_WS " + s);
+    public void sendWS(String message) {
+        JSONObject json = new JSONObject();
+        json.put("op", "sendWS");
+        json.put("shardId", shardId);
+        json.put("message", message);
+        socket.send(json.toString());
     }
+
+    //TODO: Implement these
 
     @Override
     public boolean isConnected() {

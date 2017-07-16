@@ -1,5 +1,6 @@
 package lavalink.server.io;
 
+import lavalink.server.Util;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -24,9 +25,11 @@ public class SocketServer extends WebSocketServer {
 
     @Override
     public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
+        int shardCount = Integer.parseInt(clientHandshake.getFieldValue("Shard-Count"));
+
         if (clientHandshake.getFieldValue("Authorization").equals(password)) {
             log.info("Connection opened from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
-            contextMap.put(webSocket, new SocketContext(webSocket));
+            contextMap.put(webSocket, new SocketContext(webSocket, shardCount));
         } else {
             log.error("Authentication failed from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
             webSocket.close(AUTHORIZATION_REJECTED, "Authorization rejected");
@@ -49,19 +52,19 @@ public class SocketServer extends WebSocketServer {
 
         switch (json.getString("op")) {
             case "connect":
-                contextMap.get(webSocket).getCore().getConnectionManager().queueAudioConnect(
+                contextMap.get(webSocket).getCore(getShardId(webSocket, json)).getConnectionManager().queueAudioConnect(
                         json.getString("guildId"),
                         json.getString("channelId")
                 );
                 break;
             case "voiceUpdate":
-                contextMap.get(webSocket).getCore().provideVoiceServerUpdate(
+                contextMap.get(webSocket).getCore(getShardId(webSocket, json)).provideVoiceServerUpdate(
                         json.getString("sessionId"),
                         json.getJSONObject("event")
                 );
                 break;
             case "disconnect":
-                contextMap.get(webSocket).getCore().getAudioManager(json.getString("guildId"))
+                contextMap.get(webSocket).getCore(getShardId(webSocket, json)).getAudioManager(json.getString("guildId"))
                         .closeAudioConnection();
                 break;
         }
@@ -76,4 +79,10 @@ public class SocketServer extends WebSocketServer {
     public void onStart() {
         log.info("Started WS server");
     }
+
+    //Shorthand method
+    private int getShardId(WebSocket webSocket, JSONObject json) {
+        return Util.getShardFromSnowflake(json.getString("guildId"), contextMap.get(webSocket).getShardCount());
+    }
+
 }

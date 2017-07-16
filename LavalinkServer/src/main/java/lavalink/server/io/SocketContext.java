@@ -4,28 +4,30 @@ import lavalink.server.Launcher;
 import net.dv8tion.jda.Core;
 import org.java_websocket.WebSocket;
 
+import java.util.HashMap;
+
 public class SocketContext {
 
     private final WebSocket socket;
-    private final CoreClientImpl coreClient;
-    private final Core core;
+    private int shardCount;
+    private final HashMap<Integer, Core> cores = new HashMap<>();
 
-    SocketContext(WebSocket socket) {
+    SocketContext(WebSocket socket, int shardCount) {
         this.socket = socket;
-        this.coreClient = new CoreClientImpl(socket);
-        this.core = new Core(Launcher.config.getUserId(), coreClient);
+        this.shardCount = shardCount;
     }
 
     public WebSocket getSocket() {
         return socket;
     }
 
-    public CoreClientImpl getCoreClient() {
-        return coreClient;
+    Core getCore(int shardId) {
+        return cores.computeIfAbsent(shardId,
+                __ -> new Core(Launcher.config.getUserId(), new CoreClientImpl(socket, shardId))
+        );
     }
 
-    public Core getCore() {
-        return core;
+    public int getShardCount() {
+        return shardCount;
     }
-
 }
