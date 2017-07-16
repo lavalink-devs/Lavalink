@@ -7,6 +7,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static lavalink.server.io.WSCodes.*;
+
 public class SocketServer extends WebSocketServer {
 
     private static final Logger log = LoggerFactory.getLogger(SocketServer.class);
@@ -19,9 +21,10 @@ public class SocketServer extends WebSocketServer {
     @Override
     public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
         if (clientHandshake.getFieldValue("Authorization").equals(password)) {
-            log.info("Connection opened from " + webSocket.getRemoteSocketAddress().toString() + " with protocol " + webSocket.getDraft());
+            log.info("Connection opened from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
         } else {
-            log.error("Authentication failed from " + webSocket.getRemoteSocketAddress().toString() + " with protocol " + webSocket.getDraft());
+            log.error("Authentication failed from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
+            webSocket.close(AUTHORIZATION_REJECTED, "Authorization rejected");
         }
     }
 
@@ -33,6 +36,10 @@ public class SocketServer extends WebSocketServer {
     @Override
     public void onMessage(WebSocket webSocket, String s) {
         JSONObject json = new JSONObject(s);
+
+        if (webSocket.isClosing()) {
+            log.error("Ignoring closing websocket: " + webSocket.getRemoteSocketAddress().toString());
+        }
 
         switch (json.getString("op")) {
             case "create":
