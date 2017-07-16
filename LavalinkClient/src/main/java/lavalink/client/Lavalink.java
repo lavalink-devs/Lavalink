@@ -2,6 +2,7 @@ package lavalink.client;
 
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import org.java_websocket.drafts.Draft_6455;
 import org.json.JSONObject;
 
@@ -33,8 +34,16 @@ public class Lavalink {
         socket.send(json.toString());
     }
 
+    public void interceptJdaAudio(JDAImpl jda) {
+        jda.getClient().getHandlers().put("VOICE_SERVER_UPDATE", new VoiceServerUpdateInterceptor(this, jda));
+    }
+
     public void shutdown() {
         socket.close();
+    }
+
+    LavalinkSocket getSocket() {
+        return socket;
     }
 
     JDA getShard(int num) {
