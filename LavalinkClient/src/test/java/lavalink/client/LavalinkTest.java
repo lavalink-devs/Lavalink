@@ -1,13 +1,14 @@
 package lavalink.client;
 
+import lavalink.client.io.Lavalink;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.utils.SimpleLog;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +19,11 @@ class LavalinkTest {
 
     private static final Logger log = LoggerFactory.getLogger(LavalinkTest.class);
 
-    JDA jda = null;
-    Lavalink lavalink = null;
+    private static JDA jda = null;
+    private static Lavalink lavalink = null;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         //Attach log adapter
         SimpleLog.addListener(new SimpleLogToSLF4JAdapter());
 
@@ -41,8 +42,8 @@ class LavalinkTest {
         }
     }
 
-    @AfterEach
-    void tearDown() {
+    @AfterAll
+    static void tearDown() {
         lavalink.shutdown();
         jda.shutdown();
     }
