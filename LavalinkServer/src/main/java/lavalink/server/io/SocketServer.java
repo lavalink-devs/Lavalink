@@ -108,12 +108,19 @@ public class SocketServer extends WebSocketServer {
             case "stop":
                 Player player = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
                 player.stop();
-                sendPlayerUpdate(webSocket, player);
                 break;
             case "pause":
                 Player player2 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
                 player2.setPause(json.getBoolean("pause"));
                 sendPlayerUpdate(webSocket, player2);
+                break;
+            case "seek":
+                Player player3 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
+                player3.seekTo(json.getLong("position"));
+                break;
+            case "volume":
+                Player player4 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
+                player4.setVolume(json.getInt("volume"));
                 break;
 
             default:

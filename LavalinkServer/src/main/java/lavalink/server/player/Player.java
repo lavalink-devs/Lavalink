@@ -70,6 +70,14 @@ public class Player implements AudioSendHandler {
         return guildId;
     }
 
+    public void seekTo(long position) {
+        player.getPlayingTrack().setPosition(position);
+    }
+
+    public void setVolume(int volume) {
+        player.setVolume(volume);
+    }
+
     public JSONObject getState() {
         JSONObject json = new JSONObject();
 

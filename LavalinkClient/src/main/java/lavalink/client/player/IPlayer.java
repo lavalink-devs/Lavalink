@@ -17,11 +17,9 @@ public interface IPlayer {
 
     long getTrackPosition();
 
-    long getTrackDuration();
-
     void seekTo(long position);
 
-    void setVolume(float volume);
+    void setVolume(int volume);
 
     void addListener(IPlayerEventListener listener);
 
