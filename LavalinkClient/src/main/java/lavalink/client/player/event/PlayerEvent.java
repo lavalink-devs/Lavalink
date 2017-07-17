@@ -9,4 +9,8 @@ public abstract class PlayerEvent {
     public PlayerEvent(IPlayer player) {
         this.player = player;
     }
+
+    public IPlayer getPlayer() {
+        return player;
+    }
 }

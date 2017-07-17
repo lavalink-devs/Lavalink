@@ -1,6 +1,6 @@
 package lavalink.client.player.event;
 
-public interface IPlayerListener {
+public interface IPlayerEventListener {
 
     void onEvent(PlayerEvent event);
 
