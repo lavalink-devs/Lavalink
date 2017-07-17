@@ -34,4 +34,8 @@ public class SocketContext {
     public int getShardCount() {
         return shardCount;
     }
+
+    public WebSocket getSocket() {
+        return socket;
+    }
 }

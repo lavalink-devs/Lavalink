@@ -51,6 +51,7 @@ public class Player implements AudioSendHandler {
         this.socketContext = socketContext;
         this.guildId = guildId;
         this.player = PLAYER_MANAGER.createPlayer();
+        this.player.addListener(new EventEmitter(this));
     }
 
     public void play(AudioTrack track) {
@@ -88,6 +89,10 @@ public class Player implements AudioSendHandler {
         }
 
         return json;
+    }
+
+    SocketContext getSocket() {
+        return socketContext;
     }
 
     @Override

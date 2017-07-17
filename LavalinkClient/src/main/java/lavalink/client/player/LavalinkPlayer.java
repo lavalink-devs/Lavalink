@@ -31,7 +31,6 @@ public class LavalinkPlayer implements IPlayer {
         this.guildId = guildId;
     }
 
-
     @Override
     public AudioTrack getPlayingTrack() {
         return null; //TODO
