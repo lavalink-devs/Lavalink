@@ -122,7 +122,6 @@ public class SocketServer extends WebSocketServer {
                 Player player4 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
                 player4.setVolume(json.getInt("volume"));
                 break;
-
             default:
                 log.warn("Unexpected operation: " + json.getString("op"));
                 break;
@@ -139,7 +138,7 @@ public class SocketServer extends WebSocketServer {
         log.info("Started WS server");
     }
 
-    private void sendPlayerUpdate(WebSocket webSocket, Player player) {
+    public static void sendPlayerUpdate(WebSocket webSocket, Player player) {
         JSONObject json = new JSONObject();
         json.put("op", "playerUpdate");
         json.put("guildId", player.getGuildId());

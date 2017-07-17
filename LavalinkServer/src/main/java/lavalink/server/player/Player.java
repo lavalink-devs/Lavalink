@@ -14,13 +14,10 @@ import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import lavalink.server.Config;
 import lavalink.server.Launcher;
 import lavalink.server.io.SocketContext;
-import lavalink.server.util.Util;
 import net.dv8tion.jda.audio.AudioSendHandler;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 
 public class Player implements AudioSendHandler {
 
@@ -81,20 +78,8 @@ public class Player implements AudioSendHandler {
     public JSONObject getState() {
         JSONObject json = new JSONObject();
 
-        try {
-            if (player.getPlayingTrack() != null ){
-                json.put("playingTrack", Util.toMessage(player.getPlayingTrack()));
-                json.put("position", player.getPlayingTrack().getPosition());
-                json.put("duration", player.getPlayingTrack().getDuration());
-            } else {
-                json.put("playingTrack", JSONObject.NULL);
-            }
-            json.put("paused", player.isPaused());
-            json.put("time", System.currentTimeMillis());
-
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
+        json.put("position", player.getPlayingTrack().getPosition());
+        json.put("time", System.currentTimeMillis());
 
         return json;
     }

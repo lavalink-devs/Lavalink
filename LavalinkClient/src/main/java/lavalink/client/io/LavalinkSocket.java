@@ -98,6 +98,10 @@ public class LavalinkSocket extends WebSocketClient {
                 res2.put("connected", jda3.getClient().isConnected());
                 send(res2.toString());
                 break;
+            case "playerUpdate":
+                ((LavalinkPlayer) lavalink.getPlayer(json.getString("guildId")))
+                        .provideState(json.getJSONObject("state"));
+                break;
             case "event":
                 try {
                     handleEvent(json);

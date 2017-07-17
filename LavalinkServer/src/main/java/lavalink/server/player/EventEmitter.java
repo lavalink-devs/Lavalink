@@ -5,6 +5,7 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import lavalink.server.io.SocketServer;
 import lavalink.server.util.Util;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -73,6 +74,7 @@ public class EventEmitter extends AudioEventAdapter {
         out.put("thresholdMs", thresholdMs);
 
         linkPlayer.getSocket().getSocket().send(out.toString());
+        SocketServer.sendPlayerUpdate(linkPlayer.getSocket().getSocket(), linkPlayer);
     }
 
 }

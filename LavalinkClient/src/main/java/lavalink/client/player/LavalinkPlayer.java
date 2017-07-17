@@ -121,6 +121,11 @@ public class LavalinkPlayer implements IPlayer {
         this.volume = volume;
     }
 
+    public void provideState(JSONObject json) {
+        updateTime = json.getLong("time");
+        position = json.getLong("position");
+    }
+
     @Override
     public void addListener(IPlayerEventListener listener) {
         listeners.add(listener);
