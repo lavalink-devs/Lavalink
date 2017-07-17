@@ -28,7 +28,7 @@ public class Launcher {
 
     public static void main(String[] args) {
         SpringApplication sa = new SpringApplication(Launcher.class);
-        sa.setWebEnvironment(false);
+        sa.setWebEnvironment(true);
         sa.run(args);
         new Player(null, null);
     }
