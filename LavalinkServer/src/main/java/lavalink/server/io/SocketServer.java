@@ -1,5 +1,6 @@
 package lavalink.server.io;
 
+import lavalink.server.player.Player;
 import lavalink.server.util.Util;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -8,10 +9,12 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static lavalink.server.io.WSCodes.*;
+import static lavalink.server.io.WSCodes.AUTHORIZATION_REJECTED;
+import static lavalink.server.io.WSCodes.INTERNAL_ERROR;
 
 public class SocketServer extends WebSocketServer {
 
@@ -58,6 +61,7 @@ public class SocketServer extends WebSocketServer {
         }
 
         switch (json.getString("op")) {
+            /* JDAA ops */
             case "connect":
                 contextMap.get(webSocket).getCore(getShardId(webSocket, json))
                         .getAudioManager(json.getString("guildId"))
@@ -73,6 +77,27 @@ public class SocketServer extends WebSocketServer {
                 contextMap.get(webSocket).getCore(getShardId(webSocket, json)).getAudioManager(json.getString("guildId"))
                         .closeAudioConnection();
                 break;
+
+            /* Player ops */
+            case "play":
+                try {
+                    Player player = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
+                    player.play(Util.toAudioTrack(json.getString("track")));
+                    sendPlayerUpdate(webSocket, player);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "stop":
+                Player player = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
+                player.stop();
+                sendPlayerUpdate(webSocket, player);
+                break;
+            case "pause":
+                Player player2 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
+                player2.setPause(json.getBoolean("pause"));
+                sendPlayerUpdate(webSocket, player2);
+                break;
         }
     }
 
@@ -84,6 +109,15 @@ public class SocketServer extends WebSocketServer {
     @Override
     public void onStart() {
         log.info("Started WS server");
+    }
+
+    private void sendPlayerUpdate(WebSocket webSocket, Player player) {
+        JSONObject json = new JSONObject();
+        json.put("op", "playerUpdate");
+        json.put("guildId", player.getGuildId());
+        json.put("state", player.getState());
+
+        webSocket.send(json.toString());
     }
 
     //Shorthand method
