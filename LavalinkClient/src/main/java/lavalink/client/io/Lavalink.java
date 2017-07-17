@@ -66,4 +66,8 @@ public class Lavalink {
     JDA getShard(int num) {
         return jdaProvider.apply(num);
     }
+
+    public int getNumShards() {
+        return numShards;
+    }
 }

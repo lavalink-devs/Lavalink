@@ -46,4 +46,8 @@ public class LavalinkUtil {
         return new String(Base64.encodeBytesToBytes(baos.toByteArray()));
     }
 
+    public static int getShardFromSnowflake(String snowflake, int numShards) {
+        return (int) ((Long.parseLong(snowflake) >> 22) % numShards);
+    }
+
 }

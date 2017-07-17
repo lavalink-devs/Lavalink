@@ -77,6 +77,18 @@ public class SocketServer extends WebSocketServer {
                 contextMap.get(webSocket).getCore(getShardId(webSocket, json)).getAudioManager(json.getString("guildId"))
                         .closeAudioConnection();
                 break;
+            case "validationRes":
+                ((CoreClientImpl) contextMap.get(webSocket).getCore(getShardId(webSocket, json)).getClient()).provideValidation(
+                        json.getString("guildId"),
+                        json.optString("channelId"),
+                        json.getBoolean("valid")
+                );
+                break;
+            case "isConnectedRes":
+                ((CoreClientImpl) contextMap.get(webSocket).getCore(json.getInt("shardId")).getClient()).provideIsConnected(
+                        json.getBoolean("connected")
+                );
+                break;
 
             /* Player ops */
             case "play":
@@ -102,6 +114,10 @@ public class SocketServer extends WebSocketServer {
                 Player player2 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
                 player2.setPause(json.getBoolean("pause"));
                 sendPlayerUpdate(webSocket, player2);
+                break;
+
+            default:
+                log.warn("Unexpected operation: " + json.getString("op"));
                 break;
         }
     }
