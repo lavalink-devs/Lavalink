@@ -83,6 +83,11 @@ public class SocketServer extends WebSocketServer {
                 try {
                     Player player = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
                     player.play(Util.toAudioTrack(json.getString("track")));
+
+                    SocketContext context = contextMap.get(webSocket);
+
+                    context.getCore(getShardId(webSocket, json)).getAudioManager(json.getString("guildId"))
+                            .setSendingHandler(context.getPlayer(json.getString("guildId")));
                     sendPlayerUpdate(webSocket, player);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
