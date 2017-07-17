@@ -1,19 +1,27 @@
 package lavalink.client;
 
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import lavalink.client.io.Lavalink;
+import lavalink.client.player.IPlayer;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.utils.SimpleLog;
+import org.json.JSONArray;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 class LavalinkTest {
 
@@ -61,8 +69,50 @@ class LavalinkTest {
 
         log.info("Disconnecting from " + vc);
         lavalink.closeVoiceConnection(vc);
+    }
 
-        Assertions.assertTrue(true);
+    private List<AudioTrack> loadAudioTracks(String identifier) {
+        try {
+            JSONArray trackData = Unirest.get("http://localhost:2333/loadtracks?identifier=" + URLEncoder.encode(identifier, "UTF-8"))
+                    .header("Authorization", "youshallnotpass")
+                    .asJson()
+                    .getBody()
+                    .getObject()
+                    .getJSONArray("tracks");
+
+            ArrayList<AudioTrack> list = new ArrayList<>();
+            trackData.forEach(o -> {
+                try {
+                    list.add(LavalinkUtil.toAudioTrack((String) o));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            return list;
+        } catch (UnirestException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void vcPlayTest() {
+        VoiceChannel vc = jda.getVoiceChannelById(System.getenv("TEST_VOICE_CHANNEL"));
+        lavalink.openVoiceConnection(vc);
+        log.info("Connecting to " + vc);
+
+        AudioTrack track = loadAudioTracks("aGOFOP2BIhI").get(0);
+        IPlayer player = lavalink.createPlayer(vc.getGuild().getId());
+        player.playTrack(track);
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        log.info("Disconnecting from " + vc);
+        lavalink.closeVoiceConnection(vc);
     }
 
 }
