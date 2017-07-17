@@ -10,17 +10,19 @@ import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceMan
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import lavalink.server.Config;
 import lavalink.server.Launcher;
 import lavalink.server.io.SocketContext;
 import lavalink.server.util.Util;
+import net.dv8tion.jda.audio.AudioSendHandler;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class Player {
+public class Player implements AudioSendHandler {
 
     private static final Logger log = LoggerFactory.getLogger(Player.class);
 
@@ -41,11 +43,14 @@ public class Player {
 
     private final SocketContext socketContext;
     private final String guildId;
-    private final AudioPlayer player = PLAYER_MANAGER.createPlayer();
+    private final AudioPlayer player;
+    private AudioLossCounter audioLossCounter = new AudioLossCounter();
+    private AudioFrame lastFrame = null;
 
     public Player(SocketContext socketContext, String guildId) {
         this.socketContext = socketContext;
         this.guildId = guildId;
+        this.player = PLAYER_MANAGER.createPlayer();
     }
 
     public void play(AudioTrack track) {
@@ -83,6 +88,33 @@ public class Player {
         }
 
         return json;
+    }
+
+    @Override
+    public boolean canProvide() {
+        lastFrame = player.provide();
+
+        if(lastFrame == null) {
+            audioLossCounter.onLoss();
+            return false;
+        } else {
+            audioLossCounter.onSuccess();
+            return true;
+        }
+    }
+
+    @Override
+    public byte[] provide20MsAudio() {
+        return lastFrame.data;
+    }
+
+    @Override
+    public boolean isOpus() {
+        return true;
+    }
+
+    public AudioLossCounter getAudioLossCounter() {
+        return audioLossCounter;
     }
 
 }
