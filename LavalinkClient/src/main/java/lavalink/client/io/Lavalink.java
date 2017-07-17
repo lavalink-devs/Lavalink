@@ -17,6 +17,7 @@ public class Lavalink {
     private final LavalinkSocket socket;
     private final int numShards;
     private final Function<Integer, JDA> jdaProvider;
+    private final HashMap<String, String> connectedChannels = new HashMap<>(); // Key is guild id
 
     public Lavalink(URI serverUri, String password, int numShards, Function<Integer, JDA> jdaProvider) {
         this.numShards = numShards;
@@ -34,6 +35,16 @@ public class Lavalink {
         json.put("guildId", channel.getGuild().getId());
         json.put("channelId", channel.getId());
         socket.send(json.toString());
+        connectedChannels.put(channel.getGuild().getId(), channel.getId());
+    }
+
+    public void closeVoiceConnection(VoiceChannel channel) {
+        JSONObject json = new JSONObject();
+        json.put("op", "disconnect");
+        json.put("guildId", channel.getGuild().getId());
+        json.put("channelId", channel.getId());
+        socket.send(json.toString());
+        connectedChannels.remove(channel.getGuild().getId());
     }
 
     public void interceptJdaAudio(JDA jda) {

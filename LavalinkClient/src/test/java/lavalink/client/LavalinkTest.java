@@ -59,6 +59,9 @@ class LavalinkTest {
             throw new RuntimeException(e);
         }
 
+        log.info("Disconnecting from " + vc);
+        lavalink.closeVoiceConnection(vc);
+
         Assertions.assertTrue(true);
     }
 
