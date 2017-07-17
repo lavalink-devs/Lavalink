@@ -1,17 +1,21 @@
 package lavalink.client.player;
 
+import com.sedmelluq.discord.lavaplayer.player.event.AudioEventListener;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import lavalink.client.LavalinkUtil;
 import lavalink.client.io.LavalinkSocket;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LavalinkPlayer implements IPlayer {
 
     private JSONObject audioState = null;
     private final LavalinkSocket socket;
     private final String guildId;
+    private List<AudioEventListener> listeners = new ArrayList<>();
 
     public LavalinkPlayer(LavalinkSocket socket, String guildId) {
         this.socket = socket;
@@ -54,4 +58,44 @@ public class LavalinkPlayer implements IPlayer {
         json.put("pause", b);
         socket.send(json.toString());
     }
+
+    @Override
+    public boolean isPaused() {
+        return false;
+    }
+
+    @Override
+    public long getTrackPosition() {
+        return 0;
+    }
+
+    @Override
+    public long getTrackDuration() {
+        return 0;
+    }
+
+    @Override
+    public void seekTo(long position) {
+
+    }
+
+    @Override
+    public void setVolume(float volume) {
+
+    }
+
+    @Override
+    public void addListener(AudioEventListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
+    public void removeListener(AudioEventListener listener) {
+        listeners.remove(listener);
+    }
+
+    public void providePlayerState(JSONObject state) {
+
+    }
+
 }
