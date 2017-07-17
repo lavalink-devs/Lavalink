@@ -1,6 +1,12 @@
 package lavalink.client.io;
 
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import lavalink.client.LavalinkUtil;
+import lavalink.client.player.LavalinkPlayer;
+import lavalink.client.player.event.PlayerEvent;
+import lavalink.client.player.event.TrackEndEvent;
+import lavalink.client.player.event.TrackExceptionEvent;
+import lavalink.client.player.event.TrackStuckEvent;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
@@ -14,6 +20,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 
@@ -91,10 +98,57 @@ public class LavalinkSocket extends WebSocketClient {
                 res2.put("connected", jda3.getClient().isConnected());
                 send(res2.toString());
                 break;
+            case "event":
+                try {
+                    handleEvent(json);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
             default:
                 log.warn("Unexpected operation: " + json.getString("op"));
                 break;
         }
+    }
+
+    /**
+     * Implementation details:
+     * The only events extending {@link lavalink.client.player.event.PlayerEvent} produced by the remote server are these:
+     * 1. TrackEndEvent
+     * 2. TrackExceptionEvent
+     * 3. TrackStuckEvent
+     * <p>
+     * The remaining are caused by the client
+     */
+    private void handleEvent(JSONObject json) throws IOException {
+        LavalinkPlayer player = (LavalinkPlayer) lavalink.getPlayer(json.getString("guildId"));
+        PlayerEvent event = null;
+
+        switch (json.getString("type")) {
+            case "TrackEndEvent":
+                event = new TrackEndEvent(player,
+                        LavalinkUtil.toAudioTrack(json.getString("track")),
+                        AudioTrackEndReason.valueOf(json.getString("reason"))
+                );
+                break;
+            case "TrackExceptionEvent":
+                event = new TrackExceptionEvent(player,
+                        LavalinkUtil.toAudioTrack(json.getString("track")),
+                        new RemoteTrackException(json.getString("error"))
+                );
+                break;
+            case "TrackStuckEvent":
+                event = new TrackStuckEvent(player,
+                        LavalinkUtil.toAudioTrack(json.getString("track")),
+                        json.getLong("thresholdMs")
+                );
+                break;
+            default:
+                log.warn("Unexpected event type: " + json.getString("type"));
+                break;
+        }
+
+        if (event != null) player.emitEvent(event);
     }
 
     @Override

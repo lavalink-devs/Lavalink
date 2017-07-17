@@ -1,7 +1,7 @@
 package lavalink.client.player;
 
-import com.sedmelluq.discord.lavaplayer.player.event.AudioEventListener;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import lavalink.client.player.event.IPlayerEventListener;
 
 public interface IPlayer {
 
@@ -23,8 +23,8 @@ public interface IPlayer {
 
     void setVolume(float volume);
 
-    void addListener(AudioEventListener listener);
+    void addListener(IPlayerEventListener listener);
 
-    void removeListener(AudioEventListener listener);
+    void removeListener(IPlayerEventListener listener);
 
 }

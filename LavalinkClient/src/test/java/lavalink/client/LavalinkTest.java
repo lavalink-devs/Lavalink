@@ -102,7 +102,7 @@ class LavalinkTest {
         log.info("Connecting to " + vc);
 
         AudioTrack track = loadAudioTracks("aGOFOP2BIhI").get(0);
-        IPlayer player = lavalink.createPlayer(vc.getGuild().getId());
+        IPlayer player = lavalink.getPlayer(vc.getGuild().getId());
         player.playTrack(track);
 
         try {

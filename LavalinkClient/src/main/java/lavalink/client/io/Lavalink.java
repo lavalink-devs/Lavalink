@@ -18,6 +18,7 @@ public class Lavalink {
     private final int numShards;
     private final Function<Integer, JDA> jdaProvider;
     private final HashMap<String, String> connectedChannels = new HashMap<>(); // Key is guild id
+    private final HashMap<String, LavalinkPlayer> players = new HashMap<>(); // Key is guild id
 
     public Lavalink(URI serverUri, String password, int numShards, Function<Integer, JDA> jdaProvider) {
         this.numShards = numShards;
@@ -51,8 +52,8 @@ public class Lavalink {
         ((JDAImpl) jda).getClient().getHandlers().put("VOICE_SERVER_UPDATE", new VoiceServerUpdateInterceptor(this, (JDAImpl) jda));
     }
 
-    public IPlayer createPlayer(String guildId) {
-        return new LavalinkPlayer(socket, guildId);
+    public IPlayer getPlayer(String guildId) {
+        return players.computeIfAbsent(guildId, __ -> new LavalinkPlayer(socket, guildId));
     }
 
     public void shutdown() {
