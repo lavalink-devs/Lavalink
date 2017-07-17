@@ -1,5 +1,7 @@
-package lavalink.client;
+package lavalink.client.io;
 
+import lavalink.client.player.IPlayer;
+import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
@@ -36,6 +38,10 @@ public class Lavalink {
 
     public void interceptJdaAudio(JDA jda) {
         ((JDAImpl) jda).getClient().getHandlers().put("VOICE_SERVER_UPDATE", new VoiceServerUpdateInterceptor(this, (JDAImpl) jda));
+    }
+
+    public IPlayer createPlayer(String guildId) {
+        return new LavalinkPlayer(socket, guildId);
     }
 
     public void shutdown() {
