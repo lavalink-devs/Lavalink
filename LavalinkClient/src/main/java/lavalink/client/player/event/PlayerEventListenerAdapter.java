@@ -55,7 +55,6 @@ public class PlayerEventListenerAdapter implements IPlayerEventListener {
         // Adapter dummy method
     }
 
-    //TODO
 
     @Override
     public void onEvent(PlayerEvent event) {
@@ -64,13 +63,13 @@ public class PlayerEventListenerAdapter implements IPlayerEventListener {
         } else if (event instanceof PlayerResumeEvent) {
             onPlayerResume(event.getPlayer());
         } else if (event instanceof TrackStartEvent) {
-            onTrackStart(event.getPlayer(), null);
+            onTrackStart(event.getPlayer(), ((TrackStartEvent) event).getTrack());
         } else if (event instanceof TrackEndEvent) {
-            onTrackEnd(event.getPlayer(), null, null);
+            onTrackEnd(event.getPlayer(), ((TrackEndEvent) event).getTrack(), ((TrackEndEvent) event).getReason());
         } else if (event instanceof TrackExceptionEvent) {
-            onTrackException(event.getPlayer(), null, null);
+            onTrackException(event.getPlayer(), ((TrackExceptionEvent) event).getTrack(), ((TrackExceptionEvent) event).getException());
         } else if (event instanceof TrackStuckEvent) {
-            onTrackStuck(event.getPlayer(), null, -1);
+            onTrackStuck(event.getPlayer(), ((TrackStuckEvent) event).getTrack(), ((TrackStuckEvent) event).getThresholdMs());
         }
     }
 }
