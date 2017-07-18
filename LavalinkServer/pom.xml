@@ -44,6 +44,12 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.25</version>
         </dependency>
+        <dependency>
+            <!-- CPU monitoring -->
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-dist</artifactId>
+            <version>3.4.3</version>
+        </dependency>
 
         <!-- Spring for dependency injection -->
         <dependency>

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class Launcher {
 
+    public final static long startTime = System.currentTimeMillis();
     public static Config config;
     public final SocketServer socketServer;
 

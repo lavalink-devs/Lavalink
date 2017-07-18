@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class SocketContext {
 
@@ -20,10 +23,14 @@ public class SocketContext {
     private int shardCount;
     private final HashMap<Integer, Core> cores = new HashMap<>();
     private final HashMap<String, Player> players = new HashMap<>();
+    private ScheduledExecutorService statsExecutor;
 
     SocketContext(WebSocket socket, int shardCount) {
         this.socket = socket;
         this.shardCount = shardCount;
+
+        statsExecutor = Executors.newSingleThreadScheduledExecutor();
+        statsExecutor.scheduleAtFixedRate(new StatsTask(this), 0, 1, TimeUnit.MINUTES);
     }
 
     Core getCore(int shardId) {
@@ -46,6 +53,10 @@ public class SocketContext {
         return socket;
     }
 
+    public HashMap<String, Player> getPlayers() {
+        return players;
+    }
+
     public List<Player> getPlayingPlayers() {
         List<Player> newList = new LinkedList<>();
         players.values().forEach(player -> {
@@ -56,6 +67,7 @@ public class SocketContext {
 
     void shutdown() {
         log.info("Shutting down " + cores.size() + " cores and " + getPlayingPlayers().size() + " playing players.");
+        statsExecutor.shutdown();
         players.keySet().forEach(s -> {
             Core core = cores.get(Util.getShardFromSnowflake(s, shardCount));
             core.getAudioManager(s).closeAudioConnection();
