@@ -34,6 +34,15 @@ class LavalinkTest {
 
     private static JDA jda = null;
     private static Lavalink lavalink = null;
+    private static final String[] BILL_WURTZ_JINGLES = {
+            "https://www.youtube.com/watch?v=GtwVQbUSasw",
+            "https://www.youtube.com/watch?v=eNxMkZcySKs",
+            "https://www.youtube.com/watch?v=4q1Zs3vbX8M",
+            "https://www.youtube.com/watch?v=sqPTS16mi9M",
+            "https://www.youtube.com/watch?v=dWqPb16Ox-0",
+            "https://www.youtube.com/watch?v=mxyPtMON4IM",
+            "https://www.youtube.com/watch?v=DLutlHlw4C0"
+    };
 
     @BeforeAll
     static void setUp() {
@@ -118,6 +127,7 @@ class LavalinkTest {
         latch.await(5, TimeUnit.SECONDS);
         lavalink.closeVoiceConnection(vc);
         player.removeListener(listener);
+        player.stopTrack();
 
         Assertions.assertEquals(0, latch.getCount());
     }
@@ -145,6 +155,7 @@ class LavalinkTest {
             public void onTrackStart(IPlayer player, AudioTrack track) {
                 player.stopTrack();
             }
+
             @Override
             public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
                 if (endReason == AudioTrackEndReason.STOPPED) {
@@ -160,6 +171,39 @@ class LavalinkTest {
         latch.await(5, TimeUnit.SECONDS);
         lavalink.closeVoiceConnection(vc);
         player.removeListener(listener);
+        player.stopTrack();
+
+        Assertions.assertEquals(0, latch.getCount());
+    }
+
+    @Test
+    void testPlayback() throws InterruptedException {
+        VoiceChannel vc = jda.getVoiceChannelById(System.getenv("TEST_VOICE_CHANNEL"));
+        lavalink.openVoiceConnection(vc);
+
+        IPlayer player = lavalink.getPlayer(vc.getGuild().getId());
+        CountDownLatch latch = new CountDownLatch(1);
+
+        PlayerEventListenerAdapter listener = new PlayerEventListenerAdapter() {
+            @Override
+            public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+                if (endReason == AudioTrackEndReason.FINISHED) {
+                    latch.countDown();
+                }
+            }
+        };
+
+        player.addListener(listener);
+
+        String jingle = BILL_WURTZ_JINGLES[(int) (Math.random() * BILL_WURTZ_JINGLES.length)];
+
+        player.playTrack(loadAudioTracks(jingle).get(0));
+
+        latch.await(20, TimeUnit.SECONDS);
+        lavalink.closeVoiceConnection(vc);
+        player.removeListener(listener);
+
+        player.stopTrack();
 
         Assertions.assertEquals(0, latch.getCount());
     }
