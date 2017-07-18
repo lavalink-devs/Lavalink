@@ -3,8 +3,10 @@ package lavalink.client;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import lavalink.client.io.Lavalink;
 import lavalink.client.player.IPlayer;
+import lavalink.client.player.event.PlayerEventListenerAdapter;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -12,6 +14,7 @@ import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.utils.SimpleLog;
 import org.json.JSONArray;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -22,6 +25,8 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 class LavalinkTest {
 
@@ -60,14 +65,12 @@ class LavalinkTest {
     void vcJoinTest() {
         VoiceChannel vc = jda.getVoiceChannelById(System.getenv("TEST_VOICE_CHANNEL"));
         lavalink.openVoiceConnection(vc);
-        log.info("Connecting to " + vc);
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        log.info("Disconnecting from " + vc);
         lavalink.closeVoiceConnection(vc);
     }
 
@@ -95,24 +98,61 @@ class LavalinkTest {
         }
     }
 
-    @Test
-    void vcPlayTest() {
+    private void connectAndPlay(AudioTrack track) throws InterruptedException {
         VoiceChannel vc = jda.getVoiceChannelById(System.getenv("TEST_VOICE_CHANNEL"));
         lavalink.openVoiceConnection(vc);
-        log.info("Connecting to " + vc);
 
-        AudioTrack track = loadAudioTracks("aGOFOP2BIhI").get(0);
         IPlayer player = lavalink.getPlayer(vc.getGuild().getId());
+        CountDownLatch latch = new CountDownLatch(1);
+        player.addListener(new PlayerEventListenerAdapter() {
+            @Override
+            public void onTrackStart(IPlayer player, AudioTrack track) {
+                latch.countDown();
+            }
+        });
+
         player.playTrack(track);
 
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        log.info("Disconnecting from " + vc);
+        latch.await(5, TimeUnit.SECONDS);
         lavalink.closeVoiceConnection(vc);
+
+        Assertions.assertEquals(latch.getCount(), 0);
+    }
+
+    @Test
+    void vcPlayTest() throws InterruptedException {
+        connectAndPlay(loadAudioTracks("aGOFOP2BIhI").get(0));
+    }
+
+    @Test
+    void vcStreamTest() throws InterruptedException {
+        connectAndPlay(loadAudioTracks("https://www.youtube.com/watch?v=MWZiKbWcVVQ").get(0));
+    }
+
+    @Test
+    void stopTest() throws InterruptedException {
+        VoiceChannel vc = jda.getVoiceChannelById(System.getenv("TEST_VOICE_CHANNEL"));
+        lavalink.openVoiceConnection(vc);
+
+        IPlayer player = lavalink.getPlayer(vc.getGuild().getId());
+        CountDownLatch latch = new CountDownLatch(1);
+
+        player.addListener(new PlayerEventListenerAdapter() {
+            @Override
+            public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+                if (endReason == AudioTrackEndReason.STOPPED) {
+                    latch.countDown();
+                }
+            }
+        });
+
+        player.playTrack(loadAudioTracks("aGOFOP2BIhI").get(0));
+        player.stop();
+
+        latch.await(5, TimeUnit.SECONDS);
+        lavalink.closeVoiceConnection(vc);
+
+        Assertions.assertEquals(latch.getCount(), 0);
     }
 
 }
