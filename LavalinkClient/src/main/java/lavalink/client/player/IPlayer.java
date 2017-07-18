@@ -9,9 +9,9 @@ public interface IPlayer {
 
     void playTrack(AudioTrack track);
 
-    void stop();
+    void stopTrack();
 
-    void setPause(boolean b);
+    void setPaused(boolean b);
 
     boolean isPaused();
 

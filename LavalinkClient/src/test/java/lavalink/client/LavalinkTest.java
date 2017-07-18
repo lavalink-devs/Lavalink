@@ -147,7 +147,7 @@ class LavalinkTest {
         });
 
         player.playTrack(loadAudioTracks("aGOFOP2BIhI").get(0));
-        player.stop();
+        player.stopTrack();
 
         latch.await(5, TimeUnit.SECONDS);
         lavalink.closeVoiceConnection(vc);

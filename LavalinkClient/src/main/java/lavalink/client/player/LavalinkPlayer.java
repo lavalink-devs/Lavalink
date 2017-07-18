@@ -56,16 +56,16 @@ public class LavalinkPlayer implements IPlayer {
     }
 
     @Override
-    public void stop() {
+    public void stopTrack() {
         JSONObject json = new JSONObject();
-        json.put("op", "stop");
+        json.put("op", "stopTrack");
         json.put("guildId", guildId);
         socket.send(json.toString());
         track = null;
     }
 
     @Override
-    public void setPause(boolean pause) {
+    public void setPaused(boolean pause) {
         if (pause == paused) return;
 
         JSONObject json = new JSONObject();
