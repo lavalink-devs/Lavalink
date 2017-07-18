@@ -23,9 +23,9 @@
             <version>1.2.42</version>
         </dependency>
         <dependency>
-            <groupId>com.github.Almighty-Alpaca</groupId>
+            <groupId>com.github.DV8FromTheWorld</groupId>
             <artifactId>JDA-Audio</artifactId>
-            <version>14a36bc</version>
+            <version>88cc2ba3</version>
         </dependency>
         <dependency>
             <groupId>org.java-websocket</groupId>
