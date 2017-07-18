@@ -1,7 +1,10 @@
 package lavalink.server;
 
 import lavalink.server.io.SocketServer;
-import lavalink.server.player.Player;
+import lavalink.server.nas.NativeAudioSendFactory;
+import net.dv8tion.jda.audio.AudioConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -17,6 +20,8 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class Launcher {
 
+    private static final Logger log = LoggerFactory.getLogger(Launcher.class);
+
     public final static long startTime = System.currentTimeMillis();
     public static Config config;
     public final SocketServer socketServer;
@@ -31,7 +36,21 @@ public class Launcher {
         SpringApplication sa = new SpringApplication(Launcher.class);
         sa.setWebEnvironment(true);
         sa.run(args);
-        new Player(null, null);
+
+        String os = System.getProperty("os.name");
+
+        log.info("OS: " + System.getProperty("os.name") + ", Arch: " + System.getProperty("os.arch"));
+
+        if ((os.contains("Windows") || os.contains("Linux"))
+                && !System.getProperty("os.arch").equalsIgnoreCase("arm")
+                && !System.getProperty("os.arch").equalsIgnoreCase("arm-linux")
+                ) {
+            AudioConnection.setAudioSendFactory(new NativeAudioSendFactory());
+            log.info("JDA-NAS supported system detected. Enabled native audio sending.");
+        } else {
+            log.warn("This system and architecture appears to not support native audio sending! "
+                    + "GC pauses may cause your bot to stutter during playback.");
+        }
     }
 
     @Bean

@@ -50,6 +50,24 @@
             <artifactId>oshi-dist</artifactId>
             <version>3.4.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20170516</version>
+        </dependency>
+
+        <!-- Used for JDA-NAS -->
+        <dependency>
+            <groupId>com.sedmelluq</groupId>
+            <artifactId>udp-queue</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sedmelluq</groupId>
+            <artifactId>lavaplayer-common</artifactId>
+            <version>1.0.5</version>
+        </dependency>
+
 
         <!-- Spring for dependency injection -->
         <dependency>
@@ -66,11 +84,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <version>4.3.9.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20170516</version>
         </dependency>
     </dependencies>
 
