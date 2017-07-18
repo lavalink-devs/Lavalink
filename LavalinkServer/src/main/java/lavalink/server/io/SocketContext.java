@@ -60,6 +60,8 @@ public class SocketContext {
             Core core = cores.get(Util.getShardFromSnowflake(s, shardCount));
             core.getAudioManager(s).closeAudioConnection();
         });
+
+        players.values().forEach(Player::stop);
     }
 
 }
