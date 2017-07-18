@@ -49,6 +49,7 @@ public class Player implements AudioSendHandler {
         this.guildId = guildId;
         this.player = PLAYER_MANAGER.createPlayer();
         this.player.addListener(new EventEmitter(this));
+        this.player.addListener(audioLossCounter);
     }
 
     public void play(AudioTrack track) {
