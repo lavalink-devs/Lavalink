@@ -104,19 +104,21 @@ class LavalinkTest {
 
         IPlayer player = lavalink.getPlayer(vc.getGuild().getId());
         CountDownLatch latch = new CountDownLatch(1);
-        player.addListener(new PlayerEventListenerAdapter() {
+        PlayerEventListenerAdapter listener = new PlayerEventListenerAdapter() {
             @Override
             public void onTrackStart(IPlayer player, AudioTrack track) {
                 latch.countDown();
             }
-        });
+        };
+        player.addListener(listener);
 
         player.playTrack(track);
 
         latch.await(5, TimeUnit.SECONDS);
         lavalink.closeVoiceConnection(vc);
+        player.removeListener(listener);
 
-        Assertions.assertEquals(latch.getCount(), 0);
+        Assertions.assertEquals(0, latch.getCount());
     }
 
     @Test
@@ -137,22 +139,28 @@ class LavalinkTest {
         IPlayer player = lavalink.getPlayer(vc.getGuild().getId());
         CountDownLatch latch = new CountDownLatch(1);
 
-        player.addListener(new PlayerEventListenerAdapter() {
+        PlayerEventListenerAdapter listener = new PlayerEventListenerAdapter() {
+            @Override
+            public void onTrackStart(IPlayer player, AudioTrack track) {
+                player.stopTrack();
+            }
             @Override
             public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
                 if (endReason == AudioTrackEndReason.STOPPED) {
                     latch.countDown();
                 }
             }
-        });
+        };
+
+        player.addListener(listener);
 
         player.playTrack(loadAudioTracks("aGOFOP2BIhI").get(0));
-        player.stopTrack();
 
         latch.await(5, TimeUnit.SECONDS);
         lavalink.closeVoiceConnection(vc);
+        player.removeListener(listener);
 
-        Assertions.assertEquals(latch.getCount(), 0);
+        Assertions.assertEquals(0, latch.getCount());
     }
 
 }
