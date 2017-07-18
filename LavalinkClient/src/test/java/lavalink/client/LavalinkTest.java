@@ -48,7 +48,8 @@ class LavalinkTest {
                     .setToken(System.getenv("TEST_TOKEN"))
                     .buildBlocking();
 
-            lavalink = new Lavalink(new URI("ws://localhost"), "youshallnotpass", 1, integer -> jda);
+            lavalink = new Lavalink(1, integer -> jda);
+            lavalink.addNode(new URI("ws://localhost"), "youshallnotpass");
             lavalink.interceptJdaAudio(jda);
         } catch (Exception e) {
             throw new RuntimeException(e);

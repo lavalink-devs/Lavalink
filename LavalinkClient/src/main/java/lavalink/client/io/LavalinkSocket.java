@@ -43,7 +43,7 @@ public class LavalinkSocket extends WebSocketClient {
     }
 
     @Override
-    public void onOpen(ServerHandshake handshakedata) {
+    public void onOpen(ServerHandshake handshakeData) {
         log.info("Received handshake from server");
     }
 
