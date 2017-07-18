@@ -115,4 +115,8 @@ public class Player implements AudioSendHandler {
         return audioLossCounter;
     }
 
+    public boolean isPlaying() {
+        return player.getPlayingTrack() != null && !player.isPaused();
+    }
+
 }

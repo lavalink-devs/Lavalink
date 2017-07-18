@@ -47,6 +47,7 @@ public class SocketServer extends WebSocketServer {
     @Override
     public void onClose(WebSocket webSocket, int i, String s, boolean b) {
         log.info("Connection closed from " + webSocket.getRemoteSocketAddress().toString() + " with protocol " + webSocket.getDraft());
+        contextMap.get(webSocket).shutdown();
         contextMap.remove(webSocket);
     }
 
