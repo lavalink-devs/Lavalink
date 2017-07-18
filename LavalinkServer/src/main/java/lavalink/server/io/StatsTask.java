@@ -4,6 +4,8 @@ import lavalink.server.Launcher;
 import lavalink.server.player.AudioLossCounter;
 import lavalink.server.player.Player;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OSProcess;
@@ -11,14 +13,18 @@ import oshi.software.os.OperatingSystem;
 
 public class StatsTask implements Runnable {
 
+    private static final Logger log = LoggerFactory.getLogger(StatsTask.class);
+
     private SocketContext context;
 
-    public StatsTask(SocketContext context) {
+    StatsTask(SocketContext context) {
         this.context = context;
     }
 
     @Override
     public void run() {
+        log.info("Sending stats");
+
         JSONObject out = new JSONObject();
         out.put("op", "stats");
         out.put("players", context.getPlayers().size());

@@ -56,6 +56,10 @@ public class Lavalink {
         return players.computeIfAbsent(guildId, __ -> new LavalinkPlayer(socket, guildId));
     }
 
+    public RemoteStats getLastStats() {
+        return socket.stats;
+    }
+
     public void shutdown() {
         socket.close();
     }

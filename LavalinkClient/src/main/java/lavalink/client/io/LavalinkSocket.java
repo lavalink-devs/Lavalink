@@ -30,6 +30,7 @@ public class LavalinkSocket extends WebSocketClient {
 
     private static final int TIMEOUT_MS = 5000;
     private final Lavalink lavalink;
+    RemoteStats stats;
 
     LavalinkSocket(Lavalink lavalink, URI serverUri, Draft protocolDraft, Map<String, String> headers) {
         super(serverUri, protocolDraft, headers, TIMEOUT_MS);
@@ -101,6 +102,9 @@ public class LavalinkSocket extends WebSocketClient {
             case "playerUpdate":
                 ((LavalinkPlayer) lavalink.getPlayer(json.getString("guildId")))
                         .provideState(json.getJSONObject("state"));
+                break;
+            case "stats":
+                stats = new RemoteStats(json);
                 break;
             case "event":
                 try {
