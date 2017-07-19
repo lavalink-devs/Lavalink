@@ -18,7 +18,7 @@ Allows for sending audio without it ever reaching any of your shards.
 ## Client libraries:
 * [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (Java)
 * Eris client Soon™ (JavaScript)
-* TODO: Client implementation docs
+* Or [Create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 # Acknowledgements
 This project contains modified code from https://github.com/sedmelluq/jda-nas v1.0.5
