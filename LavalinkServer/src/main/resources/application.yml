@@ -1,0 +1,5 @@
+spring:
+  application:
+    version: "1.0"
+    formatted-version: "(v1.0)"
+    name: "Lavalink"
