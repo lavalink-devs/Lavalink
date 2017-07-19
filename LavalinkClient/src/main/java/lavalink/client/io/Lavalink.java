@@ -33,18 +33,19 @@ import org.java_websocket.drafts.Draft_6455;
 import org.json.JSONObject;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 
 public class Lavalink {
 
     private final int numShards;
     private final Function<Integer, JDA> jdaProvider;
-    private final HashMap<String, String> connectedChannels = new HashMap<>(); // Key is guild id
-    private final HashMap<String, LavalinkPlayer> players = new HashMap<>(); // Key is guild id
-    private final List<LavalinkSocket> nodes = new ArrayList<>();
+    private final ConcurrentHashMap<String, String> connectedChannels = new ConcurrentHashMap<>(); // Key is guild id
+    private final ConcurrentHashMap<String, LavalinkPlayer> players = new ConcurrentHashMap<>(); // Key is guild id
+    private final List<LavalinkSocket> nodes = new CopyOnWriteArrayList<>();
     private final LavalinkLoadBalancer loadBalancer = new LavalinkLoadBalancer(this);
 
     public Lavalink(int numShards, Function<Integer, JDA> jdaProvider) {
@@ -74,6 +75,14 @@ public class Lavalink {
         json.put("guildId", guild.getId());
         loadBalancer.getSocket(guild).send(json.toString());
         connectedChannels.remove(guild.getId());
+    }
+
+    public VoiceChannel getConnectedChannel(Guild guild) {
+        String id = connectedChannels.getOrDefault(guild.getId(), null);
+        if (id != null) {
+            return guild.getVoiceChannelById(id);
+        }
+        return null;
     }
 
     public void interceptJdaAudio(JDA jda) {
