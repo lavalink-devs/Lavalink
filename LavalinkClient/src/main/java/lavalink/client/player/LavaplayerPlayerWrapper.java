@@ -25,6 +25,7 @@ package lavalink.client.player;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventListener;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import lavalink.client.player.event.IPlayerEventListener;
 
 public class LavaplayerPlayerWrapper implements IPlayer {
@@ -88,4 +89,9 @@ public class LavaplayerPlayerWrapper implements IPlayer {
     public void removeListener(IPlayerEventListener listener) {
         player.removeListener((AudioEventListener) listener);
     }
+
+    public AudioFrame provide() {
+        return player.provide();
+    }
+
 }
