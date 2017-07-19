@@ -2,7 +2,7 @@
 Standalone audio sending node based on Lavaplayer and JDA-Audio.
 Allows for sending audio without it ever reaching any of your shards.
 
-#### INCOMPLETE AND NOT READY FOR PRODUCTION USAGE
+#### NOT READY FOR PRODUCTION USAGE
 
 ## Features
 * Powered by Lavaplayer
@@ -18,7 +18,7 @@ Allows for sending audio without it ever reaching any of your shards.
 ## Client libraries:
 * [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (Java)
 * Eris client Soon™ (JavaScript)
-* Or [Create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
+* Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 # Acknowledgements
 This project contains modified code from https://github.com/sedmelluq/jda-nas v1.0.5
