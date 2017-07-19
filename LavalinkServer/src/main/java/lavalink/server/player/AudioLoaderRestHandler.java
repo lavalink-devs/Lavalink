@@ -44,14 +44,12 @@ public class AudioLoaderRestHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AudioLoaderRestHandler.class);
 
-    @GetMapping("/loadtracks")
+    @GetMapping(value = "/loadtracks", produces = "application/json")
     @ResponseBody
     public String get(HttpServletRequest request, HttpServletResponse response, @RequestParam String identifier)
             throws IOException, InterruptedException {
         String path = request.getServletPath();
         log.info("GET " + path);
-
-        response.setContentType("application/json");
 
         if (request.getHeader("Authorization") != null &&
                 !request.getHeader("Authorization").equals(Launcher.config.getPassword())) {
