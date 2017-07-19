@@ -43,6 +43,8 @@ public interface IPlayer {
 
     void setVolume(int volume);
 
+    int getVolume();
+
     void addListener(IPlayerEventListener listener);
 
     void removeListener(IPlayerEventListener listener);

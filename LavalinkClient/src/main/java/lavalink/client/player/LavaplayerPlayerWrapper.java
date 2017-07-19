@@ -81,6 +81,11 @@ public class LavaplayerPlayerWrapper implements IPlayer {
     }
 
     @Override
+    public int getVolume() {
+        return player.getVolume();
+    }
+
+    @Override
     public void addListener(IPlayerEventListener listener) {
         player.addListener((AudioEventListener) listener);
     }

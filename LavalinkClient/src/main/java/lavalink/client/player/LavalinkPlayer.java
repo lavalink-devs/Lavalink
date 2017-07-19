@@ -40,7 +40,7 @@ public class LavalinkPlayer implements IPlayer {
 
     private AudioTrack track = null;
     private boolean paused = false;
-    private float volume = 1f;
+    private int volume = 100;
     private long updateTime = -1;
     private long position = -1;
 
@@ -141,6 +141,11 @@ public class LavalinkPlayer implements IPlayer {
         json.put("volume", volume);
         socket.send(json.toString());
         this.volume = volume;
+    }
+
+    @Override
+    public int getVolume() {
+        return volume;
     }
 
     public void provideState(JSONObject json) {
