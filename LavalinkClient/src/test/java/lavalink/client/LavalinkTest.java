@@ -103,7 +103,7 @@ class LavalinkTest {
             throw new RuntimeException(e);
         }
 
-        lavalink.closeVoiceConnection(vc);
+        lavalink.closeVoiceConnection(vc.getGuild());
     }
 
     private List<AudioTrack> loadAudioTracks(String identifier) {
@@ -147,7 +147,7 @@ class LavalinkTest {
         player.playTrack(track);
 
         latch.await(5, TimeUnit.SECONDS);
-        lavalink.closeVoiceConnection(vc);
+        lavalink.closeVoiceConnection(vc.getGuild());
         player.removeListener(listener);
         player.stopTrack();
 
@@ -161,7 +161,7 @@ class LavalinkTest {
 
     @Test
     void vcStreamTest() throws InterruptedException {
-        connectAndPlay(loadAudioTracks("https://www.youtube.com/watch?v=MWZiKbWcVVQ").get(0));
+        connectAndPlay(loadAudioTracks("https://gensokyoradio.net/GensokyoRadio.m3u").get(0));
     }
 
     @Test
@@ -191,7 +191,7 @@ class LavalinkTest {
         player.playTrack(loadAudioTracks("aGOFOP2BIhI").get(0));
 
         latch.await(5, TimeUnit.SECONDS);
-        lavalink.closeVoiceConnection(vc);
+        lavalink.closeVoiceConnection(vc.getGuild());
         player.removeListener(listener);
         player.stopTrack();
 
@@ -222,7 +222,7 @@ class LavalinkTest {
         player.playTrack(loadAudioTracks(jingle).get(0));
 
         latch.await(20, TimeUnit.SECONDS);
-        lavalink.closeVoiceConnection(vc);
+        lavalink.closeVoiceConnection(vc.getGuild());
         player.removeListener(listener);
 
         player.stopTrack();

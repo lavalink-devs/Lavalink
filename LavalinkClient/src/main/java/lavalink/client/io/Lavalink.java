@@ -25,6 +25,7 @@ package lavalink.client.io;
 import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import org.java_websocket.client.WebSocketClient;
@@ -67,13 +68,12 @@ public class Lavalink {
         connectedChannels.put(channel.getGuild().getId(), channel.getId());
     }
 
-    public void closeVoiceConnection(VoiceChannel channel) {
+    public void closeVoiceConnection(Guild guild) {
         JSONObject json = new JSONObject();
         json.put("op", "disconnect");
-        json.put("guildId", channel.getGuild().getId());
-        json.put("channelId", channel.getId());
-        loadBalancer.getSocket(channel.getGuild()).send(json.toString());
-        connectedChannels.remove(channel.getGuild().getId());
+        json.put("guildId", guild.getId());
+        loadBalancer.getSocket(guild).send(json.toString());
+        connectedChannels.remove(guild.getId());
     }
 
     public void interceptJdaAudio(JDA jda) {
