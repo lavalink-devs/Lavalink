@@ -28,7 +28,7 @@
 
     <groupId>lavalink</groupId>
     <artifactId>Lavalink-Server</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <version>1.0</version>
 
     <properties>
@@ -45,9 +45,9 @@
             <version>1.2.42</version>
         </dependency>
         <dependency>
-            <groupId>com.github.DV8FromTheWorld</groupId>
+            <groupId>com.github.Frederikam</groupId>
             <artifactId>JDA-Audio</artifactId>
-            <version>88cc2ba3</version>
+            <version>5321e9ff3aa88ae536450c86325ec57c3b4278f7</version>
         </dependency>
         <dependency>
             <groupId>org.java-websocket</groupId>
