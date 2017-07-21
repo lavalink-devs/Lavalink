@@ -51,6 +51,7 @@ public class LavalinkPlayer implements IPlayer {
     public LavalinkPlayer(LavalinkSocket socket, String guildId) {
         this.socket = socket;
         this.guildId = guildId;
+        addListener(new LavalinkInternalPlayerEventHandler());
     }
 
     @Override
@@ -165,6 +166,10 @@ public class LavalinkPlayer implements IPlayer {
 
     public void emitEvent(PlayerEvent event) {
         listeners.forEach(listener -> listener.onEvent(event));
+    }
+
+    void clearTrack() {
+        track = null;
     }
 
 }
