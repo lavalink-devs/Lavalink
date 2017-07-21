@@ -140,6 +140,7 @@ public class SocketServer extends WebSocketServer {
             case "seek":
                 Player player3 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
                 player3.seekTo(json.getLong("position"));
+                sendPlayerUpdate(webSocket, player3);
                 break;
             case "volume":
                 Player player4 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
