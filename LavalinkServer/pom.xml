@@ -45,9 +45,9 @@
             <version>1.2.42</version>
         </dependency>
         <dependency>
-            <groupId>com.github.Frederikam</groupId>
+            <groupId>com.github.DV8FromTheWorld</groupId>
             <artifactId>JDA-Audio</artifactId>
-            <version>5321e9ff3aa88ae536450c86325ec57c3b4278f7</version>
+            <version>454f43b090130d9f90c001fc69757766bbe46e62</version>
         </dependency>
         <dependency>
             <groupId>org.java-websocket</groupId>
