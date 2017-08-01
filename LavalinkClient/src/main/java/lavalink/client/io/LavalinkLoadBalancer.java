@@ -47,7 +47,7 @@ public class LavalinkLoadBalancer {
 
     private LavalinkSocket determineBestSocket() {
         LavalinkSocket leastPenalty = null;
-        int record = Integer.MAX_VALUE;
+        int record = Integer.MAX_VALUE ;
 
         for (LavalinkSocket socket : lavalink.getNodes()) {
             int total = getPenalties(socket).getTotal();
@@ -135,7 +135,7 @@ public class LavalinkLoadBalancer {
         }
 
         public int getTotal() {
-            if (!socket.isOpen()) return Integer.MAX_VALUE;
+            if (!socket.isOpen()) return Integer.MAX_VALUE - 1;
 
             return playerPenalty + cpuPenalty + deficitFramePenalty + nullFramePenalty;
         }
@@ -143,7 +143,7 @@ public class LavalinkLoadBalancer {
         @Override
         public String toString() {
             if (!socket.isOpen()) return "Penalties{" +
-                    "unavailable=" + Integer.MAX_VALUE +
+                    "unavailable=" + (Integer.MAX_VALUE - 1) +
                     '}';
 
             return "Penalties{" +
