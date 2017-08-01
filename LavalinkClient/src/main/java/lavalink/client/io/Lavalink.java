@@ -69,21 +69,22 @@ public class Lavalink {
 
     public void openVoiceConnection(VoiceChannel channel) {
         LavalinkSocket socket = loadBalancer.getSocket(channel.getGuild());
+        connectedChannels.put(channel.getGuild().getId(), channel.getId());
+
+        if (socket == null || socket.isClosed()) return;
+
         JSONObject json = new JSONObject();
         json.put("op", "connect");
         json.put("guildId", channel.getGuild().getId());
         json.put("channelId", channel.getId());
-
-        connectedChannels.put(channel.getGuild().getId(), channel.getId());
-        if (socket != null && !socket.isClosed())
-            socket.send(json.toString());
+        socket.send(json.toString());
     }
 
     public void closeVoiceConnection(Guild guild) {
         LavalinkSocket socket = loadBalancer.getSocket(guild);
         connectedChannels.remove(guild.getId());
 
-        if (socket.isClosed()) return;
+        if (socket == null || socket.isClosed()) return;
 
         JSONObject json = new JSONObject();
         json.put("op", "disconnect");
