@@ -44,7 +44,7 @@ public class LavalinkPlayer implements IPlayer {
     private long updateTime = -1;
     private long position = -1;
 
-    private final LavalinkSocket socket;
+    private LavalinkSocket socket;
     private final String guildId;
     private List<IPlayerEventListener> listeners = new ArrayList<>();
 
@@ -52,6 +52,10 @@ public class LavalinkPlayer implements IPlayer {
         this.socket = socket;
         this.guildId = guildId;
         addListener(new LavalinkInternalPlayerEventHandler());
+    }
+
+    public void setSocket(LavalinkSocket socket) {
+        this.socket = socket;
     }
 
     @Override
@@ -66,7 +70,8 @@ public class LavalinkPlayer implements IPlayer {
             json.put("op", "play");
             json.put("guildId", guildId);
             json.put("track", LavalinkUtil.toMessage(track));
-            socket.send(json.toString());
+            if (socket != null)
+                socket.send(json.toString());
             position = 0;
             updateTime = System.currentTimeMillis();
             this.track = track;
@@ -83,7 +88,8 @@ public class LavalinkPlayer implements IPlayer {
         JSONObject json = new JSONObject();
         json.put("op", "stop");
         json.put("guildId", guildId);
-        socket.send(json.toString());
+        if (socket != null)
+            socket.send(json.toString());
         track = null;
     }
 
@@ -95,7 +101,8 @@ public class LavalinkPlayer implements IPlayer {
         json.put("op", "pause");
         json.put("guildId", guildId);
         json.put("pause", pause);
-        socket.send(json.toString());
+        if (socket != null)
+            socket.send(json.toString());
         paused = pause;
 
         if (pause) {
@@ -122,14 +129,15 @@ public class LavalinkPlayer implements IPlayer {
 
     @Override
     public void seekTo(long position) {
-        if (getPlayingTrack() == null)  throw new IllegalStateException("Not currently playing anything");
-        if (getPlayingTrack().getInfo().isStream)  throw new IllegalStateException("Can't seek in a stream");
+        if (getPlayingTrack() == null) throw new IllegalStateException("Not currently playing anything");
+        if (getPlayingTrack().getInfo().isStream) throw new IllegalStateException("Can't seek in a stream");
 
         JSONObject json = new JSONObject();
         json.put("op", "seek");
         json.put("guildId", guildId);
         json.put("position", position);
-        socket.send(json.toString());
+        if (socket != null)
+            socket.send(json.toString());
     }
 
     @Override
@@ -140,7 +148,8 @@ public class LavalinkPlayer implements IPlayer {
         json.put("op", "volume");
         json.put("guildId", guildId);
         json.put("volume", volume);
-        socket.send(json.toString());
+        if (socket != null)
+            socket.send(json.toString());
         this.volume = volume;
     }
 

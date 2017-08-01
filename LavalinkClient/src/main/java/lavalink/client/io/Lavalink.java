@@ -22,7 +22,6 @@
 
 package lavalink.client.io;
 
-import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
@@ -37,6 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 public class Lavalink {
@@ -45,12 +46,18 @@ public class Lavalink {
     private final Function<Integer, JDA> jdaProvider;
     private final ConcurrentHashMap<String, String> connectedChannels = new ConcurrentHashMap<>(); // Key is guild id
     private final ConcurrentHashMap<String, LavalinkPlayer> players = new ConcurrentHashMap<>(); // Key is guild id
-    private final List<LavalinkSocket> nodes = new CopyOnWriteArrayList<>();
-    private final LavalinkLoadBalancer loadBalancer = new LavalinkLoadBalancer(this);
+    final List<LavalinkSocket> nodes = new CopyOnWriteArrayList<>();
+    final LavalinkLoadBalancer loadBalancer = new LavalinkLoadBalancer(this);
 
     public Lavalink(int numShards, Function<Integer, JDA> jdaProvider) {
         this.numShards = numShards;
         this.jdaProvider = jdaProvider;
+
+        Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread thread = new Thread("lavalink-reconnect-thread");
+            thread.setDaemon(true);
+            return thread;
+        }).scheduleWithFixedDelay(new ReconnectTask(this), 0, 500, TimeUnit.MILLISECONDS);
     }
 
     public void addNode(URI serverUri, String password) {
@@ -89,7 +96,7 @@ public class Lavalink {
         ((JDAImpl) jda).getClient().getHandlers().put("VOICE_SERVER_UPDATE", new VoiceServerUpdateInterceptor(this, (JDAImpl) jda));
     }
 
-    public IPlayer getPlayer(String guildId) {
+    public LavalinkPlayer getPlayer(String guildId) {
         return players.computeIfAbsent(guildId, __ -> new LavalinkPlayer(loadBalancer.getSocket(guildId), guildId));
     }
 

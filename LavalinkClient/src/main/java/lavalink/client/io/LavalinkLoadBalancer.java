@@ -22,6 +22,7 @@
 
 package lavalink.client.io;
 
+import lavalink.client.player.IPlayer;
 import net.dv8tion.jda.core.entities.Guild;
 
 import java.util.Map;
@@ -59,7 +60,29 @@ public class LavalinkLoadBalancer {
         if (leastPenalty == null)
             throw new IllegalStateException("No available nodes!");
 
+        if (!leastPenalty.isOpen()) return null;
+
         return leastPenalty;
+    }
+
+    void onNodeDisconnect(LavalinkSocket disconnected) {
+        socketMap.replaceAll((s, socket) -> {
+            LavalinkSocket newSocket = socket.equals(disconnected) ? determineBestSocket() : socket;
+            lavalink.getPlayer(s).setSocket(socket);
+            return newSocket;
+        });
+    }
+
+    void onNodeConnect(LavalinkSocket connected) {
+        for (String guildId : socketMap.keySet()) {
+            if (socketMap.get(guildId) == null) {
+                socketMap.put(guildId, connected);
+                IPlayer player = lavalink.getPlayer(guildId);
+                if (player != null && player.getPlayingTrack() != null) {
+                    player.playTrack(player.getPlayingTrack());
+                }
+            }
+        }
     }
 
     public static Penalties getPenalties(LavalinkSocket socket) {
@@ -68,12 +91,14 @@ public class LavalinkLoadBalancer {
 
     private static class Penalties {
 
+        private LavalinkSocket socket;
         private int playerPenalty = 0;
         private int cpuPenalty = 0;
         private int deficitFramePenalty = 0;
         private int nullFramePenalty = 0;
 
         private Penalties(LavalinkSocket socket) {
+            this.socket = socket;
             if (socket.stats == null) return;
 
             // This will serve as a rule of thumb. 1 playing player = 1 penalty point
@@ -110,11 +135,17 @@ public class LavalinkLoadBalancer {
         }
 
         public int getTotal() {
+            if (!socket.isOpen()) return Integer.MAX_VALUE;
+
             return playerPenalty + cpuPenalty + deficitFramePenalty + nullFramePenalty;
         }
 
         @Override
         public String toString() {
+            if (!socket.isOpen()) return "Penalties{" +
+                    "unavailable=" + Integer.MAX_VALUE +
+                    '}';
+
             return "Penalties{" +
                     "playerPenalty=" + playerPenalty +
                     ", cpuPenalty=" + cpuPenalty +

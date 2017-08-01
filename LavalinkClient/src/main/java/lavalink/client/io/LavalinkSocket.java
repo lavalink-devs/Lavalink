@@ -44,6 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
+import java.nio.channels.NotYetConnectedException;
 import java.util.Map;
 
 public class LavalinkSocket extends WebSocketClient {
@@ -53,6 +54,7 @@ public class LavalinkSocket extends WebSocketClient {
     private static final int TIMEOUT_MS = 5000;
     private final Lavalink lavalink;
     RemoteStats stats;
+    long lastReconnectAttempt = 0;
 
     LavalinkSocket(Lavalink lavalink, URI serverUri, Draft protocolDraft, Map<String, String> headers) {
         super(serverUri, protocolDraft, headers, TIMEOUT_MS);
@@ -67,6 +69,7 @@ public class LavalinkSocket extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakeData) {
         log.info("Received handshake from server");
+        lavalink.loadBalancer.onNodeConnect(this);
     }
 
     @Override
@@ -184,10 +187,27 @@ public class LavalinkSocket extends WebSocketClient {
     @Override
     public void onClose(int code, String reason, boolean remote) {
         log.info("Connection closed with reason " + code + ": " + reason + " :: Remote=" + remote);
+        lavalink.loadBalancer.onNodeDisconnect(this);
     }
 
     @Override
     public void onError(Exception ex) {
         log.error("Caught exception in websocket", ex);
     }
+
+    @Override
+    public void send(String text) throws NotYetConnectedException {
+        // Note: If we lose connection we will reconnect and initialize properly
+        if (isOpen()) {
+            super.send(text);
+        } else if (isConnecting()) {
+            log.warn("Attempting to send messages to " + getRemoteSocketAddress() + " WHILE connecting. Ignoring.");
+        }
+    }
+
+    void attemptReconnect() {
+        lastReconnectAttempt = System.currentTimeMillis();
+        connect();
+    }
+
 }
