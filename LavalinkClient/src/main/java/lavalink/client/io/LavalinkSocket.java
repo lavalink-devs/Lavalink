@@ -125,7 +125,7 @@ public class LavalinkSocket extends WebSocketClient {
                 send(res2.toString());
                 break;
             case "playerUpdate":
-                ((LavalinkPlayer) lavalink.getPlayer(json.getString("guildId")))
+                lavalink.getPlayer(json.getString("guildId"))
                         .provideState(json.getJSONObject("state"));
                 break;
             case "stats":

@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -49,15 +50,18 @@ public class Lavalink {
     final List<LavalinkSocket> nodes = new CopyOnWriteArrayList<>();
     final LavalinkLoadBalancer loadBalancer = new LavalinkLoadBalancer(this);
 
+    private final ScheduledExecutorService reconnectService;
+
     public Lavalink(int numShards, Function<Integer, JDA> jdaProvider) {
         this.numShards = numShards;
         this.jdaProvider = jdaProvider;
 
-        Executors.newSingleThreadScheduledExecutor(r -> {
-            Thread thread = new Thread("lavalink-reconnect-thread");
+        reconnectService = Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread thread = new Thread(r, "lavalink-reconnect-thread");
             thread.setDaemon(true);
             return thread;
-        }).scheduleWithFixedDelay(new ReconnectTask(this), 0, 500, TimeUnit.MILLISECONDS);
+        });
+        reconnectService.scheduleWithFixedDelay(new ReconnectTask(this), 0, 500, TimeUnit.MILLISECONDS);
     }
 
     public void addNode(URI serverUri, String password) {
