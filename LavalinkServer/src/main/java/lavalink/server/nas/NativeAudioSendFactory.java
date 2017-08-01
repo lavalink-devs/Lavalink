@@ -91,11 +91,11 @@ public class NativeAudioSendFactory implements IAudioSendFactory {
     }
 
     private void populateQueues() {
-        UdpQueueManager manager = queueManager;
+        UdpQueueManager manager = queueManager; /* avoid getfield opcode */
 
         if (manager != null) {
             for (NativeAudioSendSystem system : systems) {
-                system.populateQueue(queueManager);
+                system.populateQueue(manager);
             }
         }
     }
