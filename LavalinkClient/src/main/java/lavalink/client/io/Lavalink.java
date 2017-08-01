@@ -68,20 +68,27 @@ public class Lavalink {
     }
 
     public void openVoiceConnection(VoiceChannel channel) {
+        LavalinkSocket socket = loadBalancer.getSocket(channel.getGuild());
         JSONObject json = new JSONObject();
         json.put("op", "connect");
         json.put("guildId", channel.getGuild().getId());
         json.put("channelId", channel.getId());
-        loadBalancer.getSocket(channel.getGuild()).send(json.toString());
+
         connectedChannels.put(channel.getGuild().getId(), channel.getId());
+        if (socket != null && !socket.isClosed())
+            socket.send(json.toString());
     }
 
     public void closeVoiceConnection(Guild guild) {
+        LavalinkSocket socket = loadBalancer.getSocket(guild);
+        connectedChannels.remove(guild.getId());
+
+        if (socket.isClosed()) return;
+
         JSONObject json = new JSONObject();
         json.put("op", "disconnect");
         json.put("guildId", guild.getId());
-        loadBalancer.getSocket(guild).send(json.toString());
-        connectedChannels.remove(guild.getId());
+        socket.send(json.toString());
     }
 
     public VoiceChannel getConnectedChannel(Guild guild) {
@@ -92,12 +99,16 @@ public class Lavalink {
         return null;
     }
 
+    public String getConnectedChannel(String guildId) {
+        return connectedChannels.getOrDefault(guildId, null);
+    }
+
     public void interceptJdaAudio(JDA jda) {
         ((JDAImpl) jda).getClient().getHandlers().put("VOICE_SERVER_UPDATE", new VoiceServerUpdateInterceptor(this, (JDAImpl) jda));
     }
 
     public LavalinkPlayer getPlayer(String guildId) {
-        return players.computeIfAbsent(guildId, __ -> new LavalinkPlayer(loadBalancer.getSocket(guildId), guildId));
+        return players.computeIfAbsent(guildId, __ -> new LavalinkPlayer(this, loadBalancer.getSocket(guildId), guildId));
     }
 
     public void shutdown() {
@@ -108,7 +119,7 @@ public class Lavalink {
         return loadBalancer.getSocket(guildId);
     }
 
-    JDA getShard(int num) {
+    public JDA getShard(int num) {
         return jdaProvider.apply(num);
     }
 

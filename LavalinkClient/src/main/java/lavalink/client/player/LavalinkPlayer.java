@@ -24,12 +24,14 @@ package lavalink.client.player;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import lavalink.client.LavalinkUtil;
+import lavalink.client.io.Lavalink;
 import lavalink.client.io.LavalinkSocket;
 import lavalink.client.player.event.IPlayerEventListener;
 import lavalink.client.player.event.PlayerEvent;
 import lavalink.client.player.event.PlayerPauseEvent;
 import lavalink.client.player.event.PlayerResumeEvent;
 import lavalink.client.player.event.TrackStartEvent;
+import net.dv8tion.jda.core.JDA;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -44,11 +46,13 @@ public class LavalinkPlayer implements IPlayer {
     private long updateTime = -1;
     private long position = -1;
 
+    private Lavalink lavalink;
     private LavalinkSocket socket;
     private final String guildId;
     private List<IPlayerEventListener> listeners = new ArrayList<>();
 
-    public LavalinkPlayer(LavalinkSocket socket, String guildId) {
+    public LavalinkPlayer(Lavalink lavalink, LavalinkSocket socket, String guildId) {
+        this.lavalink = lavalink;
         this.socket = socket;
         this.guildId = guildId;
         addListener(new LavalinkInternalPlayerEventHandler());
@@ -56,6 +60,14 @@ public class LavalinkPlayer implements IPlayer {
 
     public void setSocket(LavalinkSocket socket) {
         this.socket = socket;
+
+        // Make sure we are actually connected to a VC
+        if (socket != null
+                && lavalink.getConnectedChannel(guildId) != null) {
+            int shardId = LavalinkUtil.getShardFromSnowflake(guildId, lavalink.getNumShards());
+            JDA shard = lavalink.getShard(shardId);
+            lavalink.openVoiceConnection(lavalink.getConnectedChannel(shard.getGuildById(guildId)));
+        }
     }
 
     @Override
