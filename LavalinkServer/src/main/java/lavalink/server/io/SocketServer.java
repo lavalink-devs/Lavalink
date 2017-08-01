@@ -24,6 +24,7 @@ package lavalink.server.io;
 
 import lavalink.server.player.Player;
 import lavalink.server.util.Util;
+import net.dv8tion.jda.manager.AudioManager;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -86,9 +87,16 @@ public class SocketServer extends WebSocketServer {
         switch (json.getString("op")) {
             /* JDAA ops */
             case "connect":
-                contextMap.get(webSocket).getCore(getShardId(webSocket, json))
-                        .getAudioManager(json.getString("guildId"))
-                        .openAudioConnection(json.getString("channelId"));
+                AudioManager manager = contextMap.get(webSocket).getCore(getShardId(webSocket, json))
+                        .getAudioManager(json.getString("guildId"));
+
+                if (manager.isConnected() || manager.isAttemptingToConnect()) {
+                    manager.closeAudioConnection();
+                    log.info("Closing the audio connection for guild " + json.getString("guildId")
+                            + " so we can reconnect.");
+                }
+
+                manager.openAudioConnection(json.getString("channelId"));
                 break;
             case "voiceUpdate":
                 contextMap.get(webSocket).getCore(getShardId(webSocket, json)).provideVoiceServerUpdate(
