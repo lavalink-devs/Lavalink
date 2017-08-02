@@ -45,9 +45,9 @@
             <version>1.2.42</version>
         </dependency>
         <dependency>
-            <groupId>com.github.DV8FromTheWorld</groupId>
+            <groupId>com.github.Frederikam</groupId>
             <artifactId>JDA-Audio</artifactId>
-            <version>454f43b090130d9f90c001fc69757766bbe46e62</version>
+            <version>1a7499f0b0afd18c2ba7420cdcc785c9a4677874</version>
         </dependency>
         <dependency>
             <groupId>org.java-websocket</groupId>
@@ -88,6 +88,11 @@
             <groupId>com.sedmelluq</groupId>
             <artifactId>lavaplayer-common</artifactId>
             <version>1.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>22.0</version>
         </dependency>
 
 
@@ -245,7 +250,7 @@
                                     <resource>META-INF/spring.schemas</resource>
                                 </transformer>
                                 <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>lavalink.server.Launcher</mainClass>

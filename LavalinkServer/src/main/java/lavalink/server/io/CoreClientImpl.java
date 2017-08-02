@@ -22,13 +22,17 @@
 
 package lavalink.server.io;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import net.dv8tion.jda.CoreClient;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.java_websocket.WebSocket;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 public class CoreClientImpl implements CoreClient {
 
@@ -40,9 +44,32 @@ public class CoreClientImpl implements CoreClient {
 
     private final Object validationObj = new Object();
     private final Object isConnectionObj = new Object();
-
-    private ConcurrentHashMap<String, Boolean> validMap = new ConcurrentHashMap<>();
     private boolean connected = false;
+
+    LoadingCache<String, Boolean> guildValidMap = CacheBuilder.newBuilder()
+            .concurrencyLevel(4)
+            .expireAfterWrite(5, TimeUnit.SECONDS)
+            .build(
+                    new CacheLoader<String, Boolean>() {
+                        @Override
+                        public Boolean load(@SuppressWarnings("NullableProblems") String guild) throws Exception {
+                            return requestValidationSync(guild, null);
+                        }
+                    }
+            );
+
+    LoadingCache<ImmutablePair<String, String>, Boolean> channelValidMap = CacheBuilder.newBuilder()
+            .concurrencyLevel(4)
+            .expireAfterWrite(5, TimeUnit.SECONDS)
+            .build(
+                    new CacheLoader<ImmutablePair<String, String>, Boolean>() {
+                        @Override
+                        public Boolean load(@SuppressWarnings("NullableProblems") ImmutablePair<String, String> key) throws Exception {
+                            return requestValidationSync(key.left, key.right);
+                        }
+                    }
+            );
+
 
     CoreClientImpl(WebSocket socket, int shardId) {
         this.socket = socket;
@@ -67,25 +94,29 @@ public class CoreClientImpl implements CoreClient {
     @Override
     public boolean inGuild(String guildId) {
         log.info("Requested guild check");
-        return requestValidationSync(guildId);
+        return guildValidMap.getUnchecked(guildId);
     }
 
     @Override
-    public boolean voiceChannelExists(String s) {
+    public boolean voiceChannelExists(String guildId, String channelId) {
         log.info("Requested channel check");
-        return validMap.getOrDefault(s, false) || requestValidationSync(s);
+        return channelValidMap.getUnchecked(new ImmutablePair<>(guildId, channelId));
     }
 
     @Override
-    public boolean hasPermissionInChannel(String s, long l) {
+    public boolean hasPermissionInChannel(String guildId, String channelId, long l) {
         log.info("Requested permission check");
-        return validMap.getOrDefault(s, false) || requestValidationSync(s);
+        return channelValidMap.getUnchecked(new ImmutablePair<>(guildId, channelId));
     }
 
-    private boolean requestValidationSync(String guildOrVcId) {
+    private boolean requestValidationSync(String guildId, String channelId) {
         JSONObject json = new JSONObject();
         json.put("op", "validationReq");
-        json.put("guildOrChannelId", guildOrVcId);
+        json.put("guildId", guildId);
+
+        if (channelId != null) {
+            json.put("channelId", channelId);
+        }
 
         long startTime = System.currentTimeMillis();
         socket.send(json.toString());
@@ -102,14 +133,16 @@ public class CoreClientImpl implements CoreClient {
             throw new RuntimeException("Validation timed out");
         }
 
-        return validMap.get(guildOrVcId);
+        return channelId == null
+                ? guildValidMap.getIfPresent(guildId) == Boolean.TRUE
+                : channelValidMap.getIfPresent(new ImmutablePair<>(guildId, channelId)) == Boolean.TRUE;
     }
 
     void provideValidation(String guildId, String channelId, boolean valid) {
-        validMap.put(guildId, valid);
-        if (channelId != null) {
-            validMap.put(channelId, valid);
-        }
+        guildValidMap.put(guildId, valid);
+        if (channelId != null)
+            channelValidMap.put(new ImmutablePair<>(guildId, channelId), valid);
+
         synchronized (validationObj) {
             validationObj.notifyAll();
         }
