@@ -27,7 +27,6 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
-import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
 import org.json.JSONObject;
 
@@ -117,7 +116,7 @@ public class Lavalink {
     }
 
     public void shutdown() {
-        nodes.forEach(WebSocketClient::close);
+        nodes.forEach(ReusableWebSocket::close);
     }
 
     LavalinkSocket getSocket(String guildId) {
