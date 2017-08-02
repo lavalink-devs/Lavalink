@@ -46,7 +46,7 @@ public class CoreClientImpl implements CoreClient {
     private final Object isConnectionObj = new Object();
     private boolean connected = false;
 
-    LoadingCache<String, Boolean> guildValidMap = CacheBuilder.newBuilder()
+    private LoadingCache<String, Boolean> guildValidMap = CacheBuilder.newBuilder()
             .concurrencyLevel(4)
             .expireAfterWrite(5, TimeUnit.SECONDS)
             .build(
@@ -58,7 +58,7 @@ public class CoreClientImpl implements CoreClient {
                     }
             );
 
-    LoadingCache<ImmutablePair<String, String>, Boolean> channelValidMap = CacheBuilder.newBuilder()
+    private LoadingCache<ImmutablePair<String, String>, Boolean> channelValidMap = CacheBuilder.newBuilder()
             .concurrencyLevel(4)
             .expireAfterWrite(5, TimeUnit.SECONDS)
             .build(

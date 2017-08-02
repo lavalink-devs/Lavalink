@@ -83,37 +83,40 @@ public class LavalinkSocket extends ReusableWebSocket {
                 jda.getClient().send(json.getString("message"));
                 break;
             case "validationReq":
-                int sId = LavalinkUtil.getShardFromSnowflake(json.getString("guildOrChannelId"), lavalink.getNumShards());
+                int sId = LavalinkUtil.getShardFromSnowflake(json.getString("guildId"), lavalink.getNumShards());
                 JDA jda2 = lavalink.getShard(sId);
-                // Check if the VC or Guild exists, and that we have access to the VC
+
+                String guildId = json.getString("guildId");
+                String channelId = json.optString("channelId");
+                if (channelId.equals("")) channelId = null;
+
 
                 JSONObject res = new JSONObject();
                 res.put("op", "validationRes");
-                String mysteryId = json.getString("guildOrChannelId");
-                Guild guild = jda2.getGuildById(mysteryId);
-                VoiceChannel vc = jda2.getVoiceChannelById(mysteryId);
+                res.put("guildId", guildId);
+                VoiceChannel vc = null;
+                if (channelId != null)
+                    vc = jda2.getVoiceChannelById(channelId);
 
-                if (vc != null) {
-                    guild = vc.getGuild();
-                    res.put("guildId", guild.getId());
-                    res.put("channelId", vc.getId());
-                    res.put("valid", PermissionUtil.checkPermission(vc, guild.getSelfMember(),
-                            Permission.VOICE_CONNECT, Permission.VOICE_SPEAK));
-                    send(res.toString());
-                    break;
-                }
+                Guild guild = jda2.getGuildById(guildId);
 
-                if (guild == null) {
-                    res.put("guildId", mysteryId);
-                    res.put("channelId", mysteryId);
+                if (guild == null && channelId == null) {
                     res.put("valid", false);
                     send(res.toString());
-                    break;
+                } else if (guild == null) {
+                    res.put("valid", false);
+                    res.put("channelId", channelId);
+                    send(res.toString());
+                } else if (channelId != null) {
+                    res.put("valid", vc != null
+                            && PermissionUtil.checkPermission(vc, guild.getSelfMember(),
+                            Permission.VOICE_CONNECT, Permission.VOICE_SPEAK));
+                    res.put("channelId", channelId);
+                    send(res.toString());
+                } else {
+                    res.put("valid", true);
+                    send(res.toString());
                 }
-
-                res.put("guildId", mysteryId);
-                res.put("valid", true);
-                send(res.toString());
                 break;
             case "isConnectedReq":
                 JDAImpl jda3 = (JDAImpl) lavalink.getShard(json.getInt("shardId"));
