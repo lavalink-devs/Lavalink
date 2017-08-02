@@ -38,6 +38,7 @@ public abstract class ReusableWebSocket {
     private final Map<String, String> headers;
     private final int connectTimeout;
     private final ReusableWebSocket instance = this; // For use in inner class
+    private boolean isUsed = false;
 
     public ReusableWebSocket(URI serverUri, Draft draft, Map<String, String> headers, int connectTimeout) {
         this.serverUri = serverUri;
@@ -81,13 +82,15 @@ public abstract class ReusableWebSocket {
     }
 
     public void connect() {
-        if (socket == null) socket = new DisposableSocket(serverUri, draft, headers, connectTimeout);
+        if (socket == null || isUsed) socket = new DisposableSocket(serverUri, draft, headers, connectTimeout);
         socket.connect();
+        isUsed = true;
     }
 
     public void connectBlocking() throws InterruptedException {
-        if (socket == null) socket = new DisposableSocket(serverUri, draft, headers, connectTimeout);
+        if (socket == null || isUsed) socket = new DisposableSocket(serverUri, draft, headers, connectTimeout);
         socket.connectBlocking();
+        isUsed = true;
     }
 
     public void close() {
@@ -109,6 +112,7 @@ public abstract class ReusableWebSocket {
 
         DisposableSocket(URI serverUri, Draft protocolDraft, Map<String, String> httpHeaders, int connectTimeout) {
             super(serverUri, protocolDraft, httpHeaders, connectTimeout);
+            isUsed = false;
         }
 
         @Override
