@@ -47,8 +47,11 @@ public abstract class ReusableWebSocket {
     }
 
     public abstract void onOpen(ServerHandshake handshakeData);
+
     public abstract void onMessage(String message);
+
     public abstract void onClose(int code, String reason, boolean remote);
+
     public abstract void onError(Exception ex);
 
     public void send(String text) {
@@ -85,6 +88,21 @@ public abstract class ReusableWebSocket {
     public void connectBlocking() throws InterruptedException {
         if (socket == null) socket = new DisposableSocket(serverUri, draft, headers, connectTimeout);
         socket.connectBlocking();
+    }
+
+    public void close() {
+        if (socket != null)
+            socket.close();
+    }
+
+    public void close(int code) {
+        if (socket != null)
+            socket.close(code);
+    }
+
+    public void close(int code, String reason) {
+        if (socket != null)
+            socket.close(code, reason);
     }
 
     private class DisposableSocket extends WebSocketClient {
