@@ -32,6 +32,7 @@ import lavalink.client.player.event.PlayerPauseEvent;
 import lavalink.client.player.event.PlayerResumeEvent;
 import lavalink.client.player.event.TrackStartEvent;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -60,6 +61,12 @@ public class LavalinkPlayer implements IPlayer {
 
     public void setSocket(LavalinkSocket socket) {
         this.socket = socket;
+
+        JDAImpl jda = (JDAImpl) lavalink.getShard(LavalinkUtil.getShardFromSnowflake(guildId, lavalink.getNumShards()));
+        //jda.getGuildById(guildId).getAudioManager().closeAudioConnection();
+
+        // Close the audio connection by force if it exists
+        jda.getClient().send("{\"op\":4,\"d\":{\"self_deaf\":false,\"guild_id\":\"" + guildId + "\",\"channel_id\":null,\"self_mute\":false}}");
 
         // Make sure we are actually connected to a VC
         if (socket != null
