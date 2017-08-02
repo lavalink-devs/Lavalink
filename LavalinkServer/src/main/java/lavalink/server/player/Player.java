@@ -101,7 +101,8 @@ public class Player implements AudioSendHandler {
     public JSONObject getState() {
         JSONObject json = new JSONObject();
 
-        json.put("position", player.getPlayingTrack().getPosition());
+        if (player.getPlayingTrack() != null)
+            json.put("position", player.getPlayingTrack().getPosition());
         json.put("time", System.currentTimeMillis());
 
         return json;
