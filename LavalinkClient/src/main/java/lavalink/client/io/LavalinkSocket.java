@@ -35,7 +35,6 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.utils.PermissionUtil;
-import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
@@ -47,7 +46,7 @@ import java.net.URI;
 import java.nio.channels.NotYetConnectedException;
 import java.util.Map;
 
-public class LavalinkSocket extends WebSocketClient {
+public class LavalinkSocket extends ReusableWebSocket {
 
     private static final Logger log = LoggerFactory.getLogger(LavalinkSocket.class);
 
