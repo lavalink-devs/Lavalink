@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 import java.nio.channels.NotYetConnectedException;
 import java.util.Map;
@@ -190,12 +191,23 @@ public class LavalinkSocket extends ReusableWebSocket {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        log.info("Connection closed with reason " + code + ": " + reason + " :: Remote=" + remote);
+        reason = reason == null ? "<no reason given>" : reason;
+        if (code == 1000) {
+            log.info("Connection closed gracefully with reason: " + reason + " :: Remote=" + remote);
+        } else {
+            log.warn("Connection closed unexpectedly with reason " + code + ": " + reason + " :: Remote=" + remote);
+        }
+
         lavalink.loadBalancer.onNodeDisconnect(this);
     }
 
     @Override
     public void onError(Exception ex) {
+        if (ex instanceof ConnectException) {
+            log.warn("Failed to connect to " + getRemoteSocketAddress() + ", retrying in " + getReconnectInterval()/1000 + " seconds.");
+            return;
+        }
+
         log.error("Caught exception in websocket", ex);
     }
 
