@@ -28,8 +28,6 @@ import org.slf4j.LoggerFactory;
 public class ReconnectTask implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(ReconnectTask.class);
-
-    private static int RECONNECT_COOLDOWN_MS = 2000;
     private Lavalink lavalink;
 
     ReconnectTask(Lavalink lavalink) {
@@ -42,7 +40,7 @@ public class ReconnectTask implements Runnable {
             lavalink.nodes.forEach(lavalinkSocket -> {
                 if (lavalinkSocket.isClosed()
                         && !lavalinkSocket.isConnecting()
-                        && System.currentTimeMillis() - lavalinkSocket.lastReconnectAttempt > RECONNECT_COOLDOWN_MS) {
+                        && System.currentTimeMillis() - lavalinkSocket.lastReconnectAttempt > lavalinkSocket.getReconnectInterval()) {
                     lavalinkSocket.attemptReconnect();
                 }
             });

@@ -54,6 +54,7 @@ public class LavalinkSocket extends ReusableWebSocket {
     private final Lavalink lavalink;
     RemoteStats stats;
     long lastReconnectAttempt = 0;
+    private int reconnectsAttempted = 0;
 
     LavalinkSocket(Lavalink lavalink, URI serverUri, Draft protocolDraft, Map<String, String> headers) {
         super(serverUri, protocolDraft, headers, TIMEOUT_MS);
@@ -69,6 +70,7 @@ public class LavalinkSocket extends ReusableWebSocket {
     public void onOpen(ServerHandshake handshakeData) {
         log.info("Received handshake from server");
         lavalink.loadBalancer.onNodeConnect(this);
+        reconnectsAttempted = 0;
     }
 
     @Override
@@ -209,7 +211,11 @@ public class LavalinkSocket extends ReusableWebSocket {
 
     void attemptReconnect() {
         lastReconnectAttempt = System.currentTimeMillis();
+        reconnectsAttempted++;
         connect();
     }
 
+    long getReconnectInterval() {
+        return reconnectsAttempted * 2000 - 2000;
+    }
 }
