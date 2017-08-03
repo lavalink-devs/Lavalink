@@ -254,3 +254,12 @@ Response:
   ]
 }
 ```
+
+### Special notes
+* When your shard's mainWS connection dies, so does all your lavalink audio connections.
+    * This also includes resumes
+* When a client connection to Lavalink-Server disconnects, all connections and players for that session are shut down.
+* If Lavalink-Server suddenly dies (think SIGKILL) the client will have to terminate any audio connections by sending this event:
+```json
+{"op":4,"d":{"self_deaf":false,"guild_id":"GUILD_ID_HERE","channel_id":null,"self_mute":false}}
+```
