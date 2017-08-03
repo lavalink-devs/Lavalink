@@ -77,11 +77,11 @@ class LavalinkTest {
         try {
             jda = new JDABuilder(AccountType.BOT)
                     .setToken(System.getenv("TEST_TOKEN"))
+                    .addEventListener(lavalink)
                     .buildBlocking();
 
             lavalink = new Lavalink(1, integer -> jda);
             lavalink.addNode(new URI("ws://localhost"), "youshallnotpass");
-            lavalink.interceptJdaAudio(jda);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
