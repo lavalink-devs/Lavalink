@@ -59,6 +59,7 @@ public class LavalinkPlayer implements IPlayer {
         addListener(new LavalinkInternalPlayerEventHandler());
     }
 
+    // Used when we are moved to a new socket
     public void setSocket(LavalinkSocket socket) {
         this.socket = socket;
 
@@ -74,6 +75,11 @@ public class LavalinkPlayer implements IPlayer {
             int shardId = LavalinkUtil.getShardFromSnowflake(guildId, lavalink.getNumShards());
             JDA shard = lavalink.getShard(shardId);
             lavalink.openVoiceConnection(lavalink.getConnectedChannel(shard.getGuildById(guildId)));
+
+            IPlayer player = lavalink.getPlayer(guildId);
+            if (player != null && player.getPlayingTrack() != null) {
+                player.playTrack(player.getPlayingTrack());
+            }
         }
     }
 

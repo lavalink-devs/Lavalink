@@ -22,23 +22,27 @@
 
 package lavalink.client.io;
 
-import lavalink.client.player.IPlayer;
 import net.dv8tion.jda.core.entities.Guild;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LavalinkLoadBalancer {
 
+    private static final Logger log = LoggerFactory.getLogger(LavalinkLoadBalancer.class);
+
     private Lavalink lavalink;
-    private Map<String, LavalinkSocket> socketMap = new ConcurrentHashMap<>();
+    private Map<String, Optional<LavalinkSocket>> socketMap = new ConcurrentHashMap<>();
 
     public LavalinkLoadBalancer(Lavalink lavalink) {
         this.lavalink = lavalink;
     }
 
     LavalinkSocket getSocket(String guildId) {
-        return socketMap.computeIfAbsent(guildId, s -> determineBestSocket());
+        return socketMap.computeIfAbsent(guildId, s -> Optional.ofNullable(determineBestSocket())).orElse(null);
     }
 
     LavalinkSocket getSocket(Guild guild) {
@@ -66,21 +70,18 @@ public class LavalinkLoadBalancer {
     }
 
     void onNodeDisconnect(LavalinkSocket disconnected) {
-        socketMap.replaceAll((s, socket) -> {
-            LavalinkSocket newSocket = socket.equals(disconnected) ? determineBestSocket() : socket;
-            lavalink.getPlayer(s).setSocket(socket);
-            return newSocket;
+        socketMap.replaceAll((guildId, socket) -> {
+            LavalinkSocket newSocket = disconnected.equals(socket.orElse(null)) ? determineBestSocket() : socket.orElse(null);
+            lavalink.getPlayer(guildId).setSocket(newSocket);
+            return Optional.ofNullable(newSocket);
         });
     }
 
     void onNodeConnect(LavalinkSocket connected) {
         for (String guildId : socketMap.keySet()) {
-            if (socketMap.get(guildId) == null) {
-                socketMap.put(guildId, connected);
-                IPlayer player = lavalink.getPlayer(guildId);
-                if (player != null && player.getPlayingTrack() != null) {
-                    player.playTrack(player.getPlayingTrack());
-                }
+            if(!socketMap.get(guildId).isPresent()) {
+                socketMap.put(guildId, Optional.of(connected));
+                lavalink.getPlayer(guildId).setSocket(connected);
             }
         }
     }

@@ -25,12 +25,16 @@ package lavalink.client.io;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Map;
 
 public abstract class ReusableWebSocket {
+
+    private static final Logger log = LoggerFactory.getLogger(ReusableWebSocket.class);
 
     private DisposableSocket socket;
     private final URI serverUri;
