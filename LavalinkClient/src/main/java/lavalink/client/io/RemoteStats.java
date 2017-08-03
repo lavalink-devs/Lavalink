@@ -26,25 +26,27 @@ import org.json.JSONObject;
 
 public class RemoteStats {
 
-    private int players;
-    private int playingPlayers;
-    private long uptime;
+    private final JSONObject json;
+    private final int players;
+    private final int playingPlayers;
+    private final long uptime;
 
     // In bytes
-    private int memFree;
-    private int memUsed;
-    private int memAllocated;
-    private int memReservable;
+    private final int memFree;
+    private final int memUsed;
+    private final int memAllocated;
+    private final int memReservable;
 
-    private int cpuCores;
-    private double systemLoad;
-    private double lavalinkLoad;
+    private final int cpuCores;
+    private final double systemLoad;
+    private final double lavalinkLoad;
 
     private int avgFramesSentPerMinute = -1;
     private int avgFramesNulledPerMinute = -1;
     private int avgFramesDeficitPerMinute = -1;
 
     RemoteStats(JSONObject json) {
+        this.json = json;
         players = json.getInt("players");
         playingPlayers = json.getInt("playingPlayers");
         uptime = json.getLong("uptime");
@@ -65,6 +67,10 @@ public class RemoteStats {
             avgFramesNulledPerMinute = frames.getInt("nulled");
             avgFramesDeficitPerMinute = frames.getInt("deficit");
         }
+    }
+
+    public JSONObject getAsJson() {
+        return json;
     }
 
     public int getPlayers() {
