@@ -123,11 +123,12 @@ Incoming message to forward to mainWS
 }
 ```
 
-Request to check if the VC or Guild exists, and that we have access to the VC
+Request to check if the VC or Guild exists, and that we have access to the VC. Note that the channelId may be omitted, in which case you should only check if we are in the guild.
 ```json
 {
     "op": "validationReq",
-    "guildOrChannelId": "..."
+    "guildId": "...",
+    "channelId": "..."
 }
 ```
 
