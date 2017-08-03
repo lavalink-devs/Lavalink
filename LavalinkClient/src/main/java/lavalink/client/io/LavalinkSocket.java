@@ -230,4 +230,8 @@ public class LavalinkSocket extends ReusableWebSocket {
     long getReconnectInterval() {
         return reconnectsAttempted * 2000 - 2000;
     }
+
+    public RemoteStats getStats() {
+        return stats;
+    }
 }
