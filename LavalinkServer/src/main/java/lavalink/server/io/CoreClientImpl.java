@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 public class CoreClientImpl implements CoreClient {
 
     private static final Logger log = LoggerFactory.getLogger(CoreClientImpl.class);
-    private static final int TIMEOUT = 5000;
+    private static final int TIMEOUT = 60 * 1000;
 
     private final WebSocket socket;
     private int shardId;
@@ -130,7 +130,8 @@ public class CoreClientImpl implements CoreClient {
         }
 
         if (System.currentTimeMillis() - startTime >= TIMEOUT) {
-            throw new RuntimeException("Validation timed out");
+            log.error("Validation timed out after " + TIMEOUT + " millis");
+            return false;
         }
 
         return channelId == null
@@ -165,7 +166,7 @@ public class CoreClientImpl implements CoreClient {
         }
 
         if (System.currentTimeMillis() - startTime >= TIMEOUT) {
-            throw new RuntimeException("Connection checking timed out");
+            throw new RuntimeException("Connection checking timed out after " + TIMEOUT + " millis");
         }
 
         return connected;
