@@ -78,7 +78,9 @@ public class LavalinkPlayer implements IPlayer {
 
             IPlayer player = lavalink.getPlayer(guildId);
             if (player != null && player.getPlayingTrack() != null) {
-                player.playTrack(player.getPlayingTrack());
+                AudioTrack track = player.getPlayingTrack();
+                track.setPosition(player.getTrackPosition());
+                player.playTrack(track);
             }
         }
     }
@@ -95,6 +97,7 @@ public class LavalinkPlayer implements IPlayer {
             json.put("op", "play");
             json.put("guildId", guildId);
             json.put("track", LavalinkUtil.toMessage(track));
+            json.put("startTime", track.getPosition());
             if (socket != null)
                 socket.send(json.toString());
             position = 0;
