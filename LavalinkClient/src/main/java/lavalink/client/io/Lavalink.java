@@ -27,8 +27,14 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
+import net.dv8tion.jda.core.events.ReadyEvent;
+import net.dv8tion.jda.core.events.ReconnectedEvent;
+import net.dv8tion.jda.core.events.ResumedEvent;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.java_websocket.drafts.Draft_6455;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -40,7 +46,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-public class Lavalink {
+public class Lavalink extends ListenerAdapter {
+
+    private static final Logger log = LoggerFactory.getLogger(Lavalink.class);
 
     private final int numShards;
     private final Function<Integer, JDA> jdaProvider;
@@ -107,10 +115,6 @@ public class Lavalink {
         return connectedChannels.getOrDefault(guildId, null);
     }
 
-    public void interceptJdaAudio(JDA jda) {
-        ((JDAImpl) jda).getClient().getHandlers().put("VOICE_SERVER_UPDATE", new VoiceServerUpdateInterceptor(this, (JDAImpl) jda));
-    }
-
     public LavalinkPlayer getPlayer(String guildId) {
         return players.computeIfAbsent(guildId, __ -> new LavalinkPlayer(this, loadBalancer.getSocket(guildId), guildId));
     }
@@ -133,5 +137,37 @@ public class Lavalink {
 
     public List<LavalinkSocket> getNodes() {
         return nodes;
+    }
+
+    /* JDA event handling */
+
+    @Override
+    public void onReady(ReadyEvent event) {
+        ((JDAImpl) event.getJDA()).getClient().getHandlers()
+                .put("VOICE_SERVER_UPDATE", new VoiceServerUpdateInterceptor(this, (JDAImpl) event.getJDA()));
+    }
+
+    @Override
+    public void onReconnect(ReconnectedEvent event) {
+        reconnectTheVoiceConnections(event.getJDA());
+    }
+
+    @Override
+    public void onResume(ResumedEvent event) {
+        reconnectTheVoiceConnections(event.getJDA());
+    }
+
+    private void reconnectTheVoiceConnections(JDA jda) {
+        connectedChannels.forEach((guildId, channel) -> {
+            try {
+                Guild guild = jda.getGuildById(guildId);
+                if (guild != null) {
+                    openVoiceConnection(guild.getVoiceChannelById(channel));
+                }
+            } catch (Exception e) {
+                int shardId = jda.getShardInfo() == null ? 0 : jda.getShardInfo().getShardId();
+                log.error("Caught exception while trying to reconnect shard " + shardId, e);
+            }
+        });
     }
 }
