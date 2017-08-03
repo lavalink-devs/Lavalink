@@ -22,6 +22,7 @@
 
 package lavalink.server.io;
 
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import lavalink.server.player.Player;
 import lavalink.server.util.Util;
 import net.dv8tion.jda.manager.AudioManager;
@@ -125,7 +126,11 @@ public class SocketServer extends WebSocketServer {
             case "play":
                 try {
                     Player player = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
-                    player.play(Util.toAudioTrack(json.getString("track")));
+                    AudioTrack track = Util.toAudioTrack(json.getString("track"));
+                    if (json.has("startTime")) {
+                        track.setPosition(json.getLong("startTime"));
+                    }
+                    player.play(track);
 
                     SocketContext context = contextMap.get(webSocket);
 

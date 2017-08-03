@@ -65,12 +65,14 @@ Response to `isConnectedRes`.
 }
 ```
 
-Cause the player to play a track
+Cause the player to play a track.
+`startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
 ```json
 {
     "op": "play",
     "guildId": "...",
-    "track": "..."
+    "track": "...",
+    "startTime": "60000"
 }
 ```
 
