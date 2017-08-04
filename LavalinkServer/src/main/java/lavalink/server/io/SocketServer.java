@@ -130,6 +130,11 @@ public class SocketServer extends WebSocketServer {
                     if (json.has("startTime")) {
                         track.setPosition(json.getLong("startTime"));
                     }
+
+                    if (json.optBoolean("pause", false)) {
+                        player.setPause(true);
+                    }
+
                     player.play(track);
 
                     SocketContext context = contextMap.get(webSocket);

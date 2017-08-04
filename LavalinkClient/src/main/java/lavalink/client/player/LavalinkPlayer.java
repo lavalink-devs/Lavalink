@@ -98,6 +98,7 @@ public class LavalinkPlayer implements IPlayer {
             json.put("guildId", guildId);
             json.put("track", LavalinkUtil.toMessage(track));
             json.put("startTime", track.getPosition());
+            json.put("pause", paused);
             if (socket != null)
                 socket.send(json.toString());
             position = 0;
@@ -108,7 +109,6 @@ public class LavalinkPlayer implements IPlayer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
@@ -150,9 +150,14 @@ public class LavalinkPlayer implements IPlayer {
         if (getPlayingTrack() == null) throw new IllegalStateException("Not currently playing anything");
         if (getPlayingTrack().getInfo().isStream) return Long.MAX_VALUE;
 
-        long timeDiff = System.currentTimeMillis() - updateTime;
+        if (!paused) {
+            // Account for the time since our last update
+            long timeDiff = System.currentTimeMillis() - updateTime;
+            return Math.min(position + timeDiff, track.getDuration());
+        } else {
+            return Math.min(position, track.getDuration());
+        }
 
-        return Math.min(position + timeDiff, track.getDuration());
     }
 
     @Override

@@ -120,6 +120,7 @@ public class Lavalink extends ListenerAdapter {
     }
 
     public void shutdown() {
+        reconnectService.shutdown();
         nodes.forEach(ReusableWebSocket::close);
     }
 
