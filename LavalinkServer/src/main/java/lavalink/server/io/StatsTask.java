@@ -45,8 +45,6 @@ public class StatsTask implements Runnable {
 
     @Override
     public void run() {
-        log.info("Sending stats");
-
         JSONObject out = new JSONObject();
         out.put("op", "stats");
         out.put("players", context.getPlayers().size());
@@ -63,14 +61,14 @@ public class StatsTask implements Runnable {
 
         SystemInfo si = new SystemInfo();
         HardwareAbstractionLayer hal = si.getHardware();
-        OperatingSystem os = si.getOperatingSystem();
 
-        OSProcess p = os.getProcess(os.getProcessId());
+
 
         JSONObject cpu = new JSONObject();
         cpu.put("cores", Runtime.getRuntime().availableProcessors());
         cpu.put("systemLoad", hal.getProcessor().getSystemCpuLoad());
-        cpu.put("lavalinkLoad", (p.getKernelTime() + p.getUserTime()) / p.getUpTime());
+        cpu.put("lavalinkLoad", getProcessRecentCpuUsage());
+
         out.put("cpu", cpu);
 
         int totalSent = 0;
@@ -99,6 +97,30 @@ public class StatsTask implements Runnable {
         }
 
         context.getSocket().send(out.toString());
+    }
+
+    private double uptime = 0;
+    private double cpuTime = 0;
+
+    private double getProcessRecentCpuUsage() {
+        double output = 0d;
+        SystemInfo si = new SystemInfo();
+        HardwareAbstractionLayer hal = si.getHardware();
+        OperatingSystem os = si.getOperatingSystem();
+        OSProcess p = os.getProcess(os.getProcessId());
+
+        if (cpuTime != 0) {
+            double uptimeDiff = p.getUpTime() - uptime;
+            double cpuDiff = (p.getKernelTime() + p.getUserTime()) - cpuTime;
+            output = cpuDiff / uptimeDiff;
+        } else {
+            output = ((double) (p.getKernelTime() + p.getUserTime())) / (double) p.getUserTime();
+        }
+
+        // Record for next invocation
+        uptime = p.getUpTime();
+        cpuTime = p.getKernelTime() + p.getUserTime();
+        return output / hal.getProcessor().getLogicalProcessorCount();
     }
 
 }
