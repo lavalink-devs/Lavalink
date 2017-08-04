@@ -25,6 +25,7 @@ package lavalink.server.player;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
@@ -32,16 +33,21 @@ import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceMan
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import lavalink.server.Config;
 import lavalink.server.Launcher;
 import lavalink.server.io.SocketContext;
+import lavalink.server.io.SocketServer;
 import net.dv8tion.jda.audio.AudioSendHandler;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Player implements AudioSendHandler {
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+public class Player extends AudioEventAdapter implements AudioSendHandler {
 
     private static final Logger log = LoggerFactory.getLogger(Player.class);
 
@@ -60,16 +66,18 @@ public class Player implements AudioSendHandler {
         if (sources.isHttp()) PLAYER_MANAGER.registerSourceManager(new HttpAudioSourceManager());
     }
 
-    private final SocketContext socketContext;
+    private SocketContext socketContext;
     private final String guildId;
     private final AudioPlayer player;
     private AudioLossCounter audioLossCounter = new AudioLossCounter();
     private AudioFrame lastFrame = null;
+    private ScheduledFuture myFuture = null;
 
     public Player(SocketContext socketContext, String guildId) {
         this.socketContext = socketContext;
         this.guildId = guildId;
         this.player = PLAYER_MANAGER.createPlayer();
+        this.player.addListener(this);
         this.player.addListener(new EventEmitter(this));
         this.player.addListener(audioLossCounter);
     }
@@ -141,6 +149,20 @@ public class Player implements AudioSendHandler {
 
     public boolean isPlaying() {
         return player.getPlayingTrack() != null && !player.isPaused();
+    }
+
+    @Override
+    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+        myFuture.cancel(false);
+    }
+
+    @Override
+    public void onTrackStart(AudioPlayer player, AudioTrack track) {
+        if (myFuture == null || myFuture.isCancelled()) {
+            myFuture = socketContext.playerUpdateService.scheduleAtFixedRate(() -> {
+                SocketServer.sendPlayerUpdate(socketContext.getSocket(), this);
+            }, 0, 5, TimeUnit.SECONDS);
+        }
     }
 
 }
