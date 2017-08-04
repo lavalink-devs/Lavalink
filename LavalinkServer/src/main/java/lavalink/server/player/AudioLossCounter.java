@@ -77,6 +77,7 @@ public class AudioLossCounter extends AudioEventAdapter {
 
         // Check that we have at least stats for last minute
         long lastMin = System.currentTimeMillis() / 60000 - 1;
+        //log.info((playingSince < lastMin * 60000) + "");
         return playingSince < lastMin * 60000;
     }
 
@@ -93,12 +94,12 @@ public class AudioLossCounter extends AudioEventAdapter {
     }
 
     @Override
-    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+    public void onTrackEnd(AudioPlayer __, AudioTrack ___, AudioTrackEndReason ____) {
         lastTrackEnded = System.currentTimeMillis();
     }
 
     @Override
-    public void onTrackStart(AudioPlayer player, AudioTrack track) {
+    public void onTrackStart(AudioPlayer __, AudioTrack ___) {
         lastTrackStarted = System.currentTimeMillis();
 
         if (lastTrackStarted - lastTrackEnded > ACCEPTABLE_TRACK_SWITCH_TIME
@@ -106,6 +107,16 @@ public class AudioLossCounter extends AudioEventAdapter {
             playingSince = System.currentTimeMillis();
             lastTrackEnded = Long.MAX_VALUE;
         }
+    }
+
+    @Override
+    public void onPlayerPause(AudioPlayer player) {
+        onTrackEnd(null, null, null);
+    }
+
+    @Override
+    public void onPlayerResume(AudioPlayer player) {
+        onTrackStart(null, null);
     }
 
     @Override
