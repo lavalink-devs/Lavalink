@@ -146,7 +146,8 @@ public class LavalinkLoadBalancer {
                     '}';
 
             return "Penalties{" +
-                    "playerPenalty=" + playerPenalty +
+                    "total=" + getTotal() +
+                    ", playerPenalty=" + playerPenalty +
                     ", cpuPenalty=" + cpuPenalty +
                     ", deficitFramePenalty=" + deficitFramePenalty +
                     ", nullFramePenalty=" + nullFramePenalty +
