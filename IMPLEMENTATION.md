@@ -13,10 +13,11 @@ How to write your own client. The Java client will serve as an example implement
 
 ## Protocol
 ### Opening a connection
-When opening a websocket connection, you must supply 2 required headers:
+When opening a websocket connection, you must supply 3 required headers:
 ```
 Authorization: Password matching the server config
 Num-Shards: Total number of shards your bot is operating on
+User-Id: The user id of the bot you are playing music with
 ```
 
 ### Outgoing messages

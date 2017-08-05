@@ -54,10 +54,11 @@ public class SocketServer extends WebSocketServer {
     public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
         try {
             int shardCount = Integer.parseInt(clientHandshake.getFieldValue("Num-Shards"));
+            String userId = clientHandshake.getFieldValue("User-Id");
 
             if (clientHandshake.getFieldValue("Authorization").equals(password)) {
                 log.info("Connection opened from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
-                contextMap.put(webSocket, new SocketContext(webSocket, shardCount));
+                contextMap.put(webSocket, new SocketContext(webSocket, userId, shardCount));
             } else {
                 log.error("Authentication failed from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
                 webSocket.close(AUTHORIZATION_REJECTED, "Authorization rejected");

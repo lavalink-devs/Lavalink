@@ -2,7 +2,6 @@ server:
   port: 2333 # REST server
 lavalink:
   server:
-    userId: "12345678901234567890"
     password: "youshallnotpass"
     sources:
       youtube: true

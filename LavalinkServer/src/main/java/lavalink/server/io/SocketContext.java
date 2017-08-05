@@ -22,7 +22,6 @@
 
 package lavalink.server.io;
 
-import lavalink.server.Launcher;
 import lavalink.server.player.Player;
 import lavalink.server.util.Util;
 import net.dv8tion.jda.Core;
@@ -35,7 +34,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 public class SocketContext {
@@ -43,33 +41,32 @@ public class SocketContext {
     private static final Logger log = LoggerFactory.getLogger(SocketContext.class);
 
     private final WebSocket socket;
+    private String userId;
     private int shardCount;
     private final HashMap<Integer, Core> cores = new HashMap<>();
     private final HashMap<String, Player> players = new HashMap<>();
     private ScheduledExecutorService statsExecutor;
     public final ScheduledExecutorService playerUpdateService;
 
-    SocketContext(WebSocket socket, int shardCount) {
+    SocketContext(WebSocket socket, String userId, int shardCount) {
         this.socket = socket;
+        this.userId = userId;
         this.shardCount = shardCount;
 
         statsExecutor = Executors.newSingleThreadScheduledExecutor();
         statsExecutor.scheduleAtFixedRate(new StatsTask(this), 0, 1, TimeUnit.MINUTES);
 
-        playerUpdateService = Executors.newScheduledThreadPool(2, new ThreadFactory() {
-            @Override
-            public Thread newThread(Runnable r) {
-                Thread thread = new Thread(r);
-                thread.setName("player-update");
-                thread.setDaemon(true);
-                return thread;
-            }
+        playerUpdateService = Executors.newScheduledThreadPool(2, r -> {
+            Thread thread = new Thread(r);
+            thread.setName("player-update");
+            thread.setDaemon(true);
+            return thread;
         });
     }
 
     Core getCore(int shardId) {
         return cores.computeIfAbsent(shardId,
-                __ -> new Core(Launcher.config.getUserId(), new CoreClientImpl(socket, shardId))
+                __ -> new Core(userId, new CoreClientImpl(socket, shardId))
         );
     }
 
@@ -79,7 +76,7 @@ public class SocketContext {
         );
     }
 
-    public int getShardCount() {
+    int getShardCount() {
         return shardCount;
     }
 
@@ -87,11 +84,11 @@ public class SocketContext {
         return socket;
     }
 
-    public HashMap<String, Player> getPlayers() {
+    HashMap<String, Player> getPlayers() {
         return players;
     }
 
-    public List<Player> getPlayingPlayers() {
+    List<Player> getPlayingPlayers() {
         List<Player> newList = new LinkedList<>();
         players.values().forEach(player -> {
             if(player.isPlaying()) newList.add(player);

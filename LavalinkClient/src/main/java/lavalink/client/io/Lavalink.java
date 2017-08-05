@@ -71,10 +71,12 @@ public class Lavalink extends ListenerAdapter {
         reconnectService.scheduleWithFixedDelay(new ReconnectTask(this), 0, 500, TimeUnit.MILLISECONDS);
     }
 
-    public void addNode(URI serverUri, String password) {
+    public void addNode(URI serverUri, String password, String userId) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", password);
         headers.put("Num-Shards", Integer.toString(numShards));
+        headers.put("User-Id", userId);
+
         nodes.add(new LavalinkSocket(this, serverUri, new Draft_6455(), headers));
     }
 
