@@ -23,21 +23,18 @@
 package lavalink.client.io;
 
 import net.dv8tion.jda.core.entities.Guild;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("WeakerAccess")
 public class LavalinkLoadBalancer {
-
-    private static final Logger log = LoggerFactory.getLogger(LavalinkLoadBalancer.class);
 
     private Lavalink lavalink;
     private Map<String, Optional<LavalinkSocket>> socketMap = new ConcurrentHashMap<>();
 
-    public LavalinkLoadBalancer(Lavalink lavalink) {
+    LavalinkLoadBalancer(Lavalink lavalink) {
         this.lavalink = lavalink;
     }
 
@@ -90,7 +87,8 @@ public class LavalinkLoadBalancer {
         return new Penalties(socket);
     }
 
-    private static class Penalties {
+    @SuppressWarnings("unused")
+    public static class Penalties {
 
         private LavalinkSocket socket;
         private int playerPenalty = 0;

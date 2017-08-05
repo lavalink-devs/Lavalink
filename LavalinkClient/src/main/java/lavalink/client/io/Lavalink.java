@@ -136,6 +136,7 @@ public class Lavalink extends ListenerAdapter {
         return numShards;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public List<LavalinkSocket> getNodes() {
         return nodes;
     }
