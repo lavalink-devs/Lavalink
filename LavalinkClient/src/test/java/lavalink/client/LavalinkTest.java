@@ -81,7 +81,7 @@ class LavalinkTest {
                     .buildBlocking();
 
             lavalink = new Lavalink(1, integer -> jda);
-            lavalink.addNode(new URI("ws://localhost"), "youshallnotpass");
+            lavalink.addNode(new URI("ws://localhost"), "youshallnotpass", "152691313123393536");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
