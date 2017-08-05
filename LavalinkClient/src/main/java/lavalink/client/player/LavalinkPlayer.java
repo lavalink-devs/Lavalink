@@ -93,18 +93,19 @@ public class LavalinkPlayer implements IPlayer {
     @Override
     public void playTrack(AudioTrack track) {
         try {
+            position = track.getPosition();
+
             JSONObject json = new JSONObject();
             json.put("op", "play");
             json.put("guildId", guildId);
             json.put("track", LavalinkUtil.toMessage(track));
-            json.put("startTime", track.getPosition());
+            json.put("startTime", position);
             json.put("pause", paused);
             if (socket != null)
                 socket.send(json.toString());
-            position = 0;
+
             updateTime = System.currentTimeMillis();
             this.track = track;
-
             emitEvent(new TrackStartEvent(this, track));
         } catch (IOException e) {
             throw new RuntimeException(e);
