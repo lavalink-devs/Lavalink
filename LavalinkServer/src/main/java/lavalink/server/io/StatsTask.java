@@ -46,9 +46,18 @@ public class StatsTask implements Runnable {
     @Override
     public void run() {
         JSONObject out = new JSONObject();
+
+        final int[] players = {0};
+        final int[] playersPlaying = {0};
+
+        SocketServer.getConnections().forEach(socketContext -> {
+            players[0] += socketContext.getPlayers().size();
+            playersPlaying[0] += socketContext.getPlayingPlayers().size();
+        });
+
         out.put("op", "stats");
-        out.put("players", context.getPlayers().size());
-        out.put("playingPlayers", context.getPlayingPlayers().size());
+        out.put("players", players[0]);
+        out.put("playingPlayers", playersPlaying[0]);
         out.put("uptime", System.currentTimeMillis() - Launcher.startTime);
 
         // In bytes

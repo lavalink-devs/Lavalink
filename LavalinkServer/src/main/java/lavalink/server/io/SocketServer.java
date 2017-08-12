@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -193,6 +194,10 @@ public class SocketServer extends WebSocketServer {
     //Shorthand method
     private int getShardId(WebSocket webSocket, JSONObject json) {
         return Util.getShardFromSnowflake(json.getString("guildId"), contextMap.get(webSocket).getShardCount());
+    }
+
+    static Collection<SocketContext> getConnections() {
+        return contextMap.values();
     }
 
 }
