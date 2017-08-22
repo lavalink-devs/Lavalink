@@ -43,7 +43,6 @@ public class ResetableCountDownLatch {
 
     public void countDown() {
         latch.countDown();
-        log.info("Count is now " + latch.getCount());
     }
 
     public void await() throws InterruptedException {
@@ -57,6 +56,5 @@ public class ResetableCountDownLatch {
     public void reset() {
         while (latch.getCount() != 0) latch.countDown();
         latch = new CountDownLatch(startCount);
-        log.info("Reset");
     }
 }
