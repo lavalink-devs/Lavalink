@@ -25,6 +25,7 @@ package lavalink.server.io;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import lavalink.server.util.ResetableCountDownLatch;
 import net.dv8tion.jda.CoreClient;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.java_websocket.WebSocket;
@@ -42,8 +43,8 @@ public class CoreClientImpl implements CoreClient {
     private final WebSocket socket;
     private int shardId;
 
-    private final Object validationObj = new Object();
-    private final Object isConnectionObj = new Object();
+    private final ResetableCountDownLatch validationLatch = new ResetableCountDownLatch(1);
+    private final ResetableCountDownLatch isConnectedLatch = new ResetableCountDownLatch(1);
     private boolean connected = false;
 
     private LoadingCache<String, Boolean> guildValidMap = CacheBuilder.newBuilder()
@@ -136,9 +137,8 @@ public class CoreClientImpl implements CoreClient {
         socket.send(json.toString());
 
         try {
-            synchronized (validationObj) {
-                validationObj.wait(TIMEOUT);
-            }
+            validationLatch.await(TIMEOUT, TimeUnit.MILLISECONDS);
+            validationLatch.reset();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -158,9 +158,7 @@ public class CoreClientImpl implements CoreClient {
         if (channelId != null)
             channelValidMap.put(new ImmutablePair<>(guildId, channelId), valid);
 
-        synchronized (validationObj) {
-            validationObj.notifyAll();
-        }
+        validationLatch.countDown();
     }
 
     private boolean requestIsConnectedSync() {
@@ -172,9 +170,8 @@ public class CoreClientImpl implements CoreClient {
         socket.send(json.toString());
 
         try {
-            synchronized (isConnectionObj) {
-                isConnectionObj.wait(TIMEOUT);
-            }
+            isConnectedLatch.await(TIMEOUT, TimeUnit.MILLISECONDS);
+            isConnectedLatch.reset();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -188,9 +185,8 @@ public class CoreClientImpl implements CoreClient {
 
     void provideIsConnected(boolean connected) {
         this.connected = connected;
-        synchronized (isConnectionObj) {
-            isConnectionObj.notifyAll();
-        }
+
+        isConnectedLatch.countDown();
     }
 
 }
