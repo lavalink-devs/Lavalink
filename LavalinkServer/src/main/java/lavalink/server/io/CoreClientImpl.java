@@ -94,20 +94,34 @@ public class CoreClientImpl implements CoreClient {
     @Override
     public boolean inGuild(String guildId) {
         log.info("Requested guild check");
-        return guildValidMap.getUnchecked(guildId);
+        boolean val = guildValidMap.getUnchecked(guildId);
+        if (!val) {
+            log.warn("Requested guild check but validation was false!");
+        }
+        return val;
     }
 
     @Override
     public boolean voiceChannelExists(String guildId, String channelId) {
         log.info("Requested channel check");
-        return channelValidMap.getUnchecked(new ImmutablePair<>(guildId, channelId));
+        boolean val = channelValidMap.getUnchecked(new ImmutablePair<>(guildId, channelId));
+        if (!val) {
+            log.warn("Requested channel check but validation was false!");
+        }
+        return val;
     }
 
     @Override
     public boolean hasPermissionInChannel(String guildId, String channelId, long l) {
         log.info("Requested permission check");
-        return channelValidMap.getUnchecked(new ImmutablePair<>(guildId, channelId));
+        boolean val = channelValidMap.getUnchecked(new ImmutablePair<>(guildId, channelId));
+        if (!val) {
+            log.warn("Requested permission check but validation was false!");
+        }
+        return val;
     }
+
+
 
     private boolean requestValidationSync(String guildId, String channelId) {
         JSONObject json = new JSONObject();
