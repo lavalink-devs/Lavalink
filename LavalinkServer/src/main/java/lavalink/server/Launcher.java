@@ -24,7 +24,9 @@ package lavalink.server;
 
 import lavalink.server.io.SocketServer;
 import lavalink.server.nas.NativeAudioSendFactory;
+import lavalink.server.util.SimpleLogToSLF4JAdapter;
 import net.dv8tion.jda.audio.AudioConnection;
+import net.dv8tion.jda.utils.SimpleLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +48,13 @@ public class Launcher {
 
     public final static long startTime = System.currentTimeMillis();
     public static Config config;
-    public final SocketServer socketServer;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final SocketServer socketServer;
 
     @Autowired
     public Launcher(Config config, SocketServer socketServer) {
+        SimpleLog.LEVEL = SimpleLog.Level.OFF;
+        SimpleLog.addListener(new SimpleLogToSLF4JAdapter());
         Launcher.config = config;
         this.socketServer = socketServer;
     }
