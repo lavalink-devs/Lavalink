@@ -68,8 +68,12 @@ public class LavalinkLoadBalancer {
 
     void onNodeDisconnect(LavalinkSocket disconnected) {
         socketMap.replaceAll((guildId, socket) -> {
-            LavalinkSocket newSocket = disconnected.equals(socket.orElse(null)) ? determineBestSocket() : socket.orElse(null);
-            lavalink.getPlayer(guildId).setSocket(newSocket);
+            boolean isAffected = disconnected.equals(socket.orElse(null));
+
+            LavalinkSocket newSocket = isAffected ? determineBestSocket() : socket.orElse(null);
+            if (isAffected)
+                lavalink.getPlayer(guildId).setSocket(newSocket);
+
             return Optional.ofNullable(newSocket);
         });
     }

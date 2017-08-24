@@ -193,9 +193,9 @@ public class LavalinkSocket extends ReusableWebSocket {
     public void onClose(int code, String reason, boolean remote) {
         reason = reason == null ? "<no reason given>" : reason;
         if (code == 1000) {
-            log.info("Connection closed gracefully with reason: " + reason + " :: Remote=" + remote);
+            log.info("Connection to " + getRemoteSocketAddress() + " closed gracefully with reason: " + reason + " :: Remote=" + remote);
         } else {
-            log.warn("Connection closed unexpectedly with reason " + code + ": " + reason + " :: Remote=" + remote);
+            log.warn("Connection to " + getRemoteSocketAddress() + " closed unexpectedly with reason " + code + ": " + reason + " :: Remote=" + remote);
         }
 
         lavalink.loadBalancer.onNodeDisconnect(this);
