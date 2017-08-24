@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +48,8 @@ public class SocketServer extends WebSocketServer {
     private static final Map<WebSocket, SocketContext> contextMap = new HashMap<>();
     private final String password;
 
-    public SocketServer(String password) {
+    public SocketServer(InetSocketAddress address, String password) {
+        super(address);
         this.password = password;
     }
 
@@ -179,7 +181,7 @@ public class SocketServer extends WebSocketServer {
 
     @Override
     public void onStart() {
-        log.info("Started WS server");
+        log.info("Started WS server with port " + getPort());
     }
 
     public static void sendPlayerUpdate(WebSocket webSocket, Player player) {

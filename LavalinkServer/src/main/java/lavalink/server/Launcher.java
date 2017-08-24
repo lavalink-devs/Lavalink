@@ -38,6 +38,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 
+import java.net.InetSocketAddress;
+
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
@@ -81,8 +83,9 @@ public class Launcher {
     }
 
     @Bean
-    static SocketServer socketServer(@Value("${lavalink.server.password}") String password) {
-        SocketServer ss = new SocketServer(password);
+    static SocketServer socketServer(@Value("${lavalink.server.ws.port}") Integer port,
+                                         @Value("${lavalink.server.password}") String password) {
+        SocketServer ss = new SocketServer(new InetSocketAddress(port), password);
         ss.start();
         return ss;
     }

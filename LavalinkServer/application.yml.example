@@ -3,6 +3,8 @@ server:
 lavalink:
   server:
     password: "youshallnotpass"
+    ws:
+      port: 80
     sources:
       youtube: true
       bandcamp: true
