@@ -56,10 +56,12 @@ public class LavalinkSocket extends ReusableWebSocket {
     RemoteStats stats;
     long lastReconnectAttempt = 0;
     private int reconnectsAttempted = 0;
+    private final URI remoteUri;
 
     LavalinkSocket(Lavalink lavalink, URI serverUri, Draft protocolDraft, Map<String, String> headers) {
         super(serverUri, protocolDraft, headers, TIMEOUT_MS);
         this.lavalink = lavalink;
+        this.remoteUri = serverUri;
         try {
             this.connectBlocking();
         } catch (InterruptedException e) {
@@ -219,6 +221,11 @@ public class LavalinkSocket extends ReusableWebSocket {
         } else if (isConnecting()) {
             log.warn("Attempting to send messages to " + getRemoteSocketAddress() + " WHILE connecting. Ignoring.");
         }
+    }
+
+    @SuppressWarnings("unused")
+    public URI getRemoteUri() {
+        return remoteUri;
     }
 
     void attemptReconnect() {
