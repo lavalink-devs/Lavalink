@@ -54,12 +54,14 @@ public class Lavalink extends ListenerAdapter {
     private final Function<Integer, JDA> jdaProvider;
     private final ConcurrentHashMap<String, String> connectedChannels = new ConcurrentHashMap<>(); // Key is guild id
     private final ConcurrentHashMap<String, LavalinkPlayer> players = new ConcurrentHashMap<>(); // Key is guild id
+    private final String userId;
     final List<LavalinkSocket> nodes = new CopyOnWriteArrayList<>();
     final LavalinkLoadBalancer loadBalancer = new LavalinkLoadBalancer(this);
 
     private final ScheduledExecutorService reconnectService;
 
-    public Lavalink(int numShards, Function<Integer, JDA> jdaProvider) {
+    public Lavalink(String userId, int numShards, Function<Integer, JDA> jdaProvider) {
+        this.userId = userId;
         this.numShards = numShards;
         this.jdaProvider = jdaProvider;
 
@@ -71,7 +73,7 @@ public class Lavalink extends ListenerAdapter {
         reconnectService.scheduleWithFixedDelay(new ReconnectTask(this), 0, 500, TimeUnit.MILLISECONDS);
     }
 
-    public void addNode(URI serverUri, String password, String userId) {
+    public void addNode(URI serverUri, String password) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", password);
         headers.put("Num-Shards", Integer.toString(numShards));
@@ -79,7 +81,7 @@ public class Lavalink extends ListenerAdapter {
 
         nodes.add(new LavalinkSocket(this, serverUri, new Draft_6455(), headers));
     }
-    
+
     @SuppressWarnings("unused")
     public void removeNode(int key) {
         LavalinkSocket node = nodes.remove(key);
