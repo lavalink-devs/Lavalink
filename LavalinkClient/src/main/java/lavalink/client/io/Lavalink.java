@@ -79,6 +79,12 @@ public class Lavalink extends ListenerAdapter {
 
         nodes.add(new LavalinkSocket(this, serverUri, new Draft_6455(), headers));
     }
+    
+    @SuppressWarnings("unused")
+    public void removeNode(int key) {
+        LavalinkSocket node = nodes.remove(key);
+        node.close();
+    }
 
     public void openVoiceConnection(VoiceChannel channel) {
         LavalinkSocket socket = loadBalancer.getSocket(channel.getGuild());
