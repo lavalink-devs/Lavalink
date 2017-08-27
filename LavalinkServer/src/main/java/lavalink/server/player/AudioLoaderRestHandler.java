@@ -22,7 +22,6 @@
 
 package lavalink.server.player;
 
-import com.sedmelluq.discord.lavaplayer.tools.io.MessageInput;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import lavalink.server.Launcher;
@@ -38,7 +37,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
