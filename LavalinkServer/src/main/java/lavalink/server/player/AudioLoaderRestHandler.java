@@ -23,6 +23,7 @@
 package lavalink.server.player;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import lavalink.server.Launcher;
 import lavalink.server.util.Util;
 import org.json.JSONArray;
@@ -44,19 +45,29 @@ public class AudioLoaderRestHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AudioLoaderRestHandler.class);
 
-    @GetMapping(value = "/loadtracks", produces = "application/json")
-    @ResponseBody
-    public String get(HttpServletRequest request, HttpServletResponse response, @RequestParam String identifier)
-            throws IOException, InterruptedException {
+    private void log(HttpServletRequest request) {
         String path = request.getServletPath();
         log.info("GET " + path);
+    }
 
+    private boolean isAuthorized(HttpServletRequest request, HttpServletResponse response) {
         if (request.getHeader("Authorization") != null &&
                 !request.getHeader("Authorization").equals(Launcher.config.getPassword())) {
             log.warn("Authorization failed");
             response.setStatus(403);
-            return "";
+            return false;
         }
+        return true;
+    }
+
+    @GetMapping(value = "/loadtracks", produces = "application/json")
+    @ResponseBody
+    public String getLoadTracks(HttpServletRequest request, HttpServletResponse response, @RequestParam String identifier)
+            throws IOException, InterruptedException {
+        log(request);
+
+        if (!isAuthorized(request, response))
+            return "";
 
         JSONObject json = new JSONObject();
         JSONArray tracks = new JSONArray();
@@ -72,6 +83,29 @@ public class AudioLoaderRestHandler {
 
         json.put("tracks", tracks);
         return json.toString();
+    }
+
+    @GetMapping(value = "/decodetrack", produces = "application/json")
+    @ResponseBody
+    public String getDecodeTrack(HttpServletRequest request, HttpServletResponse response, @RequestParam String track) throws IOException {
+        log(request);
+
+        if (!isAuthorized(request, response))
+            return "";
+
+        AudioTrack audioTrack = Util.toAudioTrack(track);
+        AudioTrackInfo trackInfo = audioTrack.getInfo();
+
+        return new JSONObject()
+                .put("title", trackInfo.title)
+                .put("author", trackInfo.author)
+                .put("length", track.length())
+                .put("identifier", trackInfo.identifier)
+                .put("uri", trackInfo.uri)
+                .put("isStream", trackInfo.isStream)
+                .put("isSeekable", audioTrack.isSeekable())
+                .put("position", audioTrack.getPosition())
+                .toString();
     }
 
 }
