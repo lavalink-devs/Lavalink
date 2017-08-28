@@ -81,7 +81,6 @@ public class AudioLoaderRestHandler {
         if (!isAuthorized(request, response))
             return "";
 
-        JSONObject json = new JSONObject();
         JSONArray tracks = new JSONArray();
         List<AudioTrack> list = new AudioLoader().loadSync(identifier);
 
@@ -98,8 +97,7 @@ public class AudioLoaderRestHandler {
             }
         });
 
-        json.put("tracks", tracks);
-        return json.toString();
+        return tracks.toString();
     }
 
     @GetMapping(value = "/decodetrack", produces = "application/json")
