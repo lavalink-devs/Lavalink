@@ -31,9 +31,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -60,6 +58,20 @@ public class AudioLoaderRestHandler {
         return true;
     }
 
+    private JSONObject trackToJSON(AudioTrack audioTrack) {
+        AudioTrackInfo trackInfo = audioTrack.getInfo();
+
+        return new JSONObject()
+                .put("title", trackInfo.title)
+                .put("author", trackInfo.author)
+                .put("length", trackInfo.length)
+                .put("identifier", trackInfo.identifier)
+                .put("uri", trackInfo.uri)
+                .put("isStream", trackInfo.isStream)
+                .put("isSeekable", audioTrack.isSeekable())
+                .put("position", audioTrack.getPosition());
+    }
+
     @GetMapping(value = "/loadtracks", produces = "application/json")
     @ResponseBody
     public String getLoadTracks(HttpServletRequest request, HttpServletResponse response, @RequestParam String identifier)
@@ -69,20 +81,23 @@ public class AudioLoaderRestHandler {
         if (!isAuthorized(request, response))
             return "";
 
-        JSONObject json = new JSONObject();
         JSONArray tracks = new JSONArray();
         List<AudioTrack> list = new AudioLoader().loadSync(identifier);
 
         list.forEach(track -> {
+            JSONObject object = new JSONObject();
+            object.put("info", trackToJSON(track));
+
             try {
-                tracks.put(Util.toMessage(track));
+                String encoded = Util.toMessage(track);
+                object.put("track", encoded);
+                tracks.put(object);
             } catch (IOException e) {
                 throw new RuntimeException();
             }
         });
 
-        json.put("tracks", tracks);
-        return json.toString();
+        return tracks.toString();
     }
 
     @GetMapping(value = "/decodetrack", produces = "application/json")
@@ -94,18 +109,33 @@ public class AudioLoaderRestHandler {
             return "";
 
         AudioTrack audioTrack = Util.toAudioTrack(track);
-        AudioTrackInfo trackInfo = audioTrack.getInfo();
 
-        return new JSONObject()
-                .put("title", trackInfo.title)
-                .put("author", trackInfo.author)
-                .put("length", track.length())
-                .put("identifier", trackInfo.identifier)
-                .put("uri", trackInfo.uri)
-                .put("isStream", trackInfo.isStream)
-                .put("isSeekable", audioTrack.isSeekable())
-                .put("position", audioTrack.getPosition())
-                .toString();
+        return trackToJSON(audioTrack).toString();
     }
 
+    @PostMapping(value = "/decodetracks", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public String postDecodeTracks(HttpServletRequest request, HttpServletResponse response, @RequestBody String body) throws IOException {
+        log(request);
+
+        if (!isAuthorized(request, response))
+            return "";
+
+        JSONArray requestJSON = new JSONArray(body);
+        JSONArray responseJSON = new JSONArray();
+
+        for (int i = 0; i < requestJSON.length(); i++) {
+            String track = requestJSON.getString(i);
+            AudioTrack audioTrack = Util.toAudioTrack(track);
+
+            JSONObject infoJSON = trackToJSON(audioTrack);
+            JSONObject trackJSON = new JSONObject()
+                    .put("track", track)
+                    .put("info", infoJSON);
+
+            responseJSON.put(trackJSON);
+        }
+
+        return responseJSON.toString();
+    }
 }
