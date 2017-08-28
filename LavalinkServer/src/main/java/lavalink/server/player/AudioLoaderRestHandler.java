@@ -86,8 +86,13 @@ public class AudioLoaderRestHandler {
         List<AudioTrack> list = new AudioLoader().loadSync(identifier);
 
         list.forEach(track -> {
+            JSONObject object = new JSONObject();
+            object.put("info", trackToJSON(track));
+
             try {
-                tracks.put(Util.toMessage(track));
+                String encoded = Util.toMessage(track);
+                object.put("track", encoded);
+                tracks.put(object);
             } catch (IOException e) {
                 throw new RuntimeException();
             }
