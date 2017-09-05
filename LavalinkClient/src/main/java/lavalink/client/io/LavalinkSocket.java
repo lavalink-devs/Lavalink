@@ -46,6 +46,7 @@ import java.net.ConnectException;
 import java.net.URI;
 import java.nio.channels.NotYetConnectedException;
 import java.util.Map;
+import java.util.Objects;
 
 public class LavalinkSocket extends ReusableWebSocket {
 
@@ -80,7 +81,9 @@ public class LavalinkSocket extends ReusableWebSocket {
     public void onMessage(String message) {
         JSONObject json = new JSONObject(message);
 
-        log.info(message);
+        if (!Objects.equals(json.getString("op"), "playerUpdate")) {
+            log.debug(message);
+        }
 
         switch (json.getString("op")) {
             case "sendWS":
