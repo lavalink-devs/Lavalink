@@ -2,7 +2,7 @@
 Standalone audio sending node based on Lavaplayer and JDA-Audio.
 Allows for sending audio without it ever reaching any of your shards.
 
-#### NOT READY FOR PRODUCTION USAGE
+Being used in production by FredBoat and Dyno.
 
 ## Features
 * Powered by Lavaplayer
