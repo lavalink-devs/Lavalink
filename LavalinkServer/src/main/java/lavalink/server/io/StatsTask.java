@@ -45,6 +45,14 @@ public class StatsTask implements Runnable {
 
     @Override
     public void run() {
+        try {
+            sendStats();
+        } catch (Exception e) {
+            log.error("Exception while sending stats", e);
+        }
+    }
+
+    public void sendStats() {
         JSONObject out = new JSONObject();
 
         final int[] playersTotal = {0};
