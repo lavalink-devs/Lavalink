@@ -24,6 +24,7 @@ package lavalink.client.io;
 
 import org.json.JSONObject;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class RemoteStats {
 
     private final JSONObject json;
@@ -32,10 +33,10 @@ public class RemoteStats {
     private final long uptime;
 
     // In bytes
-    private final int memFree;
-    private final int memUsed;
-    private final int memAllocated;
-    private final int memReservable;
+    private final long memFree;
+    private final long memUsed;
+    private final long memAllocated;
+    private final long memReservable;
 
     private final int cpuCores;
     private final double systemLoad;
@@ -51,10 +52,10 @@ public class RemoteStats {
         playingPlayers = json.getInt("playingPlayers");
         uptime = json.getLong("uptime");
 
-        memFree = json.getJSONObject("memory").getInt("free");
-        memUsed = json.getJSONObject("memory").getInt("used");
-        memAllocated = json.getJSONObject("memory").getInt("allocated");
-        memReservable = json.getJSONObject("memory").getInt("reservable");
+        memFree = json.getJSONObject("memory").getLong("free");
+        memUsed = json.getJSONObject("memory").getLong("used");
+        memAllocated = json.getJSONObject("memory").getLong("allocated");
+        memReservable = json.getJSONObject("memory").getLong("reservable");
 
         cpuCores = json.getJSONObject("cpu").getInt("cores");
         systemLoad = json.getJSONObject("cpu").getDouble("systemLoad");
@@ -85,19 +86,19 @@ public class RemoteStats {
         return uptime;
     }
 
-    public int getMemFree() {
+    public long getMemFree() {
         return memFree;
     }
 
-    public int getMemUsed() {
+    public long getMemUsed() {
         return memUsed;
     }
 
-    public int getMemAllocated() {
+    public long getMemAllocated() {
         return memAllocated;
     }
 
-    public int getMemReservable() {
+    public long getMemReservable() {
         return memReservable;
     }
 
