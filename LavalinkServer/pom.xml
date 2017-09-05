@@ -42,7 +42,7 @@
             <!-- audio player for discord -->
             <groupId>com.sedmelluq</groupId>
             <artifactId>lavaplayer</artifactId>
-            <version>1.2.42</version>
+            <version>1.2.43</version>
         </dependency>
         <dependency>
             <groupId>com.github.Frederikam</groupId>
