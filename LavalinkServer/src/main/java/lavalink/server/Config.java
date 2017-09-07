@@ -45,6 +45,16 @@ public class Config {
         this.password = password;
     }
 
+    private String sentryDsn;
+
+    public String getSentryDsn() {
+        return sentryDsn;
+    }
+
+    public void setSentryDsn(String sentryDsn) {
+        this.sentryDsn = sentryDsn;
+    }
+
     public static class Sources {
 
         private boolean youtube = true;
