@@ -64,6 +64,7 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
         if (sources.isTwitch()) PLAYER_MANAGER.registerSourceManager(new TwitchStreamAudioSourceManager());
         if (sources.isVimeo()) PLAYER_MANAGER.registerSourceManager(new VimeoAudioSourceManager());
         if (sources.isHttp()) PLAYER_MANAGER.registerSourceManager(new HttpAudioSourceManager());
+        if (sources.isLocal()) PLAYER_MANAGER.registerSourceManager(new EncodableLocalAudioSourceManager());
     }
 
     private SocketContext socketContext;
