@@ -114,8 +114,8 @@ public class LavalinkLoadBalancer {
             if (socket.stats.getAvgFramesDeficitPerMinute() == -1) return;
 
             // https://fred.moe/UQJ.png
-            deficitFramePenalty = (int) Math.pow(1.02d, 200 * (socket.stats.getAvgFramesDeficitPerMinute() / 3000)) * 300 - 300;
-            nullFramePenalty = (int) Math.pow(1.02d, 200 * (socket.stats.getAvgFramesNulledPerMinute() / 3000)) * 300 - 300;
+            deficitFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesNulledPerMinute() / 3000f)) * 300 - 300);
+            nullFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesNulledPerMinute() / 3000f)) * 300 - 300);
             nullFramePenalty *= 2;
 
             // Deficit frames are better than null frames, as deficit frames can be caused by the garbage collector
