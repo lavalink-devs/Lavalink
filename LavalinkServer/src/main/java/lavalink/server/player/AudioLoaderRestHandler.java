@@ -49,8 +49,12 @@ public class AudioLoaderRestHandler {
     }
 
     private boolean isAuthorized(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getHeader("Authorization") != null &&
-                !request.getHeader("Authorization").equals(Launcher.config.getPassword())) {
+        if (request.getHeader("Authorization") == null) {
+            response.setStatus(403);
+            return false;
+        }
+
+        if (!request.getHeader("Authorization").equals(Launcher.config.getPassword())) {
             log.warn("Authorization failed");
             response.setStatus(403);
             return false;
