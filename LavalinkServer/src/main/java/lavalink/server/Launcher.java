@@ -22,6 +22,7 @@
 
 package lavalink.server;
 
+import io.sentry.Sentry;
 import lavalink.server.io.SocketServer;
 import lavalink.server.nas.NativeAudioSendFactory;
 import lavalink.server.util.SimpleLogToSLF4JAdapter;
@@ -59,6 +60,9 @@ public class Launcher {
         SimpleLog.addListener(new SimpleLogToSLF4JAdapter());
         Launcher.config = config;
         this.socketServer = socketServer;
+        if (!config.getSentryDsn().isEmpty()) {
+            Sentry.init(config.getSentryDsn());
+        }
     }
 
     public static void main(String[] args) {

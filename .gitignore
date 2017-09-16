@@ -2,3 +2,4 @@
 *.iml
 /logs/
 /target/
+/application.yml
