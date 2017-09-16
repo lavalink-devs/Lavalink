@@ -194,7 +194,7 @@ public class LavalinkPlayer implements IPlayer {
 
     public void provideState(JSONObject json) {
         updateTime = json.getLong("time");
-        position = json.getLong("position");
+        position = json.optLong("position", 0);
     }
 
     @Override
