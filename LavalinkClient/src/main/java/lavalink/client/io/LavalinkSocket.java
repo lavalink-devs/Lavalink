@@ -244,4 +244,11 @@ public class LavalinkSocket extends ReusableWebSocket {
     public RemoteStats getStats() {
         return stats;
     }
+
+    @Override
+    public String toString() {
+        return "LavalinkSocket{" +
+                "remoteUri=" + remoteUri +
+                '}';
+    }
 }
