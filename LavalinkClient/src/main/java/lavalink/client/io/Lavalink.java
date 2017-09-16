@@ -125,6 +125,10 @@ public class Lavalink extends ListenerAdapter {
         return connectedChannels.getOrDefault(guildId, null);
     }
 
+    public LavalinkSocket getNodeForGuild(Guild guild) {
+        return loadBalancer.getSocket(guild);
+    }
+
     public LavalinkPlayer getPlayer(String guildId) {
         return players.computeIfAbsent(guildId, __ -> new LavalinkPlayer(this, loadBalancer.getSocket(guildId), guildId));
     }
