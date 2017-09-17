@@ -58,6 +58,7 @@ public class LavalinkSocket extends ReusableWebSocket {
     long lastReconnectAttempt = 0;
     private int reconnectsAttempted = 0;
     private final URI remoteUri;
+    private boolean available = false;
 
     LavalinkSocket(Lavalink lavalink, URI serverUri, Draft protocolDraft, Map<String, String> headers) {
         super(serverUri, protocolDraft, headers, TIMEOUT_MS);
@@ -73,6 +74,7 @@ public class LavalinkSocket extends ReusableWebSocket {
     @Override
     public void onOpen(ServerHandshake handshakeData) {
         log.info("Received handshake from server");
+        available = true;
         lavalink.loadBalancer.onNodeConnect(this);
         reconnectsAttempted = 0;
     }
@@ -196,6 +198,7 @@ public class LavalinkSocket extends ReusableWebSocket {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
+        available = false;
         reason = reason == null ? "<no reason given>" : reason;
         if (code == 1000) {
             log.info("Connection to " + getRemoteSocketAddress() + " closed gracefully with reason: " + reason + " :: Remote=" + remote);
@@ -243,6 +246,10 @@ public class LavalinkSocket extends ReusableWebSocket {
 
     public RemoteStats getStats() {
         return stats;
+    }
+
+    public boolean isAvailable() {
+        return available && isOpen() && !isClosing();
     }
 
     @Override

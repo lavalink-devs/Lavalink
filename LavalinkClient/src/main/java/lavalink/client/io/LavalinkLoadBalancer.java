@@ -71,6 +71,7 @@ public class LavalinkLoadBalancer {
             boolean isAffected = disconnected.equals(socket.orElse(null));
 
             LavalinkSocket newSocket = isAffected ? determineBestSocket() : socket.orElse(null);
+            socketMap.put(guildId, Optional.ofNullable(newSocket)); // A bit redundant, but we need this for the setSocket call
             if (isAffected)
                 lavalink.getPlayer(guildId).setSocket(newSocket);
 
@@ -138,14 +139,14 @@ public class LavalinkLoadBalancer {
         }
 
         public int getTotal() {
-            if (!socket.isOpen()) return Integer.MAX_VALUE - 1;
+            if (!socket.isAvailable()) return Integer.MAX_VALUE - 1;
 
             return playerPenalty + cpuPenalty + deficitFramePenalty + nullFramePenalty;
         }
 
         @Override
         public String toString() {
-            if (!socket.isOpen()) return "Penalties{" +
+            if (!socket.isAvailable()) return "Penalties{" +
                     "unavailable=" + (Integer.MAX_VALUE - 1) +
                     '}';
 
