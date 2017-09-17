@@ -60,7 +60,7 @@ public class Launcher {
         SimpleLog.addListener(new SimpleLogToSLF4JAdapter());
         Launcher.config = config;
         this.socketServer = socketServer;
-        if (!config.getSentryDsn().isEmpty()) {
+        if (config.getSentryDsn() != null && !config.getSentryDsn().isEmpty()) {
             Sentry.init(config.getSentryDsn());
         }
     }
