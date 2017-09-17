@@ -114,7 +114,7 @@ public class LavalinkLoadBalancer {
             if (socket.stats.getAvgFramesDeficitPerMinute() == -1) return;
 
             // https://fred.moe/rjD.png
-            deficitFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesNulledPerMinute() / 3000f)) * 300 - 300);
+            deficitFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesDeficitPerMinute() / 3000f)) * 300 - 300);
             nullFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesNulledPerMinute() / 3000f)) * 300 - 300);
             nullFramePenalty *= 2;
 
