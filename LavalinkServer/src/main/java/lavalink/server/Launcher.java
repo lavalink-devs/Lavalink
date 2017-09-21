@@ -63,6 +63,15 @@ public class Launcher {
         if (config.getSentryDsn() != null && !config.getSentryDsn().isEmpty()) {
             Sentry.init(config.getSentryDsn());
         }
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            log.info("Shutdown hook triggered");
+            try {
+                socketServer.stop(30);
+            } catch (InterruptedException e) {
+                log.warn("Interrupted while stopping socket server", e);
+            }
+        }, "shutdown hook"));
     }
 
     public static void main(String[] args) {
