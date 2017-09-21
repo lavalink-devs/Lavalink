@@ -59,12 +59,20 @@ public class Launcher {
 
     @Autowired
     public Launcher(Config config, SocketServer socketServer) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            log.info("Shutdown hook triggered");
+            try {
+                socketServer.stop(30);
+            } catch (InterruptedException e) {
+                log.warn("Interrupted while stopping socket server", e);
+            }
+        }, "shutdown hook"));
+
         SimpleLog.LEVEL = SimpleLog.Level.OFF;
         SimpleLog.addListener(new SimpleLogToSLF4JAdapter());
         Launcher.config = config;
-        this.socketServer = socketServer;
-
         initSentry();
+        this.socketServer = socketServer;
     }
 
     private void initSentry() {
