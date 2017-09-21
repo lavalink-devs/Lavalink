@@ -23,6 +23,7 @@
 package lavalink.server;
 
 import io.sentry.Sentry;
+import io.sentry.SentryClient;
 import lavalink.server.io.SocketServer;
 import lavalink.server.nas.NativeAudioSendFactory;
 import lavalink.server.util.SimpleLogToSLF4JAdapter;
@@ -39,7 +40,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Properties;
 
 @Configuration
 @ComponentScan
@@ -60,9 +63,30 @@ public class Launcher {
         SimpleLog.addListener(new SimpleLogToSLF4JAdapter());
         Launcher.config = config;
         this.socketServer = socketServer;
-        if (config.getSentryDsn() != null && !config.getSentryDsn().isEmpty()) {
-            Sentry.init(config.getSentryDsn());
+
+        initSentry();
+    }
+
+    private void initSentry() {
+        String sentryDsn = config.getSentryDsn();
+        if (sentryDsn == null || sentryDsn.isEmpty()) {
+            return;
         }
+        SentryClient sentryClient = Sentry.init(sentryDsn);
+
+        // set the git commit hash this was build on as the release
+        Properties gitProps = new Properties();
+        try {
+            gitProps.load(Launcher.class.getClassLoader().getResourceAsStream("git.properties"));
+        } catch (NullPointerException | IOException e) {
+            log.error("Failed to load git repo information", e);
+        }
+        
+        String commitHash = gitProps.getProperty("git.commit.id.full");
+        if (commitHash == null || commitHash.isEmpty()) {
+            return;
+        }
+        sentryClient.setRelease(commitHash);
     }
 
     public static void main(String[] args) {
