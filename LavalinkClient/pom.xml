@@ -34,18 +34,12 @@
     <artifactId>Lavalink-Client</artifactId>
     <version>1.0</version>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
-
     <dependencies>
         <dependency>
             <!-- audio player for discord -->
-            <groupId>com.sedmelluq</groupId>
-            <artifactId>lavaplayer</artifactId>
-            <version>1.2.39</version>
+            <groupId>com.fredboat.fork</groupId>
+            <artifactId>com.sedmelluq.lavaplayer</artifactId>
+            <version>1.2.43.2</version>
         </dependency>
         <dependency>
             <groupId>org.java-websocket</groupId>
@@ -66,7 +60,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.2.0_226</version>
+            <version>3.3.0_273</version>
         </dependency>
 
         <!-- Test dependencies -->
@@ -97,18 +91,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>jcenter</id>
-            <name>jcenter-bintray</name>
-            <url>http://jcenter.bintray.com</url>
-        </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
-
 
 </project>
