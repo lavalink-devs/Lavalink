@@ -201,9 +201,9 @@ public class LavalinkSocket extends ReusableWebSocket {
         available = false;
         reason = reason == null ? "<no reason given>" : reason;
         if (code == 1000) {
-            log.info("Connection to " + getRemoteSocketAddress() + " closed gracefully with reason: " + reason + " :: Remote=" + remote);
+            log.info("Connection to " + getRemoteUri() + " closed gracefully with reason: " + reason + " :: Remote=" + remote);
         } else {
-            log.warn("Connection to " + getRemoteSocketAddress() + " closed unexpectedly with reason " + code + ": " + reason + " :: Remote=" + remote);
+            log.warn("Connection to " + getRemoteUri() + " closed unexpectedly with reason " + code + ": " + reason + " :: Remote=" + remote);
         }
 
         lavalink.loadBalancer.onNodeDisconnect(this);
@@ -212,7 +212,7 @@ public class LavalinkSocket extends ReusableWebSocket {
     @Override
     public void onError(Exception ex) {
         if (ex instanceof ConnectException) {
-            log.warn("Failed to connect to " + getRemoteSocketAddress() + ", retrying in " + getReconnectInterval()/1000 + " seconds.");
+            log.warn("Failed to connect to " + getRemoteUri() + ", retrying in " + getReconnectInterval()/1000 + " seconds.");
             return;
         }
 
@@ -225,7 +225,7 @@ public class LavalinkSocket extends ReusableWebSocket {
         if (isOpen()) {
             super.send(text);
         } else if (isConnecting()) {
-            log.warn("Attempting to send messages to " + getRemoteSocketAddress() + " WHILE connecting. Ignoring.");
+            log.warn("Attempting to send messages to " + getRemoteUri() + " WHILE connecting. Ignoring.");
         }
     }
 
