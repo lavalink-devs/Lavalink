@@ -24,6 +24,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>lavalink</groupId>
+        <artifactId>Lavalink-Parent</artifactId>
+        <version>1.0</version>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>lavalink</groupId>
@@ -31,18 +37,12 @@
     <packaging>jar</packaging>
     <version>1.1</version>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
-
     <dependencies>
         <dependency>
             <!-- audio player for discord -->
-            <groupId>com.sedmelluq</groupId>
-            <artifactId>lavaplayer</artifactId>
-            <version>1.2.43</version>
+            <groupId>com.fredboat.fork</groupId>
+            <artifactId>com.sedmelluq.lavaplayer</artifactId>
+            <version>1.2.43.2</version>
         </dependency>
         <dependency>
             <groupId>com.github.Frederikam</groupId>
@@ -86,13 +86,13 @@
 
         <!-- Used for JDA-NAS -->
         <dependency>
-            <groupId>com.sedmelluq</groupId>
-            <artifactId>udp-queue</artifactId>
+            <groupId>com.fredboat.fork</groupId>
+            <artifactId>com.sedmelluq.udp-queue</artifactId>
             <version>1.0.6</version>
         </dependency>
         <dependency>
-            <groupId>com.sedmelluq</groupId>
-            <artifactId>lavaplayer-common</artifactId>
+            <groupId>com.fredboat.fork</groupId>
+            <artifactId>com.sedmelluq.lavaplayer-common</artifactId>
             <version>1.0.5</version>
         </dependency>
         <dependency>
@@ -119,18 +119,6 @@
             <version>4.3.9.RELEASE</version>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>jcenter</id>
-            <name>jcenter-bintray</name>
-            <url>http://jcenter.bintray.com</url>
-        </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
