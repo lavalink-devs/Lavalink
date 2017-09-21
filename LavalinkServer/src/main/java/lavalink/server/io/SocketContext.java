@@ -25,6 +25,7 @@ package lavalink.server.io;
 import lavalink.server.player.Player;
 import lavalink.server.util.Util;
 import net.dv8tion.jda.Core;
+import net.dv8tion.jda.manager.AudioManager;
 import org.java_websocket.WebSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,7 +103,12 @@ public class SocketContext {
         playerUpdateService.shutdown();
         players.keySet().forEach(s -> {
             Core core = cores.get(Util.getShardFromSnowflake(s, shardCount));
-            core.getAudioManager(s).closeAudioConnection();
+            if (core != null) {
+                AudioManager audioManager = core.getAudioManager(s);
+                if (audioManager != null) {
+                    audioManager.closeAudioConnection();
+                }
+            }
         });
 
         players.values().forEach(Player::stop);
