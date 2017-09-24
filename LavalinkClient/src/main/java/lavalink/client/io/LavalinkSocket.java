@@ -89,12 +89,12 @@ public class LavalinkSocket extends ReusableWebSocket {
 
         switch (json.getString("op")) {
             case "sendWS":
-                JDAImpl jda = (JDAImpl) lavalink.getShard(json.getInt("shardId"));
+                JDAImpl jda = (JDAImpl) lavalink.getJda(json.getInt("shardId"));
                 jda.getClient().send(json.getString("message"));
                 break;
             case "validationReq":
                 int sId = LavalinkUtil.getShardFromSnowflake(json.getString("guildId"), lavalink.getNumShards());
-                JDA jda2 = lavalink.getShard(sId);
+                JDA jda2 = lavalink.getJda(sId);
 
                 String guildId = json.getString("guildId");
                 String channelId = json.optString("channelId");
@@ -129,7 +129,7 @@ public class LavalinkSocket extends ReusableWebSocket {
                 }
                 break;
             case "isConnectedReq":
-                JDAImpl jda3 = (JDAImpl) lavalink.getShard(json.getInt("shardId"));
+                JDAImpl jda3 = (JDAImpl) lavalink.getJda(json.getInt("shardId"));
                 JSONObject res2 = new JSONObject();
                 res2.put("op", "isConnectedRes");
                 res2.put("shardId", json.getInt("shardId"));
