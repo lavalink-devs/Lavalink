@@ -22,8 +22,10 @@
 
 package lavalink.server;
 
+import ch.qos.logback.classic.LoggerContext;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
+import io.sentry.logback.SentryAppender;
 import lavalink.server.io.SocketServer;
 import lavalink.server.nas.NativeAudioSendFactory;
 import lavalink.server.util.SimpleLogToSLF4JAdapter;
@@ -70,6 +72,7 @@ public class Launcher {
     private void initSentry() {
         String sentryDsn = config.getSentryDsn();
         if (sentryDsn == null || sentryDsn.isEmpty()) {
+            turnOffSentry();
             return;
         }
         SentryClient sentryClient = Sentry.init(sentryDsn);
@@ -87,6 +90,13 @@ public class Launcher {
             return;
         }
         sentryClient.setRelease(commitHash);
+    }
+
+    private void turnOffSentry() {
+        LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+        SentryAppender sentryAppender = (SentryAppender) lc.getLogger(Logger.ROOT_LOGGER_NAME).getAppender("SENTRY");
+        Sentry.close();
+        sentryAppender.stop();
     }
 
     public static void main(String[] args) {
