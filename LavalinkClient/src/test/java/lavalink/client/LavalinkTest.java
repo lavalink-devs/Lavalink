@@ -27,6 +27,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import lavalink.client.io.Lavalink;
+import lavalink.client.io.Link;
 import lavalink.client.player.IPlayer;
 import lavalink.client.player.event.PlayerEventListenerAdapter;
 import net.dv8tion.jda.core.AccountType;
@@ -201,9 +202,10 @@ class LavalinkTest {
     @Test
     void testPlayback() throws InterruptedException {
         VoiceChannel vc = jda.getVoiceChannelById(System.getenv("TEST_VOICE_CHANNEL"));
-        lavalink.openVoiceConnection(vc);
+        Link link = lavalink.getLink(vc.getGuild());
+        link.connect(vc);
 
-        IPlayer player = lavalink.getPlayer(vc.getGuild().getId());
+        IPlayer player = link.getPlayer();
         CountDownLatch latch = new CountDownLatch(1);
 
         PlayerEventListenerAdapter listener = new PlayerEventListenerAdapter() {
@@ -222,7 +224,7 @@ class LavalinkTest {
         player.playTrack(loadAudioTracks(jingle).get(0));
 
         latch.await(20, TimeUnit.SECONDS);
-        lavalink.closeVoiceConnection(vc.getGuild());
+        link.disconnect();
         player.removeListener(listener);
 
         player.stopTrack();

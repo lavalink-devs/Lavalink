@@ -22,6 +22,7 @@
 
 package lavalink.client.io;
 
+import lavalink.client.LavalinkUtil;
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
@@ -30,13 +31,15 @@ import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.ReconnectedEvent;
 import net.dv8tion.jda.core.events.ResumedEvent;
+import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
+import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.java_websocket.drafts.Draft_6455;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,6 +55,7 @@ public class Lavalink extends ListenerAdapter {
 
     private final int numShards;
     private final Function<Integer, JDA> jdaProvider;
+    private final ConcurrentHashMap<String, Link> links = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, String> connectedChannels = new ConcurrentHashMap<>(); // Key is guild id
     private final ConcurrentHashMap<String, LavalinkPlayer> players = new ConcurrentHashMap<>(); // Key is guild id
     private final String userId;
@@ -88,66 +92,22 @@ public class Lavalink extends ListenerAdapter {
         node.close();
     }
 
-    public void openVoiceConnection(VoiceChannel channel) {
-        LavalinkSocket socket = loadBalancer.getSocket(channel.getGuild());
-        connectedChannels.put(channel.getGuild().getId(), channel.getId());
-
-        if (socket == null || socket.isClosed()) return;
-
-        JSONObject json = new JSONObject();
-        json.put("op", "connect");
-        json.put("guildId", channel.getGuild().getId());
-        json.put("channelId", channel.getId());
-        socket.send(json.toString());
+    public Link getLink(String guildId) {
+        return getLink(getJdaFromSnowflake(guildId).getGuildById(guildId));
     }
 
-    public void closeVoiceConnection(Guild guild) {
-        LavalinkSocket socket = loadBalancer.getSocket(guild);
-        connectedChannels.remove(guild.getId());
-
-        if (socket == null || socket.isClosed()) return;
-
-        JSONObject json = new JSONObject();
-        json.put("op", "disconnect");
-        json.put("guildId", guild.getId());
-        socket.send(json.toString());
+    @SuppressWarnings("WeakerAccess")
+    public Link getLink(Guild guild) {
+        return links.computeIfAbsent(guild.getId(), __ -> new Link(this, guild));
     }
 
-    public VoiceChannel getConnectedChannel(Guild guild) {
-        String id = connectedChannels.getOrDefault(guild.getId(), null);
-        if (id != null) {
-            return guild.getVoiceChannelById(id);
-        }
-        return null;
-    }
-
-    public String getConnectedChannel(String guildId) {
-        return connectedChannels.getOrDefault(guildId, null);
-    }
-
-    public LavalinkSocket getNodeForGuild(Guild guild) {
-        return loadBalancer.getSocket(guild);
-    }
-
-    public LavalinkPlayer getPlayer(String guildId) {
-        return players.computeIfAbsent(guildId, __ -> new LavalinkPlayer(this, loadBalancer.getSocket(guildId), guildId));
-    }
-
-    public void shutdown() {
-        reconnectService.shutdown();
-        nodes.forEach(ReusableWebSocket::close);
-    }
-
-    LavalinkSocket getSocket(String guildId) {
-        return loadBalancer.getSocket(guildId);
-    }
-
-    public JDA getShard(int num) {
-        return jdaProvider.apply(num);
-    }
-
+    @SuppressWarnings("WeakerAccess")
     public int getNumShards() {
         return numShards;
+    }
+
+    public Collection<Link> getLinks() {
+        return links.values();
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -155,7 +115,63 @@ public class Lavalink extends ListenerAdapter {
         return nodes;
     }
 
-    /* JDA event handling */
+    @SuppressWarnings("WeakerAccess")
+    public JDA getJda(int shardId) {
+        return jdaProvider.apply(shardId);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public JDA getJdaFromSnowflake(String snowflake) {
+        return jdaProvider.apply(LavalinkUtil.getShardFromSnowflake(snowflake, numShards));
+    }
+
+    public void shutdown() {
+        reconnectService.shutdown();
+        nodes.forEach(ReusableWebSocket::close);
+    }
+
+    /*
+     *  Deprecated, will be removed in v2.0
+     */
+
+    @Deprecated
+    LavalinkSocket getSocket(String guildId) {
+        return getLink(guildId).getCurrentSocket();
+    }
+
+    @Deprecated
+    public VoiceChannel getConnectedChannel(Guild guild) {
+        return getLink(guild).getCurrentChannel();
+    }
+
+    @Deprecated
+    public String getConnectedChannel(String guildId) {
+        return getLink(guildId).getCurrentChannel().getId();
+    }
+
+    @Deprecated
+    public LavalinkSocket getNodeForGuild(Guild guild) {
+        return getLink(guild).getCurrentSocket();
+    }
+
+    @Deprecated
+    public LavalinkPlayer getPlayer(String guildId) {
+        return getLink(guildId).getPlayer();
+    }
+
+    @Deprecated
+    public void openVoiceConnection(VoiceChannel channel) {
+        getLink(channel.getGuild()).connect(channel);
+    }
+
+    @Deprecated
+    public void closeVoiceConnection(Guild guild) {
+        getLink(guild).disconnect();
+    }
+
+    /*
+     *  JDA event handling
+     */
 
     @Override
     public void onReady(ReadyEvent event) {
@@ -173,12 +189,30 @@ public class Lavalink extends ListenerAdapter {
         reconnectTheVoiceConnections(event.getJDA());
     }
 
+    @Override
+    public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
+        // Check if not ourselves
+        if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
+
+        log.info("Joined voice");
+        getLink(event.getGuild()).onVoiceJoin();
+    }
+
+    @Override
+    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
+        // Check if not ourselves
+        if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
+
+        log.info("Left voice");
+        getLink(event.getGuild()).onVoiceLeave();
+    }
+
     private void reconnectTheVoiceConnections(JDA jda) {
         connectedChannels.forEach((guildId, channel) -> {
             try {
                 Guild guild = jda.getGuildById(guildId);
                 if (guild != null) {
-                    openVoiceConnection(guild.getVoiceChannelById(channel));
+                    getLink(guild).connect(guild.getVoiceChannelById(channel));
                 }
             } catch (Exception e) {
                 int shardId = jda.getShardInfo() == null ? 0 : jda.getShardInfo().getShardId();

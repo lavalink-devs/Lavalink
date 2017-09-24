@@ -32,7 +32,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Lavalink-Client</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -70,7 +70,6 @@
         </dependency>
 
         <!-- Test dependencies -->
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -78,8 +77,20 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.0.0-M4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
+            <version>1.0.0-M4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-runner</artifactId>
             <version>1.0.0-M4</version>
             <scope>test</scope>
         </dependency>
@@ -109,6 +120,4 @@
             <url>https://jitpack.io</url>
         </repository>
     </repositories>
-
-
 </project>
