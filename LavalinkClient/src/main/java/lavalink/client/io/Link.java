@@ -189,8 +189,6 @@ public class Link {
     void onNodeDisconnected() {
         changeNode(lavalink.loadBalancer.determineBestSocket());
 
-        log.info("Forcefully closing connection");
-
         // This will trigger a leave
         ((JDAImpl) getJda()).getClient()
                 .send("{\"op\":4,\"d\":{\"self_deaf\":false,\"guild_id\":\"" + guild + "\",\"channel_id\":null,\"self_mute\":false}}");

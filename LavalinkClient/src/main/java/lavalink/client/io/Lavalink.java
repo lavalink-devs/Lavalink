@@ -193,8 +193,7 @@ public class Lavalink extends ListenerAdapter {
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
         // Check if not ourselves
         if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
-
-        log.info("Joined voice");
+        
         getLink(event.getGuild()).onVoiceJoin();
     }
 
@@ -203,7 +202,6 @@ public class Lavalink extends ListenerAdapter {
         // Check if not ourselves
         if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
 
-        log.info("Left voice");
         getLink(event.getGuild()).onVoiceLeave();
     }
 
