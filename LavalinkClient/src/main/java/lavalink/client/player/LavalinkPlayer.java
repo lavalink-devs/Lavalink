@@ -77,12 +77,17 @@ public class LavalinkPlayer implements IPlayer {
     public void playTrack(AudioTrack track) {
         try {
             position = track.getPosition();
+            TrackData trackData = track.getUserData(TrackData.class);
 
             JSONObject json = new JSONObject();
             json.put("op", "play");
             json.put("guildId", link.getGuildId());
             json.put("track", LavalinkUtil.toMessage(track));
             json.put("startTime", position);
+            if (trackData != null) {
+                json.put("startTime", trackData.startPos);
+                json.put("endTime", trackData.endPos);
+            }
             json.put("pause", paused);
             if (link.getCurrentSocket() != null)
                 link.getCurrentSocket().send(json.toString());
