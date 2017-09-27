@@ -94,12 +94,12 @@ public class Lavalink extends ListenerAdapter {
     }
 
     public Link getLink(String guildId) {
-        return getLink(getJdaFromSnowflake(guildId).getGuildById(guildId));
+        return links.computeIfAbsent(guildId, __ -> new Link(this, guildId));
     }
 
     @SuppressWarnings("WeakerAccess")
     public Link getLink(Guild guild) {
-        return links.computeIfAbsent(guild.getId(), __ -> new Link(this, guild));
+        return getLink(guild.getId());
     }
 
     @SuppressWarnings("WeakerAccess")

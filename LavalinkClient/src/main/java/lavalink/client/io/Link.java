@@ -24,7 +24,6 @@ package lavalink.client.io;
 
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
@@ -70,9 +69,9 @@ public class Link {
 
     private volatile Instant lastTimeDisconnected = Instant.EPOCH;
 
-    Link(Lavalink lavalink, Guild guild) {
+    Link(Lavalink lavalink, String guildId) {
         this.lavalink = lavalink;
-        this.guild = guild.getId();
+        this.guild = guildId;
     }
 
     public LavalinkPlayer getPlayer() {

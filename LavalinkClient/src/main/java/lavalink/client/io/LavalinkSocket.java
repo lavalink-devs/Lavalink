@@ -166,7 +166,7 @@ public class LavalinkSocket extends ReusableWebSocket {
      * The remaining are caused by the client
      */
     private void handleEvent(JSONObject json) throws IOException {
-        LavalinkPlayer player = (LavalinkPlayer) lavalink.getPlayer(json.getString("guildId"));
+        LavalinkPlayer player = lavalink.getLink(json.getString("guildId")).getPlayer();
         PlayerEvent event = null;
 
         switch (json.getString("type")) {
