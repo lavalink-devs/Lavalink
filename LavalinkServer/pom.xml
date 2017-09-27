@@ -42,7 +42,7 @@
             <!-- audio player for discord -->
             <groupId>com.fredboat.fork</groupId>
             <artifactId>com.sedmelluq.lavaplayer</artifactId>
-            <version>1.2.43.2</version>
+            <version>1.2.43.3</version>
         </dependency>
         <dependency>
             <groupId>com.github.FredBoat</groupId>
@@ -88,7 +88,7 @@
         <dependency>
             <groupId>com.fredboat.fork</groupId>
             <artifactId>com.sedmelluq.udp-queue</artifactId>
-            <version>1.0.6</version>
+            <version>1.0.6.1</version>
         </dependency>
         <dependency>
             <groupId>com.fredboat.fork</groupId>
