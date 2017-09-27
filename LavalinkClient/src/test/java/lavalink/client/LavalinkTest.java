@@ -34,7 +34,6 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.utils.SimpleLog;
 import org.json.JSONArray;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -69,12 +68,6 @@ class LavalinkTest {
 
     @BeforeAll
     static void setUp() {
-        //Attach log adapter
-        SimpleLog.addListener(new SimpleLogToSLF4JAdapter());
-
-        //Make JDA not print to console, we have Logback for that
-        SimpleLog.LEVEL = SimpleLog.Level.OFF;
-
         try {
             jda = new JDABuilder(AccountType.BOT)
                     .setToken(System.getenv("TEST_TOKEN"))
