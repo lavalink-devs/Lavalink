@@ -27,6 +27,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
+import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -184,6 +185,16 @@ public class Link {
             state = State.NO_CHANNEL;
             currentChannel = null;
         }
+    }
+
+    void onGuildVoiceMove(GuildVoiceMoveEvent event) {
+        log.info("Moved from " + event.getChannelLeft() + " to " + event.getChannelJoined());
+
+        if (!event.getChannelLeft().getId().equals(currentChannel)) {
+            log.warn("Moved away from channel " + currentChannel + " but expected channel is " + currentChannel + "!");
+        }
+
+        currentChannel = event.getChannelJoined().getId();
     }
 
     void onNodeDisconnected() {

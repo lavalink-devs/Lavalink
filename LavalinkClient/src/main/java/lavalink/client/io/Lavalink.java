@@ -33,6 +33,7 @@ import net.dv8tion.jda.core.events.ReconnectedEvent;
 import net.dv8tion.jda.core.events.ResumedEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.java_websocket.drafts.Draft_6455;
 import org.slf4j.Logger;
@@ -203,6 +204,14 @@ public class Lavalink extends ListenerAdapter {
         if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
 
         getLink(event.getGuild()).onVoiceLeave();
+    }
+
+    @Override
+    public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
+        // Check if not ourselves
+        if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
+
+        getLink(event.getGuild()).onGuildVoiceMove(event);
     }
 
     private void reconnectTheVoiceConnections(JDA jda) {
