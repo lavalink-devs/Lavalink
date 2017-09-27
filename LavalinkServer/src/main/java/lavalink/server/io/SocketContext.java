@@ -33,6 +33,8 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -44,8 +46,8 @@ public class SocketContext {
     private final WebSocket socket;
     private String userId;
     private int shardCount;
-    private final HashMap<Integer, Core> cores = new HashMap<>();
-    private final HashMap<String, Player> players = new HashMap<>();
+    private final Map<Integer, Core> cores = new HashMap<>();
+    private final Map<String, Player> players = new ConcurrentHashMap<>();
     private ScheduledExecutorService statsExecutor;
     public final ScheduledExecutorService playerUpdateService;
 
@@ -85,7 +87,7 @@ public class SocketContext {
         return socket;
     }
 
-    HashMap<String, Player> getPlayers() {
+    Map<String, Player> getPlayers() {
         return players;
     }
 
