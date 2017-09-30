@@ -103,4 +103,20 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <!-- sets a default value for the build number if it is missing in the environment (when building in a
+            development environment for example) -->
+            <id>version</id>
+            <activation>
+                <property>
+                    <name>!env.version</name>
+                </property>
+            </activation>
+            <properties>
+                <env.version>1.2</env.version>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>
