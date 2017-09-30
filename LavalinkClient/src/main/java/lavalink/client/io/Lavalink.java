@@ -131,6 +131,11 @@ public class Lavalink extends ListenerAdapter {
         nodes.forEach(ReusableWebSocket::close);
     }
 
+    void removeDestroyedLink(Link link) {
+        log.info("Destroyed link for guild " + link.getGuildId());
+        links.remove(link.getGuildId());
+    }
+
     /*
      *  Deprecated, will be removed in v2.0
      */

@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 public class Link {
 
     private static final Logger log = LoggerFactory.getLogger(Link.class);
-    private static final ScheduledExecutorService DISCONNECT_TIMEOUT_SERVICE = Executors.newSingleThreadScheduledExecutor();
+    private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     /**
      * Time before we forcefully reconnect if we don't receive our leave event
      */
@@ -109,7 +109,7 @@ public class Link {
 
             if (state == State.CONNECTED) {
                 // Make sure we eventually reconnect
-                DISCONNECT_TIMEOUT_SERVICE.schedule(disconnectTimeoutHandler, DISCONNECT_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+                executor.schedule(disconnectTimeoutHandler, DISCONNECT_TIMEOUT_MS, TimeUnit.MILLISECONDS);
 
                 disconnect();
             }
@@ -122,6 +122,11 @@ public class Link {
      * @param channelId Channel to connect to
      */
     private void connectNow(String channelId) {
+        if (state == State.DESTROYED) {
+            log.warn("Attempted to connect to vc for guild " + guild + " while Link is destroyed. Ignoring...");
+            return;
+        }
+
         VoiceChannel channel = getJda()
                 .getVoiceChannelById(channelId);
 
@@ -141,6 +146,10 @@ public class Link {
     private void disconnect(boolean reconnect) {
         if (state == State.NO_CHANNEL) {
             log.warn("Attempt to disconnect from channel when not connected. Guild: " + guild);
+            return;
+        }
+
+        if (getJda().getGuildById(guild) == null) {
             return;
         }
 
@@ -169,6 +178,22 @@ public class Link {
         }
     }
 
+    public void destroy() {
+        log.debug("Destroying Link for " + guild);
+        state = State.DESTROYED;
+
+        if (state == State.NO_CHANNEL) {
+            lavalink.removeDestroyedLink(this);
+        } else {
+            disconnect();
+        }
+
+        executor.schedule(() -> {
+            // This will act as both a timeout
+            lavalink.removeDestroyedLink(this);
+        }, DISCONNECT_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+    }
+
     private void changeNode0(LavalinkSocket newNode) {
         currentNode = newNode;
         pendingNode = null;
@@ -186,6 +211,11 @@ public class Link {
 
     void onVoiceLeave() {
         lastTimeDisconnected = Instant.now();
+
+        if (state == State.DESTROYED) {
+            // We are shutting down this link and have left voice, so now we can safely unmap it
+            lavalink.removeDestroyedLink(this);
+        }
 
         if (pendingNode != null) {
             // Disconnecting means we can change to the pending node, if any
@@ -269,7 +299,12 @@ public class Link {
         /**
          * We are trying to disconnect, after which we will switch to CONNECTING. Used for changing node
          */
-        DISCONNECTING_BEFORE_RECONNECTING
+        DISCONNECTING_BEFORE_RECONNECTING,
+
+        /**
+         * This {@Code Link} has been destroyed and will soon (if not already) be unmapped from Lavalink
+         */
+        DESTROYED
     }
 
 }
