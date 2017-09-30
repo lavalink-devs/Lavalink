@@ -32,7 +32,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Lavalink-Client</artifactId>
-    <version>${version}</version>
+    <version>${project-version}</version>
 
     <dependencies>
         <dependency>
@@ -105,12 +105,11 @@
 
     <profiles>
         <profile>
-            <!-- sets a default value for the build number if it is missing in the environment (when building in a
-            development environment for example) -->
+            <!-- sets a default value for the version if it is missing in the environment -->
             <id>version</id>
             <activation>
                 <property>
-                    <name>!env.version</name>
+                    <name>!env.project-version</name>
                 </property>
             </activation>
             <properties>
