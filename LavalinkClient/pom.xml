@@ -109,11 +109,11 @@
             <id>version</id>
             <activation>
                 <property>
-                    <name>!env.project-version</name>
+                    <name>!project-version</name>
                 </property>
             </activation>
             <properties>
-                <env.project-version>1.2</env.project-version>
+                <project-version>1.2</project-version>
             </properties>
         </profile>
     </profiles>
