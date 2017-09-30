@@ -113,7 +113,7 @@
                 </property>
             </activation>
             <properties>
-                <env.version>1.2</env.version>
+                <env.project-version>1.2</env.project-version>
             </properties>
         </profile>
     </profiles>
