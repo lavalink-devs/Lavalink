@@ -263,7 +263,7 @@ public class Link {
         log.info("Moved from " + event.getChannelLeft() + " to " + event.getChannelJoined());
 
         if (!event.getChannelLeft().getId().equals(currentChannel)) {
-            log.warn("Moved away from channel " + currentChannel + " but expected channel is " + currentChannel + "!");
+            log.warn("Moved away from channel " + event.getChannelLeft() + " but expected channel is " + currentChannel + "!");
         }
 
         currentChannel = event.getChannelJoined().getId();
