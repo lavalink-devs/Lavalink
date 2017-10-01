@@ -46,7 +46,7 @@ public class Link {
     /**
      * Time before we forcefully reconnect if we don't receive our leave event
      */
-    private static final int DISCONNECT_TIMEOUT_MS = 5000;
+    private static final int TIMEOUT_MS = 5000;
 
     private final Lavalink lavalink;
     private final String guild;
@@ -72,6 +72,7 @@ public class Link {
      * Used for making sure we properly time out disconnect attempts
      */
     private final AtomicInteger disconnectCounter = new AtomicInteger(0);
+    private final AtomicInteger connectCounter = new AtomicInteger(0);
 
     Link(Lavalink lavalink, String guildId) {
         this.lavalink = lavalink;
@@ -112,18 +113,6 @@ public class Link {
             pendingChannel = channel.getId();
 
             if (state == State.CONNECTED || state == State.DISCONNECTING) {
-                // Make sure we eventually reconnect
-                int startCount = disconnectCounter.get();
-
-                executor.schedule(() -> {
-                    if(startCount == disconnectCounter.get()) {
-                        // We didn't get the leave event, so we *must* not be connected
-                        log.warn("Attempted to disconnect from voice to reconnect but timed out after " + DISCONNECT_TIMEOUT_MS
-                                + "ms. Pretending that we left so we don't get stuck...");
-                        onVoiceLeave();
-                    }
-                }, DISCONNECT_TIMEOUT_MS, TimeUnit.MILLISECONDS);
-
                 disconnect();
             }
         }
@@ -139,6 +128,15 @@ public class Link {
             log.warn("Attempted to connect to vc for guild " + guild + " while Link is destroyed. Ignoring...");
             return;
         }
+
+        int startCount = connectCounter.get();
+
+        executor.schedule(() -> {
+            if(startCount == connectCounter.get()) {
+                log.warn("Connecting timed out for guild " + guild + ". Forcefully sending OP 4...");
+                forcefullyDisconnect();
+            }
+        }, TIMEOUT_MS, TimeUnit.MILLISECONDS);
 
         VoiceChannel channel = getJda()
                 .getVoiceChannelById(channelId);
@@ -157,12 +155,26 @@ public class Link {
     }
 
     private void disconnect(boolean reconnect) {
+        // Make sure we eventually reconnect
+        int startCount = disconnectCounter.get();
+
+        executor.schedule(() -> {
+            if(startCount == disconnectCounter.get()) {
+                // We didn't get the leave event, so we *must* not be connected
+                log.warn("Attempted to disconnect from voice but timed out after " + TIMEOUT_MS
+                        + "ms. Did someone use ;;leave while we're not connected?" +
+                        " Pretending that we left so we don't get stuck...");
+                onVoiceLeave();
+            }
+        }, TIMEOUT_MS, TimeUnit.MILLISECONDS);
+
         if (state == State.NO_CHANNEL) {
             log.warn("Attempt to disconnect from channel when not connected. Guild: " + guild);
             return;
         }
 
         if (getJda().getGuildById(guild) == null) {
+            log.warn("Attempt to disconnect from channel when not in guild. Guild: " + guild);
             return;
         }
 
@@ -204,7 +216,7 @@ public class Link {
         executor.schedule(() -> {
             // This will act as both a timeout
             lavalink.removeDestroyedLink(this);
-        }, DISCONNECT_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+        }, TIMEOUT_MS, TimeUnit.MILLISECONDS);
     }
 
     private void changeNode0(LavalinkSocket newNode) {
@@ -219,6 +231,7 @@ public class Link {
     }
 
     void onVoiceJoin() {
+        connectCounter.incrementAndGet();
         state = State.CONNECTED;
     }
 
@@ -260,6 +273,13 @@ public class Link {
         changeNode(lavalink.loadBalancer.determineBestSocket());
 
         // This will trigger a leave
+        forcefullyDisconnect();
+    }
+
+    /**
+     * This sends OP 4 to Discord. This should close any voice connection for our guild by setting the channel to null.
+     */
+    private void forcefullyDisconnect() {
         ((JDAImpl) getJda()).getClient()
                 .send("{\"op\":4,\"d\":{\"self_deaf\":false,\"guild_id\":\"" + guild + "\",\"channel_id\":null,\"self_mute\":false}}");
     }
