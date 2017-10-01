@@ -24,14 +24,12 @@ package lavalink.client.player;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import lavalink.client.LavalinkUtil;
-import lavalink.client.io.Lavalink;
-import lavalink.client.io.LavalinkSocket;
+import lavalink.client.io.Link;
 import lavalink.client.player.event.IPlayerEventListener;
 import lavalink.client.player.event.PlayerEvent;
 import lavalink.client.player.event.PlayerPauseEvent;
 import lavalink.client.player.event.PlayerResumeEvent;
 import lavalink.client.player.event.TrackStartEvent;
-import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import org.json.JSONObject;
 
@@ -47,42 +45,27 @@ public class LavalinkPlayer implements IPlayer {
     private long updateTime = -1;
     private long position = -1;
 
-    private Lavalink lavalink;
-    private LavalinkSocket socket;
-    private final String guildId;
+    private final Link link;
     private List<IPlayerEventListener> listeners = new ArrayList<>();
 
-    public LavalinkPlayer(Lavalink lavalink, LavalinkSocket socket, String guildId) {
-        this.lavalink = lavalink;
-        this.socket = socket;
-        this.guildId = guildId;
+    public LavalinkPlayer(Link link) {
+        this.link = link;
         addListener(new LavalinkInternalPlayerEventHandler());
     }
 
+    /**
+     * Invoked by {@link Link} to make sure we keep playing music on the new node
+     */
     // Used when we are moved to a new socket
-    public void setSocket(LavalinkSocket socket) {
-        this.socket = socket;
+    public void onNodeChange() {
+        JDAImpl jda = (JDAImpl) link.getJda();
 
-        JDAImpl jda = (JDAImpl) lavalink.getShard(LavalinkUtil.getShardFromSnowflake(guildId, lavalink.getNumShards()));
-        //jda.getGuildById(guildId).getAudioManager().closeAudioConnection();
-
-        // Close the audio connection by force if it exists
-        jda.getClient().send("{\"op\":4,\"d\":{\"self_deaf\":false,\"guild_id\":\"" + guildId + "\",\"channel_id\":null,\"self_mute\":false}}");
-
-        // Make sure we are actually connected to a VC
-        if (socket != null
-                && lavalink.getConnectedChannel(guildId) != null) {
-            int shardId = LavalinkUtil.getShardFromSnowflake(guildId, lavalink.getNumShards());
-            JDA shard = lavalink.getShard(shardId);
-            lavalink.openVoiceConnection(lavalink.getConnectedChannel(shard.getGuildById(guildId)));
-
-            IPlayer player = lavalink.getPlayer(guildId);
-            if (player != null && player.getPlayingTrack() != null) {
-                AudioTrack track = player.getPlayingTrack();
-                track.setPosition(player.getTrackPosition());
-                player.playTrack(track);
-            }
+        if (getPlayingTrack() != null) {
+            AudioTrack track = getPlayingTrack();
+            track.setPosition(getTrackPosition());
+            playTrack(track);
         }
+
     }
 
     @Override
@@ -94,15 +77,20 @@ public class LavalinkPlayer implements IPlayer {
     public void playTrack(AudioTrack track) {
         try {
             position = track.getPosition();
+            TrackData trackData = track.getUserData(TrackData.class);
 
             JSONObject json = new JSONObject();
             json.put("op", "play");
-            json.put("guildId", guildId);
+            json.put("guildId", link.getGuildId());
             json.put("track", LavalinkUtil.toMessage(track));
             json.put("startTime", position);
+            if (trackData != null) {
+                json.put("startTime", trackData.startPos);
+                json.put("endTime", trackData.endPos);
+            }
             json.put("pause", paused);
-            if (socket != null)
-                socket.send(json.toString());
+            if (link.getCurrentSocket() != null)
+                link.getCurrentSocket().send(json.toString());
 
             updateTime = System.currentTimeMillis();
             this.track = track;
@@ -116,9 +104,9 @@ public class LavalinkPlayer implements IPlayer {
     public void stopTrack() {
         JSONObject json = new JSONObject();
         json.put("op", "stop");
-        json.put("guildId", guildId);
-        if (socket != null)
-            socket.send(json.toString());
+        json.put("guildId", link.getGuildId());
+        if (link.getCurrentSocket() != null)
+            link.getCurrentSocket().send(json.toString());
         track = null;
     }
 
@@ -128,10 +116,10 @@ public class LavalinkPlayer implements IPlayer {
 
         JSONObject json = new JSONObject();
         json.put("op", "pause");
-        json.put("guildId", guildId);
+        json.put("guildId", link.getGuildId());
         json.put("pause", pause);
-        if (socket != null)
-            socket.send(json.toString());
+        if (link.getCurrentSocket() != null)
+            link.getCurrentSocket().send(json.toString());
         paused = pause;
 
         if (pause) {
@@ -168,10 +156,10 @@ public class LavalinkPlayer implements IPlayer {
 
         JSONObject json = new JSONObject();
         json.put("op", "seek");
-        json.put("guildId", guildId);
+        json.put("guildId", link.getGuildId());
         json.put("position", position);
-        if (socket != null)
-            socket.send(json.toString());
+        if (link.getCurrentSocket() != null)
+            link.getCurrentSocket().send(json.toString());
     }
 
     @Override
@@ -180,10 +168,10 @@ public class LavalinkPlayer implements IPlayer {
 
         JSONObject json = new JSONObject();
         json.put("op", "volume");
-        json.put("guildId", guildId);
+        json.put("guildId", link.getGuildId());
         json.put("volume", volume);
-        if (socket != null)
-            socket.send(json.toString());
+        if (link.getCurrentSocket() != null)
+            link.getCurrentSocket().send(json.toString());
         this.volume = volume;
     }
 
@@ -213,6 +201,11 @@ public class LavalinkPlayer implements IPlayer {
 
     void clearTrack() {
         track = null;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public Link getLink() {
+        return link;
     }
 
 }

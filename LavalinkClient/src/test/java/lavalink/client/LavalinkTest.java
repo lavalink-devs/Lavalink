@@ -27,13 +27,13 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import lavalink.client.io.Lavalink;
+import lavalink.client.io.Link;
 import lavalink.client.player.IPlayer;
 import lavalink.client.player.event.PlayerEventListenerAdapter;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.utils.SimpleLog;
 import org.json.JSONArray;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -68,12 +68,6 @@ class LavalinkTest {
 
     @BeforeAll
     static void setUp() {
-        //Attach log adapter
-        SimpleLog.addListener(new SimpleLogToSLF4JAdapter());
-
-        //Make JDA not print to console, we have Logback for that
-        SimpleLog.LEVEL = SimpleLog.Level.OFF;
-
         try {
             jda = new JDABuilder(AccountType.BOT)
                     .setToken(System.getenv("TEST_TOKEN"))
@@ -201,9 +195,10 @@ class LavalinkTest {
     @Test
     void testPlayback() throws InterruptedException {
         VoiceChannel vc = jda.getVoiceChannelById(System.getenv("TEST_VOICE_CHANNEL"));
-        lavalink.openVoiceConnection(vc);
+        Link link = lavalink.getLink(vc.getGuild());
+        link.connect(vc);
 
-        IPlayer player = lavalink.getPlayer(vc.getGuild().getId());
+        IPlayer player = link.getPlayer();
         CountDownLatch latch = new CountDownLatch(1);
 
         PlayerEventListenerAdapter listener = new PlayerEventListenerAdapter() {
@@ -222,7 +217,7 @@ class LavalinkTest {
         player.playTrack(loadAudioTracks(jingle).get(0));
 
         latch.await(20, TimeUnit.SECONDS);
-        lavalink.closeVoiceConnection(vc.getGuild());
+        link.disconnect();
         player.removeListener(listener);
 
         player.stopTrack();

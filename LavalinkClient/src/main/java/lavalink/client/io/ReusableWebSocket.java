@@ -65,6 +65,11 @@ public abstract class ReusableWebSocket {
         }
     }
 
+    public URI getServerUri() {
+        return this.serverUri;
+    }
+
+    //will return null if there is no connection
     public InetSocketAddress getRemoteSocketAddress() {
         return socket.getRemoteSocketAddress();
     }

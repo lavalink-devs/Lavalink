@@ -32,20 +32,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Lavalink-Client</artifactId>
-    <version>1.0</version>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
+    <version>${project-version}</version>
 
     <dependencies>
         <dependency>
             <!-- audio player for discord -->
-            <groupId>com.sedmelluq</groupId>
-            <artifactId>lavaplayer</artifactId>
-            <version>1.2.39</version>
+            <groupId>com.fredboat.fork</groupId>
+            <artifactId>com.sedmelluq.lavaplayer</artifactId>
+            <version>1.2.43.3</version>
         </dependency>
         <dependency>
             <groupId>org.java-websocket</groupId>
@@ -66,11 +60,10 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.2.0_226</version>
+            <version>3.3.1_281</version>
         </dependency>
 
         <!-- Test dependencies -->
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -78,8 +71,20 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.0.0-M4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
+            <version>1.0.0-M4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-runner</artifactId>
             <version>1.0.0-M4</version>
             <scope>test</scope>
         </dependency>
@@ -98,17 +103,54 @@
         </dependency>
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>jcenter</id>
-            <name>jcenter-bintray</name>
-            <url>http://jcenter.bintray.com</url>
-        </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
-
+    <profiles>
+        <profile>
+            <!-- sets a default value for the version if it is missing in the environment -->
+            <id>version</id>
+            <activation>
+                <property>
+                    <name>!project-version</name>
+                </property>
+            </activation>
+            <properties>
+                <project-version>1.2</project-version>
+            </properties>
+        </profile>
+        <profile>
+            <id>shade</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>do_shade</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                                <configuration>
+                                    <createDependencyReducedPom>true</createDependencyReducedPom>
+                                    <shadedArtifactAttached>false</shadedArtifactAttached>
+                                    <createSourcesJar>true</createSourcesJar>
+                                    <relocations>
+                                        <relocation>
+                                            <pattern>com.google.common</pattern>
+                                            <shadedPattern>com.myproject.google.common</shadedPattern>
+                                        </relocation>
+                                        <relocation>
+                                            <pattern>org.apache.commons</pattern>
+                                            <shadedPattern>com.myproject.commons</shadedPattern>
+                                        </relocation>
+                                    </relocations>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
