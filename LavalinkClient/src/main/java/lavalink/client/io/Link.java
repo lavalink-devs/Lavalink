@@ -31,10 +31,10 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Instant;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Indicates which node we are linked to, what voice channel to use, and what player we are using
@@ -67,7 +67,11 @@ public class Link {
     private volatile LavalinkSocket pendingNode = null;
     private volatile State state = State.NO_CHANNEL;
 
-    private volatile Instant lastTimeDisconnected = Instant.EPOCH;
+
+    /**
+     * Used for making sure we properly time out disconnect attempts
+     */
+    private final AtomicInteger disconnectCounter = new AtomicInteger(0);
 
     Link(Lavalink lavalink, String guildId) {
         this.lavalink = lavalink;
@@ -107,9 +111,18 @@ public class Link {
         } else {
             pendingChannel = channel.getId();
 
-            if (state == State.CONNECTED) {
+            if (state == State.CONNECTED || state == State.DISCONNECTING) {
                 // Make sure we eventually reconnect
-                executor.schedule(disconnectTimeoutHandler, DISCONNECT_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+                int startCount = disconnectCounter.get();
+
+                executor.schedule(() -> {
+                    if(startCount == disconnectCounter.get()) {
+                        // We didn't get the leave event, so we *must* not be connected
+                        log.warn("Attempted to disconnect from voice to reconnect but timed out after " + DISCONNECT_TIMEOUT_MS
+                                + "ms. Pretending that we left so we don't get stuck...");
+                        onVoiceLeave();
+                    }
+                }, DISCONNECT_TIMEOUT_MS, TimeUnit.MILLISECONDS);
 
                 disconnect();
             }
@@ -210,7 +223,7 @@ public class Link {
     }
 
     void onVoiceLeave() {
-        lastTimeDisconnected = Instant.now();
+        disconnectCounter.incrementAndGet();
 
         if (state == State.DESTROYED) {
             // We are shutting down this link and have left voice, so now we can safely unmap it
@@ -250,15 +263,6 @@ public class Link {
         ((JDAImpl) getJda()).getClient()
                 .send("{\"op\":4,\"d\":{\"self_deaf\":false,\"guild_id\":\"" + guild + "\",\"channel_id\":null,\"self_mute\":false}}");
     }
-
-    private final Runnable disconnectTimeoutHandler = () -> {
-        if(lastTimeDisconnected.plusMillis(DISCONNECT_TIMEOUT_MS).isBefore(Instant.now())) {
-            // We didn't get the leave event, so we *must* not be connected
-            log.warn("Attempted to disconnect from voice to reconnect but timed out after " + DISCONNECT_TIMEOUT_MS
-                    + "ms. Pretending that we left so we don't get stuck...");
-            onVoiceLeave();
-        }
-    };
 
     /**
      * @return The channel we are currently connect to, even if we are trying to connect to a different one
