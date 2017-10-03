@@ -299,6 +299,13 @@ public class Link {
         return lavalink.getJdaFromSnowflake(guild);
     }
 
+    /**
+     * @return The {@link State} of this {@link Link}
+     */
+    public State getState() {
+        return state;
+    }
+
     private enum State {
         /**
          * Default, means we are not trying to use voice at all
@@ -326,7 +333,7 @@ public class Link {
         DISCONNECTING_BEFORE_RECONNECTING,
 
         /**
-         * This {@Code Link} has been destroyed and will soon (if not already) be unmapped from Lavalink
+         * This {@link Link} has been destroyed and will soon (if not already) be unmapped from {@link Lavalink}
          */
         DESTROYED
     }
