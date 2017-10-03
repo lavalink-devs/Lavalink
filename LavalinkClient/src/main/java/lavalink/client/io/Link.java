@@ -158,6 +158,14 @@ public class Link {
         // Make sure we eventually reconnect
         int startCount = disconnectCounter.get();
 
+        if (currentNode == null) {
+            log.warn("Current node is somehow null while we are trying to disconnect! " +
+                    "Did someone try to disconnect before connecting in the first place? " +
+                    "Guild: " + guild  + " State: " + state);
+            state = State.NO_CHANNEL;
+            return;
+        }
+
         executor.schedule(() -> {
             if(startCount == disconnectCounter.get()) {
                 // We didn't get the leave event, so we *must* not be connected
