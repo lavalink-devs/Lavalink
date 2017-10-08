@@ -23,7 +23,9 @@
 package lavalink.server.io;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.TrackMarker;
 import lavalink.server.player.Player;
+import lavalink.server.player.TrackEndMarkerHandler;
 import lavalink.server.util.Util;
 import net.dv8tion.jda.manager.AudioManager;
 import org.java_websocket.WebSocket;
@@ -73,10 +75,28 @@ public class SocketServer extends WebSocketServer {
     }
 
     @Override
-    public void onClose(WebSocket webSocket, int i, String s, boolean b) {
-        log.info("Connection closed from " + webSocket.getRemoteSocketAddress().toString() + " with protocol " + webSocket.getDraft());
-        contextMap.get(webSocket).shutdown();
-        contextMap.remove(webSocket);
+    public void onCloseInitiated(WebSocket webSocket, int code, String reason) {
+        close(webSocket, code, reason);
+    }
+
+    @Override
+    public void onClosing(WebSocket webSocket, int code, String reason, boolean remote) {
+        close(webSocket, code, reason);
+    }
+
+    @Override
+    public void onClose(WebSocket webSocket, int code, String reason, boolean remote) {
+        close(webSocket, code, reason);
+    }
+
+    // WebSocketServer has a very questionable attitude towards communicating close events, so we override ALL the closing methods
+    private void close(WebSocket webSocket, int code, String reason) {
+        SocketContext context = contextMap.remove(webSocket);
+        if (context != null) {
+            log.info("Connection closed from {} with protocol {} with reason {} with code {}",
+                    webSocket.getRemoteSocketAddress().toString(), webSocket.getDraft(), reason, code);
+            context.shutdown();
+        }
     }
 
     @Override
@@ -133,6 +153,9 @@ public class SocketServer extends WebSocketServer {
                     AudioTrack track = Util.toAudioTrack(json.getString("track"));
                     if (json.has("startTime")) {
                         track.setPosition(json.getLong("startTime"));
+                    }
+                    if (json.has("endTime")) {
+                        track.setMarker(new TrackMarker(json.getLong("endTime"), new TrackEndMarkerHandler(player)));
                     }
 
                     if (json.optBoolean("pause", false)) {

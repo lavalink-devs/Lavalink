@@ -68,12 +68,14 @@ Response to `isConnectedRes`.
 
 Cause the player to play a track.
 `startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
+`endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default the track plays until it's end as per the encoded data.
 ```json
 {
     "op": "play",
     "guildId": "...",
     "track": "...",
-    "startTime": "60000"
+    "startTime": "60000",
+    "endTime": "120000"
 }
 ```
 

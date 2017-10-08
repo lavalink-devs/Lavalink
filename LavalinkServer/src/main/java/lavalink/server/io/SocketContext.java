@@ -25,6 +25,7 @@ package lavalink.server.io;
 import lavalink.server.player.Player;
 import lavalink.server.util.Util;
 import net.dv8tion.jda.Core;
+import net.dv8tion.jda.manager.AudioManager;
 import org.java_websocket.WebSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,8 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -43,8 +46,8 @@ public class SocketContext {
     private final WebSocket socket;
     private String userId;
     private int shardCount;
-    private final HashMap<Integer, Core> cores = new HashMap<>();
-    private final HashMap<String, Player> players = new HashMap<>();
+    private final Map<Integer, Core> cores = new HashMap<>();
+    private final Map<String, Player> players = new ConcurrentHashMap<>();
     private ScheduledExecutorService statsExecutor;
     public final ScheduledExecutorService playerUpdateService;
 
@@ -84,7 +87,7 @@ public class SocketContext {
         return socket;
     }
 
-    HashMap<String, Player> getPlayers() {
+    Map<String, Player> getPlayers() {
         return players;
     }
 
@@ -102,7 +105,12 @@ public class SocketContext {
         playerUpdateService.shutdown();
         players.keySet().forEach(s -> {
             Core core = cores.get(Util.getShardFromSnowflake(s, shardCount));
-            core.getAudioManager(s).closeAudioConnection();
+            if (core != null) {
+                AudioManager audioManager = core.getAudioManager(s);
+                if (audioManager != null) {
+                    audioManager.closeAudioConnection();
+                }
+            }
         });
 
         players.values().forEach(Player::stop);

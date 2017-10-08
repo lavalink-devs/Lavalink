@@ -13,3 +13,4 @@ lavalink:
       vimeo: true
       http: true
       local: false
+    sentryDsn: ""

@@ -22,33 +22,19 @@
 
 package lavalink.client.io;
 
-import net.dv8tion.jda.core.entities.Guild;
-
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-
 @SuppressWarnings("WeakerAccess")
 public class LavalinkLoadBalancer {
 
     private Lavalink lavalink;
-    private Map<String, Optional<LavalinkSocket>> socketMap = new ConcurrentHashMap<>();
+    //private Map<String, Optional<LavalinkSocket>> socketMap = new ConcurrentHashMap<>();
 
     LavalinkLoadBalancer(Lavalink lavalink) {
         this.lavalink = lavalink;
     }
 
-    LavalinkSocket getSocket(String guildId) {
-        return socketMap.computeIfAbsent(guildId, s -> Optional.ofNullable(determineBestSocket())).orElse(null);
-    }
-
-    LavalinkSocket getSocket(Guild guild) {
-        return getSocket(guild.getId());
-    }
-
-    private LavalinkSocket determineBestSocket() {
+    public LavalinkSocket determineBestSocket() {
         LavalinkSocket leastPenalty = null;
-        int record = Integer.MAX_VALUE ;
+        int record = Integer.MAX_VALUE;
 
         for (LavalinkSocket socket : lavalink.getNodes()) {
             int total = getPenalties(socket).getTotal();
@@ -67,24 +53,17 @@ public class LavalinkLoadBalancer {
     }
 
     void onNodeDisconnect(LavalinkSocket disconnected) {
-        socketMap.replaceAll((guildId, socket) -> {
-            boolean isAffected = disconnected.equals(socket.orElse(null));
-
-            LavalinkSocket newSocket = isAffected ? determineBestSocket() : socket.orElse(null);
-            if (isAffected)
-                lavalink.getPlayer(guildId).setSocket(newSocket);
-
-            return Optional.ofNullable(newSocket);
+        lavalink.getLinks().forEach(link -> {
+            if (disconnected.equals(link.getCurrentSocket()))
+                link.onNodeDisconnected();
         });
     }
 
     void onNodeConnect(LavalinkSocket connected) {
-        for (String guildId : socketMap.keySet()) {
-            if(!socketMap.get(guildId).isPresent()) {
-                socketMap.put(guildId, Optional.of(connected));
-                lavalink.getPlayer(guildId).setSocket(connected);
-            }
-        }
+        lavalink.getLinks().forEach(link -> {
+            if (link.getCurrentSocket() == null)
+                link.changeNode(connected);
+        });
     }
 
     public static Penalties getPenalties(LavalinkSocket socket) {
@@ -114,7 +93,7 @@ public class LavalinkLoadBalancer {
             if (socket.stats.getAvgFramesDeficitPerMinute() == -1) return;
 
             // https://fred.moe/rjD.png
-            deficitFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesNulledPerMinute() / 3000f)) * 300 - 300);
+            deficitFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesDeficitPerMinute() / 3000f)) * 300 - 300);
             nullFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesNulledPerMinute() / 3000f)) * 300 - 300);
             nullFramePenalty *= 2;
 
@@ -138,14 +117,14 @@ public class LavalinkLoadBalancer {
         }
 
         public int getTotal() {
-            if (!socket.isOpen()) return Integer.MAX_VALUE - 1;
+            if (!socket.isAvailable()) return Integer.MAX_VALUE - 1;
 
             return playerPenalty + cpuPenalty + deficitFramePenalty + nullFramePenalty;
         }
 
         @Override
         public String toString() {
-            if (!socket.isOpen()) return "Penalties{" +
+            if (!socket.isAvailable()) return "Penalties{" +
                     "unavailable=" + (Integer.MAX_VALUE - 1) +
                     '}';
 

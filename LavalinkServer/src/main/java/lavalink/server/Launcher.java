@@ -22,6 +22,10 @@
 
 package lavalink.server;
 
+import ch.qos.logback.classic.LoggerContext;
+import io.sentry.Sentry;
+import io.sentry.SentryClient;
+import io.sentry.logback.SentryAppender;
 import lavalink.server.io.SocketServer;
 import lavalink.server.nas.NativeAudioSendFactory;
 import lavalink.server.util.SimpleLogToSLF4JAdapter;
@@ -38,7 +42,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Properties;
 
 @Configuration
 @ComponentScan
@@ -55,10 +61,50 @@ public class Launcher {
 
     @Autowired
     public Launcher(Config config, SocketServer socketServer) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            log.info("Shutdown hook triggered");
+            try {
+                socketServer.stop(30);
+            } catch (InterruptedException e) {
+                log.warn("Interrupted while stopping socket server", e);
+            }
+        }, "shutdown hook"));
+
         SimpleLog.LEVEL = SimpleLog.Level.OFF;
         SimpleLog.addListener(new SimpleLogToSLF4JAdapter());
         Launcher.config = config;
+        initSentry();
         this.socketServer = socketServer;
+    }
+
+    private void initSentry() {
+        String sentryDsn = config.getSentryDsn();
+        if (sentryDsn == null || sentryDsn.isEmpty()) {
+            turnOffSentry();
+            return;
+        }
+        SentryClient sentryClient = Sentry.init(sentryDsn);
+
+        // set the git commit hash this was build on as the release
+        Properties gitProps = new Properties();
+        try {
+            gitProps.load(Launcher.class.getClassLoader().getResourceAsStream("git.properties"));
+        } catch (NullPointerException | IOException e) {
+            log.error("Failed to load git repo information", e);
+        }
+        
+        String commitHash = gitProps.getProperty("git.commit.id.full");
+        if (commitHash == null || commitHash.isEmpty()) {
+            return;
+        }
+        sentryClient.setRelease(commitHash);
+    }
+
+    private void turnOffSentry() {
+        LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+        SentryAppender sentryAppender = (SentryAppender) lc.getLogger(Logger.ROOT_LOGGER_NAME).getAppender("SENTRY");
+        Sentry.close();
+        sentryAppender.stop();
     }
 
     public static void main(String[] args) {

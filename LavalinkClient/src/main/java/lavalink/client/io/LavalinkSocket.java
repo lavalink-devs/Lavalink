@@ -58,6 +58,7 @@ public class LavalinkSocket extends ReusableWebSocket {
     long lastReconnectAttempt = 0;
     private int reconnectsAttempted = 0;
     private final URI remoteUri;
+    private boolean available = false;
 
     LavalinkSocket(Lavalink lavalink, URI serverUri, Draft protocolDraft, Map<String, String> headers) {
         super(serverUri, protocolDraft, headers, TIMEOUT_MS);
@@ -73,6 +74,7 @@ public class LavalinkSocket extends ReusableWebSocket {
     @Override
     public void onOpen(ServerHandshake handshakeData) {
         log.info("Received handshake from server");
+        available = true;
         lavalink.loadBalancer.onNodeConnect(this);
         reconnectsAttempted = 0;
     }
@@ -87,12 +89,12 @@ public class LavalinkSocket extends ReusableWebSocket {
 
         switch (json.getString("op")) {
             case "sendWS":
-                JDAImpl jda = (JDAImpl) lavalink.getShard(json.getInt("shardId"));
+                JDAImpl jda = (JDAImpl) lavalink.getJda(json.getInt("shardId"));
                 jda.getClient().send(json.getString("message"));
                 break;
             case "validationReq":
                 int sId = LavalinkUtil.getShardFromSnowflake(json.getString("guildId"), lavalink.getNumShards());
-                JDA jda2 = lavalink.getShard(sId);
+                JDA jda2 = lavalink.getJda(sId);
 
                 String guildId = json.getString("guildId");
                 String channelId = json.optString("channelId");
@@ -127,7 +129,7 @@ public class LavalinkSocket extends ReusableWebSocket {
                 }
                 break;
             case "isConnectedReq":
-                JDAImpl jda3 = (JDAImpl) lavalink.getShard(json.getInt("shardId"));
+                JDAImpl jda3 = (JDAImpl) lavalink.getJda(json.getInt("shardId"));
                 JSONObject res2 = new JSONObject();
                 res2.put("op", "isConnectedRes");
                 res2.put("shardId", json.getInt("shardId"));
@@ -164,7 +166,7 @@ public class LavalinkSocket extends ReusableWebSocket {
      * The remaining are caused by the client
      */
     private void handleEvent(JSONObject json) throws IOException {
-        LavalinkPlayer player = (LavalinkPlayer) lavalink.getPlayer(json.getString("guildId"));
+        LavalinkPlayer player = lavalink.getLink(json.getString("guildId")).getPlayer();
         PlayerEvent event = null;
 
         switch (json.getString("type")) {
@@ -196,11 +198,12 @@ public class LavalinkSocket extends ReusableWebSocket {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
+        available = false;
         reason = reason == null ? "<no reason given>" : reason;
         if (code == 1000) {
-            log.info("Connection to " + getRemoteSocketAddress() + " closed gracefully with reason: " + reason + " :: Remote=" + remote);
+            log.info("Connection to " + getRemoteUri() + " closed gracefully with reason: " + reason + " :: Remote=" + remote);
         } else {
-            log.warn("Connection to " + getRemoteSocketAddress() + " closed unexpectedly with reason " + code + ": " + reason + " :: Remote=" + remote);
+            log.warn("Connection to " + getRemoteUri() + " closed unexpectedly with reason " + code + ": " + reason + " :: Remote=" + remote);
         }
 
         lavalink.loadBalancer.onNodeDisconnect(this);
@@ -209,7 +212,7 @@ public class LavalinkSocket extends ReusableWebSocket {
     @Override
     public void onError(Exception ex) {
         if (ex instanceof ConnectException) {
-            log.warn("Failed to connect to " + getRemoteSocketAddress() + ", retrying in " + getReconnectInterval()/1000 + " seconds.");
+            log.warn("Failed to connect to " + getRemoteUri() + ", retrying in " + getReconnectInterval()/1000 + " seconds.");
             return;
         }
 
@@ -222,7 +225,7 @@ public class LavalinkSocket extends ReusableWebSocket {
         if (isOpen()) {
             super.send(text);
         } else if (isConnecting()) {
-            log.warn("Attempting to send messages to " + getRemoteSocketAddress() + " WHILE connecting. Ignoring.");
+            log.warn("Attempting to send messages to " + getRemoteUri() + " WHILE connecting. Ignoring.");
         }
     }
 
@@ -243,5 +246,16 @@ public class LavalinkSocket extends ReusableWebSocket {
 
     public RemoteStats getStats() {
         return stats;
+    }
+
+    public boolean isAvailable() {
+        return available && isOpen() && !isClosing();
+    }
+
+    @Override
+    public String toString() {
+        return "LavalinkSocket{" +
+                "remoteUri=" + remoteUri +
+                '}';
     }
 }
