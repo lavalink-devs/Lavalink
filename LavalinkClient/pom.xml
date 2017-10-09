@@ -39,7 +39,7 @@
             <!-- audio player for discord -->
             <groupId>com.fredboat.fork</groupId>
             <artifactId>com.sedmelluq.lavaplayer</artifactId>
-            <version>1.2.43.3</version>
+            <version>1.2.44.4</version>
         </dependency>
         <dependency>
             <groupId>org.java-websocket</groupId>
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.3.1_281</version>
+            <version>3.3.1_286</version>
         </dependency>
 
         <!-- Test dependencies -->
