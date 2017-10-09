@@ -12,4 +12,5 @@ lavalink:
       twitch: true
       vimeo: true
       http: true
+      local: false
     sentryDsn: ""

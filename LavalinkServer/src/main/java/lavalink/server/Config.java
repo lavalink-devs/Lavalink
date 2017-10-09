@@ -63,6 +63,7 @@ public class Config {
         private boolean twitch = true;
         private boolean vimeo = true;
         private boolean http = true;
+        private boolean local = false;
 
         public boolean isYoutube() {
             return youtube;
@@ -110,6 +111,14 @@ public class Config {
 
         public void setHttp(boolean http) {
             this.http = http;
+        }
+
+        public boolean isLocal() {
+            return local;
+        }
+
+        public void setLocal(boolean local) {
+            this.local = local;
         }
     }
 }
