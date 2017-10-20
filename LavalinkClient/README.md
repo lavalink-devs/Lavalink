@@ -1,4 +1,4 @@
-# JDA Lavalink Client
+# Lavalink JDA Client
 ## Installation
 Lavalink does not have a maven repository and instead uses Jitpack.
 You can add the following to your POM if you're using Maven:
