@@ -30,13 +30,13 @@ public class LavalinkLoadBalancer {
 
     private Lavalink lavalink;
     //private Map<String, Optional<LavalinkSocket>> socketMap = new ConcurrentHashMap<>();
-    private List<BalancerPenalty> customPenalties = new ArrayList<>();
+    private List<PenaltyProvider> customPenalties = new ArrayList<>();
 
     LavalinkLoadBalancer(Lavalink lavalink) {
         this.lavalink = lavalink;
     }
 
-    public LavalinkSocket determineBestSocket(Long guild) {
+    public LavalinkSocket determineBestSocket(long guild) {
         LavalinkSocket leastPenalty = null;
         int record = Integer.MAX_VALUE;
 
@@ -56,11 +56,11 @@ public class LavalinkLoadBalancer {
         return leastPenalty;
     }
 
-    public void addPenalty(BalancerPenalty penalty) {
+    public void addPenalty(PenaltyProvider penalty) {
         this.customPenalties.add(penalty);
     }
 
-    public void remPenalty(BalancerPenalty penalty) {
+    public void removePenalty(PenaltyProvider penalty) {
         this.customPenalties.remove(penalty);
     }
 
@@ -78,7 +78,7 @@ public class LavalinkLoadBalancer {
         });
     }
 
-    public static Penalties getPenalties(LavalinkSocket socket, Long guild, List<BalancerPenalty> customPenalties) {
+    public Penalties getPenalties(LavalinkSocket socket, long guild, List<PenaltyProvider> customPenalties) {
         return new Penalties(socket, guild, customPenalties);
     }
 
@@ -86,14 +86,14 @@ public class LavalinkLoadBalancer {
     public static class Penalties {
 
         private LavalinkSocket socket;
-        private final Long guild;
+        private final long guild;
         private int playerPenalty = 0;
         private int cpuPenalty = 0;
         private int deficitFramePenalty = 0;
         private int nullFramePenalty = 0;
-        private List<BalancerPenalty> custom;
+        private int customPenalties = 0;
 
-        private Penalties(LavalinkSocket socket, Long guild, List<BalancerPenalty> custom) {
+        private Penalties(LavalinkSocket socket, long guild, List<PenaltyProvider> custom) {
             this.socket = socket;
             this.guild = guild;
             if (socket.stats == null) return;
@@ -111,15 +111,14 @@ public class LavalinkLoadBalancer {
             nullFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesNulledPerMinute() / 3000f)) * 300 - 300);
             nullFramePenalty *= 2;
             // Deficit frames are better than null frames, as deficit frames can be caused by the garbage collector
-
-            this.custom = custom;
+            custom.forEach(c -> customPenalties += c.getPenalty(this)); // Not sure if this can break
         }
 
         public LavalinkSocket getSocket() {
             return socket;
         }
 
-        public Long getGuild() {
+        public long getGuild() {
             return guild;
         }
 
@@ -139,16 +138,12 @@ public class LavalinkLoadBalancer {
             return nullFramePenalty;
         }
 
-        public int getTotalPenalties() {
-            if (!socket.isAvailable()) return Integer.MAX_VALUE - 1;
-            return playerPenalty + cpuPenalty + deficitFramePenalty + nullFramePenalty;
+        public int getCustomPenalties() {
+            return this.customPenalties;
         }
 
-        // Prevents loop calls to getTotal where a custom penalty calls it.
-        int getTotal() {
-            final int[] c = {0};
-            this.custom.forEach(custom -> c[0] += custom.getPenalty(this));
-            return getTotalPenalties() + c[0];
+        public int getTotal() {
+            return playerPenalty + cpuPenalty + deficitFramePenalty + nullFramePenalty + customPenalties;
         }
 
         @Override
@@ -163,15 +158,9 @@ public class LavalinkLoadBalancer {
                     ", cpuPenalty=" + cpuPenalty +
                     ", deficitFramePenalty=" + deficitFramePenalty +
                     ", nullFramePenalty=" + nullFramePenalty +
+                    ", custom=" + customPenalties +
                     '}';
         }
-    }
-
-    public interface BalancerPenalty {
-
-        // Using the penalties class allows for using default ones like CPU or Players.
-        int getPenalty(Penalties balancer);
-
     }
 
 }
