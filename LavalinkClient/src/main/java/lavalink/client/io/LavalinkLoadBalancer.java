@@ -23,6 +23,7 @@
 package lavalink.client.io;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("WeakerAccess")
@@ -80,6 +81,10 @@ public class LavalinkLoadBalancer {
 
     public Penalties getPenalties(LavalinkSocket socket, long guild, List<PenaltyProvider> penaltyProviders) {
         return new Penalties(socket, guild, penaltyProviders);
+    }
+
+    public static Penalties getPenalties(LavalinkSocket socket) {
+        return new Penalties(socket, 0L, Collections.emptyList());
     }
 
     @SuppressWarnings("unused")
