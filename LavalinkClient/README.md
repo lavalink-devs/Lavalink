@@ -89,7 +89,7 @@ Here are a few important methods:
 
 The `IPlayer` more or less works like a drop-in replacement for Lavaplayer's `AudioPlayer`. Which leads me to...
 
-**Warning:** You should not use JDA's `AudioManager#openAudioConnection()` or `AudioManager#closeAudioConnection()` when using Lavalink is being used. Use `Link` instead.
+**Warning:** You should not use JDA's `AudioManager#openAudioConnection()` or `AudioManager#closeAudioConnection()` when Lavalink is being used. Use `Link` instead.
 
 ### Using Lavalink and Lavaplayer in the same codebase
 One of the requirements for Lavalink to work with FredBoat was to make Lavalink optional, so we can support selfhosters who do not want to run Lavalink.
