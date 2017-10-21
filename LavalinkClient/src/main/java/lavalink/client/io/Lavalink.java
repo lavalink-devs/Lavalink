@@ -97,6 +97,10 @@ public class Lavalink extends ListenerAdapter {
         return links.computeIfAbsent(guildId, __ -> new Link(this, guildId));
     }
 
+    public LavalinkLoadBalancer getLoadBalancer() {
+        return loadBalancer;
+    }
+
     @SuppressWarnings("WeakerAccess")
     public Link getLink(Guild guild) {
         return getLink(guild.getId());

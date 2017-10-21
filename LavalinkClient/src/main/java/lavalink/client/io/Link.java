@@ -103,7 +103,7 @@ public class Link {
     @SuppressWarnings("WeakerAccess")
     public void connect(VoiceChannel channel) {
         if (currentNode == null) {
-            currentNode = lavalink.loadBalancer.determineBestSocket();
+            currentNode = lavalink.loadBalancer.determineBestSocket(channel.getGuild().getIdLong());
         }
 
         if (state == State.NO_CHANNEL) {
@@ -278,7 +278,7 @@ public class Link {
     }
 
     void onNodeDisconnected() {
-        changeNode(lavalink.loadBalancer.determineBestSocket());
+        changeNode(lavalink.loadBalancer.determineBestSocket(Long.parseLong(this.guild)));
 
         // This will trigger a leave
         forcefullyDisconnect();
