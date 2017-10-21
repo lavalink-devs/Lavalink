@@ -110,8 +110,8 @@ public class LavalinkLoadBalancer {
             deficitFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesDeficitPerMinute() / 3000f)) * 300 - 300);
             nullFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesNulledPerMinute() / 3000f)) * 300 - 300);
             nullFramePenalty *= 2;
-
             // Deficit frames are better than null frames, as deficit frames can be caused by the garbage collector
+
             this.custom = custom;
         }
 
@@ -169,7 +169,7 @@ public class LavalinkLoadBalancer {
 
     public interface BalancerPenalty {
 
-        // Using the penalties class allows for getting of default ones like CPU or Players.
+        // Using the penalties class allows for using default ones like CPU or Players.
         int getPenalty(Penalties balancer);
 
     }
