@@ -30,7 +30,7 @@ public class LavalinkLoadBalancer {
 
     private Lavalink lavalink;
     //private Map<String, Optional<LavalinkSocket>> socketMap = new ConcurrentHashMap<>();
-    private List<PenaltyProvider> customPenalties = new ArrayList<>();
+    private List<PenaltyProvider> penaltyProviders = new ArrayList<>();
 
     LavalinkLoadBalancer(Lavalink lavalink) {
         this.lavalink = lavalink;
@@ -41,7 +41,7 @@ public class LavalinkLoadBalancer {
         int record = Integer.MAX_VALUE;
 
         for (LavalinkSocket socket : lavalink.getNodes()) {
-            int total = getPenalties(socket, guild, customPenalties).getTotal();
+            int total = getPenalties(socket, guild, penaltyProviders).getTotal();
             if (total < record) {
                 leastPenalty = socket;
                 record = total;
@@ -57,11 +57,11 @@ public class LavalinkLoadBalancer {
     }
 
     public void addPenalty(PenaltyProvider penalty) {
-        this.customPenalties.add(penalty);
+        this.penaltyProviders.add(penalty);
     }
 
     public void removePenalty(PenaltyProvider penalty) {
-        this.customPenalties.remove(penalty);
+        this.penaltyProviders.remove(penalty);
     }
 
     void onNodeDisconnect(LavalinkSocket disconnected) {
@@ -78,8 +78,8 @@ public class LavalinkLoadBalancer {
         });
     }
 
-    public Penalties getPenalties(LavalinkSocket socket, long guild, List<PenaltyProvider> customPenalties) {
-        return new Penalties(socket, guild, customPenalties);
+    public Penalties getPenalties(LavalinkSocket socket, long guild, List<PenaltyProvider> penaltyProviders) {
+        return new Penalties(socket, guild, penaltyProviders);
     }
 
     @SuppressWarnings("unused")
@@ -93,7 +93,7 @@ public class LavalinkLoadBalancer {
         private int nullFramePenalty = 0;
         private int customPenalties = 0;
 
-        private Penalties(LavalinkSocket socket, long guild, List<PenaltyProvider> custom) {
+        private Penalties(LavalinkSocket socket, long guild, List<PenaltyProvider> penaltyProviders) {
             this.socket = socket;
             this.guild = guild;
             if (socket.stats == null) return;
@@ -111,7 +111,7 @@ public class LavalinkLoadBalancer {
             nullFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesNulledPerMinute() / 3000f)) * 300 - 300);
             nullFramePenalty *= 2;
             // Deficit frames are better than null frames, as deficit frames can be caused by the garbage collector
-            custom.forEach(c -> customPenalties += c.getPenalty(this)); // Not sure if this can break
+            penaltyProviders.forEach(pp -> customPenalties += pp.getPenalty(this)); // Not sure if this can break
         }
 
         public LavalinkSocket getSocket() {
