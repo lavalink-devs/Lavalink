@@ -14,3 +14,4 @@ lavalink:
       http: true
       local: false
     sentryDsn: ""
+    bufferDurationMs:
