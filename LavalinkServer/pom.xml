@@ -40,14 +40,14 @@
     <dependencies>
         <dependency>
             <!-- audio player for discord -->
-            <groupId>com.fredboat.fork</groupId>
-            <artifactId>com.sedmelluq.lavaplayer</artifactId>
-            <version>1.2.44.4</version>
+            <groupId>com.sedmelluq</groupId>
+            <artifactId>lavaplayer</artifactId>
+            <version>1.2.44</version>
         </dependency>
         <dependency>
-            <groupId>com.github.FredBoat</groupId>
+            <groupId>com.github.DV8FromTheWorld</groupId>
             <artifactId>JDA-Audio</artifactId>
-            <version>6c78c37b1f7de5a757b0f64dd3a3b6107c5876c5</version>
+            <version>8f07b4349c197183c36de926a92f1b4d5012526a</version>
         </dependency>
         <dependency>
             <groupId>org.java-websocket</groupId>
@@ -86,13 +86,13 @@
 
         <!-- Used for JDA-NAS -->
         <dependency>
-            <groupId>com.fredboat.fork</groupId>
-            <artifactId>com.sedmelluq.udp-queue</artifactId>
-            <version>1.0.6.1</version>
+            <groupId>com.github.FredBoat</groupId>
+            <artifactId>jda-nas</artifactId>
+            <version>1.0.5.1-JDA-Audio</version>
         </dependency>
         <dependency>
-            <groupId>com.fredboat.fork</groupId>
-            <artifactId>com.sedmelluq.lavaplayer-common</artifactId>
+            <groupId>com.sedmelluq</groupId>
+            <artifactId>lavaplayer-common</artifactId>
             <version>1.0.5</version>
         </dependency>
         <dependency>

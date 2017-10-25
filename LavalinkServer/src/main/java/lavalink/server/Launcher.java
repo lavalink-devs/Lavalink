@@ -23,11 +23,11 @@
 package lavalink.server;
 
 import ch.qos.logback.classic.LoggerContext;
+import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.logback.SentryAppender;
 import lavalink.server.io.SocketServer;
-import lavalink.server.nas.NativeAudioSendFactory;
 import lavalink.server.util.SimpleLogToSLF4JAdapter;
 import net.dv8tion.jda.audio.AudioConnection;
 import net.dv8tion.jda.utils.SimpleLog;

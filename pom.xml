@@ -51,23 +51,6 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <repository>
-            <!-- using the napster repos for forks/testing builds that jitpack doesnt build -->
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>napster-releases</id>
-            <name>custom repo for stuff</name>
-            <url>https://repo.npstr.space/repository/maven-releases/</url>
-        </repository>
-        <repository>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <id>napster-snapshots</id>
-            <name>custom repo for stuff</name>
-            <url>https://repo.npstr.space/repository/maven-snapshots/</url>
-        </repository>
     </repositories>
 
     <build>
