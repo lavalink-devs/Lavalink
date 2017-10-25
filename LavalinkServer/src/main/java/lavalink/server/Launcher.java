@@ -120,7 +120,17 @@ public class Launcher {
                 && !System.getProperty("os.arch").equalsIgnoreCase("arm")
                 && !System.getProperty("os.arch").equalsIgnoreCase("arm-linux")
                 ) {
-            AudioConnection.setAudioSendFactory(new NativeAudioSendFactory());
+
+            Integer customBuffer = config.getBufferDurationMs();
+            NativeAudioSendFactory nativeAudioSendFactory;
+            if (customBuffer != null) {
+                log.info("Setting buffer to {}ms", customBuffer);
+                nativeAudioSendFactory = new NativeAudioSendFactory(customBuffer);
+            } else {
+                log.info("Using default buffer");
+                nativeAudioSendFactory = new NativeAudioSendFactory();
+            }
+            AudioConnection.setAudioSendFactory(nativeAudioSendFactory);
             log.info("JDA-NAS supported system detected. Enabled native audio sending.");
         } else {
             log.warn("This system and architecture appears to not support native audio sending! "

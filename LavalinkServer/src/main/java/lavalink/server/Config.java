@@ -25,6 +25,8 @@ package lavalink.server;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
+
 @ConfigurationProperties(prefix = "lavalink.server")
 @Component
 public class Config {
@@ -53,6 +55,18 @@ public class Config {
 
     public void setSentryDsn(String sentryDsn) {
         this.sentryDsn = sentryDsn;
+    }
+
+    @Nullable
+    public Integer bufferDurationMs;
+
+    @Nullable
+    public Integer getBufferDurationMs() {
+        return bufferDurationMs;
+    }
+
+    public void setBufferDurationMs(@Nullable Integer bufferDurationMs) {
+        this.bufferDurationMs = bufferDurationMs;
     }
 
     public static class Sources {
