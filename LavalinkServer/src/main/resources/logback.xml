@@ -28,7 +28,7 @@
         <file>logs/lavalink.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logs/lavalink.%d{yyyyMMdd}.log</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>[%date{HH:mm:ss}] [ %-5level] [%logger{0}] %msg%n</pattern>
