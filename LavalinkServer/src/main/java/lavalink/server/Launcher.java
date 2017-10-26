@@ -23,6 +23,7 @@
 package lavalink.server;
 
 import ch.qos.logback.classic.LoggerContext;
+import com.github.shredder121.asyncaudio.jdaaudio.AsyncPacketProviderFactory;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
@@ -30,6 +31,7 @@ import io.sentry.logback.SentryAppender;
 import lavalink.server.io.SocketServer;
 import lavalink.server.util.SimpleLogToSLF4JAdapter;
 import net.dv8tion.jda.audio.AudioConnection;
+import net.dv8tion.jda.audio.factory.IAudioSendFactory;
 import net.dv8tion.jda.utils.SimpleLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,7 +132,9 @@ public class Launcher {
                 log.info("Using default buffer");
                 nativeAudioSendFactory = new NativeAudioSendFactory();
             }
-            AudioConnection.setAudioSendFactory(nativeAudioSendFactory);
+            AudioConnection.setAudioSendFactory(
+                    AsyncPacketProviderFactory.adapt(nativeAudioSendFactory)
+            );
             log.info("JDA-NAS supported system detected. Enabled native audio sending.");
         } else {
             log.warn("This system and architecture appears to not support native audio sending! "

@@ -101,6 +101,12 @@
             <version>22.0</version>
         </dependency>
 
+        <!-- Complement JDA-NAS with providing the packets in an async fashion -->
+        <dependency>
+            <groupId>com.github.shredder121</groupId>
+            <artifactId>jda-async-packetprovider</artifactId>
+            <version>1.0</version>
+        </dependency>
 
         <!-- Spring for dependency injection -->
         <dependency>
