@@ -26,6 +26,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker;
 import lavalink.server.player.Player;
 import lavalink.server.player.TrackEndMarkerHandler;
+import lavalink.server.util.DebugConnectionListener;
 import lavalink.server.util.Util;
 import net.dv8tion.jda.manager.AudioManager;
 import org.java_websocket.WebSocket;
@@ -112,13 +113,15 @@ public class SocketServer extends WebSocketServer {
         switch (json.getString("op")) {
             /* JDAA ops */
             case "connect":
+                long guildId = Long.parseLong(json.getString("guildId"));
                 AudioManager manager = contextMap.get(webSocket).getCore(getShardId(webSocket, json))
                         .getAudioManager(json.getString("guildId"));
-
+                if (manager.getConnectionListener() == null) {
+                    manager.setConnectionListener(new DebugConnectionListener(guildId));
+                }
                 if (manager.isConnected() || manager.isAttemptingToConnect()) {
                     manager.closeAudioConnection();
-                    log.info("Closing the audio connection for guild " + json.getString("guildId")
-                            + " so we can reconnect.");
+                    log.info("Closing the audio connection for guild {} so we can reconnect.", guildId);
                 }
 
                 manager.openAudioConnection(json.getString("channelId"));
