@@ -181,7 +181,7 @@ public class Link {
         }, TIMEOUT_MS, TimeUnit.MILLISECONDS);
 
         if (state == State.NO_CHANNEL) {
-            log.warn("Attempt to disconnect from channel when not connected. Guild: " + guild);
+            log.info("Attempt to disconnect from channel when not connected. Guild: " + guild);
             return;
         }
 
