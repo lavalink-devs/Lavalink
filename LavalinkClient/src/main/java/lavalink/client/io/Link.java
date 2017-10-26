@@ -31,6 +31,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -234,7 +236,16 @@ public class Link {
     }
 
     @SuppressWarnings("WeakerAccess")
+    @Nullable
     public LavalinkSocket getCurrentSocket() {
+        return currentNode;
+    }
+
+    @Nonnull
+    LavalinkSocket getOrDetermineSocket() {
+        if (currentNode == null) {
+            currentNode = lavalink.loadBalancer.determineBestSocket(Long.parseLong(guild));
+        }
         return currentNode;
     }
 

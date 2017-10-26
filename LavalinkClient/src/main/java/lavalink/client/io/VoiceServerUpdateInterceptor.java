@@ -60,7 +60,7 @@ public class VoiceServerUpdateInterceptor extends SocketHandler {
         json.put("sessionId", sessionId);
         json.put("guildId", guild.getId());
         json.put("event", content);
-        lavalink.getLink(guild).getCurrentSocket().send(json.toString());
+        lavalink.getLink(guild).getOrDetermineSocket().send(json.toString());
 
         log.info("Sent voice update");
 
