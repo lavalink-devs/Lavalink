@@ -67,6 +67,8 @@ public class Link {
      */
     private volatile LavalinkSocket currentNode = null;
     private volatile LavalinkSocket pendingNode = null;
+
+    /* May only be set by setState() */
     private volatile State state = State.NO_CHANNEL;
 
 
@@ -134,7 +136,7 @@ public class Link {
         int startCount = connectCounter.get();
 
         executor.schedule(() -> {
-            if(startCount == connectCounter.get()) {
+            if (startCount == connectCounter.get()) {
                 log.warn("Connecting timed out for guild " + guild + ". Forcefully sending OP 4...");
                 forcefullyDisconnect();
             }
@@ -147,7 +149,7 @@ public class Link {
 
         currentChannel = channelId;
         pendingChannel = null;
-        state = State.CONNECTING;
+        setState(State.CONNECTING);
 
         JSONObject json = new JSONObject();
         json.put("op", "connect");
@@ -163,13 +165,13 @@ public class Link {
         if (currentNode == null) {
             log.warn("Current node is somehow null while we are trying to disconnect! " +
                     "Did someone try to disconnect before connecting in the first place? " +
-                    "Guild: " + guild  + " State: " + state);
-            state = State.NO_CHANNEL;
+                    "Guild: " + guild + " State: " + state);
+            setState(State.NO_CHANNEL);
             return;
         }
 
         executor.schedule(() -> {
-            if(startCount == disconnectCounter.get()) {
+            if (startCount == disconnectCounter.get()) {
                 // We didn't get the leave event, so we *must* not be connected
                 log.warn("Attempted to disconnect from voice but timed out after " + TIMEOUT_MS
                         + "ms. Did someone use ;;leave while we're not connected?" +
@@ -188,9 +190,9 @@ public class Link {
             return;
         }
 
-        state = reconnect
+        setState(reconnect
                 ? State.DISCONNECTING_BEFORE_RECONNECTING
-                : State.DISCONNECTING;
+                : State.DISCONNECTING);
 
         JSONObject json = new JSONObject();
         json.put("op", "disconnect");
@@ -213,9 +215,10 @@ public class Link {
         }
     }
 
+    @SuppressWarnings("unused")
     public void destroy() {
         log.debug("Destroying Link for " + guild);
-        state = State.DESTROYED;
+        setState(State.DESTROYED);
 
         if (state == State.NO_CHANNEL) {
             lavalink.removeDestroyedLink(this);
@@ -251,7 +254,7 @@ public class Link {
 
     void onVoiceJoin() {
         connectCounter.incrementAndGet();
-        state = State.CONNECTED;
+        setState(State.CONNECTED);
     }
 
     void onVoiceLeave() {
@@ -273,7 +276,7 @@ public class Link {
         } else if (state == State.DISCONNECTING_BEFORE_RECONNECTING) {
             connectNow(currentChannel);
         } else {
-            state = State.NO_CHANNEL;
+            setState(State.NO_CHANNEL);
             currentChannel = null;
         }
     }
@@ -323,6 +326,18 @@ public class Link {
      */
     public State getState() {
         return state;
+    }
+
+    private void setState(State state) {
+        log.debug("Link {} changed state from {} to {}", this, this.state, state);
+        this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return "Link{" +
+                "guild='" + guild + '\'' +
+                '}';
     }
 
     private enum State {
