@@ -49,7 +49,7 @@ public class DebugConnectionListener implements ConnectionListener {
 
     @Override
     public void onStatusChange(ConnectionStatus connectionStatus) {
-        log.info("Status change for audio connection in guild {} : {} => {}",
+        log.debug("Status change for audio connection in guild {} : {} => {}",
                 guildId, oldStatus, connectionStatus);
 
         oldStatus = connectionStatus;
