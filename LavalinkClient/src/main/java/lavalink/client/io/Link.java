@@ -194,6 +194,10 @@ public class Link {
                 ? State.DISCONNECTING_BEFORE_RECONNECTING
                 : State.DISCONNECTING);
 
+        sendDisconnectOp();
+    }
+
+    private void sendDisconnectOp() {
         JSONObject json = new JSONObject();
         json.put("op", "disconnect");
         json.put("guildId", guild);
@@ -211,7 +215,7 @@ public class Link {
         } else {
             // Since we are connected, we will need to disconnect before truly changing node
             pendingNode = newNode;
-            disconnect(true);
+            sendDisconnectOp();
         }
     }
 
@@ -329,6 +333,9 @@ public class Link {
     }
 
     private void setState(State state) {
+        if (this.state == State.DESTROYED)
+            throw new IllegalStateException("Cannot change state when state is " + State.DESTROYED);
+
         log.debug("Link {} changed state from {} to {}", this, this.state, state);
         this.state = state;
     }
