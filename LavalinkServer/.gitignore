@@ -3,3 +3,4 @@
 /logs/
 /application.yml
 /target/
+/debug_token
