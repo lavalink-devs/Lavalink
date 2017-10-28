@@ -111,7 +111,7 @@ public class LavalinkLoadBalancer {
             // -1 Means we don't have any frame stats. This is normal for very young nodes
             if (socket.stats.getAvgFramesDeficitPerMinute() != -1) {
                 // https://fred.moe/rjD.png
-                deficitFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesDeficitPerMinute() / 3000f)) * 300 - 300);
+                deficitFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesDeficitPerMinute() / 3000f)) * 600 - 600);
                 nullFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesNulledPerMinute() / 3000f)) * 300 - 300);
                 nullFramePenalty *= 2;
                 // Deficit frames are better than null frames, as deficit frames can be caused by the garbage collector
