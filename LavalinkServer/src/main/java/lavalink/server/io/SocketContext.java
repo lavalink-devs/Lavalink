@@ -74,7 +74,12 @@ public class SocketContext {
 
     Core getCore(int shardId) {
         return cores.computeIfAbsent(shardId,
-                __ -> new Core(userId, new CoreClientImpl(socket, shardId))
+                __ -> {
+                    if (nasSupported)
+                        return new Core(userId, new CoreClientImpl(socket, shardId), createAudioSendFactory());
+                    else
+                        return new Core(userId, new CoreClientImpl(socket, shardId));
+                }
         );
     }
 
@@ -99,7 +104,7 @@ public class SocketContext {
     List<Player> getPlayingPlayers() {
         List<Player> newList = new LinkedList<>();
         players.values().forEach(player -> {
-            if(player.isPlaying()) newList.add(player);
+            if (player.isPlaying()) newList.add(player);
         });
         return newList;
     }
