@@ -130,10 +130,8 @@ public class SocketContext {
         Integer customBuffer = Launcher.config.getBufferDurationMs();
         NativeAudioSendFactory nativeAudioSendFactory;
         if (customBuffer != null) {
-            log.info("Setting buffer to {}ms", customBuffer);
             nativeAudioSendFactory = new NativeAudioSendFactory(customBuffer);
         } else {
-            log.info("Using default buffer");
             nativeAudioSendFactory = new NativeAudioSendFactory();
         }
 
