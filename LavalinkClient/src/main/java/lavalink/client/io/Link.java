@@ -272,17 +272,15 @@ public class Link {
     void onVoiceLeave() {
         disconnectCounter.incrementAndGet();
 
-        if (state == State.DESTROYED) {
-            // We are shutting down this link and have left voice, so now we can safely unmap it
-            lavalink.removeDestroyedLink(this);
-        }
-
         if (pendingNode != null) {
             // Disconnecting means we can change to the pending node, if any
             changeNode0(pendingNode);
         }
 
-        if (pendingChannel != null) {
+        if (state == State.DESTROYED) {
+            // We are shutting down this link and have left voice, so now we can safely unmap it
+            lavalink.removeDestroyedLink(this);
+        } else if (pendingChannel != null) {
             connectNow(pendingChannel);
             pendingChannel = null;
         } else if (state == State.DISCONNECTING_BEFORE_RECONNECTING) {
