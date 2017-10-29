@@ -182,6 +182,7 @@ public class Link {
 
         if (state == State.NO_CHANNEL) {
             log.info("Attempt to disconnect from channel when not connected. Guild: " + guild);
+            sendDisconnectOp();
             return;
         }
 
