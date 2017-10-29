@@ -190,9 +190,10 @@ public class Link {
             return;
         }
 
-        setState(reconnect
-                ? State.DISCONNECTING_BEFORE_RECONNECTING
-                : State.DISCONNECTING);
+        if (state != State.DESTROYED)
+            setState(reconnect
+                    ? State.DISCONNECTING_BEFORE_RECONNECTING
+                    : State.DISCONNECTING);
 
         sendDisconnectOp();
     }
@@ -227,11 +228,17 @@ public class Link {
         if (state == State.NO_CHANNEL) {
             lavalink.removeDestroyedLink(this);
         } else {
-            disconnect();
+            try {
+                disconnect();
+            } catch (Exception e) {
+                // Shouldn't happen. This is to prevent a regression of a previous bug
+                log.error("Caught exception while trying to disconnect a destroyed link!", e);
+            }
         }
 
         executor.schedule(() -> {
-            // This will act as both a timeout
+            // This will act as a timeout
+            log.info("Timed out while destroying link. Forcing removal...");
             lavalink.removeDestroyedLink(this);
         }, TIMEOUT_MS, TimeUnit.MILLISECONDS);
     }
@@ -333,7 +340,7 @@ public class Link {
     }
 
     private void setState(State state) {
-        if (this.state == State.DESTROYED)
+        if (this.state == State.DESTROYED && state != State.DESTROYED)
             throw new IllegalStateException("Cannot change state when state is " + State.DESTROYED);
 
         log.debug("Link {} changed state from {} to {}", this, this.state, state);
