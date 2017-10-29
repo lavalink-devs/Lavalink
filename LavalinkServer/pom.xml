@@ -47,7 +47,7 @@
         <dependency>
             <groupId>com.github.DV8FromTheWorld</groupId>
             <artifactId>JDA-Audio</artifactId>
-            <version>8f07b4349c197183c36de926a92f1b4d5012526a</version>
+            <version>7a3f9d40a32b74b6e85e0e0c8f9a051f004b5584</version>
         </dependency>
         <dependency>
             <groupId>org.java-websocket</groupId>
