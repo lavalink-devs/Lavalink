@@ -25,6 +25,8 @@ package lavalink.server;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
+
 @ConfigurationProperties(prefix = "lavalink.server")
 @Component
 public class Config {
@@ -55,6 +57,18 @@ public class Config {
         this.sentryDsn = sentryDsn;
     }
 
+    @Nullable
+    public Integer bufferDurationMs;
+
+    @Nullable
+    public Integer getBufferDurationMs() {
+        return bufferDurationMs;
+    }
+
+    public void setBufferDurationMs(@Nullable Integer bufferDurationMs) {
+        this.bufferDurationMs = bufferDurationMs;
+    }
+
     public static class Sources {
 
         private boolean youtube = true;
@@ -62,7 +76,9 @@ public class Config {
         private boolean soundcloud = true;
         private boolean twitch = true;
         private boolean vimeo = true;
+        private boolean mixer = true;
         private boolean http = true;
+        private boolean local = false;
 
         public boolean isYoutube() {
             return youtube;
@@ -104,12 +120,28 @@ public class Config {
             this.vimeo = vimeo;
         }
 
+        public boolean isMixer() {
+            return mixer;
+        }
+
+        public void setMixer(boolean mixer) {
+            this.mixer = mixer;
+        }
+
         public boolean isHttp() {
             return http;
         }
 
         public void setHttp(boolean http) {
             this.http = http;
+        }
+
+        public boolean isLocal() {
+            return local;
+        }
+
+        public void setLocal(boolean local) {
+            this.local = local;
         }
     }
 }

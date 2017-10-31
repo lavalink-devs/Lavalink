@@ -26,10 +26,9 @@ import ch.qos.logback.classic.LoggerContext;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.logback.SentryAppender;
+import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
-import lavalink.server.nas.NativeAudioSendFactory;
 import lavalink.server.util.SimpleLogToSLF4JAdapter;
-import net.dv8tion.jda.audio.AudioConnection;
 import net.dv8tion.jda.utils.SimpleLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,8 +119,15 @@ public class Launcher {
                 && !System.getProperty("os.arch").equalsIgnoreCase("arm")
                 && !System.getProperty("os.arch").equalsIgnoreCase("arm-linux")
                 ) {
-            AudioConnection.setAudioSendFactory(new NativeAudioSendFactory());
+            SocketContext.nasSupported = true;
             log.info("JDA-NAS supported system detected. Enabled native audio sending.");
+
+            Integer customBuffer = config.getBufferDurationMs();
+            if (customBuffer != null) {
+                log.info("Setting buffer to {}ms", customBuffer);
+            } else {
+                log.info("Using default buffer");
+            }
         } else {
             log.warn("This system and architecture appears to not support native audio sending! "
                     + "GC pauses may cause your bot to stutter during playback.");

@@ -27,7 +27,9 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.beam.BeamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
@@ -63,7 +65,9 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
         if (sources.isSoundcloud()) PLAYER_MANAGER.registerSourceManager(new SoundCloudAudioSourceManager());
         if (sources.isTwitch()) PLAYER_MANAGER.registerSourceManager(new TwitchStreamAudioSourceManager());
         if (sources.isVimeo()) PLAYER_MANAGER.registerSourceManager(new VimeoAudioSourceManager());
+        if (sources.isMixer()) PLAYER_MANAGER.registerSourceManager(new BeamAudioSourceManager());
         if (sources.isHttp()) PLAYER_MANAGER.registerSourceManager(new HttpAudioSourceManager());
+        if (sources.isLocal()) PLAYER_MANAGER.registerSourceManager(new LocalAudioSourceManager());
     }
 
     private SocketContext socketContext;

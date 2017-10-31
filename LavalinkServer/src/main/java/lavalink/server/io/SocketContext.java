@@ -22,9 +22,13 @@
 
 package lavalink.server.io;
 
+import com.github.shredder121.asyncaudio.jdaaudio.AsyncPacketProviderFactory;
+import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
+import lavalink.server.Launcher;
 import lavalink.server.player.Player;
 import lavalink.server.util.Util;
 import net.dv8tion.jda.Core;
+import net.dv8tion.jda.audio.factory.IAudioSendFactory;
 import net.dv8tion.jda.manager.AudioManager;
 import org.java_websocket.WebSocket;
 import org.slf4j.Logger;
@@ -43,6 +47,7 @@ public class SocketContext {
 
     private static final Logger log = LoggerFactory.getLogger(SocketContext.class);
 
+    public static boolean nasSupported = false;
     private final WebSocket socket;
     private String userId;
     private int shardCount;
@@ -69,7 +74,12 @@ public class SocketContext {
 
     Core getCore(int shardId) {
         return cores.computeIfAbsent(shardId,
-                __ -> new Core(userId, new CoreClientImpl(socket, shardId))
+                __ -> {
+                    if (nasSupported)
+                        return new Core(userId, new CoreClientImpl(socket, shardId), createAudioSendFactory());
+                    else
+                        return new Core(userId, new CoreClientImpl(socket, shardId));
+                }
         );
     }
 
@@ -94,7 +104,7 @@ public class SocketContext {
     List<Player> getPlayingPlayers() {
         List<Player> newList = new LinkedList<>();
         players.values().forEach(player -> {
-            if(player.isPlaying()) newList.add(player);
+            if (player.isPlaying()) newList.add(player);
         });
         return newList;
     }
@@ -114,6 +124,18 @@ public class SocketContext {
         });
 
         players.values().forEach(Player::stop);
+    }
+
+    private IAudioSendFactory createAudioSendFactory() {
+        Integer customBuffer = Launcher.config.getBufferDurationMs();
+        NativeAudioSendFactory nativeAudioSendFactory;
+        if (customBuffer != null) {
+            nativeAudioSendFactory = new NativeAudioSendFactory(customBuffer);
+        } else {
+            nativeAudioSendFactory = new NativeAudioSendFactory();
+        }
+
+        return AsyncPacketProviderFactory.adapt(nativeAudioSendFactory);
     }
 
 }
