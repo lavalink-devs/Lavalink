@@ -10,6 +10,11 @@ ext {
     moduleName = 'Lavalink-Server'
 }
 
+shadowJar {
+    archiveName = "Lavalink.jar"
+}
+publishToMavenLocal.dependsOn 'shadowJar'
+
 dependencies {
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.44'
     compile group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: '7a3f9d40a32b74b6e85e0e0c8f9a051f004b5584'
