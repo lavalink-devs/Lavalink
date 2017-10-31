@@ -1,0 +1,57 @@
+allprojects {
+
+    repositories {
+        mavenCentral()                     // main maven repo
+        jcenter()                          // JDA and some other stuff
+        mavenLocal()                       // useful for developing
+        maven { url "https://jitpack.io" } // build projects directly from github
+    }
+
+    group = 'lavalink'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'maven-publish'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                groupId rootProject.group
+                artifactId moduleName
+
+                from components.java
+
+                artifact sourceJar {
+                    classifier "sources"
+                }
+            }
+        }
+    }
+
+    compileJava.dependsOn 'clean'
+    compileJava.options.encoding = 'UTF-8'
+    compileJava.options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+
+    task install(dependsOn: 'publishToMavenLocal')
+    publishToMavenLocal.dependsOn 'jar'
+
+    task sourceJar(type: Jar) {
+        from sourceSets.main.allJava
+    }
+}
+
+ext {
+    moduleName = 'Lavalink-Parent'
+}
+
+import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.2.1'
+    distributionType = DistributionType.ALL
+}

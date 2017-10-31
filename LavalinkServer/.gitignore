@@ -4,3 +4,4 @@
 /application.yml
 /target/
 /debug_token
+build/*

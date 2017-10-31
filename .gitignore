@@ -4,3 +4,5 @@
 /target/
 /application.yml
 */dependency-reduced-pom.xml
+.gradle/*
+build/*
