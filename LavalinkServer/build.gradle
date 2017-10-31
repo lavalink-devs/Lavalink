@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-    id 'com.github.johnrengelman.shadow' version '2.0.1'
+    id 'org.springframework.boot' version '1.5.8.RELEASE'
 }
 
 description = 'Play audio to discord voice channels'
@@ -10,10 +10,10 @@ ext {
     moduleName = 'Lavalink-Server'
 }
 
-shadowJar {
+jar {
     archiveName = "Lavalink.jar"
 }
-publishToMavenLocal.dependsOn 'shadowJar'
+publishToMavenLocal.dependsOn 'bootRepackage'
 
 dependencies {
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.44'
