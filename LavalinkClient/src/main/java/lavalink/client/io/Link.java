@@ -353,7 +353,7 @@ public class Link {
                 '}';
     }
 
-    private enum State {
+    public enum State {
         /**
          * Default, means we are not trying to use voice at all
          */
