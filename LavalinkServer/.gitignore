@@ -5,3 +5,4 @@
 /target/
 /debug_token
 build/*
+/out/
