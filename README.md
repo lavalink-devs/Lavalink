@@ -25,7 +25,7 @@ Download from [the CI server](https://ci.fredboat.com/viewLog.html?buildId=lastS
 
 Put an `application.yml` file in your working directory. [Example](https://github.com/Frederikam/Lavalink/blob/master/LavalinkServer/application.yml.example)
 
-Run with `java -jar Lavalink-x.x.jar`
+Run with `java -jar Lavalink.jar`
 
 # Acknowledgements
 This project contains modified code from https://github.com/sedmelluq/jda-nas v1.0.5
