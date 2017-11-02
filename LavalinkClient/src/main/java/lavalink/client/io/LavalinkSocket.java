@@ -28,8 +28,6 @@ import lavalink.client.player.LavalinkPlayer;
 import lavalink.client.player.event.PlayerEvent;
 import lavalink.client.player.event.TrackEndEvent;
 import lavalink.client.player.event.TrackExceptionEvent;
-import lavalink.client.player.event.TrackResolveErrorEvent;
-import lavalink.client.player.event.TrackStartEvent;
 import lavalink.client.player.event.TrackStuckEvent;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;
@@ -139,7 +137,7 @@ public class LavalinkSocket extends ReusableWebSocket {
                 send(res2.toString());
                 break;
             case "playerUpdate":
-                lavalink.getLink(json.getString("guildId")).getPlayer()
+                lavalink.getPlayer(json.getString("guildId"))
                         .provideState(json.getJSONObject("state"));
                 break;
             case "stats":
@@ -189,12 +187,6 @@ public class LavalinkSocket extends ReusableWebSocket {
                         LavalinkUtil.toAudioTrack(json.getString("track")),
                         json.getLong("thresholdMs")
                 );
-                break;
-            case "TrackStartEvent":
-                event = new TrackStartEvent(player,  LavalinkUtil.toAudioTrack(json.getString("track")));
-                break;
-            case "TrackResolveErrorEvent":
-                event = new TrackResolveErrorEvent(player, player.getPlayingTrack());
                 break;
             default:
                 log.warn("Unexpected event type: " + json.getString("type"));
