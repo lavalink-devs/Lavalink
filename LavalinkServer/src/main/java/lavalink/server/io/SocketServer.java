@@ -22,13 +22,14 @@
 
 package lavalink.server.io;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.TrackMarker;
-import lavalink.server.player.Player;
-import lavalink.server.player.TrackEndMarkerHandler;
-import lavalink.server.util.DebugConnectionListener;
-import lavalink.server.util.Util;
-import net.dv8tion.jda.manager.AudioManager;
+import static lavalink.server.io.WSCodes.AUTHORIZATION_REJECTED;
+import static lavalink.server.io.WSCodes.INTERNAL_ERROR;
+
+import java.net.InetSocketAddress;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -36,14 +37,14 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.TrackMarker;
 
-import static lavalink.server.io.WSCodes.AUTHORIZATION_REJECTED;
-import static lavalink.server.io.WSCodes.INTERNAL_ERROR;
+import lavalink.server.player.Player;
+import lavalink.server.player.TrackEndMarkerHandler;
+import lavalink.server.util.DebugConnectionListener;
+import lavalink.server.util.Util;
+import net.dv8tion.jda.manager.AudioManager;
 
 public class SocketServer extends WebSocketServer {
 
@@ -172,7 +173,8 @@ public class SocketServer extends WebSocketServer {
                     context.getCore(getShardId(webSocket, json)).getAudioManager(json.getString("guildId"))
                             .setSendingHandler(context.getPlayer(json.getString("guildId")));
                     sendPlayerUpdate(webSocket, player);
-                } catch (IOException e) {
+                } catch (Exception e) {
+                    sendTrackResolveError(webSocket, json.getString("guildId"));
                     throw new RuntimeException(e);
                 }
                 break;
@@ -208,6 +210,18 @@ public class SocketServer extends WebSocketServer {
     @Override
     public void onStart() {
         log.info("Started WS server with port " + getPort());
+    }
+    
+    public static void sendTrackResolveError(WebSocket webSocket, String guildId) {
+         JSONObject out = new JSONObject();
+         out.put("op", "event");
+         out.put("type", "TrackResolveErrorEvent");
+         out.put("guildId", guildId);
+
+         // TODO Possibly send why it failed?
+         //out.put("reason", e.getMessage());
+
+         webSocket.send(out.toString());
     }
 
     public static void sendPlayerUpdate(WebSocket webSocket, Player player) {

@@ -22,24 +22,26 @@
 
 package lavalink.client.player;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONObject;
+
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+
 import lavalink.client.LavalinkUtil;
 import lavalink.client.io.Link;
 import lavalink.client.player.event.IPlayerEventListener;
 import lavalink.client.player.event.PlayerEvent;
 import lavalink.client.player.event.PlayerPauseEvent;
 import lavalink.client.player.event.PlayerResumeEvent;
-import lavalink.client.player.event.TrackStartEvent;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LavalinkPlayer implements IPlayer {
 
-    private AudioTrack track = null;
+    AudioTrack track = null;
+    boolean loadingTrack = false;
     private boolean paused = false;
     private int volume = 100;
     private long updateTime = -1;
@@ -75,6 +77,16 @@ public class LavalinkPlayer implements IPlayer {
 
     @Override
     public void playTrack(AudioTrack track) {
+        playTrackAsync(track);
+        try {
+            while (loadingTrack)
+                Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void playTrackAsync(AudioTrack track) {
         try {
             position = track.getPosition();
             TrackData trackData = track.getUserData(TrackData.class);
@@ -92,9 +104,10 @@ public class LavalinkPlayer implements IPlayer {
             if (link.getCurrentSocket() != null)
                 link.getCurrentSocket().send(json.toString());
 
+            loadingTrack = true;
             updateTime = System.currentTimeMillis();
-            this.track = track;
-            emitEvent(new TrackStartEvent(this, track));
+            // this.track = track;
+            // emitEvent(new TrackStartEvent(this, track));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -206,6 +219,11 @@ public class LavalinkPlayer implements IPlayer {
     @SuppressWarnings("WeakerAccess")
     public Link getLink() {
         return link;
+    }
+
+    @Override
+    public boolean isLoadingSong() {
+        return loadingTrack;
     }
 
 }

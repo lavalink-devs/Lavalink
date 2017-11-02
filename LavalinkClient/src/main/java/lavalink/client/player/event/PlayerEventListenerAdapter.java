@@ -77,6 +77,14 @@ public class PlayerEventListenerAdapter implements IPlayerEventListener {
         // Adapter dummy method
     }
 
+    
+    /**
+     * @param player Audio player
+     * @param track Audio track where the exception occurred
+     */
+    public void onTrackResolveError(IPlayer player, AudioTrack track) {
+        // Adapter dummy method
+    }
 
     @Override
     public void onEvent(PlayerEvent event) {

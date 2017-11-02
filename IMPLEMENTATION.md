@@ -230,6 +230,12 @@ private void handleEvent(JSONObject json) throws IOException {
                     json.getLong("thresholdMs")
             );
             break;
+        case "TrackStartEvent":
+            event = new TrackStartEvent(player,  LavalinkUtil.toAudioTrack(json.getString("track")));
+            break;
+        case "TrackResolveErrorEvent":
+            event = new TrackResolveErrorEvent(player, player.getPlayingTrack());
+            break;
         default:
             log.warn("Unexpected event type: " + json.getString("type"));
             break;

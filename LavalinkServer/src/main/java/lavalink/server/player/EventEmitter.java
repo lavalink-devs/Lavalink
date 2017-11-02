@@ -45,6 +45,21 @@ public class EventEmitter extends AudioEventAdapter {
     }
 
     @Override
+    public void onTrackStart(AudioPlayer player, AudioTrack track) {
+        JSONObject out = new JSONObject();
+        out.put("op", "event");
+        out.put("type", "TrackStartEvent");
+        out.put("guildId", linkPlayer.getGuildId());
+        try {
+            out.put("track", Util.toMessage(track));
+        } catch (@SuppressWarnings("unused") IOException e) {
+            out.put("track", JSONObject.NULL);
+        }
+
+        linkPlayer.getSocket().getSocket().send(out.toString());
+    }
+
+    @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         JSONObject out = new JSONObject();
         out.put("op", "event");
@@ -52,7 +67,7 @@ public class EventEmitter extends AudioEventAdapter {
         out.put("guildId", linkPlayer.getGuildId());
         try {
             out.put("track", Util.toMessage(track));
-        } catch (IOException e) {
+        } catch (@SuppressWarnings("unused") IOException e) {
             out.put("track", JSONObject.NULL);
         }
 
