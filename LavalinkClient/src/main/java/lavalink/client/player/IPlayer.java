@@ -49,4 +49,6 @@ public interface IPlayer {
 
     void removeListener(IPlayerEventListener listener);
 
+	boolean isLoadingSong();
+
 }

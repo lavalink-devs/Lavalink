@@ -76,6 +76,14 @@ public class PlayerEventListenerAdapter implements IPlayerEventListener {
     public void onTrackStuck(IPlayer player, AudioTrack track, long thresholdMs) {
         // Adapter dummy method
     }
+    
+    /**
+     * @param player Audio player
+     * @param track Audio track where the exception occurred
+     */
+    public void onTrackResolveError(IPlayer player, AudioTrack track) {
+        // Adapter dummy method
+    }
 
 
     @Override
@@ -92,6 +100,8 @@ public class PlayerEventListenerAdapter implements IPlayerEventListener {
             onTrackException(event.getPlayer(), ((TrackExceptionEvent) event).getTrack(), ((TrackExceptionEvent) event).getException());
         } else if (event instanceof TrackStuckEvent) {
             onTrackStuck(event.getPlayer(), ((TrackStuckEvent) event).getTrack(), ((TrackStuckEvent) event).getThresholdMs());
+        }else if (event instanceof TrackResolveErrorEvent) {
+        	onTrackResolveError(event.getPlayer(), ((TrackResolveErrorEvent) event).getTrack());
         }
     }
 }
