@@ -20,21 +20,23 @@
  * SOFTWARE.
  */
 
-package lavalink.client.player;
+package lavalink.client.player.event;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
-import lavalink.client.player.event.PlayerEventListenerAdapter;
 
-class LavalinkInternalPlayerEventHandler extends PlayerEventListenerAdapter {
+import lavalink.client.player.IPlayer;
 
-	@Override
-	public void onTrackStart(IPlayer player, AudioTrack track) {
-		 ((LavalinkPlayer) player).track = track;
+public class TrackResolveErrorEvent extends PlayerEvent {
+
+	private AudioTrack track;
+
+	public TrackResolveErrorEvent(IPlayer player, AudioTrack track) {
+		super(player);
+		this.track = track;
 	}
-	
-    @Override
-    public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        ((LavalinkPlayer) player).clearTrack();
-    }
+
+	public AudioTrack getTrack() {
+		return track;
+	}
+
 }
