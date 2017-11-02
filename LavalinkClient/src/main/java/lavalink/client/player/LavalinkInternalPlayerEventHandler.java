@@ -28,6 +28,17 @@ import lavalink.client.player.event.PlayerEventListenerAdapter;
 
 class LavalinkInternalPlayerEventHandler extends PlayerEventListenerAdapter {
 
+	@Override
+	public void onTrackStart(IPlayer player, AudioTrack track) {
+		 ((LavalinkPlayer) player).track = track;
+		 ((LavalinkPlayer) player).loadingTrack = false;
+	}
+	
+	@Override
+	public void onTrackResolveError(IPlayer player, AudioTrack track) {
+		 ((LavalinkPlayer) player).loadingTrack = false;
+	}
+	
     @Override
     public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         ((LavalinkPlayer) player).clearTrack();

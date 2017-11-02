@@ -20,35 +20,23 @@
  * SOFTWARE.
  */
 
-package lavalink.client.player;
+package lavalink.client.player.event;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import lavalink.client.player.event.IPlayerEventListener;
 
-public interface IPlayer {
+import lavalink.client.player.IPlayer;
 
-    AudioTrack getPlayingTrack();
+public class TrackResolveErrorEvent extends PlayerEvent {
 
-    void playTrack(AudioTrack track);
+	private AudioTrack track;
 
-    void stopTrack();
+	public TrackResolveErrorEvent(IPlayer player, AudioTrack track) {
+		super(player);
+		this.track = track;
+	}
 
-    void setPaused(boolean b);
-
-    boolean isPaused();
-
-    long getTrackPosition();
-
-    void seekTo(long position);
-
-    void setVolume(int volume);
-
-    int getVolume();
-
-    void addListener(IPlayerEventListener listener);
-
-    void removeListener(IPlayerEventListener listener);
-
-	boolean isLoadingSong();
+	public AudioTrack getTrack() {
+		return track;
+	}
 
 }

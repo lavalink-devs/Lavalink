@@ -39,7 +39,8 @@ import java.util.List;
 
 public class LavalinkPlayer implements IPlayer {
 
-    private AudioTrack track = null;
+    AudioTrack track = null;
+    boolean loadingTrack = false;
     private boolean paused = false;
     private int volume = 100;
     private long updateTime = -1;
@@ -91,10 +92,11 @@ public class LavalinkPlayer implements IPlayer {
             json.put("pause", paused);
             if (link.getCurrentSocket() != null)
                 link.getCurrentSocket().send(json.toString());
-
+            
+            loadingTrack = true;
             updateTime = System.currentTimeMillis();
-            this.track = track;
-            emitEvent(new TrackStartEvent(this, track));
+            //this.track = track;
+            //emitEvent(new TrackStartEvent(this, track));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -207,5 +209,10 @@ public class LavalinkPlayer implements IPlayer {
     public Link getLink() {
         return link;
     }
+
+	@Override
+	public boolean isLoadingSong() {
+		return loadingTrack;
+	}
 
 }

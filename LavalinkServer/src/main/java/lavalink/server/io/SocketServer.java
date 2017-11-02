@@ -172,7 +172,8 @@ public class SocketServer extends WebSocketServer {
                     context.getCore(getShardId(webSocket, json)).getAudioManager(json.getString("guildId"))
                             .setSendingHandler(context.getPlayer(json.getString("guildId")));
                     sendPlayerUpdate(webSocket, player);
-                } catch (IOException e) {
+                } catch (Exception e) {
+                	sendTrackResolveError(webSocket, json.getString("guildId"));
                     throw new RuntimeException(e);
                 }
                 break;
@@ -208,6 +209,18 @@ public class SocketServer extends WebSocketServer {
     @Override
     public void onStart() {
         log.info("Started WS server with port " + getPort());
+    }
+    
+    public static void sendTrackResolveError(WebSocket webSocket, String guildId) {
+    	 JSONObject out = new JSONObject();
+         out.put("op", "event");
+         out.put("type", "TrackResolveErrorEvent");
+         out.put("guildId", guildId);
+
+         // TODO Possibly send why it failed?
+         //out.put("reason", e.getMessage());
+
+         webSocket.send(out.toString());
     }
 
     public static void sendPlayerUpdate(WebSocket webSocket, Player player) {

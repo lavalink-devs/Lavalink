@@ -99,4 +99,9 @@ public class LavaplayerPlayerWrapper implements IPlayer {
         return player.provide();
     }
 
+	@Override
+	public boolean isLoadingSong() {
+		return false;
+	}
+
 }
