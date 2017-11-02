@@ -204,6 +204,8 @@ Server emitted an event. See the client implementation below.
  * 1. TrackEndEvent
  * 2. TrackExceptionEvent
  * 3. TrackStuckEvent
+ * 4. TrackStartEvent
+ * 5. TrackResolveErrorEvent
  * <p>
  * The remaining are caused by the client
  */
@@ -229,6 +231,12 @@ private void handleEvent(JSONObject json) throws IOException {
                     LavalinkUtil.toAudioTrack(json.getString("track")),
                     json.getLong("thresholdMs")
             );
+            break;
+        case "TrackStartEvent":
+            event = new TrackStartEvent(player,  LavalinkUtil.toAudioTrack(json.getString("track")));
+            break;
+        case "TrackResolveErrorEvent":
+            event = new TrackResolveErrorEvent(player, player.getPlayingTrack());
             break;
         default:
             log.warn("Unexpected event type: " + json.getString("type"));
