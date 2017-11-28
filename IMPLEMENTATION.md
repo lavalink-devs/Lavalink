@@ -34,6 +34,7 @@ Provide an intercepted voice server update
 ```json
 {
     "op": "voiceUpdate",
+    "guildId": "...",
     "sessionId": "...",
     "event": "..."
 }
