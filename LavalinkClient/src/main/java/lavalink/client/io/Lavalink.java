@@ -57,8 +57,6 @@ public class Lavalink extends ListenerAdapter {
     private final int numShards;
     private final Function<Integer, JDA> jdaProvider;
     private final ConcurrentHashMap<String, Link> links = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<String, String> connectedChannels = new ConcurrentHashMap<>(); // Key is guild id
-    private final ConcurrentHashMap<String, LavalinkPlayer> players = new ConcurrentHashMap<>(); // Key is guild id
     private final String userId;
     final List<LavalinkSocket> nodes = new CopyOnWriteArrayList<>();
     final LavalinkLoadBalancer loadBalancer = new LavalinkLoadBalancer(this);
@@ -93,6 +91,7 @@ public class Lavalink extends ListenerAdapter {
         node.close();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Link getLink(String guildId) {
         return links.computeIfAbsent(guildId, __ -> new Link(this, guildId));
     }
@@ -111,6 +110,7 @@ public class Lavalink extends ListenerAdapter {
         return numShards;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Collection<Link> getLinks() {
         return links.values();
     }
@@ -191,12 +191,12 @@ public class Lavalink extends ListenerAdapter {
 
     @Override
     public void onReconnect(ReconnectedEvent event) {
-        reconnectTheVoiceConnections(event.getJDA());
+        reconnectVoiceConnections(event.getJDA());
     }
 
     @Override
     public void onResume(ResumedEvent event) {
-        reconnectTheVoiceConnections(event.getJDA());
+        reconnectVoiceConnections(event.getJDA());
     }
 
     @Override
@@ -223,16 +223,16 @@ public class Lavalink extends ListenerAdapter {
         getLink(event.getGuild()).onGuildVoiceMove(event);
     }
 
-    private void reconnectTheVoiceConnections(JDA jda) {
-        connectedChannels.forEach((guildId, channel) -> {
+    private void reconnectVoiceConnections(JDA jda) {
+        links.forEach((guildId, link) -> {
             try {
-                Guild guild = jda.getGuildById(guildId);
-                if (guild != null) {
-                    getLink(guild).connect(guild.getVoiceChannelById(channel));
+                //Note: We also ensure that the link belongs to the JDA object
+                if (link.getCurrentChannel() != null
+                        && jda.getGuildById(guildId) != null) {
+                    link.connect(link.getCurrentChannel());
                 }
             } catch (Exception e) {
-                int shardId = jda.getShardInfo() == null ? 0 : jda.getShardInfo().getShardId();
-                log.error("Caught exception while trying to reconnect shard " + shardId, e);
+                log.error("Caught exception while trying to reconnect link " + link, e);
             }
         });
     }

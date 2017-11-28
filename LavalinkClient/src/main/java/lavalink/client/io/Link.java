@@ -350,6 +350,9 @@ public class Link {
     public String toString() {
         return "Link{" +
                 "guild='" + guild + '\'' +
+                ", currentChannel='" + currentChannel + '\'' +
+                ", pendingChannel='" + pendingChannel + '\'' +
+                ", state=" + state +
                 '}';
     }
 
