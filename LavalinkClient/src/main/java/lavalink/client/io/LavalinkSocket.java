@@ -213,7 +213,7 @@ public class LavalinkSocket extends ReusableWebSocket {
     @Override
     public void onError(Exception ex) {
         if (ex instanceof ConnectException) {
-            log.warn("Failed to connect to " + getRemoteUri() + ", retrying in " + getReconnectInterval()/1000 + " seconds.");
+            log.warn("Failed to connect to " + getRemoteUri() + ", retrying in " + getReconnectInterval() / 1000 + " seconds.");
             return;
         }
 

@@ -43,11 +43,7 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Function;
 
 public class Lavalink extends ListenerAdapter {
@@ -203,7 +199,7 @@ public class Lavalink extends ListenerAdapter {
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
         // Check if not ourselves
         if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
-        
+
         getLink(event.getGuild()).onVoiceJoin();
     }
 

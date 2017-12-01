@@ -49,7 +49,7 @@ public abstract class AudioEventAdapterWrapped extends AudioEventAdapter impleme
             onEvent(new com.sedmelluq.discord.lavaplayer.player.event.TrackEndEvent(player,
                     ((TrackEndEvent) event).getTrack(),
                     ((TrackEndEvent) event).getReason()
-                    ));
+            ));
         } else if (event instanceof TrackExceptionEvent) {
             Exception e = ((TrackExceptionEvent) event).getException();
             FriendlyException fe = e instanceof FriendlyException

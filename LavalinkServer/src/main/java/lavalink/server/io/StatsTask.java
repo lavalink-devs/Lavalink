@@ -81,7 +81,6 @@ public class StatsTask implements Runnable {
         HardwareAbstractionLayer hal = si.getHardware();
 
 
-
         JSONObject cpu = new JSONObject();
         cpu.put("cores", Runtime.getRuntime().availableProcessors());
         cpu.put("systemLoad", hal.getProcessor().getSystemCpuLoad());

@@ -44,15 +44,15 @@ public class PlayerEventListenerAdapter implements IPlayerEventListener {
 
     /**
      * @param player Audio player
-     * @param track Audio track that started
+     * @param track  Audio track that started
      */
     public void onTrackStart(IPlayer player, AudioTrack track) {
         // Adapter dummy method
     }
 
     /**
-     * @param player Audio player
-     * @param track Audio track that ended
+     * @param player    Audio player
+     * @param track     Audio track that ended
      * @param endReason The reason why the track stopped playing
      */
     public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
@@ -60,8 +60,8 @@ public class PlayerEventListenerAdapter implements IPlayerEventListener {
     }
 
     /**
-     * @param player Audio player
-     * @param track Audio track where the exception occurred
+     * @param player    Audio player
+     * @param track     Audio track where the exception occurred
      * @param exception The exception that occurred
      */
     public void onTrackException(IPlayer player, AudioTrack track, Exception exception) {
@@ -69,8 +69,8 @@ public class PlayerEventListenerAdapter implements IPlayerEventListener {
     }
 
     /**
-     * @param player Audio player
-     * @param track Audio track where the exception occurred
+     * @param player      Audio player
+     * @param track       Audio track where the exception occurred
      * @param thresholdMs The wait threshold that was exceeded for this event to trigger
      */
     public void onTrackStuck(IPlayer player, AudioTrack track, long thresholdMs) {
