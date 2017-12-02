@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-    id 'org.springframework.boot' version '1.5.8.RELEASE'
+    id 'org.springframework.boot' version '1.5.9.RELEASE'
 }
 
 description = 'Play audio to discord voice channels'
@@ -27,7 +27,7 @@ dependencies {
     compile group: 'com.github.oshi', name: 'oshi-core', version: '3.4.3'
     compile group: 'org.json', name: 'json', version: '20170516'
     compile group: 'com.google.guava', name: 'guava', version: '22.0'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '1.5.4.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '1.5.4.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '1.5.9.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '1.5.9.RELEASE'
     compile group: 'org.springframework', name: 'spring-web', version: '4.3.9.RELEASE'
 }
