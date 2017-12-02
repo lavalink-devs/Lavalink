@@ -1,5 +1,5 @@
 description = 'JDA based client for the Lavalink-Server'
-version System.getenv('dev') == 'true' ? '-SNAPSHOT' : '1.3'
+version System.getenv('dev') == 'true' ? '-SNAPSHOT' : '2.0'
 ext {
     moduleName = 'Lavalink-Client'
 }
