@@ -23,6 +23,7 @@
 package lavalink.client.io;
 
 import lavalink.client.LavalinkUtil;
+import lavalink.client.io.actions.ActionHandler;
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
@@ -60,6 +61,7 @@ public class Lavalink extends ListenerAdapter {
     private final String userId;
     final List<LavalinkSocket> nodes = new CopyOnWriteArrayList<>();
     final LavalinkLoadBalancer loadBalancer = new LavalinkLoadBalancer(this);
+    private final ActionHandler actionHandler = new ActionHandler(this);
 
     private final ScheduledExecutorService reconnectService;
 
@@ -235,5 +237,9 @@ public class Lavalink extends ListenerAdapter {
                 log.error("Caught exception while trying to reconnect link " + link, e);
             }
         });
+    }
+
+    public ActionHandler getActionHandler() {
+        return actionHandler;
     }
 }
