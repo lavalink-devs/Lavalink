@@ -148,7 +148,7 @@ public class LavalinkLoadBalancer {
         }
 
         public int getTotal() {
-            if (socket.stats == null) return (Integer.MAX_VALUE - 1);
+            if(socket.stats == null) return (Integer.MAX_VALUE - 1);
             return playerPenalty + cpuPenalty + deficitFramePenalty + nullFramePenalty + customPenalties;
         }
 

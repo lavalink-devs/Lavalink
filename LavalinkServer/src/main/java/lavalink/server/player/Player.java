@@ -128,7 +128,7 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
     public boolean canProvide() {
         lastFrame = player.provide();
 
-        if (lastFrame == null) {
+        if(lastFrame == null) {
             audioLossCounter.onLoss();
             return false;
         } else {

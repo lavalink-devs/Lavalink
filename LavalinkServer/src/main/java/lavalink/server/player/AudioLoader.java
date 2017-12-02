@@ -40,7 +40,7 @@ public class AudioLoader implements AudioLoadResultHandler {
     private boolean used = false;
 
     List<AudioTrack> loadSync(String identifier) throws InterruptedException {
-        if (used)
+        if(used)
             throw new IllegalStateException("This loader can only be used once per instance");
 
         used = true;

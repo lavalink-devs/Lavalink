@@ -25,7 +25,11 @@ package lavalink.client.player;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import lavalink.client.LavalinkUtil;
 import lavalink.client.io.Link;
-import lavalink.client.player.event.*;
+import lavalink.client.player.event.IPlayerEventListener;
+import lavalink.client.player.event.PlayerEvent;
+import lavalink.client.player.event.PlayerPauseEvent;
+import lavalink.client.player.event.PlayerResumeEvent;
+import lavalink.client.player.event.TrackStartEvent;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import org.json.JSONObject;
 
