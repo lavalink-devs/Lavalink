@@ -91,6 +91,10 @@ public class Link {
         return player;
     }
 
+    public void resetPlayer() {
+        player = null;
+    }
+
     public Lavalink getLavalink() {
         return lavalink;
     }
