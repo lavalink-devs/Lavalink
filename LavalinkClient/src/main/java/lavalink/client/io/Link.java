@@ -251,6 +251,7 @@ public class Link {
     private void changeNode0(LavalinkSocket newNode) {
         currentNode = newNode;
         pendingNode = null;
+        connect(getCurrentChannel());
         getPlayer().onNodeChange();
     }
 
