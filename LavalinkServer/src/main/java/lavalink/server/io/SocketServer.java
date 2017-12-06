@@ -161,9 +161,7 @@ public class SocketServer extends WebSocketServer {
                         track.setMarker(new TrackMarker(json.getLong("endTime"), new TrackEndMarkerHandler(player)));
                     }
 
-                    if (json.optBoolean("pause", false)) {
-                        player.setPause(true);
-                    }
+                    player.setPause(json.optBoolean("pause", false));
 
                     player.play(track);
 

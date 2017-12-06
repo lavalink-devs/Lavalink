@@ -58,8 +58,6 @@ public class LavalinkPlayer implements IPlayer {
      */
     // Used when we are moved to a new socket
     public void onNodeChange() {
-        JDAImpl jda = (JDAImpl) link.getJda();
-
         if (getPlayingTrack() != null) {
             AudioTrack track = getPlayingTrack();
             track.setPosition(getTrackPosition());
