@@ -147,7 +147,7 @@ public class Link {
         currentNode.send(json.toString());
     }
 
-    private void disconnect() {
+    public void disconnect() {
         // Make sure we eventually reconnect
         int startCount = disconnectCounter.get();
 
