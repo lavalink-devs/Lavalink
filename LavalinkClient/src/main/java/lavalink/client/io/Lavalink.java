@@ -43,17 +43,14 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Function;
 
 public class Lavalink extends ListenerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(Lavalink.class);
 
+    private final boolean autoReconnect;
     private final int numShards;
     private final Function<Integer, JDA> jdaProvider;
     private final ConcurrentHashMap<String, Link> links = new ConcurrentHashMap<>();
@@ -63,7 +60,8 @@ public class Lavalink extends ListenerAdapter {
 
     private final ScheduledExecutorService reconnectService;
 
-    public Lavalink(String userId, int numShards, Function<Integer, JDA> jdaProvider) {
+    public Lavalink(String userId, int numShards, Function<Integer, JDA> jdaProvider, boolean autoReconnect) {
+        this.autoReconnect = autoReconnect;
         this.userId = userId;
         this.numShards = numShards;
         this.jdaProvider = jdaProvider;
@@ -74,6 +72,10 @@ public class Lavalink extends ListenerAdapter {
             return thread;
         });
         reconnectService.scheduleWithFixedDelay(new ReconnectTask(this), 0, 500, TimeUnit.MILLISECONDS);
+    }
+
+    public Lavalink(String userId, int numShards, Function<Integer, JDA> jdaProvider) {
+        this(userId, numShards, jdaProvider, true);
     }
 
     public void addNode(URI serverUri, String password) {
@@ -203,7 +205,7 @@ public class Lavalink extends ListenerAdapter {
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
         // Check if not ourselves
         if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
-        
+
         getLink(event.getGuild()).onVoiceJoin();
     }
 
@@ -224,16 +226,18 @@ public class Lavalink extends ListenerAdapter {
     }
 
     private void reconnectVoiceConnections(JDA jda) {
-        links.forEach((guildId, link) -> {
-            try {
-                //Note: We also ensure that the link belongs to the JDA object
-                if (link.getCurrentChannel() != null
-                        && jda.getGuildById(guildId) != null) {
-                    link.connect(link.getCurrentChannel());
+        if (autoReconnect) {
+            links.forEach((guildId, link) -> {
+                try {
+                    //Note: We also ensure that the link belongs to the JDA object
+                    if (link.getCurrentChannel() != null
+                            && jda.getGuildById(guildId) != null) {
+                        link.connect(link.getCurrentChannel());
+                    }
+                } catch (Exception e) {
+                    log.error("Caught exception while trying to reconnect link " + link, e);
                 }
-            } catch (Exception e) {
-                log.error("Caught exception while trying to reconnect link " + link, e);
-            }
-        });
+            });
+        }
     }
 }
