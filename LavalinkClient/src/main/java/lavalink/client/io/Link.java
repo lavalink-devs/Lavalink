@@ -58,10 +58,6 @@ public class Link {
      */
     private volatile String currentChannel = null;
     /**
-     * Channel we will connect to after disconnecting from {@code currentChannel}
-     */
-    private volatile String pendingChannel = null;
-    /**
      * The node we are currently connected to. Automatically assigned.
      * Can only be reassigned by reconnecting any existing voice connection.
      */
@@ -113,17 +109,7 @@ public class Link {
         if (currentNode == null) {
             currentNode = lavalink.loadBalancer.determineBestSocket(channel.getGuild().getIdLong());
         }
-
-        if (state == State.NO_CHANNEL) {
-            connectNow(channel.getId());
-            pendingChannel = null;
-        } else {
-            pendingChannel = channel.getId();
-
-            if (state == State.CONNECTED || state == State.DISCONNECTING) {
-                disconnect();
-            }
-        }
+        connectNow(channel.getId());
     }
 
     /**
@@ -152,7 +138,6 @@ public class Link {
         assert channel.getGuild().getId().equals(guild);
 
         currentChannel = channelId;
-        pendingChannel = null;
         setState(State.CONNECTING);
 
         JSONObject json = new JSONObject();
@@ -286,9 +271,6 @@ public class Link {
         if (state == State.DESTROYED) {
             // We are shutting down this link and have left voice, so now we can safely unmap it
             lavalink.removeDestroyedLink(this);
-        } else if (pendingChannel != null) {
-            connectNow(pendingChannel);
-            pendingChannel = null;
         } else if (state == State.DISCONNECTING_BEFORE_RECONNECTING) {
             connectNow(currentChannel);
         } else {
@@ -357,7 +339,6 @@ public class Link {
         return "Link{" +
                 "guild='" + guild + '\'' +
                 ", currentChannel='" + currentChannel + '\'' +
-                ", pendingChannel='" + pendingChannel + '\'' +
                 ", state=" + state +
                 '}';
     }
