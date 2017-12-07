@@ -271,6 +271,7 @@ public class Link {
     }
 
     void onGuildVoiceMove(GuildVoiceMoveEvent event) {
+        connectCounter.incrementAndGet();
         log.info("Moved from " + event.getChannelLeft() + " to " + event.getChannelJoined());
         currentChannel = event.getChannelJoined().getId();
     }
