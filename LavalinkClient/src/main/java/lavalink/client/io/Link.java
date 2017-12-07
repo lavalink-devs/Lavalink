@@ -180,6 +180,7 @@ public class Link {
                 log.warn("Attempted to disconnect from voice but timed out after " + TIMEOUT_MS
                         + "ms. Did someone use ;;leave while we're not connected?" +
                         " Pretending that we left so we don't get stuck...");
+                forcefullyDisconnect();
                 onVoiceLeave();
             }
         }, TIMEOUT_MS, TimeUnit.MILLISECONDS);
