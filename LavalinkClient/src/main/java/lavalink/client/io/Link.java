@@ -147,7 +147,7 @@ public class Link {
         currentNode.send(json.toString());
     }
 
-    private void disconnect(boolean reconnect) {
+    private void disconnect() {
         // Make sure we eventually reconnect
         int startCount = disconnectCounter.get();
 
@@ -182,9 +182,7 @@ public class Link {
         }
 
         if (state != State.DESTROYED)
-            setState(reconnect
-                    ? State.DISCONNECTING_BEFORE_RECONNECTING
-                    : State.DISCONNECTING);
+            setState(State.DISCONNECTING);
 
         sendDisconnectOp();
     }
@@ -194,11 +192,6 @@ public class Link {
         json.put("op", "disconnect");
         json.put("guildId", guild);
         currentNode.send(json.toString());
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void disconnect() {
-        disconnect(false);
     }
 
     void changeNode(LavalinkSocket newNode) {
@@ -271,8 +264,6 @@ public class Link {
         if (state == State.DESTROYED) {
             // We are shutting down this link and have left voice, so now we can safely unmap it
             lavalink.removeDestroyedLink(this);
-        } else if (state == State.DISCONNECTING_BEFORE_RECONNECTING) {
-            connectNow(currentChannel);
         } else {
             setState(State.NO_CHANNEL);
             currentChannel = null;
@@ -281,11 +272,6 @@ public class Link {
 
     void onGuildVoiceMove(GuildVoiceMoveEvent event) {
         log.info("Moved from " + event.getChannelLeft() + " to " + event.getChannelJoined());
-
-        if (!event.getChannelLeft().getId().equals(currentChannel)) {
-            log.warn("Moved away from channel " + event.getChannelLeft() + " but expected channel is " + currentChannel + "!");
-        }
-
         currentChannel = event.getChannelJoined().getId();
     }
 
@@ -363,12 +349,6 @@ public class Link {
          * We are trying to disconnect, after which we will switch to NO_CHANNEL
          */
         DISCONNECTING,
-
-        /**
-         * We are trying to disconnect, after which we will switch to CONNECTING. Used for changing node
-         */
-        DISCONNECTING_BEFORE_RECONNECTING,
-
         /**
          * This {@link Link} has been destroyed and will soon (if not already) be unmapped from {@link Lavalink}
          */
