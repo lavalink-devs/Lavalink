@@ -18,7 +18,8 @@ Being used in production by FredBoat and Dyno.
 ## Client libraries:
 * [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (JDA, Java)
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
-* [lava-d.js](https://github.com/untocodes/lava-d.js) (d.js, JavaScript)
+* [lava-d.js](https://github.com/untocodes/lava-d.js) (discord.js, JavaScript)
+* [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink) (discord.js, JavaScript)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ## Server configuration
