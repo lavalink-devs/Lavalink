@@ -43,14 +43,18 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 public class Lavalink extends ListenerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(Lavalink.class);
 
-    private final boolean autoReconnect;
+    private boolean autoReconnect = true;
     private final int numShards;
     private final Function<Integer, JDA> jdaProvider;
     private final ConcurrentHashMap<String, Link> links = new ConcurrentHashMap<>();
@@ -60,8 +64,7 @@ public class Lavalink extends ListenerAdapter {
 
     private final ScheduledExecutorService reconnectService;
 
-    public Lavalink(String userId, int numShards, Function<Integer, JDA> jdaProvider, boolean autoReconnect) {
-        this.autoReconnect = autoReconnect;
+    public Lavalink(String userId, int numShards, Function<Integer, JDA> jdaProvider) {
         this.userId = userId;
         this.numShards = numShards;
         this.jdaProvider = jdaProvider;
@@ -74,8 +77,14 @@ public class Lavalink extends ListenerAdapter {
         reconnectService.scheduleWithFixedDelay(new ReconnectTask(this), 0, 500, TimeUnit.MILLISECONDS);
     }
 
-    public Lavalink(String userId, int numShards, Function<Integer, JDA> jdaProvider) {
-        this(userId, numShards, jdaProvider, true);
+    @SuppressWarnings("unused")
+    public void setAutoReconnect(boolean autoReconnect) {
+        this.autoReconnect = autoReconnect;
+    }
+
+    @SuppressWarnings("unused")
+    public boolean getAutoReconnect() {
+        return autoReconnect;
     }
 
     public void addNode(URI serverUri, String password) {
