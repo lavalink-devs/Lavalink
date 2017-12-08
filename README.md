@@ -16,7 +16,7 @@ Being used in production by FredBoat and Dyno.
 * Basic authentication
 
 ## Client libraries:
-* [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (Java)
+* [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (JDA, Java)
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
 * [lava-d.js](https://github.com/untocodes/lava-d.js) (d.js, JavaScript)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
