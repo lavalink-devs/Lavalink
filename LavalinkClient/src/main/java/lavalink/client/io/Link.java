@@ -58,10 +58,6 @@ public class Link {
      */
     private volatile String currentChannel = null;
     /**
-     * Channel we will connect to after disconnecting from {@code currentChannel}
-     */
-    private volatile String pendingChannel = null;
-    /**
      * The node we are currently connected to. Automatically assigned.
      * Can only be reassigned by reconnecting any existing voice connection.
      */
@@ -113,17 +109,7 @@ public class Link {
         if (currentNode == null) {
             currentNode = lavalink.loadBalancer.determineBestSocket(channel.getGuild().getIdLong());
         }
-
-        if (state == State.NO_CHANNEL) {
-            connectNow(channel.getId());
-            pendingChannel = null;
-        } else {
-            pendingChannel = channel.getId();
-
-            if (state == State.CONNECTED || state == State.DISCONNECTING) {
-                disconnect();
-            }
-        }
+        connectNow(channel.getId());
     }
 
     /**
@@ -152,7 +138,6 @@ public class Link {
         assert channel.getGuild().getId().equals(guild);
 
         currentChannel = channelId;
-        pendingChannel = null;
         setState(State.CONNECTING);
 
         JSONObject json = new JSONObject();
@@ -162,7 +147,7 @@ public class Link {
         currentNode.send(json.toString());
     }
 
-    private void disconnect(boolean reconnect) {
+    public void disconnect() {
         // Make sure we eventually reconnect
         int startCount = disconnectCounter.get();
 
@@ -180,6 +165,7 @@ public class Link {
                 log.warn("Attempted to disconnect from voice but timed out after " + TIMEOUT_MS
                         + "ms. Did someone use ;;leave while we're not connected?" +
                         " Pretending that we left so we don't get stuck...");
+                forcefullyDisconnect();
                 onVoiceLeave();
             }
         }, TIMEOUT_MS, TimeUnit.MILLISECONDS);
@@ -196,9 +182,7 @@ public class Link {
         }
 
         if (state != State.DESTROYED)
-            setState(reconnect
-                    ? State.DISCONNECTING_BEFORE_RECONNECTING
-                    : State.DISCONNECTING);
+            setState(State.DISCONNECTING);
 
         sendDisconnectOp();
     }
@@ -208,11 +192,6 @@ public class Link {
         json.put("op", "disconnect");
         json.put("guildId", guild);
         currentNode.send(json.toString());
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void disconnect() {
-        disconnect(false);
     }
 
     void changeNode(LavalinkSocket newNode) {
@@ -285,11 +264,6 @@ public class Link {
         if (state == State.DESTROYED) {
             // We are shutting down this link and have left voice, so now we can safely unmap it
             lavalink.removeDestroyedLink(this);
-        } else if (pendingChannel != null) {
-            connectNow(pendingChannel);
-            pendingChannel = null;
-        } else if (state == State.DISCONNECTING_BEFORE_RECONNECTING) {
-            connectNow(currentChannel);
         } else {
             setState(State.NO_CHANNEL);
             currentChannel = null;
@@ -297,12 +271,8 @@ public class Link {
     }
 
     void onGuildVoiceMove(GuildVoiceMoveEvent event) {
+        connectCounter.incrementAndGet();
         log.info("Moved from " + event.getChannelLeft() + " to " + event.getChannelJoined());
-
-        if (!event.getChannelLeft().getId().equals(currentChannel)) {
-            log.warn("Moved away from channel " + event.getChannelLeft() + " but expected channel is " + currentChannel + "!");
-        }
-
         currentChannel = event.getChannelJoined().getId();
     }
 
@@ -356,7 +326,6 @@ public class Link {
         return "Link{" +
                 "guild='" + guild + '\'' +
                 ", currentChannel='" + currentChannel + '\'' +
-                ", pendingChannel='" + pendingChannel + '\'' +
                 ", state=" + state +
                 '}';
     }
@@ -381,12 +350,6 @@ public class Link {
          * We are trying to disconnect, after which we will switch to NO_CHANNEL
          */
         DISCONNECTING,
-
-        /**
-         * We are trying to disconnect, after which we will switch to CONNECTING. Used for changing node
-         */
-        DISCONNECTING_BEFORE_RECONNECTING,
-
         /**
          * This {@link Link} has been destroyed and will soon (if not already) be unmapped from {@link Lavalink}
          */
