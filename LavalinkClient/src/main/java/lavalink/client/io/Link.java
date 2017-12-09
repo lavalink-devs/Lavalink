@@ -207,11 +207,9 @@ public class Link {
     @SuppressWarnings("unused")
     public void destroy() {
         log.debug("Destroying Link for " + guild);
+        lavalink.removeDestroyedLink(this);
         setState(State.DESTROYED);
-
-        if (state == State.NO_CHANNEL) {
-            lavalink.removeDestroyedLink(this);
-        } else {
+        if (state != State.NO_CHANNEL) {
             try {
                 disconnect();
             } catch (Exception e) {
@@ -219,12 +217,6 @@ public class Link {
                 log.error("Caught exception while trying to disconnect a destroyed link!", e);
             }
         }
-
-        executor.schedule(() -> {
-            // This will act as a timeout
-            log.info("Timed out while destroying link. Forcing removal...");
-            lavalink.removeDestroyedLink(this);
-        }, TIMEOUT_MS, TimeUnit.MILLISECONDS);
     }
 
     private void changeNode0(LavalinkSocket newNode) {
@@ -259,11 +251,6 @@ public class Link {
         if (pendingNode != null) {
             // Disconnecting means we can change to the pending node, if any
             changeNode0(pendingNode);
-        }
-
-        if (state == State.DESTROYED) {
-            // We are shutting down this link and have left voice, so now we can safely unmap it
-            lavalink.removeDestroyedLink(this);
         } else {
             setState(State.NO_CHANNEL);
             currentChannel = null;
