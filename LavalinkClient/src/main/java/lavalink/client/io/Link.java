@@ -176,11 +176,6 @@ public class Link {
             return;
         }
 
-        if (getJda().getGuildById(guild) == null) {
-            log.warn("Attempt to disconnect from channel when not in guild. Guild: " + guild);
-            return;
-        }
-
         if (state != State.DESTROYED)
             setState(State.DISCONNECTING);
 
@@ -204,6 +199,11 @@ public class Link {
         }
     }
 
+    /**
+     * Disconnects the voice connection (if any) and internally dereferences this {@link Link}.
+     *
+     * You should invoke this method your bot leaves a {@link net.dv8tion.jda.core.entities.Guild}.
+     */
     @SuppressWarnings("unused")
     public void destroy() {
         log.debug("Destroying Link for " + guild);
