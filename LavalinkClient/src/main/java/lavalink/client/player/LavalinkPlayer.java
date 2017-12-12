@@ -168,8 +168,7 @@ public class LavalinkPlayer implements IPlayer {
         json.put("op", "volume");
         json.put("guildId", link.getGuildId());
         json.put("volume", volume);
-        if (link.getCurrentSocket() != null)
-            link.getCurrentSocket().send(json.toString());
+        link.getOrDetermineSocket().send(json.toString());
         this.volume = volume;
     }
 

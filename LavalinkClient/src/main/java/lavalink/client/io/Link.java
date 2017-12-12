@@ -241,7 +241,7 @@ public class Link {
     }
 
     @Nonnull
-    LavalinkSocket getOrDetermineSocket() {
+    public LavalinkSocket getOrDetermineSocket() {
         if (currentNode == null) {
             currentNode = lavalink.loadBalancer.determineBestSocket(Long.parseLong(guild));
         }
