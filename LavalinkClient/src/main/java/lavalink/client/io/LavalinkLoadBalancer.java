@@ -67,14 +67,14 @@ public class LavalinkLoadBalancer {
 
     void onNodeDisconnect(LavalinkSocket disconnected) {
         lavalink.getLinks().forEach(link -> {
-            if (disconnected.equals(link.getCurrentSocket()))
+            if (disconnected.equals(link.getNode(false)))
                 link.onNodeDisconnected();
         });
     }
 
     void onNodeConnect(LavalinkSocket connected) {
         lavalink.getLinks().forEach(link -> {
-            if (link.getCurrentSocket() == null)
+            if (link.getNode(false) == null)
                 link.changeNode(connected);
         });
     }

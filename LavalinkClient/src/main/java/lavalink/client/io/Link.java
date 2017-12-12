@@ -31,6 +31,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -230,6 +231,13 @@ public class Link {
         pendingNode = null;
         connect(getCurrentChannel());
         getPlayer().onNodeChange();
+    }
+
+    @Deprecated
+    @SuppressWarnings("WeakerAccess")
+    @Nullable
+    public LavalinkSocket getCurrentSocket() {
+        return currentNode;
     }
 
     /**
