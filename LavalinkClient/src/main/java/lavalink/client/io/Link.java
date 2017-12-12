@@ -163,8 +163,8 @@ public class Link {
             if (startCount == disconnectCounter.get()) {
                 // We didn't get the leave event, so we *must* not be connected
                 log.warn("Attempted to disconnect from voice but timed out after " + TIMEOUT_MS
-                        + "ms. Did someone use ;;leave while we're not connected?" +
-                        " Pretending that we left so we don't get stuck...");
+                        + "ms. Are we already disconnected?" +
+                        " Pretending that we left so we don't get stuck... Guild: " + guild);
                 forcefullyDisconnect();
                 onVoiceLeave();
             }
