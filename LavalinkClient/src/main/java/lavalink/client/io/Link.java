@@ -243,6 +243,7 @@ public class Link {
     /**
      * @return The current node
      */
+    @Nullable
     @SuppressWarnings({"WeakerAccess", "unused"})
     public LavalinkSocket getNode() {
         return getNode(false);
@@ -252,6 +253,7 @@ public class Link {
      * @param selectIfAbsent If true determines a new socket if there isn't one yet
      * @return The current node
      */
+    @Nullable
     @SuppressWarnings("WeakerAccess")
     public LavalinkSocket getNode(boolean selectIfAbsent) {
         if (selectIfAbsent && currentNode == null) {
