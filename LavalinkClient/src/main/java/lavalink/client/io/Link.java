@@ -224,7 +224,7 @@ public class Link {
         pendingNode = null;
         VoiceChannel currentChannel = getCurrentChannel();
         if (currentChannel != null) {
-            connect(getCurrentChannel());
+            connect(currentChannel);
             getPlayer().onNodeChange();
         }
     }
