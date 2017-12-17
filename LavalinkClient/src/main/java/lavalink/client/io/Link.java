@@ -222,8 +222,11 @@ public class Link {
     private void changeNode0(LavalinkSocket newNode) {
         currentNode = newNode;
         pendingNode = null;
-        connect(getCurrentChannel());
-        getPlayer().onNodeChange();
+        VoiceChannel currentChannel = getCurrentChannel();
+        if (currentChannel != null) {
+            connect(getCurrentChannel());
+            getPlayer().onNodeChange();
+        }
     }
 
     @SuppressWarnings("WeakerAccess")
