@@ -31,7 +31,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -201,7 +200,7 @@ public class Link {
 
     /**
      * Disconnects the voice connection (if any) and internally dereferences this {@link Link}.
-     *
+     * <p>
      * You should invoke this method your bot leaves a {@link net.dv8tion.jda.core.entities.Guild}.
      */
     @SuppressWarnings("unused")
@@ -229,15 +228,30 @@ public class Link {
         }
     }
 
+    @Deprecated
     @SuppressWarnings("WeakerAccess")
     @Nullable
     public LavalinkSocket getCurrentSocket() {
         return currentNode;
     }
 
-    @Nonnull
-    LavalinkSocket getOrDetermineSocket() {
-        if (currentNode == null) {
+    /**
+     * @return The current node
+     */
+    @Nullable
+    @SuppressWarnings({"WeakerAccess", "unused"})
+    public LavalinkSocket getNode() {
+        return getNode(false);
+    }
+
+    /**
+     * @param selectIfAbsent If true determines a new socket if there isn't one yet
+     * @return The current node
+     */
+    @Nullable
+    @SuppressWarnings("WeakerAccess")
+    public LavalinkSocket getNode(boolean selectIfAbsent) {
+        if (selectIfAbsent && currentNode == null) {
             currentNode = lavalink.loadBalancer.determineBestSocket(Long.parseLong(guild));
         }
         return currentNode;

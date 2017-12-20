@@ -157,7 +157,7 @@ public class Lavalink extends ListenerAdapter {
 
     @Deprecated
     LavalinkSocket getSocket(String guildId) {
-        return getLink(guildId).getCurrentSocket();
+        return getLink(guildId).getNode(false);
     }
 
     @Deprecated
@@ -172,7 +172,7 @@ public class Lavalink extends ListenerAdapter {
 
     @Deprecated
     public LavalinkSocket getNodeForGuild(Guild guild) {
-        return getLink(guild).getCurrentSocket();
+        return getLink(guild).getNode(false);
     }
 
     @Deprecated
