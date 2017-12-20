@@ -137,7 +137,8 @@ public class LavalinkSocket extends ReusableWebSocket {
                 send(res2.toString());
                 break;
             case "playerUpdate":
-                lavalink.getPlayer(json.getString("guildId"))
+                lavalink.getLink(json.getString("guildId"))
+                        .getPlayer()
                         .provideState(json.getJSONObject("state"));
                 break;
             case "stats":

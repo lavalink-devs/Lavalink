@@ -91,7 +91,7 @@ public class Launcher {
         } catch (NullPointerException | IOException e) {
             log.error("Failed to load git repo information", e);
         }
-        
+
         String commitHash = gitProps.getProperty("git.commit.id.full");
         if (commitHash == null || commitHash.isEmpty()) {
             return;
@@ -136,8 +136,9 @@ public class Launcher {
 
     @Bean
     static SocketServer socketServer(@Value("${lavalink.server.ws.port}") Integer port,
-                                         @Value("${lavalink.server.password}") String password) {
-        SocketServer ss = new SocketServer(new InetSocketAddress(port), password);
+                                     @Value("${lavalink.server.ws.host}") String host,
+                                     @Value("${lavalink.server.password}") String password) {
+        SocketServer ss = new SocketServer(new InetSocketAddress(host, port), password);
         ss.start();
         return ss;
     }

@@ -39,6 +39,8 @@ public class StatsTask implements Runnable {
 
     private SocketContext context;
 
+    private final SystemInfo si = new SystemInfo();
+
     StatsTask(SocketContext context) {
         this.context = context;
     }
@@ -76,7 +78,6 @@ public class StatsTask implements Runnable {
         mem.put("reservable", Runtime.getRuntime().maxMemory());
         out.put("memory", mem);
 
-        SystemInfo si = new SystemInfo();
         HardwareAbstractionLayer hal = si.getHardware();
 
 
@@ -121,7 +122,6 @@ public class StatsTask implements Runnable {
 
     private double getProcessRecentCpuUsage() {
         double output = 0d;
-        SystemInfo si = new SystemInfo();
         HardwareAbstractionLayer hal = si.getHardware();
         OperatingSystem os = si.getOperatingSystem();
         OSProcess p = os.getProcess(os.getProcessId());

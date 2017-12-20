@@ -30,6 +30,8 @@ class LavalinkInternalPlayerEventHandler extends PlayerEventListenerAdapter {
 
     @Override
     public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        ((LavalinkPlayer) player).clearTrack();
+        if (endReason != AudioTrackEndReason.REPLACED && endReason != AudioTrackEndReason.STOPPED) {
+            ((LavalinkPlayer) player).clearTrack();
+        }
     }
 }

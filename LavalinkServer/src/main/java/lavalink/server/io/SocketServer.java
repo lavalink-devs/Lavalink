@@ -108,6 +108,7 @@ public class SocketServer extends WebSocketServer {
 
         if (webSocket.isClosing()) {
             log.error("Ignoring closing websocket: " + webSocket.getRemoteSocketAddress().toString());
+            return;
         }
 
         switch (json.getString("op")) {
@@ -119,11 +120,6 @@ public class SocketServer extends WebSocketServer {
                 if (manager.getConnectionListener() == null) {
                     manager.setConnectionListener(new DebugConnectionListener(guildId));
                 }
-                if (manager.isConnected() || manager.isAttemptingToConnect()) {
-                    manager.closeAudioConnection();
-                    log.info("Closing the audio connection for guild {} so we can reconnect.", guildId);
-                }
-
                 manager.openAudioConnection(json.getString("channelId"));
                 break;
             case "voiceUpdate":
@@ -161,9 +157,7 @@ public class SocketServer extends WebSocketServer {
                         track.setMarker(new TrackMarker(json.getLong("endTime"), new TrackEndMarkerHandler(player)));
                     }
 
-                    if (json.optBoolean("pause", false)) {
-                        player.setPause(true);
-                    }
+                    player.setPause(json.optBoolean("pause", false));
 
                     player.play(track);
 

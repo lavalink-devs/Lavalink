@@ -54,11 +54,10 @@ public class Lavalink extends ListenerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(Lavalink.class);
 
+    private boolean autoReconnect = true;
     private final int numShards;
     private final Function<Integer, JDA> jdaProvider;
     private final ConcurrentHashMap<String, Link> links = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<String, String> connectedChannels = new ConcurrentHashMap<>(); // Key is guild id
-    private final ConcurrentHashMap<String, LavalinkPlayer> players = new ConcurrentHashMap<>(); // Key is guild id
     private final String userId;
     final List<LavalinkSocket> nodes = new CopyOnWriteArrayList<>();
     final LavalinkLoadBalancer loadBalancer = new LavalinkLoadBalancer(this);
@@ -78,6 +77,16 @@ public class Lavalink extends ListenerAdapter {
         reconnectService.scheduleWithFixedDelay(new ReconnectTask(this), 0, 500, TimeUnit.MILLISECONDS);
     }
 
+    @SuppressWarnings("unused")
+    public void setAutoReconnect(boolean autoReconnect) {
+        this.autoReconnect = autoReconnect;
+    }
+
+    @SuppressWarnings("unused")
+    public boolean getAutoReconnect() {
+        return autoReconnect;
+    }
+
     public void addNode(URI serverUri, String password) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", password);
@@ -93,6 +102,7 @@ public class Lavalink extends ListenerAdapter {
         node.close();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Link getLink(String guildId) {
         return links.computeIfAbsent(guildId, __ -> new Link(this, guildId));
     }
@@ -111,6 +121,7 @@ public class Lavalink extends ListenerAdapter {
         return numShards;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Collection<Link> getLinks() {
         return links.values();
     }
@@ -146,7 +157,7 @@ public class Lavalink extends ListenerAdapter {
 
     @Deprecated
     LavalinkSocket getSocket(String guildId) {
-        return getLink(guildId).getCurrentSocket();
+        return getLink(guildId).getNode(false);
     }
 
     @Deprecated
@@ -161,7 +172,7 @@ public class Lavalink extends ListenerAdapter {
 
     @Deprecated
     public LavalinkSocket getNodeForGuild(Guild guild) {
-        return getLink(guild).getCurrentSocket();
+        return getLink(guild).getNode(false);
     }
 
     @Deprecated
@@ -191,19 +202,19 @@ public class Lavalink extends ListenerAdapter {
 
     @Override
     public void onReconnect(ReconnectedEvent event) {
-        reconnectTheVoiceConnections(event.getJDA());
+        reconnectVoiceConnections(event.getJDA());
     }
 
     @Override
     public void onResume(ResumedEvent event) {
-        reconnectTheVoiceConnections(event.getJDA());
+        reconnectVoiceConnections(event.getJDA());
     }
 
     @Override
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
         // Check if not ourselves
         if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
-        
+
         getLink(event.getGuild()).onVoiceJoin();
     }
 
@@ -223,17 +234,19 @@ public class Lavalink extends ListenerAdapter {
         getLink(event.getGuild()).onGuildVoiceMove(event);
     }
 
-    private void reconnectTheVoiceConnections(JDA jda) {
-        connectedChannels.forEach((guildId, channel) -> {
-            try {
-                Guild guild = jda.getGuildById(guildId);
-                if (guild != null) {
-                    getLink(guild).connect(guild.getVoiceChannelById(channel));
+    private void reconnectVoiceConnections(JDA jda) {
+        if (autoReconnect) {
+            links.forEach((guildId, link) -> {
+                try {
+                    //Note: We also ensure that the link belongs to the JDA object
+                    if (link.getCurrentChannel() != null
+                            && jda.getGuildById(guildId) != null) {
+                        link.connect(link.getCurrentChannel());
+                    }
+                } catch (Exception e) {
+                    log.error("Caught exception while trying to reconnect link " + link, e);
                 }
-            } catch (Exception e) {
-                int shardId = jda.getShardInfo() == null ? 0 : jda.getShardInfo().getShardId();
-                log.error("Caught exception while trying to reconnect shard " + shardId, e);
-            }
-        });
+            });
+        }
     }
 }
