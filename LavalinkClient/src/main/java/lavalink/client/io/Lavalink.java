@@ -28,9 +28,11 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
+import net.dv8tion.jda.core.events.DisconnectEvent;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.ReconnectedEvent;
 import net.dv8tion.jda.core.events.ResumedEvent;
+import net.dv8tion.jda.core.events.ShutdownEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
@@ -201,6 +203,16 @@ public class Lavalink extends ListenerAdapter {
     }
 
     @Override
+    public void onDisconnect(DisconnectEvent event) {
+        disconnectVoiceConnection(event.getJDA());
+    }
+
+    @Override
+    public void onShutdown(ShutdownEvent event) {
+        disconnectVoiceConnection(event.getJDA());
+    }
+
+    @Override
     public void onReconnect(ReconnectedEvent event) {
         reconnectVoiceConnections(event.getJDA());
     }
@@ -249,4 +261,17 @@ public class Lavalink extends ListenerAdapter {
             });
         }
     }
+
+    private void disconnectVoiceConnection(JDA jda) {
+        links.forEach((guildId, link) -> {
+            try {
+                if (jda.getGuildById(guildId) != null) {
+                    link.disconnect();
+                }
+            } catch (Exception e) {
+                log.error("Caught exception while trying to disconnect link " + link, e);
+            }
+        });
+    }
+
 }
