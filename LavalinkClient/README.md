@@ -115,3 +115,10 @@ Useful methods:
 * `isAvailable()` Whether or not we are connected and can play music.
 * `getRemoteUri()` Returns a `URI` of the remote address.
 * `getStats()` Returns a nullable `RemoteStats` object, with statistics from the Lavalink Server. Updated every minute.
+
+# Common pitfalls
+If you are experiencing problems with playing audio or joining a voice channel with Lavalink please check to see if all these apply to you:
+
+1. You are adding the Lavalink instance to your JDABuilder *before* building it. Lavalink must be able to receive the ready event.
+2. You don't have multiple Lavalink instances.
+3. You don't attempt to join a voice channel via JDA directly.
