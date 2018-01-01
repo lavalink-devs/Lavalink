@@ -130,7 +130,6 @@ public class LavalinkPlayer implements IPlayer {
     @Override
     public long getTrackPosition() {
         if (getPlayingTrack() == null) throw new IllegalStateException("Not currently playing anything");
-        if (getPlayingTrack().getInfo().isStream) return Long.MAX_VALUE;
 
         if (!paused) {
             // Account for the time since our last update
@@ -145,7 +144,7 @@ public class LavalinkPlayer implements IPlayer {
     @Override
     public void seekTo(long position) {
         if (getPlayingTrack() == null) throw new IllegalStateException("Not currently playing anything");
-        if (getPlayingTrack().getInfo().isStream) throw new IllegalStateException("Can't seek in a stream");
+        if (!getPlayingTrack().isSeekable()) throw new IllegalStateException("Track cannot be seeked");
 
         JSONObject json = new JSONObject();
         json.put("op", "seek");
