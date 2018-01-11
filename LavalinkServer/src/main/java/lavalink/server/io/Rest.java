@@ -9,6 +9,7 @@ import lavalink.server.util.Util;
 import net.dv8tion.jda.Core;
 import net.dv8tion.jda.manager.AudioManager;
 import org.json.JSONObject;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,9 +26,9 @@ import static lavalink.server.io.SocketServer.sendPlayerUpdate;
 @RestController
 public class Rest {
 
-    @PostMapping("/connect")
+    @PostMapping("/{guildId}/connect")
     public void connect(@RequestParam String channelId,
-                        @RequestParam String guildId,
+                        @PathVariable String guildId,
                         @RequestHeader("Authorization") String identifier) {
         AudioManager audioManager = getCore(guildId, identifier).getAudioManager(guildId);
         if (audioManager.getConnectionListener() == null) {
@@ -36,14 +37,14 @@ public class Rest {
         audioManager.openAudioConnection(channelId);
     }
 
-    @PostMapping("/disconnect")
-    public void disconnect(@RequestParam String guildId,
+    @PostMapping("/{guildId}/disconnect")
+    public void disconnect(@PathVariable String guildId,
                            @RequestHeader("Authorization") String identifier) {
         getCore(guildId, identifier).getAudioManager(guildId).closeAudioConnection();
     }
 
-    @PostMapping("/play")
-    public JSONObject play(@RequestParam String guildId,
+    @PostMapping("/{guildId}/play")
+    public JSONObject play(@PathVariable String guildId,
                            @RequestParam String track,
                            @RequestParam Long startTime,
                            @RequestParam Long endTime,
@@ -67,14 +68,14 @@ public class Rest {
         return player.getState();
     }
 
-    @PostMapping("/stop")
-    public void stop(@RequestParam String guildId,
+    @PostMapping("/{guildId}/stop")
+    public void stop(@PathVariable String guildId,
                      @RequestHeader("Authorization") String identifier) {
         getContext(identifier).getPlayer(guildId).stop();
     }
 
-    @PostMapping("/pause")
-    public void pause(@RequestParam String guildId,
+    @PostMapping("/{guildId}/pause")
+    public void pause(@PathVariable String guildId,
                       @RequestParam boolean pause,
                       @RequestHeader("Authorization") String identifier) {
         SocketContext socketContext = getContext(identifier);
@@ -83,8 +84,8 @@ public class Rest {
         sendPlayerUpdate(socketContext.getSocket(), player);
     }
 
-    @PostMapping("/seek")
-    public void seek(@RequestParam String guildId,
+    @PostMapping("/{guildId}/seek")
+    public void seek(@PathVariable String guildId,
                      @RequestParam long position,
                      @RequestHeader("Authorization") String identifier) {
         SocketContext socketContext = getContext(identifier);
@@ -93,8 +94,8 @@ public class Rest {
         sendPlayerUpdate(socketContext.getSocket(), player);
     }
 
-    @PostMapping("/volume")
-    public void volume(@RequestParam String guildId,
+    @PostMapping("/{guildId}/volume")
+    public void volume(@PathVariable String guildId,
                        @RequestParam int volume,
                        @RequestHeader("Authorization") String identifier) {
         Player player = getContext(identifier).getPlayer(guildId);
