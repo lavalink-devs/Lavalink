@@ -34,6 +34,7 @@ Provide an intercepted voice server update
 ```json
 {
     "op": "voiceUpdate",
+    "guildId": "...",
     "sessionId": "...",
     "event": "..."
 }
@@ -276,3 +277,12 @@ Response:
 ```json
 {"op":4,"d":{"self_deaf":false,"guild_id":"GUILD_ID_HERE","channel_id":null,"self_mute":false}}
 ```
+
+# Common pitfalls
+Admidtedly Lavalink isn't inherently the most intuitive thing ever, and people tend to run into the same mistakes over again. Please double check the following if you run into problems developing your client and you can't connect to a voice channel or play audio:
+
+1. Check that you are forwarding sendWS events to **Discord**.
+2. Check that you are intercepting **VOICE_SERVER_UPDATE**s to **Lavalink**. Do not edit the event object from Discord.
+3. Check that you aren't expecting to hear audio when you have forgotten to queue something up OR forgotten to join a voice channel.
+4. Check that you are not trying to create a voice connection with your Discord library.
+5. When in doubt, check the debug logfile at `/logs/debug.log`.
