@@ -22,13 +22,8 @@
 
 package lavalink.server.io;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.TrackMarker;
 import lavalink.server.player.Player;
-import lavalink.server.player.TrackEndMarkerHandler;
-import lavalink.server.util.DebugConnectionListener;
 import lavalink.server.util.Util;
-import net.dv8tion.jda.manager.AudioManager;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -36,11 +31,11 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static lavalink.server.io.WSCodes.AUTHORIZATION_REJECTED;
 import static lavalink.server.io.WSCodes.INTERNAL_ERROR;
@@ -49,6 +44,7 @@ public class SocketServer extends WebSocketServer {
 
     private static final Logger log = LoggerFactory.getLogger(SocketServer.class);
     private static final Map<WebSocket, SocketContext> contextMap = new HashMap<>();
+    private static final Map<String, SocketContext> contextIdentifierMap = new HashMap<>();
     private final String password;
 
     public SocketServer(InetSocketAddress address, String password) {
@@ -64,7 +60,10 @@ public class SocketServer extends WebSocketServer {
 
             if (clientHandshake.getFieldValue("Authorization").equals(password)) {
                 log.info("Connection opened from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
-                contextMap.put(webSocket, new SocketContext(webSocket, userId, shardCount));
+                String identifier = UUID.randomUUID().toString();
+                SocketContext socketContext = new SocketContext(webSocket, userId, shardCount, identifier);
+                contextMap.put(webSocket, socketContext);
+                sendHello(webSocket, socketContext, identifier);
             } else {
                 log.error("Authentication failed from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
                 webSocket.close(AUTHORIZATION_REJECTED, "Authorization rejected");
@@ -73,6 +72,18 @@ public class SocketServer extends WebSocketServer {
             log.error("Error when opening websocket", e);
             webSocket.close(INTERNAL_ERROR, e.getMessage());
         }
+    }
+
+    private void sendHello(WebSocket webSocket, SocketContext socketContext, String identifier) {
+        JSONObject hello = new JSONObject()
+                .put("op", "hello")
+                .put("identifier", identifier);
+        webSocket.send(hello.toString());
+        contextIdentifierMap.put(identifier, socketContext);
+    }
+
+    public static SocketContext getContext(String identifier) {
+        return contextIdentifierMap.get(identifier);
     }
 
     @Override
@@ -113,24 +124,11 @@ public class SocketServer extends WebSocketServer {
 
         switch (json.getString("op")) {
             /* JDAA ops */
-            case "connect":
-                long guildId = Long.parseLong(json.getString("guildId"));
-                AudioManager manager = contextMap.get(webSocket).getCore(getShardId(webSocket, json))
-                        .getAudioManager(json.getString("guildId"));
-                if (manager.getConnectionListener() == null) {
-                    manager.setConnectionListener(new DebugConnectionListener(guildId));
-                }
-                manager.openAudioConnection(json.getString("channelId"));
-                break;
             case "voiceUpdate":
                 contextMap.get(webSocket).getCore(getShardId(webSocket, json)).provideVoiceServerUpdate(
                         json.getString("sessionId"),
                         json.getJSONObject("event")
                 );
-                break;
-            case "disconnect":
-                contextMap.get(webSocket).getCore(getShardId(webSocket, json)).getAudioManager(json.getString("guildId"))
-                        .closeAudioConnection();
                 break;
             case "validationRes":
                 ((CoreClientImpl) contextMap.get(webSocket).getCore(getShardId(webSocket, json)).getClient()).provideValidation(
@@ -143,50 +141,6 @@ public class SocketServer extends WebSocketServer {
                 ((CoreClientImpl) contextMap.get(webSocket).getCore(json.getInt("shardId")).getClient()).provideIsConnected(
                         json.getBoolean("connected")
                 );
-                break;
-
-            /* Player ops */
-            case "play":
-                try {
-                    Player player = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
-                    AudioTrack track = Util.toAudioTrack(json.getString("track"));
-                    if (json.has("startTime")) {
-                        track.setPosition(json.getLong("startTime"));
-                    }
-                    if (json.has("endTime")) {
-                        track.setMarker(new TrackMarker(json.getLong("endTime"), new TrackEndMarkerHandler(player)));
-                    }
-
-                    player.setPause(json.optBoolean("pause", false));
-
-                    player.play(track);
-
-                    SocketContext context = contextMap.get(webSocket);
-
-                    context.getCore(getShardId(webSocket, json)).getAudioManager(json.getString("guildId"))
-                            .setSendingHandler(context.getPlayer(json.getString("guildId")));
-                    sendPlayerUpdate(webSocket, player);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case "stop":
-                Player player = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
-                player.stop();
-                break;
-            case "pause":
-                Player player2 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
-                player2.setPause(json.getBoolean("pause"));
-                sendPlayerUpdate(webSocket, player2);
-                break;
-            case "seek":
-                Player player3 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
-                player3.seekTo(json.getLong("position"));
-                sendPlayerUpdate(webSocket, player3);
-                break;
-            case "volume":
-                Player player4 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
-                player4.setVolume(json.getInt("volume"));
                 break;
             default:
                 log.warn("Unexpected operation: " + json.getString("op"));

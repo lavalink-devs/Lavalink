@@ -121,7 +121,7 @@ public class StatsTask implements Runnable {
     private double cpuTime = 0;
 
     private double getProcessRecentCpuUsage() {
-        double output = 0d;
+        double output;
         HardwareAbstractionLayer hal = si.getHardware();
         OperatingSystem os = si.getOperatingSystem();
         OSProcess p = os.getProcess(os.getProcessId());
