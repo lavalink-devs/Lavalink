@@ -110,7 +110,6 @@ public class SocketContext {
     }
 
     void shutdown() {
-        SocketServer.getContextMap().entrySet().removeIf(e -> e.getValue().equals(this));
         SocketServer.getContextIdentifierMap().entrySet().removeIf(e -> e.getValue().equals(this));
         log.info("Shutting down " + cores.size() + " cores and " + getPlayingPlayers().size() + " playing players.");
         statsExecutor.shutdown();
