@@ -176,4 +176,12 @@ public class SocketServer extends WebSocketServer {
         return contextMap.values();
     }
 
+    public static Map<WebSocket, SocketContext> getContextMap() {
+        return contextMap;
+    }
+
+    public static Map<String, SocketContext> getContextIdentifierMap() {
+        return contextIdentifierMap;
+    }
+
 }
