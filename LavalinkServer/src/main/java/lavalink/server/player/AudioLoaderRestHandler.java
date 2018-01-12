@@ -25,6 +25,7 @@ package lavalink.server.player;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import lavalink.server.Launcher;
+import lavalink.server.io.SocketServer;
 import lavalink.server.util.Util;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,12 +50,13 @@ public class AudioLoaderRestHandler {
     }
 
     private boolean isAuthorized(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getHeader("Authorization") == null) {
+        String authorization = request.getHeader("Authorization");
+        if (authorization == null) {
             response.setStatus(403);
             return false;
         }
 
-        if (!request.getHeader("Authorization").equals(Launcher.config.getPassword())) {
+        if (!authorization.equals(Launcher.config.getPassword()) && !SocketServer.getContextIdentifierMap().containsKey(authorization)) {
             log.warn("Authorization failed");
             response.setStatus(403);
             return false;
