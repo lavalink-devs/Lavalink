@@ -103,6 +103,12 @@ public class Rest {
         player.setVolume(volume);
     }
 
+    @PostMapping("/{guildId}/destroy")
+    public void destroy(@PathVariable String guildId,
+                        @RequestHeader("Authorization") String identifier) {
+        getContext(identifier).getPlayers().remove(guildId);
+    }
+
     private Core getCore(String guildId, String identifier) {
         SocketContext socketContext = getContext(identifier);
         int shard = Util.getShardFromSnowflake(guildId, socketContext.getShardCount());
