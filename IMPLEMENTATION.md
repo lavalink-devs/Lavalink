@@ -61,64 +61,6 @@ Response to `isConnectedRes`.
 }
 ```
 
-### Rest operations
-#### All rest operations should include the `Authorization` header with the identifier provided via websocket in the hello op
-
-**Play a track** `/{guildId}/play`:
-
-Query params:
-- `startTime`
-- `endTime`
-
-The track base64 string should be sent in the body of the request
-
-`startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
-`endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default the track plays until it's end as per the encoded data.
-
-
-**Stop the player** `/{guildId}/stop`
-
-**Set player pause state** `/{guildId}/pause`
-
-Query params:
-- `pause` - boolean, sets the players paused state (true is paused)
-
-**Seek** `/{guildId}/seek`
-
-Query params:
-- `position` - The desired position (in milliseconds)
-
-**Volume** `/{guildId}/volume`
-
-Query params:
-- `volume` - Sets the desired volume, from 0 to 150, 100 is default.
-
-**Resolving tracks for non JVM clients:**
-```
-GET /loadtracks?identifier=dQw4w9WgXcQ HTTP/1.1
-Host: localhost:8080
-Authorization: youshallnotpass
-```
-
-Response:
-```json
-[
-  {
-    "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-    "info": {
-      "identifier": "dQw4w9WgXcQ",
-      "isSeekable": true,
-      "author": "RickAstleyVEVO",
-      "length": 212000,
-      "isStream": false,
-      "position": 0,
-      "title": "Rick Astley - Never Gonna Give You Up",
-      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    }
-  }
-]
-```
-
 ### Incoming messages
 See
 [LavalinkSocket.java](https://github.com/Frederikam/Lavalink/blob/91bc0ef4dab6ca5d5efcba12203ee4054bb55ae9/LavalinkClient/src/main/java/lavalink/client/io/LavalinkSocket.java)
@@ -246,8 +188,66 @@ private void handleEvent(JSONObject json) throws IOException {
 
 See also: [AudioTrackEndReason.java](https://github.com/sedmelluq/lavaplayer/blob/master/main/src/main/java/com/sedmelluq/discord/lavaplayer/track/AudioTrackEndReason.java)
 
+### Rest operations
+#### All rest operations should include the `Authorization` header with the identifier provided via websocket in the hello op
+
+**Play a track** `/{guildId}/play`:
+
+Query params:
+- `startTime`
+- `endTime`
+
+The track base64 string should be sent in the body of the request
+
+`startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
+`endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default the track plays until it's end as per the encoded data.
+
+
+**Stop the player** `/{guildId}/stop`
+
+**Set player pause state** `/{guildId}/pause`
+
+Query params:
+- `pause` - boolean, sets the players paused state (true is paused)
+
+**Seek** `/{guildId}/seek`
+
+Query params:
+- `position` - The desired position (in milliseconds)
+
+**Volume** `/{guildId}/volume`
+
+Query params:
+- `volume` - Sets the desired volume, from 0 to 150, 100 is default.
+
+**Resolving tracks for non JVM clients:**
+```
+GET /loadtracks?identifier=dQw4w9WgXcQ HTTP/1.1
+Host: localhost:8080
+Authorization: youshallnotpass
+```
+
+Response:
+```json
+[
+  {
+    "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "info": {
+      "identifier": "dQw4w9WgXcQ",
+      "isSeekable": true,
+      "author": "RickAstleyVEVO",
+      "length": 212000,
+      "isStream": false,
+      "position": 0,
+      "title": "Rick Astley - Never Gonna Give You Up",
+      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    }
+  }
+]
+```
+
 ### Special notes
-* When your shard's mainWS connection dies, so does all your lavalink audio connections.
+* When your shard's mainWS connection dies, so do all your lavalink audio connections.
     * This also includes resumes
 * When a client connection to Lavalink-Server disconnects, all connections and players for that session are shut down.
 * If Lavalink-Server suddenly dies (think SIGKILL) the client will have to terminate any audio connections by sending this event:
