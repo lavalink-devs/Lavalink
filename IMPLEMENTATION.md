@@ -1,3 +1,4 @@
+
 # Implementation guidelines
 How to write your own client. The Java client will serve as an example implementation.
 
@@ -20,16 +21,14 @@ Num-Shards: Total number of shards your bot is operating on
 User-Id: The user id of the bot you are playing music with
 ```
 
-### Outgoing messages
-Make the server queue a voice connection
-```json
-{
-    "op": "connect",
-    "guildId": "...",
-    "channelId": "..."
-}
-```
+### Hello op
+After connecting, you will get sent back a hello op which contains the following:
+- Rest server base URL
+- Rest server identifier / authorization which should be sent in the `Authorization` header of every rest request (Apart for the debug endpoint)
 
+
+
+### Outgoing websocket messages
 Provide an intercepted voice server update
 ```json
 {
@@ -37,14 +36,6 @@ Provide an intercepted voice server update
     "guildId": "...",
     "sessionId": "...",
     "event": "..."
-}
-```
-
-Close a voice connection
-```json
-{
-    "op": "disconnect",
-    "guildId": "123"
 }
 ```
 
@@ -67,53 +58,37 @@ Response to `isConnectedRes`.
 }
 ```
 
-Cause the player to play a track.
+### Rest operations
+#### All rest operations should include the `Authorization` header with the identifier provided via websocket in the hello op
+
+**Play a track** `/{guildId}/play`:
+
+Query params:
+- `startTime`
+- `endTime`
+
+The track base64 string should be sent in the body of the request
+
 `startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
 `endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default the track plays until it's end as per the encoded data.
-```json
-{
-    "op": "play",
-    "guildId": "...",
-    "track": "...",
-    "startTime": "60000",
-    "endTime": "120000"
-}
-```
 
-Cause the player to stop
-```json
-{
-    "op": "stop",
-    "guildId": "..."
-}
-```
 
-Set player pause
-```json
-{
-    "op": "pause",
-    "guildId": "...",
-    "pause": true
-}
-```
+**Stop the player** `/{guildId}/stop`
 
-Make the player seek to a position of the track. Position is in millis
-```json
-{
-    "op": "seek",
-    "guildId": "...",
-    "position": 60000
-}
-```
+**Set player pause state** `/{guildId}/pause`
 
-Set player volume. Volume may range from 0 to 150. 100 is default.
-```json
-{
-    "op": "volume",
-    "guildId": "...",
-    "volume": 125
-}
-```
+Query params:
+- `pause` - boolean, sets the players paused state (true is paused)
+
+**Seek** `/{guildId}/seek`
+
+Query params:
+- `position` - The desired position (in milliseconds)
+
+**Volume** `/{guildId}/volume`
+
+Query params:
+- `volume` - Sets the desired volume, from 0 to 150, 100 is default.
 
 ### Incoming messages
 See 
