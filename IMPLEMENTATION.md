@@ -27,9 +27,11 @@ After connecting, you will get sent back a hello op which contains the following
 {
   "op" : "hello",
   "restBase": "http://localhost:2333/",
-  "identifier": "..."
+  "token": "..."
 }
 ```
+- `restBase` - The base URL that should be used for all rest requests
+- `token` - Authorization token, should be sent in the `Authorization` header in each rest request (apart for the debug endpoint)
 
 ### Outgoing websocket messages
 Provide an intercepted voice server update
@@ -189,7 +191,7 @@ private void handleEvent(JSONObject json) throws IOException {
 See also: [AudioTrackEndReason.java](https://github.com/sedmelluq/lavaplayer/blob/master/main/src/main/java/com/sedmelluq/discord/lavaplayer/track/AudioTrackEndReason.java)
 
 ### Rest operations
-#### All rest operations should include the `Authorization` header with the identifier provided via websocket in the hello op
+#### All rest operations should include the `Authorization` header with the token provided via websocket in the hello op
 
 **Play a track** `/{guildId}/play`:
 

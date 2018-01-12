@@ -82,7 +82,7 @@ public class SocketServer extends WebSocketServer {
     private void sendHello(WebSocket webSocket, SocketContext socketContext, String identifier, String restBaseUrl) {
         JSONObject hello = new JSONObject()
                 .put("op", "hello")
-                .put("identifier", identifier)
+                .put("token", identifier)
                 .put("restBase", restBaseUrl);
         log.info(hello.toString());
         webSocket.send(hello.toString());
