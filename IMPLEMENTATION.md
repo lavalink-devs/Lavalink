@@ -23,10 +23,12 @@ User-Id: The user id of the bot you are playing music with
 
 ### Hello op
 After connecting, you will get sent back a hello op which contains the following:
-- Rest server base URL
-- Rest server identifier / authorization which should be sent in the `Authorization` header of every rest request (Apart for the debug endpoint)
-
-
+```json
+{
+  "restBase": "http://localhost:2333/",
+  "identifier": "..."
+}
+```
 
 ### Outgoing websocket messages
 Provide an intercepted voice server update
@@ -90,8 +92,34 @@ Query params:
 Query params:
 - `volume` - Sets the desired volume, from 0 to 150, 100 is default.
 
+**Resolving tracks for non JVM clients:**
+```
+GET /loadtracks?identifier=dQw4w9WgXcQ HTTP/1.1
+Host: localhost:8080
+Authorization: youshallnotpass
+```
+
+Response:
+```json
+[
+  {
+    "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "info": {
+      "identifier": "dQw4w9WgXcQ",
+      "isSeekable": true,
+      "author": "RickAstleyVEVO",
+      "length": 212000,
+      "isStream": false,
+      "position": 0,
+      "title": "Rick Astley - Never Gonna Give You Up",
+      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    }
+  }
+]
+```
+
 ### Incoming messages
-See 
+See
 [LavalinkSocket.java](https://github.com/Frederikam/Lavalink/blob/91bc0ef4dab6ca5d5efcba12203ee4054bb55ae9/LavalinkClient/src/main/java/lavalink/client/io/LavalinkSocket.java)
 for client implementation
 
@@ -133,7 +161,7 @@ Position information about a player. Includes unix timestamp.
 }
 ```
 
-A collection of stats sent every minute. 
+A collection of stats sent every minute.
 ```json
 {
     "op": "stats",
@@ -216,33 +244,6 @@ private void handleEvent(JSONObject json) throws IOException {
 ```
 
 See also: [AudioTrackEndReason.java](https://github.com/sedmelluq/lavaplayer/blob/master/main/src/main/java/com/sedmelluq/discord/lavaplayer/track/AudioTrackEndReason.java)
-
-### REST API
-The REST api is used to resolve audio tracks for use with the `play` op. 
-```
-GET /loadtracks?identifier=dQw4w9WgXcQ HTTP/1.1
-Host: localhost:8080
-Authorization: youshallnotpass
-```
-
-Response:
-```json
-[
-  {
-    "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-    "info": {
-      "identifier": "dQw4w9WgXcQ",
-      "isSeekable": true,
-      "author": "RickAstleyVEVO",
-      "length": 212000,
-      "isStream": false,
-      "position": 0,
-      "title": "Rick Astley - Never Gonna Give You Up",
-      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    }
-  }
-]
-```
 
 ### Special notes
 * When your shard's mainWS connection dies, so does all your lavalink audio connections.

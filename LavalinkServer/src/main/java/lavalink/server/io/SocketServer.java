@@ -30,6 +30,7 @@ import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.net.InetSocketAddress;
 import java.util.Collection;
@@ -47,6 +48,9 @@ public class SocketServer extends WebSocketServer {
     private static final Map<String, SocketContext> contextIdentifierMap = new HashMap<>();
     private final String password;
 
+    @Value("${server.port}")
+    private String restPort;
+
     public SocketServer(InetSocketAddress address, String password) {
         super(address);
         this.password = password;
@@ -63,7 +67,8 @@ public class SocketServer extends WebSocketServer {
                 String identifier = UUID.randomUUID().toString();
                 SocketContext socketContext = new SocketContext(webSocket, userId, shardCount, identifier);
                 contextMap.put(webSocket, socketContext);
-                sendHello(webSocket, socketContext, identifier);
+                String host = clientHandshake.getFieldValue("Host");
+                sendHello(webSocket, socketContext, identifier, restBaseUrl(host));
             } else {
                 log.error("Authentication failed from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
                 webSocket.close(AUTHORIZATION_REJECTED, "Authorization rejected");
@@ -74,12 +79,18 @@ public class SocketServer extends WebSocketServer {
         }
     }
 
-    private void sendHello(WebSocket webSocket, SocketContext socketContext, String identifier) {
+    private void sendHello(WebSocket webSocket, SocketContext socketContext, String identifier, String restBaseUrl) {
         JSONObject hello = new JSONObject()
                 .put("op", "hello")
-                .put("identifier", identifier);
+                .put("identifier", identifier)
+                .put("restBase", restBaseUrl);
+        log.info(hello.toString());
         webSocket.send(hello.toString());
         contextIdentifierMap.put(identifier, socketContext);
+    }
+
+    private String restBaseUrl(String host) {
+        return "http://" + host.replaceAll(":\\d+", "") + ":" + restPort + "/";
     }
 
     public static SocketContext getContext(String identifier) {
