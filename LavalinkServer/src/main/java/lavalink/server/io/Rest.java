@@ -106,6 +106,7 @@ public class Rest {
     @PostMapping("/{guildId}/destroy")
     public void destroy(@PathVariable String guildId,
                         @RequestHeader("Authorization") String identifier) {
+        getCore(guildId, identifier).getAudioManager(guildId).closeAudioConnection();
         Player player = getContext(identifier).getPlayers().remove(guildId);
         if (player != null) player.stop();
     }
