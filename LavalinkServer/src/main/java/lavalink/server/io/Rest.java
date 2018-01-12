@@ -106,7 +106,8 @@ public class Rest {
     @PostMapping("/{guildId}/destroy")
     public void destroy(@PathVariable String guildId,
                         @RequestHeader("Authorization") String identifier) {
-        getContext(identifier).getPlayers().remove(guildId);
+        Player player = getContext(identifier).getPlayers().remove(guildId);
+        if (player != null) player.stop();
     }
 
     private Core getCore(String guildId, String identifier) {
