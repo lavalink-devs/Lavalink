@@ -25,6 +25,7 @@ User-Id: The user id of the bot you are playing music with
 After connecting, you will get sent back a hello op which contains the following:
 ```json
 {
+  "op" : "hello",
   "restBase": "http://localhost:2333/",
   "identifier": "..."
 }
