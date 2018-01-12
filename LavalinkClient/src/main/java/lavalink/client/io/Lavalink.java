@@ -29,9 +29,11 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
+import net.dv8tion.jda.core.events.DisconnectEvent;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.ReconnectedEvent;
 import net.dv8tion.jda.core.events.ResumedEvent;
+import net.dv8tion.jda.core.events.ShutdownEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
@@ -55,6 +57,7 @@ public class Lavalink extends ListenerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(Lavalink.class);
 
+    private boolean autoReconnect = true;
     private final int numShards;
     private final Function<Integer, JDA> jdaProvider;
     private final ConcurrentHashMap<String, Link> links = new ConcurrentHashMap<>();
@@ -76,6 +79,16 @@ public class Lavalink extends ListenerAdapter {
             return thread;
         });
         reconnectService.scheduleWithFixedDelay(new ReconnectTask(this), 0, 500, TimeUnit.MILLISECONDS);
+    }
+
+    @SuppressWarnings("unused")
+    public void setAutoReconnect(boolean autoReconnect) {
+        this.autoReconnect = autoReconnect;
+    }
+
+    @SuppressWarnings("unused")
+    public boolean getAutoReconnect() {
+        return autoReconnect;
     }
 
     public void addNode(URI serverUri, String password) {
@@ -148,7 +161,7 @@ public class Lavalink extends ListenerAdapter {
 
     @Deprecated
     LavalinkSocket getSocket(String guildId) {
-        return getLink(guildId).getCurrentSocket();
+        return getLink(guildId).getNode(false);
     }
 
     @Deprecated
@@ -163,7 +176,7 @@ public class Lavalink extends ListenerAdapter {
 
     @Deprecated
     public LavalinkSocket getNodeForGuild(Guild guild) {
-        return getLink(guild).getCurrentSocket();
+        return getLink(guild).getNode(false);
     }
 
     @Deprecated
@@ -192,6 +205,16 @@ public class Lavalink extends ListenerAdapter {
     }
 
     @Override
+    public void onDisconnect(DisconnectEvent event) {
+        disconnectVoiceConnection(event.getJDA());
+    }
+
+    @Override
+    public void onShutdown(ShutdownEvent event) {
+        disconnectVoiceConnection(event.getJDA());
+    }
+
+    @Override
     public void onReconnect(ReconnectedEvent event) {
         reconnectVoiceConnections(event.getJDA());
     }
@@ -205,7 +228,7 @@ public class Lavalink extends ListenerAdapter {
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
         // Check if not ourselves
         if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
-        
+
         getLink(event.getGuild()).onVoiceJoin();
     }
 
@@ -226,15 +249,29 @@ public class Lavalink extends ListenerAdapter {
     }
 
     private void reconnectVoiceConnections(JDA jda) {
+        if (autoReconnect) {
+            links.forEach((guildId, link) -> {
+                try {
+                    //Note: We also ensure that the link belongs to the JDA object
+                    if (link.getCurrentChannel() != null
+                            && jda.getGuildById(guildId) != null) {
+                        link.connect(link.getCurrentChannel());
+                    }
+                } catch (Exception e) {
+                    log.error("Caught exception while trying to reconnect link " + link, e);
+                }
+            });
+        }
+    }
+
+    private void disconnectVoiceConnection(JDA jda) {
         links.forEach((guildId, link) -> {
             try {
-                //Note: We also ensure that the link belongs to the JDA object
-                if (link.getCurrentChannel() != null
-                        && jda.getGuildById(guildId) != null) {
-                    link.connect(link.getCurrentChannel());
+                if (jda.getGuildById(guildId) != null) {
+                    link.disconnect();
                 }
             } catch (Exception e) {
-                log.error("Caught exception while trying to reconnect link " + link, e);
+                log.error("Caught exception while trying to disconnect link " + link, e);
             }
         });
     }

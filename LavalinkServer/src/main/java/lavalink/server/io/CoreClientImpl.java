@@ -123,7 +123,6 @@ public class CoreClientImpl implements CoreClient {
     }
 
 
-
     private boolean requestValidationSync(String guildId, String channelId) {
         JSONObject json = new JSONObject();
         json.put("op", "validationReq");

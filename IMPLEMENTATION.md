@@ -1,3 +1,4 @@
+
 # Implementation guidelines
 How to write your own client. The Java client will serve as an example implementation.
 
@@ -20,30 +21,26 @@ Num-Shards: Total number of shards your bot is operating on
 User-Id: The user id of the bot you are playing music with
 ```
 
-### Outgoing messages
-Make the server queue a voice connection
+### Hello op
+After connecting, you will get sent back a hello op which contains the following:
 ```json
 {
-    "op": "connect",
-    "guildId": "...",
-    "channelId": "..."
+  "op" : "hello",
+  "restBase": "http://localhost:2333/",
+  "token": "..."
 }
 ```
+- `restBase` - The base URL that should be used for all rest requests
+- `token` - Authorization token, should be sent in the `Authorization` header in each rest request (apart for the debug endpoint)
 
+### Outgoing websocket messages
 Provide an intercepted voice server update
 ```json
 {
     "op": "voiceUpdate",
+    "guildId": "...",
     "sessionId": "...",
     "event": "..."
-}
-```
-
-Close a voice connection
-```json
-{
-    "op": "disconnect",
-    "guildId": "123"
 }
 ```
 
@@ -66,56 +63,8 @@ Response to `isConnectedRes`.
 }
 ```
 
-Cause the player to play a track.
-`startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
-`endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default the track plays until it's end as per the encoded data.
-```json
-{
-    "op": "play",
-    "guildId": "...",
-    "track": "...",
-    "startTime": "60000",
-    "endTime": "120000"
-}
-```
-
-Cause the player to stop
-```json
-{
-    "op": "stop",
-    "guildId": "..."
-}
-```
-
-Set player pause
-```json
-{
-    "op": "pause",
-    "guildId": "...",
-    "pause": true
-}
-```
-
-Make the player seek to a position of the track. Position is in millis
-```json
-{
-    "op": "seek",
-    "guildId": "...",
-    "position": 60000
-}
-```
-
-Set player volume. Volume may range from 0 to 150. 100 is default.
-```json
-{
-    "op": "volume",
-    "guildId": "...",
-    "volume": 125
-}
-```
-
 ### Incoming messages
-See 
+See
 [LavalinkSocket.java](https://github.com/Frederikam/Lavalink/blob/91bc0ef4dab6ca5d5efcba12203ee4054bb55ae9/LavalinkClient/src/main/java/lavalink/client/io/LavalinkSocket.java)
 for client implementation
 
@@ -157,7 +106,7 @@ Position information about a player. Includes unix timestamp.
 }
 ```
 
-A collection of stats sent every minute. 
+A collection of stats sent every minute.
 ```json
 {
     "op": "stats",
@@ -241,8 +190,39 @@ private void handleEvent(JSONObject json) throws IOException {
 
 See also: [AudioTrackEndReason.java](https://github.com/sedmelluq/lavaplayer/blob/master/main/src/main/java/com/sedmelluq/discord/lavaplayer/track/AudioTrackEndReason.java)
 
-### REST API
-The REST api is used to resolve audio tracks for use with the `play` op. 
+### Rest operations
+#### All rest operations should include the `Authorization` header with the token provided via websocket in the hello op
+
+**Play a track** `/{guildId}/play`:
+
+Query params:
+- `startTime`
+- `endTime`
+
+The track base64 string should be sent in the body of the request
+
+`startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
+`endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default the track plays until it's end as per the encoded data.
+
+
+**Stop the player** `/{guildId}/stop`
+
+**Set player pause state** `/{guildId}/pause`
+
+Query params:
+- `pause` - boolean, sets the players paused state (true is paused)
+
+**Seek** `/{guildId}/seek`
+
+Query params:
+- `position` - The desired position (in milliseconds)
+
+**Volume** `/{guildId}/volume`
+
+Query params:
+- `volume` - Sets the desired volume, from 0 to 150, 100 is default.
+
+**Resolving tracks for non JVM clients:**
 ```
 GET /loadtracks?identifier=dQw4w9WgXcQ HTTP/1.1
 Host: localhost:8080
@@ -269,10 +249,19 @@ Response:
 ```
 
 ### Special notes
-* When your shard's mainWS connection dies, so does all your lavalink audio connections.
+* When your shard's mainWS connection dies, so do all your lavalink audio connections.
     * This also includes resumes
 * When a client connection to Lavalink-Server disconnects, all connections and players for that session are shut down.
 * If Lavalink-Server suddenly dies (think SIGKILL) the client will have to terminate any audio connections by sending this event:
 ```json
 {"op":4,"d":{"self_deaf":false,"guild_id":"GUILD_ID_HERE","channel_id":null,"self_mute":false}}
 ```
+
+# Common pitfalls
+Admidtedly Lavalink isn't inherently the most intuitive thing ever, and people tend to run into the same mistakes over again. Please double check the following if you run into problems developing your client and you can't connect to a voice channel or play audio:
+
+1. Check that you are forwarding sendWS events to **Discord**.
+2. Check that you are intercepting **VOICE_SERVER_UPDATE**s to **Lavalink**. Do not edit the event object from Discord.
+3. Check that you aren't expecting to hear audio when you have forgotten to queue something up OR forgotten to join a voice channel.
+4. Check that you are not trying to create a voice connection with your Discord library.
+5. When in doubt, check the debug logfile at `/logs/debug.log`.

@@ -36,9 +36,9 @@ public class DebugConnectionListener implements ConnectionListener {
     private static final Logger log = LoggerFactory.getLogger(DebugConnectionListener.class);
 
     private ConnectionStatus oldStatus = null;
-    private final long guildId;
+    private final String guildId;
 
-    public DebugConnectionListener(long guildId) {
+    public DebugConnectionListener(String guildId) {
         this.guildId = guildId;
     }
 

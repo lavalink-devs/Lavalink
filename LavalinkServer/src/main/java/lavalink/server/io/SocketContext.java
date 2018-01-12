@@ -56,7 +56,7 @@ public class SocketContext {
     private ScheduledExecutorService statsExecutor;
     public final ScheduledExecutorService playerUpdateService;
 
-    SocketContext(WebSocket socket, String userId, int shardCount) {
+    SocketContext(WebSocket socket, String userId, int shardCount, String identifier) {
         this.socket = socket;
         this.userId = userId;
         this.shardCount = shardCount;
@@ -72,7 +72,7 @@ public class SocketContext {
         });
     }
 
-    Core getCore(int shardId) {
+    public Core getCore(int shardId) {
         return cores.computeIfAbsent(shardId,
                 __ -> {
                     if (nasSupported)
@@ -83,13 +83,13 @@ public class SocketContext {
         );
     }
 
-    Player getPlayer(String guildId) {
+    public Player getPlayer(String guildId) {
         return players.computeIfAbsent(guildId,
                 __ -> new Player(this, guildId)
         );
     }
 
-    int getShardCount() {
+    public int getShardCount() {
         return shardCount;
     }
 
@@ -110,6 +110,7 @@ public class SocketContext {
     }
 
     void shutdown() {
+        SocketServer.getContextIdentifierMap().entrySet().removeIf(e -> e.getValue().equals(this));
         log.info("Shutting down " + cores.size() + " cores and " + getPlayingPlayers().size() + " playing players.");
         statsExecutor.shutdown();
         playerUpdateService.shutdown();
@@ -137,5 +138,6 @@ public class SocketContext {
 
         return AsyncPacketProviderFactory.adapt(nativeAudioSendFactory);
     }
+
 
 }

@@ -22,6 +22,7 @@
 
 package lavalink.client.io;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +38,7 @@ public class LavalinkLoadBalancer {
         this.lavalink = lavalink;
     }
 
+    @Nonnull
     public LavalinkSocket determineBestSocket(long guild) {
         LavalinkSocket leastPenalty = null;
         int record = Integer.MAX_VALUE;
@@ -49,10 +51,8 @@ public class LavalinkLoadBalancer {
             }
         }
 
-        if (leastPenalty == null)
+        if (leastPenalty == null || !leastPenalty.isAvailable())
             throw new IllegalStateException("No available nodes!");
-
-        if (!leastPenalty.isOpen()) return null;
 
         return leastPenalty;
     }
@@ -67,14 +67,14 @@ public class LavalinkLoadBalancer {
 
     void onNodeDisconnect(LavalinkSocket disconnected) {
         lavalink.getLinks().forEach(link -> {
-            if (disconnected.equals(link.getCurrentSocket()))
+            if (disconnected.equals(link.getNode(false)))
                 link.onNodeDisconnected();
         });
     }
 
     void onNodeConnect(LavalinkSocket connected) {
         lavalink.getLinks().forEach(link -> {
-            if (link.getCurrentSocket() == null)
+            if (link.getNode(false) == null)
                 link.changeNode(connected);
         });
     }
@@ -148,7 +148,7 @@ public class LavalinkLoadBalancer {
         }
 
         public int getTotal() {
-            if(socket.stats == null) return (Integer.MAX_VALUE - 1);
+            if(!socket.isAvailable() || socket.stats == null) return (Integer.MAX_VALUE - 1);
             return playerPenalty + cpuPenalty + deficitFramePenalty + nullFramePenalty + customPenalties;
         }
 
