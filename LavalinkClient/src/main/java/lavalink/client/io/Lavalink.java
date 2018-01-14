@@ -164,12 +164,12 @@ public class Lavalink extends ListenerAdapter {
 
     @Deprecated
     public VoiceChannel getConnectedChannel(Guild guild) {
-        return getLink(guild).getCurrentChannel();
+        return getLink(guild).getChannel();
     }
 
     @Deprecated
     public String getConnectedChannel(String guildId) {
-        return getLink(guildId).getCurrentChannel().getId();
+        return getLink(guildId).getChannel().getId();
     }
 
     @Deprecated
@@ -251,9 +251,9 @@ public class Lavalink extends ListenerAdapter {
             links.forEach((guildId, link) -> {
                 try {
                     //Note: We also ensure that the link belongs to the JDA object
-                    if (link.getCurrentChannel() != null
+                    if (link.getChannel() != null
                             && jda.getGuildById(guildId) != null) {
-                        link.connect(link.getCurrentChannel());
+                        link.connect(link.getChannel());
                     }
                 } catch (Exception e) {
                     log.error("Caught exception while trying to reconnect link " + link, e);
