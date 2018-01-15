@@ -39,24 +39,16 @@ public class Link {
     private static final Logger log = LoggerFactory.getLogger(Link.class);
 
     private final Lavalink lavalink;
-    private final String guild;
+    private final long guild;
     private LavalinkPlayer player;
-    /**
-     * Channel we are currently connected to or disconnecting/connecting from/to, if any
-     */
     private volatile String channel = null;
-    /**
-     * The node we are currently connected to. Automatically assigned.
-     * Can only be reassigned by reconnecting any existing voice connection.
-     */
     private volatile LavalinkSocket node = null;
-
     /* May only be set by setState() */
     private volatile State state = State.NOT_CONNECTED;
 
     Link(Lavalink lavalink, String guildId) {
         this.lavalink = lavalink;
-        this.guild = guildId;
+        this.guild = Long.parseLong(guildId);
     }
 
     public LavalinkPlayer getPlayer() {
@@ -77,6 +69,10 @@ public class Link {
     }
 
     public String getGuildId() {
+        return Long.toString(guild);
+    }
+
+    public long getGuildIdLong() {
         return guild;
     }
 
@@ -129,7 +125,7 @@ public class Link {
     @SuppressWarnings("WeakerAccess")
     public LavalinkSocket getNode(boolean selectIfAbsent) {
         if (selectIfAbsent && node == null) {
-            node = lavalink.loadBalancer.determineBestSocket(Long.parseLong(guild));
+            node = lavalink.loadBalancer.determineBestSocket(guild);
         }
         return node;
     }
@@ -157,13 +153,12 @@ public class Link {
     public VoiceChannel getChannel() {
         if (channel == null) return null;
 
-        return getJda()
-                .getVoiceChannelById(channel);
+        return getJda().getVoiceChannelById(channel);
     }
 
     @SuppressWarnings("WeakerAccess")
     public JDA getJda() {
-        return lavalink.getJdaFromSnowflake(guild);
+        return lavalink.getJdaFromSnowflake(String.valueOf(guild));
     }
 
     /**
