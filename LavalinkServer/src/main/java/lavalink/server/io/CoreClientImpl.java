@@ -22,171 +22,41 @@
 
 package lavalink.server.io;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import lavalink.server.util.ResetableCountDownLatch;
 import net.dv8tion.jda.CoreClient;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.java_websocket.WebSocket;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.TimeUnit;
 
 public class CoreClientImpl implements CoreClient {
 
     private static final Logger log = LoggerFactory.getLogger(CoreClientImpl.class);
-    private static final int TIMEOUT = 60 * 1000;
-
-    private final WebSocket socket;
-    private int shardId;
-
-    private final ResetableCountDownLatch validationLatch = new ResetableCountDownLatch(1);
-    private final ResetableCountDownLatch isConnectedLatch = new ResetableCountDownLatch(1);
-    private boolean connected = false;
-
-    private LoadingCache<String, Boolean> guildValidMap = CacheBuilder.newBuilder()
-            .concurrencyLevel(4)
-            .expireAfterWrite(5, TimeUnit.SECONDS)
-            .build(
-                    new CacheLoader<String, Boolean>() {
-                        @Override
-                        public Boolean load(@SuppressWarnings("NullableProblems") String guild) throws Exception {
-                            return requestValidationSync(guild, null);
-                        }
-                    }
-            );
-
-    private LoadingCache<ImmutablePair<String, String>, Boolean> channelValidMap = CacheBuilder.newBuilder()
-            .concurrencyLevel(4)
-            .expireAfterWrite(5, TimeUnit.SECONDS)
-            .build(
-                    new CacheLoader<ImmutablePair<String, String>, Boolean>() {
-                        @Override
-                        public Boolean load(@SuppressWarnings("NullableProblems") ImmutablePair<String, String> key) throws Exception {
-                            return requestValidationSync(key.left, key.right);
-                        }
-                    }
-            );
-
-
-    CoreClientImpl(WebSocket socket, int shardId) {
-        this.socket = socket;
-        this.shardId = shardId;
-    }
 
     @Override
     public void sendWS(String message) {
-        log.info(message);
-        JSONObject json = new JSONObject();
-        json.put("op", "sendWS");
-        json.put("shardId", shardId);
-        json.put("message", message);
-        socket.send(json.toString());
+        log.warn("sendWS was requested, this shouldn't happen");
     }
 
     @Override
     public boolean isConnected() {
-        return requestIsConnectedSync();
+        log.warn("isConnected was requested, this shouldn't happen");
+        return true;
     }
 
     @Override
     public boolean inGuild(String guildId) {
-        log.info("Requested guild check");
-        boolean val = guildValidMap.getUnchecked(guildId);
-        if (!val) {
-            log.warn("Requested guild check but validation was false!");
-        }
-        return val;
+        log.warn("inGuild was requested, this shouldn't happen");
+        return true;
     }
 
     @Override
     public boolean voiceChannelExists(String guildId, String channelId) {
-        log.info("Requested channel check");
-        boolean val = channelValidMap.getUnchecked(new ImmutablePair<>(guildId, channelId));
-        if (!val) {
-            log.warn("Requested channel check but validation was false!");
-        }
-        return val;
+        log.warn("voiceChannelExists was requested, this shouldn't happen");
+        return true;
     }
 
     @Override
     public boolean hasPermissionInChannel(String guildId, String channelId, long l) {
-        log.info("Requested permission check");
-        boolean val = channelValidMap.getUnchecked(new ImmutablePair<>(guildId, channelId));
-        if (!val) {
-            log.warn("Requested permission check but validation was false!");
-        }
-        return val;
-    }
-
-
-
-    private boolean requestValidationSync(String guildId, String channelId) {
-        JSONObject json = new JSONObject();
-        json.put("op", "validationReq");
-        json.put("guildId", guildId);
-
-        if (channelId != null) {
-            json.put("channelId", channelId);
-        }
-
-        long startTime = System.currentTimeMillis();
-        socket.send(json.toString());
-
-        try {
-            validationLatch.await(TIMEOUT, TimeUnit.MILLISECONDS);
-            validationLatch.reset();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        if (System.currentTimeMillis() - startTime >= TIMEOUT) {
-            log.error("Validation timed out after " + TIMEOUT + " millis");
-            return false;
-        }
-
-        return channelId == null
-                ? guildValidMap.getIfPresent(guildId) == Boolean.TRUE
-                : channelValidMap.getIfPresent(new ImmutablePair<>(guildId, channelId)) == Boolean.TRUE;
-    }
-
-    void provideValidation(String guildId, String channelId, boolean valid) {
-        guildValidMap.put(guildId, valid);
-        if (channelId != null)
-            channelValidMap.put(new ImmutablePair<>(guildId, channelId), valid);
-
-        validationLatch.countDown();
-    }
-
-    private boolean requestIsConnectedSync() {
-        JSONObject json = new JSONObject();
-        json.put("op", "isConnectedReq");
-        json.put("shardId", shardId);
-
-        long startTime = System.currentTimeMillis();
-        socket.send(json.toString());
-
-        try {
-            isConnectedLatch.await(TIMEOUT, TimeUnit.MILLISECONDS);
-            isConnectedLatch.reset();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        if (System.currentTimeMillis() - startTime >= TIMEOUT) {
-            throw new RuntimeException("Connection checking timed out after " + TIMEOUT + " millis");
-        }
-
-        return connected;
-    }
-
-    void provideIsConnected(boolean connected) {
-        this.connected = connected;
-
-        isConnectedLatch.countDown();
+        log.warn("hasPermissionInChannel was requested, this shouldn't happen");
+        return true;
     }
 
 }
