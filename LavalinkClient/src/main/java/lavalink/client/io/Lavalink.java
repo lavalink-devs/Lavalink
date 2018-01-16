@@ -41,6 +41,7 @@ import org.java_websocket.drafts.Draft_6455;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
@@ -104,16 +105,20 @@ public class Lavalink extends ListenerAdapter {
         node.close();
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public Link getLink(String guildId) {
-        return links.computeIfAbsent(guildId, __ -> new Link(this, guildId));
-    }
-
+    @SuppressWarnings("unused")
+    @Nonnull
     public LavalinkLoadBalancer getLoadBalancer() {
         return loadBalancer;
     }
 
     @SuppressWarnings("WeakerAccess")
+    @Nonnull
+    public Link getLink(String guildId) {
+        return links.computeIfAbsent(guildId, __ -> new Link(this, guildId));
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    @Nonnull
     public Link getLink(Guild guild) {
         return getLink(guild.getId());
     }
@@ -124,21 +129,25 @@ public class Lavalink extends ListenerAdapter {
     }
 
     @SuppressWarnings("WeakerAccess")
+    @Nonnull
     public Collection<Link> getLinks() {
         return links.values();
     }
 
     @SuppressWarnings("WeakerAccess")
+    @Nonnull
     public List<LavalinkSocket> getNodes() {
         return nodes;
     }
 
     @SuppressWarnings("WeakerAccess")
+    @Nonnull
     public JDA getJda(int shardId) {
         return jdaProvider.apply(shardId);
     }
 
     @SuppressWarnings("WeakerAccess")
+    @Nonnull
     public JDA getJdaFromSnowflake(String snowflake) {
         return jdaProvider.apply(LavalinkUtil.getShardFromSnowflake(snowflake, numShards));
     }
@@ -154,45 +163,6 @@ public class Lavalink extends ListenerAdapter {
     }
 
     /*
-     *  Deprecated, will be removed in v2.0
-     */
-
-    @Deprecated
-    LavalinkSocket getSocket(String guildId) {
-        return getLink(guildId).getNode(false);
-    }
-
-    @Deprecated
-    public VoiceChannel getConnectedChannel(Guild guild) {
-        return getLink(guild).getChannel();
-    }
-
-    @Deprecated
-    public String getConnectedChannel(String guildId) {
-        return getLink(guildId).getChannel().getId();
-    }
-
-    @Deprecated
-    public LavalinkSocket getNodeForGuild(Guild guild) {
-        return getLink(guild).getNode(false);
-    }
-
-    @Deprecated
-    public LavalinkPlayer getPlayer(String guildId) {
-        return getLink(guildId).getPlayer();
-    }
-
-    @Deprecated
-    public void openVoiceConnection(VoiceChannel channel) {
-        getLink(channel.getGuild()).connect(channel);
-    }
-
-    @Deprecated
-    public void closeVoiceConnection(Guild guild) {
-        getLink(guild).disconnect();
-    }
-
-    /*
      *  JDA event handling
      */
 
@@ -203,47 +173,8 @@ public class Lavalink extends ListenerAdapter {
     }
 
     @Override
-    public void onDisconnect(DisconnectEvent event) {
-        disconnectVoiceConnection(event.getJDA());
-    }
-
-    @Override
-    public void onShutdown(ShutdownEvent event) {
-        disconnectVoiceConnection(event.getJDA());
-    }
-
-    @Override
     public void onReconnect(ReconnectedEvent event) {
         reconnectVoiceConnections(event.getJDA());
-    }
-
-    @Override
-    public void onResume(ResumedEvent event) {
-        reconnectVoiceConnections(event.getJDA());
-    }
-
-    @Override
-    public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
-        // Check if not ourselves
-        if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
-
-        getLink(event.getGuild()).onVoiceJoin();
-    }
-
-    @Override
-    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
-        // Check if not ourselves
-        if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
-
-        getLink(event.getGuild()).onVoiceLeave();
-    }
-
-    @Override
-    public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
-        // Check if not ourselves
-        if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
-
-        getLink(event.getGuild()).onGuildVoiceMove(event);
     }
 
     private void reconnectVoiceConnections(JDA jda) {
@@ -262,7 +193,7 @@ public class Lavalink extends ListenerAdapter {
         }
     }
 
-    private void disconnectVoiceConnection(JDA jda) {
+    private void disconnectVoiceConnections(JDA jda) {
         links.forEach((guildId, link) -> {
             try {
                 if (jda.getGuildById(guildId) != null) {

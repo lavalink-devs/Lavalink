@@ -24,11 +24,19 @@ package lavalink.client.io;
 
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.core.exceptions.GuildUnavailableException;
+import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.core.requests.WebSocketClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -83,17 +91,34 @@ public class Link {
      */
     @SuppressWarnings("WeakerAccess")
     public void connect(VoiceChannel channel) {
-        // TODO
+        if (!channel.getGuild().equals(getJda().getGuildById(guild)))
+            throw new IllegalArgumentException("The provided VoiceChannel is not a part of the Guild that this AudioManager handles." +
+                    "Please provide a VoiceChannel from the proper Guild");
+        if (!channel.getGuild().isAvailable())
+            throw new GuildUnavailableException("Cannot open an Audio Connection with an unavailable guild. " +
+                    "Please wait until this Guild is available to open a connection.");
+        final Member self = channel.getGuild().getSelfMember();
+        if (!self.hasPermission(channel, Permission.VOICE_CONNECT) && !self.hasPermission(channel, Permission.VOICE_MOVE_OTHERS))
+            throw new InsufficientPermissionException(Permission.VOICE_CONNECT);
+
+        setState(State.CONNECTING);
+        getMainWs().queueAudioConnect(channel);
     }
 
     public void disconnect() {
-        // TODO
+        Guild g = getJda().getGuildById(guild);
+
+        if (g == null) return;
+
+        setState(State.DISCONNECTING);
+        getMainWs().queueAudioDisconnect(g);
     }
 
     public void changeNode(LavalinkSocket newNode) {
         disconnect();
         node = newNode;
         connect(getJda().getVoiceChannelById(channel));
+        // TODO: Handle properly
     }
 
     /**
@@ -130,35 +155,15 @@ public class Link {
         return node;
     }
 
-    void onVoiceJoin() {
-
-    }
-
-    void onVoiceLeave() {
-
-    }
-
-    void onGuildVoiceMove(GuildVoiceMoveEvent event) {
-
-    }
-
-    void onNodeDisconnected() {
-
-    }
-
     /**
      * @return The channel we are currently connect to
      */
     @SuppressWarnings("WeakerAccess")
+    @Nullable
     public VoiceChannel getChannel() {
         if (channel == null) return null;
 
         return getJda().getVoiceChannelById(channel);
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public JDA getJda() {
-        return lavalink.getJdaFromSnowflake(String.valueOf(guild));
     }
 
     /**
@@ -169,12 +174,22 @@ public class Link {
         return state;
     }
 
-    private void setState(State state) {
+    private void setState(@Nonnull State state) {
         if (this.state == State.DESTROYED && state != State.DESTROYED)
             throw new IllegalStateException("Cannot change state to " + state + " when state is " + State.DESTROYED);
 
         log.debug("Link {} changed state from {} to {}", this, this.state, state);
         this.state = state;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    @Nonnull
+    public JDA getJda() {
+        return lavalink.getJdaFromSnowflake(String.valueOf(guild));
+    }
+
+    private WebSocketClient getMainWs() {
+        return ((JDAImpl) getJda()).getClient();
     }
 
     @Override
@@ -201,6 +216,11 @@ public class Link {
          * We have dispatched the voice server info to the server, and it should (soon) be connected.
          */
         CONNECTED,
+
+        /**
+         * Waiting for confirmation from Discord that we have connected
+         */
+        DISCONNECTING,
 
         /**
          * This {@link Link} has been destroyed and will soon (if not already) be unmapped from {@link Lavalink}
