@@ -161,6 +161,9 @@ public class SocketServer extends WebSocketServer {
                 Player player4 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
                 player4.setVolume(json.getInt("volume"));
                 break;
+            case "destroy":
+                Player player5 = contextMap.get(webSocket).getPlayers().remove(json.getString("guildId"));
+                if (player5 != null) player5.stop();
             default:
                 log.warn("Unexpected operation: " + json.getString("op"));
                 break;
