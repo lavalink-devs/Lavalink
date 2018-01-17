@@ -38,10 +38,7 @@ public class VoiceStateUpdateInterceptor extends VoiceStateUpdateHandler {
         // We only need special handling if our own state is modified
         if (!member.equals(guild.getSelfMember())) return super.handleInternally(content);
 
-
         VoiceChannel channel = channelId != null ? guild.getVoiceChannelById(channelId) : null;
-        GuildVoiceState vState = member.getVoiceState();
-        VoiceChannel oldChannel = vState.getChannel();
         Link link = lavalink.getLink(guildId.toString());
 
         if (channelId == null) {
@@ -51,7 +48,6 @@ public class VoiceStateUpdateInterceptor extends VoiceStateUpdateHandler {
         }
 
         if (link.getState() == Link.State.CONNECTED) {
-
             api.getClient().updateAudioConnection(guildId, channel);
         }
 
