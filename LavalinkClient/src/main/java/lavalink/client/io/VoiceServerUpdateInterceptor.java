@@ -42,7 +42,7 @@ public class VoiceServerUpdateInterceptor extends SocketHandler {
 
     @Override
     protected Long handleInternally(JSONObject content) {
-        log.info(content.toString());
+        log.debug(content.toString());
         long idLong = content.getLong("guild_id");
 
         if (api.getGuildLock().isLocked(idLong))

@@ -33,10 +33,14 @@ import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.ReconnectedEvent;
 import net.dv8tion.jda.core.events.ResumedEvent;
 import net.dv8tion.jda.core.events.ShutdownEvent;
+import net.dv8tion.jda.core.events.channel.voice.VoiceChannelDeleteEvent;
+import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.core.handle.SocketHandler;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.core.requests.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +50,7 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
@@ -168,14 +173,34 @@ public class Lavalink extends ListenerAdapter {
 
     @Override
     public void onReady(ReadyEvent event) {
-        ((JDAImpl) event.getJDA()).getClient().getHandlers()
-                .put("VOICE_SERVER_UPDATE", new VoiceServerUpdateInterceptor(this, (JDAImpl) event.getJDA()));
+        Map<String, SocketHandler> handlers = ((JDAImpl) event.getJDA()).getClient().getHandlers();
+        handlers.put("VOICE_SERVER_UPDATE", new VoiceServerUpdateInterceptor(this, (JDAImpl) event.getJDA()));
+        handlers.put("VOICE_STATE_UPDATE", new VoiceStateUpdateInterceptor(this, (JDAImpl) event.getJDA()));
+    }
+
+    @Override
+    public void onGuildLeave(GuildLeaveEvent event) {
+        Link link = links.get(event.getGuild().getId());
+        if (link == null) return;
+
+        ((JDAImpl) event.getJDA()).getClient().removeAudioConnection(link.getGuildIdLong());
+        link.destroy();
+    }
+
+    @Override
+    public void onVoiceChannelDelete(VoiceChannelDeleteEvent event) {
+        Link link = links.get(event.getGuild().getId());
+        if (link == null || !event.getChannel().equals(link.getChannel())) return;
+
+        link.disconnect();
     }
 
     @Override
     public void onReconnect(ReconnectedEvent event) {
         reconnectVoiceConnections(event.getJDA());
     }
+
+    /* Util */
 
     private void reconnectVoiceConnections(JDA jda) {
         if (autoReconnect) {

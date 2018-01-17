@@ -111,6 +111,7 @@ public class Link {
         if (g == null) return;
 
         setState(State.DISCONNECTING);
+        channel = null;
         getMainWs().queueAudioDisconnect(g);
     }
 
@@ -190,6 +191,13 @@ public class Link {
 
     private WebSocketClient getMainWs() {
         return ((JDAImpl) getJda()).getClient();
+    }
+
+    /**
+     * Setter used by {@link VoiceStateUpdateInterceptor} to change the expected channel
+     */
+    void setChannel(@Nonnull VoiceChannel channel) {
+        this.channel = channel.getId();
     }
 
     @Override
