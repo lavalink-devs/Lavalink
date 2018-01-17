@@ -66,8 +66,6 @@ public class VoiceServerUpdateInterceptor extends SocketHandler {
         link.getNode(true).send(json.toString());
         link.setState(Link.State.CONNECTED);
 
-        log.info("Sent voice update for guild {}", idLong);
-
         return null;
     }
 }

@@ -14,7 +14,7 @@ public class VoiceStateUpdateInterceptor extends VoiceStateUpdateHandler {
 
     private final Lavalink lavalink;
 
-    public VoiceStateUpdateInterceptor(Lavalink lavalink, JDAImpl jda) {
+    VoiceStateUpdateInterceptor(Lavalink lavalink, JDAImpl jda) {
         super(jda);
         this.lavalink = lavalink;
     }
@@ -55,12 +55,6 @@ public class VoiceStateUpdateInterceptor extends VoiceStateUpdateHandler {
             api.getClient().updateAudioConnection(guildId, channel);
         }
 
-        // Handle super
-        Long result = super.handleInternally(content);
-        if (!Objects.equals(channel, oldChannel)) {
-
-        }
-
-        return result;
+        return super.handleInternally(content);
     }
 }
