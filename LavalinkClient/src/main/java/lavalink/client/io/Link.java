@@ -53,6 +53,7 @@ public class Link {
     private volatile LavalinkSocket node = null;
     /* May only be set by setState() */
     private volatile State state = State.NOT_CONNECTED;
+    private volatile boolean reconnectToNewNode = false;
 
     Link(Lavalink lavalink, String guildId) {
         this.lavalink = lavalink;
@@ -119,7 +120,7 @@ public class Link {
         disconnect();
         node = newNode;
         connect(getJda().getVoiceChannelById(channel));
-        // TODO: Handle properly
+        reconnectToNewNode = true;
     }
 
     /**
@@ -181,6 +182,11 @@ public class Link {
 
         log.debug("Link {} changed state from {} to {}", this, this.state, state);
         this.state = state;
+
+        if (state == State.DISCONNECTING && reconnectToNewNode) {
+            reconnectToNewNode = false;
+            connect(getJda().getVoiceChannelById(channel));
+        }
     }
 
     @SuppressWarnings("WeakerAccess")
