@@ -175,7 +175,7 @@ public class Link {
         return state;
     }
 
-    private void setState(@Nonnull State state) {
+    void setState(@Nonnull State state) {
         if (this.state == State.DESTROYED && state != State.DESTROYED)
             throw new IllegalStateException("Cannot change state to " + state + " when state is " + State.DESTROYED);
 
