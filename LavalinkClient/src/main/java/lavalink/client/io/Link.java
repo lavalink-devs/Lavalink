@@ -33,6 +33,7 @@ import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.core.exceptions.GuildUnavailableException;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.requests.WebSocketClient;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -133,6 +134,13 @@ public class Link {
         setState(State.DESTROYED);
         disconnect();
         lavalink.removeDestroyedLink(this);
+        LavalinkSocket socket = getNode(false);
+        if (socket != null) {
+            socket.send(new JSONObject()
+                    .put("op", "destroy")
+                    .put("guildId", guild)
+                    .toString());
+        }
     }
 
     /**
