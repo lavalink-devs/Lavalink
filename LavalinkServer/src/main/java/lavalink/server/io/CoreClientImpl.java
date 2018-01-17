@@ -43,19 +43,19 @@ public class CoreClientImpl implements CoreClient {
 
     @Override
     public boolean inGuild(String guildId) {
-        log.warn("inGuild was requested, this shouldn't happen");
+        log.warn("inGuild was requested, this shouldn't happen, guildId:" + guildId);
         return true;
     }
 
     @Override
     public boolean voiceChannelExists(String guildId, String channelId) {
-        log.warn("voiceChannelExists was requested, this shouldn't happen");
+        log.warn("voiceChannelExists was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId);
         return true;
     }
 
     @Override
     public boolean hasPermissionInChannel(String guildId, String channelId, long l) {
-        log.warn("hasPermissionInChannel was requested, this shouldn't happen");
+        log.warn("hasPermissionInChannel was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId, " l:" + l);
         return true;
     }
 
