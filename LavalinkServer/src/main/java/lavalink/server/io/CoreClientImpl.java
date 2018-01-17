@@ -32,7 +32,7 @@ public class CoreClientImpl implements CoreClient {
 
     @Override
     public void sendWS(String message) {
-        log.warn("sendWS was requested, this shouldn't happen");
+        log.warn("sendWS was requested, this shouldn't happen, message:" + message);
     }
 
     @Override
