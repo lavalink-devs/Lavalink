@@ -28,27 +28,31 @@ public class CoreClientImpl implements CoreClient {
 
     @Override
     public void sendWS(String message) {
-        throw new RuntimeException("sendWS was requested, this shouldn't happen, message:" + message);
+        new RuntimeException("sendWS was requested, this shouldn't happen, message:" + message).printStackTrace();
     }
 
     @Override
     public boolean isConnected() {
-        throw new RuntimeException("isConnected was requested, this shouldn't happen");
+        new RuntimeException("isConnected was requested, this shouldn't happen").printStackTrace();
+        return true;
     }
 
     @Override
     public boolean inGuild(String guildId) {
-        throw new RuntimeException("inGuild was requested, this shouldn't happen, guildId:" + guildId);
+        new RuntimeException("inGuild was requested, this shouldn't happen, guildId:" + guildId).printStackTrace();
+        return true;
     }
 
     @Override
     public boolean voiceChannelExists(String guildId, String channelId) {
-        throw new RuntimeException("voiceChannelExists was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId);
+        new RuntimeException("voiceChannelExists was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId).printStackTrace();
+        return true;
     }
 
     @Override
     public boolean hasPermissionInChannel(String guildId, String channelId, long l) {
-        throw new RuntimeException("hasPermissionInChannel was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId + " l:" + l);
+        new RuntimeException("hasPermissionInChannel was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId + " l:" + l).printStackTrace();
+        return true;
     }
 
 }

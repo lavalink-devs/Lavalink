@@ -14,12 +14,12 @@ public class ConnectionManagerImpl implements ConnectionManager {
 
     @Override
     public void queueAudioConnect(String guildId, String channelId) {
-        throw new RuntimeException("queueAudioConnect was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId);
+        new RuntimeException("queueAudioConnect was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId).printStackTrace();
     }
 
     @Override
     public void onDisconnect(String guildId) {
-        throw new RuntimeException("onDisconnect was requested, this shouldn't happen, guildId:" + guildId);
+        new RuntimeException("onDisconnect was requested, this shouldn't happen, guildId:" + guildId).printStackTrace();
     }
 
 }
