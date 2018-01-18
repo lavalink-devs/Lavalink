@@ -23,35 +23,39 @@
 package lavalink.server.io;
 
 import net.dv8tion.jda.CoreClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CoreClientImpl implements CoreClient {
 
+    private static final Logger log = LoggerFactory.getLogger(CoreClientImpl.class);
+
     @Override
     public void sendWS(String message) {
-        new RuntimeException("sendWS was requested, this shouldn't happen, message:" + message).printStackTrace();
+        log.warn("sendWS was requested, this shouldn't happen, message:" + message, new RuntimeException());
     }
 
     @Override
     public boolean isConnected() {
-        new RuntimeException("isConnected was requested, this shouldn't happen").printStackTrace();
+        log.warn("isConnected was requested, this shouldn't happen", new RuntimeException());
         return true;
     }
 
     @Override
     public boolean inGuild(String guildId) {
-        new RuntimeException("inGuild was requested, this shouldn't happen, guildId:" + guildId).printStackTrace();
+        log.warn("inGuild was requested, this shouldn't happen, guildId:" + guildId, new RuntimeException());
         return true;
     }
 
     @Override
     public boolean voiceChannelExists(String guildId, String channelId) {
-        new RuntimeException("voiceChannelExists was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId).printStackTrace();
+        log.warn("voiceChannelExists was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId, new RuntimeException());
         return true;
     }
 
     @Override
     public boolean hasPermissionInChannel(String guildId, String channelId, long l) {
-        new RuntimeException("hasPermissionInChannel was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId + " l:" + l).printStackTrace();
+        log.warn("hasPermissionInChannel was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId + " l:" + l, new RuntimeException());
         return true;
     }
 
