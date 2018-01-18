@@ -27,6 +27,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.events.ReadyEvent;
+import net.dv8tion.jda.core.events.ReconnectedEvent;
 import net.dv8tion.jda.core.events.channel.voice.VoiceChannelDeleteEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.handle.SocketHandler;
@@ -52,6 +53,7 @@ public class Lavalink extends ListenerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(Lavalink.class);
 
+    private boolean autoReconnect = true;
     private final int numShards;
     private final Function<Integer, JDA> jdaProvider;
     private final ConcurrentHashMap<String, Link> links = new ConcurrentHashMap<>();
@@ -72,6 +74,17 @@ public class Lavalink extends ListenerAdapter {
             return thread;
         });
         reconnectService.scheduleWithFixedDelay(new ReconnectTask(this), 0, 500, TimeUnit.MILLISECONDS);
+    }
+
+
+    @SuppressWarnings("unused")
+    public void setAutoReconnect(boolean autoReconnect) {
+        this.autoReconnect = autoReconnect;
+    }
+
+    @SuppressWarnings("unused")
+    public boolean getAutoReconnect() {
+        return autoReconnect;
     }
 
     public void addNode(URI serverUri, String password) {
@@ -172,6 +185,28 @@ public class Lavalink extends ListenerAdapter {
         if (link == null || !event.getChannel().equals(link.getChannel())) return;
 
         link.disconnect();
+    }
+
+    @Override
+    public void onReconnect(ReconnectedEvent event) {
+        reconnectVoiceConnections(event.getJDA());
+    }
+
+
+    private void reconnectVoiceConnections(JDA jda) {
+        if (autoReconnect) {
+            links.forEach((guildId, link) -> {
+                try {
+                    //Note: We also ensure that the link belongs to the JDA object
+                    if (link.getChannel() != null
+                            && jda.getGuildById(guildId) != null) {
+                        link.connect(link.getChannel());
+                    }
+                } catch (Exception e) {
+                    log.error("Caught exception while trying to reconnect link " + link, e);
+                }
+            });
+        }
     }
 
 }
