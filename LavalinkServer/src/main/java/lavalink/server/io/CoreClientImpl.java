@@ -23,12 +23,8 @@
 package lavalink.server.io;
 
 import net.dv8tion.jda.CoreClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CoreClientImpl implements CoreClient {
-
-    private static final Logger log = LoggerFactory.getLogger(CoreClientImpl.class);
 
     @Override
     public void sendWS(String message) {

@@ -1,7 +1,6 @@
 package lavalink.client.io;
 
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.GuildVoiceState;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
@@ -36,10 +35,7 @@ public class VoiceStateUpdateInterceptor extends VoiceStateUpdateHandler {
         // We only need special handling if our own state is modified
         if (!member.equals(guild.getSelfMember())) return super.handleInternally(content);
 
-
         VoiceChannel channel = channelId != null ? guild.getVoiceChannelById(channelId) : null;
-        GuildVoiceState vState = member.getVoiceState();
-        VoiceChannel oldChannel = vState.getChannel();
         Link link = lavalink.getLink(guildId.toString());
 
         if (channelId == null) {
@@ -49,7 +45,6 @@ public class VoiceStateUpdateInterceptor extends VoiceStateUpdateHandler {
         }
 
         if (link.getState() == Link.State.CONNECTED) {
-
             api.getClient().updateAudioConnection(guildId, channel);
         }
 

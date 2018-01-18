@@ -32,6 +32,7 @@ import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.exceptions.GuildUnavailableException;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.requests.WebSocketClient;
+import net.dv8tion.jda.core.utils.PermissionUtil;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,6 +103,21 @@ public class Link {
         if (!self.hasPermission(channel, Permission.VOICE_CONNECT) && !self.hasPermission(channel, Permission.VOICE_MOVE_OTHERS))
             throw new InsufficientPermissionException(Permission.VOICE_CONNECT);
 
+        //If we are already connected to this VoiceChannel, then do nothing.
+        if (channel.equals(channel.getGuild().getSelfMember().getVoiceState().getChannel()))
+            return;
+
+        final int userLimit = channel.getUserLimit(); // userLimit is 0 if no limit is set!
+        if (!self.isOwner() && !self.hasPermission(Permission.ADMINISTRATOR)) {
+            final long perms = PermissionUtil.getExplicitPermission(channel, self);
+            final long voicePerm = Permission.VOICE_MOVE_OTHERS.getRawValue();
+            if (userLimit > 0                                                   // If there is a userlimit
+                    && userLimit <= channel.getMembers().size()                 // if that userlimit is reached
+                    && (perms & voicePerm) != voicePerm)                        // If we don't have voice move others permissions
+                throw new InsufficientPermissionException(Permission.VOICE_MOVE_OTHERS, // then throw exception!
+                        "Unable to connect to VoiceChannel due to userlimit! Requires permission VOICE_MOVE_OTHERS to bypass");
+        }
+
         setState(State.CONNECTING);
         getMainWs().queueAudioConnect(channel);
     }
@@ -130,8 +146,8 @@ public class Link {
      */
     @SuppressWarnings("unused")
     public void destroy() {
-        setState(State.DESTROYED);
         disconnect();
+        setState(State.DESTROYED);
         lavalink.removeDestroyedLink(this);
         LavalinkSocket socket = getNode(false);
         if (socket != null) {
