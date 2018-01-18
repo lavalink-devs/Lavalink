@@ -27,6 +27,7 @@ import com.sedmelluq.discord.lavaplayer.track.TrackMarker;
 import lavalink.server.player.Player;
 import lavalink.server.player.TrackEndMarkerHandler;
 import lavalink.server.util.Util;
+import net.dv8tion.jda.Core;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -112,10 +113,12 @@ public class SocketServer extends WebSocketServer {
         switch (json.getString("op")) {
             /* JDAA ops */
             case "voiceUpdate":
-                contextMap.get(webSocket).getCore(getShardId(webSocket, json)).provideVoiceServerUpdate(
+                Core core = contextMap.get(webSocket).getCore(getShardId(webSocket, json));
+                core.provideVoiceServerUpdate(
                         json.getString("sessionId"),
                         json.getJSONObject("event")
                 );
+                core.getAudioManager(json.getJSONObject("event").getString("guild_id")).setAutoReconnect(false);
                 break;
 
             /* Player ops */

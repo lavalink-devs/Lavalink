@@ -29,7 +29,6 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.core.exceptions.GuildUnavailableException;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.requests.WebSocketClient;
@@ -138,7 +137,7 @@ public class Link {
         if (socket != null) {
             socket.send(new JSONObject()
                     .put("op", "destroy")
-                    .put("guildId", guild)
+                    .put("guildId", Long.toString(guild))
                     .toString());
         }
     }

@@ -23,24 +23,14 @@
 package lavalink.client.io;
 
 import lavalink.client.LavalinkUtil;
-import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
-import net.dv8tion.jda.core.events.DisconnectEvent;
 import net.dv8tion.jda.core.events.ReadyEvent;
-import net.dv8tion.jda.core.events.ReconnectedEvent;
-import net.dv8tion.jda.core.events.ResumedEvent;
-import net.dv8tion.jda.core.events.ShutdownEvent;
 import net.dv8tion.jda.core.events.channel.voice.VoiceChannelDeleteEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.core.handle.SocketHandler;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.requests.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +52,6 @@ public class Lavalink extends ListenerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(Lavalink.class);
 
-    private boolean autoReconnect = true;
     private final int numShards;
     private final Function<Integer, JDA> jdaProvider;
     private final ConcurrentHashMap<String, Link> links = new ConcurrentHashMap<>();
@@ -83,16 +72,6 @@ public class Lavalink extends ListenerAdapter {
             return thread;
         });
         reconnectService.scheduleWithFixedDelay(new ReconnectTask(this), 0, 500, TimeUnit.MILLISECONDS);
-    }
-
-    @SuppressWarnings("unused")
-    public void setAutoReconnect(boolean autoReconnect) {
-        this.autoReconnect = autoReconnect;
-    }
-
-    @SuppressWarnings("unused")
-    public boolean getAutoReconnect() {
-        return autoReconnect;
     }
 
     public void addNode(URI serverUri, String password) {
@@ -193,41 +172,6 @@ public class Lavalink extends ListenerAdapter {
         if (link == null || !event.getChannel().equals(link.getChannel())) return;
 
         link.disconnect();
-    }
-
-    @Override
-    public void onReconnect(ReconnectedEvent event) {
-        reconnectVoiceConnections(event.getJDA());
-    }
-
-    /* Util */
-
-    private void reconnectVoiceConnections(JDA jda) {
-        if (autoReconnect) {
-            links.forEach((guildId, link) -> {
-                try {
-                    //Note: We also ensure that the link belongs to the JDA object
-                    if (link.getChannel() != null
-                            && jda.getGuildById(guildId) != null) {
-                        link.connect(link.getChannel());
-                    }
-                } catch (Exception e) {
-                    log.error("Caught exception while trying to reconnect link " + link, e);
-                }
-            });
-        }
-    }
-
-    private void disconnectVoiceConnections(JDA jda) {
-        links.forEach((guildId, link) -> {
-            try {
-                if (jda.getGuildById(guildId) != null) {
-                    link.disconnect();
-                }
-            } catch (Exception e) {
-                log.error("Caught exception while trying to disconnect link " + link, e);
-            }
-        });
     }
 
 }

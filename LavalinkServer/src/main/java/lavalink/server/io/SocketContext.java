@@ -30,7 +30,6 @@ import lavalink.server.util.Util;
 import net.dv8tion.jda.Core;
 import net.dv8tion.jda.audio.factory.IAudioSendFactory;
 import net.dv8tion.jda.manager.AudioManager;
-import net.dv8tion.jda.manager.ConnectionManager;
 import net.dv8tion.jda.manager.ConnectionManagerBuilder;
 import org.java_websocket.WebSocket;
 import org.slf4j.Logger;
@@ -80,9 +79,9 @@ public class SocketContext {
         return cores.computeIfAbsent(shardId,
                 __ -> {
                     if (nasSupported)
-                        return new Core(userId, new CoreClientImpl(), core -> new ConnectionManagerImpl(socket), getAudioSendFactory(shardId));
+                        return new Core(userId, new CoreClientImpl(), core -> new ConnectionManagerImpl(), getAudioSendFactory(shardId));
                     else
-                        return new Core(userId, new CoreClientImpl(), (ConnectionManagerBuilder) core -> new ConnectionManagerImpl(socket));
+                        return new Core(userId, new CoreClientImpl(), (ConnectionManagerBuilder) core -> new ConnectionManagerImpl());
                 }
         );
     }

@@ -32,31 +32,27 @@ public class CoreClientImpl implements CoreClient {
 
     @Override
     public void sendWS(String message) {
-        log.warn("sendWS was requested, this shouldn't happen, message:" + message);
+        throw new RuntimeException("sendWS was requested, this shouldn't happen, message:" + message);
     }
 
     @Override
     public boolean isConnected() {
-        log.warn("isConnected was requested, this shouldn't happen");
-        return true;
+        throw new RuntimeException("isConnected was requested, this shouldn't happen");
     }
 
     @Override
     public boolean inGuild(String guildId) {
-        log.warn("inGuild was requested, this shouldn't happen, guildId:" + guildId);
-        return true;
+        throw new RuntimeException("inGuild was requested, this shouldn't happen, guildId:" + guildId);
     }
 
     @Override
     public boolean voiceChannelExists(String guildId, String channelId) {
-        log.warn("voiceChannelExists was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId);
-        return true;
+        throw new RuntimeException("voiceChannelExists was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId);
     }
 
     @Override
     public boolean hasPermissionInChannel(String guildId, String channelId, long l) {
-        log.warn("hasPermissionInChannel was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId, " l:" + l);
-        return true;
+        throw new RuntimeException("hasPermissionInChannel was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId + " l:" + l);
     }
 
 }

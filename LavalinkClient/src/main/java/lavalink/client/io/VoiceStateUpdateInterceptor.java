@@ -8,8 +8,6 @@ import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.handle.VoiceStateUpdateHandler;
 import org.json.JSONObject;
 
-import java.util.Objects;
-
 public class VoiceStateUpdateInterceptor extends VoiceStateUpdateHandler {
 
     private final Lavalink lavalink;
