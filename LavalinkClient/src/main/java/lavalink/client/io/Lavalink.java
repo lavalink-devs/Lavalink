@@ -184,7 +184,7 @@ public class Lavalink extends ListenerAdapter {
         Link link = links.get(event.getGuild().getId());
         if (link == null || !event.getChannel().equals(link.getChannel())) return;
 
-        link.disconnect();
+        link.destroy();
     }
 
     @Override
