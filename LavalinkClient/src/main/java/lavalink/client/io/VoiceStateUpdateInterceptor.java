@@ -39,7 +39,7 @@ public class VoiceStateUpdateInterceptor extends VoiceStateUpdateHandler {
         Link link = lavalink.getLink(guildId.toString());
 
         if (channelId == null) {
-            link.disconnect(); // Null channel means disconnected
+            // Null channel means disconnected
             if (link.getState() != Link.State.DESTROYED) {
                 link.setState(Link.State.NOT_CONNECTED);
             }
