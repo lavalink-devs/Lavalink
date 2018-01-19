@@ -146,7 +146,9 @@ public class Link {
      */
     @SuppressWarnings("unused")
     public void destroy() {
-        disconnect();
+        if (state != State.DISCONNECTING && state != State.NOT_CONNECTED) {
+            disconnect();
+        }
         setState(State.DESTROYED);
         lavalink.removeDestroyedLink(this);
         LavalinkSocket socket = getNode(false);
