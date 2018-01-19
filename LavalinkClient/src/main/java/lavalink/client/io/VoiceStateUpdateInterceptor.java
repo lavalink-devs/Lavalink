@@ -1,14 +1,11 @@
 package lavalink.client.io;
 
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.GuildVoiceState;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.handle.VoiceStateUpdateHandler;
 import org.json.JSONObject;
-
-import java.util.Objects;
 
 public class VoiceStateUpdateInterceptor extends VoiceStateUpdateHandler {
 
@@ -42,7 +39,10 @@ public class VoiceStateUpdateInterceptor extends VoiceStateUpdateHandler {
         Link link = lavalink.getLink(guildId.toString());
 
         if (channelId == null) {
-            link.disconnect(); // Null channel means disconnected
+            // Null channel means disconnected
+            if (link.getState() != Link.State.DESTROYED) {
+                link.setState(Link.State.NOT_CONNECTED);
+            }
         } else if (channel != null) {
             link.setChannel(channel); // Change expected channel
         }

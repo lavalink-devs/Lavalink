@@ -45,7 +45,6 @@ public class LavalinkUtil {
 
     static {
         PLAYER_MANAGER = new DefaultAudioPlayerManager();
-        PLAYER_MANAGER.enableGcMonitoring();
 
         /* These are only to encode/decode messages */
         PLAYER_MANAGER.registerSourceManager(new YoutubeAudioSourceManager());

@@ -23,24 +23,15 @@
 package lavalink.client.io;
 
 import lavalink.client.LavalinkUtil;
-import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
-import net.dv8tion.jda.core.events.DisconnectEvent;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.ReconnectedEvent;
-import net.dv8tion.jda.core.events.ResumedEvent;
-import net.dv8tion.jda.core.events.ShutdownEvent;
 import net.dv8tion.jda.core.events.channel.voice.VoiceChannelDeleteEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.core.handle.SocketHandler;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.requests.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,6 +75,7 @@ public class Lavalink extends ListenerAdapter {
         });
         reconnectService.scheduleWithFixedDelay(new ReconnectTask(this), 0, 500, TimeUnit.MILLISECONDS);
     }
+
 
     @SuppressWarnings("unused")
     public void setAutoReconnect(boolean autoReconnect) {
@@ -200,7 +192,6 @@ public class Lavalink extends ListenerAdapter {
         reconnectVoiceConnections(event.getJDA());
     }
 
-    /* Util */
 
     private void reconnectVoiceConnections(JDA jda) {
         if (autoReconnect) {
@@ -216,18 +207,6 @@ public class Lavalink extends ListenerAdapter {
                 }
             });
         }
-    }
-
-    private void disconnectVoiceConnections(JDA jda) {
-        links.forEach((guildId, link) -> {
-            try {
-                if (jda.getGuildById(guildId) != null) {
-                    link.disconnect();
-                }
-            } catch (Exception e) {
-                log.error("Caught exception while trying to disconnect link " + link, e);
-            }
-        });
     }
 
 }
