@@ -84,15 +84,6 @@ See
 [LavalinkSocket.java](https://github.com/Frederikam/Lavalink/blob/dev/LavalinkClient/src/main/java/lavalink/client/io/LavalinkSocket.java)
 for client implementation
 
-Received when the voice connection is disconnected (and unable to resume).
-The client must queue a new voice connection if it desires to reconnect.
-```json
-{
-    "op": "disconnected",
-    "guildId": "...",
-}
-```
-
 Position information about a player. Includes unix timestamp.
 ```json
 {
