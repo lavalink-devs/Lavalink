@@ -131,6 +131,10 @@ public class Link {
         getMainWs().queueAudioDisconnect(g);
     }
 
+    void removeConnection() {
+        getMainWs().removeAudioConnection(guild);
+    }
+
     public void changeNode(LavalinkSocket newNode) {
         disconnect();
         node = newNode;
@@ -184,7 +188,7 @@ public class Link {
     /**
      * @return The channel we are currently connect to
      */
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "unused"})
     @Nullable
     public VoiceChannel getChannel() {
         if (channel == null || state == State.DESTROYED || state == State.NOT_CONNECTED) return null;
