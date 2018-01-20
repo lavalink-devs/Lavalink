@@ -141,6 +141,7 @@ public class Link {
     public void changeNode(LavalinkSocket newNode) {
         node = newNode;
         connect(getJda().getVoiceChannelById(channel));
+        player.onNodeChange();
     }
 
     /**
