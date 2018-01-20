@@ -128,7 +128,6 @@ public class Link {
         if (g == null) return;
 
         setState(State.DISCONNECTING);
-        channel = null;
         getMainWs().queueAudioDisconnect(g);
     }
 
@@ -207,6 +206,10 @@ public class Link {
 
         log.debug("Link {} changed state from {} to {}", this, this.state, state);
         this.state = state;
+
+        if (state == State.NOT_CONNECTED || state == State.DESTROYED) {
+            channel = null;
+        }
 
         if (state == State.DISCONNECTING && reconnectToNewNode) {
             reconnectToNewNode = false;
