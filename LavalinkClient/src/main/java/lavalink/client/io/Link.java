@@ -187,6 +187,17 @@ public class Link {
     @SuppressWarnings("WeakerAccess")
     @Nullable
     public VoiceChannel getChannel() {
+        if (channel == null || state == State.DESTROYED || state == State.NOT_CONNECTED) return null;
+
+        return getJda().getVoiceChannelById(channel);
+    }
+
+    /**
+     * @return The channel we are currently connected to, or which we were connected to
+     */
+    @SuppressWarnings("WeakerAccess")
+    @Nullable
+    VoiceChannel getLastChannel() {
         if (channel == null) return null;
 
         return getJda().getVoiceChannelById(channel);
@@ -210,8 +221,6 @@ public class Link {
         if (state == State.NOT_CONNECTED && reconnectToNewNode) {
             reconnectToNewNode = false;
             connect(getJda().getVoiceChannelById(channel));
-        } else if (state == State.NOT_CONNECTED || state == State.DESTROYED) {
-            channel = null;
         }
     }
 
