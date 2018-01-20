@@ -139,6 +139,7 @@ public class Link {
     }
 
     public void changeNode(LavalinkSocket newNode) {
+        disconnect();
         node = newNode;
         connect(getJda().getVoiceChannelById(channel));
         player.onNodeChange();
