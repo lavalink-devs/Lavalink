@@ -175,16 +175,15 @@ public class Lavalink extends ListenerAdapter {
         Link link = links.get(event.getGuild().getId());
         if (link == null) return;
 
-        ((JDAImpl) event.getJDA()).getClient().removeAudioConnection(link.getGuildIdLong());
-        link.destroy();
+        link.removeConnection();
     }
 
     @Override
     public void onVoiceChannelDelete(VoiceChannelDeleteEvent event) {
         Link link = links.get(event.getGuild().getId());
-        if (link == null || !event.getChannel().equals(link.getChannel())) return;
+        if (link == null || !event.getChannel().equals(link.getLastChannel())) return;
 
-        link.disconnect();
+        link.removeConnection();
     }
 
     @Override
@@ -198,7 +197,7 @@ public class Lavalink extends ListenerAdapter {
             links.forEach((guildId, link) -> {
                 try {
                     //Note: We also ensure that the link belongs to the JDA object
-                    if (link.getChannel() != null
+                    if (link.getLastChannel() != null
                             && jda.getGuildById(guildId) != null) {
                         link.connect(link.getLastChannel());
                     }
