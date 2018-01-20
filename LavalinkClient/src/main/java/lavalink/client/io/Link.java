@@ -207,13 +207,11 @@ public class Link {
         log.debug("Link {} changed state from {} to {}", this, this.state, state);
         this.state = state;
 
-        if (state == State.NOT_CONNECTED || state == State.DESTROYED) {
-            channel = null;
-        }
-
-        if (state == State.DISCONNECTING && reconnectToNewNode) {
+        if (state == State.NOT_CONNECTED && reconnectToNewNode) {
             reconnectToNewNode = false;
             connect(getJda().getVoiceChannelById(channel));
+        } else if (state == State.NOT_CONNECTED || state == State.DESTROYED) {
+            channel = null;
         }
     }
 
