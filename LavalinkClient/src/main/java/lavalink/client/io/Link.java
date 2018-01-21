@@ -46,11 +46,11 @@ import javax.annotation.Nullable;
 public class Link {
 
     private static final Logger log = LoggerFactory.getLogger(Link.class);
-
     private final Lavalink lavalink;
     private final long guild;
     private LavalinkPlayer player;
     private volatile String channel = null;
+    JSONObject lastVoiceServerUpdate = null;
     private volatile LavalinkSocket node = null;
     /* May only be set by setState() */
     private volatile State state = State.NOT_CONNECTED;
@@ -139,10 +139,11 @@ public class Link {
     }
 
     public void changeNode(LavalinkSocket newNode) {
-        disconnect();
         node = newNode;
-        connect(getJda().getVoiceChannelById(channel));
-        player.onNodeChange();
+        if (lastVoiceServerUpdate != null) {
+            node.send(lastVoiceServerUpdate.toString());
+            player.onNodeChange();
+        }
     }
 
     /**
