@@ -46,15 +46,14 @@ import javax.annotation.Nullable;
 public class Link {
 
     private static final Logger log = LoggerFactory.getLogger(Link.class);
-
     private final Lavalink lavalink;
     private final long guild;
     private LavalinkPlayer player;
     private volatile String channel = null;
+    JSONObject lastVoiceServerUpdate = null;
     private volatile LavalinkSocket node = null;
     /* May only be set by setState() */
     private volatile State state = State.NOT_CONNECTED;
-    private volatile boolean reconnectToNewNode = false;
 
     Link(Lavalink lavalink, String guildId) {
         this.lavalink = lavalink;
@@ -92,7 +91,7 @@ public class Link {
      * @param channel Channel to connect to
      */
     @SuppressWarnings("WeakerAccess")
-    public void connect(VoiceChannel channel) {
+    void connect(VoiceChannel channel, boolean checkChannel) {
         if (!channel.getGuild().equals(getJda().getGuildById(guild)))
             throw new IllegalArgumentException("The provided VoiceChannel is not a part of the Guild that this AudioManager handles." +
                     "Please provide a VoiceChannel from the proper Guild");
@@ -104,7 +103,7 @@ public class Link {
             throw new InsufficientPermissionException(Permission.VOICE_CONNECT);
 
         //If we are already connected to this VoiceChannel, then do nothing.
-        if (channel.equals(channel.getGuild().getSelfMember().getVoiceState().getChannel()))
+        if (checkChannel && channel.equals(channel.getGuild().getSelfMember().getVoiceState().getChannel()))
             return;
 
         final int userLimit = channel.getUserLimit(); // userLimit is 0 if no limit is set!
@@ -122,6 +121,10 @@ public class Link {
         getMainWs().queueAudioConnect(channel);
     }
 
+    public void connect(VoiceChannel voiceChannel) {
+        connect(voiceChannel, true);
+    }
+
     public void disconnect() {
         Guild g = getJda().getGuildById(guild);
 
@@ -136,10 +139,11 @@ public class Link {
     }
 
     public void changeNode(LavalinkSocket newNode) {
-        disconnect();
         node = newNode;
-        connect(getJda().getVoiceChannelById(channel));
-        reconnectToNewNode = true;
+        if (lastVoiceServerUpdate != null) {
+            node.send(lastVoiceServerUpdate.toString());
+            player.onNodeChange();
+        }
     }
 
     /**
@@ -221,11 +225,6 @@ public class Link {
 
         log.debug("Link {} changed state from {} to {}", this, this.state, state);
         this.state = state;
-
-        if (state == State.NOT_CONNECTED && reconnectToNewNode) {
-            reconnectToNewNode = false;
-            connect(getJda().getVoiceChannelById(channel));
-        }
     }
 
     @SuppressWarnings("WeakerAccess")

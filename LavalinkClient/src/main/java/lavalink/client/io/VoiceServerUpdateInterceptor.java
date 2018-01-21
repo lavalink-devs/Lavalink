@@ -62,6 +62,7 @@ public class VoiceServerUpdateInterceptor extends SocketHandler {
         json.put("event", content);
 
         Link link = lavalink.getLink(guild);
+        link.lastVoiceServerUpdate = json;
         //noinspection ConstantConditions
         link.getNode(true).send(json.toString());
         link.setState(Link.State.CONNECTED);

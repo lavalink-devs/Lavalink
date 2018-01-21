@@ -199,7 +199,7 @@ public class Lavalink extends ListenerAdapter {
                     //Note: We also ensure that the link belongs to the JDA object
                     if (link.getLastChannel() != null
                             && jda.getGuildById(guildId) != null) {
-                        link.connect(link.getLastChannel());
+                        link.connect(link.getLastChannel(), false);
                     }
                 } catch (Exception e) {
                     log.error("Caught exception while trying to reconnect link " + link, e);
