@@ -47,6 +47,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 public class Lavalink extends ListenerAdapter {
@@ -87,13 +88,27 @@ public class Lavalink extends ListenerAdapter {
         return autoReconnect;
     }
 
-    public void addNode(URI serverUri, String password) {
+    private static final AtomicInteger nodeCounter = new AtomicInteger(0);
+
+    public void addNode(@Nonnull URI serverUri, @Nonnull String password) {
+        addNode("Lavalink_Node_#" + nodeCounter.getAndIncrement(), serverUri, password);
+    }
+
+    /**
+     * @param name
+     *         A name to identify this node. May show up in metrics and other places.
+     * @param serverUri
+     *         uri of the node to be added
+     * @param password
+     *         password of the node to be added
+     */
+    public void addNode(@Nonnull String name, @Nonnull URI serverUri, @Nonnull String password) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", password);
         headers.put("Num-Shards", Integer.toString(numShards));
         headers.put("User-Id", userId);
 
-        nodes.add(new LavalinkSocket(this, serverUri, new Draft_6455(), headers));
+        nodes.add(new LavalinkSocket(name, this, serverUri, new Draft_6455(), headers));
     }
 
     @SuppressWarnings("unused")

@@ -29,18 +29,13 @@ import lavalink.client.player.event.PlayerEvent;
 import lavalink.client.player.event.TrackEndEvent;
 import lavalink.client.player.event.TrackExceptionEvent;
 import lavalink.client.player.event.TrackStuckEvent;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.entities.impl.JDAImpl;
-import net.dv8tion.jda.core.utils.PermissionUtil;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URI;
@@ -53,15 +48,20 @@ public class LavalinkSocket extends ReusableWebSocket {
     private static final Logger log = LoggerFactory.getLogger(LavalinkSocket.class);
 
     private static final int TIMEOUT_MS = 5000;
+    @Nonnull
+    private final String name;
+    @Nonnull
     private final Lavalink lavalink;
     RemoteStats stats;
     long lastReconnectAttempt = 0;
     private int reconnectsAttempted = 0;
+    @Nonnull
     private final URI remoteUri;
     private boolean available = false;
 
-    LavalinkSocket(Lavalink lavalink, URI serverUri, Draft protocolDraft, Map<String, String> headers) {
+    LavalinkSocket(@Nonnull String name, @Nonnull Lavalink lavalink, @Nonnull URI serverUri, Draft protocolDraft, Map<String, String> headers) {
         super(serverUri, protocolDraft, headers, TIMEOUT_MS);
+        this.name = name;
         this.lavalink = lavalink;
         this.remoteUri = serverUri;
         try {
@@ -182,6 +182,7 @@ public class LavalinkSocket extends ReusableWebSocket {
         }
     }
 
+    @Nonnull
     @SuppressWarnings("unused")
     public URI getRemoteUri() {
         return remoteUri;
@@ -205,10 +206,16 @@ public class LavalinkSocket extends ReusableWebSocket {
         return available && isOpen() && !isClosing();
     }
 
+    @Nonnull
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
         return "LavalinkSocket{" +
-                "remoteUri=" + remoteUri +
+                "name=" + name +
+                ",remoteUri=" + remoteUri +
                 '}';
     }
 }
