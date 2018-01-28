@@ -139,8 +139,8 @@ public class Launcher {
     }
 
     @Bean
-    static SocketServer socketServer(@Value("${lavalink.server.ws.port}") Integer port,
-                                     @Value("${lavalink.server.ws.host}") String host,
+    static SocketServer socketServer(@Value("${lavalink.server.ws.port:8080}") Integer port,
+                                     @Value("${lavalink.server.ws.host:0.0.0.0}") String host,
                                      @Value("${lavalink.server.password}") String password) {
         SocketServer ss = new SocketServer(new InetSocketAddress(host, port), password);
         ss.start();

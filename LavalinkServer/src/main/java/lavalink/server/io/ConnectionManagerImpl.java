@@ -16,6 +16,11 @@ public class ConnectionManagerImpl implements ConnectionManager {
     }
 
     @Override
+    public void onDisconnect(String s) {
+        
+    }
+
+    @Override
     public void queueAudioConnect(String guildId, String channelId) {
         log.warn("queueAudioConnect was requested, this shouldn't happen, guildId:" + guildId + " channelId:" + channelId, new RuntimeException());
     }
