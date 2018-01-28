@@ -1,6 +1,7 @@
 plugins {
     id 'application'
     id 'org.springframework.boot' version '1.5.9.RELEASE'
+    id 'com.gorylenko.gradle-git-properties' version '1.4.20'
 }
 
 description = 'Play audio to discord voice channels'
