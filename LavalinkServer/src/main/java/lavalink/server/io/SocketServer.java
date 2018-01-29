@@ -26,9 +26,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker;
 import lavalink.server.player.Player;
 import lavalink.server.player.TrackEndMarkerHandler;
-import lavalink.server.util.DebugConnectionListener;
 import lavalink.server.util.Util;
-import net.dv8tion.jda.manager.AudioManager;
+import net.dv8tion.jda.Core;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -113,36 +112,13 @@ public class SocketServer extends WebSocketServer {
 
         switch (json.getString("op")) {
             /* JDAA ops */
-            case "connect":
-                long guildId = Long.parseLong(json.getString("guildId"));
-                AudioManager manager = contextMap.get(webSocket).getCore(getShardId(webSocket, json))
-                        .getAudioManager(json.getString("guildId"));
-                if (manager.getConnectionListener() == null) {
-                    manager.setConnectionListener(new DebugConnectionListener(guildId));
-                }
-                manager.openAudioConnection(json.getString("channelId"));
-                break;
             case "voiceUpdate":
-                contextMap.get(webSocket).getCore(getShardId(webSocket, json)).provideVoiceServerUpdate(
+                Core core = contextMap.get(webSocket).getCore(getShardId(webSocket, json));
+                core.provideVoiceServerUpdate(
                         json.getString("sessionId"),
                         json.getJSONObject("event")
                 );
-                break;
-            case "disconnect":
-                contextMap.get(webSocket).getCore(getShardId(webSocket, json)).getAudioManager(json.getString("guildId"))
-                        .closeAudioConnection();
-                break;
-            case "validationRes":
-                ((CoreClientImpl) contextMap.get(webSocket).getCore(getShardId(webSocket, json)).getClient()).provideValidation(
-                        json.getString("guildId"),
-                        json.optString("channelId"),
-                        json.getBoolean("valid")
-                );
-                break;
-            case "isConnectedRes":
-                ((CoreClientImpl) contextMap.get(webSocket).getCore(json.getInt("shardId")).getClient()).provideIsConnected(
-                        json.getBoolean("connected")
-                );
+                core.getAudioManager(json.getJSONObject("event").getString("guild_id")).setAutoReconnect(false);
                 break;
 
             /* Player ops */
@@ -187,6 +163,10 @@ public class SocketServer extends WebSocketServer {
             case "volume":
                 Player player4 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
                 player4.setVolume(json.getInt("volume"));
+                break;
+            case "destroy":
+                Player player5 = contextMap.get(webSocket).getPlayers().remove(json.getString("guildId"));
+                if (player5 != null) player5.stop();
                 break;
             default:
                 log.warn("Unexpected operation: " + json.getString("op"));

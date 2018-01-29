@@ -33,8 +33,8 @@ import lavalink.client.player.event.TrackStartEvent;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class LavalinkPlayer implements IPlayer {
 
@@ -45,7 +45,7 @@ public class LavalinkPlayer implements IPlayer {
     private long position = -1;
 
     private final Link link;
-    private List<IPlayerEventListener> listeners = new ArrayList<>();
+    private List<IPlayerEventListener> listeners = new CopyOnWriteArrayList<>();
 
     public LavalinkPlayer(Link link) {
         this.link = link;

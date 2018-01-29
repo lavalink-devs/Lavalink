@@ -24,18 +24,21 @@ package lavalink.client.io;
 
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.core.exceptions.GuildUnavailableException;
+import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.core.requests.WebSocketClient;
+import net.dv8tion.jda.core.utils.PermissionUtil;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Indicates which node we are linked to, what voice channel to use, and what player we are using
@@ -43,39 +46,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Link {
 
     private static final Logger log = LoggerFactory.getLogger(Link.class);
-    private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-    /**
-     * Time before we forcefully reconnect if we don't receive our leave event
-     */
-    private static final int TIMEOUT_MS = 5000;
-
     private final Lavalink lavalink;
-    private final String guild;
+    private final long guild;
     private LavalinkPlayer player;
-    /**
-     * Channel we are currently connected to or disconnecting/connecting from/to, if any
-     */
-    private volatile String currentChannel = null;
-    /**
-     * The node we are currently connected to. Automatically assigned.
-     * Can only be reassigned by reconnecting any existing voice connection.
-     */
-    private volatile LavalinkSocket currentNode = null;
-    private volatile LavalinkSocket pendingNode = null;
-
+    private volatile String channel = null;
+    JSONObject lastVoiceServerUpdate = null;
+    private volatile LavalinkSocket node = null;
     /* May only be set by setState() */
-    private volatile State state = State.NO_CHANNEL;
-
-
-    /**
-     * Used for making sure we properly time out disconnect attempts
-     */
-    private final AtomicInteger disconnectCounter = new AtomicInteger(0);
-    private final AtomicInteger connectCounter = new AtomicInteger(0);
+    private volatile State state = State.NOT_CONNECTED;
 
     Link(Lavalink lavalink, String guildId) {
         this.lavalink = lavalink;
-        this.guild = guildId;
+        this.guild = Long.parseLong(guildId);
     }
 
     public LavalinkPlayer getPlayer() {
@@ -86,15 +68,20 @@ public class Link {
         return player;
     }
 
-    public void resetPlayer() {
-        player = null;
-    }
-
     public Lavalink getLavalink() {
         return lavalink;
     }
 
+    @SuppressWarnings("unused")
+    public void resetPlayer() {
+        player = null;
+    }
+
     public String getGuildId() {
+        return Long.toString(guild);
+    }
+
+    public long getGuildIdLong() {
         return guild;
     }
 
@@ -104,97 +91,58 @@ public class Link {
      * @param channel Channel to connect to
      */
     @SuppressWarnings("WeakerAccess")
-    public void connect(VoiceChannel channel) {
-        if (currentNode == null) {
-            currentNode = lavalink.loadBalancer.determineBestSocket(channel.getGuild().getIdLong());
+    void connect(VoiceChannel channel, boolean checkChannel) {
+        if (!channel.getGuild().equals(getJda().getGuildById(guild)))
+            throw new IllegalArgumentException("The provided VoiceChannel is not a part of the Guild that this AudioManager handles." +
+                    "Please provide a VoiceChannel from the proper Guild");
+        if (!channel.getGuild().isAvailable())
+            throw new GuildUnavailableException("Cannot open an Audio Connection with an unavailable guild. " +
+                    "Please wait until this Guild is available to open a connection.");
+        final Member self = channel.getGuild().getSelfMember();
+        if (!self.hasPermission(channel, Permission.VOICE_CONNECT) && !self.hasPermission(channel, Permission.VOICE_MOVE_OTHERS))
+            throw new InsufficientPermissionException(Permission.VOICE_CONNECT);
+
+        //If we are already connected to this VoiceChannel, then do nothing.
+        if (checkChannel && channel.equals(channel.getGuild().getSelfMember().getVoiceState().getChannel()))
+            return;
+
+        final int userLimit = channel.getUserLimit(); // userLimit is 0 if no limit is set!
+        if (!self.isOwner() && !self.hasPermission(Permission.ADMINISTRATOR)) {
+            final long perms = PermissionUtil.getExplicitPermission(channel, self);
+            final long voicePerm = Permission.VOICE_MOVE_OTHERS.getRawValue();
+            if (userLimit > 0                                                   // If there is a userlimit
+                    && userLimit <= channel.getMembers().size()                 // if that userlimit is reached
+                    && (perms & voicePerm) != voicePerm)                        // If we don't have voice move others permissions
+                throw new InsufficientPermissionException(Permission.VOICE_MOVE_OTHERS, // then throw exception!
+                        "Unable to connect to VoiceChannel due to userlimit! Requires permission VOICE_MOVE_OTHERS to bypass");
         }
-        connectNow(channel.getId());
+
+        setState(State.CONNECTING);
+        getMainWs().queueAudioConnect(channel);
     }
 
-    /**
-     * Invoked when we are ready too establish a connection
-     *
-     * @param channelId Channel to connect to
-     */
-    private void connectNow(String channelId) {
-        if (state == State.DESTROYED) {
-            log.warn("Attempted to connect to vc for guild " + guild + " while Link is destroyed. Ignoring...");
-            return;
-        }
-
-        int startCount = connectCounter.get();
-
-        executor.schedule(() -> {
-            if (startCount == connectCounter.get()) {
-                log.warn("Connecting timed out for guild " + guild + ". Forcefully sending OP 4...");
-                forcefullyDisconnect();
-            }
-        }, TIMEOUT_MS, TimeUnit.MILLISECONDS);
-
-        VoiceChannel channel = getJda()
-                .getVoiceChannelById(channelId);
-
-        assert channel.getGuild().getId().equals(guild);
-
-        currentChannel = channelId;
-        setState(State.CONNECTING);
-
-        JSONObject json = new JSONObject();
-        json.put("op", "connect");
-        json.put("guildId", channel.getGuild().getId());
-        json.put("channelId", channel.getId());
-        currentNode.send(json.toString());
+    public void connect(VoiceChannel voiceChannel) {
+        connect(voiceChannel, true);
     }
 
     public void disconnect() {
-        // Make sure we eventually reconnect
-        int startCount = disconnectCounter.get();
+        Guild g = getJda().getGuildById(guild);
 
-        if (currentNode == null) {
-            log.warn("Current node is somehow null while we are trying to disconnect! " +
-                    "Did someone try to disconnect before connecting in the first place? " +
-                    "Guild: " + guild + " State: " + state);
-            setState(State.NO_CHANNEL);
-            return;
-        }
+        if (g == null) return;
 
-        executor.schedule(() -> {
-            if (startCount == disconnectCounter.get()) {
-                // We didn't get the leave event, so we *must* not be connected
-                log.warn("Attempted to disconnect from voice but timed out after " + TIMEOUT_MS
-                        + "ms. Are we already disconnected?" +
-                        " Pretending that we left so we don't get stuck... Guild: " + guild);
-                forcefullyDisconnect();
-                onVoiceLeave();
-            }
-        }, TIMEOUT_MS, TimeUnit.MILLISECONDS);
-
-        if (state == State.NO_CHANNEL) {
-            log.info("Attempt to disconnect from channel when not connected. Guild: " + guild);
-            sendDisconnectOp();
-            return;
-        }
-
-        if (state != State.DESTROYED)
-            setState(State.DISCONNECTING);
-
-        sendDisconnectOp();
+        setState(State.DISCONNECTING);
+        getMainWs().queueAudioDisconnect(g);
     }
 
-    private void sendDisconnectOp() {
-        JSONObject json = new JSONObject();
-        json.put("op", "disconnect");
-        json.put("guildId", guild);
-        currentNode.send(json.toString());
+    void removeConnection() {
+        getMainWs().removeAudioConnection(guild);
     }
 
-    void changeNode(LavalinkSocket newNode) {
-        if (state == State.NO_CHANNEL) {
-            changeNode0(newNode);
-        } else {
-            // Since we are connected, we will need to disconnect before truly changing node
-            pendingNode = newNode;
-            sendDisconnectOp();
+    public void changeNode(LavalinkSocket newNode) {
+        node = newNode;
+        if (lastVoiceServerUpdate != null) {
+            node.send(lastVoiceServerUpdate.toString());
+            player.onNodeChange();
         }
     }
 
@@ -205,34 +153,18 @@ public class Link {
      */
     @SuppressWarnings("unused")
     public void destroy() {
-        log.debug("Destroying Link for " + guild);
-        lavalink.removeDestroyedLink(this);
+        if (state != State.DISCONNECTING && state != State.NOT_CONNECTED) {
+            disconnect();
+        }
         setState(State.DESTROYED);
-        if (state != State.NO_CHANNEL) {
-            try {
-                disconnect();
-            } catch (Exception e) {
-                // Shouldn't happen. This is to prevent a regression of a previous bug
-                log.error("Caught exception while trying to disconnect a destroyed link!", e);
-            }
+        lavalink.removeDestroyedLink(this);
+        LavalinkSocket socket = getNode(false);
+        if (socket != null) {
+            socket.send(new JSONObject()
+                    .put("op", "destroy")
+                    .put("guildId", Long.toString(guild))
+                    .toString());
         }
-    }
-
-    private void changeNode0(LavalinkSocket newNode) {
-        currentNode = newNode;
-        pendingNode = null;
-        VoiceChannel currentChannel = getCurrentChannel();
-        if (currentChannel != null) {
-            connect(currentChannel);
-            getPlayer().onNodeChange();
-        }
-    }
-
-    @Deprecated
-    @SuppressWarnings("WeakerAccess")
-    @Nullable
-    public LavalinkSocket getCurrentSocket() {
-        return currentNode;
     }
 
     /**
@@ -251,73 +183,43 @@ public class Link {
     @Nullable
     @SuppressWarnings("WeakerAccess")
     public LavalinkSocket getNode(boolean selectIfAbsent) {
-        if (selectIfAbsent && currentNode == null) {
-            currentNode = lavalink.loadBalancer.determineBestSocket(Long.parseLong(guild));
+        if (selectIfAbsent && node == null) {
+            node = lavalink.loadBalancer.determineBestSocket(guild);
         }
-        return currentNode;
-    }
-
-    void onVoiceJoin() {
-        connectCounter.incrementAndGet();
-        setState(State.CONNECTED);
-    }
-
-    void onVoiceLeave() {
-        disconnectCounter.incrementAndGet();
-
-        if (pendingNode != null) {
-            // Disconnecting means we can change to the pending node, if any
-            changeNode0(pendingNode);
-        } else {
-            setState(State.NO_CHANNEL);
-            currentChannel = null;
-        }
-    }
-
-    void onGuildVoiceMove(GuildVoiceMoveEvent event) {
-        connectCounter.incrementAndGet();
-        log.info("Moved from " + event.getChannelLeft() + " to " + event.getChannelJoined());
-        currentChannel = event.getChannelJoined().getId();
-    }
-
-    void onNodeDisconnected() {
-        changeNode(lavalink.loadBalancer.determineBestSocket(Long.parseLong(this.guild)));
-
-        // This will trigger a leave
-        forcefullyDisconnect();
+        return node;
     }
 
     /**
-     * This sends OP 4 to Discord. This should close any voice connection for our guild by setting the channel to null.
+     * @return The channel we are currently connect to
      */
-    private void forcefullyDisconnect() {
-        ((JDAImpl) getJda()).getClient()
-                .send("{\"op\":4,\"d\":{\"self_deaf\":false,\"guild_id\":\"" + guild + "\",\"channel_id\":null,\"self_mute\":false}}");
+    @SuppressWarnings({"WeakerAccess", "unused"})
+    @Nullable
+    public VoiceChannel getChannel() {
+        if (channel == null || state == State.DESTROYED || state == State.NOT_CONNECTED) return null;
+
+        return getJda().getVoiceChannelById(channel);
     }
 
     /**
-     * @return The channel we are currently connect to, even if we are trying to connect to a different one
+     * @return The channel we are currently connected to, or which we were connected to
      */
     @SuppressWarnings("WeakerAccess")
-    public VoiceChannel getCurrentChannel() {
-        if (currentChannel == null) return null;
+    @Nullable
+    VoiceChannel getLastChannel() {
+        if (channel == null) return null;
 
-        return getJda()
-                .getVoiceChannelById(currentChannel);
-    }
-
-    public JDA getJda() {
-        return lavalink.getJdaFromSnowflake(guild);
+        return getJda().getVoiceChannelById(channel);
     }
 
     /**
      * @return The {@link State} of this {@link Link}
      */
+    @SuppressWarnings("unused")
     public State getState() {
         return state;
     }
 
-    private void setState(State state) {
+    void setState(@Nonnull State state) {
         if (this.state == State.DESTROYED && state != State.DESTROYED)
             throw new IllegalStateException("Cannot change state to " + state + " when state is " + State.DESTROYED);
 
@@ -325,11 +227,28 @@ public class Link {
         this.state = state;
     }
 
+    @SuppressWarnings("WeakerAccess")
+    @Nonnull
+    public JDA getJda() {
+        return lavalink.getJdaFromSnowflake(String.valueOf(guild));
+    }
+
+    private WebSocketClient getMainWs() {
+        return ((JDAImpl) getJda()).getClient();
+    }
+
+    /**
+     * Setter used by {@link VoiceStateUpdateInterceptor} to change the expected channel
+     */
+    void setChannel(@Nonnull VoiceChannel channel) {
+        this.channel = channel.getId();
+    }
+
     @Override
     public String toString() {
         return "Link{" +
                 "guild='" + guild + '\'' +
-                ", currentChannel='" + currentChannel + '\'' +
+                ", channel='" + channel + '\'' +
                 ", state=" + state +
                 '}';
     }
@@ -338,22 +257,23 @@ public class Link {
         /**
          * Default, means we are not trying to use voice at all
          */
-        NO_CHANNEL,
+        NOT_CONNECTED,
 
         /**
-         * Connecting to voice
+         * Waiting for VOICE_SERVER_UPDATE
          */
         CONNECTING,
 
         /**
-         * Connected (or attempting to reconnect) to voice
+         * We have dispatched the voice server info to the server, and it should (soon) be connected.
          */
         CONNECTED,
 
         /**
-         * We are trying to disconnect, after which we will switch to NO_CHANNEL
+         * Waiting for confirmation from Discord that we have connected
          */
         DISCONNECTING,
+
         /**
          * This {@link Link} has been destroyed and will soon (if not already) be unmapped from {@link Lavalink}
          */

@@ -57,10 +57,12 @@ public class LavalinkLoadBalancer {
         return leastPenalty;
     }
 
+    @SuppressWarnings("unused")
     public void addPenalty(PenaltyProvider penalty) {
         this.penaltyProviders.add(penalty);
     }
 
+    @SuppressWarnings("unused")
     public void removePenalty(PenaltyProvider penalty) {
         this.penaltyProviders.remove(penalty);
     }
@@ -68,7 +70,7 @@ public class LavalinkLoadBalancer {
     void onNodeDisconnect(LavalinkSocket disconnected) {
         lavalink.getLinks().forEach(link -> {
             if (disconnected.equals(link.getNode(false)))
-                link.onNodeDisconnected();
+                link.changeNode(lavalink.loadBalancer.determineBestSocket(link.getGuildIdLong()));
         });
     }
 

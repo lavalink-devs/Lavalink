@@ -21,49 +21,13 @@ User-Id: The user id of the bot you are playing music with
 ```
 
 ### Outgoing messages
-Make the server queue a voice connection
-```json
-{
-    "op": "connect",
-    "guildId": "...",
-    "channelId": "..."
-}
-```
-
-Provide an intercepted voice server update
+Provide an intercepted voice server update. This causes the server to connect to the voice channel
 ```json
 {
     "op": "voiceUpdate",
     "guildId": "...",
     "sessionId": "...",
     "event": "..."
-}
-```
-
-Close a voice connection
-```json
-{
-    "op": "disconnect",
-    "guildId": "123"
-}
-```
-
-Response to `validationReq`. `channelId` is omitted if the request does not display the channel id.
-```json
-{
-    "op": "validationRes",
-    "guildId": "...",
-    "channelId": "...",
-    "valid": true
-}
-```
-
-Response to `isConnectedRes`.
-```json
-{
-    "op": "isConnectedRes",
-    "shardId": 1337,
-    "connected": true
 }
 ```
 
@@ -117,34 +81,8 @@ Set player volume. Volume may range from 0 to 150. 100 is default.
 
 ### Incoming messages
 See 
-[LavalinkSocket.java](https://github.com/Frederikam/Lavalink/blob/91bc0ef4dab6ca5d5efcba12203ee4054bb55ae9/LavalinkClient/src/main/java/lavalink/client/io/LavalinkSocket.java)
+[LavalinkSocket.java](https://github.com/Frederikam/Lavalink/blob/dev/LavalinkClient/src/main/java/lavalink/client/io/LavalinkSocket.java)
 for client implementation
-
-Incoming message to forward to mainWS
-```json
-{
-    "op": "sendWS",
-    "shardId": 1337,
-    "message": "..."
-}
-```
-
-Request to check if the VC or Guild exists, and that we have access to the VC. Note that the channelId may be omitted, in which case you should only check if we are in the guild.
-```json
-{
-    "op": "validationReq",
-    "guildId": "...",
-    "channelId": "..."
-}
-```
-
-Request to check if a shard's mainWS is connected
-```json
-{
-    "op": "isConnectedReq",
-    "shardId": 1337
-}
-```
 
 Position information about a player. Includes unix timestamp.
 ```json

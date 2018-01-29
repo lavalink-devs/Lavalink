@@ -42,7 +42,7 @@ public class VoiceServerUpdateInterceptor extends SocketHandler {
 
     @Override
     protected Long handleInternally(JSONObject content) {
-        log.info(content.toString());
+        log.debug(content.toString());
         long idLong = content.getLong("guild_id");
 
         if (api.getGuildLock().isLocked(idLong))
@@ -60,9 +60,12 @@ public class VoiceServerUpdateInterceptor extends SocketHandler {
         json.put("sessionId", sessionId);
         json.put("guildId", guild.getId());
         json.put("event", content);
-        lavalink.getLink(guild).getNode(true).send(json.toString());
 
-        log.info("Sent voice update for guild {}", idLong);
+        Link link = lavalink.getLink(guild);
+        link.lastVoiceServerUpdate = json;
+        //noinspection ConstantConditions
+        link.getNode(true).send(json.toString());
+        link.setState(Link.State.CONNECTED);
 
         return null;
     }
