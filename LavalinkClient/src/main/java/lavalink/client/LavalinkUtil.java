@@ -45,7 +45,6 @@ public class LavalinkUtil {
 
     static {
         PLAYER_MANAGER = new DefaultAudioPlayerManager();
-        PLAYER_MANAGER.enableGcMonitoring();
 
         /* These are only to encode/decode messages */
         PLAYER_MANAGER.registerSourceManager(new YoutubeAudioSourceManager());
@@ -65,7 +64,7 @@ public class LavalinkUtil {
     public static String toMessage(AudioTrack track) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PLAYER_MANAGER.encodeTrack(new MessageOutput(baos), track);
-        return new String(Base64.encodeBytesToBytes(baos.toByteArray()));
+        return Base64.encodeBytes(baos.toByteArray());
     }
 
     public static int getShardFromSnowflake(String snowflake, int numShards) {

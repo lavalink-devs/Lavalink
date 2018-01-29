@@ -2,7 +2,7 @@
 Standalone audio sending node based on Lavaplayer and JDA-Audio.
 Allows for sending audio without it ever reaching any of your shards.
 
-Being used in production by FredBoat and Dyno.
+Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 
 ## Features
 * Powered by Lavaplayer
@@ -16,11 +16,16 @@ Being used in production by FredBoat and Dyno.
 * Basic authentication
 
 ## Client libraries:
+### Supports 2.x:
 * [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (JDA, Java)
+* Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
+
+### Supports 1.x:
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
 * [lava-d.js](https://github.com/untocodes/lava-d.js) (discord.js, JavaScript)
 * [lavalink.js](https://github.com/briantanner/lavalink.js) (discord.js, JavaScript)
-* Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
+
+Outdated as of January 29 2018.
 
 ## Server configuration
 Download from [the CI server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1)

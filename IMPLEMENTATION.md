@@ -10,6 +10,31 @@ How to write your own client. The Java client will serve as an example implement
     * Hybi 10
     * Hixie 76
     * Hixie 75
+    
+## Changes v1.3 -> v2.0 
+With the release of v2.0 many unnecessary ops were removed:
+
+* `connect`
+* `disconnect`
+* `validationRes`
+* `isConnectedRes`
+* `validationReq`
+* `isConnectedReq`
+* `sendWS`
+
+With Lavalink 1.x the server had the responsibility of handling Discord VOICE_SERVER_UPDATEs as well as its own internal ratelimiting.
+This remote handling makes things unnecessarily complicated and adds a lot og points where things could go wrong. 
+One problem we noticed is that since JDAA is unaware of ratelimits on the bot's gateway connection, it would keep adding
+to the ratelimit queue to the gateway. With this update this is now the responsibility of the Lavalink client or the 
+Discord client.
+
+A voice connection is now initiated by forwarding a `voiceUpdate` (VOICE_SERVER_UPDATE) to the server. When you want to
+disconnect or move to a different voice channel you must send Discord a new VOICE_STATE_UPDATE. If you want to move your
+connection to a new Lavalink server you can simply send the VOICE_SERVER_UPDATE to the new node, and the other node
+will be disconnected by Discord.
+
+Depending on your Discord library, it may be possible to take advantage of the library's OP 4 handling. For instance,
+the JDA client takes advantage of JDA's websocket write thread to send OP 4s for connects, disconnects and reconnects.
 
 ## Protocol
 ### Opening a connection
@@ -21,49 +46,13 @@ User-Id: The user id of the bot you are playing music with
 ```
 
 ### Outgoing messages
-Make the server queue a voice connection
-```json
-{
-    "op": "connect",
-    "guildId": "...",
-    "channelId": "..."
-}
-```
-
-Provide an intercepted voice server update
+Provide an intercepted voice server update. This causes the server to connect to the voice channel
 ```json
 {
     "op": "voiceUpdate",
     "guildId": "...",
     "sessionId": "...",
     "event": "..."
-}
-```
-
-Close a voice connection
-```json
-{
-    "op": "disconnect",
-    "guildId": "123"
-}
-```
-
-Response to `validationReq`. `channelId` is omitted if the request does not display the channel id.
-```json
-{
-    "op": "validationRes",
-    "guildId": "...",
-    "channelId": "...",
-    "valid": true
-}
-```
-
-Response to `isConnectedRes`.
-```json
-{
-    "op": "isConnectedRes",
-    "shardId": 1337,
-    "connected": true
 }
 ```
 
@@ -117,34 +106,8 @@ Set player volume. Volume may range from 0 to 150. 100 is default.
 
 ### Incoming messages
 See 
-[LavalinkSocket.java](https://github.com/Frederikam/Lavalink/blob/91bc0ef4dab6ca5d5efcba12203ee4054bb55ae9/LavalinkClient/src/main/java/lavalink/client/io/LavalinkSocket.java)
+[LavalinkSocket.java](https://github.com/Frederikam/Lavalink/blob/dev/LavalinkClient/src/main/java/lavalink/client/io/LavalinkSocket.java)
 for client implementation
-
-Incoming message to forward to mainWS
-```json
-{
-    "op": "sendWS",
-    "shardId": 1337,
-    "message": "..."
-}
-```
-
-Request to check if the VC or Guild exists, and that we have access to the VC. Note that the channelId may be omitted, in which case you should only check if we are in the guild.
-```json
-{
-    "op": "validationReq",
-    "guildId": "...",
-    "channelId": "..."
-}
-```
-
-Request to check if a shard's mainWS is connected
-```json
-{
-    "op": "isConnectedReq",
-    "shardId": 1337
-}
-```
 
 Position information about a player. Includes unix timestamp.
 ```json

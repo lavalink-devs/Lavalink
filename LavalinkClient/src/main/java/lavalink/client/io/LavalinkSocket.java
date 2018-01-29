@@ -29,18 +29,13 @@ import lavalink.client.player.event.PlayerEvent;
 import lavalink.client.player.event.TrackEndEvent;
 import lavalink.client.player.event.TrackExceptionEvent;
 import lavalink.client.player.event.TrackStuckEvent;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.entities.impl.JDAImpl;
-import net.dv8tion.jda.core.utils.PermissionUtil;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URI;
@@ -53,15 +48,20 @@ public class LavalinkSocket extends ReusableWebSocket {
     private static final Logger log = LoggerFactory.getLogger(LavalinkSocket.class);
 
     private static final int TIMEOUT_MS = 5000;
+    @Nonnull
+    private final String name;
+    @Nonnull
     private final Lavalink lavalink;
     RemoteStats stats;
     long lastReconnectAttempt = 0;
     private int reconnectsAttempted = 0;
+    @Nonnull
     private final URI remoteUri;
     private boolean available = false;
 
-    LavalinkSocket(Lavalink lavalink, URI serverUri, Draft protocolDraft, Map<String, String> headers) {
+    LavalinkSocket(@Nonnull String name, @Nonnull Lavalink lavalink, @Nonnull URI serverUri, Draft protocolDraft, Map<String, String> headers) {
         super(serverUri, protocolDraft, headers, TIMEOUT_MS);
+        this.name = name;
         this.lavalink = lavalink;
         this.remoteUri = serverUri;
         try {
@@ -88,54 +88,6 @@ public class LavalinkSocket extends ReusableWebSocket {
         }
 
         switch (json.getString("op")) {
-            case "sendWS":
-                JDAImpl jda = (JDAImpl) lavalink.getJda(json.getInt("shardId"));
-                jda.getClient().send(json.getString("message"));
-                break;
-            case "validationReq":
-                int sId = LavalinkUtil.getShardFromSnowflake(json.getString("guildId"), lavalink.getNumShards());
-                JDA jda2 = lavalink.getJda(sId);
-
-                String guildId = json.getString("guildId");
-                String channelId = json.optString("channelId");
-                if (channelId.equals("")) channelId = null;
-
-
-                JSONObject res = new JSONObject();
-                res.put("op", "validationRes");
-                res.put("guildId", guildId);
-                VoiceChannel vc = null;
-                if (channelId != null)
-                    vc = jda2.getVoiceChannelById(channelId);
-
-                Guild guild = jda2.getGuildById(guildId);
-
-                if (guild == null && channelId == null) {
-                    res.put("valid", false);
-                    send(res.toString());
-                } else if (guild == null) {
-                    res.put("valid", false);
-                    res.put("channelId", channelId);
-                    send(res.toString());
-                } else if (channelId != null) {
-                    res.put("valid", vc != null
-                            && PermissionUtil.checkPermission(vc, guild.getSelfMember(),
-                            Permission.VOICE_CONNECT, Permission.VOICE_SPEAK));
-                    res.put("channelId", channelId);
-                    send(res.toString());
-                } else {
-                    res.put("valid", true);
-                    send(res.toString());
-                }
-                break;
-            case "isConnectedReq":
-                JDAImpl jda3 = (JDAImpl) lavalink.getJda(json.getInt("shardId"));
-                JSONObject res2 = new JSONObject();
-                res2.put("op", "isConnectedRes");
-                res2.put("shardId", json.getInt("shardId"));
-                res2.put("connected", jda3.getClient().isConnected());
-                send(res2.toString());
-                break;
             case "playerUpdate":
                 lavalink.getLink(json.getString("guildId"))
                         .getPlayer()
@@ -230,6 +182,7 @@ public class LavalinkSocket extends ReusableWebSocket {
         }
     }
 
+    @Nonnull
     @SuppressWarnings("unused")
     public URI getRemoteUri() {
         return remoteUri;
@@ -253,10 +206,16 @@ public class LavalinkSocket extends ReusableWebSocket {
         return available && isOpen() && !isClosing();
     }
 
+    @Nonnull
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
         return "LavalinkSocket{" +
-                "remoteUri=" + remoteUri +
+                "name=" + name +
+                ",remoteUri=" + remoteUri +
                 '}';
     }
 }

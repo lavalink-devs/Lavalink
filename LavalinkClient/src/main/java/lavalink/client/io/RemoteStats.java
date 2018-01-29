@@ -30,7 +30,7 @@ public class RemoteStats {
     private final JSONObject json;
     private final int players;
     private final int playingPlayers;
-    private final long uptime;
+    private final long uptime; //in millis
 
     // In bytes
     private final long memFree;
@@ -82,7 +82,7 @@ public class RemoteStats {
         return playingPlayers;
     }
 
-    public long getUptime() {
+    public long getUptime() { //in millis
         return uptime;
     }
 

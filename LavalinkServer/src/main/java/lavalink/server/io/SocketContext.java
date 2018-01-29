@@ -30,6 +30,7 @@ import lavalink.server.util.Util;
 import net.dv8tion.jda.Core;
 import net.dv8tion.jda.audio.factory.IAudioSendFactory;
 import net.dv8tion.jda.manager.AudioManager;
+import net.dv8tion.jda.manager.ConnectionManagerBuilder;
 import org.java_websocket.WebSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,8 @@ public class SocketContext {
     private final Map<String, Player> players = new ConcurrentHashMap<>();
     private ScheduledExecutorService statsExecutor;
     public final ScheduledExecutorService playerUpdateService;
+    private static final int audioSendFactoryCount = Runtime.getRuntime().availableProcessors() * 2;
+    private final ConcurrentHashMap<Integer, IAudioSendFactory> sendFactories = new ConcurrentHashMap<>();
 
     SocketContext(WebSocket socket, String userId, int shardCount) {
         this.socket = socket;
@@ -76,9 +79,9 @@ public class SocketContext {
         return cores.computeIfAbsent(shardId,
                 __ -> {
                     if (nasSupported)
-                        return new Core(userId, new CoreClientImpl(socket, shardId), createAudioSendFactory());
+                        return new Core(userId, new CoreClientImpl(), core -> new ConnectionManagerImpl(), getAudioSendFactory(shardId));
                     else
-                        return new Core(userId, new CoreClientImpl(socket, shardId));
+                        return new Core(userId, new CoreClientImpl(), (ConnectionManagerBuilder) core -> new ConnectionManagerImpl());
                 }
         );
     }
@@ -126,16 +129,18 @@ public class SocketContext {
         players.values().forEach(Player::stop);
     }
 
-    private IAudioSendFactory createAudioSendFactory() {
-        Integer customBuffer = Launcher.config.getBufferDurationMs();
-        NativeAudioSendFactory nativeAudioSendFactory;
-        if (customBuffer != null) {
-            nativeAudioSendFactory = new NativeAudioSendFactory(customBuffer);
-        } else {
-            nativeAudioSendFactory = new NativeAudioSendFactory();
-        }
+    private IAudioSendFactory getAudioSendFactory(int shardId) {
+        return sendFactories.computeIfAbsent(shardId % audioSendFactoryCount, integer -> {
+            Integer customBuffer = Launcher.config.getBufferDurationMs();
+            NativeAudioSendFactory nativeAudioSendFactory;
+            if (customBuffer != null) {
+                nativeAudioSendFactory = new NativeAudioSendFactory(customBuffer);
+            } else {
+                nativeAudioSendFactory = new NativeAudioSendFactory();
+            }
 
-        return AsyncPacketProviderFactory.adapt(nativeAudioSendFactory);
+            return AsyncPacketProviderFactory.adapt(nativeAudioSendFactory);
+        });
     }
 
 }

@@ -79,10 +79,12 @@ public class Launcher {
     private void initSentry() {
         String sentryDsn = config.getSentryDsn();
         if (sentryDsn == null || sentryDsn.isEmpty()) {
+            log.info("No sentry dsn found, turning off sentry.");
             turnOffSentry();
             return;
         }
         SentryClient sentryClient = Sentry.init(sentryDsn);
+        log.info("Set up sentry.");
 
         // set the git commit hash this was build on as the release
         Properties gitProps = new Properties();
@@ -92,11 +94,13 @@ public class Launcher {
             log.error("Failed to load git repo information", e);
         }
 
-        String commitHash = gitProps.getProperty("git.commit.id.full");
-        if (commitHash == null || commitHash.isEmpty()) {
-            return;
+        String commitHash = gitProps.getProperty("git.commit.id");
+        if (commitHash != null && !commitHash.isEmpty()) {
+            log.info("Setting sentry release to commit hash {}", commitHash);
+            sentryClient.setRelease(commitHash);
+        } else {
+            log.warn("No git commit hash found to set up sentry release");
         }
-        sentryClient.setRelease(commitHash);
     }
 
     private void turnOffSentry() {
@@ -135,8 +139,8 @@ public class Launcher {
     }
 
     @Bean
-    static SocketServer socketServer(@Value("${lavalink.server.ws.port}") Integer port,
-                                     @Value("${lavalink.server.ws.host}") String host,
+    static SocketServer socketServer(@Value("${lavalink.server.ws.port:8080}") Integer port,
+                                     @Value("${lavalink.server.ws.host:0.0.0.0}") String host,
                                      @Value("${lavalink.server.password}") String password) {
         SocketServer ss = new SocketServer(new InetSocketAddress(host, port), password);
         ss.start();

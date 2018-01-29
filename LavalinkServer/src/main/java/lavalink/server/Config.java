@@ -47,16 +47,19 @@ public class Config {
         this.password = password;
     }
 
+    @Nullable
     private String sentryDsn;
 
+    @Nullable
     public String getSentryDsn() {
         return sentryDsn;
     }
 
-    public void setSentryDsn(String sentryDsn) {
+    public void setSentryDsn(@Nullable String sentryDsn) {
         this.sentryDsn = sentryDsn;
     }
 
+    @SuppressWarnings("WeakerAccess")
     @Nullable
     public Integer bufferDurationMs;
 
