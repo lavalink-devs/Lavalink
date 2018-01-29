@@ -6,7 +6,7 @@ plugins {
 
 description = 'Play audio to discord voice channels'
 mainClassName = "lavalink.server.Launcher"
-version '1.3'
+version '2.0'
 ext {
     moduleName = 'Lavalink-Server'
 }
