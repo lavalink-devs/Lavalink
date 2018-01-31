@@ -103,18 +103,19 @@ public class LavalinkLoadBalancer {
         private Penalties(LavalinkSocket socket, long guild, List<PenaltyProvider> penaltyProviders) {
             this.socket = socket;
             this.guild = guild;
-            if (socket.stats == null) return; // Will return as max penalty anyways
+            RemoteStats stats = socket.getStats();
+            if (stats == null) return; // Will return as max penalty anyways
             // This will serve as a rule of thumb. 1 playing player = 1 penalty point
-            playerPenalty = socket.stats.getPlayingPlayers();
+            playerPenalty = stats.getPlayingPlayers();
 
             // https://fred.moe/293.png
-            cpuPenalty = (int) Math.pow(1.05d, 100 * socket.stats.getSystemLoad()) * 10 - 10;
+            cpuPenalty = (int) Math.pow(1.05d, 100 * stats.getSystemLoad()) * 10 - 10;
 
             // -1 Means we don't have any frame stats. This is normal for very young nodes
-            if (socket.stats.getAvgFramesDeficitPerMinute() != -1) {
+            if (stats.getAvgFramesDeficitPerMinute() != -1) {
                 // https://fred.moe/rjD.png
-                deficitFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesDeficitPerMinute() / 3000f)) * 600 - 600);
-                nullFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) socket.stats.getAvgFramesNulledPerMinute() / 3000f)) * 300 - 300);
+                deficitFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) stats.getAvgFramesDeficitPerMinute() / 3000f)) * 600 - 600);
+                nullFramePenalty = (int) (Math.pow(1.03d, 500f * ((float) stats.getAvgFramesNulledPerMinute() / 3000f)) * 300 - 300);
                 nullFramePenalty *= 2;
                 // Deficit frames are better than null frames, as deficit frames can be caused by the garbage collector
             }
@@ -150,7 +151,7 @@ public class LavalinkLoadBalancer {
         }
 
         public int getTotal() {
-            if(!socket.isAvailable() || socket.stats == null) return (Integer.MAX_VALUE - 1);
+            if (!socket.isAvailable() || socket.getStats() == null) return (Integer.MAX_VALUE - 1);
             return playerPenalty + cpuPenalty + deficitFramePenalty + nullFramePenalty + customPenalties;
         }
 

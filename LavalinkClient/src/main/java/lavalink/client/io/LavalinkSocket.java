@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URI;
@@ -52,7 +53,8 @@ public class LavalinkSocket extends ReusableWebSocket {
     private final String name;
     @Nonnull
     private final Lavalink lavalink;
-    RemoteStats stats;
+    @Nullable
+    private RemoteStats stats;
     long lastReconnectAttempt = 0;
     private int reconnectsAttempted = 0;
     @Nonnull
@@ -198,6 +200,7 @@ public class LavalinkSocket extends ReusableWebSocket {
         return reconnectsAttempted * 2000 - 2000;
     }
 
+    @Nullable
     public RemoteStats getStats() {
         return stats;
     }
