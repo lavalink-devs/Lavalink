@@ -60,7 +60,13 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
         PLAYER_MANAGER.enableGcMonitoring();
 
         Config.Sources sources = Launcher.config.getSources();
-        if (sources.isYoutube()) PLAYER_MANAGER.registerSourceManager(new YoutubeAudioSourceManager());
+        if (sources.isYoutube()) {
+            YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager();
+            Integer playlistLoadLimit = Launcher.config.getYoutubePlaylistLoadLimit();
+
+            if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit);
+            PLAYER_MANAGER.registerSourceManager(new YoutubeAudioSourceManager());
+        }
         if (sources.isBandcamp()) PLAYER_MANAGER.registerSourceManager(new BandcampAudioSourceManager());
         if (sources.isSoundcloud()) PLAYER_MANAGER.registerSourceManager(new SoundCloudAudioSourceManager());
         if (sources.isTwitch()) PLAYER_MANAGER.registerSourceManager(new TwitchStreamAudioSourceManager());
