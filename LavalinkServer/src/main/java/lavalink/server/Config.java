@@ -72,6 +72,18 @@ public class Config {
         this.bufferDurationMs = bufferDurationMs;
     }
 
+    @Nullable
+    private Integer youtubePlaylistLoadLimit;
+
+    @Nullable
+    public Integer getYoutubePlaylistLoadLimit() {
+        return youtubePlaylistLoadLimit;
+    }
+
+    public void setYoutubePlaylistLoadLimit(@Nullable Integer youtubePlaylistLoadLimit) {
+        this.youtubePlaylistLoadLimit = youtubePlaylistLoadLimit;
+    }
+
     public static class Sources {
 
         private boolean youtube = true;
