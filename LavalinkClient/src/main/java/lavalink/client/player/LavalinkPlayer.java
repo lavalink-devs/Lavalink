@@ -47,6 +47,11 @@ public class LavalinkPlayer implements IPlayer {
     private final Link link;
     private List<IPlayerEventListener> listeners = new CopyOnWriteArrayList<>();
 
+    /**
+     * Constructor only for internal use
+     *
+     * @param link the parent link
+     */
     public LavalinkPlayer(Link link) {
         this.link = link;
         addListener(new LavalinkInternalPlayerEventHandler());
@@ -54,11 +59,12 @@ public class LavalinkPlayer implements IPlayer {
 
     /**
      * Invoked by {@link Link} to make sure we keep playing music on the new node
+     *
+     * Used when we are moved to a new socket
      */
-    // Used when we are moved to a new socket
     public void onNodeChange() {
-        if (getPlayingTrack() != null) {
-            AudioTrack track = getPlayingTrack();
+        AudioTrack track = getPlayingTrack();
+        if (track != null) {
             track.setPosition(getTrackPosition());
             playTrack(track);
         }
