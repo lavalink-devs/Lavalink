@@ -146,6 +146,18 @@ public class Link {
         }
     }
 
+    void onDisconnected() {
+        setState(State.NOT_CONNECTED);
+        LavalinkSocket socket = getNode(false);
+        if (socket != null) {
+            socket.send(new JSONObject()
+                    .put("op", "destroy")
+                    .put("guildId", Long.toString(guild))
+                    .toString());
+            node = null;
+        }
+    }
+
     /**
      * Disconnects the voice connection (if any) and internally dereferences this {@link Link}.
      * <p>
@@ -154,7 +166,8 @@ public class Link {
     @SuppressWarnings("unused")
     public void destroy() {
         if (state != State.DISCONNECTING && state != State.NOT_CONNECTED) {
-            disconnect();
+            Guild g = getJda().getGuildById(guild);
+            if (g != null) getMainWs().queueAudioDisconnect(g);
         }
         setState(State.DESTROYED);
         lavalink.removeDestroyedLink(this);
@@ -185,6 +198,7 @@ public class Link {
     public LavalinkSocket getNode(boolean selectIfAbsent) {
         if (selectIfAbsent && node == null) {
             node = lavalink.loadBalancer.determineBestSocket(guild);
+            player.onNodeChange();
         }
         return node;
     }
