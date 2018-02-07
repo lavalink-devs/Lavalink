@@ -81,6 +81,9 @@ public class LavalinkCollector extends Collector {
         for (LavalinkSocket node : lavalink.getNodes()) {
             List<String> labels = Collections.singletonList(node.getName());
             RemoteStats stats = node.getStats();
+            if (stats == null) {
+                continue;
+            }
 
             players.addMetric(labels, stats.getPlayers());
             playingPlayers.addMetric(labels, stats.getPlayingPlayers());

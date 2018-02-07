@@ -41,7 +41,7 @@ public class VoiceStateUpdateInterceptor extends VoiceStateUpdateHandler {
         if (channelId == null) {
             // Null channel means disconnected
             if (link.getState() != Link.State.DESTROYED) {
-                link.setState(Link.State.NOT_CONNECTED);
+                link.onDisconnected();
             }
         } else if (channel != null) {
             link.setChannel(channel); // Change expected channel
