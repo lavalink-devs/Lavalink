@@ -109,7 +109,7 @@ public class LavalinkLoadBalancer {
             if (stats == null) return; // Will return as max penalty anyways
             // This will serve as a rule of thumb. 1 playing player = 1 penalty point
             if (lavalink != null) {
-                playerPenalty = getLocalPlayingPlayers();
+                playerPenalty = countPlayingPlayers();
             } else {
                 playerPenalty = stats.getPlayingPlayers();
             }
@@ -128,8 +128,13 @@ public class LavalinkLoadBalancer {
             penaltyProviders.forEach(pp -> customPenalties += pp.getPenalty(this));
         }
 
-        private int getLocalPlayingPlayers() {
-            Long players = lavalink.getLinks().stream().filter(link -> socket.equals(link.getNode(false)) && link.getPlayer().getPlayingTrack() != null && !link.getPlayer().isPaused()).count();
+        private int countPlayingPlayers() {
+            Long players = lavalink.getLinks()
+                    .stream().filter(link ->
+                            socket.equals(link.getNode(false)) &&
+                                    link.getPlayer().getPlayingTrack() != null &&
+                                    !link.getPlayer().isPaused())
+                    .count();
             return players.intValue();
         }
 

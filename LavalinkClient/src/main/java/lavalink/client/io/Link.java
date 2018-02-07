@@ -237,7 +237,9 @@ public class Link {
     void setState(@Nonnull State state) {
         if (this.state == State.DESTROYED && state != State.DESTROYED)
             throw new IllegalStateException("Cannot change state to " + state + " when state is " + State.DESTROYED);
-
+        if (this.state == State.DESTROYING && state != State.DESTROYED) {
+            throw new IllegalStateException("Cannot change state to " + state + " when state is " + State.DESTROYING);
+        }
         log.debug("Link {} changed state from {} to {}", this, this.state, state);
         this.state = state;
     }
