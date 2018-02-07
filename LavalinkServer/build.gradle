@@ -16,7 +16,7 @@ jar {
 publishToMavenLocal.dependsOn 'bootRepackage'
 
 dependencies {
-    compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.45'
+    compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.47'
     compile group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: '7a3f9d40a32b74b6e85e0e0c8f9a051f004b5584'
     compile group: 'com.github.FredBoat', name: 'jda-nas', version: '1.0.6.1-JDA-Audio'
     compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: '1.1'
