@@ -149,7 +149,7 @@ public class Link {
     void onDisconnected() {
         setState(State.NOT_CONNECTED);
         LavalinkSocket socket = getNode(false);
-        if (socket != null) {
+        if (socket != null && state != State.DESTROYING && state != State.DESTROYED) {
             socket.send(new JSONObject()
                     .put("op", "destroy")
                     .put("guildId", Long.toString(guild))
@@ -165,6 +165,7 @@ public class Link {
      */
     @SuppressWarnings("unused")
     public void destroy() {
+        setState(State.DESTROYING);
         if (state != State.DISCONNECTING && state != State.NOT_CONNECTED) {
             Guild g = getJda().getGuildById(guild);
             if (g != null) getMainWs().queueAudioDisconnect(g);
@@ -236,7 +237,9 @@ public class Link {
     void setState(@Nonnull State state) {
         if (this.state == State.DESTROYED && state != State.DESTROYED)
             throw new IllegalStateException("Cannot change state to " + state + " when state is " + State.DESTROYED);
-
+        if (this.state == State.DESTROYING && state != State.DESTROYED) {
+            throw new IllegalStateException("Cannot change state to " + state + " when state is " + State.DESTROYING);
+        }
         log.debug("Link {} changed state from {} to {}", this, this.state, state);
         this.state = state;
     }
@@ -287,6 +290,11 @@ public class Link {
          * Waiting for confirmation from Discord that we have connected
          */
         DISCONNECTING,
+
+        /**
+         * This {@link Link} is being destroyed
+         */
+        DESTROYING,
 
         /**
          * This {@link Link} has been destroyed and will soon (if not already) be unmapped from {@link Lavalink}

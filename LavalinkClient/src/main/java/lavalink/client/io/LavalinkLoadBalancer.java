@@ -82,11 +82,11 @@ public class LavalinkLoadBalancer {
     }
 
     public Penalties getPenalties(LavalinkSocket socket, long guild, List<PenaltyProvider> penaltyProviders) {
-        return new Penalties(socket, guild, penaltyProviders);
+        return new Penalties(socket, guild, penaltyProviders, lavalink);
     }
 
     public static Penalties getPenalties(LavalinkSocket socket) {
-        return new Penalties(socket, 0L, Collections.emptyList());
+        return new Penalties(socket, 0L, Collections.emptyList(), null);
     }
 
     @SuppressWarnings("unused")
@@ -99,14 +99,20 @@ public class LavalinkLoadBalancer {
         private int deficitFramePenalty = 0;
         private int nullFramePenalty = 0;
         private int customPenalties = 0;
+        private final Lavalink lavalink;
 
-        private Penalties(LavalinkSocket socket, long guild, List<PenaltyProvider> penaltyProviders) {
+        private Penalties(LavalinkSocket socket, long guild, List<PenaltyProvider> penaltyProviders, Lavalink lavalink) {
+            this.lavalink = lavalink;
             this.socket = socket;
             this.guild = guild;
             RemoteStats stats = socket.getStats();
             if (stats == null) return; // Will return as max penalty anyways
             // This will serve as a rule of thumb. 1 playing player = 1 penalty point
-            playerPenalty = stats.getPlayingPlayers();
+            if (lavalink != null) {
+                playerPenalty = countPlayingPlayers();
+            } else {
+                playerPenalty = stats.getPlayingPlayers();
+            }
 
             // https://fred.moe/293.png
             cpuPenalty = (int) Math.pow(1.05d, 100 * stats.getSystemLoad()) * 10 - 10;
@@ -120,6 +126,16 @@ public class LavalinkLoadBalancer {
                 // Deficit frames are better than null frames, as deficit frames can be caused by the garbage collector
             }
             penaltyProviders.forEach(pp -> customPenalties += pp.getPenalty(this));
+        }
+
+        private int countPlayingPlayers() {
+            Long players = lavalink.getLinks()
+                    .stream().filter(link ->
+                            socket.equals(link.getNode(false)) &&
+                                    link.getPlayer().getPlayingTrack() != null &&
+                                    !link.getPlayer().isPaused())
+                    .count();
+            return players.intValue();
         }
 
         public LavalinkSocket getSocket() {
