@@ -201,7 +201,7 @@ public class Link {
     public LavalinkSocket getNode(boolean selectIfAbsent) {
         if (selectIfAbsent && node == null) {
             node = lavalink.loadBalancer.determineBestSocket(guild);
-            player.onNodeChange();
+            if (player != null) player.onNodeChange();
         }
         return node;
     }
