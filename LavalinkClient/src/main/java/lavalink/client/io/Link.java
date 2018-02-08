@@ -106,7 +106,7 @@ public class Link {
         if (checkChannel && channel.equals(channel.getGuild().getSelfMember().getVoiceState().getChannel()))
             return;
 
-        if (this.state == State.CONNECTED) {
+        if (channel.getGuild().getSelfMember().getVoiceState().inVoiceChannel()) {
             final int userLimit = channel.getUserLimit(); // userLimit is 0 if no limit is set!
             if (!self.isOwner() && !self.hasPermission(Permission.ADMINISTRATOR)) {
                 final long perms = PermissionUtil.getExplicitPermission(channel, self);
