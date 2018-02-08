@@ -65,7 +65,7 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
             Integer playlistLoadLimit = Launcher.config.getYoutubePlaylistLoadLimit();
 
             if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit);
-            PLAYER_MANAGER.registerSourceManager(new YoutubeAudioSourceManager());
+            PLAYER_MANAGER.registerSourceManager(youtube);
         }
         if (sources.isBandcamp()) PLAYER_MANAGER.registerSourceManager(new BandcampAudioSourceManager());
         if (sources.isSoundcloud()) PLAYER_MANAGER.registerSourceManager(new SoundCloudAudioSourceManager());
