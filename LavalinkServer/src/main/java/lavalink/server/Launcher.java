@@ -132,6 +132,13 @@ public class Launcher {
             } else {
                 log.info("Using default buffer");
             }
+
+            Integer customPlaylistLimit = config.getYoutubePlaylistLoadLimit();
+            if (customPlaylistLimit != null) {
+                log.info("Setting playlist load limit to {}", customPlaylistLimit);
+            } else {
+                log.info("Using default playlist load limit");
+            }
         } else {
             log.warn("This system and architecture appears to not support native audio sending! "
                     + "GC pauses may cause your bot to stutter during playback.");
