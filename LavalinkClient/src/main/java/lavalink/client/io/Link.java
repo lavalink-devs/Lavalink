@@ -167,8 +167,9 @@ public class Link {
      */
     @SuppressWarnings("unused")
     public void destroy() {
+        boolean shouldDisconnect = state != State.DISCONNECTING && state != State.NOT_CONNECTED;
         setState(State.DESTROYING);
-        if (state != State.DISCONNECTING && state != State.NOT_CONNECTED) {
+        if (shouldDisconnect) {
             Guild g = getJda().getGuildById(guild);
             if (g != null) getMainWs().queueAudioDisconnect(g);
         }
