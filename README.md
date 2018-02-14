@@ -25,10 +25,8 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ### Supports 1.x:
-* [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
 * [lava-d.js](https://github.com/untocodes/lava-d.js) (discord.js, JavaScript)
 * [lavalink.js](https://github.com/briantanner/lavalink.js) (discord.js, JavaScript)
-* [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
 
 Outdated as of January 29 2018.
 
