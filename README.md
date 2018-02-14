@@ -20,13 +20,13 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 * [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (JDA, Java)
 * [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
 * [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
+* [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
+* [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ### Supports 1.x:
-* [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
 * [lava-d.js](https://github.com/untocodes/lava-d.js) (discord.js, JavaScript)
 * [lavalink.js](https://github.com/briantanner/lavalink.js) (discord.js, JavaScript)
-* [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
 
 Outdated as of January 29 2018.
 
