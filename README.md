@@ -21,6 +21,7 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 * [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
 * [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
 * [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
+* [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ### Supports 1.x:
