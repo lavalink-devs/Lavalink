@@ -22,4 +22,4 @@ ENV SERVER_PORT=2333 \
     LAVALINK_SERVER_BUFFER_DURATION_MS=400 \
     LAVALINK_SERVER_YOUTUBE_PLAYLIST_LOAD_LIMIT=600
 
-ENTRYPOINT ["java", "-jar", "-Xmx128m", "Lavalink.jar"]
+ENTRYPOINT ["java", "-jar", "-Xmx4G", "Lavalink.jar"]
