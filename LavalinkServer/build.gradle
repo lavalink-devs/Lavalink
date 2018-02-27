@@ -20,7 +20,7 @@ dependencies {
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.54'
     compile group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: '91438c36d7107cf838c2f2eb147b08f989d929db'
     compile group: 'com.github.FredBoat', name: 'jda-nas', version: '1.0.6.1-JDA-Audio'
-    compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: '1.1'
+    compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: '1.2'
     compile group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.3.7'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
