@@ -89,10 +89,11 @@ public class AudioLoaderRestHandler {
         if (!isAuthorized(request, response))
             return "";
 
+        JSONObject json = new JSONObject();
         JSONArray tracks = new JSONArray();
-        List<AudioTrack> list = new AudioLoader().loadSync(identifier);
+        LoadResult result = new AudioLoader().loadSync(identifier);
 
-        list.forEach(track -> {
+        result.tracks.forEach(track -> {
             JSONObject object = new JSONObject();
             object.put("info", trackToJSON(track));
 
@@ -105,7 +106,10 @@ public class AudioLoaderRestHandler {
             }
         });
 
-        return tracks.toString();
+        json.put("isPlaylist", result.isPlaylist);
+        json.put("tracks", tracks);
+
+        return json.toString();
     }
 
     @GetMapping(value = "/decodetrack", produces = "application/json")
