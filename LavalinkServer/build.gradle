@@ -1,8 +1,6 @@
-plugins {
-    id 'application'
-    id 'org.springframework.boot' version '1.5.10.RELEASE'
-    id 'com.gorylenko.gradle-git-properties' version '1.4.20'
-}
+apply plugin: 'application'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'com.gorylenko.gradle-git-properties'
 
 description = 'Play audio to discord voice channels'
 mainClassName = "lavalink.server.Launcher"
@@ -17,16 +15,16 @@ jar {
 publishToMavenLocal.dependsOn 'bootRepackage'
 
 dependencies {
-    compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.56'
-    compile group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: '91438c36d7107cf838c2f2eb147b08f989d929db'
-    compile group: 'com.github.FredBoat', name: 'jda-nas', version: '1.0.6.1-JDA-Audio'
-    compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: '1.2'
-    compile group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.3.7'
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-    compile group: 'io.sentry', name: 'sentry-logback', version: '1.6.4'
-    compile group: 'com.github.oshi', name: 'oshi-core', version: '3.4.4'
-    compile group: 'org.json', name: 'json', version: '20180130'
-    compile group: 'com.google.guava', name: 'guava', version: '23.0'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '1.5.10.RELEASE'
+    compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
+    compile group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: jdaAudioVersion
+    compile group: 'com.github.FredBoat', name: 'jda-nas', version: jdaNasVersion
+    compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: jappVersion
+    compile group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
+    compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
+    compile group: 'io.sentry', name: 'sentry-logback', version: sentryLogbackVersion
+    compile group: 'com.github.oshi', name: 'oshi-core', version: oshiVersion
+    compile group: 'org.json', name: 'json', version: jsonOrgVersion
+    compile group: 'com.google.guava', name: 'guava', version: guavaVersion
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
 }
