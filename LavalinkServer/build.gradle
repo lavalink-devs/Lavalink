@@ -9,7 +9,7 @@ ext {
     moduleName = 'Lavalink-Server'
 }
 
-jar {
+bootJar {
     archiveName = "Lavalink.jar"
 }
 
