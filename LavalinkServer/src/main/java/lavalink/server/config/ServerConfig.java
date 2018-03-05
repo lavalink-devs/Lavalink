@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package lavalink.server;
+package lavalink.server.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -29,13 +29,7 @@ import javax.annotation.Nullable;
 
 @ConfigurationProperties(prefix = "lavalink.server")
 @Component
-public class Config {
-
-    private final Sources sources = new Sources();
-
-    public Sources getSources() {
-        return sources;
-    }
+public class ServerConfig {
 
     private String password;
 
@@ -47,19 +41,16 @@ public class Config {
         this.password = password;
     }
 
-    @Nullable
-    private String sentryDsn;
+    private String sentryDsn = "";
 
-    @Nullable
     public String getSentryDsn() {
         return sentryDsn;
     }
 
-    public void setSentryDsn(@Nullable String sentryDsn) {
+    public void setSentryDsn(String sentryDsn) {
         this.sentryDsn = sentryDsn;
     }
 
-    @SuppressWarnings("WeakerAccess")
     @Nullable
     public Integer bufferDurationMs;
 
@@ -82,81 +73,5 @@ public class Config {
 
     public void setYoutubePlaylistLoadLimit(@Nullable Integer youtubePlaylistLoadLimit) {
         this.youtubePlaylistLoadLimit = youtubePlaylistLoadLimit;
-    }
-
-    public static class Sources {
-
-        private boolean youtube = true;
-        private boolean bandcamp = true;
-        private boolean soundcloud = true;
-        private boolean twitch = true;
-        private boolean vimeo = true;
-        private boolean mixer = true;
-        private boolean http = true;
-        private boolean local = false;
-
-        public boolean isYoutube() {
-            return youtube;
-        }
-
-        public void setYoutube(boolean youtube) {
-            this.youtube = youtube;
-        }
-
-        public boolean isBandcamp() {
-            return bandcamp;
-        }
-
-        public void setBandcamp(boolean bandcamp) {
-            this.bandcamp = bandcamp;
-        }
-
-        public boolean isSoundcloud() {
-            return soundcloud;
-        }
-
-        public void setSoundcloud(boolean soundcloud) {
-            this.soundcloud = soundcloud;
-        }
-
-        public boolean isTwitch() {
-            return twitch;
-        }
-
-        public void setTwitch(boolean twitch) {
-            this.twitch = twitch;
-        }
-
-        public boolean isVimeo() {
-            return vimeo;
-        }
-
-        public void setVimeo(boolean vimeo) {
-            this.vimeo = vimeo;
-        }
-
-        public boolean isMixer() {
-            return mixer;
-        }
-
-        public void setMixer(boolean mixer) {
-            this.mixer = mixer;
-        }
-
-        public boolean isHttp() {
-            return http;
-        }
-
-        public void setHttp(boolean http) {
-            this.http = http;
-        }
-
-        public boolean isLocal() {
-            return local;
-        }
-
-        public void setLocal(boolean local) {
-            this.local = local;
-        }
     }
 }

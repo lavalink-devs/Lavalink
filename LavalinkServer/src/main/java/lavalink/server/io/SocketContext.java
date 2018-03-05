@@ -24,7 +24,9 @@ package lavalink.server.io;
 
 import com.github.shredder121.asyncaudio.jdaaudio.AsyncPacketProviderFactory;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
-import lavalink.server.Launcher;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import lavalink.server.config.AudioSendFactoryConfiguration;
+import lavalink.server.config.ServerConfig;
 import lavalink.server.player.Player;
 import lavalink.server.util.Util;
 import net.dv8tion.jda.Core;
@@ -48,24 +50,30 @@ public class SocketContext {
 
     private static final Logger log = LoggerFactory.getLogger(SocketContext.class);
 
-    public static boolean nasSupported = false;
+    private final AudioPlayerManager audioPlayerManager;
+    private final ServerConfig serverConfig;
     private final WebSocket socket;
+    private final AudioSendFactoryConfiguration audioSendFactoryConfiguration;
     private String userId;
     private int shardCount;
     private final Map<Integer, Core> cores = new HashMap<>();
     private final Map<String, Player> players = new ConcurrentHashMap<>();
     private ScheduledExecutorService statsExecutor;
     public final ScheduledExecutorService playerUpdateService;
-    private static final int audioSendFactoryCount = Runtime.getRuntime().availableProcessors() * 2;
     private final ConcurrentHashMap<Integer, IAudioSendFactory> sendFactories = new ConcurrentHashMap<>();
 
-    SocketContext(WebSocket socket, String userId, int shardCount) {
+    SocketContext(AudioPlayerManager audioPlayerManager, ServerConfig serverConfig, WebSocket socket,
+                  AudioSendFactoryConfiguration audioSendFactoryConfiguration, SocketServer socketServer,
+                  String userId, int shardCount) {
+        this.audioPlayerManager = audioPlayerManager;
+        this.serverConfig = serverConfig;
         this.socket = socket;
+        this.audioSendFactoryConfiguration = audioSendFactoryConfiguration;
         this.userId = userId;
         this.shardCount = shardCount;
 
         statsExecutor = Executors.newSingleThreadScheduledExecutor();
-        statsExecutor.scheduleAtFixedRate(new StatsTask(this), 0, 1, TimeUnit.MINUTES);
+        statsExecutor.scheduleAtFixedRate(new StatsTask(this, socketServer), 0, 1, TimeUnit.MINUTES);
 
         playerUpdateService = Executors.newScheduledThreadPool(2, r -> {
             Thread thread = new Thread(r);
@@ -78,7 +86,7 @@ public class SocketContext {
     Core getCore(int shardId) {
         return cores.computeIfAbsent(shardId,
                 __ -> {
-                    if (nasSupported)
+                    if (audioSendFactoryConfiguration.isNasSupported())
                         return new Core(userId, new CoreClientImpl(), core -> new ConnectionManagerImpl(), getAudioSendFactory(shardId));
                     else
                         return new Core(userId, new CoreClientImpl(), (ConnectionManagerBuilder) core -> new ConnectionManagerImpl());
@@ -88,7 +96,7 @@ public class SocketContext {
 
     Player getPlayer(String guildId) {
         return players.computeIfAbsent(guildId,
-                __ -> new Player(this, guildId)
+                __ -> new Player(this, guildId, audioPlayerManager)
         );
     }
 
@@ -130,17 +138,18 @@ public class SocketContext {
     }
 
     private IAudioSendFactory getAudioSendFactory(int shardId) {
-        return sendFactories.computeIfAbsent(shardId % audioSendFactoryCount, integer -> {
-            Integer customBuffer = Launcher.config.getBufferDurationMs();
-            NativeAudioSendFactory nativeAudioSendFactory;
-            if (customBuffer != null) {
-                nativeAudioSendFactory = new NativeAudioSendFactory(customBuffer);
-            } else {
-                nativeAudioSendFactory = new NativeAudioSendFactory();
-            }
+        return sendFactories.computeIfAbsent(shardId % audioSendFactoryConfiguration.getAudioSendFactoryCount(),
+                integer -> {
+                    Integer customBuffer = serverConfig.getBufferDurationMs();
+                    NativeAudioSendFactory nativeAudioSendFactory;
+                    if (customBuffer != null) {
+                        nativeAudioSendFactory = new NativeAudioSendFactory(customBuffer);
+                    } else {
+                        nativeAudioSendFactory = new NativeAudioSendFactory();
+                    }
 
-            return AsyncPacketProviderFactory.adapt(nativeAudioSendFactory);
-        });
+                    return AsyncPacketProviderFactory.adapt(nativeAudioSendFactory);
+                });
     }
 
 }

@@ -22,9 +22,10 @@
 
 package lavalink.server.player;
 
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import lavalink.server.Launcher;
+import lavalink.server.config.ServerConfig;
 import lavalink.server.util.Util;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,6 +47,13 @@ import java.util.List;
 public class AudioLoaderRestHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AudioLoaderRestHandler.class);
+    private final AudioPlayerManager audioPlayerManager;
+    private final ServerConfig serverConfig;
+
+    public AudioLoaderRestHandler(AudioPlayerManager audioPlayerManager, ServerConfig serverConfig) {
+        this.audioPlayerManager = audioPlayerManager;
+        this.serverConfig = serverConfig;
+    }
 
     private void log(HttpServletRequest request) {
         String path = request.getServletPath();
@@ -58,7 +66,7 @@ public class AudioLoaderRestHandler {
             return false;
         }
 
-        if (!request.getHeader("Authorization").equals(Launcher.config.getPassword())) {
+        if (!request.getHeader("Authorization").equals(serverConfig.getPassword())) {
             log.warn("Authorization failed");
             response.setStatus(403);
             return false;
@@ -90,14 +98,14 @@ public class AudioLoaderRestHandler {
             return "";
 
         JSONArray tracks = new JSONArray();
-        List<AudioTrack> list = new AudioLoader().loadSync(identifier);
+        List<AudioTrack> list = new AudioLoader(audioPlayerManager).loadSync(identifier);
 
         list.forEach(track -> {
             JSONObject object = new JSONObject();
             object.put("info", trackToJSON(track));
 
             try {
-                String encoded = Util.toMessage(track);
+                String encoded = Util.toMessage(audioPlayerManager, track);
                 object.put("track", encoded);
                 tracks.put(object);
             } catch (IOException e) {
@@ -116,7 +124,7 @@ public class AudioLoaderRestHandler {
         if (!isAuthorized(request, response))
             return "";
 
-        AudioTrack audioTrack = Util.toAudioTrack(track);
+        AudioTrack audioTrack = Util.toAudioTrack(audioPlayerManager, track);
 
         return trackToJSON(audioTrack).toString();
     }
@@ -134,7 +142,7 @@ public class AudioLoaderRestHandler {
 
         for (int i = 0; i < requestJSON.length(); i++) {
             String track = requestJSON.getString(i);
-            AudioTrack audioTrack = Util.toAudioTrack(track);
+            AudioTrack audioTrack = Util.toAudioTrack(audioPlayerManager, track);
 
             JSONObject infoJSON = trackToJSON(audioTrack);
             JSONObject trackJSON = new JSONObject()

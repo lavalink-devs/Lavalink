@@ -26,41 +26,35 @@ import ch.qos.logback.classic.LoggerContext;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.logback.SentryAppender;
-import lavalink.server.io.SocketContext;
+import lavalink.server.config.ServerConfig;
 import lavalink.server.io.SocketServer;
 import lavalink.server.util.SimpleLogToSLF4JAdapter;
 import net.dv8tion.jda.utils.SimpleLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.Properties;
 
-@Configuration
+@SpringBootApplication
 @ComponentScan
-@EnableAutoConfiguration
-@Controller
 public class Launcher {
 
     private static final Logger log = LoggerFactory.getLogger(Launcher.class);
 
     public final static long startTime = System.currentTimeMillis();
-    public static Config config;
-    @SuppressWarnings("FieldCanBeLocal")
-    private final SocketServer socketServer;
 
-    @Autowired
-    public Launcher(Config config, SocketServer socketServer) {
+    public static void main(String[] args) {
+        SpringApplication sa = new SpringApplication(Launcher.class);
+        sa.setWebApplicationType(WebApplicationType.SERVLET);
+        sa.run(args);
+    }
+
+    public Launcher(ServerConfig serverConfig, SocketServer socketServer) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             log.info("Shutdown hook triggered");
             try {
@@ -72,13 +66,11 @@ public class Launcher {
 
         SimpleLog.LEVEL = SimpleLog.Level.OFF;
         SimpleLog.addListener(new SimpleLogToSLF4JAdapter());
-        Launcher.config = config;
-        initSentry();
-        this.socketServer = socketServer;
+        initSentry(serverConfig);
     }
 
-    private void initSentry() {
-        String sentryDsn = config.getSentryDsn();
+    private void initSentry(ServerConfig serverConfig) {
+        String sentryDsn = serverConfig.getSentryDsn();
         if (sentryDsn == null || sentryDsn.isEmpty()) {
             log.info("No sentry dsn found, turning off sentry.");
             turnOffSentry();
@@ -110,49 +102,4 @@ public class Launcher {
         Sentry.close();
         sentryAppender.stop();
     }
-
-    public static void main(String[] args) {
-        SpringApplication sa = new SpringApplication(Launcher.class);
-        sa.setWebApplicationType(WebApplicationType.SERVLET);
-        sa.run(args);
-
-        String os = System.getProperty("os.name");
-
-        log.info("OS: " + System.getProperty("os.name") + ", Arch: " + System.getProperty("os.arch"));
-
-        if ((os.contains("Windows") || os.contains("Linux"))
-                && !System.getProperty("os.arch").equalsIgnoreCase("arm")
-                && !System.getProperty("os.arch").equalsIgnoreCase("arm-linux")
-                ) {
-            SocketContext.nasSupported = true;
-            log.info("JDA-NAS supported system detected. Enabled native audio sending.");
-
-            Integer customBuffer = config.getBufferDurationMs();
-            if (customBuffer != null) {
-                log.info("Setting buffer to {}ms", customBuffer);
-            } else {
-                log.info("Using default buffer");
-            }
-
-            Integer customPlaylistLimit = config.getYoutubePlaylistLoadLimit();
-            if (customPlaylistLimit != null) {
-                log.info("Setting playlist load limit to {}", customPlaylistLimit);
-            } else {
-                log.info("Using default playlist load limit");
-            }
-        } else {
-            log.warn("This system and architecture appears to not support native audio sending! "
-                    + "GC pauses may cause your bot to stutter during playback.");
-        }
-    }
-
-    @Bean
-    static SocketServer socketServer(@Value("${lavalink.server.ws.port:8080}") Integer port,
-                                     @Value("${lavalink.server.ws.host:0.0.0.0}") String host,
-                                     @Value("${lavalink.server.password}") String password) {
-        SocketServer ss = new SocketServer(new InetSocketAddress(host, port), password);
-        ss.start();
-        return ss;
-    }
-
 }

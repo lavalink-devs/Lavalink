@@ -23,6 +23,7 @@
 package lavalink.server.player;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -35,9 +36,14 @@ import java.util.List;
 public class AudioLoader implements AudioLoadResultHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AudioLoader.class);
+    private final AudioPlayerManager audioPlayerManager;
 
     private List<AudioTrack> loadedItems;
     private boolean used = false;
+
+    public AudioLoader(AudioPlayerManager audioPlayerManager) {
+        this.audioPlayerManager = audioPlayerManager;
+    }
 
     List<AudioTrack> loadSync(String identifier) throws InterruptedException {
         if(used)
@@ -45,7 +51,7 @@ public class AudioLoader implements AudioLoadResultHandler {
 
         used = true;
 
-        Player.PLAYER_MANAGER.loadItem(identifier, this);
+        audioPlayerManager.loadItem(identifier, this);
 
         synchronized (this) {
             this.wait();
