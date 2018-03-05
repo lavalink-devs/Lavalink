@@ -28,7 +28,6 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ### Supports 1.x:
-* [lava-d.js](https://github.com/untocodes/lava-d.js) (discord.js, JavaScript)
 * [lavalink.js](https://github.com/briantanner/lavalink.js) (discord.js, JavaScript)
 
 Outdated as of January 29 2018.
