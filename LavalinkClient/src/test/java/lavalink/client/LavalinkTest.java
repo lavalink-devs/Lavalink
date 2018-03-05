@@ -90,14 +90,14 @@ class LavalinkTest {
     @Test
     void vcJoinTest() {
         VoiceChannel vc = jda.getVoiceChannelById(System.getenv("TEST_VOICE_CHANNEL"));
-        lavalink.openVoiceConnection(vc);
+        lavalink.getLink(vc.getGuild()).connect(vc);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        lavalink.closeVoiceConnection(vc.getGuild());
+        lavalink.getLink(vc.getGuild()).disconnect();
     }
 
     private List<AudioTrack> loadAudioTracks(String identifier) {
@@ -126,9 +126,9 @@ class LavalinkTest {
 
     private void connectAndPlay(AudioTrack track) throws InterruptedException {
         VoiceChannel vc = jda.getVoiceChannelById(System.getenv("TEST_VOICE_CHANNEL"));
-        lavalink.openVoiceConnection(vc);
+        lavalink.getLink(vc.getGuild()).connect(vc);
 
-        IPlayer player = lavalink.getPlayer(vc.getGuild().getId());
+        IPlayer player = lavalink.getLink(vc.getGuild()).getPlayer();
         CountDownLatch latch = new CountDownLatch(1);
         PlayerEventListenerAdapter listener = new PlayerEventListenerAdapter() {
             @Override
@@ -141,7 +141,7 @@ class LavalinkTest {
         player.playTrack(track);
 
         latch.await(5, TimeUnit.SECONDS);
-        lavalink.closeVoiceConnection(vc.getGuild());
+        lavalink.getLink(vc.getGuild()).disconnect();
         player.removeListener(listener);
         player.stopTrack();
 
@@ -161,9 +161,9 @@ class LavalinkTest {
     @Test
     void stopTest() throws InterruptedException {
         VoiceChannel vc = jda.getVoiceChannelById(System.getenv("TEST_VOICE_CHANNEL"));
-        lavalink.openVoiceConnection(vc);
+        lavalink.getLink(vc.getGuild()).connect(vc);
 
-        IPlayer player = lavalink.getPlayer(vc.getGuild().getId());
+        IPlayer player = lavalink.getLink(vc.getGuild()).getPlayer();
         CountDownLatch latch = new CountDownLatch(1);
 
         PlayerEventListenerAdapter listener = new PlayerEventListenerAdapter() {
@@ -185,7 +185,7 @@ class LavalinkTest {
         player.playTrack(loadAudioTracks("aGOFOP2BIhI").get(0));
 
         latch.await(5, TimeUnit.SECONDS);
-        lavalink.closeVoiceConnection(vc.getGuild());
+        lavalink.getLink(vc.getGuild()).disconnect();
         player.removeListener(listener);
         player.stopTrack();
 
