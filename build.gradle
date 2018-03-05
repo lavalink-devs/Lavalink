@@ -13,7 +13,7 @@ allprojects {
 subprojects {
     buildscript {
         ext {
-            springBootVersion = '1.5.10.RELEASE'
+            springBootVersion = '2.0.0.RELEASE'
             gradleGitVersion = '1.4.21'
         }
         repositories {

@@ -12,7 +12,7 @@ ext {
 jar {
     archiveName = "Lavalink.jar"
 }
-publishToMavenLocal.dependsOn 'bootRepackage'
+publishToMavenLocal.dependsOn 'bootJar'
 
 bootRun {
     //compiling tests during bootRun increases the likelyhood of catching broken tests locally instead of on the CI

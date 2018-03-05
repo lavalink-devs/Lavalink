@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -112,7 +113,7 @@ public class Launcher {
 
     public static void main(String[] args) {
         SpringApplication sa = new SpringApplication(Launcher.class);
-        sa.setWebEnvironment(true);
+        sa.setWebApplicationType(WebApplicationType.SERVLET);
         sa.run(args);
 
         String os = System.getProperty("os.name");
