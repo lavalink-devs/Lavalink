@@ -3,6 +3,27 @@ version System.getenv('dev') == 'true' ? '-SNAPSHOT' : '2.0'
 ext {
     moduleName = 'Lavalink-Client'
 }
+
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId rootProject.group
+            artifactId moduleName
+
+            from components.java
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+}
+
+task install(dependsOn: 'publishToMavenLocal')
+publishToMavenLocal.dependsOn 'jar'
+
 dependencies {
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
     compile group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
