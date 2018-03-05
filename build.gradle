@@ -14,7 +14,7 @@ subprojects {
     buildscript {
         ext {
             springBootVersion = '1.5.10.RELEASE'
-            gradleGitVersion = '1.4.20'
+            gradleGitVersion = '1.4.21'
         }
         repositories {
             maven { url "https://plugins.gradle.org/m2/" }
