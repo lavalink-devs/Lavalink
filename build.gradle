@@ -13,7 +13,7 @@ allprojects {
 subprojects {
     buildscript {
         ext {
-            springBootVersion = '1.5.10.RELEASE'
+            springBootVersion = '2.0.0.RELEASE'
             gradleGitVersion = '1.4.21'
         }
         repositories {
@@ -27,32 +27,13 @@ subprojects {
     }
     apply plugin: 'java'
     apply plugin: 'idea'
-    apply plugin: 'maven-publish'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                groupId rootProject.group
-                artifactId moduleName
-
-                from components.java
-
-                artifact sourceJar {
-                    classifier "sources"
-                }
-            }
-        }
-    }
-
     compileJava.dependsOn 'clean'
     compileJava.options.encoding = 'UTF-8'
     compileJava.options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-
-    task install(dependsOn: 'publishToMavenLocal')
-    publishToMavenLocal.dependsOn 'jar'
 
     task sourceJar(type: Jar) {
         from sourceSets.main.allJava
@@ -65,20 +46,20 @@ subprojects {
         jdaAudioVersion                 = '91438c36d7107cf838c2f2eb147b08f989d929db'
         jdaNasVersion                   = '1.0.6.1-JDA-Audio'
         jappVersion                     = '1.2'
-        jdaVersion                      = '3.5.0_334'
+        jdaVersion                      = '3.5.1_345'
 
         springBootVersion               = "${springBootVersion}"
         javaWebSocketVersion            = '1.3.7'
         logbackVersion                  = '1.2.3'
         slf4jVersion                    = '1.7.25'
-        sentryLogbackVersion            = '1.6.4'
+        sentryLogbackVersion            = '1.7.0'
         oshiVersion                     = '3.4.4'
         jsonOrgVersion                  = '20180130'
-        guavaVersion                    = '23.0'
-        prometheusVersion               = '0.1.0'
+        guavaVersion                    = '24.0-jre'
+        prometheusVersion               = '0.3.0'
 
-        junitJupiterVersion             = '5.0.0-M4'
-        junitPlatformVersion            = '1.0.0-M4'
+        junitJupiterVersion             = '5.1.0'
+        junitPlatformVersion            = '1.1.0'
         unirestVersion                  = '1.4.9'
 
         //@formatter:on
@@ -92,6 +73,6 @@ ext {
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.4.1'
+    gradleVersion = '4.6'
     distributionType = DistributionType.ALL
 }

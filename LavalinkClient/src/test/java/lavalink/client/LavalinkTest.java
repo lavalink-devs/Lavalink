@@ -35,8 +35,8 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -50,9 +50,21 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@RequireSystemProperty({
+        LavalinkTest.PROPERTY_TOKEN,
+        LavalinkTest.PROPERTY_CHANNEL,
+})
 class LavalinkTest {
 
     private static final Logger log = LoggerFactory.getLogger(LavalinkTest.class);
+
+    public static final String PROPERTY_TOKEN = "TEST_TOKEN";
+    public static final String PROPERTY_CHANNEL = "TEST_VOICE_CHANNEL";
 
     private static JDA jda = null;
     private static Lavalink lavalink = null;
@@ -67,37 +79,40 @@ class LavalinkTest {
     };
 
     @BeforeAll
-    static void setUp() {
-        try {
-            jda = new JDABuilder(AccountType.BOT)
-                    .setToken(System.getenv("TEST_TOKEN"))
-                    .addEventListener(lavalink)
-                    .buildBlocking();
+    static void setUp() throws Exception {
+        JDABuilder jdaBuilder = new JDABuilder(AccountType.BOT)
+                .setToken(getSystemProperty(PROPERTY_TOKEN));
 
-            lavalink = new Lavalink("152691313123393536", 1, integer -> jda);
-            lavalink.addNode(new URI("ws://localhost"), "youshallnotpass");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        JDA selfId = jdaBuilder.buildAsync();
+        lavalink = new Lavalink(selfId.asBot().getApplicationInfo().submit().get(30, TimeUnit.SECONDS).getId(), 1, integer -> jda);
+        selfId.shutdown();
+
+        lavalink.addNode(new URI("ws://localhost:5555"), "youshallnotpass");
+
+        jda = jdaBuilder
+                .addEventListener(lavalink)
+                .buildAsync();
+
+        Thread.sleep(2000);
+        assertTrue(lavalink.getNodes().get(0).isAvailable(), "Could not connect to lavalink server");
     }
 
     @AfterAll
     static void tearDown() {
-        lavalink.shutdown();
-        jda.shutdown();
+        if (lavalink != null) {
+            lavalink.shutdown();
+        }
+        if (jda != null) {
+            jda.shutdown();
+        }
     }
 
     @Test
     void vcJoinTest() {
-        VoiceChannel vc = jda.getVoiceChannelById(System.getenv("TEST_VOICE_CHANNEL"));
-        lavalink.getLink(vc.getGuild()).connect(vc);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        lavalink.getLink(vc.getGuild()).disconnect();
+        VoiceChannel vc = fetchVoiceChannel(jda, getTestVoiceChannelId());
+        ensureConnected(lavalink, vc);
+        assertEquals(Link.State.CONNECTED, lavalink.getLink(vc.getGuild()).getState(), "Failed to connect to voice channel");
+        ensureNotConnected(lavalink, vc);
     }
 
     private List<AudioTrack> loadAudioTracks(String identifier) {
@@ -106,13 +121,12 @@ class LavalinkTest {
                     .header("Authorization", "youshallnotpass")
                     .asJson()
                     .getBody()
-                    .getObject()
-                    .getJSONArray("tracks");
+                    .getArray();
 
             ArrayList<AudioTrack> list = new ArrayList<>();
             trackData.forEach(o -> {
                 try {
-                    list.add(LavalinkUtil.toAudioTrack((String) o));
+                    list.add(LavalinkUtil.toAudioTrack(((JSONObject) o).getString("track")));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -125,8 +139,8 @@ class LavalinkTest {
     }
 
     private void connectAndPlay(AudioTrack track) throws InterruptedException {
-        VoiceChannel vc = jda.getVoiceChannelById(System.getenv("TEST_VOICE_CHANNEL"));
-        lavalink.getLink(vc.getGuild()).connect(vc);
+        VoiceChannel vc = fetchVoiceChannel(jda, getTestVoiceChannelId());
+        ensureConnected(lavalink, vc);
 
         IPlayer player = lavalink.getLink(vc.getGuild()).getPlayer();
         CountDownLatch latch = new CountDownLatch(1);
@@ -141,11 +155,11 @@ class LavalinkTest {
         player.playTrack(track);
 
         latch.await(5, TimeUnit.SECONDS);
-        lavalink.getLink(vc.getGuild()).disconnect();
+        ensureNotConnected(lavalink, vc);
         player.removeListener(listener);
         player.stopTrack();
 
-        Assertions.assertEquals(0, latch.getCount());
+        assertEquals(0, latch.getCount());
     }
 
     @Test
@@ -160,8 +174,8 @@ class LavalinkTest {
 
     @Test
     void stopTest() throws InterruptedException {
-        VoiceChannel vc = jda.getVoiceChannelById(System.getenv("TEST_VOICE_CHANNEL"));
-        lavalink.getLink(vc.getGuild()).connect(vc);
+        VoiceChannel vc = fetchVoiceChannel(jda, getTestVoiceChannelId());
+        ensureConnected(lavalink, vc);
 
         IPlayer player = lavalink.getLink(vc.getGuild()).getPlayer();
         CountDownLatch latch = new CountDownLatch(1);
@@ -185,18 +199,18 @@ class LavalinkTest {
         player.playTrack(loadAudioTracks("aGOFOP2BIhI").get(0));
 
         latch.await(5, TimeUnit.SECONDS);
-        lavalink.getLink(vc.getGuild()).disconnect();
+        ensureNotConnected(lavalink, vc);
         player.removeListener(listener);
         player.stopTrack();
 
-        Assertions.assertEquals(0, latch.getCount());
+        assertEquals(0, latch.getCount());
     }
 
     @Test
     void testPlayback() throws InterruptedException {
-        VoiceChannel vc = jda.getVoiceChannelById(System.getenv("TEST_VOICE_CHANNEL"));
+        VoiceChannel vc = fetchVoiceChannel(jda, getTestVoiceChannelId());
         Link link = lavalink.getLink(vc.getGuild());
-        link.connect(vc);
+        ensureConnected(lavalink, vc);
 
         IPlayer player = link.getPlayer();
         CountDownLatch latch = new CountDownLatch(1);
@@ -204,6 +218,7 @@ class LavalinkTest {
         PlayerEventListenerAdapter listener = new PlayerEventListenerAdapter() {
             @Override
             public void onTrackEnd(IPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+                log.info(endReason.name());
                 if (endReason == AudioTrackEndReason.FINISHED) {
                     latch.countDown();
                 }
@@ -217,12 +232,82 @@ class LavalinkTest {
         player.playTrack(loadAudioTracks(jingle).get(0));
 
         latch.await(20, TimeUnit.SECONDS);
-        link.disconnect();
+        ensureNotConnected(lavalink, vc);
         player.removeListener(listener);
 
         player.stopTrack();
 
-        Assertions.assertEquals(0, latch.getCount());
+        assertEquals(0, latch.getCount());
     }
 
+    private static String getSystemProperty(String key) {
+        String value = System.getProperty(key);
+
+        assertNotNull(value, "Missing system property " + key);
+        assertFalse(value.isEmpty(), "System property " + key + " is empty");
+
+        return value;
+    }
+
+    private static long getTestVoiceChannelId() {
+        return Long.parseUnsignedLong(getSystemProperty(PROPERTY_CHANNEL));
+    }
+
+    private static VoiceChannel fetchVoiceChannel(JDA jda, long voiceChannelId) {
+        long started = System.currentTimeMillis();
+        while (jda.getStatus() != JDA.Status.CONNECTED
+                && System.currentTimeMillis() - started < 10000 //wait 10 sec max
+                && !Thread.currentThread().isInterrupted()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        assertEquals(JDA.Status.CONNECTED, jda.getStatus(), "Failed to connect to Discord in a reasonable amount of time");
+
+        VoiceChannel voiceChannel = jda.getVoiceChannelById(voiceChannelId);
+        assertNotNull(voiceChannel, "Configured VoiceChannel not found on the configured Discord bot account");
+
+        return voiceChannel;
+    }
+
+
+    private static void ensureConnected(Lavalink lavalink, VoiceChannel voiceChannel) {
+
+        Link link = lavalink.getLink(voiceChannel.getGuild());
+        link.connect(voiceChannel);
+        long started = System.currentTimeMillis();
+        while (link.getState() != Link.State.CONNECTED
+                && System.currentTimeMillis() - started < 10000 //wait 10 sec max
+                && !Thread.currentThread().isInterrupted()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            link.connect(voiceChannel);
+        }
+
+        assertEquals(Link.State.CONNECTED, link.getState(), "Failed to connect to voice channel in a reasonable amount of time");
+    }
+
+    private static void ensureNotConnected(Lavalink lavalink, VoiceChannel voiceChannel) {
+        Link link = lavalink.getLink(voiceChannel.getGuild());
+        link.disconnect();
+        long started = System.currentTimeMillis();
+        while (link.getState() != Link.State.NOT_CONNECTED && link.getState() != Link.State.DISCONNECTING
+                && System.currentTimeMillis() - started < 10000 //wait 10 sec max
+                && !Thread.currentThread().isInterrupted()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            link.disconnect();
+        }
+
+        assertTrue(link.getState() == Link.State.NOT_CONNECTED
+                || link.getState() == Link.State.DISCONNECTING, "Failed to disconnect from voice channel in a reasonable amount of time");
+    }
 }
