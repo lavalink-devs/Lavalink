@@ -38,11 +38,13 @@ public class StatsTask implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(StatsTask.class);
 
     private SocketContext context;
+    private final SocketServer socketServer;
 
     private final SystemInfo si = new SystemInfo();
 
-    StatsTask(SocketContext context) {
+    StatsTask(SocketContext context, SocketServer socketServer) {
         this.context = context;
+        this.socketServer = socketServer;
     }
 
     @Override
@@ -60,7 +62,7 @@ public class StatsTask implements Runnable {
         final int[] playersTotal = {0};
         final int[] playersPlaying = {0};
 
-        SocketServer.getConnections().forEach(socketContext -> {
+        socketServer.getConnections().forEach(socketContext -> {
             playersTotal[0] += socketContext.getPlayers().size();
             playersPlaying[0] += socketContext.getPlayingPlayers().size();
         });
