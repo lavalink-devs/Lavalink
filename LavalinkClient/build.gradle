@@ -24,6 +24,13 @@ publishing {
 task install(dependsOn: 'publishToMavenLocal')
 publishToMavenLocal.dependsOn 'jar'
 
+test {
+    useJUnitPlatform()
+
+    systemProperty("TEST_TOKEN", System.getProperty("TEST_TOKEN"))
+    systemProperty("TEST_VOICE_CHANNEL", System.getProperty("TEST_VOICE_CHANNEL"))
+}
+
 dependencies {
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
     compile group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
