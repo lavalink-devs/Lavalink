@@ -44,7 +44,7 @@ dependencies {
 
 //create a simple version file that we will be reading to create appropriate docker tags
 void versionTxt() {
-    new File("$projectDir/VERSION.txt").text = "$rootProject.version\n"
+    new File("$projectDir/VERSION.txt").text = "$project.version\n"
 }
 
 versionTxt()
