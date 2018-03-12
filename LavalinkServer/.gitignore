@@ -6,3 +6,4 @@
 /debug_token
 build/*
 /out/
+VERSION.txt

@@ -2,6 +2,6 @@ FROM openjdk:9-jre-slim
 
 WORKDIR /opt/Lavalink
 
-COPY LavalinkServer/build/libs/Lavalink.jar Lavalink.jar
+COPY Lavalink.jar Lavalink.jar
 
-ENTRYPOINT ["java", "-jar", "-Xmx4G", "Lavalink.jar"]
+ENTRYPOINT ["java", "-Xmx4G", "-jar", "Lavalink.jar"]

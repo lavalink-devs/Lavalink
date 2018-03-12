@@ -41,3 +41,10 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: guavaVersion
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
 }
+
+//create a simple version file that we will be reading to create appropriate docker tags
+void versionTxt() {
+    new File("$projectDir/VERSION.txt").text = "$rootProject.version\n"
+}
+
+versionTxt()
