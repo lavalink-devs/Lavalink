@@ -11,6 +11,8 @@ ext {
 
 bootJar {
     archiveName = "Lavalink.jar"
+
+    requiresUnpack '**/jda-nas*.jar' //otherwise we get missing classes exceptions
 }
 
 bootRun {
