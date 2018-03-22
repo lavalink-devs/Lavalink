@@ -32,6 +32,7 @@ import lavalink.server.player.Player;
 import lavalink.server.player.TrackEndMarkerHandler;
 import lavalink.server.util.Util;
 import net.dv8tion.jda.Core;
+import net.dv8tion.jda.manager.AudioManager;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -187,10 +188,11 @@ public class SocketServer extends WebSocketServer {
             case "destroy":
                 Player player5 = contextMap.get(webSocket).getPlayers().remove(json.getString("guildId"));
                 if (player5 != null) player5.stop();
-                contextMap.get(webSocket)
+                AudioManager audioManager = contextMap.get(webSocket)
                         .getCore(getShardId(webSocket, json))
-                        .getAudioManager(json.getString("guildId"))
-                        .closeAudioConnection();
+                        .getAudioManager(json.getString("guildId"));
+                audioManager.setSendingHandler(null);
+                audioManager.closeAudioConnection();
                 break;
             default:
                 log.warn("Unexpected operation: " + json.getString("op"));
