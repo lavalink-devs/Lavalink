@@ -41,7 +41,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 public class AudioLoaderRestHandler {
@@ -97,10 +96,11 @@ public class AudioLoaderRestHandler {
         if (!isAuthorized(request, response))
             return "";
 
+        JSONObject json = new JSONObject();
         JSONArray tracks = new JSONArray();
-        List<AudioTrack> list = new AudioLoader(audioPlayerManager).loadSync(identifier);
+        LoadResult result = new AudioLoader(audioPlayerManager).loadSync(identifier);
 
-        list.forEach(track -> {
+        result.tracks.forEach(track -> {
             JSONObject object = new JSONObject();
             object.put("info", trackToJSON(track));
 
@@ -113,7 +113,10 @@ public class AudioLoaderRestHandler {
             }
         });
 
-        return tracks.toString();
+        json.put("isPlaylist", result.isPlaylist);
+        json.put("tracks", tracks);
+
+        return json.toString();
     }
 
     @GetMapping(value = "/decodetrack", produces = "application/json")

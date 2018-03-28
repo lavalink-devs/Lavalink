@@ -39,13 +39,14 @@ public class AudioLoader implements AudioLoadResultHandler {
     private final AudioPlayerManager audioPlayerManager;
 
     private List<AudioTrack> loadedItems;
+    private boolean isPlaylist = false;
     private boolean used = false;
 
     public AudioLoader(AudioPlayerManager audioPlayerManager) {
         this.audioPlayerManager = audioPlayerManager;
     }
 
-    List<AudioTrack> loadSync(String identifier) throws InterruptedException {
+    LoadResult loadSync(String identifier) throws InterruptedException {
         if(used)
             throw new IllegalStateException("This loader can only be used once per instance");
 
@@ -57,7 +58,7 @@ public class AudioLoader implements AudioLoadResultHandler {
             this.wait();
         }
 
-        return loadedItems;
+        return new LoadResult(loadedItems, isPlaylist);
     }
 
     @Override
@@ -72,6 +73,10 @@ public class AudioLoader implements AudioLoadResultHandler {
 
     @Override
     public void playlistLoaded(AudioPlaylist audioPlaylist) {
+        if (!audioPlaylist.isSearchResult()) {
+            isPlaylist = true;
+        }
+
         log.info("Loaded playlist " + audioPlaylist.getName());
         loadedItems = audioPlaylist.getTracks();
         synchronized (this) {
@@ -97,4 +102,14 @@ public class AudioLoader implements AudioLoadResultHandler {
         }
     }
 
+}
+
+class LoadResult {
+    public List<AudioTrack> tracks;
+    public boolean isPlaylist;
+
+    public LoadResult(List<AudioTrack> tracks, boolean isPlaylist) {
+        this.tracks = tracks;
+        this.isPlaylist = isPlaylist;
+    }
 }
