@@ -24,6 +24,7 @@ package lavalink.client.player;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import lavalink.client.LavalinkUtil;
+import lavalink.client.io.LavalinkSocket;
 import lavalink.client.io.Link;
 import lavalink.client.player.event.IPlayerEventListener;
 import lavalink.client.player.event.PlayerEvent;
@@ -81,18 +82,22 @@ public class LavalinkPlayer implements IPlayer {
         try {
             position = track.getPosition();
             TrackData trackData = track.getUserData(TrackData.class);
+            LavalinkSocket node = link.getNode(false);
 
-            JSONObject json = new JSONObject();
-            json.put("op", "play");
-            json.put("guildId", link.getGuildId());
-            json.put("track", LavalinkUtil.toMessage(track));
-            json.put("startTime", position);
-            if (trackData != null) {
-                json.put("startTime", trackData.startPos);
-                json.put("endTime", trackData.endPos);
+            if (node != null) {
+                JSONObject json = new JSONObject();
+                json.put("op", "play");
+                json.put("guildId", link.getGuildId());
+                json.put("track", LavalinkUtil.toMessage(track));
+                json.put("startTime", position);
+                if (trackData != null) {
+                    json.put("startTime", trackData.startPos);
+                    json.put("endTime", trackData.endPos);
+                }
+                json.put("pause", paused);
+                node.send(json.toString());
             }
-            json.put("pause", paused);
-            link.getNode(true).send(json.toString());
+
             updateTime = System.currentTimeMillis();
             this.track = track;
             emitEvent(new TrackStartEvent(this, track));
@@ -103,22 +108,27 @@ public class LavalinkPlayer implements IPlayer {
 
     @Override
     public void stopTrack() {
+        track = null;
+
+        LavalinkSocket node = link.getNode(false);
+        if (node == null) return;
         JSONObject json = new JSONObject();
         json.put("op", "stop");
         json.put("guildId", link.getGuildId());
-        link.getNode(true).send(json.toString());
-        track = null;
+        node.send(json.toString());
     }
 
     @Override
     public void setPaused(boolean pause) {
         if (pause == paused) return;
-
-        JSONObject json = new JSONObject();
-        json.put("op", "pause");
-        json.put("guildId", link.getGuildId());
-        json.put("pause", pause);
-        link.getNode(true).send(json.toString());
+        LavalinkSocket node = link.getNode(false);
+        if (node != null) {
+            JSONObject json = new JSONObject();
+            json.put("op", "pause");
+            json.put("guildId", link.getGuildId());
+            json.put("pause", pause);
+            node.send(json.toString());
+        }
         paused = pause;
 
         if (pause) {
@@ -151,24 +161,29 @@ public class LavalinkPlayer implements IPlayer {
     public void seekTo(long position) {
         if (getPlayingTrack() == null) throw new IllegalStateException("Not currently playing anything");
         if (!getPlayingTrack().isSeekable()) throw new IllegalStateException("Track cannot be seeked");
+        LavalinkSocket node = link.getNode(false);
+        if (node == null) return;
 
         JSONObject json = new JSONObject();
         json.put("op", "seek");
         json.put("guildId", link.getGuildId());
         json.put("position", position);
-        link.getNode(true).send(json.toString());
+        node.send(json.toString());
     }
 
     @Override
     public void setVolume(int volume) {
         volume = Math.min(150, Math.max(0, volume)); // Lavaplayer bounds
+        this.volume = volume;
+
+        LavalinkSocket node = link.getNode(false);
+        if (node == null) return;
 
         JSONObject json = new JSONObject();
         json.put("op", "volume");
         json.put("guildId", link.getGuildId());
         json.put("volume", volume);
-        link.getNode(true).send(json.toString());
-        this.volume = volume;
+        node.send(json.toString());
     }
 
     @Override
