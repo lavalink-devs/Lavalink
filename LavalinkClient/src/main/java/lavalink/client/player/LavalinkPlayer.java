@@ -82,21 +82,19 @@ public class LavalinkPlayer implements IPlayer {
         try {
             position = track.getPosition();
             TrackData trackData = track.getUserData(TrackData.class);
-            LavalinkSocket node = link.getNode(false);
 
-            if (node != null) {
-                JSONObject json = new JSONObject();
-                json.put("op", "play");
-                json.put("guildId", link.getGuildId());
-                json.put("track", LavalinkUtil.toMessage(track));
-                json.put("startTime", position);
-                if (trackData != null) {
-                    json.put("startTime", trackData.startPos);
-                    json.put("endTime", trackData.endPos);
-                }
-                json.put("pause", paused);
-                node.send(json.toString());
+            JSONObject json = new JSONObject();
+            json.put("op", "play");
+            json.put("guildId", link.getGuildId());
+            json.put("track", LavalinkUtil.toMessage(track));
+            json.put("startTime", position);
+            if (trackData != null) {
+                json.put("startTime", trackData.startPos);
+                json.put("endTime", trackData.endPos);
             }
+            json.put("pause", paused);
+            //noinspection ConstantConditions
+            link.getNode(true).send(json.toString());
 
             updateTime = System.currentTimeMillis();
             this.track = track;
@@ -161,14 +159,13 @@ public class LavalinkPlayer implements IPlayer {
     public void seekTo(long position) {
         if (getPlayingTrack() == null) throw new IllegalStateException("Not currently playing anything");
         if (!getPlayingTrack().isSeekable()) throw new IllegalStateException("Track cannot be seeked");
-        LavalinkSocket node = link.getNode(false);
-        if (node == null) return;
 
         JSONObject json = new JSONObject();
         json.put("op", "seek");
         json.put("guildId", link.getGuildId());
         json.put("position", position);
-        node.send(json.toString());
+        //noinspection ConstantConditions
+        link.getNode(true).send(json.toString());
     }
 
     @Override
