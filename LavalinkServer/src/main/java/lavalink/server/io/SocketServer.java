@@ -22,8 +22,12 @@
 
 package lavalink.server.io;
 
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker;
+import lavalink.server.config.AudioSendFactoryConfiguration;
+import lavalink.server.config.ServerConfig;
+import lavalink.server.config.WebsocketConfig;
 import lavalink.server.player.Player;
 import lavalink.server.player.TrackEndMarkerHandler;
 import lavalink.server.util.Util;
@@ -35,7 +39,9 @@ import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Collection;
@@ -45,15 +51,28 @@ import java.util.Map;
 import static lavalink.server.io.WSCodes.AUTHORIZATION_REJECTED;
 import static lavalink.server.io.WSCodes.INTERNAL_ERROR;
 
+@Component
 public class SocketServer extends WebSocketServer {
 
     private static final Logger log = LoggerFactory.getLogger(SocketServer.class);
-    private static final Map<WebSocket, SocketContext> contextMap = new HashMap<>();
-    private final String password;
 
-    public SocketServer(InetSocketAddress address, String password) {
-        super(address);
-        this.password = password;
+    private final Map<WebSocket, SocketContext> contextMap = new HashMap<>();
+    private final ServerConfig serverConfig;
+    private final AudioPlayerManager audioPlayerManager;
+    private final AudioSendFactoryConfiguration audioSendFactoryConfiguration;
+
+    public SocketServer(WebsocketConfig websocketConfig, ServerConfig serverConfig, AudioPlayerManager audioPlayerManager,
+                        AudioSendFactoryConfiguration audioSendFactoryConfiguration) {
+        super(new InetSocketAddress(websocketConfig.getHost(), websocketConfig.getPort()));
+        this.serverConfig = serverConfig;
+        this.audioPlayerManager = audioPlayerManager;
+        this.audioSendFactoryConfiguration = audioSendFactoryConfiguration;
+    }
+
+    @Override
+    @PostConstruct
+    public void start() {
+        super.start();
     }
 
     @Override
@@ -62,9 +81,10 @@ public class SocketServer extends WebSocketServer {
             int shardCount = Integer.parseInt(clientHandshake.getFieldValue("Num-Shards"));
             String userId = clientHandshake.getFieldValue("User-Id");
 
-            if (clientHandshake.getFieldValue("Authorization").equals(password)) {
+            if (clientHandshake.getFieldValue("Authorization").equals(serverConfig.getPassword())) {
                 log.info("Connection opened from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
-                contextMap.put(webSocket, new SocketContext(webSocket, userId, shardCount));
+                contextMap.put(webSocket, new SocketContext(audioPlayerManager, serverConfig, webSocket,
+                        audioSendFactoryConfiguration, this, userId, shardCount));
             } else {
                 log.error("Authentication failed from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
                 webSocket.close(AUTHORIZATION_REJECTED, "Authorization rejected");
@@ -126,7 +146,7 @@ public class SocketServer extends WebSocketServer {
             case "play":
                 try {
                     Player player = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
-                    AudioTrack track = Util.toAudioTrack(json.getString("track"));
+                    AudioTrack track = Util.toAudioTrack(audioPlayerManager, json.getString("track"));
                     if (json.has("startTime")) {
                         track.setPosition(json.getLong("startTime"));
                     }
@@ -168,10 +188,11 @@ public class SocketServer extends WebSocketServer {
             case "destroy":
                 Player player5 = contextMap.get(webSocket).getPlayers().remove(json.getString("guildId"));
                 if (player5 != null) player5.stop();
-                contextMap.get(webSocket)
+                AudioManager audioManager = contextMap.get(webSocket)
                         .getCore(getShardId(webSocket, json))
-                        .getAudioManager(json.getString("guildId"))
-                        .closeAudioConnection();
+                        .getAudioManager(json.getString("guildId"));
+                audioManager.setSendingHandler(null);
+                audioManager.closeAudioConnection();
                 break;
             default:
                 log.warn("Unexpected operation: " + json.getString("op"));
@@ -203,7 +224,7 @@ public class SocketServer extends WebSocketServer {
         return Util.getShardFromSnowflake(json.getString("guildId"), contextMap.get(webSocket).getShardCount());
     }
 
-    static Collection<SocketContext> getConnections() {
+    Collection<SocketContext> getConnections() {
         return contextMap.values();
     }
 

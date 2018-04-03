@@ -1,32 +1,50 @@
-plugins {
-    id 'application'
-    id 'org.springframework.boot' version '1.5.10.RELEASE'
-    id 'com.gorylenko.gradle-git-properties' version '1.4.20'
-}
+apply plugin: 'application'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'com.gorylenko.gradle-git-properties'
 
 description = 'Play audio to discord voice channels'
 mainClassName = "lavalink.server.Launcher"
-version '2.0'
+version '2.0.1'
 ext {
     moduleName = 'Lavalink-Server'
 }
 
-jar {
+bootJar {
     archiveName = "Lavalink.jar"
+
+    requiresUnpack '**/jda-nas*.jar' //otherwise we get missing classes exceptions
 }
-publishToMavenLocal.dependsOn 'bootRepackage'
+
+bootRun {
+    //compiling tests during bootRun increases the likelyhood of catching broken tests locally instead of on the CI
+    dependsOn compileTestJava
+
+    //pass in custom jvm args
+    // source: https://stackoverflow.com/a/25079415
+    // example: ./gradlew bootRun -PjvmArgs="--illegal-access=debug -Dwhatever=value"
+    if (project.hasProperty('jvmArgs')) {
+        jvmArgs project.jvmArgs.split('\\s+')
+    }
+}
 
 dependencies {
-    compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.47'
-    compile group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: '91438c36d7107cf838c2f2eb147b08f989d929db'
-    compile group: 'com.github.FredBoat', name: 'jda-nas', version: '1.0.6.1-JDA-Audio'
-    compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: '1.1'
-    compile group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.3.7'
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-    compile group: 'io.sentry', name: 'sentry-logback', version: '1.6.4'
-    compile group: 'com.github.oshi', name: 'oshi-core', version: '3.4.4'
-    compile group: 'org.json', name: 'json', version: '20180130'
-    compile group: 'com.google.guava', name: 'guava', version: '23.0'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '1.5.10.RELEASE'
+    compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
+    compile group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: jdaAudioVersion
+    compile group: 'com.github.FredBoat', name: 'jda-nas', version: jdaNasVersion
+    compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: jappVersion
+    compile group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
+    compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
+    compile group: 'io.sentry', name: 'sentry-logback', version: sentryLogbackVersion
+    compile group: 'com.github.oshi', name: 'oshi-core', version: oshiVersion
+    compile group: 'org.json', name: 'json', version: jsonOrgVersion
+    compile group: 'com.google.guava', name: 'guava', version: guavaVersion
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
 }
+
+//create a simple version file that we will be reading to create appropriate docker tags
+void versionTxt() {
+    new File("$projectDir/VERSION.txt").text = "$project.version\n"
+}
+
+versionTxt()

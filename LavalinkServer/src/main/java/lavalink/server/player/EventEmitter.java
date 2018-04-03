@@ -23,6 +23,7 @@
 package lavalink.server.player;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -38,9 +39,11 @@ import java.io.IOException;
 public class EventEmitter extends AudioEventAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(EventEmitter.class);
+    private final AudioPlayerManager audioPlayerManager;
     private final Player linkPlayer;
 
-    EventEmitter(Player linkPlayer) {
+    EventEmitter(AudioPlayerManager audioPlayerManager, Player linkPlayer) {
+        this.audioPlayerManager = audioPlayerManager;
         this.linkPlayer = linkPlayer;
     }
 
@@ -51,7 +54,7 @@ public class EventEmitter extends AudioEventAdapter {
         out.put("type", "TrackEndEvent");
         out.put("guildId", linkPlayer.getGuildId());
         try {
-            out.put("track", Util.toMessage(track));
+            out.put("track", Util.toMessage(audioPlayerManager, track));
         } catch (IOException e) {
             out.put("track", JSONObject.NULL);
         }
@@ -69,7 +72,7 @@ public class EventEmitter extends AudioEventAdapter {
         out.put("type", "TrackExceptionEvent");
         out.put("guildId", linkPlayer.getGuildId());
         try {
-            out.put("track", Util.toMessage(track));
+            out.put("track", Util.toMessage(audioPlayerManager, track));
         } catch (IOException e) {
             out.put("track", JSONObject.NULL);
         }
@@ -88,7 +91,7 @@ public class EventEmitter extends AudioEventAdapter {
         out.put("type", "TrackStuckEvent");
         out.put("guildId", linkPlayer.getGuildId());
         try {
-            out.put("track", Util.toMessage(track));
+            out.put("track", Util.toMessage(audioPlayerManager, track));
         } catch (IOException e) {
             out.put("track", JSONObject.NULL);
         }

@@ -66,11 +66,6 @@ public class LavalinkSocket extends ReusableWebSocket {
         this.name = name;
         this.lavalink = lavalink;
         this.remoteUri = serverUri;
-        try {
-            this.connectBlocking();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override

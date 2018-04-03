@@ -1,19 +1,47 @@
 description = 'JDA based client for the Lavalink-Server'
-version System.getenv('dev') == 'true' ? '-SNAPSHOT' : '2.0'
+version System.getenv('dev') == 'true' ? '-SNAPSHOT' : '2.0.1'
 ext {
     moduleName = 'Lavalink-Client'
 }
+
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId rootProject.group
+            artifactId moduleName
+
+            from components.java
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+}
+
+task install(dependsOn: 'publishToMavenLocal')
+publishToMavenLocal.dependsOn 'jar'
+
+test {
+    useJUnitPlatform()
+
+    systemProperty("TEST_TOKEN", System.getProperty("TEST_TOKEN"))
+    systemProperty("TEST_VOICE_CHANNEL", System.getProperty("TEST_VOICE_CHANNEL"))
+}
+
 dependencies {
-    compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.47'
-    compile group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.3.7'
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-    compile group: 'org.json', name: 'json', version: '20180130'
-    compile group: 'net.dv8tion', name: 'JDA', version: '3.5.0_334'
-    compileOnly group: 'io.prometheus', name: 'simpleclient', version: '0.1.0'
-    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0-M4'
-    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.0.0-M4'
-    testCompile group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.0.0-M4'
-    testCompile group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.0.0-M4'
-    testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    testCompile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
+    compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
+    compile group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
+    compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
+    compile group: 'org.json', name: 'json', version: jsonOrgVersion
+    compile group: 'net.dv8tion', name: 'JDA', version: jdaVersion
+    compileOnly group: 'io.prometheus', name: 'simpleclient', version: prometheusVersion
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion
+    testCompile group: 'org.junit.platform', name: 'junit-platform-launcher', version: junitPlatformVersion
+    testCompile group: 'org.junit.platform', name: 'junit-platform-runner', version: junitPlatformVersion
+    testCompile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
+    testCompile group: 'com.mashape.unirest', name: 'unirest-java', version: unirestVersion
 }

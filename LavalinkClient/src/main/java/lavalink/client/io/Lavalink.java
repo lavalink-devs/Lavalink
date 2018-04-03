@@ -108,7 +108,9 @@ public class Lavalink extends ListenerAdapter {
         headers.put("Num-Shards", Integer.toString(numShards));
         headers.put("User-Id", userId);
 
-        nodes.add(new LavalinkSocket(name, this, serverUri, new Draft_6455(), headers));
+        LavalinkSocket socket = new LavalinkSocket(name, this, serverUri, new Draft_6455(), headers);
+        socket.connect();
+        nodes.add(socket);
     }
 
     @SuppressWarnings("unused")

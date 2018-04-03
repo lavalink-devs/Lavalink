@@ -106,15 +106,17 @@ public class Link {
         if (checkChannel && channel.equals(channel.getGuild().getSelfMember().getVoiceState().getChannel()))
             return;
 
-        final int userLimit = channel.getUserLimit(); // userLimit is 0 if no limit is set!
-        if (!self.isOwner() && !self.hasPermission(Permission.ADMINISTRATOR)) {
-            final long perms = PermissionUtil.getExplicitPermission(channel, self);
-            final long voicePerm = Permission.VOICE_MOVE_OTHERS.getRawValue();
-            if (userLimit > 0                                                   // If there is a userlimit
-                    && userLimit <= channel.getMembers().size()                 // if that userlimit is reached
-                    && (perms & voicePerm) != voicePerm)                        // If we don't have voice move others permissions
-                throw new InsufficientPermissionException(Permission.VOICE_MOVE_OTHERS, // then throw exception!
-                        "Unable to connect to VoiceChannel due to userlimit! Requires permission VOICE_MOVE_OTHERS to bypass");
+        if (channel.getGuild().getSelfMember().getVoiceState().inVoiceChannel()) {
+            final int userLimit = channel.getUserLimit(); // userLimit is 0 if no limit is set!
+            if (!self.isOwner() && !self.hasPermission(Permission.ADMINISTRATOR)) {
+                final long perms = PermissionUtil.getExplicitPermission(channel, self);
+                final long voicePerm = Permission.VOICE_MOVE_OTHERS.getRawValue();
+                if (userLimit > 0                                                   // If there is a userlimit
+                        && userLimit <= channel.getMembers().size()                 // if that userlimit is reached
+                        && (perms & voicePerm) != voicePerm)                        // If we don't have voice move others permissions
+                    throw new InsufficientPermissionException(Permission.VOICE_MOVE_OTHERS, // then throw exception!
+                            "Unable to connect to VoiceChannel due to userlimit! Requires permission VOICE_MOVE_OTHERS to bypass");
+            }
         }
 
         setState(State.CONNECTING);
@@ -165,8 +167,9 @@ public class Link {
      */
     @SuppressWarnings("unused")
     public void destroy() {
+        boolean shouldDisconnect = state != State.DISCONNECTING && state != State.NOT_CONNECTED;
         setState(State.DESTROYING);
-        if (state != State.DISCONNECTING && state != State.NOT_CONNECTED) {
+        if (shouldDisconnect) {
             Guild g = getJda().getGuildById(guild);
             if (g != null) getMainWs().queueAudioDisconnect(g);
         }
@@ -199,7 +202,7 @@ public class Link {
     public LavalinkSocket getNode(boolean selectIfAbsent) {
         if (selectIfAbsent && node == null) {
             node = lavalink.loadBalancer.determineBestSocket(guild);
-            player.onNodeChange();
+            if (player != null) player.onNodeChange();
         }
         return node;
     }

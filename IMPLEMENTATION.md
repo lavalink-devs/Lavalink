@@ -104,6 +104,16 @@ Set player volume. Volume may range from 0 to 150. 100 is default.
 }
 ```
 
+Tell the server to potentially disconnect from the voice server and potentially remove the player with all its data.
+This is useful if you want to move to a new node for a voice connection. Calling this op does not affect voice state,
+and you can send the same VOICE_SERVER_UPDATE to a new node.
+```json
+{
+    "op": "destroy",
+    "guildId": "..."
+}
+```
+
 ### Incoming messages
 See 
 [LavalinkSocket.java](https://github.com/Frederikam/Lavalink/blob/dev/LavalinkClient/src/main/java/lavalink/client/io/LavalinkSocket.java)

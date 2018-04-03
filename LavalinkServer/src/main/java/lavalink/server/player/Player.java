@@ -24,21 +24,10 @@ package lavalink.server.player;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
-import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.beam.BeamAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
-import lavalink.server.Config;
-import lavalink.server.Launcher;
 import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
 import net.dv8tion.jda.audio.AudioSendHandler;
@@ -53,29 +42,6 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
 
     private static final Logger log = LoggerFactory.getLogger(Player.class);
 
-    public static final AudioPlayerManager PLAYER_MANAGER;
-
-    static {
-        PLAYER_MANAGER = new DefaultAudioPlayerManager();
-        PLAYER_MANAGER.enableGcMonitoring();
-
-        Config.Sources sources = Launcher.config.getSources();
-        if (sources.isYoutube()) {
-            YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager();
-            Integer playlistLoadLimit = Launcher.config.getYoutubePlaylistLoadLimit();
-
-            if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit);
-            PLAYER_MANAGER.registerSourceManager(new YoutubeAudioSourceManager());
-        }
-        if (sources.isBandcamp()) PLAYER_MANAGER.registerSourceManager(new BandcampAudioSourceManager());
-        if (sources.isSoundcloud()) PLAYER_MANAGER.registerSourceManager(new SoundCloudAudioSourceManager());
-        if (sources.isTwitch()) PLAYER_MANAGER.registerSourceManager(new TwitchStreamAudioSourceManager());
-        if (sources.isVimeo()) PLAYER_MANAGER.registerSourceManager(new VimeoAudioSourceManager());
-        if (sources.isMixer()) PLAYER_MANAGER.registerSourceManager(new BeamAudioSourceManager());
-        if (sources.isHttp()) PLAYER_MANAGER.registerSourceManager(new HttpAudioSourceManager());
-        if (sources.isLocal()) PLAYER_MANAGER.registerSourceManager(new LocalAudioSourceManager());
-    }
-
     private SocketContext socketContext;
     private final String guildId;
     private final AudioPlayer player;
@@ -83,12 +49,12 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
     private AudioFrame lastFrame = null;
     private ScheduledFuture myFuture = null;
 
-    public Player(SocketContext socketContext, String guildId) {
+    public Player(SocketContext socketContext, String guildId, AudioPlayerManager audioPlayerManager) {
         this.socketContext = socketContext;
         this.guildId = guildId;
-        this.player = PLAYER_MANAGER.createPlayer();
+        this.player = audioPlayerManager.createPlayer();
         this.player.addListener(this);
-        this.player.addListener(new EventEmitter(this));
+        this.player.addListener(new EventEmitter(audioPlayerManager, this));
         this.player.addListener(audioLossCounter);
     }
 
