@@ -155,6 +155,9 @@ public class SocketServer extends WebSocketServer {
                     }
 
                     player.setPause(json.optBoolean("pause", false));
+                    if (json.has("volume")) {
+                        player.setVolume(json.getInt("volume"));
+                    }
 
                     player.play(track);
 
@@ -224,7 +227,7 @@ public class SocketServer extends WebSocketServer {
         return Util.getShardFromSnowflake(json.getString("guildId"), contextMap.get(webSocket).getShardCount());
     }
 
-    Collection<SocketContext> getConnections() {
+    Collection<SocketContext> getContexts() {
         return contextMap.values();
     }
 

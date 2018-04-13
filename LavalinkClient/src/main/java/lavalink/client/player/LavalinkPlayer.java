@@ -60,7 +60,7 @@ public class LavalinkPlayer implements IPlayer {
 
     /**
      * Invoked by {@link Link} to make sure we keep playing music on the new node
-     *
+     * <p>
      * Used when we are moved to a new socket
      */
     public void onNodeChange() {
@@ -93,6 +93,7 @@ public class LavalinkPlayer implements IPlayer {
                 json.put("endTime", trackData.endPos);
             }
             json.put("pause", paused);
+            json.put("volume", volume);
             //noinspection ConstantConditions
             link.getNode(true).send(json.toString());
 
