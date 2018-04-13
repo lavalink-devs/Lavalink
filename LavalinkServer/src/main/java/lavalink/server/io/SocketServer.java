@@ -155,6 +155,9 @@ public class SocketServer extends WebSocketServer {
                     }
 
                     player.setPause(json.optBoolean("pause", false));
+                    if (json.has("volume")) {
+                        player.setVolume(json.getInt("volume"));
+                    }
 
                     player.play(track);
 
