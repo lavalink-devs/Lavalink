@@ -227,7 +227,7 @@ public class SocketServer extends WebSocketServer {
         return Util.getShardFromSnowflake(json.getString("guildId"), contextMap.get(webSocket).getShardCount());
     }
 
-    Collection<SocketContext> getConnections() {
+    Collection<SocketContext> getContexts() {
         return contextMap.values();
     }
 
