@@ -64,6 +64,7 @@ public class SocketServer extends WebSocketServer {
     public SocketServer(WebsocketConfig websocketConfig, ServerConfig serverConfig, AudioPlayerManager audioPlayerManager,
                         AudioSendFactoryConfiguration audioSendFactoryConfiguration) {
         super(new InetSocketAddress(websocketConfig.getHost(), websocketConfig.getPort()));
+        this.setReuseAddr(true);
         this.serverConfig = serverConfig;
         this.audioPlayerManager = audioPlayerManager;
         this.audioSendFactoryConfiguration = audioSendFactoryConfiguration;
