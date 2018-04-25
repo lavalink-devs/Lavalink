@@ -30,7 +30,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
-import net.dv8tion.jda.audio.AudioSendHandler;
+import net.dv8tion.jda.core.audio.AudioSendHandler;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

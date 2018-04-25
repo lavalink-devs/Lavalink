@@ -22,6 +22,8 @@
 
 package lavalink.server.io;
 
+import com.github.shredder121.asyncaudio.jda.AsyncPacketProviderFactory;
+import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker;
@@ -31,8 +33,7 @@ import lavalink.server.config.WebsocketConfig;
 import lavalink.server.player.Player;
 import lavalink.server.player.TrackEndMarkerHandler;
 import lavalink.server.util.Util;
-import net.dv8tion.jda.Core;
-import net.dv8tion.jda.manager.AudioManager;
+import net.dv8tion.jda.core.audio.factory.IAudioSendFactory;
 import org.java_websocket.WebSocket;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.exceptions.InvalidDataException;
@@ -43,6 +44,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import space.npstr.magma.MagmaApi;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -50,6 +52,7 @@ import java.net.InetSocketAddress;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import static lavalink.server.io.WSCodes.AUTHORIZATION_REJECTED;
@@ -60,10 +63,14 @@ public class SocketServer extends WebSocketServer {
 
     private static final Logger log = LoggerFactory.getLogger(SocketServer.class);
 
+    private final MagmaApi magmaApi = MagmaApi.of(this::getAudioSendFactory);
+    // userId <-> shardCount
+    private final Map<String, Integer> shardCounts = new ConcurrentHashMap<>();
     private final Map<WebSocket, SocketContext> contextMap = new HashMap<>();
     private final ServerConfig serverConfig;
     private final Supplier<AudioPlayerManager> audioPlayerManagerSupplier;
     private final AudioSendFactoryConfiguration audioSendFactoryConfiguration;
+    private final ConcurrentHashMap<Integer, IAudioSendFactory> sendFactories = new ConcurrentHashMap<>();
 
     public SocketServer(WebsocketConfig websocketConfig, ServerConfig serverConfig, Supplier<AudioPlayerManager> audioPlayerManagerSupplier,
                         AudioSendFactoryConfiguration audioSendFactoryConfiguration) {
@@ -93,10 +100,11 @@ public class SocketServer extends WebSocketServer {
             int shardCount = Integer.parseInt(clientHandshake.getFieldValue("Num-Shards"));
             String userId = clientHandshake.getFieldValue("User-Id");
 
+            shardCounts.put(userId, shardCount);
+
             if (clientHandshake.getFieldValue("Authorization").equals(serverConfig.getPassword())) {
                 log.info("Connection opened from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
-                contextMap.put(webSocket, new SocketContext(audioPlayerManagerSupplier, serverConfig, webSocket,
-                        audioSendFactoryConfiguration, this, userId, shardCount));
+                contextMap.put(webSocket, new SocketContext(audioPlayerManagerSupplier, webSocket, this, userId, magmaApi));
             } else {
                 log.error("Authentication failed from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
                 webSocket.close(AUTHORIZATION_REJECTED, "Authorization rejected");
@@ -146,12 +154,16 @@ public class SocketServer extends WebSocketServer {
         switch (json.getString("op")) {
             /* JDAA ops */
             case "voiceUpdate":
-                Core core = contextMap.get(webSocket).getCore(getShardId(webSocket, json));
-                core.provideVoiceServerUpdate(
-                        json.getString("sessionId"),
-                        json.getJSONObject("event")
-                );
-                core.getAudioManager(json.getJSONObject("event").getString("guild_id")).setAutoReconnect(false);
+                String sessionId = json.getString("sessionId");
+                String guildId = json.getString("guildId");
+
+                JSONObject event = json.getJSONObject("event");
+                String endpoint = event.getString("endpoint");
+                String token = event.getString("token");
+                //todo endpoint empty check?
+
+                SocketContext sktContext = contextMap.get(webSocket);
+                magmaApi.provideVoiceServerUpdate(sktContext.getUserId(), sessionId, guildId, endpoint, token);
                 break;
 
             /* Player ops */
@@ -176,8 +188,11 @@ public class SocketServer extends WebSocketServer {
 
                     SocketContext context = contextMap.get(webSocket);
 
-                    context.getCore(getShardId(webSocket, json)).getAudioManager(json.getString("guildId"))
-                            .setSendingHandler(context.getPlayer(json.getString("guildId")));
+                    magmaApi.setSendHandler(
+                            context.getUserId(),
+                            json.getString("guildId"),
+                            context.getPlayer(json.getString("guildId")));
+
                     sendPlayerUpdate(webSocket, player);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -202,13 +217,11 @@ public class SocketServer extends WebSocketServer {
                 player4.setVolume(json.getInt("volume"));
                 break;
             case "destroy":
-                Player player5 = contextMap.get(webSocket).getPlayers().remove(json.getString("guildId"));
+                SocketContext socketContext = contextMap.get(webSocket);
+                Player player5 = socketContext.getPlayers().remove(json.getString("guildId"));
                 if (player5 != null) player5.stop();
-                AudioManager audioManager = contextMap.get(webSocket)
-                        .getCore(getShardId(webSocket, json))
-                        .getAudioManager(json.getString("guildId"));
-                audioManager.setSendingHandler(null);
-                audioManager.closeAudioConnection();
+                magmaApi.removeSendHandler(socketContext.getUserId(), json.getString("guildId"));
+                magmaApi.closeConnection(socketContext.getUserId(), json.getString("guildId"));
                 break;
             default:
                 log.warn("Unexpected operation: " + json.getString("op"));
@@ -235,13 +248,25 @@ public class SocketServer extends WebSocketServer {
         webSocket.send(json.toString());
     }
 
-    //Shorthand method
-    private int getShardId(WebSocket webSocket, JSONObject json) {
-        return Util.getShardFromSnowflake(json.getString("guildId"), contextMap.get(webSocket).getShardCount());
-    }
-
     Collection<SocketContext> getContexts() {
         return contextMap.values();
     }
 
+    private IAudioSendFactory getAudioSendFactory(String userId, String guildId) {
+        int shardCount = shardCounts.getOrDefault(userId, 1);
+        int shardId = Util.getShardFromSnowflake(guildId, shardCount);
+
+        return sendFactories.computeIfAbsent(shardId % audioSendFactoryConfiguration.getAudioSendFactoryCount(),
+                integer -> {
+                    Integer customBuffer = serverConfig.getBufferDurationMs();
+                    NativeAudioSendFactory nativeAudioSendFactory;
+                    if (customBuffer != null) {
+                        nativeAudioSendFactory = new NativeAudioSendFactory(customBuffer);
+                    } else {
+                        nativeAudioSendFactory = new NativeAudioSendFactory();
+                    }
+
+                    return AsyncPacketProviderFactory.adapt(nativeAudioSendFactory);
+                });
+    }
 }

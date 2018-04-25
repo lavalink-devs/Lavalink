@@ -22,22 +22,13 @@
 
 package lavalink.server.io;
 
-import com.github.shredder121.asyncaudio.jdaaudio.AsyncPacketProviderFactory;
-import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import lavalink.server.config.AudioSendFactoryConfiguration;
-import lavalink.server.config.ServerConfig;
 import lavalink.server.player.Player;
-import lavalink.server.util.Util;
-import net.dv8tion.jda.Core;
-import net.dv8tion.jda.audio.factory.IAudioSendFactory;
-import net.dv8tion.jda.manager.AudioManager;
-import net.dv8tion.jda.manager.ConnectionManagerBuilder;
 import org.java_websocket.WebSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import space.npstr.magma.MagmaApi;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -52,26 +43,20 @@ public class SocketContext {
     private static final Logger log = LoggerFactory.getLogger(SocketContext.class);
 
     private final AudioPlayerManager audioPlayerManager;
-    private final ServerConfig serverConfig;
     private final WebSocket socket;
-    private final AudioSendFactoryConfiguration audioSendFactoryConfiguration;
     private String userId;
-    private int shardCount;
-    private final Map<Integer, Core> cores = new HashMap<>();
+    private final MagmaApi magmaApi;
+    //guildId <-> Player
     private final Map<String, Player> players = new ConcurrentHashMap<>();
     private ScheduledExecutorService statsExecutor;
     public final ScheduledExecutorService playerUpdateService;
-    private final ConcurrentHashMap<Integer, IAudioSendFactory> sendFactories = new ConcurrentHashMap<>();
 
-    SocketContext(Supplier<AudioPlayerManager> audioPlayerManagerSupplier, ServerConfig serverConfig, WebSocket socket,
-                  AudioSendFactoryConfiguration audioSendFactoryConfiguration, SocketServer socketServer,
-                  String userId, int shardCount) {
+    SocketContext(Supplier<AudioPlayerManager> audioPlayerManagerSupplier, WebSocket socket, SocketServer socketServer, String userId,
+                  MagmaApi magmaApi) {
         this.audioPlayerManager = audioPlayerManagerSupplier.get();
-        this.serverConfig = serverConfig;
         this.socket = socket;
-        this.audioSendFactoryConfiguration = audioSendFactoryConfiguration;
         this.userId = userId;
-        this.shardCount = shardCount;
+        this.magmaApi = magmaApi;
 
         statsExecutor = Executors.newSingleThreadScheduledExecutor();
         statsExecutor.scheduleAtFixedRate(new StatsTask(this, socketServer), 0, 1, TimeUnit.MINUTES);
@@ -84,25 +69,14 @@ public class SocketContext {
         });
     }
 
-    Core getCore(int shardId) {
-        return cores.computeIfAbsent(shardId,
-                __ -> {
-                    if (audioSendFactoryConfiguration.isNasSupported())
-                        return new Core(userId, new CoreClientImpl(), core -> new ConnectionManagerImpl(), getAudioSendFactory(shardId));
-                    else
-                        return new Core(userId, new CoreClientImpl(), (ConnectionManagerBuilder) core -> new ConnectionManagerImpl());
-                }
-        );
+    public String getUserId() {
+        return userId;
     }
 
     Player getPlayer(String guildId) {
         return players.computeIfAbsent(guildId,
                 __ -> new Player(this, guildId, audioPlayerManager)
         );
-    }
-
-    int getShardCount() {
-        return shardCount;
     }
 
     public WebSocket getSocket() {
@@ -122,36 +96,16 @@ public class SocketContext {
     }
 
     void shutdown() {
-        log.info("Shutting down " + cores.size() + " cores and " + getPlayingPlayers().size() + " playing players.");
+        log.info("Shutting down " + getPlayingPlayers().size() + " playing players.");
         statsExecutor.shutdown();
         audioPlayerManager.shutdown();
         playerUpdateService.shutdown();
-        players.keySet().forEach(s -> {
-            Core core = cores.get(Util.getShardFromSnowflake(s, shardCount));
-            if (core != null) {
-                AudioManager audioManager = core.getAudioManager(s);
-                if (audioManager != null) {
-                    audioManager.closeAudioConnection();
-                }
-            }
+        players.keySet().forEach(guildId -> {
+            magmaApi.removeSendHandler(userId, guildId);
+            magmaApi.closeConnection(userId, guildId);
         });
 
         players.values().forEach(Player::stop);
-    }
-
-    private IAudioSendFactory getAudioSendFactory(int shardId) {
-        return sendFactories.computeIfAbsent(shardId % audioSendFactoryConfiguration.getAudioSendFactoryCount(),
-                integer -> {
-                    Integer customBuffer = serverConfig.getBufferDurationMs();
-                    NativeAudioSendFactory nativeAudioSendFactory;
-                    if (customBuffer != null) {
-                        nativeAudioSendFactory = new NativeAudioSendFactory(customBuffer);
-                    } else {
-                        nativeAudioSendFactory = new NativeAudioSendFactory();
-                    }
-
-                    return AsyncPacketProviderFactory.adapt(nativeAudioSendFactory);
-                });
     }
 
     public AudioPlayerManager getAudioPlayerManager() {
