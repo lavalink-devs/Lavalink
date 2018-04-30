@@ -17,9 +17,16 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 * Statistics (good for load balancing)
 * Basic authentication
 
+## Changes in 3.x
+* Lavalink-Server now requires Java 10
+* Breaking changes to the output of the /loadtracks endpoint https://github.com/Frederikam/Lavalink/pull/91
+* Replace JDA-Audio with Magma to improve performance by switching to non-blocking IO.
+
 ## Client libraries:
-### Supports 2.x:
+### Supports 3.x:
 * [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (JDA, Java)
+
+### Supports 2.x:
 * [Magma](https://github.com/initzx/magma/) (discord.py, Python)
 * [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
 * [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
@@ -27,11 +34,6 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
 * [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) (Discord.js, JavaScript)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
-
-### Supports 1.x:
-* [lavalink.js](https://github.com/briantanner/lavalink.js) (discord.js, JavaScript)
-
-Outdated as of January 29 2018.
 
 ## Server configuration
 Download from [the CI server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1)
