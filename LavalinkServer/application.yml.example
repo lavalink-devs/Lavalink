@@ -28,4 +28,4 @@ logging:
 
   level:
     root: INFO
-    lavalink: DEBUG
+    lavalink: INFO
