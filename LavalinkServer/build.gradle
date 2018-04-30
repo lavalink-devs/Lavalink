@@ -15,6 +15,9 @@ bootJar {
     requiresUnpack '**/jda-nas*.jar' //otherwise we get missing classes exceptions
 }
 
+sourceCompatibility = 9
+targetCompatibility = 9
+
 bootRun {
     //compiling tests during bootRun increases the likelyhood of catching broken tests locally instead of on the CI
     dependsOn compileTestJava
