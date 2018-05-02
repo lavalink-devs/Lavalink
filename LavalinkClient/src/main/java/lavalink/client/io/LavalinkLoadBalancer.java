@@ -24,6 +24,7 @@ package lavalink.client.io;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,12 +39,14 @@ public class LavalinkLoadBalancer {
         this.lavalink = lavalink;
     }
 
+    @SuppressWarnings("unchecked")
     @Nonnull
     public LavalinkSocket determineBestSocket(long guild) {
         LavalinkSocket leastPenalty = null;
         int record = Integer.MAX_VALUE;
 
-        for (LavalinkSocket socket : lavalink.getNodes()) {
+        List<LavalinkSocket> nodes = lavalink.getNodes();
+        for (LavalinkSocket socket : nodes) {
             int total = getPenalties(socket, guild, penaltyProviders).getTotal();
             if (total < record) {
                 leastPenalty = socket;
@@ -68,14 +71,18 @@ public class LavalinkLoadBalancer {
     }
 
     void onNodeDisconnect(LavalinkSocket disconnected) {
-        lavalink.getLinks().forEach(link -> {
+        //noinspection unchecked
+        Collection<Link> links = lavalink.getLinks();
+        links.forEach(link -> {
             if (disconnected.equals(link.getNode(false)))
                 link.changeNode(lavalink.loadBalancer.determineBestSocket(link.getGuildIdLong()));
         });
     }
 
     void onNodeConnect(LavalinkSocket connected) {
-        lavalink.getLinks().forEach(link -> {
+        //noinspection unchecked
+        Collection<Link> links = lavalink.getLinks();
+        links.forEach(link -> {
             if (link.getNode(false) == null)
                 link.changeNode(connected);
         });
@@ -85,6 +92,7 @@ public class LavalinkLoadBalancer {
         return new Penalties(socket, guild, penaltyProviders, lavalink);
     }
 
+    @SuppressWarnings("unused")
     public static Penalties getPenalties(LavalinkSocket socket) {
         return new Penalties(socket, 0L, Collections.emptyList(), null);
     }
@@ -129,7 +137,9 @@ public class LavalinkLoadBalancer {
         }
 
         private int countPlayingPlayers() {
-            Long players = lavalink.getLinks()
+            //noinspection unchecked
+            Collection<Link> links = lavalink.getLinks();
+            Long players = links
                     .stream().filter(link ->
                             socket.equals(link.getNode(false)) &&
                                     link.getPlayer().getPlayingTrack() != null &&

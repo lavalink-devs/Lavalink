@@ -25,6 +25,8 @@ package lavalink.client.io;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class ReconnectTask implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(ReconnectTask.class);
@@ -37,7 +39,9 @@ public class ReconnectTask implements Runnable {
     @Override
     public void run() {
         try {
-            lavalink.nodes.forEach(lavalinkSocket -> {
+            //noinspection unchecked
+            List<LavalinkSocket> nodes = lavalink.getNodes();
+            nodes.forEach(lavalinkSocket -> {
                 if (lavalinkSocket.isClosed()
                         && !lavalinkSocket.isConnecting()
                         && System.currentTimeMillis() - lavalinkSocket.lastReconnectAttempt > lavalinkSocket.getReconnectInterval()) {

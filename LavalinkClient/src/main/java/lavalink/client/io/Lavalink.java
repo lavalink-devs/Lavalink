@@ -22,16 +22,6 @@
 
 package lavalink.client.io;
 
-import lavalink.client.LavalinkUtil;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.impl.JDAImpl;
-import net.dv8tion.jda.core.events.ReadyEvent;
-import net.dv8tion.jda.core.events.ReconnectedEvent;
-import net.dv8tion.jda.core.events.channel.voice.VoiceChannelDeleteEvent;
-import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.core.handle.SocketHandler;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.java_websocket.drafts.Draft_6455;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,32 +32,25 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 
-public class Lavalink extends ListenerAdapter {
+public abstract class Lavalink<T extends Link> {
 
     private static final Logger log = LoggerFactory.getLogger(Lavalink.class);
 
-    private boolean autoReconnect = true;
-    private final int numShards;
-    private final Function<Integer, JDA> jdaProvider;
-    private final ConcurrentHashMap<String, Link> links = new ConcurrentHashMap<>();
+    @SuppressWarnings("WeakerAccess")
+    protected final int numShards;
     private final String userId;
+    private final ConcurrentHashMap<String, T> links = new ConcurrentHashMap<>();
     final List<LavalinkSocket> nodes = new CopyOnWriteArrayList<>();
     final LavalinkLoadBalancer loadBalancer = new LavalinkLoadBalancer(this);
 
     private final ScheduledExecutorService reconnectService;
 
-    public Lavalink(String userId, int numShards, Function<Integer, JDA> jdaProvider) {
+    public Lavalink(String userId, int numShards) {
         this.userId = userId;
         this.numShards = numShards;
-        this.jdaProvider = jdaProvider;
 
         reconnectService = Executors.newSingleThreadScheduledExecutor(r -> {
             Thread thread = new Thread(r, "lavalink-reconnect-thread");
@@ -75,17 +58,6 @@ public class Lavalink extends ListenerAdapter {
             return thread;
         });
         reconnectService.scheduleWithFixedDelay(new ReconnectTask(this), 0, 500, TimeUnit.MILLISECONDS);
-    }
-
-
-    @SuppressWarnings("unused")
-    public void setAutoReconnect(boolean autoReconnect) {
-        this.autoReconnect = autoReconnect;
-    }
-
-    @SuppressWarnings("unused")
-    public boolean getAutoReconnect() {
-        return autoReconnect;
     }
 
     private static final AtomicInteger nodeCounter = new AtomicInteger(0);
@@ -102,6 +74,7 @@ public class Lavalink extends ListenerAdapter {
      * @param password
      *         password of the node to be added
      */
+    @SuppressWarnings("WeakerAccess")
     public void addNode(@Nonnull String name, @Nonnull URI serverUri, @Nonnull String password) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", password);
@@ -127,15 +100,18 @@ public class Lavalink extends ListenerAdapter {
 
     @SuppressWarnings("WeakerAccess")
     @Nonnull
-    public Link getLink(String guildId) {
-        return links.computeIfAbsent(guildId, __ -> new Link(this, guildId));
+    public T getLink(String guildId) {
+        return links.computeIfAbsent(guildId, __ -> buildNewLink(guildId));
     }
 
-    @SuppressWarnings("WeakerAccess")
-    @Nonnull
-    public Link getLink(Guild guild) {
-        return getLink(guild.getId());
-    }
+    /**
+     * Hook to build a new Link.
+     * Since the Link class is abstract, you will have to return your own implementation of Link.
+     *
+     * @param guildId the associated guild's ID
+     * @return the new link
+     */
+    protected abstract T buildNewLink(String guildId);
 
     @SuppressWarnings("WeakerAccess")
     public int getNumShards() {
@@ -144,7 +120,7 @@ public class Lavalink extends ListenerAdapter {
 
     @SuppressWarnings("WeakerAccess")
     @Nonnull
-    public Collection<Link> getLinks() {
+    public Collection<T> getLinks() {
         return links.values();
     }
 
@@ -152,18 +128,6 @@ public class Lavalink extends ListenerAdapter {
     @Nonnull
     public List<LavalinkSocket> getNodes() {
         return nodes;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    @Nonnull
-    public JDA getJda(int shardId) {
-        return jdaProvider.apply(shardId);
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    @Nonnull
-    public JDA getJdaFromSnowflake(String snowflake) {
-        return jdaProvider.apply(LavalinkUtil.getShardFromSnowflake(snowflake, numShards));
     }
 
     public void shutdown() {
@@ -176,53 +140,9 @@ public class Lavalink extends ListenerAdapter {
         links.remove(link.getGuildId());
     }
 
-    /*
-     *  JDA event handling
-     */
-
-    @Override
-    public void onReady(ReadyEvent event) {
-        Map<String, SocketHandler> handlers = ((JDAImpl) event.getJDA()).getClient().getHandlers();
-        handlers.put("VOICE_SERVER_UPDATE", new VoiceServerUpdateInterceptor(this, (JDAImpl) event.getJDA()));
-        handlers.put("VOICE_STATE_UPDATE", new VoiceStateUpdateInterceptor(this, (JDAImpl) event.getJDA()));
-    }
-
-    @Override
-    public void onGuildLeave(GuildLeaveEvent event) {
-        Link link = links.get(event.getGuild().getId());
-        if (link == null) return;
-
-        link.removeConnection();
-    }
-
-    @Override
-    public void onVoiceChannelDelete(VoiceChannelDeleteEvent event) {
-        Link link = links.get(event.getGuild().getId());
-        if (link == null || !event.getChannel().equals(link.getLastChannel())) return;
-
-        link.removeConnection();
-    }
-
-    @Override
-    public void onReconnect(ReconnectedEvent event) {
-        reconnectVoiceConnections(event.getJDA());
-    }
-
-
-    private void reconnectVoiceConnections(JDA jda) {
-        if (autoReconnect) {
-            links.forEach((guildId, link) -> {
-                try {
-                    //Note: We also ensure that the link belongs to the JDA object
-                    if (link.getLastChannel() != null
-                            && jda.getGuildById(guildId) != null) {
-                        link.connect(link.getLastChannel(), false);
-                    }
-                } catch (Exception e) {
-                    log.error("Caught exception while trying to reconnect link " + link, e);
-                }
-            });
-        }
+    @SuppressWarnings("WeakerAccess")
+    protected Map<String, T> getLinksMap() {
+        return links;
     }
 
 }
