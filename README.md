@@ -19,18 +19,18 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 
 ## Client libraries:
 ### Supports 2.x:
+* [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) ([JDA](https://github.com/DV8FromTheWorld/JDA), Java)
 * [LavaClient](https://github.com/SamOphis/LavaClient) (Java)
-* [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (JDA, Java)
 * [Magma](https://github.com/initzx/magma/) (discord.py, Python)
 * [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
 * [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
 * [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
-* [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
-* [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) (Discord.js, JavaScript)
+* [eris-lavalink](https://github.com/briantanner/eris-lavalink) ([eris](https://github.com/abalabahaha/eris), JavaScript)
+* [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ### Supports 1.x:
-* [lavalink.js](https://github.com/briantanner/lavalink.js) (discord.js, JavaScript)
+* [lavalink.js](https://github.com/briantanner/lavalink.js) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
 
 Outdated as of January 29 2018.
 
