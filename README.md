@@ -21,9 +21,9 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 ### Supports 2.x:
 * [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) ([JDA](https://github.com/DV8FromTheWorld/JDA), Java)
 * [LavaClient](https://github.com/SamOphis/LavaClient) (Java)
-* [Magma](https://github.com/initzx/magma/) (discord.py, Python)
-* [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
-* [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
+* [Magma](https://github.com/initzx/magma/) ([discord.py](https://github.com/Rapptz/discord.py), Python)
+* [Lavalink.py](https://github.com/Devoxin/Lavalink.py) ([discord.py](https://github.com/Rapptz/discord.py), Python)
+* [pylava](https://github.com/Pandentia/pylava) ([discord.py](https://github.com/Rapptz/discord.py), Python)
 * [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) ([eris](https://github.com/abalabahaha/eris), JavaScript)
 * [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
