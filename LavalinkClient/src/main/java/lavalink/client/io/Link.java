@@ -222,13 +222,13 @@ abstract public class Link {
 
         // Send WS message
         JSONObject out = new JSONObject();
-        json.put("op", "voiceUpdate");
-        json.put("sessionId", getSessionId());
-        json.put("guildId", guild);
-        json.put("event", lastVoiceServerUpdate);
+        out.put("op", "voiceUpdate");
+        out.put("sessionId", getSessionId());
+        out.put("guildId", Long.toString(guild));
+        out.put("event", lastVoiceServerUpdate);
 
         //noinspection ConstantConditions
-        getNode(true).send(json.toString());
+        getNode(true).send(out.toString());
         setState(Link.State.CONNECTED);
     }
 

@@ -54,7 +54,6 @@ public class VoiceServerUpdateInterceptor extends SocketHandler {
         Guild guild = api.getGuildMap().get(idLong);
         if (guild == null)
             throw new IllegalArgumentException("Attempted to start audio connection with Guild that doesn't exist! JSON: " + content);
-        String sessionId = guild.getSelfMember().getVoiceState().getSessionId();
 
         lavalink.getLink(guild).onVoiceServerUpdate(content);
 

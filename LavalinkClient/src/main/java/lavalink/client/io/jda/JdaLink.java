@@ -1,6 +1,5 @@
 package lavalink.client.io.jda;
 
-import lavalink.client.io.Lavalink;
 import lavalink.client.io.Link;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;

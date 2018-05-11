@@ -43,7 +43,7 @@ public class JdaLavalink extends Lavalink<JdaLink> implements EventListener {
 
     @SuppressWarnings("WeakerAccess")
     @Nonnull
-    public Link getLink(Guild guild) {
+    public JdaLink getLink(Guild guild) {
         return getLink(guild.getId());
     }
 
