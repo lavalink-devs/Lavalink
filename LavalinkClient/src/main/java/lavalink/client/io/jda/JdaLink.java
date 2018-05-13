@@ -109,12 +109,4 @@ public class JdaLink extends Link {
     public Guild getGuild() {
         return getJda().getGuildById(guild);
     }
-
-    @Nullable
-    @Override
-    protected String getSessionId() {
-        Guild g = getGuild();
-        if (g != null) return g.getSelfMember().getVoiceState().getSessionId();
-        return null;
-    }
 }

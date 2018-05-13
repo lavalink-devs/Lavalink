@@ -217,7 +217,7 @@ abstract public class Link {
                 '}';
     }
 
-    public void onVoiceServerUpdate(JSONObject json) {
+    public void onVoiceServerUpdate(JSONObject json, String sessionId) {
         lastVoiceServerUpdate = json;
 
         // Send WS message
@@ -231,11 +231,6 @@ abstract public class Link {
         getNode(true).send(out.toString());
         setState(Link.State.CONNECTED);
     }
-
-    /**
-     * @return the session ID of this member in this Link's guild
-     */
-    protected abstract String getSessionId();
 
     public JSONObject getLastVoiceServerUpdate() {
         return lastVoiceServerUpdate;

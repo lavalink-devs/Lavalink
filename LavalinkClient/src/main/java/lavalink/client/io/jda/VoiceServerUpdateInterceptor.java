@@ -22,8 +22,6 @@
 
 package lavalink.client.io.jda;
 
-import lavalink.client.io.Lavalink;
-import lavalink.client.io.Link;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.handle.SocketHandler;
@@ -55,7 +53,7 @@ public class VoiceServerUpdateInterceptor extends SocketHandler {
         if (guild == null)
             throw new IllegalArgumentException("Attempted to start audio connection with Guild that doesn't exist! JSON: " + content);
 
-        lavalink.getLink(guild).onVoiceServerUpdate(content);
+        lavalink.getLink(guild).onVoiceServerUpdate(content, guild.getSelfMember().getVoiceState().getSessionId());
 
         return null;
     }
