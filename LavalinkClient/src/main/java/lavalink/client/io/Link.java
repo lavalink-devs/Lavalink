@@ -22,18 +22,8 @@
 
 package lavalink.client.io;
 
-import lavalink.client.io.jda.VoiceStateUpdateInterceptor;
 import lavalink.client.player.LavalinkPlayer;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.entities.impl.JDAImpl;
-import net.dv8tion.jda.core.exceptions.GuildUnavailableException;
-import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.core.requests.WebSocketClient;
-import net.dv8tion.jda.core.utils.PermissionUtil;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -223,7 +213,7 @@ abstract public class Link {
         // Send WS message
         JSONObject out = new JSONObject();
         out.put("op", "voiceUpdate");
-        out.put("sessionId", getSessionId());
+        out.put("sessionId", sessionId);
         out.put("guildId", Long.toString(guild));
         out.put("event", lastVoiceServerUpdate);
 
