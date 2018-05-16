@@ -11,8 +11,6 @@ ext {
 
 bootJar {
     archiveName = "Lavalink.jar"
-
-    requiresUnpack '**/jda-nas*.jar' //otherwise we get missing classes exceptions
 }
 
 bootRun {
@@ -30,7 +28,7 @@ bootRun {
 dependencies {
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
     compile group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: jdaAudioVersion
-    compile group: 'com.github.FredBoat', name: 'jda-nas', version: jdaNasVersion
+    compile group: 'com.github.FredBoat.jda-nas', name: 'jda-nas', version: jdaNasVersion
     compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: jappVersion
     compile group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
     compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
