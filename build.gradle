@@ -44,7 +44,7 @@ subprojects {
 
         lavaplayerVersion               = '1.2.63'
         jdaAudioVersion                 = '91438c36d7107cf838c2f2eb147b08f989d929db'
-        jdaNasVersion                   = '1.0.6.1-JDA-Audio'
+        jdaNasVersion                   = '1.0.6.2-JDA-Audio'
         jappVersion                     = '1.2'
         jdaVersion                      = '3.6.0_355'
 
