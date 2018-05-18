@@ -1,6 +1,5 @@
 package lavalink.client.io.jda;
 
-import lavalink.client.io.Lavalink;
 import lavalink.client.io.Link;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
@@ -46,7 +45,7 @@ public class VoiceStateUpdateInterceptor extends VoiceStateUpdateHandler {
                 link.onDisconnected();
             }
         } else if (channel != null) {
-            link.setChannel(channel); // Change expected channel
+            link.setChannel(channel.getId()); // Change expected channel
         }
 
         if (link.getState() == Link.State.CONNECTED) {
