@@ -23,7 +23,6 @@
 package lavalink.client.io;
 
 import lavalink.client.player.LavalinkPlayer;
-import net.dv8tion.jda.core.entities.VoiceChannel;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,7 +106,7 @@ abstract public class Link {
     /**
      * Disconnects the voice connection (if any) and internally dereferences this {@link Link}.
      * <p>
-     * You should invoke this method your bot leaves a {@link net.dv8tion.jda.core.entities.Guild}.
+     * You should invoke this method your bot leaves a guild.
      */
     @SuppressWarnings("unused")
     public void destroy() {
@@ -194,8 +193,8 @@ abstract public class Link {
     /**
      * Invoked when we receive a voice state update from Discord, which tells us we have joined a channel
      */
-    public void setChannel(@Nonnull VoiceChannel channel) {
-        this.channel = channel.getId();
+    public void setChannel(@Nonnull String channel) {
+        this.channel = channel;
     }
 
     @Override
