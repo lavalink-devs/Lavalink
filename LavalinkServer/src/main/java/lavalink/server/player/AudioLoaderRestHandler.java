@@ -97,6 +97,7 @@ public class AudioLoaderRestHandler {
             return "";
 
         JSONObject json = new JSONObject();
+        JSONObject playlist = new JSONObject();
         JSONArray tracks = new JSONArray();
         LoadResult result = new AudioLoader(audioPlayerManager).loadSync(identifier);
 
@@ -113,7 +114,11 @@ public class AudioLoaderRestHandler {
             }
         });
 
+        playlist.put("name", result.playlistName);
+        playlist.put("selectedTrack", result.selectedTrack);
+
         json.put("isPlaylist", result.isPlaylist);
+        json.put("playlistInfo", playlist);
         json.put("tracks", tracks);
 
         return json.toString();

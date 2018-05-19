@@ -41,6 +41,8 @@ public class AudioLoader implements AudioLoadResultHandler {
 
     private List<AudioTrack> loadedItems;
     private boolean isPlaylist = false;
+    private String playlistName = null;
+    private Integer selectedTrack = null;
     private boolean used = false;
 
     public AudioLoader(AudioPlayerManager audioPlayerManager) {
@@ -59,7 +61,7 @@ public class AudioLoader implements AudioLoadResultHandler {
             this.wait();
         }
 
-        return new LoadResult(loadedItems, isPlaylist);
+        return new LoadResult(loadedItems, isPlaylist, playlistName, selectedTrack);
     }
 
     @Override
@@ -76,6 +78,8 @@ public class AudioLoader implements AudioLoadResultHandler {
     public void playlistLoaded(AudioPlaylist audioPlaylist) {
         if (!audioPlaylist.isSearchResult()) {
             isPlaylist = true;
+            playlistName = audioPlaylist.getName();
+            selectedTrack = audioPlaylist.getTracks().indexOf(audioPlaylist.getSelectedTrack());
         }
 
         log.info("Loaded playlist " + audioPlaylist.getName());
@@ -108,9 +112,13 @@ public class AudioLoader implements AudioLoadResultHandler {
 class LoadResult {
     public List<AudioTrack> tracks;
     public boolean isPlaylist;
+    public String playlistName;
+    public Integer selectedTrack;
 
-    public LoadResult(List<AudioTrack> tracks, boolean isPlaylist) {
+    public LoadResult(List<AudioTrack> tracks, boolean isPlaylist, String playlistName, Integer selectedTrack) {
         this.tracks = Collections.unmodifiableList(tracks);
         this.isPlaylist = isPlaylist;
+        this.playlistName = playlistName;
+        this.selectedTrack = selectedTrack;
     }
 }
