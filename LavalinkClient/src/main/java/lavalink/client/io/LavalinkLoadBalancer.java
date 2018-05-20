@@ -22,7 +22,8 @@
 
 package lavalink.client.io;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +39,7 @@ public class LavalinkLoadBalancer {
         this.lavalink = lavalink;
     }
 
-    @Nonnull
+    @NonNull
     public LavalinkSocket determineBestSocket(long guild) {
         LavalinkSocket leastPenalty = null;
         int record = Integer.MAX_VALUE;
@@ -75,6 +76,13 @@ public class LavalinkLoadBalancer {
     }
 
     void onNodeConnect(LavalinkSocket connected) {
+        long otherAvailableNodes = lavalink.getNodes().stream()
+                .filter(node -> node != connected)
+                .filter(LavalinkSocket::isAvailable)
+                .count();
+        if (otherAvailableNodes > 0) { //only update links if this is the only connected node
+            return;
+        }
         lavalink.getLinks().forEach(link -> {
             if (link.getNode(false) == null)
                 link.changeNode(connected);

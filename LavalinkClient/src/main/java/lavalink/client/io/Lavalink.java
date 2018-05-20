@@ -22,6 +22,7 @@
 
 package lavalink.client.io;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import lavalink.client.LavalinkUtil;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
@@ -36,7 +37,6 @@ import org.java_websocket.drafts.Draft_6455;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
 import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
@@ -90,7 +90,7 @@ public class Lavalink extends ListenerAdapter {
 
     private static final AtomicInteger nodeCounter = new AtomicInteger(0);
 
-    public void addNode(@Nonnull URI serverUri, @Nonnull String password) {
+    public void addNode(@NonNull URI serverUri, @NonNull String password) {
         addNode("Lavalink_Node_#" + nodeCounter.getAndIncrement(), serverUri, password);
     }
 
@@ -102,7 +102,7 @@ public class Lavalink extends ListenerAdapter {
      * @param password
      *         password of the node to be added
      */
-    public void addNode(@Nonnull String name, @Nonnull URI serverUri, @Nonnull String password) {
+    public void addNode(@NonNull String name, @NonNull URI serverUri, @NonNull String password) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", password);
         headers.put("Num-Shards", Integer.toString(numShards));
@@ -120,19 +120,19 @@ public class Lavalink extends ListenerAdapter {
     }
 
     @SuppressWarnings("unused")
-    @Nonnull
+    @NonNull
     public LavalinkLoadBalancer getLoadBalancer() {
         return loadBalancer;
     }
 
     @SuppressWarnings("WeakerAccess")
-    @Nonnull
+    @NonNull
     public Link getLink(String guildId) {
         return links.computeIfAbsent(guildId, __ -> new Link(this, guildId));
     }
 
     @SuppressWarnings("WeakerAccess")
-    @Nonnull
+    @NonNull
     public Link getLink(Guild guild) {
         return getLink(guild.getId());
     }
@@ -143,25 +143,25 @@ public class Lavalink extends ListenerAdapter {
     }
 
     @SuppressWarnings("WeakerAccess")
-    @Nonnull
+    @NonNull
     public Collection<Link> getLinks() {
         return links.values();
     }
 
     @SuppressWarnings("WeakerAccess")
-    @Nonnull
+    @NonNull
     public List<LavalinkSocket> getNodes() {
         return nodes;
     }
 
     @SuppressWarnings("WeakerAccess")
-    @Nonnull
+    @NonNull
     public JDA getJda(int shardId) {
         return jdaProvider.apply(shardId);
     }
 
     @SuppressWarnings("WeakerAccess")
-    @Nonnull
+    @NonNull
     public JDA getJdaFromSnowflake(String snowflake) {
         return jdaProvider.apply(LavalinkUtil.getShardFromSnowflake(snowflake, numShards));
     }

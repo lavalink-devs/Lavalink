@@ -22,10 +22,10 @@
 
 package lavalink.server.config;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Nullable;
 
 @ConfigurationProperties(prefix = "lavalink.server")
 @Component

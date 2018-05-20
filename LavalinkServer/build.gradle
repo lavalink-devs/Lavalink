@@ -11,8 +11,6 @@ ext {
 
 bootJar {
     archiveName = "Lavalink.jar"
-
-    requiresUnpack '**/jda-nas*.jar' //otherwise we get missing classes exceptions
 }
 
 sourceCompatibility = 10
@@ -33,7 +31,7 @@ bootRun {
 dependencies {
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
     compile group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: jdaAudioVersion
-    compile group: 'com.github.FredBoat', name: 'jda-nas', version: jdaNasVersion
+    compile group: 'com.github.FredBoat.jda-nas', name: 'jda-nas', version: jdaNasVersion
     compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: jappVersion
     compile group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
     compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
@@ -41,8 +39,8 @@ dependencies {
     compile group: 'io.sentry', name: 'sentry-logback', version: sentryLogbackVersion
     compile group: 'com.github.oshi', name: 'oshi-core', version: oshiVersion
     compile group: 'org.json', name: 'json', version: jsonOrgVersion
-    compile group: 'com.google.guava', name: 'guava', version: guavaVersion
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
+    compileOnly group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: spotbugsAnnotationsVersion
 }
 
 //create a simple version file that we will be reading to create appropriate docker tags

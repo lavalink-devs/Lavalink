@@ -1,12 +1,12 @@
 package lavalink.client.io.metrics;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import io.prometheus.client.Collector;
 import io.prometheus.client.GaugeMetricFamily;
 import lavalink.client.io.Lavalink;
 import lavalink.client.io.LavalinkSocket;
 import lavalink.client.io.RemoteStats;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +21,7 @@ public class LavalinkCollector extends Collector {
 
     private final Lavalink lavalink;
 
-    public LavalinkCollector(@Nonnull Lavalink lavalinkInstance) {
+    public LavalinkCollector(@NonNull Lavalink lavalinkInstance) {
         this.lavalink = lavalinkInstance;
     }
 
