@@ -50,9 +50,11 @@ public class PrometheusMetricsController {
         }
 
         Writer writer = new StringWriter();
-        try (writer) {
+        try {
             TextFormat.write004(writer, this.registry.filteredMetricFamilySamples(params));
             writer.flush();
+        } finally {
+            writer.close();
         }
 
         return new ResponseEntity<>(writer.toString(), HttpStatus.OK);
