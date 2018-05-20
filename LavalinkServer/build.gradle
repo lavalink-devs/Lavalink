@@ -38,6 +38,11 @@ dependencies {
     compile group: 'org.json', name: 'json', version: jsonOrgVersion
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
     compileOnly group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: spotbugsAnnotationsVersion
+
+    compile group: 'io.prometheus', name: 'simpleclient', version: prometheusVersion
+    compile group: 'io.prometheus', name: 'simpleclient_hotspot', version: prometheusVersion
+    compile group: 'io.prometheus', name: 'simpleclient_logback', version: prometheusVersion
+    compile group: 'io.prometheus', name: 'simpleclient_servlet', version: prometheusVersion
 }
 
 //create a simple version file that we will be reading to create appropriate docker tags
