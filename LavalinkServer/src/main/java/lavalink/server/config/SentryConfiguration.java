@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -23,19 +24,35 @@ public class SentryConfiguration {
     private static final Logger log = LoggerFactory.getLogger(SentryConfiguration.class);
     private static final String SENTRY_APPENDER_NAME = "SENTRY";
 
-    public SentryConfiguration(ServerConfig serverConfig) {
-        String sentryDsn = serverConfig.getSentryDsn();
-        if (sentryDsn != null && !sentryDsn.isEmpty()) {
-            turnOn(sentryDsn);
+    public SentryConfiguration(ServerConfig serverConfig, SentryConfigProperties sentryConfig) {
+
+        String dsn = sentryConfig.getDsn();
+        boolean warnDeprecatedDsnConfig = false;
+        if (dsn == null || dsn.isEmpty()) {
+            //try deprecated config location
+            dsn = serverConfig.getSentryDsn();
+            warnDeprecatedDsnConfig = true;
+        }
+
+        if (dsn != null && !dsn.isEmpty()) {
+            turnOn(dsn, sentryConfig.getTags());
+            if (warnDeprecatedDsnConfig) {
+                log.warn("Please update the location of the sentry dsn in lavalinks config file / your environment "
+                        + "vars, it is now located under 'sentry.dsn' instead of 'lavalink.server.sentryDsn'.");
+            }
         } else {
             turnOff();
         }
     }
 
 
-    public void turnOn(String dsn) {
+    public void turnOn(String dsn, Map<String, String> tags) {
         log.info("Turning on sentry");
         SentryClient sentryClient = Sentry.init(dsn);
+
+        if (tags != null) {
+            tags.forEach(sentryClient::addTag);
+        }
 
         // set the git commit hash this was build on as the release
         Properties gitProps = new Properties();
