@@ -22,6 +22,8 @@
 
 package lavalink.client.io;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import lavalink.client.player.LavalinkPlayer;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;
@@ -37,8 +39,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * Indicates which node we are linked to, what voice channel to use, and what player we are using
@@ -237,7 +237,7 @@ public class Link {
         return state;
     }
 
-    void setState(@Nonnull State state) {
+    void setState(@NonNull State state) {
         if (this.state == State.DESTROYED && state != State.DESTROYED)
             throw new IllegalStateException("Cannot change state to " + state + " when state is " + State.DESTROYED);
         if (this.state == State.DESTROYING && state != State.DESTROYED) {
@@ -248,7 +248,7 @@ public class Link {
     }
 
     @SuppressWarnings("WeakerAccess")
-    @Nonnull
+    @NonNull
     public JDA getJda() {
         return lavalink.getJdaFromSnowflake(String.valueOf(guild));
     }
@@ -260,7 +260,7 @@ public class Link {
     /**
      * Setter used by {@link VoiceStateUpdateInterceptor} to change the expected channel
      */
-    void setChannel(@Nonnull VoiceChannel channel) {
+    void setChannel(@NonNull VoiceChannel channel) {
         this.channel = channel.getId();
     }
 

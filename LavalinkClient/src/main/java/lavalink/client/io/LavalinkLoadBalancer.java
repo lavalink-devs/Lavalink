@@ -22,7 +22,8 @@
 
 package lavalink.client.io;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +39,7 @@ public class LavalinkLoadBalancer {
         this.lavalink = lavalink;
     }
 
-    @Nonnull
+    @NonNull
     public LavalinkSocket determineBestSocket(long guild) {
         LavalinkSocket leastPenalty = null;
         int record = Integer.MAX_VALUE;
