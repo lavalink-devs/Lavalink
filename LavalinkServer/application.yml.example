@@ -16,9 +16,14 @@ lavalink:
       mixer: true
       http: true
       local: false
-    sentryDsn: ""
     bufferDurationMs: 400
     youtubePlaylistLoadLimit: 600
+
+sentry:
+  dsn: ""
+#  tags:
+#    some_key: some_value
+#    another_key: another_value
 
 logging:
   file:
