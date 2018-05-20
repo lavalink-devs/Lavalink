@@ -19,6 +19,11 @@ lavalink:
     bufferDurationMs: 400
     youtubePlaylistLoadLimit: 600
 
+metrics:
+  prometheus:
+    enabled: false
+    endpoint: /metrics
+
 sentry:
   dsn: ""
 #  tags:
