@@ -23,7 +23,10 @@ public class AudioPlayerConfiguration {
     public AudioPlayerManager audioPlayerManager(AudioSourcesConfig sources, ServerConfig serverConfig) {
 
         AudioPlayerManager audioPlayerManager = new DefaultAudioPlayerManager();
-        audioPlayerManager.enableGcMonitoring();
+
+        if (serverConfig.isGcWarnings()) {
+            audioPlayerManager.enableGcMonitoring();
+        }
 
         if (sources.isYoutube()) {
             YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager();
