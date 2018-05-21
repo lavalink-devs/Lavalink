@@ -8,6 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import javax.management.NotificationEmitter;
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
+
 /**
  * Created by napster on 08.05.18.
  */
@@ -29,6 +33,14 @@ public class PrometheusMetrics {
 
         //jvm (hotspot) metrics
         DefaultExports.initialize();
+
+        //gc pause buckets
+        final GcNotificationListener gcNotificationListener = new GcNotificationListener();
+        for (GarbageCollectorMXBean gcBean : ManagementFactory.getGarbageCollectorMXBeans()) {
+            if (gcBean instanceof NotificationEmitter) {
+                ((NotificationEmitter) gcBean).addNotificationListener(gcNotificationListener, null, gcBean);
+            }
+        }
 
         log.info("Prometheus metrics set up");
     }
