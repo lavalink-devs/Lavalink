@@ -162,9 +162,13 @@ public class SocketServer extends WebSocketServer {
                 String guildId = json.getString("guildId");
 
                 JSONObject event = json.getJSONObject("event");
-                String endpoint = event.getString("endpoint");
+                String endpoint = event.optString("endpoint");
                 String token = event.getString("token");
-                //todo endpoint empty check?
+
+                //discord sometimes send a partial server update missing the endpoint, which can be ignored.
+                if (endpoint == null || endpoint.isEmpty()) {
+                    return;
+                }
 
                 SocketContext sktContext = contextMap.get(webSocket);
                 Member member = MagmaMember.builder()
