@@ -28,6 +28,8 @@ import org.java_websocket.WebSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import space.npstr.magma.MagmaApi;
+import space.npstr.magma.MagmaMember;
+import space.npstr.magma.Member;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -101,8 +103,12 @@ public class SocketContext {
         audioPlayerManager.shutdown();
         playerUpdateService.shutdown();
         players.keySet().forEach(guildId -> {
-            magmaApi.removeSendHandler(userId, guildId);
-            magmaApi.closeConnection(userId, guildId);
+            Member member = MagmaMember.builder()
+                    .userId(userId)
+                    .guildId(guildId)
+                    .build();
+            magmaApi.removeSendHandler(member);
+            magmaApi.closeConnection(member);
         });
 
         players.values().forEach(Player::stop);

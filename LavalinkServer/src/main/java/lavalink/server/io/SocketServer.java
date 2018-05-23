@@ -45,6 +45,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import space.npstr.magma.MagmaApi;
+import space.npstr.magma.MagmaMember;
+import space.npstr.magma.MagmaServerUpdate;
+import space.npstr.magma.Member;
+import space.npstr.magma.ServerUpdate;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -163,7 +167,16 @@ public class SocketServer extends WebSocketServer {
                 //todo endpoint empty check?
 
                 SocketContext sktContext = contextMap.get(webSocket);
-                magmaApi.provideVoiceServerUpdate(sktContext.getUserId(), sessionId, guildId, endpoint, token);
+                Member member = MagmaMember.builder()
+                        .userId(sktContext.getUserId())
+                        .guildId(guildId)
+                        .build();
+                ServerUpdate serverUpdate = MagmaServerUpdate.builder()
+                        .sessionId(sessionId)
+                        .endpoint(endpoint)
+                        .token(token)
+                        .build();
+                magmaApi.provideVoiceServerUpdate(member, serverUpdate);
                 break;
 
             /* Player ops */
@@ -188,10 +201,11 @@ public class SocketServer extends WebSocketServer {
 
                     SocketContext context = contextMap.get(webSocket);
 
-                    magmaApi.setSendHandler(
-                            context.getUserId(),
-                            json.getString("guildId"),
-                            context.getPlayer(json.getString("guildId")));
+                    Member m = MagmaMember.builder()
+                            .userId(context.getUserId())
+                            .guildId(json.getString("guildId"))
+                            .build();
+                    magmaApi.setSendHandler(m, context.getPlayer(json.getString("guildId")));
 
                     sendPlayerUpdate(webSocket, player);
                 } catch (IOException e) {
@@ -220,8 +234,12 @@ public class SocketServer extends WebSocketServer {
                 SocketContext socketContext = contextMap.get(webSocket);
                 Player player5 = socketContext.getPlayers().remove(json.getString("guildId"));
                 if (player5 != null) player5.stop();
-                magmaApi.removeSendHandler(socketContext.getUserId(), json.getString("guildId"));
-                magmaApi.closeConnection(socketContext.getUserId(), json.getString("guildId"));
+                Member mem = MagmaMember.builder()
+                        .userId(socketContext.getUserId())
+                        .guildId(json.getString("guildId"))
+                        .build();
+                magmaApi.removeSendHandler(mem);
+                magmaApi.closeConnection(mem);
                 break;
             default:
                 log.warn("Unexpected operation: " + json.getString("op"));
@@ -252,9 +270,9 @@ public class SocketServer extends WebSocketServer {
         return contextMap.values();
     }
 
-    private IAudioSendFactory getAudioSendFactory(String userId, String guildId) {
-        int shardCount = shardCounts.getOrDefault(userId, 1);
-        int shardId = Util.getShardFromSnowflake(guildId, shardCount);
+    private IAudioSendFactory getAudioSendFactory(Member member) {
+        int shardCount = shardCounts.getOrDefault(member.getUserId(), 1);
+        int shardId = Util.getShardFromSnowflake(member.getGuildId(), shardCount);
 
         return sendFactories.computeIfAbsent(shardId % audioSendFactoryConfiguration.getAudioSendFactoryCount(),
                 integer -> {
