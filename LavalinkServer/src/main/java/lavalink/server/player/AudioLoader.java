@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AudioLoader implements AudioLoadResultHandler {
@@ -39,13 +40,16 @@ public class AudioLoader implements AudioLoadResultHandler {
     private final AudioPlayerManager audioPlayerManager;
 
     private List<AudioTrack> loadedItems;
+    private boolean isPlaylist = false;
+    private String playlistName = null;
+    private Integer selectedTrack = null;
     private boolean used = false;
 
     public AudioLoader(AudioPlayerManager audioPlayerManager) {
         this.audioPlayerManager = audioPlayerManager;
     }
 
-    List<AudioTrack> loadSync(String identifier) throws InterruptedException {
+    LoadResult loadSync(String identifier) throws InterruptedException {
         if(used)
             throw new IllegalStateException("This loader can only be used once per instance");
 
@@ -57,7 +61,7 @@ public class AudioLoader implements AudioLoadResultHandler {
             this.wait();
         }
 
-        return loadedItems;
+        return new LoadResult(loadedItems, isPlaylist, playlistName, selectedTrack);
     }
 
     @Override
@@ -72,6 +76,12 @@ public class AudioLoader implements AudioLoadResultHandler {
 
     @Override
     public void playlistLoaded(AudioPlaylist audioPlaylist) {
+        if (!audioPlaylist.isSearchResult()) {
+            isPlaylist = true;
+            playlistName = audioPlaylist.getName();
+            selectedTrack = audioPlaylist.getTracks().indexOf(audioPlaylist.getSelectedTrack());
+        }
+
         log.info("Loaded playlist " + audioPlaylist.getName());
         loadedItems = audioPlaylist.getTracks();
         synchronized (this) {
@@ -97,4 +107,18 @@ public class AudioLoader implements AudioLoadResultHandler {
         }
     }
 
+}
+
+class LoadResult {
+    public List<AudioTrack> tracks;
+    public boolean isPlaylist;
+    public String playlistName;
+    public Integer selectedTrack;
+
+    public LoadResult(List<AudioTrack> tracks, boolean isPlaylist, String playlistName, Integer selectedTrack) {
+        this.tracks = Collections.unmodifiableList(tracks);
+        this.isPlaylist = isPlaylist;
+        this.playlistName = playlistName;
+        this.selectedTrack = selectedTrack;
+    }
 }
