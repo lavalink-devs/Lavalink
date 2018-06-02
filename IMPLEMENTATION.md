@@ -11,8 +11,11 @@ The Java client has support for JDA, but can also be adapted to work with other 
     * Hybi 10
     * Hixie 76
     * Hixie 75
-    
-## Changes v1.3 -> v2.0 
+
+## Breaking changes v2.0 -> v3.0 
+The response of `/loadtracks` has been completely changed.
+
+## Breaking changes v1.3 -> v2.0 
 With the release of v2.0 many unnecessary ops were removed:
 
 * `connect`
