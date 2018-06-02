@@ -17,14 +17,13 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 * Statistics (good for load balancing)
 * Basic authentication
 
-## Changes in 3.x
-* Lavalink-Server now requires Java 10
+## Changes in 3.0
 * Breaking changes to the output of the /loadtracks endpoint https://github.com/Frederikam/Lavalink/pull/91
-* Replace JDA-Audio with Magma to improve performance by switching to non-blocking IO.
+* The Java client has been made generic. This is a breaking change so please read the documentation.
 
 ## Client libraries:
 ### Supports 3.x:
-* [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (JDA, Java)
+* [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (JDA or generic, Java)
 
 ### Supports 2.x:
 * [Magma](https://github.com/initzx/magma/) (discord.py, Python)
