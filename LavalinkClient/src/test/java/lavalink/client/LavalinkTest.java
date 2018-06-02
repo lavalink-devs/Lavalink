@@ -27,7 +27,10 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import lavalink.client.io.Lavalink;
+import lavalink.client.io.LavalinkSocket;
 import lavalink.client.io.Link;
+import lavalink.client.io.jda.JdaLavalink;
+import lavalink.client.io.jda.JdaLink;
 import lavalink.client.player.IPlayer;
 import lavalink.client.player.event.PlayerEventListenerAdapter;
 import net.dv8tion.jda.core.AccountType;
@@ -67,7 +70,7 @@ class LavalinkTest {
     public static final String PROPERTY_CHANNEL = "TEST_VOICE_CHANNEL";
 
     private static JDA jda = null;
-    private static Lavalink lavalink = null;
+    private static JdaLavalink lavalink = null;
     private static final String[] BILL_WURTZ_JINGLES = {
             "https://www.youtube.com/watch?v=GtwVQbUSasw",
             "https://www.youtube.com/watch?v=eNxMkZcySKs",
@@ -84,7 +87,7 @@ class LavalinkTest {
                 .setToken(getSystemProperty(PROPERTY_TOKEN));
 
         JDA selfId = jdaBuilder.buildAsync();
-        lavalink = new Lavalink(selfId.asBot().getApplicationInfo().submit().get(30, TimeUnit.SECONDS).getId(), 1, integer -> jda);
+        lavalink = new JdaLavalink(selfId.asBot().getApplicationInfo().submit().get(30, TimeUnit.SECONDS).getId(), 1, integer -> jda);
         selfId.shutdown();
 
         lavalink.addNode(new URI("ws://localhost:5555"), "youshallnotpass");
@@ -94,6 +97,7 @@ class LavalinkTest {
                 .buildAsync();
 
         Thread.sleep(2000);
+
         assertTrue(lavalink.getNodes().get(0).isAvailable(), "Could not connect to lavalink server");
     }
 
@@ -273,9 +277,8 @@ class LavalinkTest {
     }
 
 
-    private static void ensureConnected(Lavalink lavalink, VoiceChannel voiceChannel) {
-
-        Link link = lavalink.getLink(voiceChannel.getGuild());
+    private static void ensureConnected(JdaLavalink lavalink, VoiceChannel voiceChannel) {
+        JdaLink link = lavalink.getLink(voiceChannel.getGuild());
         link.connect(voiceChannel);
         long started = System.currentTimeMillis();
         while (link.getState() != Link.State.CONNECTED
@@ -292,7 +295,7 @@ class LavalinkTest {
         assertEquals(Link.State.CONNECTED, link.getState(), "Failed to connect to voice channel in a reasonable amount of time");
     }
 
-    private static void ensureNotConnected(Lavalink lavalink, VoiceChannel voiceChannel) {
+    private static void ensureNotConnected(JdaLavalink lavalink, VoiceChannel voiceChannel) {
         Link link = lavalink.getLink(voiceChannel.getGuild());
         link.disconnect();
         long started = System.currentTimeMillis();

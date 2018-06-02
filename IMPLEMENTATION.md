@@ -1,5 +1,6 @@
 # Implementation guidelines
 How to write your own client. The Java client will serve as an example implementation.
+The Java client has support for JDA, but can also be adapted to work with other JVM libraries.
 
 ## Requirements
 * You must be able to send messages via a shard's mainWS connection.

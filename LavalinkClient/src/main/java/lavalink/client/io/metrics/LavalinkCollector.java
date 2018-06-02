@@ -8,6 +8,7 @@ import lavalink.client.io.LavalinkSocket;
 import lavalink.client.io.RemoteStats;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -78,7 +79,9 @@ public class LavalinkCollector extends Collector {
         mfs.add(averageFramesDeficitPerMinute);
 
 
-        for (LavalinkSocket node : lavalink.getNodes()) {
+        //noinspection unchecked
+        List<LavalinkSocket> nodes = lavalink.getNodes();
+        for (LavalinkSocket node : nodes) {
             List<String> labels = Collections.singletonList(node.getName());
             RemoteStats stats = node.getStats();
             if (stats == null) {

@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package lavalink.client.io;
+package lavalink.client.io.jda;
 
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
@@ -33,9 +33,9 @@ public class VoiceServerUpdateInterceptor extends SocketHandler {
 
     private static final Logger log = LoggerFactory.getLogger(VoiceServerUpdateInterceptor.class);
 
-    private final Lavalink lavalink;
+    private final JdaLavalink lavalink;
 
-    VoiceServerUpdateInterceptor(Lavalink lavalink, JDAImpl jda) {
+    VoiceServerUpdateInterceptor(JdaLavalink lavalink, JDAImpl jda) {
         super(jda);
         this.lavalink = lavalink;
     }
@@ -52,20 +52,8 @@ public class VoiceServerUpdateInterceptor extends SocketHandler {
         Guild guild = api.getGuildMap().get(idLong);
         if (guild == null)
             throw new IllegalArgumentException("Attempted to start audio connection with Guild that doesn't exist! JSON: " + content);
-        String sessionId = guild.getSelfMember().getVoiceState().getSessionId();
 
-        // Send WS message
-        JSONObject json = new JSONObject();
-        json.put("op", "voiceUpdate");
-        json.put("sessionId", sessionId);
-        json.put("guildId", guild.getId());
-        json.put("event", content);
-
-        Link link = lavalink.getLink(guild);
-        link.lastVoiceServerUpdate = json;
-        //noinspection ConstantConditions
-        link.getNode(true).send(json.toString());
-        link.setState(Link.State.CONNECTED);
+        lavalink.getLink(guild).onVoiceServerUpdate(content, guild.getSelfMember().getVoiceState().getSessionId());
 
         return null;
     }
