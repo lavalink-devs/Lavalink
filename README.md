@@ -25,6 +25,7 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 ## Client libraries:
 ### Supports 3.x:
 * [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (JDA, Java)
+* [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
 
 ### Supports 2.x:
 * [Magma](https://github.com/initzx/magma/) (discord.py, Python)
