@@ -22,12 +22,12 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 * The Java client has been made generic. This is a breaking change so please read the documentation.
 
 ## Client libraries:
-### Supports 3.x:
+### Supports 3.x and older:
 * [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (JDA or generic, Java)
+* [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
 
 ### Supports 2.x:
 * [Magma](https://github.com/initzx/magma/) (discord.py, Python)
-* [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
 * [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
 * [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
