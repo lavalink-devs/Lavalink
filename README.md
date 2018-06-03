@@ -24,6 +24,7 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 ## Client libraries:
 ### Supports 3.x and older:
 * [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (JDA or generic, Java)
+* [LavaClient](https://github.com/SamOphis/LavaClient) (Java)
 * [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
 * [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
 
