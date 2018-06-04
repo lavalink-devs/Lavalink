@@ -18,7 +18,9 @@ import java.util.Properties;
 /**
  * Created by napster on 25.04.18.
  */
+
 @Configuration
+@SuppressWarnings("WeakerAccess")
 public class SentryConfiguration {
 
     private static final Logger log = LoggerFactory.getLogger(SentryConfiguration.class);

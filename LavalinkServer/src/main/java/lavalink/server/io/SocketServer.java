@@ -82,7 +82,7 @@ public class SocketServer extends WebSocketServer {
     @Override
     public ServerHandshakeBuilder onWebsocketHandshakeReceivedAsServer(WebSocket conn, Draft draft, ClientHandshake request) throws InvalidDataException {
         ServerHandshakeBuilder builder = super.onWebsocketHandshakeReceivedAsServer(conn, draft, request);
-        builder.put("Lavalink-Version", "3");
+        builder.put("Lavalink-Major-Version", "3");
         return builder;
     }
 
