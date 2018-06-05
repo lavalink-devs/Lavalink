@@ -12,14 +12,12 @@ The Java client has support for JDA, but can also be adapted to work with other 
     * Hixie 76
     * Hixie 75
 
-## Breaking changes v2.0 -> v3.0 
-The response of `/loadtracks` has been completely changed.
+## Significant changes v2.0 -> v3.0 
+* The response of `/loadtracks` has been completely changed.
+* Lavalink v3.0 now reports its version as a handshake response header.
+`Lavalink-Major-Version` has a value of `3` for v3.0 only. It's missing for any older version.
 
-## Non-breaking changes v2.0 -> v3.0
-Lavalink v3.0 now reports its version as a handshake response header.
-`Lavalink-Major-Version` has a value of `3` for v3.0 and it's missing for any version below, allowing clients to change their behaviour for different nodes.
-
-## Breaking changes v1.3 -> v2.0 
+## Significant changes v1.3 -> v2.0 
 With the release of v2.0 many unnecessary ops were removed:
 
 * `connect`
