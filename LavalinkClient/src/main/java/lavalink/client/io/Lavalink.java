@@ -23,6 +23,7 @@
 package lavalink.client.io;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.java_websocket.drafts.Draft_6455;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,6 +103,12 @@ public abstract class Lavalink<T extends Link> {
     @NonNull
     public T getLink(@NonNull String guildId) {
         return links.computeIfAbsent(guildId, __ -> buildNewLink(guildId));
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    @Nullable
+    public T getExistingLink(@NonNull String guildId) {
+        return links.get(guildId);
     }
 
     /**

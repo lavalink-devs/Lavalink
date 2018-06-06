@@ -1,8 +1,9 @@
 package lavalink.client.io.jda;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import lavalink.client.LavalinkUtil;
 import lavalink.client.io.Lavalink;
-import lavalink.client.io.Link;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
@@ -16,7 +17,6 @@ import net.dv8tion.jda.core.hooks.EventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -42,19 +42,25 @@ public class JdaLavalink extends Lavalink<JdaLink> implements EventListener {
     }
 
     @SuppressWarnings("WeakerAccess")
-    @Nonnull
+    @NonNull
     public JdaLink getLink(Guild guild) {
         return getLink(guild.getId());
     }
 
     @SuppressWarnings("WeakerAccess")
-    @Nonnull
+    @Nullable
+    public JdaLink getExistingLink(Guild guild) {
+        return getExistingLink(guild.getId());
+    }
+
+    @SuppressWarnings({"WeakerAccess", "unused"})
+    @NonNull
     public JDA getJda(int shardId) {
         return jdaProvider.apply(shardId);
     }
 
     @SuppressWarnings("WeakerAccess")
-    @Nonnull
+    @NonNull
     public JDA getJdaFromSnowflake(String snowflake) {
         return jdaProvider.apply(LavalinkUtil.getShardFromSnowflake(snowflake, numShards));
     }
