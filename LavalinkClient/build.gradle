@@ -39,7 +39,7 @@ dependencies {
     compile group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
     compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
     compile group: 'org.json', name: 'json', version: jsonOrgVersion
-    compile group: 'net.dv8tion', name: 'JDA', version: jdaVersion
+    compileOnly group: 'net.dv8tion', name: 'JDA', version: jdaVersion
     compileOnly group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: spotbugsAnnotationsVersion
     compileOnly group: 'io.prometheus', name: 'simpleclient', version: prometheusVersion
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion
