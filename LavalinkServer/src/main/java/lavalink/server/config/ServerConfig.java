@@ -32,6 +32,12 @@ import org.springframework.stereotype.Component;
 public class ServerConfig {
 
     private String password;
+    private String sentryDsn = "";
+    @Nullable
+    private Integer bufferDurationMs;
+    @Nullable
+    private Integer youtubePlaylistLoadLimit;
+    private boolean gcWarnings = true;
 
     public String getPassword() {
         return password;
@@ -40,8 +46,6 @@ public class ServerConfig {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    private String sentryDsn = "";
 
     /**
      * @deprecated use {@link SentryConfigProperties} instead.
@@ -56,9 +60,6 @@ public class ServerConfig {
     }
 
     @Nullable
-    public Integer bufferDurationMs;
-
-    @Nullable
     public Integer getBufferDurationMs() {
         return bufferDurationMs;
     }
@@ -68,14 +69,19 @@ public class ServerConfig {
     }
 
     @Nullable
-    private Integer youtubePlaylistLoadLimit;
-
-    @Nullable
     public Integer getYoutubePlaylistLoadLimit() {
         return youtubePlaylistLoadLimit;
     }
 
     public void setYoutubePlaylistLoadLimit(@Nullable Integer youtubePlaylistLoadLimit) {
         this.youtubePlaylistLoadLimit = youtubePlaylistLoadLimit;
+    }
+
+    public boolean isGcWarnings() {
+        return gcWarnings;
+    }
+
+    public void setGcWarnings(boolean gcWarnings) {
+        this.gcWarnings = gcWarnings;
     }
 }

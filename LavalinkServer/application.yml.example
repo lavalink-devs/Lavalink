@@ -18,6 +18,7 @@ lavalink:
       local: false
     bufferDurationMs: 400
     youtubePlaylistLoadLimit: 600
+    gc-warnings: true
 
 metrics:
   prometheus:
