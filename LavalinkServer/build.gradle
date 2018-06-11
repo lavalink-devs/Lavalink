@@ -46,6 +46,8 @@ dependencies {
     compile group: 'io.prometheus', name: 'simpleclient_hotspot', version: prometheusVersion
     compile group: 'io.prometheus', name: 'simpleclient_logback', version: prometheusVersion
     compile group: 'io.prometheus', name: 'simpleclient_servlet', version: prometheusVersion
+
+    compile group: 'org.ow2.asm', name: 'asm', version: asmVersion
 }
 
 //create a simple version file that we will be reading to create appropriate docker tags
