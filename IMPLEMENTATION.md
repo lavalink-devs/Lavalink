@@ -259,7 +259,10 @@ If the identifier leads to a playlist, `playlistInfo` will contain two propertie
   "playlistInfo": {
     "name": "Example YouTube Playlist",
     "selectedTrack": 3
-  }
+  },
+  "tracks": [
+    ...
+  ]
 }
 ```
 
