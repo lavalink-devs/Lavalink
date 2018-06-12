@@ -16,14 +16,18 @@ public class PluginLoader {
         this.parentLoader = loader;
     }
 
-    public List<Class<? extends LavalinkPlugin>> load(File from) throws IOException {
-        if(from.isDirectory()) {
-            return new DirectoryPluginFinder(parentLoader, from).find();
+    public List<Class<? extends LavalinkPlugin>> load(File from) throws PluginLoadException {
+        try {
+            if(from.isDirectory()) {
+                return new DirectoryPluginFinder(parentLoader, from).find();
+            }
+            if(from.isFile() && from.getName().endsWith(".jar")) {
+                return new JarPluginFinder(parentLoader, from).find();
+            }
+        } catch(IOException e) {
+            throw new PluginLoadException(e);
         }
-        if(from.isFile() && from.getName().endsWith(".jar")) {
-            return new JarPluginFinder(parentLoader, from).find();
-        }
-        throw new IllegalArgumentException("Unable to load plugins from " + from + ": no suitable loader found");
+        throw new PluginLoadException("Unable to load plugins from " + from + ": no suitable loader found");
     }
 
     //has annotation but doesn't implement the interface

@@ -23,6 +23,7 @@
 package lavalink.server;
 
 import lavalink.server.io.SocketServer;
+import lavalink.server.plugin.loader.PluginManager;
 import lavalink.server.util.SimpleLogToSLF4JAdapter;
 import net.dv8tion.jda.utils.SimpleLog;
 import org.slf4j.Logger;
@@ -35,7 +36,6 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan
 public class Launcher {
-
     private static final Logger log = LoggerFactory.getLogger(Launcher.class);
 
     public final static long startTime = System.currentTimeMillis();
@@ -46,9 +46,10 @@ public class Launcher {
         sa.run(args);
     }
 
-    public Launcher(SocketServer socketServer) {
+    public Launcher(SocketServer socketServer, PluginManager manager) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             log.info("Shutdown hook triggered");
+            manager.callOnShutdown();
             try {
                 socketServer.stop(30);
             } catch (InterruptedException e) {
@@ -58,5 +59,9 @@ public class Launcher {
 
         SimpleLog.LEVEL = SimpleLog.Level.OFF;
         SimpleLog.addListener(new SimpleLogToSLF4JAdapter());
+        if(manager.hasPlugins()) {
+            log.info("Initializing plugins");
+        }
+        manager.callOnStart(socketServer);
     }
 }

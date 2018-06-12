@@ -1,5 +1,7 @@
 package lavalink.server.plugin;
 
+import lavalink.server.io.SocketServer;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -11,4 +13,8 @@ public interface LavalinkPlugin {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     @interface AutoRegister {}
+
+    default void onStart(SocketServer server) {}
+
+    default void onShutdown() {}
 }
