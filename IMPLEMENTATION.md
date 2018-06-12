@@ -233,6 +233,7 @@ Response:
 ```json
 {
   "isPlaylist": false,
+  "playlistInfo": {},
   "tracks": [
     {
       "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
@@ -247,6 +248,20 @@ Response:
         "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
       }
     }
+  ]
+}
+```
+
+If the identifier leads to a playlist, `playlistInfo` will contain two properties, `name` and `selectedTrack`
+```json
+{
+  "isPlaylist": true,
+  "playlistInfo": {
+    "name": "Example YouTube Playlist",
+    "selectedTrack": 3
+  },
+  "tracks": [
+    ...
   ]
 }
 ```
