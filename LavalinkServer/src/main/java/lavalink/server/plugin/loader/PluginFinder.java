@@ -130,7 +130,7 @@ abstract class PluginFinder extends ClassLoader implements Closeable {
                 parent = finder.analyze(superName.replace('/', '.'));
             }
             if(hasAnnotation && !hasInterface) {
-                PluginLoader.logBadPlugin(name);
+                PluginLoader.logBadPlugin(name.replace('/', '.'));
             }
             return new ClassInfo(parent, hasInterface, hasAnnotation);
         }

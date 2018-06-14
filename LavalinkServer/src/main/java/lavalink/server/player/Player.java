@@ -58,6 +58,10 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
         this.player.addListener(audioLossCounter);
     }
 
+    public AudioPlayer getAudioPlayer() {
+        return player;
+    }
+
     public void play(AudioTrack track) {
         player.playTrack(track);
     }

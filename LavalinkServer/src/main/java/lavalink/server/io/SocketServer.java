@@ -30,6 +30,7 @@ import lavalink.server.config.ServerConfig;
 import lavalink.server.config.WebsocketConfig;
 import lavalink.server.player.Player;
 import lavalink.server.player.TrackEndMarkerHandler;
+import lavalink.server.plugin.WebsocketOperationHandler;
 import lavalink.server.util.Util;
 import net.dv8tion.jda.Core;
 import net.dv8tion.jda.manager.AudioManager;
@@ -48,8 +49,10 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static lavalink.server.io.WSCodes.AUTHORIZATION_REJECTED;
 import static lavalink.server.io.WSCodes.INTERNAL_ERROR;
@@ -59,10 +62,79 @@ public class SocketServer extends WebSocketServer {
 
     private static final Logger log = LoggerFactory.getLogger(SocketServer.class);
 
+    private static final Map<String, WebsocketOperationHandler> DEFAULT_HANDLERS;
+
     private final Map<WebSocket, SocketContext> contextMap = new HashMap<>();
     private final ServerConfig serverConfig;
     private final AudioPlayerManager audioPlayerManager;
     private final AudioSendFactoryConfiguration audioSendFactoryConfiguration;
+    private final Map<String, WebsocketOperationHandler> handlers;
+
+    static {
+        Map<String, WebsocketOperationHandler> map = new HashMap<>();
+        map.put("voiceUpdate", (server, context, webSocket, json) -> {
+            Core core = context.getCore(server.getShardId(webSocket, json));
+            core.provideVoiceServerUpdate(
+                    json.getString("sessionId"),
+                    json.getJSONObject("event")
+            );
+            core.getAudioManager(json.getJSONObject("event").getString("guild_id")).setAutoReconnect(false);
+        });
+        map.put("play", (server, context, webSocket, json) -> {
+            try {
+                Player player = context.getPlayer(json.getString("guildId"));
+                AudioTrack track = Util.toAudioTrack(server.audioPlayerManager, json.getString("track"));
+                if (json.has("startTime")) {
+                    track.setPosition(json.getLong("startTime"));
+                }
+                if (json.has("endTime")) {
+                    track.setMarker(new TrackMarker(json.getLong("endTime"), new TrackEndMarkerHandler(player)));
+                }
+
+                player.setPause(json.optBoolean("pause", false));
+                if (json.has("volume")) {
+                    player.setVolume(json.getInt("volume"));
+                }
+
+                player.play(track);
+
+                context.getCore(server.getShardId(webSocket, json)).getAudioManager(json.getString("guildId"))
+                        .setSendingHandler(context.getPlayer(json.getString("guildId")));
+                sendPlayerUpdate(webSocket, player);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        map.put("stop", (server, context, webSocket, json) -> {
+            Player player = context.getPlayer(json.getString("guildId"));
+            player.stop();
+        });
+        map.put("pause", (server, context, webSocket, json) -> {
+            Player player = context.getPlayer(json.getString("guildId"));
+            player.setPause(json.getBoolean("pause"));
+            sendPlayerUpdate(webSocket, player);
+        });
+        map.put("seek", (server, context, webSocket, json) -> {
+            Player player = context.getPlayer(json.getString("guildId"));
+            player.seekTo(json.getLong("position"));
+            sendPlayerUpdate(webSocket, player);
+        });
+        map.put("volume", (server, context, webSocket, json) -> {
+            Player player = context.getPlayer(json.getString("guildId"));
+            player.setVolume(json.getInt("volume"));
+            sendPlayerUpdate(webSocket, player);
+        });
+        map.put("destroy", (server, context, webSocket, json) -> {
+            Player player = context.getPlayers().remove(json.getString("guildId"));
+            if (player != null) player.stop();
+            AudioManager audioManager = context
+                    .getCore(server.getShardId(webSocket, json))
+                    .getAudioManager(json.getString("guildId"));
+            audioManager.setSendingHandler(null);
+            audioManager.closeAudioConnection();
+        });
+        DEFAULT_HANDLERS = Collections.unmodifiableMap(map);
+    }
 
     public SocketServer(WebsocketConfig websocketConfig, ServerConfig serverConfig, AudioPlayerManager audioPlayerManager,
                         AudioSendFactoryConfiguration audioSendFactoryConfiguration) {
@@ -71,6 +143,7 @@ public class SocketServer extends WebSocketServer {
         this.serverConfig = serverConfig;
         this.audioPlayerManager = audioPlayerManager;
         this.audioSendFactoryConfiguration = audioSendFactoryConfiguration;
+        this.handlers = new HashMap<>(DEFAULT_HANDLERS);
     }
 
     @Override
@@ -142,76 +215,15 @@ public class SocketServer extends WebSocketServer {
             return;
         }
 
-        switch (json.getString("op")) {
-            /* JDAA ops */
-            case "voiceUpdate":
-                Core core = contextMap.get(webSocket).getCore(getShardId(webSocket, json));
-                core.provideVoiceServerUpdate(
-                        json.getString("sessionId"),
-                        json.getJSONObject("event")
-                );
-                core.getAudioManager(json.getJSONObject("event").getString("guild_id")).setAutoReconnect(false);
-                break;
-
-            /* Player ops */
-            case "play":
-                try {
-                    Player player = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
-                    AudioTrack track = Util.toAudioTrack(audioPlayerManager, json.getString("track"));
-                    if (json.has("startTime")) {
-                        track.setPosition(json.getLong("startTime"));
-                    }
-                    if (json.has("endTime")) {
-                        track.setMarker(new TrackMarker(json.getLong("endTime"), new TrackEndMarkerHandler(player)));
-                    }
-
-                    player.setPause(json.optBoolean("pause", false));
-                    if (json.has("volume")) {
-                        player.setVolume(json.getInt("volume"));
-                    }
-
-                    player.play(track);
-
-                    SocketContext context = contextMap.get(webSocket);
-
-                    context.getCore(getShardId(webSocket, json)).getAudioManager(json.getString("guildId"))
-                            .setSendingHandler(context.getPlayer(json.getString("guildId")));
-                    sendPlayerUpdate(webSocket, player);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case "stop":
-                Player player = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
-                player.stop();
-                break;
-            case "pause":
-                Player player2 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
-                player2.setPause(json.getBoolean("pause"));
-                sendPlayerUpdate(webSocket, player2);
-                break;
-            case "seek":
-                Player player3 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
-                player3.seekTo(json.getLong("position"));
-                sendPlayerUpdate(webSocket, player3);
-                break;
-            case "volume":
-                Player player4 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
-                player4.setVolume(json.getInt("volume"));
-                break;
-            case "destroy":
-                Player player5 = contextMap.get(webSocket).getPlayers().remove(json.getString("guildId"));
-                if (player5 != null) player5.stop();
-                AudioManager audioManager = contextMap.get(webSocket)
-                        .getCore(getShardId(webSocket, json))
-                        .getAudioManager(json.getString("guildId"));
-                audioManager.setSendingHandler(null);
-                audioManager.closeAudioConnection();
-                break;
-            default:
-                log.warn("Unexpected operation: " + json.getString("op"));
-                break;
+        WebsocketOperationHandler handler = handlers.get(json.getString("op"));
+        if(handler == null) {
+            log.warn("Unexpected operation: " + json.getString("op"));
+            return;
         }
+
+        SocketContext context = contextMap.get(webSocket);
+
+        handler.handle(this, context, webSocket, json);
     }
 
     @Override
@@ -234,12 +246,37 @@ public class SocketServer extends WebSocketServer {
     }
 
     //Shorthand method
-    private int getShardId(WebSocket webSocket, JSONObject json) {
+    public int getShardId(WebSocket webSocket, JSONObject json) {
         return Util.getShardFromSnowflake(json.getString("guildId"), contextMap.get(webSocket).getShardCount());
     }
 
-    Collection<SocketContext> getContexts() {
+    public Collection<SocketContext> getContexts() {
         return contextMap.values();
     }
 
+    public Map<String, WebsocketOperationHandler> getHandlers() {
+        return handlers;
+    }
+
+    public WebsocketOperationHandler getHandler(String op) {
+        return handlers.get(op);
+    }
+
+    public boolean registerHandler(String op, WebsocketOperationHandler handler, boolean override) {
+        Objects.requireNonNull(op, "Op may not be null");
+        Objects.requireNonNull(handler, "Handler may not be null");
+        if(override) {
+            handlers.put(op, handler);
+            return true;
+        }
+        return handlers.putIfAbsent(op, handler) == null;
+    }
+
+    public boolean registerHandler(String op, WebsocketOperationHandler handler) {
+        return registerHandler(op, handler, false);
+    }
+
+    public AudioPlayerManager getAudioPlayerManager() {
+        return audioPlayerManager;
+    }
 }

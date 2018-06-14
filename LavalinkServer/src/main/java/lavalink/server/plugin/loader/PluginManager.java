@@ -11,6 +11,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class PluginManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(PluginManager.class);
@@ -67,7 +69,12 @@ public class PluginManager {
             try {
                 Constructor<? extends LavalinkPlugin> ctor = clazz.getDeclaredConstructor();
                 ctor.setAccessible(true);
-                plugins.add(ctor.newInstance());
+                LavalinkPlugin.Async async = clazz.getAnnotation(LavalinkPlugin.Async.class);
+                LavalinkPlugin plugin = ctor.newInstance();
+                if(async != null) {
+                    plugin = new AsyncPlugin(plugin, async);
+                }
+                plugins.add(plugin);
             } catch(NoSuchMethodException e) {
                 LOGGER.error("Plugin {} does not have a zero arg constructor", clazz);
             } catch(InstantiationException e) {
@@ -77,6 +84,62 @@ public class PluginManager {
             } catch(InvocationTargetException e) {
                 LOGGER.error("Unable to instantiate {}", clazz, e);
             }
+        }
+    }
+
+    private static class AsyncPlugin implements LavalinkPlugin {
+        private final LavalinkPlugin actualPlugin;
+        private final ExecutorService executor;
+
+        private AsyncPlugin(LavalinkPlugin actualPlugin, Async async) {
+            this.actualPlugin = actualPlugin;
+            String str = actualPlugin.toString();
+            this.executor = Executors.newFixedThreadPool(async.corePoolSize(), r->{
+                Thread t = new Thread(r, "PluginThread-" + str);
+                t.setDaemon(true);
+                return t;
+            });
+        }
+
+        @Override
+        public void onStart(SocketServer server) {
+            executor.execute(()->{
+                try {
+                    actualPlugin.onStart(server);
+                } catch(Exception e) {
+                    LOGGER.error("Error calling onStart() for {}", actualPlugin, e);
+                }
+            });
+        }
+
+        @Override
+        public void onShutdown() {
+            executor.execute(()->{
+                try {
+                    actualPlugin.onShutdown();
+                } catch(Exception e) {
+                    LOGGER.error("Error calling onShutdown() for {}", actualPlugin, e);
+                }
+                executor.shutdown();
+            });
+        }
+
+        @Override
+        public int hashCode() {
+            return actualPlugin.hashCode();
+        }
+
+        @Override
+        public String toString() {
+            return actualPlugin.toString();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(obj instanceof AsyncPlugin) {
+                return ((AsyncPlugin) obj).actualPlugin.equals(actualPlugin);
+            }
+            return obj instanceof LavalinkPlugin && actualPlugin.equals(obj);
         }
     }
 }

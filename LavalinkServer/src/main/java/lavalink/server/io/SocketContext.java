@@ -83,7 +83,7 @@ public class SocketContext {
         });
     }
 
-    Core getCore(int shardId) {
+    public Core getCore(int shardId) {
         return cores.computeIfAbsent(shardId,
                 __ -> {
                     if (audioSendFactoryConfiguration.isNasSupported())
@@ -94,13 +94,13 @@ public class SocketContext {
         );
     }
 
-    Player getPlayer(String guildId) {
+    public Player getPlayer(String guildId) {
         return players.computeIfAbsent(guildId,
                 __ -> new Player(this, guildId, audioPlayerManager)
         );
     }
 
-    int getShardCount() {
+    public int getShardCount() {
         return shardCount;
     }
 
@@ -108,11 +108,11 @@ public class SocketContext {
         return socket;
     }
 
-    Map<String, Player> getPlayers() {
+    public Map<String, Player> getPlayers() {
         return players;
     }
 
-    List<Player> getPlayingPlayers() {
+    public List<Player> getPlayingPlayers() {
         List<Player> newList = new LinkedList<>();
         players.values().forEach(player -> {
             if (player.isPlaying()) newList.add(player);
@@ -120,7 +120,7 @@ public class SocketContext {
         return newList;
     }
 
-    void shutdown() {
+    public void shutdown() {
         log.info("Shutting down " + cores.size() + " cores and " + getPlayingPlayers().size() + " playing players.");
         statsExecutor.shutdown();
         playerUpdateService.shutdown();

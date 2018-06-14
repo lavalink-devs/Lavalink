@@ -14,6 +14,12 @@ public interface LavalinkPlugin {
     @Target(ElementType.TYPE)
     @interface AutoRegister {}
 
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    @interface Async {
+        int corePoolSize() default 1;
+    }
+
     default void onStart(SocketServer server) {}
 
     default void onShutdown() {}
