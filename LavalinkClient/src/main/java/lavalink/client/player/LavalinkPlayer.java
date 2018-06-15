@@ -171,7 +171,7 @@ public class LavalinkPlayer implements IPlayer {
 
     @Override
     public void setVolume(int volume) {
-        volume = Math.min(150, Math.max(0, volume)); // Lavaplayer bounds
+        volume = Math.min(1000, Math.max(0, volume)); // Lavaplayer bounds
         this.volume = volume;
 
         LavalinkSocket node = link.getNode(false);
