@@ -62,7 +62,7 @@ public class StatsTask implements Runnable {
         final int[] playersTotal = {0};
         final int[] playersPlaying = {0};
 
-        socketServer.getConnections().forEach(socketContext -> {
+        socketServer.getContexts().forEach(socketContext -> {
             playersTotal[0] += socketContext.getPlayers().size();
             playersPlaying[0] += socketContext.getPlayingPlayers().size();
         });

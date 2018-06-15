@@ -23,6 +23,8 @@
 package lavalink.client.io;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import lavalink.client.LavalinkUtil;
 import lavalink.client.player.LavalinkPlayer;
 import lavalink.client.player.event.PlayerEvent;
@@ -35,8 +37,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URI;
@@ -49,19 +49,19 @@ public class LavalinkSocket extends ReusableWebSocket {
     private static final Logger log = LoggerFactory.getLogger(LavalinkSocket.class);
 
     private static final int TIMEOUT_MS = 5000;
-    @Nonnull
+    @NonNull
     private final String name;
-    @Nonnull
+    @NonNull
     private final Lavalink lavalink;
     @Nullable
     private RemoteStats stats;
     long lastReconnectAttempt = 0;
     private int reconnectsAttempted = 0;
-    @Nonnull
+    @NonNull
     private final URI remoteUri;
     private boolean available = false;
 
-    LavalinkSocket(@Nonnull String name, @Nonnull Lavalink lavalink, @Nonnull URI serverUri, Draft protocolDraft, Map<String, String> headers) {
+    LavalinkSocket(@NonNull String name, @NonNull Lavalink lavalink, @NonNull URI serverUri, Draft protocolDraft, Map<String, String> headers) {
         super(serverUri, protocolDraft, headers, TIMEOUT_MS);
         this.name = name;
         this.lavalink = lavalink;
@@ -179,7 +179,7 @@ public class LavalinkSocket extends ReusableWebSocket {
         }
     }
 
-    @Nonnull
+    @NonNull
     @SuppressWarnings("unused")
     public URI getRemoteUri() {
         return remoteUri;
@@ -204,7 +204,7 @@ public class LavalinkSocket extends ReusableWebSocket {
         return available && isOpen() && !isClosing();
     }
 
-    @Nonnull
+    @NonNull
     public String getName() {
         return name;
     }

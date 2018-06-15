@@ -64,6 +64,7 @@ public class SocketServer extends WebSocketServer {
     public SocketServer(WebsocketConfig websocketConfig, ServerConfig serverConfig, AudioPlayerManager audioPlayerManager,
                         AudioSendFactoryConfiguration audioSendFactoryConfiguration) {
         super(new InetSocketAddress(websocketConfig.getHost(), websocketConfig.getPort()));
+        this.setReuseAddr(true);
         this.serverConfig = serverConfig;
         this.audioPlayerManager = audioPlayerManager;
         this.audioSendFactoryConfiguration = audioSendFactoryConfiguration;
@@ -155,6 +156,9 @@ public class SocketServer extends WebSocketServer {
                     }
 
                     player.setPause(json.optBoolean("pause", false));
+                    if (json.has("volume")) {
+                        player.setVolume(json.getInt("volume"));
+                    }
 
                     player.play(track);
 
@@ -224,7 +228,7 @@ public class SocketServer extends WebSocketServer {
         return Util.getShardFromSnowflake(json.getString("guildId"), contextMap.get(webSocket).getShardCount());
     }
 
-    Collection<SocketContext> getConnections() {
+    Collection<SocketContext> getContexts() {
         return contextMap.values();
     }
 

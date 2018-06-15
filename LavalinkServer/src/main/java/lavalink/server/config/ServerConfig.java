@@ -22,16 +22,22 @@
 
 package lavalink.server.config;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Nullable;
 
 @ConfigurationProperties(prefix = "lavalink.server")
 @Component
 public class ServerConfig {
 
     private String password;
+    private String sentryDsn = "";
+    @Nullable
+    private Integer bufferDurationMs;
+    @Nullable
+    private Integer youtubePlaylistLoadLimit;
+    private boolean gcWarnings = true;
 
     public String getPassword() {
         return password;
@@ -41,8 +47,6 @@ public class ServerConfig {
         this.password = password;
     }
 
-    private String sentryDsn = "";
-
     public String getSentryDsn() {
         return sentryDsn;
     }
@@ -50,9 +54,6 @@ public class ServerConfig {
     public void setSentryDsn(String sentryDsn) {
         this.sentryDsn = sentryDsn;
     }
-
-    @Nullable
-    public Integer bufferDurationMs;
 
     @Nullable
     public Integer getBufferDurationMs() {
@@ -64,14 +65,19 @@ public class ServerConfig {
     }
 
     @Nullable
-    private Integer youtubePlaylistLoadLimit;
-
-    @Nullable
     public Integer getYoutubePlaylistLoadLimit() {
         return youtubePlaylistLoadLimit;
     }
 
     public void setYoutubePlaylistLoadLimit(@Nullable Integer youtubePlaylistLoadLimit) {
         this.youtubePlaylistLoadLimit = youtubePlaylistLoadLimit;
+    }
+
+    public boolean isGcWarnings() {
+        return gcWarnings;
+    }
+
+    public void setGcWarnings(boolean gcWarnings) {
+        this.gcWarnings = gcWarnings;
     }
 }
