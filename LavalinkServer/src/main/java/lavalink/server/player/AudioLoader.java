@@ -84,7 +84,7 @@ public class AudioLoader implements AudioLoadResultHandler {
         }
 
         log.info("Loaded playlist " + audioPlaylist.getName());
-        status = ResultStatus.PLAYLIST_LOADED;
+        status = audioPlaylist.isSearchResult() ? ResultStatus.SEARCH_RESULT : ResultStatus.PLAYLIST_LOADED;
         loadedItems = audioPlaylist.getTracks();
         synchronized (this) {
             this.notify();
