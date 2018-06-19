@@ -123,6 +123,7 @@ public class SocketContext {
     public void shutdown() {
         log.info("Shutting down " + cores.size() + " cores and " + getPlayingPlayers().size() + " playing players.");
         statsExecutor.shutdown();
+        audioPlayerManager.shutdown();
         playerUpdateService.shutdown();
         players.keySet().forEach(s -> {
             Core core = cores.get(Util.getShardFromSnowflake(s, shardCount));

@@ -13,7 +13,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
     * Hixie 75
 
 ## Significant changes v2.0 -> v3.0 
-* The response of `/loadtracks` has been completely changed.
+* The response of `/loadtracks` has been completely changed (again since the initial v3.0 pre-release).
 * Lavalink v3.0 now reports its version as a handshake response header.
 `Lavalink-Major-Version` has a value of `3` for v3.0 only. It's missing for any older version.
 
@@ -101,7 +101,7 @@ Make the player seek to a position of the track. Position is in millis
 }
 ```
 
-Set player volume. Volume may range from 0 to 150. 100 is default.
+Set player volume. Volume may range from 0 to 1000. 100 is default.
 ```json
 {
     "op": "volume",
@@ -232,7 +232,8 @@ Authorization: youshallnotpass
 Response:
 ```json
 {
-  "isPlaylist": false,
+  "loadType": "TRACK_LOADED",
+  "playlistInfo": {},
   "tracks": [
     {
       "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
@@ -250,6 +251,27 @@ Response:
   ]
 }
 ```
+
+If the identifier leads to a playlist, `playlistInfo` will contain two properties, `name` and `selectedTrack`
+```json
+{
+  "loadType": "PLAYLIST_LOADED",
+  "playlistInfo": {
+    "name": "Example YouTube Playlist",
+    "selectedTrack": 3
+  },
+  "tracks": [
+    ...
+  ]
+}
+```
+
+Additionally, in every `/loadtracks` response, a `loadType` property is returned which can be used to judge the response from Lavalink properly. It can be one of the following:
+* `TRACK_LOADED` - Returned when a single track is loaded.
+* `PLAYLIST_LOADED` - Returned when a playlist is loaded.
+* `SEARCH_RESULT` - Returned when a search result is made (i.e `ytsearch: some song`).
+* `NO_MATCHES` - Returned if no matches/sources could be found for a given identifier.
+* `LOAD_FAILED` - Returned if Lavaplayer failed to load something for some reason.
 
 ### Special notes
 * When your shard's mainWS connection dies, so does all your lavalink audio connections.

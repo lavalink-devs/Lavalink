@@ -18,7 +18,7 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 * Basic authentication
 
 ## Changes in 3.0
-* Breaking changes to the output of the /loadtracks endpoint https://github.com/Frederikam/Lavalink/pull/91
+* Breaking changes to the output of the /loadtracks endpoint. [See PR #91](https://github.com/Frederikam/Lavalink/pull/91) [and PR #116](https://github.com/Frederikam/Lavalink/pull/116).
 * The Java client has been made generic. This is a breaking change so please read the documentation.
 
 ## Client libraries:
