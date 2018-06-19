@@ -13,7 +13,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
     * Hixie 75
 
 ## Significant changes v2.0 -> v3.0 
-* The response of `/loadtracks` has been completely changed.
+* The response of `/loadtracks` has been completely changed (again!)
 * Lavalink v3.0 now reports its version as a handshake response header.
 `Lavalink-Major-Version` has a value of `3` for v3.0 only. It's missing for any older version.
 
@@ -233,6 +233,7 @@ Response:
 ```json
 {
   "isPlaylist": false,
+  "loadType": "TRACK_LOADED",
   "playlistInfo": {},
   "tracks": [
     {
@@ -256,6 +257,7 @@ If the identifier leads to a playlist, `playlistInfo` will contain two propertie
 ```json
 {
   "isPlaylist": true,
+  "loadType": "PLAYLIST_LOADED",
   "playlistInfo": {
     "name": "Example YouTube Playlist",
     "selectedTrack": 3
@@ -265,6 +267,13 @@ If the identifier leads to a playlist, `playlistInfo` will contain two propertie
   ]
 }
 ```
+
+Additionally, in every `/loadtracks` response, a `loadType` property is returned which can be used to judge the response from Lavalink properly. It can be one of the following:
+* `TRACK_LOADED` - Returned when a single track is loaded.
+* `PLAYLIST_LOADED` - Returned when a playlist is loaded.
+* `SEARCH_RESULT` - Returned when a search result is made (i.e `ytsearch: some song`).
+* `NO_MATCHES` - Returned if no matches/sources could be found for a given identifier.
+* `LOAD_FAILED` - Returned if Lavaplayer failed to load something for some reason.
 
 ### Special notes
 * When your shard's mainWS connection dies, so does all your lavalink audio connections.
