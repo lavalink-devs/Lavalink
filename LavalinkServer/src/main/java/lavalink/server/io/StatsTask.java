@@ -116,7 +116,8 @@ public class StatsTask implements Runnable {
             out.put("frameStats", frames);
         }
 
-        context.getSocket().send(out.toString());
+        if (context.getSocket().isOpen())
+            context.getSocket().send(out.toString());
     }
 
     private double uptime = 0;

@@ -41,10 +41,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class SocketContext {
 
@@ -59,6 +56,7 @@ public class SocketContext {
     private final Map<Integer, Core> cores = new HashMap<>();
     private final Map<String, Player> players = new ConcurrentHashMap<>();
     private ScheduledExecutorService statsExecutor;
+    private ScheduledFuture<?> statsFuture;
     public final ScheduledExecutorService playerUpdateService;
     private final ConcurrentHashMap<Integer, IAudioSendFactory> sendFactories = new ConcurrentHashMap<>();
 
@@ -73,7 +71,7 @@ public class SocketContext {
         this.shardCount = shardCount;
 
         statsExecutor = Executors.newSingleThreadScheduledExecutor();
-        statsExecutor.scheduleAtFixedRate(new StatsTask(this, socketServer), 0, 1, TimeUnit.MINUTES);
+        this.statsFuture = statsExecutor.scheduleAtFixedRate(new StatsTask(this, socketServer), 0, 1, TimeUnit.MINUTES);
 
         playerUpdateService = Executors.newScheduledThreadPool(2, r -> {
             Thread thread = new Thread(r);
@@ -98,6 +96,10 @@ public class SocketContext {
         return players.computeIfAbsent(guildId,
                 __ -> new Player(this, guildId, audioPlayerManager)
         );
+    }
+
+    ScheduledFuture<?> getStatsFuture() {
+        return statsFuture;
     }
 
     int getShardCount() {
@@ -133,8 +135,9 @@ public class SocketContext {
                 }
             }
         });
-
         players.values().forEach(Player::stop);
+        if (!statsFuture.isCancelled())
+            statsFuture.cancel(true);
     }
 
     private IAudioSendFactory getAudioSendFactory(int shardId) {
