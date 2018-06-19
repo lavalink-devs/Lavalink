@@ -232,7 +232,6 @@ Authorization: youshallnotpass
 Response:
 ```json
 {
-  "isPlaylist": false,
   "loadType": "TRACK_LOADED",
   "playlistInfo": {},
   "tracks": [
@@ -256,7 +255,6 @@ Response:
 If the identifier leads to a playlist, `playlistInfo` will contain two properties, `name` and `selectedTrack`
 ```json
 {
-  "isPlaylist": true,
   "loadType": "PLAYLIST_LOADED",
   "playlistInfo": {
     "name": "Example YouTube Playlist",
