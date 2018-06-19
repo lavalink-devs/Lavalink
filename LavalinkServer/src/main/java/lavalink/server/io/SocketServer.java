@@ -128,6 +128,8 @@ public class SocketServer extends WebSocketServer {
             log.info("Connection closed from {} with protocol {} with reason {} with code {}",
                     webSocket.getRemoteSocketAddress().toString(), webSocket.getDraft(), reason, code);
             context.shutdown();
+            if (!context.getStatsFuture().isCancelled())
+                context.getStatsFuture().cancel(true);
         }
     }
 
@@ -225,6 +227,8 @@ public class SocketServer extends WebSocketServer {
     }
 
     public static void sendPlayerUpdate(WebSocket webSocket, Player player) {
+        if (webSocket.isClosed())
+            return;
         JSONObject json = new JSONObject();
         json.put("op", "playerUpdate");
         json.put("guildId", player.getGuildId());

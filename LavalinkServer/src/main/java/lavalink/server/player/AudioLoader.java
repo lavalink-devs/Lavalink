@@ -31,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class AudioLoader implements AudioLoadResultHandler {
@@ -43,6 +42,7 @@ public class AudioLoader implements AudioLoadResultHandler {
     private boolean isPlaylist = false;
     private String playlistName = null;
     private Integer selectedTrack = null;
+    private ResultStatus status = ResultStatus.UNKNOWN;
     private boolean used = false;
 
     public AudioLoader(AudioPlayerManager audioPlayerManager) {
@@ -61,13 +61,14 @@ public class AudioLoader implements AudioLoadResultHandler {
             this.wait();
         }
 
-        return new LoadResult(loadedItems, isPlaylist, playlistName, selectedTrack);
+        return new LoadResult(loadedItems, isPlaylist, playlistName, status, selectedTrack);
     }
 
     @Override
     public void trackLoaded(AudioTrack audioTrack) {
         loadedItems = new ArrayList<>();
         loadedItems.add(audioTrack);
+        status = ResultStatus.TRACK_LOADED;
         log.info("Loaded track " + audioTrack.getInfo().title);
         synchronized (this) {
             this.notify();
@@ -83,6 +84,7 @@ public class AudioLoader implements AudioLoadResultHandler {
         }
 
         log.info("Loaded playlist " + audioPlaylist.getName());
+        status = audioPlaylist.isSearchResult() ? ResultStatus.SEARCH_RESULT : ResultStatus.PLAYLIST_LOADED;
         loadedItems = audioPlaylist.getTracks();
         synchronized (this) {
             this.notify();
@@ -92,6 +94,7 @@ public class AudioLoader implements AudioLoadResultHandler {
     @Override
     public void noMatches() {
         log.info("No matches found");
+        status = ResultStatus.NO_MATCHES;
         loadedItems = new ArrayList<>();
         synchronized (this) {
             this.notify();
@@ -101,24 +104,11 @@ public class AudioLoader implements AudioLoadResultHandler {
     @Override
     public void loadFailed(FriendlyException e) {
         log.error("Load failed", e);
+        status = ResultStatus.LOAD_FAILED;
         loadedItems = new ArrayList<>();
         synchronized (this) {
             this.notify();
         }
     }
 
-}
-
-class LoadResult {
-    public List<AudioTrack> tracks;
-    public boolean isPlaylist;
-    public String playlistName;
-    public Integer selectedTrack;
-
-    public LoadResult(List<AudioTrack> tracks, boolean isPlaylist, String playlistName, Integer selectedTrack) {
-        this.tracks = Collections.unmodifiableList(tracks);
-        this.isPlaylist = isPlaylist;
-        this.playlistName = playlistName;
-        this.selectedTrack = selectedTrack;
-    }
 }
