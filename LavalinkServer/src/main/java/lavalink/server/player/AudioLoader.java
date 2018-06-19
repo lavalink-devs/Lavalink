@@ -61,6 +61,8 @@ public class AudioLoader implements AudioLoadResultHandler {
             this.wait();
         }
 
+        if (status == ResultStatus.UNKNOWN)
+            throw new IllegalStateException("Load Type == UNKNOWN (shouldn't happen!)");
         return new LoadResult(loadedItems, isPlaylist, playlistName, status, selectedTrack);
     }
 
