@@ -22,7 +22,7 @@ public class GcNotificationListener implements NotificationListener {
     private final Histogram gcPauses = Histogram.build()
             .name("lavalink_gc_pauses_seconds")
             .help("Garbage collection pauses by buckets")
-            .buckets(25, 50, 100, 200, 400, 800, 1600)
+            .buckets(0.025, 0.050, 0.100, 0.200, 0.400, 0.800, 1.600)
             .register();
 
     @Override

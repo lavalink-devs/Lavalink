@@ -101,7 +101,7 @@ Make the player seek to a position of the track. Position is in millis
 }
 ```
 
-Set player volume. Volume may range from 0 to 150. 100 is default.
+Set player volume. Volume may range from 0 to 1000. 100 is default.
 ```json
 {
     "op": "volume",
