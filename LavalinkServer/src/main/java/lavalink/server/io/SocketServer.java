@@ -115,6 +115,7 @@ public class SocketServer extends WebSocketServer {
     private void close(WebSocket webSocket, int code, String reason) {
         SocketContext context = contextMap.remove(webSocket);
         if (context != null) {
+            context.getStatsFuture().cancel(true);
             log.info("Connection closed from {} with protocol {} with reason {} with code {}",
                     webSocket.getRemoteSocketAddress().toString(), webSocket.getDraft(), reason, code);
             context.shutdown();
