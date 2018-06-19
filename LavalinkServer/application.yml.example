@@ -2,6 +2,11 @@ server: # REST server
   port: 2333
   address: 0.0.0.0
 lavalink:
+# plugins:
+#   enabled: true
+#   paths:
+#     - "path/to/dir/containing/class/files"
+#     - "path/to/some.jar"
   server:
     password: "youshallnotpass"
     ws:

@@ -12,6 +12,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = "lavalink.plugins")
 @Component
 public class PluginConfig {
+    private boolean enabled;
     private List<String> paths = new ArrayList<>();
 
     public List<String> getPaths() {
@@ -22,10 +23,20 @@ public class PluginConfig {
         this.paths = paths;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Bean
     public PluginManager manager() {
         PluginManager manager = new PluginManager(Launcher.class.getClassLoader());
-        manager.loadFrom(this);
+        if(enabled) {
+            manager.loadFrom(this);
+        }
         return manager;
     }
 }
