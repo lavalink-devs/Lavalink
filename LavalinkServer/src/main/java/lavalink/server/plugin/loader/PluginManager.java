@@ -94,7 +94,7 @@ public class PluginManager {
         private AsyncPlugin(LavalinkPlugin actualPlugin, Async async) {
             this.actualPlugin = actualPlugin;
             String str = actualPlugin.toString();
-            this.executor = Executors.newFixedThreadPool(async.corePoolSize(), r->{
+            this.executor = Executors.newFixedThreadPool(Math.max(1, async.corePoolSize()), r->{
                 Thread t = new Thread(r, "PluginThread-" + str);
                 t.setDaemon(true);
                 return t;
