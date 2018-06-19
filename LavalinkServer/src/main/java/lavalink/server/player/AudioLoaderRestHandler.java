@@ -117,8 +117,8 @@ public class AudioLoaderRestHandler {
         playlist.put("name", result.playlistName);
         playlist.put("selectedTrack", result.selectedTrack);
 
-        json.put("isPlaylist", result.isPlaylist);
         json.put("playlistInfo", playlist);
+        json.put("loadType", result.loadResultType);
         json.put("tracks", tracks);
 
         return json.toString();
