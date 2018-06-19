@@ -39,7 +39,6 @@ public class AudioLoader implements AudioLoadResultHandler {
     private final AudioPlayerManager audioPlayerManager;
 
     private List<AudioTrack> loadedItems;
-    private boolean isPlaylist = false;
     private String playlistName = null;
     private Integer selectedTrack = null;
     private ResultStatus status = ResultStatus.UNKNOWN;
@@ -63,7 +62,7 @@ public class AudioLoader implements AudioLoadResultHandler {
 
         if (status == ResultStatus.UNKNOWN)
             throw new IllegalStateException("Load Type == UNKNOWN (shouldn't happen!)");
-        return new LoadResult(loadedItems, isPlaylist, playlistName, status, selectedTrack);
+        return new LoadResult(loadedItems, playlistName, status, selectedTrack);
     }
 
     @Override
@@ -80,7 +79,6 @@ public class AudioLoader implements AudioLoadResultHandler {
     @Override
     public void playlistLoaded(AudioPlaylist audioPlaylist) {
         if (!audioPlaylist.isSearchResult()) {
-            isPlaylist = true;
             playlistName = audioPlaylist.getName();
             selectedTrack = audioPlaylist.getTracks().indexOf(audioPlaylist.getSelectedTrack());
         }
