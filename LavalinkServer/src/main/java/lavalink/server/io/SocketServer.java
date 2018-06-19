@@ -227,6 +227,8 @@ public class SocketServer extends WebSocketServer {
     }
 
     public static void sendPlayerUpdate(WebSocket webSocket, Player player) {
+        if (webSocket.isClosed())
+            return;
         JSONObject json = new JSONObject();
         json.put("op", "playerUpdate");
         json.put("guildId", player.getGuildId());
