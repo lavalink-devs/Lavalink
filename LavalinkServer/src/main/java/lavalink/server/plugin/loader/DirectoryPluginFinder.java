@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Iterator;
 
 class DirectoryPluginFinder extends PluginFinder {
@@ -14,6 +16,15 @@ class DirectoryPluginFinder extends PluginFinder {
     DirectoryPluginFinder(ClassLoader loader, File directory) {
         super(loader);
         this.directory = directory;
+    }
+
+    @Override
+    URL createURL(String path) {
+        try {
+            return new File(directory, path).toURI().toURL();
+        } catch(MalformedURLException e) {
+            return null;
+        }
     }
 
     @Override
@@ -36,7 +47,7 @@ class DirectoryPluginFinder extends PluginFinder {
         private final int substringLength;
 
         private FileIterator(File root) {
-            this.files = FileUtils.iterateFiles(root, new String[]{"class"}, true);
+            this.files = FileUtils.iterateFiles(root, null, true);
             this.substringLength = root.getAbsolutePath().length() + File.separator.length();
         }
 

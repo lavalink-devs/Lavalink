@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,9 +21,29 @@ abstract class PluginFinder extends ClassLoader implements Closeable {
     //there won't be any concurrent access so we can cache this
     private final byte[] buffer = new byte[4096];
     private final Map<String, ClassInfo> cachedData = new HashMap<>();
+    private final List<String> allFiles = new ArrayList<>();
 
     PluginFinder(ClassLoader loader) {
         super(loader);
+    }
+
+
+    @Override
+    protected URL findResource(String name) {
+        try {
+            listEntries();
+        } catch(IOException e) {
+            return null;
+        }
+        if(name.startsWith("/")) {
+            name = name.substring(1);
+        }
+        for(String s : allFiles) {
+            if(s.equals(name)) {
+                return createURL(s);
+            }
+        }
+        return null;
     }
 
     @Override
@@ -34,15 +55,15 @@ abstract class PluginFinder extends ClassLoader implements Closeable {
         }
     }
 
+    abstract URL createURL(String path);
     abstract Iterator<String> files() throws IOException;
     abstract InputStream open(String path) throws IOException;
 
     @SuppressWarnings("unchecked")
     List<Class<? extends LavalinkPlugin>> find() throws IOException {
-        Iterator<String> it = files();
+        listEntries();
         List<Class<? extends LavalinkPlugin>> list = new ArrayList<>();
-        while(it.hasNext()) {
-            String s = it.next();
+        for(String s : allFiles) {
             if(s.endsWith(".class")) {
                 ClassInfo info = openAndAnalyze(s);
                 if(info.isPlugin()) {
@@ -51,6 +72,15 @@ abstract class PluginFinder extends ClassLoader implements Closeable {
             }
         }
         return list;
+    }
+
+    private void listEntries() throws IOException {
+        if(allFiles.isEmpty()) {
+            Iterator<String> it = files();
+            while(it.hasNext()) {
+                allFiles.add(it.next());
+            }
+        }
     }
 
     private Class<?> load(String path) throws IOException {
