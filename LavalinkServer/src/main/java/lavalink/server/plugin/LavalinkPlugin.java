@@ -1,6 +1,9 @@
 package lavalink.server.plugin;
 
 import lavalink.server.io.SocketServer;
+import org.java_websocket.WebSocket;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.handshake.ClientHandshake;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -51,6 +54,32 @@ public interface LavalinkPlugin {
      * @param server SocketServer instance used by lavalink.
      */
     default void onStart(SocketServer server) {}
+
+    /**
+     * Called when the websocket handshake is received. Allows setting, for example, custom headers.
+     *
+     * @param conn Websocket connection.
+     * @param draft Draft being used.
+     * @param request Client handshake received.
+     */
+    default void onWebsocketHandshakeReceivedAsServer(WebSocket conn, Draft draft, ClientHandshake request) {}
+
+    /**
+     * Called when a websocket connection is opened.
+     *
+     * @param webSocket Websocket connection.
+     * @param clientHandshake Client handshake received.
+     */
+    default void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {}
+
+    /**
+     * Called when a websocket is closed. Sending messages to this socket is <b>NOT</b> safe.
+     *
+     * @param webSocket Socket closed.
+     * @param code Close code.
+     * @param reason Close reason, if any.
+     */
+    default void onClose(WebSocket webSocket, int code, String reason) {}
 
     /**
      * Called before lavalink shuts down. Use this method to release any resources

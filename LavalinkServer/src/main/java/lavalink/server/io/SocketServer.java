@@ -31,6 +31,7 @@ import lavalink.server.config.WebsocketConfig;
 import lavalink.server.player.Player;
 import lavalink.server.player.TrackEndMarkerHandler;
 import lavalink.server.plugin.WebsocketOperationHandler;
+import lavalink.server.plugin.loader.PluginManager;
 import lavalink.server.util.Util;
 import net.dv8tion.jda.Core;
 import net.dv8tion.jda.manager.AudioManager;
@@ -68,6 +69,7 @@ public class SocketServer extends WebSocketServer {
     private final ServerConfig serverConfig;
     private final AudioPlayerManager audioPlayerManager;
     private final AudioSendFactoryConfiguration audioSendFactoryConfiguration;
+    private final PluginManager pluginManager;
     private final Map<String, WebsocketOperationHandler> handlers;
 
     static {
@@ -137,12 +139,13 @@ public class SocketServer extends WebSocketServer {
     }
 
     public SocketServer(WebsocketConfig websocketConfig, ServerConfig serverConfig, AudioPlayerManager audioPlayerManager,
-                        AudioSendFactoryConfiguration audioSendFactoryConfiguration) {
+                        AudioSendFactoryConfiguration audioSendFactoryConfiguration, PluginManager pluginManager) {
         super(new InetSocketAddress(websocketConfig.getHost(), websocketConfig.getPort()));
         this.setReuseAddr(true);
         this.serverConfig = serverConfig;
         this.audioPlayerManager = audioPlayerManager;
         this.audioSendFactoryConfiguration = audioSendFactoryConfiguration;
+        this.pluginManager = pluginManager;
         this.handlers = new HashMap<>(DEFAULT_HANDLERS);
     }
 
@@ -155,6 +158,7 @@ public class SocketServer extends WebSocketServer {
     @Override
     public ServerHandshakeBuilder onWebsocketHandshakeReceivedAsServer(WebSocket conn, Draft draft, ClientHandshake request) throws InvalidDataException {
         ServerHandshakeBuilder builder = super.onWebsocketHandshakeReceivedAsServer(conn, draft, request);
+        pluginManager.callOnWebsocketHandshakeReceivedAsServer(conn, draft, request);
         builder.put("Lavalink-Major-Version", "3");
         return builder;
     }
@@ -173,6 +177,7 @@ public class SocketServer extends WebSocketServer {
                 log.error("Authentication failed from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
                 webSocket.close(AUTHORIZATION_REJECTED, "Authorization rejected");
             }
+            pluginManager.callOnOpen(webSocket, clientHandshake);
         } catch (Exception e) {
             log.error("Error when opening websocket", e);
             webSocket.close(INTERNAL_ERROR, e.getMessage());
@@ -198,6 +203,7 @@ public class SocketServer extends WebSocketServer {
     private void close(WebSocket webSocket, int code, String reason) {
         SocketContext context = contextMap.remove(webSocket);
         if (context != null) {
+            pluginManager.callOnClose(webSocket, code, reason);
             log.info("Connection closed from {} with protocol {} with reason {} with code {}",
                     webSocket.getRemoteSocketAddress().toString(), webSocket.getDraft(), reason, code);
             context.shutdown();
@@ -234,6 +240,10 @@ public class SocketServer extends WebSocketServer {
     @Override
     public void onStart() {
         log.info("Started WS server with port " + getPort());
+        if(pluginManager.hasPlugins()) {
+            log.info("Initializing plugins");
+            pluginManager.callOnStart(this);
+        }
     }
 
     public static void sendPlayerUpdate(WebSocket webSocket, Player player) {

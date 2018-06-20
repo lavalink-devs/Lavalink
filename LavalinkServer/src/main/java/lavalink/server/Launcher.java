@@ -59,9 +59,5 @@ public class Launcher {
 
         SimpleLog.LEVEL = SimpleLog.Level.OFF;
         SimpleLog.addListener(new SimpleLogToSLF4JAdapter());
-        if(manager.hasPlugins()) {
-            log.info("Initializing plugins");
-        }
-        manager.callOnStart(socketServer);
     }
 }

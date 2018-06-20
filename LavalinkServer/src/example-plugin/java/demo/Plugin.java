@@ -4,6 +4,8 @@ import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
 import lavalink.server.plugin.LavalinkPlugin;
 import org.java_websocket.WebSocket;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.handshake.ClientHandshake;
 import org.json.JSONObject;
 
 @LavalinkPlugin.AutoRegister
@@ -13,6 +15,21 @@ public class Plugin implements LavalinkPlugin {
         System.out.println("Hello World!");
 
         server.registerHandler("my-custom-op", Plugin::handleMyCustomOp);
+    }
+
+    @Override
+    public void onWebsocketHandshakeReceivedAsServer(WebSocket conn, Draft draft, ClientHandshake request) {
+        System.out.println("Received handshake");
+    }
+
+    @Override
+    public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
+        System.out.println("Connection opened");
+    }
+
+    @Override
+    public void onClose(WebSocket webSocket, int code, String reason) {
+        System.out.println("Connection closed");
     }
 
     @Override

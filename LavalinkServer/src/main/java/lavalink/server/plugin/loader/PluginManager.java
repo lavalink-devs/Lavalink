@@ -3,6 +3,9 @@ package lavalink.server.plugin.loader;
 import lavalink.server.config.PluginConfig;
 import lavalink.server.io.SocketServer;
 import lavalink.server.plugin.LavalinkPlugin;
+import org.java_websocket.WebSocket;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.handshake.ClientHandshake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +52,36 @@ public class PluginManager {
                 plugin.onStart(server);
             } catch(Exception e) {
                 LOGGER.error("Error calling onStart() for {}", plugin, e);
+            }
+        }
+    }
+
+    public synchronized void callOnWebsocketHandshakeReceivedAsServer(WebSocket conn, Draft draft, ClientHandshake request) {
+        for(LavalinkPlugin plugin : plugins) {
+            try {
+                plugin.onWebsocketHandshakeReceivedAsServer(conn, draft, request);
+            } catch(Exception e) {
+                LOGGER.error("Error calling onWebsocketHandshakeReceivedAsServer() for {}", plugin, e);
+            }
+        }
+    }
+
+    public synchronized void callOnOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
+        for(LavalinkPlugin plugin : plugins) {
+            try {
+                plugin.onOpen(webSocket, clientHandshake);
+            } catch(Exception e) {
+                LOGGER.error("Error calling onOpen() for {}", plugin, e);
+            }
+        }
+    }
+
+    public synchronized void callOnClose(WebSocket webSocket, int code, String reason) {
+        for(LavalinkPlugin plugin : plugins) {
+            try {
+                plugin.onClose(webSocket, code, reason);
+            } catch(Exception e) {
+                LOGGER.error("Error calling onClose() for {}", plugin, e);
             }
         }
     }
@@ -108,6 +141,39 @@ public class PluginManager {
                     actualPlugin.onStart(server);
                 } catch(Exception e) {
                     LOGGER.error("Error calling onStart() for {}", actualPlugin, e);
+                }
+            });
+        }
+
+        @Override
+        public void onWebsocketHandshakeReceivedAsServer(WebSocket conn, Draft draft, ClientHandshake request) {
+            executor.execute(()->{
+                try {
+                    actualPlugin.onWebsocketHandshakeReceivedAsServer(conn, draft, request);
+                } catch(Exception e) {
+                    LOGGER.error("Error calling onWebsocketHandshakeReceivedAsServer() for {}", actualPlugin, e);
+                }
+            });
+        }
+
+        @Override
+        public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
+            executor.execute(()->{
+                try {
+                    actualPlugin.onOpen(webSocket, clientHandshake);
+                } catch(Exception e) {
+                    LOGGER.error("Error calling onOpen() for {}", actualPlugin, e);
+                }
+            });
+        }
+
+        @Override
+        public void onClose(WebSocket webSocket, int code, String reason) {
+            executor.execute(()->{
+                try {
+                    actualPlugin.onClose(webSocket, code, reason);
+                } catch(Exception e) {
+                    LOGGER.error("Error calling onClose() for {}", actualPlugin, e);
                 }
             });
         }
