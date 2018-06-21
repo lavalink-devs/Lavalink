@@ -6,21 +6,20 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 @ConfigurationProperties(prefix = "lavalink.plugins")
 @Component
 public class PluginConfig {
     private boolean enabled;
-    private List<String> paths = new ArrayList<>();
+    private Map<String, PluginInfo> locations;
 
-    public List<String> getPaths() {
-        return paths;
+    public Map<String, PluginInfo> getLocations() {
+        return locations;
     }
 
-    public void setPaths(List<String> paths) {
-        this.paths = paths;
+    public void setLocations(Map<String, PluginInfo> locations) {
+        this.locations = locations;
     }
 
     public boolean isEnabled() {

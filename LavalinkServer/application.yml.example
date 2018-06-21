@@ -3,10 +3,14 @@ server: # REST server
   address: 0.0.0.0
 lavalink:
 # plugins:
-#   enabled: true
-#   paths:
-#     - "path/to/dir/containing/class/files"
-#     - "path/to/some.jar"
+#   enabled: true # if false, all plugins are disabled
+#   locations:
+#     plugin_name: # can be changed to anything, just used for logging plugin load
+#       path: path/to/class/files/or/a.jar # can be a directory with class files
+#       enabled: true # enable or disable this specific plugin
+#     another_plugin_name:
+#       path: another/path/to/a/plugin
+#       enabled: false
   server:
     password: "youshallnotpass"
     ws:

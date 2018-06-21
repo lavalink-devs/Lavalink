@@ -1,6 +1,7 @@
 package lavalink.server.plugin.loader;
 
 import lavalink.server.config.PluginConfig;
+import lavalink.server.config.PluginInfo;
 import lavalink.server.io.SocketServer;
 import lavalink.server.plugin.LavalinkPlugin;
 import org.java_websocket.WebSocket;
@@ -14,6 +15,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,12 +34,18 @@ public class PluginManager {
     }
 
     public void loadFrom(PluginConfig config) {
-        for(String s : config.getPaths()) {
-            LOGGER.info("Loading plugins from {}", s);
+        for(Map.Entry<String, PluginInfo> plugin : config.getLocations().entrySet()) {
+            String name = plugin.getKey();
+            PluginInfo info = plugin.getValue();
+            if(!info.isEnabled()) {
+                LOGGER.info("Plugin {} is disabled, skipping...", name);
+                continue;
+            }
+            LOGGER.info("Loading plugin {} from {}", name, info.getPath());
             try {
-                load(s);
+                load(info.getPath());
             } catch(PluginLoadException e) {
-                LOGGER.error("Error loading plugin from {}", s, e);
+                LOGGER.error("Error loading plugin {}", name, e);
             }
         }
     }
