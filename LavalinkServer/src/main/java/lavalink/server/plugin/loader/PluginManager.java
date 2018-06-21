@@ -9,10 +9,9 @@ import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ClientHandshake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,13 +23,15 @@ public class PluginManager {
 
     private final PluginLoader loader;
     private final List<LavalinkPlugin> plugins = new ArrayList<>();
+    private final AutowireCapableBeanFactory factory;
 
-    public PluginManager(ClassLoader loader) {
+    public PluginManager(ClassLoader loader, AutowireCapableBeanFactory factory) {
         this.loader = new PluginLoader(loader);
+        this.factory = factory;
     }
 
-    public PluginManager() {
-        this(PluginManager.class.getClassLoader());
+    public PluginManager(AutowireCapableBeanFactory factory) {
+        this(PluginManager.class.getClassLoader(), factory);
     }
 
     public void loadFrom(PluginConfig config) {
@@ -108,22 +109,14 @@ public class PluginManager {
         List<Class<? extends LavalinkPlugin>> classes = loader.load(new File(path));
         for(Class<? extends LavalinkPlugin> clazz : classes) {
             try {
-                Constructor<? extends LavalinkPlugin> ctor = clazz.getDeclaredConstructor();
-                ctor.setAccessible(true);
                 LavalinkPlugin.Async async = clazz.getAnnotation(LavalinkPlugin.Async.class);
-                LavalinkPlugin plugin = ctor.newInstance();
+                LavalinkPlugin plugin = factory.createBean(clazz);
                 if(async != null) {
                     plugin = new AsyncPlugin(plugin, async);
                 }
                 plugins.add(plugin);
-            } catch(NoSuchMethodException e) {
-                LOGGER.error("Plugin {} does not have a zero arg constructor", clazz);
-            } catch(InstantiationException e) {
-                LOGGER.error("Error instantiating {}", clazz, e);
-            } catch(IllegalAccessException e) {
-                LOGGER.error("Unable to access constructor for {}", clazz);
-            } catch(InvocationTargetException e) {
-                LOGGER.error("Unable to instantiate {}", clazz, e);
+            } catch(Exception e) {
+                LOGGER.error("Unable to create plugin {}", clazz, e);
             }
         }
     }
