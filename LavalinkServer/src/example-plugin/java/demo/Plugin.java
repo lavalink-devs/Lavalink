@@ -1,5 +1,6 @@
 package demo;
 
+import lavalink.server.config.ServerConfig;
 import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
 import lavalink.server.plugin.LavalinkPlugin;
@@ -10,6 +11,11 @@ import org.json.JSONObject;
 
 @LavalinkPlugin.AutoRegister
 public class Plugin implements LavalinkPlugin {
+    //Spring dependency injection can be used
+    public Plugin(ServerConfig serverConfig) {
+        System.out.println("Password is " + serverConfig.getPassword());
+    }
+
     @Override
     public void onStart(SocketServer server) {
         System.out.println("Hello World!");
