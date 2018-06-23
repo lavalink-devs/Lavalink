@@ -1,0 +1,16 @@
+//so that these can be conditionally enabled
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'org.sonarqube'
+
+test {
+    jacoco {
+        includes['lavalink.*']
+    }
+}
+
+sonarqube {
+    properties {
+        property 'sonar.inclusions', 'src/main/java/lavalink/**/*'
+    }
+}

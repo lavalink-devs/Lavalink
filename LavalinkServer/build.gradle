@@ -25,6 +25,10 @@ bootRun {
     }
 }
 
+test {
+    useJUnitPlatform()
+}
+
 dependencies {
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
     compile group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: jdaAudioVersion

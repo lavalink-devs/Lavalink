@@ -2,6 +2,7 @@ buildscript {
     ext {
         springBootVersion = '2.0.2.RELEASE'
         gradleGitVersion = '1.4.21'
+        sonarqubeVersion = '2.6.2'
     }
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
@@ -10,6 +11,7 @@ buildscript {
     dependencies {
         classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:${gradleGitVersion}"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarqubeVersion}"
     }
 }
 
@@ -28,6 +30,10 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
+    if (project.hasProperty("includeAnalysis")) {
+        project.logger.lifecycle("applying analysis plugins")
+        apply from: "../analysis.gradle"
+    }
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
