@@ -1,3 +1,18 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.2.RELEASE'
+        gradleGitVersion = '1.4.21'
+    }
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url 'http://repo.spring.io/plugins-release' }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:${gradleGitVersion}"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
 allprojects {
 
     repositories {
@@ -11,20 +26,6 @@ allprojects {
 }
 
 subprojects {
-    buildscript {
-        ext {
-            springBootVersion = '2.0.2.RELEASE'
-            gradleGitVersion = '1.4.21'
-        }
-        repositories {
-            maven { url "https://plugins.gradle.org/m2/" }
-            maven { url 'http://repo.spring.io/plugins-release' }
-        }
-        dependencies {
-            classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:${gradleGitVersion}"
-            classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-        }
-    }
     apply plugin: 'java'
     apply plugin: 'idea'
 
