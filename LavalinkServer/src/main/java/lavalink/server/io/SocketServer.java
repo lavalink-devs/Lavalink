@@ -147,8 +147,9 @@ public class SocketServer extends WebSocketServer {
             /* Player ops */
             case "play":
                 try {
-                    Player player = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
-                    AudioTrack track = Util.toAudioTrack(audioPlayerManager, json.getString("track"));
+                    SocketContext ctx = contextMap.get(webSocket);
+                    Player player = ctx.getPlayer(json.getString("guildId"));
+                    AudioTrack track = Util.toAudioTrack(ctx.getAudioPlayerManager(), json.getString("track"));
                     if (json.has("startTime")) {
                         track.setPosition(json.getLong("startTime"));
                     }

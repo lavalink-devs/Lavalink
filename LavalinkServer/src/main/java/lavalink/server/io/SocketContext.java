@@ -154,4 +154,7 @@ public class SocketContext {
                 });
     }
 
+    public AudioPlayerManager getAudioPlayerManager() {
+        return audioPlayerManager;
+    }
 }
