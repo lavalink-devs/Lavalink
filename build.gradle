@@ -1,3 +1,20 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.2.RELEASE'
+        gradleGitVersion = '1.4.21'
+        sonarqubeVersion = '2.6.2'
+    }
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url 'http://repo.spring.io/plugins-release' }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:${gradleGitVersion}"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarqubeVersion}"
+    }
+}
+
 allprojects {
 
     repositories {
@@ -11,22 +28,12 @@ allprojects {
 }
 
 subprojects {
-    buildscript {
-        ext {
-            springBootVersion = '2.0.2.RELEASE'
-            gradleGitVersion = '1.4.21'
-        }
-        repositories {
-            maven { url "https://plugins.gradle.org/m2/" }
-            maven { url 'http://repo.spring.io/plugins-release' }
-        }
-        dependencies {
-            classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:${gradleGitVersion}"
-            classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-        }
-    }
     apply plugin: 'java'
     apply plugin: 'idea'
+    if (project.hasProperty("includeAnalysis")) {
+        project.logger.lifecycle("applying analysis plugins")
+        apply from: "../analysis.gradle"
+    }
 
     compileJava.dependsOn 'clean'
     compileJava.options.encoding = 'UTF-8'
