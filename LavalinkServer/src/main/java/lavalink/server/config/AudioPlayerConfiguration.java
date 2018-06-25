@@ -49,4 +49,9 @@ public class AudioPlayerConfiguration {
         };
     }
 
+    @Bean
+    public AudioPlayerManager restAudioPlayerManager(Supplier<AudioPlayerManager> supplier) {
+        return supplier.get();
+    }
+
 }
