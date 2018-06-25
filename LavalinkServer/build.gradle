@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'com.gorylenko.gradle-git-properties'
@@ -47,6 +49,19 @@ dependencies {
     compile group: 'io.prometheus', name: 'simpleclient_hotspot', version: prometheusVersion
     compile group: 'io.prometheus', name: 'simpleclient_logback', version: prometheusVersion
     compile group: 'io.prometheus', name: 'simpleclient_servlet', version: prometheusVersion
+}
+
+processResources {
+    //inject values into app.properties
+    filesMatching("**/app.properties") {
+        filter ReplaceTokens, tokens: [
+                "project.version"   : project.version,
+                "project.groupId"   : project.group,
+                "project.artifactId": project.ext.moduleName,
+                "env.BUILD_NUMBER"  : (System.getenv('CI') ? System.getenv('BUILD_NUMBER') : 'DEV'),
+                "env.BUILD_TIME"    : System.currentTimeMillis() + ''
+        ]
+    }
 }
 
 //create a simple version file that we will be reading to create appropriate docker tags
