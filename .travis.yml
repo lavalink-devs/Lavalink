@@ -23,7 +23,7 @@ jobs:
   fast_finish: true
   include:
     - stage: sonar
-      jdk: openjdk8
+      jdk: openjdk10
       before_script:
         #for full sonar cloud blame information
         - "git fetch --unshallow"
