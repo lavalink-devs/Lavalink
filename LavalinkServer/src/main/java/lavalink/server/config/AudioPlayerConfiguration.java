@@ -13,6 +13,8 @@ import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import java.util.function.Supplier;
+
 /**
  * Created by napster on 05.03.18.
  */
@@ -20,30 +22,31 @@ import org.springframework.stereotype.Component;
 public class AudioPlayerConfiguration {
 
     @Bean
-    public AudioPlayerManager audioPlayerManager(AudioSourcesConfig sources, ServerConfig serverConfig) {
+    public Supplier<AudioPlayerManager> audioPlayerManagerSupplier(AudioSourcesConfig sources, ServerConfig serverConfig) {
+        return () -> {
+            AudioPlayerManager audioPlayerManager = new DefaultAudioPlayerManager();
 
-        AudioPlayerManager audioPlayerManager = new DefaultAudioPlayerManager();
+            if (serverConfig.isGcWarnings()) {
+                audioPlayerManager.enableGcMonitoring();
+            }
 
-        if (serverConfig.isGcWarnings()) {
-            audioPlayerManager.enableGcMonitoring();
-        }
+            if (sources.isYoutube()) {
+                YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager();
+                Integer playlistLoadLimit = serverConfig.getYoutubePlaylistLoadLimit();
 
-        if (sources.isYoutube()) {
-            YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager();
-            Integer playlistLoadLimit = serverConfig.getYoutubePlaylistLoadLimit();
+                if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit);
+                audioPlayerManager.registerSourceManager(youtube);
+            }
+            if (sources.isBandcamp()) audioPlayerManager.registerSourceManager(new BandcampAudioSourceManager());
+            if (sources.isSoundcloud()) audioPlayerManager.registerSourceManager(new SoundCloudAudioSourceManager());
+            if (sources.isTwitch()) audioPlayerManager.registerSourceManager(new TwitchStreamAudioSourceManager());
+            if (sources.isVimeo()) audioPlayerManager.registerSourceManager(new VimeoAudioSourceManager());
+            if (sources.isMixer()) audioPlayerManager.registerSourceManager(new BeamAudioSourceManager());
+            if (sources.isHttp()) audioPlayerManager.registerSourceManager(new HttpAudioSourceManager());
+            if (sources.isLocal()) audioPlayerManager.registerSourceManager(new LocalAudioSourceManager());
 
-            if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit);
-            audioPlayerManager.registerSourceManager(youtube);
-        }
-        if (sources.isBandcamp()) audioPlayerManager.registerSourceManager(new BandcampAudioSourceManager());
-        if (sources.isSoundcloud()) audioPlayerManager.registerSourceManager(new SoundCloudAudioSourceManager());
-        if (sources.isTwitch()) audioPlayerManager.registerSourceManager(new TwitchStreamAudioSourceManager());
-        if (sources.isVimeo()) audioPlayerManager.registerSourceManager(new VimeoAudioSourceManager());
-        if (sources.isMixer()) audioPlayerManager.registerSourceManager(new BeamAudioSourceManager());
-        if (sources.isHttp()) audioPlayerManager.registerSourceManager(new HttpAudioSourceManager());
-        if (sources.isLocal()) audioPlayerManager.registerSourceManager(new LocalAudioSourceManager());
-
-        return audioPlayerManager;
+            return audioPlayerManager;
+        };
     }
 
 }
