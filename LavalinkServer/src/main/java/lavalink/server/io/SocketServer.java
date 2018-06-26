@@ -54,6 +54,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import static lavalink.server.io.WSCodes.AUTHORIZATION_REJECTED;
 import static lavalink.server.io.WSCodes.INTERNAL_ERROR;
@@ -67,7 +68,7 @@ public class SocketServer extends WebSocketServer {
 
     private final Map<WebSocket, SocketContext> contextMap = new HashMap<>();
     private final ServerConfig serverConfig;
-    private final AudioPlayerManager audioPlayerManager;
+    private final Supplier<AudioPlayerManager> audioPlayerManagerSupplier;
     private final AudioSendFactoryConfiguration audioSendFactoryConfiguration;
     private final PluginManager pluginManager;
     private final Map<String, WebsocketOperationHandler> handlers;
@@ -85,7 +86,7 @@ public class SocketServer extends WebSocketServer {
         map.put("play", (server, context, webSocket, json) -> {
             try {
                 Player player = context.getPlayer(json.getString("guildId"));
-                AudioTrack track = Util.toAudioTrack(server.audioPlayerManager, json.getString("track"));
+                AudioTrack track = Util.toAudioTrack(context.getAudioPlayerManager(), json.getString("track"));
                 if (json.has("startTime")) {
                     track.setPosition(json.getLong("startTime"));
                 }
@@ -138,12 +139,12 @@ public class SocketServer extends WebSocketServer {
         DEFAULT_HANDLERS = Collections.unmodifiableMap(map);
     }
 
-    public SocketServer(WebsocketConfig websocketConfig, ServerConfig serverConfig, AudioPlayerManager audioPlayerManager,
+    public SocketServer(WebsocketConfig websocketConfig, ServerConfig serverConfig, Supplier<AudioPlayerManager> audioPlayerManagerSupplier,
                         AudioSendFactoryConfiguration audioSendFactoryConfiguration, PluginManager pluginManager) {
         super(new InetSocketAddress(websocketConfig.getHost(), websocketConfig.getPort()));
         this.setReuseAddr(true);
         this.serverConfig = serverConfig;
-        this.audioPlayerManager = audioPlayerManager;
+        this.audioPlayerManagerSupplier = audioPlayerManagerSupplier;
         this.audioSendFactoryConfiguration = audioSendFactoryConfiguration;
         this.pluginManager = pluginManager;
         this.handlers = new HashMap<>(DEFAULT_HANDLERS);
@@ -171,7 +172,7 @@ public class SocketServer extends WebSocketServer {
 
             if (clientHandshake.getFieldValue("Authorization").equals(serverConfig.getPassword())) {
                 log.info("Connection opened from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
-                contextMap.put(webSocket, new SocketContext(audioPlayerManager, serverConfig, webSocket,
+                contextMap.put(webSocket, new SocketContext(audioPlayerManagerSupplier, serverConfig, webSocket,
                         audioSendFactoryConfiguration, this, userId, shardCount));
             } else {
                 log.error("Authentication failed from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
@@ -286,7 +287,7 @@ public class SocketServer extends WebSocketServer {
         return registerHandler(op, handler, false);
     }
 
-    public AudioPlayerManager getAudioPlayerManager() {
-        return audioPlayerManager;
+    public Supplier<AudioPlayerManager> getAudioPlayerManagerSupplier() {
+        return audioPlayerManagerSupplier;
     }
 }
