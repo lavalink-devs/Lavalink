@@ -53,6 +53,9 @@ publishing {
 
 task install(dependsOn: 'publishToMavenLocal')
 publishToMavenLocal.dependsOn 'jar'
+jar {
+    enabled true
+}
 
 dependencies {
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
