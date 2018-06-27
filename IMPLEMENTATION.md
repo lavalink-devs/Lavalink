@@ -16,7 +16,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * The response of `/loadtracks` has been completely changed (again since the initial v3.0 pre-release).
 * Lavalink v3.0 now reports its version as a handshake response header.
 `Lavalink-Major-Version` has a value of `3` for v3.0 only. It's missing for any older version.
-* Added support for plugins, loaded by lavalink on startup (an example can be found in LavalinkServer/src/example-plugin).
+* Added support for plugins, loaded by lavalink on startup (an example can be found [here](https://github.com/natanbc/lavalink-sample-plugin)).
 
 ## Significant changes v1.3 -> v2.0 
 With the release of v2.0 many unnecessary ops were removed:
