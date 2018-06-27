@@ -1,7 +1,7 @@
 buildscript {
     ext {
         springBootVersion = '2.0.2.RELEASE'
-        gradleGitVersion = '1.4.21'
+        gradleGitVersion = '1.5.1'
         sonarqubeVersion = '2.6.2'
     }
     repositories {
