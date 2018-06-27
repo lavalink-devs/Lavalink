@@ -172,13 +172,14 @@ public class SocketServer extends WebSocketServer {
 
             if (clientHandshake.getFieldValue("Authorization").equals(serverConfig.getPassword())) {
                 log.info("Connection opened from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
-                contextMap.put(webSocket, new SocketContext(audioPlayerManagerSupplier, serverConfig, webSocket,
-                        audioSendFactoryConfiguration, this, userId, shardCount));
+                SocketContext context = new SocketContext(audioPlayerManagerSupplier, serverConfig, webSocket,
+                        audioSendFactoryConfiguration, this, userId, shardCount);
+                contextMap.put(webSocket, context);
+                pluginManager.callOnOpen(webSocket, clientHandshake, context);
             } else {
                 log.error("Authentication failed from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
                 webSocket.close(AUTHORIZATION_REJECTED, "Authorization rejected");
             }
-            pluginManager.callOnOpen(webSocket, clientHandshake);
         } catch (Exception e) {
             log.error("Error when opening websocket", e);
             webSocket.close(INTERNAL_ERROR, e.getMessage());
@@ -204,7 +205,7 @@ public class SocketServer extends WebSocketServer {
     private void close(WebSocket webSocket, int code, String reason) {
         SocketContext context = contextMap.remove(webSocket);
         if (context != null) {
-            pluginManager.callOnClose(webSocket, code, reason);
+            pluginManager.callOnClose(webSocket, code, reason, context);
             log.info("Connection closed from {} with protocol {} with reason {} with code {}",
                     webSocket.getRemoteSocketAddress().toString(), webSocket.getDraft(), reason, code);
             context.shutdown();

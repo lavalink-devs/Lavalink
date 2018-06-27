@@ -1,5 +1,6 @@
 package lavalink.server.plugin;
 
+import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.drafts.Draft;
@@ -69,8 +70,9 @@ public interface LavalinkPlugin {
      *
      * @param webSocket Websocket connection.
      * @param clientHandshake Client handshake received.
+     * @param context Context for this connection.
      */
-    default void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {}
+    default void onOpen(WebSocket webSocket, ClientHandshake clientHandshake, SocketContext context) {}
 
     /**
      * Called when a websocket is closed. Sending messages to this socket is <b>NOT</b> safe.
@@ -78,8 +80,9 @@ public interface LavalinkPlugin {
      * @param webSocket Socket closed.
      * @param code Close code.
      * @param reason Close reason, if any.
+     * @param context Context for this connection.
      */
-    default void onClose(WebSocket webSocket, int code, String reason) {}
+    default void onClose(WebSocket webSocket, int code, String reason, SocketContext context) {}
 
     /**
      * Called before lavalink shuts down. Use this method to release any resources

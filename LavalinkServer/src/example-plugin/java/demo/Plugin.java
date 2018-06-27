@@ -29,12 +29,12 @@ public class Plugin implements LavalinkPlugin {
     }
 
     @Override
-    public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
+    public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake, SocketContext context) {
         System.out.println("Connection opened");
     }
 
     @Override
-    public void onClose(WebSocket webSocket, int code, String reason) {
+    public void onClose(WebSocket webSocket, int code, String reason, SocketContext context) {
         System.out.println("Connection closed");
     }
 

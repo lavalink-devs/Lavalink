@@ -2,6 +2,7 @@ package lavalink.server.plugin.loader;
 
 import lavalink.server.config.PluginConfig;
 import lavalink.server.config.PluginInfo;
+import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
 import lavalink.server.plugin.LavalinkPlugin;
 import org.java_websocket.WebSocket;
@@ -75,20 +76,20 @@ public class PluginManager {
         }
     }
 
-    public synchronized void callOnOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
+    public synchronized void callOnOpen(WebSocket webSocket, ClientHandshake clientHandshake, SocketContext context) {
         for(LavalinkPlugin plugin : plugins) {
             try {
-                plugin.onOpen(webSocket, clientHandshake);
+                plugin.onOpen(webSocket, clientHandshake, context);
             } catch(Exception e) {
                 LOGGER.error("Error calling onOpen() for {}", plugin, e);
             }
         }
     }
 
-    public synchronized void callOnClose(WebSocket webSocket, int code, String reason) {
+    public synchronized void callOnClose(WebSocket webSocket, int code, String reason, SocketContext context) {
         for(LavalinkPlugin plugin : plugins) {
             try {
-                plugin.onClose(webSocket, code, reason);
+                plugin.onClose(webSocket, code, reason, context);
             } catch(Exception e) {
                 LOGGER.error("Error calling onClose() for {}", plugin, e);
             }
@@ -158,10 +159,10 @@ public class PluginManager {
         }
 
         @Override
-        public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
+        public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake, SocketContext context) {
             executor.execute(()->{
                 try {
-                    actualPlugin.onOpen(webSocket, clientHandshake);
+                    actualPlugin.onOpen(webSocket, clientHandshake, context);
                 } catch(Exception e) {
                     LOGGER.error("Error calling onOpen() for {}", actualPlugin, e);
                 }
@@ -169,10 +170,10 @@ public class PluginManager {
         }
 
         @Override
-        public void onClose(WebSocket webSocket, int code, String reason) {
+        public void onClose(WebSocket webSocket, int code, String reason, SocketContext context) {
             executor.execute(()->{
                 try {
-                    actualPlugin.onClose(webSocket, code, reason);
+                    actualPlugin.onClose(webSocket, code, reason, context);
                 } catch(Exception e) {
                     LOGGER.error("Error calling onClose() for {}", actualPlugin, e);
                 }
