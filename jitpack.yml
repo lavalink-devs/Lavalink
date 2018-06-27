@@ -1,1 +1,3 @@
-jdk: openjdk9
+before_install:
+  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
+  - source install-jdk.sh -F 10 -L GPL
