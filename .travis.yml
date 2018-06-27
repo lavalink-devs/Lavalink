@@ -24,6 +24,7 @@ jobs:
   include:
     - stage: sonar
       jdk: openjdk8
+      if: env(TRAVIS_SECURE_ENV_VARS) = true
       before_script:
         #for full sonar cloud blame information
         - "git fetch --unshallow"
