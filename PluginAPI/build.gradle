@@ -28,8 +28,8 @@ task install(dependsOn: 'publishToMavenLocal')
 publishToMavenLocal.dependsOn 'jar'
 
 dependencies {
-    compileOnly group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
-    compileOnly group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: jdaAudioVersion
-    compileOnly group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
-    compileOnly group: 'org.json', name: 'json', version: jsonOrgVersion
+    compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
+    compile group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: jdaAudioVersion
+    compile group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
+    compile group: 'org.json', name: 'json', version: jsonOrgVersion
 }
