@@ -1,10 +1,10 @@
-group 'lavalink'
-version '1.0'
+description = 'API for writing Lavalink plugins'
+version System.getenv('dev') == 'true' ? '-SNAPSHOT' : '1.0'
+ext {
+    moduleName = 'PluginAPI'
+}
 
-apply plugin: 'java'
 apply plugin: 'maven-publish'
-
-sourceCompatibility = 1.8
 
 publishing {
     publications {
@@ -20,6 +20,9 @@ publishing {
         }
     }
 }
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 task install(dependsOn: 'publishToMavenLocal')
 publishToMavenLocal.dependsOn 'jar'
