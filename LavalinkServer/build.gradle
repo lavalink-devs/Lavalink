@@ -2,8 +2,6 @@ apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'com.gorylenko.gradle-git-properties'
 
-apply plugin: 'maven-publish'
-
 description = 'Play audio to discord voice channels'
 mainClassName = "lavalink.server.Launcher"
 version '3.0'
@@ -35,29 +33,9 @@ test {
     useJUnitPlatform()
 }
 
-//publishing so plugins can be used from jitpack
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId rootProject.group
-            artifactId moduleName
-
-            from components.java
-
-            artifact sourceJar {
-                classifier "sources"
-            }
-        }
-    }
-}
-
-task install(dependsOn: 'publishToMavenLocal')
-publishToMavenLocal.dependsOn 'jar'
-jar {
-    enabled true
-}
-
 dependencies {
+    compile project(':PluginAPI')
+
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
     compile group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: jdaAudioVersion
     compile group: 'com.github.FredBoat.jda-nas', name: 'jda-nas', version: jdaNasVersion

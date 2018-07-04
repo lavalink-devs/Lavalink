@@ -28,6 +28,7 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
+import lavalink.plugin.IPlayer;
 import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
 import net.dv8tion.jda.audio.AudioSendHandler;
@@ -38,7 +39,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class Player extends AudioEventAdapter implements AudioSendHandler {
+public class Player extends AudioEventAdapter implements AudioSendHandler, IPlayer {
 
     private static final Logger log = LoggerFactory.getLogger(Player.class);
 
@@ -58,34 +59,42 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
         this.player.addListener(audioLossCounter);
     }
 
+    @Override
     public AudioPlayer getAudioPlayer() {
         return player;
     }
 
+    @Override
     public void play(AudioTrack track) {
         player.playTrack(track);
     }
 
+    @Override
     public void stop() {
         player.stopTrack();
     }
 
+    @Override
     public void setPause(boolean b) {
         player.setPaused(b);
     }
 
+    @Override
     public String getGuildId() {
         return guildId;
     }
 
+    @Override
     public void seekTo(long position) {
         player.getPlayingTrack().setPosition(position);
     }
 
+    @Override
     public void setVolume(int volume) {
         player.setVolume(volume);
     }
 
+    @Override
     public JSONObject getState() {
         JSONObject json = new JSONObject();
 
@@ -94,6 +103,16 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
         json.put("time", System.currentTimeMillis());
 
         return json;
+    }
+
+    @Override
+    public AudioLossCounter getAudioLossCounter() {
+        return audioLossCounter;
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return player.getPlayingTrack() != null && !player.isPaused();
     }
 
     SocketContext getSocket() {
@@ -121,14 +140,6 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
     @Override
     public boolean isOpus() {
         return true;
-    }
-
-    public AudioLossCounter getAudioLossCounter() {
-        return audioLossCounter;
-    }
-
-    public boolean isPlaying() {
-        return player.getPlayingTrack() != null && !player.isPaused();
     }
 
     @Override

@@ -1,0 +1,32 @@
+group 'lavalink'
+version '1.0'
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
+sourceCompatibility = 1.8
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId rootProject.group
+            artifactId moduleName
+
+            from components.java
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+}
+
+task install(dependsOn: 'publishToMavenLocal')
+publishToMavenLocal.dependsOn 'jar'
+
+dependencies {
+    compileOnly group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
+    compileOnly group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: jdaAudioVersion
+    compileOnly group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
+    compileOnly group: 'org.json', name: 'json', version: jsonOrgVersion
+}

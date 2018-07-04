@@ -25,12 +25,14 @@ package lavalink.server.io;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker;
+import lavalink.plugin.IPlayer;
+import lavalink.plugin.ISocketServer;
+import lavalink.plugin.WebsocketOperationHandler;
 import lavalink.server.config.AudioSendFactoryConfiguration;
 import lavalink.server.config.ServerConfig;
 import lavalink.server.config.WebsocketConfig;
 import lavalink.server.player.Player;
 import lavalink.server.player.TrackEndMarkerHandler;
-import lavalink.server.plugin.WebsocketOperationHandler;
 import lavalink.server.plugin.loader.PluginManager;
 import lavalink.server.util.Util;
 import net.dv8tion.jda.Core;
@@ -60,7 +62,7 @@ import static lavalink.server.io.WSCodes.AUTHORIZATION_REJECTED;
 import static lavalink.server.io.WSCodes.INTERNAL_ERROR;
 
 @Component
-public class SocketServer extends WebSocketServer {
+public class SocketServer extends WebSocketServer implements ISocketServer {
 
     private static final Logger log = LoggerFactory.getLogger(SocketServer.class);
 
@@ -85,7 +87,7 @@ public class SocketServer extends WebSocketServer {
         });
         map.put("play", (server, context, webSocket, json) -> {
             try {
-                Player player = context.getPlayer(json.getString("guildId"));
+                Player player = (Player)context.getPlayer(json.getString("guildId"));
                 AudioTrack track = Util.toAudioTrack(context.getAudioPlayerManager(), json.getString("track"));
                 if (json.has("startTime")) {
                     track.setPosition(json.getLong("startTime"));
@@ -102,33 +104,33 @@ public class SocketServer extends WebSocketServer {
                 player.play(track);
 
                 context.getCore(server.getShardId(webSocket, json)).getAudioManager(json.getString("guildId"))
-                        .setSendingHandler(context.getPlayer(json.getString("guildId")));
+                        .setSendingHandler((Player)context.getPlayer(json.getString("guildId")));
                 sendPlayerUpdate(webSocket, player);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
         map.put("stop", (server, context, webSocket, json) -> {
-            Player player = context.getPlayer(json.getString("guildId"));
+            IPlayer player = context.getPlayer(json.getString("guildId"));
             player.stop();
         });
         map.put("pause", (server, context, webSocket, json) -> {
-            Player player = context.getPlayer(json.getString("guildId"));
+            IPlayer player = context.getPlayer(json.getString("guildId"));
             player.setPause(json.getBoolean("pause"));
             sendPlayerUpdate(webSocket, player);
         });
         map.put("seek", (server, context, webSocket, json) -> {
-            Player player = context.getPlayer(json.getString("guildId"));
+            IPlayer player = context.getPlayer(json.getString("guildId"));
             player.seekTo(json.getLong("position"));
             sendPlayerUpdate(webSocket, player);
         });
         map.put("volume", (server, context, webSocket, json) -> {
-            Player player = context.getPlayer(json.getString("guildId"));
+            IPlayer player = context.getPlayer(json.getString("guildId"));
             player.setVolume(json.getInt("volume"));
             sendPlayerUpdate(webSocket, player);
         });
         map.put("destroy", (server, context, webSocket, json) -> {
-            Player player = context.getPlayers().remove(json.getString("guildId"));
+            IPlayer player = context.getPlayers().remove(json.getString("guildId"));
             if (player != null) player.stop();
             AudioManager audioManager = context
                     .getCore(server.getShardId(webSocket, json))
@@ -248,7 +250,7 @@ public class SocketServer extends WebSocketServer {
         }
     }
 
-    public static void sendPlayerUpdate(WebSocket webSocket, Player player) {
+    public static void sendPlayerUpdate(WebSocket webSocket, IPlayer player) {
         JSONObject json = new JSONObject();
         json.put("op", "playerUpdate");
         json.put("guildId", player.getGuildId());

@@ -1,6 +1,6 @@
 package lavalink.server.plugin.loader;
 
-import lavalink.server.plugin.LavalinkPlugin;
+import lavalink.plugin.LavalinkPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

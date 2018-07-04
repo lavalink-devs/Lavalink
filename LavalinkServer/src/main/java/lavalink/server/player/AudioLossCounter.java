@@ -26,10 +26,11 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import lavalink.plugin.IAudioLossCounter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AudioLossCounter extends AudioEventAdapter {
+public class AudioLossCounter extends AudioEventAdapter implements IAudioLossCounter {
 
     private static final Logger log = LoggerFactory.getLogger(AudioLossCounter.class);
 
@@ -60,14 +61,17 @@ public class AudioLossCounter extends AudioEventAdapter {
         curSucc++;
     }
 
+    @Override
     public int getLastMinuteLoss() {
         return lastLoss;
     }
 
+    @Override
     public int getLastMinuteSuccess() {
         return lastSucc;
     }
 
+    @Override
     public boolean isDataUsable() {
         //log.info("\n" + lastTrackStarted + "\n" + lastTrackEnded + "\n" + playingSince);
 

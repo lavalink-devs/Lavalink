@@ -1,6 +1,6 @@
 package lavalink.server.plugin.loader;
 
-import lavalink.server.plugin.LavalinkPlugin;
+import lavalink.plugin.LavalinkPlugin;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;

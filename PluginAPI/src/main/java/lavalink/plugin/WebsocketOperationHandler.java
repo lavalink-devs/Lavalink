@@ -1,7 +1,5 @@
-package lavalink.server.plugin;
+package lavalink.plugin;
 
-import lavalink.server.io.SocketContext;
-import lavalink.server.io.SocketServer;
 import org.java_websocket.WebSocket;
 import org.json.JSONObject;
 
@@ -17,5 +15,5 @@ public interface WebsocketOperationHandler {
      * @param webSocket WebSocket for the peer.
      * @param json Payload received.
      */
-    void handle(SocketServer server, SocketContext context, WebSocket webSocket, JSONObject json);
+    void handle(ISocketServer server, ISocketContext context, WebSocket webSocket, JSONObject json);
 }

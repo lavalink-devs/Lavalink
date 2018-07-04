@@ -1,10 +1,12 @@
 package lavalink.server.plugin.loader;
 
+import lavalink.plugin.ISocketContext;
+import lavalink.plugin.ISocketServer;
+import lavalink.plugin.LavalinkPlugin;
 import lavalink.server.config.PluginConfig;
 import lavalink.server.config.PluginInfo;
 import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
-import lavalink.server.plugin.LavalinkPlugin;
 import org.java_websocket.WebSocket;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ClientHandshake;
@@ -137,7 +139,7 @@ public class PluginManager {
         }
 
         @Override
-        public void onStart(SocketServer server) {
+        public void onStart(ISocketServer server) {
             executor.execute(()->{
                 try {
                     actualPlugin.onStart(server);
@@ -159,7 +161,7 @@ public class PluginManager {
         }
 
         @Override
-        public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake, SocketContext context) {
+        public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake, ISocketContext context) {
             executor.execute(()->{
                 try {
                     actualPlugin.onOpen(webSocket, clientHandshake, context);
@@ -170,7 +172,7 @@ public class PluginManager {
         }
 
         @Override
-        public void onClose(WebSocket webSocket, int code, String reason, SocketContext context) {
+        public void onClose(WebSocket webSocket, int code, String reason, ISocketContext context) {
             executor.execute(()->{
                 try {
                     actualPlugin.onClose(webSocket, code, reason, context);

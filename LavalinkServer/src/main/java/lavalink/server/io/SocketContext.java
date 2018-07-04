@@ -25,6 +25,7 @@ package lavalink.server.io;
 import com.github.shredder121.asyncaudio.jdaaudio.AsyncPacketProviderFactory;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import lavalink.plugin.ISocketContext;
 import lavalink.server.config.AudioSendFactoryConfiguration;
 import lavalink.server.config.ServerConfig;
 import lavalink.server.player.Player;
@@ -47,7 +48,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-public class SocketContext {
+public class SocketContext implements ISocketContext {
 
     private static final Logger log = LoggerFactory.getLogger(SocketContext.class);
 
@@ -84,6 +85,7 @@ public class SocketContext {
         });
     }
 
+    @Override
     public Core getCore(int shardId) {
         return cores.computeIfAbsent(shardId,
                 __ -> {
@@ -95,24 +97,29 @@ public class SocketContext {
         );
     }
 
+    @Override
     public Player getPlayer(String guildId) {
         return players.computeIfAbsent(guildId,
                 __ -> new Player(this, guildId, audioPlayerManager)
         );
     }
 
+    @Override
     public int getShardCount() {
         return shardCount;
     }
 
+    @Override
     public WebSocket getSocket() {
         return socket;
     }
 
+    @Override
     public Map<String, Player> getPlayers() {
         return players;
     }
 
+    @Override
     public List<Player> getPlayingPlayers() {
         List<Player> newList = new LinkedList<>();
         players.values().forEach(player -> {
@@ -121,6 +128,7 @@ public class SocketContext {
         return newList;
     }
 
+    @Override
     public void shutdown() {
         log.info("Shutting down " + cores.size() + " cores and " + getPlayingPlayers().size() + " playing players.");
         statsExecutor.shutdown();
@@ -139,6 +147,11 @@ public class SocketContext {
         players.values().forEach(Player::stop);
     }
 
+    @Override
+    public AudioPlayerManager getAudioPlayerManager() {
+        return audioPlayerManager;
+    }
+
     private IAudioSendFactory getAudioSendFactory(int shardId) {
         return sendFactories.computeIfAbsent(shardId % audioSendFactoryConfiguration.getAudioSendFactoryCount(),
                 integer -> {
@@ -152,9 +165,5 @@ public class SocketContext {
 
                     return AsyncPacketProviderFactory.adapt(nativeAudioSendFactory);
                 });
-    }
-
-    public AudioPlayerManager getAudioPlayerManager() {
-        return audioPlayerManager;
     }
 }
