@@ -31,70 +31,61 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AudioLoader implements AudioLoadResultHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AudioLoader.class);
     private final AudioPlayerManager audioPlayerManager;
 
-    private List<AudioTrack> loadedItems;
-    private boolean used = false;
+    private final CompletableFuture<List<AudioTrack>> loadedItems;
+    private final AtomicBoolean used = new AtomicBoolean(false);
 
     public AudioLoader(AudioPlayerManager audioPlayerManager) {
         this.audioPlayerManager = audioPlayerManager;
+        this.loadedItems = new CompletableFuture<>();
     }
 
-    List<AudioTrack> loadSync(String identifier) throws InterruptedException {
-        if(used)
+    public CompletionStage<List<AudioTrack>> load(String identifier) {
+        boolean isUsed = this.used.getAndSet(true);
+        if (isUsed) {
             throw new IllegalStateException("This loader can only be used once per instance");
-
-        used = true;
-
-        audioPlayerManager.loadItem(identifier, this);
-
-        synchronized (this) {
-            this.wait();
         }
+
+        log.trace("Loading item with identifier {}", identifier);
+        this.audioPlayerManager.loadItem(identifier, this);
 
         return loadedItems;
     }
 
     @Override
     public void trackLoaded(AudioTrack audioTrack) {
-        loadedItems = new ArrayList<>();
-        loadedItems.add(audioTrack);
         log.info("Loaded track " + audioTrack.getInfo().title);
-        synchronized (this) {
-            this.notify();
-        }
+        ArrayList<AudioTrack> result = new ArrayList<>();
+        result.add(audioTrack);
+        this.loadedItems.complete(result);
     }
 
     @Override
     public void playlistLoaded(AudioPlaylist audioPlaylist) {
         log.info("Loaded playlist " + audioPlaylist.getName());
-        loadedItems = audioPlaylist.getTracks();
-        synchronized (this) {
-            this.notify();
-        }
+        this.loadedItems.complete(audioPlaylist.getTracks());
     }
 
     @Override
     public void noMatches() {
         log.info("No matches found");
-        loadedItems = new ArrayList<>();
-        synchronized (this) {
-            this.notify();
-        }
+        this.loadedItems.complete(Collections.emptyList());
     }
 
     @Override
     public void loadFailed(FriendlyException e) {
         log.error("Load failed", e);
-        loadedItems = new ArrayList<>();
-        synchronized (this) {
-            this.notify();
-        }
+        this.loadedItems.complete(Collections.emptyList());
     }
 
 }

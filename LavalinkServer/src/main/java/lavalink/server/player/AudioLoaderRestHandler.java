@@ -45,6 +45,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 @RestController
 public class AudioLoaderRestHandler {
@@ -91,21 +93,9 @@ public class AudioLoaderRestHandler {
                 .put("position", audioTrack.getPosition());
     }
 
-    @GetMapping(value = "/loadtracks", produces = "application/json")
-    @ResponseBody
-    public ResponseEntity<String> getLoadTracks(HttpServletRequest request, HttpServletResponse response, @RequestParam String identifier)
-            throws IOException, InterruptedException {
-        log(request);
-
-        Optional<ResponseEntity<String>> notAuthed = checkAuthorization(request);
-        if (notAuthed.isPresent()) {
-            return notAuthed.get();
-        }
-
+    private JSONArray encodeTrackList(List<AudioTrack> trackList) {
         JSONArray tracks = new JSONArray();
-        List<AudioTrack> list = new AudioLoader(audioPlayerManager).loadSync(identifier);
-
-        list.forEach(track -> {
+        trackList.forEach(track -> {
             JSONObject object = new JSONObject();
             object.put("info", trackToJSON(track));
 
@@ -114,11 +104,25 @@ public class AudioLoaderRestHandler {
                 object.put("track", encoded);
                 tracks.put(object);
             } catch (IOException e) {
-                throw new RuntimeException();
+                log.warn("Failed to encode a track {}, skipping", track.getIdentifier(), e);
             }
         });
+        return tracks;
+    }
 
-        return new ResponseEntity<>(tracks.toString(), HttpStatus.OK);
+    @GetMapping(value = "/loadtracks", produces = "application/json")
+    @ResponseBody
+    public CompletionStage<ResponseEntity<String>> getLoadTracks(HttpServletRequest request, @RequestParam String identifier) {
+        log(request);
+
+        Optional<ResponseEntity<String>> notAuthed = checkAuthorization(request);
+        if (notAuthed.isPresent()) {
+            return CompletableFuture.completedFuture(notAuthed.get());
+        }
+
+        return new AudioLoader(audioPlayerManager).load(identifier)
+                .thenApply(this::encodeTrackList)
+                .thenApply(tracksArray -> new ResponseEntity<>(tracksArray.toString(), HttpStatus.OK));
     }
 
     @GetMapping(value = "/decodetrack", produces = "application/json")
