@@ -5,6 +5,5 @@ public enum ResultStatus {
     PLAYLIST_LOADED,
     SEARCH_RESULT,
     NO_MATCHES,
-    LOAD_FAILED,
-    UNKNOWN
+    LOAD_FAILED
 }

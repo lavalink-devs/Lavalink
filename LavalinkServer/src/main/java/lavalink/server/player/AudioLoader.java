@@ -31,84 +31,76 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AudioLoader implements AudioLoadResultHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AudioLoader.class);
+    private static final LoadResult NO_MATCHES = new LoadResult(Collections.emptyList(),
+            null, ResultStatus.NO_MATCHES, null);
+    private static final LoadResult LOAD_FAILED = new LoadResult(Collections.emptyList(),
+            null, ResultStatus.LOAD_FAILED, null);
+
     private final AudioPlayerManager audioPlayerManager;
 
-    private List<AudioTrack> loadedItems;
-    private String playlistName = null;
-    private Integer selectedTrack = null;
-    private ResultStatus status = ResultStatus.UNKNOWN;
-    private boolean used = false;
+    private final CompletableFuture<LoadResult> loadResult = new CompletableFuture<>();
+    private final AtomicBoolean used = new AtomicBoolean(false);
 
     public AudioLoader(AudioPlayerManager audioPlayerManager) {
         this.audioPlayerManager = audioPlayerManager;
     }
 
-    LoadResult loadSync(String identifier) throws InterruptedException {
-        if(used)
+    public CompletionStage<LoadResult> load(String identifier) {
+        boolean isUsed = this.used.getAndSet(true);
+        if (isUsed) {
             throw new IllegalStateException("This loader can only be used once per instance");
-
-        used = true;
-
-        audioPlayerManager.loadItem(identifier, this);
-
-        synchronized (this) {
-            this.wait();
         }
 
-        if (status == ResultStatus.UNKNOWN)
-            throw new IllegalStateException("Load Type == UNKNOWN (shouldn't happen!)");
-        return new LoadResult(loadedItems, playlistName, status, selectedTrack);
+        log.trace("Loading item with identifier {}", identifier);
+        this.audioPlayerManager.loadItem(identifier, this);
+
+        return loadResult;
     }
 
     @Override
     public void trackLoaded(AudioTrack audioTrack) {
-        loadedItems = new ArrayList<>();
-        loadedItems.add(audioTrack);
-        status = ResultStatus.TRACK_LOADED;
         log.info("Loaded track " + audioTrack.getInfo().title);
-        synchronized (this) {
-            this.notify();
-        }
+        ArrayList<AudioTrack> result = new ArrayList<>();
+        result.add(audioTrack);
+        this.loadResult.complete(new LoadResult(result, null, ResultStatus.TRACK_LOADED, null));
     }
 
     @Override
     public void playlistLoaded(AudioPlaylist audioPlaylist) {
+        log.info("Loaded playlist " + audioPlaylist.getName());
+
+        String playlistName = null;
+        Integer selectedTrack = null;
         if (!audioPlaylist.isSearchResult()) {
             playlistName = audioPlaylist.getName();
             selectedTrack = audioPlaylist.getTracks().indexOf(audioPlaylist.getSelectedTrack());
         }
 
-        log.info("Loaded playlist " + audioPlaylist.getName());
-        status = audioPlaylist.isSearchResult() ? ResultStatus.SEARCH_RESULT : ResultStatus.PLAYLIST_LOADED;
-        loadedItems = audioPlaylist.getTracks();
-        synchronized (this) {
-            this.notify();
-        }
+        ResultStatus status = audioPlaylist.isSearchResult() ? ResultStatus.SEARCH_RESULT : ResultStatus.PLAYLIST_LOADED;
+        List<AudioTrack> loadedItems = audioPlaylist.getTracks();
+
+        this.loadResult.complete(new LoadResult(loadedItems, playlistName, status, selectedTrack));
     }
 
     @Override
     public void noMatches() {
         log.info("No matches found");
-        status = ResultStatus.NO_MATCHES;
-        loadedItems = new ArrayList<>();
-        synchronized (this) {
-            this.notify();
-        }
+        this.loadResult.complete(NO_MATCHES);
     }
 
     @Override
     public void loadFailed(FriendlyException e) {
         log.error("Load failed", e);
-        status = ResultStatus.LOAD_FAILED;
-        loadedItems = new ArrayList<>();
-        synchronized (this) {
-            this.notify();
-        }
+        this.loadResult.complete(LOAD_FAILED);
     }
 
 }

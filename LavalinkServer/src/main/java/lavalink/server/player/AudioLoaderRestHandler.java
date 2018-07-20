@@ -31,18 +31,22 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
-@Controller
+@RestController
 public class AudioLoaderRestHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AudioLoaderRestHandler.class);
@@ -59,18 +63,18 @@ public class AudioLoaderRestHandler {
         log.info("GET " + path);
     }
 
-    private boolean isAuthorized(HttpServletRequest request, HttpServletResponse response) {
+    //returns an empty answer if the auth succeeded, or a response to send back immediately
+    private <T> Optional<ResponseEntity<T>> checkAuthorization(HttpServletRequest request) {
         if (request.getHeader("Authorization") == null) {
-            response.setStatus(403);
-            return false;
+            return Optional.of(new ResponseEntity<>(HttpStatus.UNAUTHORIZED));
         }
 
         if (!request.getHeader("Authorization").equals(serverConfig.getPassword())) {
             log.warn("Authorization failed");
-            response.setStatus(403);
-            return false;
+            return Optional.of(new ResponseEntity<>(HttpStatus.FORBIDDEN));
         }
-        return true;
+
+        return Optional.empty();
     }
 
     private JSONObject trackToJSON(AudioTrack audioTrack) {
@@ -87,19 +91,10 @@ public class AudioLoaderRestHandler {
                 .put("position", audioTrack.getPosition());
     }
 
-    @GetMapping(value = "/loadtracks", produces = "application/json")
-    @ResponseBody
-    public String getLoadTracks(HttpServletRequest request, HttpServletResponse response, @RequestParam String identifier)
-            throws IOException, InterruptedException {
-        log(request);
-
-        if (!isAuthorized(request, response))
-            return "";
-
+    private JSONObject encodeLoadResult(LoadResult result) {
         JSONObject json = new JSONObject();
         JSONObject playlist = new JSONObject();
         JSONArray tracks = new JSONArray();
-        LoadResult result = new AudioLoader(audioPlayerManager).loadSync(identifier);
 
         result.tracks.forEach(track -> {
             JSONObject object = new JSONObject();
@@ -110,7 +105,7 @@ public class AudioLoaderRestHandler {
                 object.put("track", encoded);
                 tracks.put(object);
             } catch (IOException e) {
-                throw new RuntimeException();
+                log.warn("Failed to encode a track {}, skipping", track.getIdentifier(), e);
             }
         });
 
@@ -121,29 +116,54 @@ public class AudioLoaderRestHandler {
         json.put("loadType", result.loadResultType);
         json.put("tracks", tracks);
 
-        return json.toString();
+        return json;
+    }
+
+    @GetMapping(value = "/loadtracks", produces = "application/json")
+    @ResponseBody
+    public CompletionStage<ResponseEntity<String>> getLoadTracks(HttpServletRequest request,
+                                                                 @RequestParam String identifier) {
+
+        log(request);
+
+        Optional<ResponseEntity<String>> notAuthed = checkAuthorization(request);
+        if (notAuthed.isPresent()) {
+            return CompletableFuture.completedFuture(notAuthed.get());
+        }
+
+        return new AudioLoader(audioPlayerManager).load(identifier)
+                .thenApply(this::encodeLoadResult)
+                .thenApply(loadResultJson -> new ResponseEntity<>(loadResultJson.toString(), HttpStatus.OK));
     }
 
     @GetMapping(value = "/decodetrack", produces = "application/json")
     @ResponseBody
-    public String getDecodeTrack(HttpServletRequest request, HttpServletResponse response, @RequestParam String track) throws IOException {
+    public ResponseEntity<String> getDecodeTrack(HttpServletRequest request, @RequestParam String track)
+            throws IOException {
+
         log(request);
 
-        if (!isAuthorized(request, response))
-            return "";
+        Optional<ResponseEntity<String>> notAuthed = checkAuthorization(request);
+        if (notAuthed.isPresent()) {
+            return notAuthed.get();
+        }
 
         AudioTrack audioTrack = Util.toAudioTrack(audioPlayerManager, track);
 
-        return trackToJSON(audioTrack).toString();
+        return new ResponseEntity<>(trackToJSON(audioTrack).toString(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/decodetracks", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public String postDecodeTracks(HttpServletRequest request, HttpServletResponse response, @RequestBody String body) throws IOException {
+    public ResponseEntity<String> postDecodeTracks(HttpServletRequest request, @RequestBody String body)
+            throws IOException {
+
         log(request);
 
-        if (!isAuthorized(request, response))
-            return "";
+        Optional<ResponseEntity<String>> notAuthed = checkAuthorization(request);
+        if (notAuthed.isPresent()) {
+            return notAuthed.get();
+        }
 
         JSONArray requestJSON = new JSONArray(body);
         JSONArray responseJSON = new JSONArray();
@@ -160,6 +180,6 @@ public class AudioLoaderRestHandler {
             responseJSON.put(trackJSON);
         }
 
-        return responseJSON.toString();
+        return new ResponseEntity<>(responseJSON.toString(), HttpStatus.OK);
     }
 }
