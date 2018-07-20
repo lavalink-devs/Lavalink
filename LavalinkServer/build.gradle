@@ -3,10 +3,11 @@ import org.apache.tools.ant.filters.ReplaceTokens
 apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'com.gorylenko.gradle-git-properties'
+apply plugin: 'org.ajoberstar.grgit'
 
 description = 'Play audio to discord voice channels'
 mainClassName = "lavalink.server.Launcher"
-version '3.0'
+version = "${versionFromTag()}".toString()
 ext {
     moduleName = 'Lavalink-Server'
 }
@@ -64,6 +65,28 @@ processResources {
                 "env.BUILD_NUMBER"  : (System.getenv('CI') ? System.getenv('BUILD_NUMBER') : 'DEV'),
                 "env.BUILD_TIME"    : System.currentTimeMillis() + ''
         ]
+    }
+}
+
+build {
+    doLast {
+        println 'Version: ' + version
+    }
+}
+
+@SuppressWarnings("GrMethodMayBeStatic")
+String versionFromTag() {
+
+    def headTag = grgit.tag.list().find {
+        it.commit == grgit.head()
+    }
+
+    def clean = grgit.status().clean //uncommitted changes? -> should be SNAPSHOT
+
+    if (headTag && clean) {
+        headTag.getName()
+    } else {
+        "${grgit.head().id}-SNAPSHOT"
     }
 }
 
