@@ -19,11 +19,12 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 
 ## Changes in 3.0
 * Breaking changes to the output of the /loadtracks endpoint. [See PR #91](https://github.com/Frederikam/Lavalink/pull/91) [and PR #116](https://github.com/Frederikam/Lavalink/pull/116).
+* The Java client has been moved to a new repository at https://github.com/FredBoat/Lavalink-Client.
 * The Java client has been made generic. This is a breaking change so please read the documentation.
 
 ## Client libraries:
 ### Supports 3.x and older:
-* [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (JDA or generic, Java)
+* [Lavalink-Client](https://github.com/FredBoat/Lavalink-Client) (JDA or generic, Java)
 * [LavaClient](https://github.com/SamOphis/LavaClient) (Java)
 * [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
 * [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)

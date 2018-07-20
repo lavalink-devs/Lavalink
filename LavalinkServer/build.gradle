@@ -42,7 +42,6 @@ dependencies {
     compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: jappVersion
     compile group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
     compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
-    compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
     compile group: 'io.sentry', name: 'sentry-logback', version: sentryLogbackVersion
     compile group: 'com.github.oshi', name: 'oshi-core', version: oshiVersion
     compile group: 'org.json', name: 'json', version: jsonOrgVersion
