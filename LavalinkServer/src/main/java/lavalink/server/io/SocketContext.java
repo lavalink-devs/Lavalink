@@ -45,6 +45,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 public class SocketContext {
 
@@ -62,10 +63,10 @@ public class SocketContext {
     public final ScheduledExecutorService playerUpdateService;
     private final ConcurrentHashMap<Integer, IAudioSendFactory> sendFactories = new ConcurrentHashMap<>();
 
-    SocketContext(AudioPlayerManager audioPlayerManager, ServerConfig serverConfig, WebSocket socket,
+    SocketContext(Supplier<AudioPlayerManager> audioPlayerManagerSupplier, ServerConfig serverConfig, WebSocket socket,
                   AudioSendFactoryConfiguration audioSendFactoryConfiguration, SocketServer socketServer,
                   String userId, int shardCount) {
-        this.audioPlayerManager = audioPlayerManager;
+        this.audioPlayerManager = audioPlayerManagerSupplier.get();
         this.serverConfig = serverConfig;
         this.socket = socket;
         this.audioSendFactoryConfiguration = audioSendFactoryConfiguration;
@@ -123,6 +124,7 @@ public class SocketContext {
     void shutdown() {
         log.info("Shutting down " + cores.size() + " cores and " + getPlayingPlayers().size() + " playing players.");
         statsExecutor.shutdown();
+        audioPlayerManager.shutdown();
         playerUpdateService.shutdown();
         players.keySet().forEach(s -> {
             Core core = cores.get(Util.getShardFromSnowflake(s, shardCount));
@@ -152,4 +154,7 @@ public class SocketContext {
                 });
     }
 
+    public AudioPlayerManager getAudioPlayerManager() {
+        return audioPlayerManager;
+    }
 }

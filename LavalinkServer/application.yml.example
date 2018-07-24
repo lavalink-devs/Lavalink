@@ -1,6 +1,9 @@
 server: # REST server
   port: 2333
   address: 0.0.0.0
+spring:
+  main:
+    banner-mode: log
 lavalink:
   server:
     password: "youshallnotpass"

@@ -111,7 +111,7 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
 
     @Override
     public byte[] provide20MsAudio() {
-        return lastFrame.data;
+        return lastFrame.getData();
     }
 
     @Override
