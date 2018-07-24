@@ -16,23 +16,26 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 * REST API for resolving lavaplayer tracks (used for non-JVM clients)
 * Statistics (good for load balancing)
 * Basic authentication
+* Prometheus metrics
+* Docker images
+
+## Changelog
+
+Please see [here](CHANGELOG.md)
 
 ## Client libraries:
-### Supports 2.x:
-* [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) ([JDA](https://github.com/DV8FromTheWorld/JDA), Java)
+### Supports 3.x and older:
+* [Lavalink-Client](https://github.com/FredBoat/Lavalink-Client) (JDA or generic, Java)
 * [LavaClient](https://github.com/SamOphis/LavaClient) (Java)
-* [Magma](https://github.com/initzx/magma/) ([discord.py](https://github.com/Rapptz/discord.py), Python)
-* [Lavalink.py](https://github.com/Devoxin/Lavalink.py) ([discord.py](https://github.com/Rapptz/discord.py), Python)
-* [pylava](https://github.com/Pandentia/pylava) ([discord.py](https://github.com/Rapptz/discord.py), Python)
+* [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
+* [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
 * [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
-* [eris-lavalink](https://github.com/briantanner/eris-lavalink) ([eris](https://github.com/abalabahaha/eris), JavaScript)
-* [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
+
+### Supports 2.x:
+* [Magma](https://github.com/initzx/magma/) (discord.py, Python)
+* [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
+* [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) (Discord.js, JavaScript)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
-
-### Supports 1.x:
-* [lavalink.js](https://github.com/briantanner/lavalink.js) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
-
-Outdated as of January 29 2018.
 
 ## Server configuration
 Download from [the CI server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1)

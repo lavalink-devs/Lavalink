@@ -35,9 +35,6 @@ subprojects {
         apply from: "../analysis.gradle"
     }
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-
     compileJava.dependsOn 'clean'
     compileJava.options.encoding = 'UTF-8'
     compileJava.options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
@@ -53,21 +50,15 @@ subprojects {
         jdaAudioVersion                 = '4d7abb48aec49f0a996ba0d87df34fdc67f71275'
         jdaNasVersion                   = '1.0.6.2-JDA-Audio'
         jappVersion                     = '1.2'
-        jdaVersion                      = '3.6.0_367'
 
         springBootVersion               = "${springBootVersion}"
         javaWebSocketVersion            = '1.3.8'
         logbackVersion                  = '1.2.3'
-        slf4jVersion                    = '1.7.25'
         sentryLogbackVersion            = '1.7.0'
         oshiVersion                     = '3.5.0'
         jsonOrgVersion                  = '20180130'
         spotbugsAnnotationsVersion      = '3.1.3'
         prometheusVersion               = '0.4.0'
-
-        junitJupiterVersion             = '5.2.0'
-        junitPlatformVersion            = '1.2.0'
-        unirestVersion                  = '1.4.9'
 
         //@formatter:on
     }
@@ -77,9 +68,8 @@ ext {
     moduleName = 'Lavalink-Parent'
 }
 
-import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
-
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.6'
-    distributionType = DistributionType.ALL
+    gradleVersion = '4.7'
+    //noinspection UnnecessaryQualifiedReference
+    distributionType = Wrapper.DistributionType.ALL
 }

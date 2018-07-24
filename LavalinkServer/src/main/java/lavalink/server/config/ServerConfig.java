@@ -47,6 +47,10 @@ public class ServerConfig {
         this.password = password;
     }
 
+    /**
+     * @deprecated use {@link SentryConfigProperties} instead.
+     */
+    @Deprecated(since = "3")
     public String getSentryDsn() {
         return sentryDsn;
     }

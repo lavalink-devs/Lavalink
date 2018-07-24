@@ -34,7 +34,10 @@ import lavalink.server.util.Util;
 import net.dv8tion.jda.Core;
 import net.dv8tion.jda.manager.AudioManager;
 import org.java_websocket.WebSocket;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.exceptions.InvalidDataException;
 import org.java_websocket.handshake.ClientHandshake;
+import org.java_websocket.handshake.ServerHandshakeBuilder;
 import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -75,6 +78,13 @@ public class SocketServer extends WebSocketServer {
     @PostConstruct
     public void start() {
         super.start();
+    }
+
+    @Override
+    public ServerHandshakeBuilder onWebsocketHandshakeReceivedAsServer(WebSocket conn, Draft draft, ClientHandshake request) throws InvalidDataException {
+        ServerHandshakeBuilder builder = super.onWebsocketHandshakeReceivedAsServer(conn, draft, request);
+        builder.put("Lavalink-Major-Version", "3");
+        return builder;
     }
 
     @Override
