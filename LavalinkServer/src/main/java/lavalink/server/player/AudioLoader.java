@@ -40,17 +40,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AudioLoader implements AudioLoadResultHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AudioLoader.class);
+    private static final LoadResult NO_MATCHES = new LoadResult(Collections.emptyList(),
+            null, ResultStatus.NO_MATCHES, null);
+    private static final LoadResult LOAD_FAILED = new LoadResult(Collections.emptyList(),
+            null, ResultStatus.LOAD_FAILED, null);
+
     private final AudioPlayerManager audioPlayerManager;
 
-    private final CompletableFuture<List<AudioTrack>> loadedItems;
+    private final CompletableFuture<LoadResult> loadResult = new CompletableFuture<>();
     private final AtomicBoolean used = new AtomicBoolean(false);
 
     public AudioLoader(AudioPlayerManager audioPlayerManager) {
         this.audioPlayerManager = audioPlayerManager;
-        this.loadedItems = new CompletableFuture<>();
     }
 
-    public CompletionStage<List<AudioTrack>> load(String identifier) {
+    public CompletionStage<LoadResult> load(String identifier) {
         boolean isUsed = this.used.getAndSet(true);
         if (isUsed) {
             throw new IllegalStateException("This loader can only be used once per instance");
@@ -59,7 +63,7 @@ public class AudioLoader implements AudioLoadResultHandler {
         log.trace("Loading item with identifier {}", identifier);
         this.audioPlayerManager.loadItem(identifier, this);
 
-        return loadedItems;
+        return loadResult;
     }
 
     @Override
@@ -67,25 +71,36 @@ public class AudioLoader implements AudioLoadResultHandler {
         log.info("Loaded track " + audioTrack.getInfo().title);
         ArrayList<AudioTrack> result = new ArrayList<>();
         result.add(audioTrack);
-        this.loadedItems.complete(result);
+        this.loadResult.complete(new LoadResult(result, null, ResultStatus.TRACK_LOADED, null));
     }
 
     @Override
     public void playlistLoaded(AudioPlaylist audioPlaylist) {
         log.info("Loaded playlist " + audioPlaylist.getName());
-        this.loadedItems.complete(audioPlaylist.getTracks());
+
+        String playlistName = null;
+        Integer selectedTrack = null;
+        if (!audioPlaylist.isSearchResult()) {
+            playlistName = audioPlaylist.getName();
+            selectedTrack = audioPlaylist.getTracks().indexOf(audioPlaylist.getSelectedTrack());
+        }
+
+        ResultStatus status = audioPlaylist.isSearchResult() ? ResultStatus.SEARCH_RESULT : ResultStatus.PLAYLIST_LOADED;
+        List<AudioTrack> loadedItems = audioPlaylist.getTracks();
+
+        this.loadResult.complete(new LoadResult(loadedItems, playlistName, status, selectedTrack));
     }
 
     @Override
     public void noMatches() {
         log.info("No matches found");
-        this.loadedItems.complete(Collections.emptyList());
+        this.loadResult.complete(NO_MATCHES);
     }
 
     @Override
     public void loadFailed(FriendlyException e) {
         log.error("Load failed", e);
-        this.loadedItems.complete(Collections.emptyList());
+        this.loadResult.complete(LOAD_FAILED);
     }
 
 }

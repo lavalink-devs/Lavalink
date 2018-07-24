@@ -22,12 +22,7 @@
 
 package lavalink.server;
 
-import ch.qos.logback.classic.LoggerContext;
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
-import io.sentry.Sentry;
-import io.sentry.SentryClient;
-import io.sentry.logback.SentryAppender;
-import lavalink.server.config.ServerConfig;
 import lavalink.server.info.AppInfo;
 import lavalink.server.info.GitRepoState;
 import lavalink.server.io.SocketServer;
@@ -42,11 +37,9 @@ import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEven
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.context.annotation.ComponentScan;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Properties;
 
 @SpringBootApplication
 @ComponentScan
@@ -59,7 +52,7 @@ public class Launcher {
     public static void main(String[] args) {
         if (args.length > 0
                 && (args[0].equalsIgnoreCase("-v")
-                    || args[0].equalsIgnoreCase("--version"))) {
+                || args[0].equalsIgnoreCase("--version"))) {
             System.out.println("Version flag detected. Printing version info, then exiting.");
             System.out.println(getVersionInfo());
             return;
@@ -83,7 +76,7 @@ public class Launcher {
         sa.run(args);
     }
 
-    public Launcher(ServerConfig serverConfig, SocketServer socketServer) {
+    public Launcher(SocketServer socketServer) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             log.info("Shutdown hook triggered");
             try {
@@ -95,41 +88,6 @@ public class Launcher {
 
         SimpleLog.LEVEL = SimpleLog.Level.OFF;
         SimpleLog.addListener(new SimpleLogToSLF4JAdapter());
-        initSentry(serverConfig);
-    }
-
-    private void initSentry(ServerConfig serverConfig) {
-        String sentryDsn = serverConfig.getSentryDsn();
-        if (sentryDsn == null || sentryDsn.isEmpty()) {
-            log.info("No sentry dsn found, turning off sentry.");
-            turnOffSentry();
-            return;
-        }
-        SentryClient sentryClient = Sentry.init(sentryDsn);
-        log.info("Set up sentry.");
-
-        // set the git commit hash this was build on as the release
-        Properties gitProps = new Properties();
-        try {
-            gitProps.load(Launcher.class.getClassLoader().getResourceAsStream("git.properties"));
-        } catch (NullPointerException | IOException e) {
-            log.error("Failed to load git repo information", e);
-        }
-
-        String commitHash = gitProps.getProperty("git.commit.id");
-        if (commitHash != null && !commitHash.isEmpty()) {
-            log.info("Setting sentry release to commit hash {}", commitHash);
-            sentryClient.setRelease(commitHash);
-        } else {
-            log.warn("No git commit hash found to set up sentry release");
-        }
-    }
-
-    private void turnOffSentry() {
-        LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-        SentryAppender sentryAppender = (SentryAppender) lc.getLogger(Logger.ROOT_LOGGER_NAME).getAppender("SENTRY");
-        Sentry.close();
-        sentryAppender.stop();
     }
 
     private static String getVersionInfo() {

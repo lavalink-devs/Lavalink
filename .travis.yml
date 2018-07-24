@@ -23,7 +23,7 @@ jobs:
   fast_finish: true
   include:
     - stage: sonar
-      jdk: openjdk8
+      jdk: openjdk10
       if: env(TRAVIS_SECURE_ENV_VARS) = true
       before_script:
         #for full sonar cloud blame information

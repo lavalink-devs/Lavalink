@@ -41,9 +41,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -93,9 +91,12 @@ public class AudioLoaderRestHandler {
                 .put("position", audioTrack.getPosition());
     }
 
-    private JSONArray encodeTrackList(List<AudioTrack> trackList) {
+    private JSONObject encodeLoadResult(LoadResult result) {
+        JSONObject json = new JSONObject();
+        JSONObject playlist = new JSONObject();
         JSONArray tracks = new JSONArray();
-        trackList.forEach(track -> {
+
+        result.tracks.forEach(track -> {
             JSONObject object = new JSONObject();
             object.put("info", trackToJSON(track));
 
@@ -107,12 +108,22 @@ public class AudioLoaderRestHandler {
                 log.warn("Failed to encode a track {}, skipping", track.getIdentifier(), e);
             }
         });
-        return tracks;
+
+        playlist.put("name", result.playlistName);
+        playlist.put("selectedTrack", result.selectedTrack);
+
+        json.put("playlistInfo", playlist);
+        json.put("loadType", result.loadResultType);
+        json.put("tracks", tracks);
+
+        return json;
     }
 
     @GetMapping(value = "/loadtracks", produces = "application/json")
     @ResponseBody
-    public CompletionStage<ResponseEntity<String>> getLoadTracks(HttpServletRequest request, @RequestParam String identifier) {
+    public CompletionStage<ResponseEntity<String>> getLoadTracks(HttpServletRequest request,
+                                                                 @RequestParam String identifier) {
+
         log(request);
 
         Optional<ResponseEntity<String>> notAuthed = checkAuthorization(request);
@@ -121,14 +132,15 @@ public class AudioLoaderRestHandler {
         }
 
         return new AudioLoader(audioPlayerManager).load(identifier)
-                .thenApply(this::encodeTrackList)
-                .thenApply(tracksArray -> new ResponseEntity<>(tracksArray.toString(), HttpStatus.OK));
+                .thenApply(this::encodeLoadResult)
+                .thenApply(loadResultJson -> new ResponseEntity<>(loadResultJson.toString(), HttpStatus.OK));
     }
 
     @GetMapping(value = "/decodetrack", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<String> getDecodeTrack(HttpServletRequest request, HttpServletResponse response, @RequestParam String track)
+    public ResponseEntity<String> getDecodeTrack(HttpServletRequest request, @RequestParam String track)
             throws IOException {
+
         log(request);
 
         Optional<ResponseEntity<String>> notAuthed = checkAuthorization(request);
@@ -143,8 +155,9 @@ public class AudioLoaderRestHandler {
 
     @PostMapping(value = "/decodetracks", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<String> postDecodeTracks(HttpServletRequest request, HttpServletResponse response, @RequestBody String body)
+    public ResponseEntity<String> postDecodeTracks(HttpServletRequest request, @RequestBody String body)
             throws IOException {
+
         log(request);
 
         Optional<ResponseEntity<String>> notAuthed = checkAuthorization(request);
