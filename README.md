@@ -16,21 +16,28 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 * REST API for resolving lavaplayer tracks (used for non-JVM clients)
 * Statistics (good for load balancing)
 * Basic authentication
+* Prometheus metrics
+* Docker images
 
-## Changes in 3.0
-* Breaking changes to the output of the /loadtracks endpoint. [See PR #91](https://github.com/Frederikam/Lavalink/pull/91) [and PR #116](https://github.com/Frederikam/Lavalink/pull/116).
-* The Java client has been made generic. This is a breaking change so please read the documentation.
+## Changelog
+
+Please see [here](CHANGELOG.md)
 
 ## Client libraries:
 ### Supports 3.x and older:
-* [JDA client](https://github.com/Frederikam/Lavalink/tree/master/LavalinkClient) (JDA or generic, Java)
+* [Lavalink-Client](https://github.com/FredBoat/Lavalink-Client) (JDA or generic, Java)
 * [LavaClient](https://github.com/SamOphis/LavaClient) (Java)
 * [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
+* [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
 * [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
+* [eris-lavalink](https://github.com/briantanner/eris-lavalink) ([eris](https://github.com/abalabahaha/eris), JavaScript)
+* [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
+* [Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET) (.NET)
+* [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink) ([DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/), .NET)
+* Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ### Supports 2.x:
 * [Magma](https://github.com/initzx/magma/) (discord.py, Python)
-* [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
 * [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) (Discord.js, JavaScript)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)

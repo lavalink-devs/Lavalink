@@ -50,22 +50,16 @@ subprojects {
         magmaVersion                    = '0.4.4'
         jdaNasVersion                   = '1.0.6'
         jappVersion                     = '1.2'
-        jdaVersion                      = '3.6.0_367'
 
         springBootVersion               = "${springBootVersion}"
         javaWebSocketVersion            = '1.3.8'
         logbackVersion                  = '1.2.3'
-        slf4jVersion                    = '1.7.25'
         sentryLogbackVersion            = '1.7.0'
         oshiVersion                     = '3.5.0'
         jsonOrgVersion                  = '20180130'
         spotbugsAnnotationsVersion      = '3.1.3'
         prometheusVersion               = '0.4.0'
         commonsLangVersion              = '3.7'
-
-        junitJupiterVersion             = '5.2.0'
-        junitPlatformVersion            = '1.2.0'
-        unirestVersion                  = '1.4.9'
 
         //@formatter:on
     }

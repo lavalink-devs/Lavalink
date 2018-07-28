@@ -1,5 +1,5 @@
 # Implementation guidelines
-How to write your own client. The Java client will serve as an example implementation.
+How to write your own client. The Java [Lavalink-Client](https://github.com/FredBoat/Lavalink-Client) will serve as an example implementation.
 The Java client has support for JDA, but can also be adapted to work with other JVM libraries.
 
 ## Requirements
@@ -122,7 +122,7 @@ and you can send the same VOICE_SERVER_UPDATE to a new node.
 
 ### Incoming messages
 See 
-[LavalinkSocket.java](https://github.com/Frederikam/Lavalink/blob/dev/LavalinkClient/src/main/java/lavalink/client/io/LavalinkSocket.java)
+[LavalinkSocket.java](https://github.com/FredBoat/Lavalink-Client/blob/master/src/main/java/lavalink/client/io/LavalinkSocket.java)
 for client implementation
 
 Position information about a player. Includes unix timestamp.
