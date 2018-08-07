@@ -43,7 +43,7 @@ dependencies {
     compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: jappVersion
     //required by japp
     compile group: 'org.apache.commons', name: 'commons-lang3', version: commonsLangVersion
-    compile group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
+    compile group: 'org.springframework', name: 'spring-websocket', version: springWebSocketVersion
     compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
     compile group: 'io.sentry', name: 'sentry-logback', version: sentryLogbackVersion
     compile group: 'com.github.oshi', name: 'oshi-core', version: oshiVersion

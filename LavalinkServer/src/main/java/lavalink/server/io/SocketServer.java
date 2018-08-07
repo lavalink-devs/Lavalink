@@ -29,129 +29,76 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker;
 import lavalink.server.config.AudioSendFactoryConfiguration;
 import lavalink.server.config.ServerConfig;
-import lavalink.server.config.WebsocketConfig;
 import lavalink.server.player.Player;
 import lavalink.server.player.TrackEndMarkerHandler;
 import lavalink.server.util.Util;
 import net.dv8tion.jda.core.audio.factory.IAudioSendFactory;
-import org.java_websocket.WebSocket;
-import org.java_websocket.drafts.Draft;
-import org.java_websocket.exceptions.InvalidDataException;
-import org.java_websocket.handshake.ClientHandshake;
-import org.java_websocket.handshake.ServerHandshakeBuilder;
-import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import space.npstr.magma.MagmaApi;
-import space.npstr.magma.MagmaMember;
-import space.npstr.magma.MagmaServerUpdate;
-import space.npstr.magma.Member;
-import space.npstr.magma.ServerUpdate;
+import org.springframework.stereotype.Service;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
+import space.npstr.magma.*;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-import static lavalink.server.io.WSCodes.AUTHORIZATION_REJECTED;
-import static lavalink.server.io.WSCodes.INTERNAL_ERROR;
-
-@Component
-public class SocketServer extends WebSocketServer {
+@Service
+public class SocketServer extends TextWebSocketHandler {
 
     private static final Logger log = LoggerFactory.getLogger(SocketServer.class);
 
     private final MagmaApi magmaApi = MagmaApi.of(this::getAudioSendFactory);
     // userId <-> shardCount
     private final Map<String, Integer> shardCounts = new ConcurrentHashMap<>();
-    private final Map<WebSocket, SocketContext> contextMap = new HashMap<>();
+    private final Map<String, SocketContext> contextMap = new HashMap<>();
     private final ServerConfig serverConfig;
     private final Supplier<AudioPlayerManager> audioPlayerManagerSupplier;
     private final AudioSendFactoryConfiguration audioSendFactoryConfiguration;
     private final ConcurrentHashMap<Integer, IAudioSendFactory> sendFactories = new ConcurrentHashMap<>();
 
-    public SocketServer(WebsocketConfig websocketConfig, ServerConfig serverConfig, Supplier<AudioPlayerManager> audioPlayerManagerSupplier,
+    public SocketServer(ServerConfig serverConfig, Supplier<AudioPlayerManager> audioPlayerManagerSupplier,
                         AudioSendFactoryConfiguration audioSendFactoryConfiguration) {
-        super(new InetSocketAddress(websocketConfig.getHost(), websocketConfig.getPort()));
-        this.setReuseAddr(true);
         this.serverConfig = serverConfig;
         this.audioPlayerManagerSupplier = audioPlayerManagerSupplier;
         this.audioSendFactoryConfiguration = audioSendFactoryConfiguration;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    @PostConstruct
-    public void start() {
-        super.start();
+    public void afterConnectionEstablished(WebSocketSession session) {
+        int shardCount = Integer.parseInt(session.getHandshakeHeaders().getFirst("Num-Shards"));
+        String userId = session.getHandshakeHeaders().getFirst("User-Id");
+
+        shardCounts.put(userId, shardCount);
+
+        contextMap.put(session.getId(), new SocketContext(audioPlayerManagerSupplier, session, this, userId, magmaApi));
     }
 
     @Override
-    public ServerHandshakeBuilder onWebsocketHandshakeReceivedAsServer(WebSocket conn, Draft draft, ClientHandshake request) throws InvalidDataException {
-        ServerHandshakeBuilder builder = super.onWebsocketHandshakeReceivedAsServer(conn, draft, request);
-        builder.put("Lavalink-Major-Version", "3");
-        return builder;
-    }
-
-    @Override
-    public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
-        try {
-            int shardCount = Integer.parseInt(clientHandshake.getFieldValue("Num-Shards"));
-            String userId = clientHandshake.getFieldValue("User-Id");
-
-            shardCounts.put(userId, shardCount);
-
-            if (clientHandshake.getFieldValue("Authorization").equals(serverConfig.getPassword())) {
-                log.info("Connection opened from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
-                contextMap.put(webSocket, new SocketContext(audioPlayerManagerSupplier, webSocket, this, userId, magmaApi));
-            } else {
-                log.error("Authentication failed from " + webSocket.getRemoteSocketAddress() + " with protocol " + webSocket.getDraft());
-                webSocket.close(AUTHORIZATION_REJECTED, "Authorization rejected");
-            }
-        } catch (Exception e) {
-            log.error("Error when opening websocket", e);
-            webSocket.close(INTERNAL_ERROR, e.getMessage());
-        }
-    }
-
-    @Override
-    public void onCloseInitiated(WebSocket webSocket, int code, String reason) {
-        close(webSocket, code, reason);
-    }
-
-    @Override
-    public void onClosing(WebSocket webSocket, int code, String reason, boolean remote) {
-        close(webSocket, code, reason);
-    }
-
-    @Override
-    public void onClose(WebSocket webSocket, int code, String reason, boolean remote) {
-        close(webSocket, code, reason);
-    }
-
-    // WebSocketServer has a very questionable attitude towards communicating close events, so we override ALL the closing methods
-    private void close(WebSocket webSocket, int code, String reason) {
-        SocketContext context = contextMap.remove(webSocket);
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+        SocketContext context = contextMap.remove(session.getId());
         if (context != null) {
-            log.info("Connection closed from {} with protocol {} with reason {} with code {}",
-                    webSocket.getRemoteSocketAddress().toString(), webSocket.getDraft(), reason, code);
+            log.info("Connection closed from {} -- {}", session.getRemoteAddress(), status);
             context.shutdown();
         }
     }
 
     @Override
-    public void onMessage(WebSocket webSocket, String s) {
-        JSONObject json = new JSONObject(s);
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
+        JSONObject json = new JSONObject(message.getPayload());
 
-        log.info(s);
+        log.info(message.getPayload());
 
-        if (webSocket.isClosing()) {
-            log.error("Ignoring closing websocket: " + webSocket.getRemoteSocketAddress().toString());
+        if (!session.isOpen()) {
+            log.error("Ignoring closing websocket: " + session.getRemoteAddress());
             return;
         }
 
@@ -170,7 +117,7 @@ public class SocketServer extends WebSocketServer {
                     return;
                 }
 
-                SocketContext sktContext = contextMap.get(webSocket);
+                SocketContext sktContext = contextMap.get(session.getId());
                 Member member = MagmaMember.builder()
                         .userId(sktContext.getUserId())
                         .guildId(guildId)
@@ -186,7 +133,7 @@ public class SocketServer extends WebSocketServer {
             /* Player ops */
             case "play":
                 try {
-                    SocketContext ctx = contextMap.get(webSocket);
+                    SocketContext ctx = contextMap.get(session.getId());
                     Player player = ctx.getPlayer(json.getString("guildId"));
                     AudioTrack track = Util.toAudioTrack(ctx.getAudioPlayerManager(), json.getString("track"));
                     if (json.has("startTime")) {
@@ -203,7 +150,7 @@ public class SocketServer extends WebSocketServer {
 
                     player.play(track);
 
-                    SocketContext context = contextMap.get(webSocket);
+                    SocketContext context = contextMap.get(session.getId());
 
                     Member m = MagmaMember.builder()
                             .userId(context.getUserId())
@@ -211,31 +158,31 @@ public class SocketServer extends WebSocketServer {
                             .build();
                     magmaApi.setSendHandler(m, context.getPlayer(json.getString("guildId")));
 
-                    sendPlayerUpdate(webSocket, player);
+                    sendPlayerUpdate(session, player);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case "stop":
-                Player player = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
+                Player player = contextMap.get(session.getId()).getPlayer(json.getString("guildId"));
                 player.stop();
                 break;
             case "pause":
-                Player player2 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
+                Player player2 = contextMap.get(session.getId()).getPlayer(json.getString("guildId"));
                 player2.setPause(json.getBoolean("pause"));
-                sendPlayerUpdate(webSocket, player2);
+                sendPlayerUpdate(session, player2);
                 break;
             case "seek":
-                Player player3 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
+                Player player3 = contextMap.get(session.getId()).getPlayer(json.getString("guildId"));
                 player3.seekTo(json.getLong("position"));
-                sendPlayerUpdate(webSocket, player3);
+                sendPlayerUpdate(session, player3);
                 break;
             case "volume":
-                Player player4 = contextMap.get(webSocket).getPlayer(json.getString("guildId"));
+                Player player4 = contextMap.get(session.getId()).getPlayer(json.getString("guildId"));
                 player4.setVolume(json.getInt("volume"));
                 break;
             case "destroy":
-                SocketContext socketContext = contextMap.get(webSocket);
+                SocketContext socketContext = contextMap.get(session.getId());
                 Player player5 = socketContext.getPlayers().remove(json.getString("guildId"));
                 if (player5 != null) player5.stop();
                 Member mem = MagmaMember.builder()
@@ -251,23 +198,13 @@ public class SocketServer extends WebSocketServer {
         }
     }
 
-    @Override
-    public void onError(WebSocket webSocket, Exception e) {
-        log.error("Caught exception in websocket", e);
-    }
-
-    @Override
-    public void onStart() {
-        log.info("Started WS server with port " + getPort());
-    }
-
-    public static void sendPlayerUpdate(WebSocket webSocket, Player player) {
+    public static void sendPlayerUpdate(WebSocketSession session, Player player) throws IOException {
         JSONObject json = new JSONObject();
         json.put("op", "playerUpdate");
         json.put("guildId", player.getGuildId());
         json.put("state", player.getState());
 
-        webSocket.send(json.toString());
+        session.sendMessage(new TextMessage(json.toString()));
     }
 
     Collection<SocketContext> getContexts() {

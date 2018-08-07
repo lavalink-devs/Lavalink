@@ -24,9 +24,9 @@ package lavalink.server.io;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import lavalink.server.player.Player;
-import org.java_websocket.WebSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.socket.WebSocketSession;
 import space.npstr.magma.MagmaApi;
 import space.npstr.magma.MagmaMember;
 import space.npstr.magma.Member;
@@ -45,7 +45,7 @@ public class SocketContext {
     private static final Logger log = LoggerFactory.getLogger(SocketContext.class);
 
     private final AudioPlayerManager audioPlayerManager;
-    private final WebSocket socket;
+    private final WebSocketSession socket;
     private String userId;
     private final MagmaApi magmaApi;
     //guildId <-> Player
@@ -53,7 +53,7 @@ public class SocketContext {
     private ScheduledExecutorService statsExecutor;
     public final ScheduledExecutorService playerUpdateService;
 
-    SocketContext(Supplier<AudioPlayerManager> audioPlayerManagerSupplier, WebSocket socket, SocketServer socketServer, String userId,
+    SocketContext(Supplier<AudioPlayerManager> audioPlayerManagerSupplier, WebSocketSession socket, SocketServer socketServer, String userId,
                   MagmaApi magmaApi) {
         this.audioPlayerManager = audioPlayerManagerSupplier.get();
         this.socket = socket;
@@ -81,7 +81,7 @@ public class SocketContext {
         );
     }
 
-    public WebSocket getSocket() {
+    public WebSocketSession getSession() {
         return socket;
     }
 

@@ -35,6 +35,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -136,7 +137,11 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
         if (myFuture == null || myFuture.isCancelled()) {
             myFuture = socketContext.playerUpdateService.scheduleAtFixedRate(() -> {
-                SocketServer.sendPlayerUpdate(socketContext.getSocket(), this);
+                try {
+                    SocketServer.sendPlayerUpdate(socketContext.getSession(), this);
+                } catch (IOException e) {
+                    log.error("Failed to send player update after track start", e);
+                }
             }, 0, 5, TimeUnit.SECONDS);
         }
     }
