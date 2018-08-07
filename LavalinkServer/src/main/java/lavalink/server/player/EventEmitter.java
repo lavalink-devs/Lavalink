@@ -33,6 +33,7 @@ import lavalink.server.util.Util;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.socket.TextMessage;
 
 import java.io.IOException;
 
@@ -61,7 +62,11 @@ public class EventEmitter extends AudioEventAdapter {
 
         out.put("reason", endReason.toString());
 
-        linkPlayer.getSocket().getSocket().send(out.toString());
+        try {
+            linkPlayer.getSocket().getSession().sendMessage(new TextMessage(out.toString()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // These exceptions are already logged by Lavaplayer
@@ -79,7 +84,11 @@ public class EventEmitter extends AudioEventAdapter {
 
         out.put("error", exception.getMessage());
 
-        linkPlayer.getSocket().getSocket().send(out.toString());
+        try {
+            linkPlayer.getSocket().getSession().sendMessage(new TextMessage(out.toString()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -98,8 +107,12 @@ public class EventEmitter extends AudioEventAdapter {
 
         out.put("thresholdMs", thresholdMs);
 
-        linkPlayer.getSocket().getSocket().send(out.toString());
-        SocketServer.sendPlayerUpdate(linkPlayer.getSocket().getSocket(), linkPlayer);
+        try {
+            linkPlayer.getSocket().getSession().sendMessage(new TextMessage(out.toString()));
+            SocketServer.sendPlayerUpdate(linkPlayer.getSocket().getSession(), linkPlayer);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

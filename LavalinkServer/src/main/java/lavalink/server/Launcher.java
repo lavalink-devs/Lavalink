@@ -25,7 +25,6 @@ package lavalink.server;
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
 import lavalink.server.info.AppInfo;
 import lavalink.server.info.GitRepoState;
-import lavalink.server.io.SocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -33,14 +32,12 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
-import org.springframework.context.annotation.ComponentScan;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 @SpringBootApplication
-@ComponentScan
 public class Launcher {
 
     private static final Logger log = LoggerFactory.getLogger(Launcher.class);
@@ -72,17 +69,6 @@ public class Launcher {
                 }
         );
         sa.run(args);
-    }
-
-    public Launcher(SocketServer socketServer) {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            log.info("Shutdown hook triggered");
-            try {
-                socketServer.stop(30);
-            } catch (InterruptedException e) {
-                log.warn("Interrupted while stopping socket server", e);
-            }
-        }, "shutdown hook"));
     }
 
     private static String getVersionInfo() {
