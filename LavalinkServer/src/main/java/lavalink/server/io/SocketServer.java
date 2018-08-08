@@ -93,7 +93,15 @@ public class SocketServer extends TextWebSocketHandler {
     }
 
     @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) {
+        try {
+            handleTextMessageSafe(session, message);
+        } catch (Exception e) {
+            log.error("Exception while handling websocket message", e);
+        }
+    }
+
+    private void handleTextMessageSafe(WebSocketSession session, TextMessage message) throws IOException {
         JSONObject json = new JSONObject(message.getPayload());
 
         log.info(message.getPayload());
