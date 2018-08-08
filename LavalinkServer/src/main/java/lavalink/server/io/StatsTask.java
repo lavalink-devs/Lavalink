@@ -25,10 +25,10 @@ package lavalink.server.io;
 import lavalink.server.Launcher;
 import lavalink.server.player.AudioLossCounter;
 import lavalink.server.player.Player;
+import lavalink.server.util.Ws;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.socket.TextMessage;
 import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OSProcess;
@@ -119,7 +119,7 @@ public class StatsTask implements Runnable {
             out.put("frameStats", frames);
         }
 
-        context.getSession().sendMessage(new TextMessage(out.toString()));
+        Ws.send(context.getSession(), out);
     }
 
     private double uptime = 0;

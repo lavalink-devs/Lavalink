@@ -30,10 +30,10 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import lavalink.server.io.SocketServer;
 import lavalink.server.util.Util;
+import lavalink.server.util.Ws;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.socket.TextMessage;
 
 import java.io.IOException;
 
@@ -62,11 +62,7 @@ public class EventEmitter extends AudioEventAdapter {
 
         out.put("reason", endReason.toString());
 
-        try {
-            linkPlayer.getSocket().getSession().sendMessage(new TextMessage(out.toString()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Ws.send(linkPlayer.getSocket().getSession(), out);
     }
 
     // These exceptions are already logged by Lavaplayer
@@ -84,11 +80,7 @@ public class EventEmitter extends AudioEventAdapter {
 
         out.put("error", exception.getMessage());
 
-        try {
-            linkPlayer.getSocket().getSession().sendMessage(new TextMessage(out.toString()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Ws.send(linkPlayer.getSocket().getSession(), out);
     }
 
     @Override
@@ -107,12 +99,8 @@ public class EventEmitter extends AudioEventAdapter {
 
         out.put("thresholdMs", thresholdMs);
 
-        try {
-            linkPlayer.getSocket().getSession().sendMessage(new TextMessage(out.toString()));
-            SocketServer.sendPlayerUpdate(linkPlayer.getSocket().getSession(), linkPlayer);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Ws.send(linkPlayer.getSocket().getSession(), out);
+        SocketServer.sendPlayerUpdate(linkPlayer.getSocket().getSession(), linkPlayer);
     }
 
 }

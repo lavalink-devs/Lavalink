@@ -32,6 +32,7 @@ import lavalink.server.config.ServerConfig;
 import lavalink.server.player.Player;
 import lavalink.server.player.TrackEndMarkerHandler;
 import lavalink.server.util.Util;
+import lavalink.server.util.Ws;
 import net.dv8tion.jda.core.audio.factory.IAudioSendFactory;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -80,6 +81,7 @@ public class SocketServer extends TextWebSocketHandler {
         shardCounts.put(userId, shardCount);
 
         contextMap.put(session.getId(), new SocketContext(audioPlayerManagerSupplier, session, this, userId, magmaApi));
+        session.setTextMessageSizeLimit(512);
         log.info("Connection successfully established from " + session.getRemoteAddress());
     }
 
@@ -207,13 +209,13 @@ public class SocketServer extends TextWebSocketHandler {
         }
     }
 
-    public static void sendPlayerUpdate(WebSocketSession session, Player player) throws IOException {
+    public static void sendPlayerUpdate(WebSocketSession session, Player player) {
         JSONObject json = new JSONObject();
         json.put("op", "playerUpdate");
         json.put("guildId", player.getGuildId());
         json.put("state", player.getState());
 
-        session.sendMessage(new TextMessage(json.toString()));
+        Ws.send(session, json);
     }
 
     Collection<SocketContext> getContexts() {
