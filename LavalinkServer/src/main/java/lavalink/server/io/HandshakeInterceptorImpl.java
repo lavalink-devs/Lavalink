@@ -37,7 +37,7 @@ public class HandshakeInterceptorImpl implements HandshakeInterceptor {
         String password = request.getHeaders().getFirst("Authorization");
         boolean matches = Objects.equals(password, serverConfig.getPassword());
 
-        if (!matches) {
+        if (matches) {
             log.info("Incoming connection from " + request.getRemoteAddress());
         } else {
             log.error("Authentication failed from " + request.getRemoteAddress());
