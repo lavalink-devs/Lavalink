@@ -50,7 +50,7 @@ public class GitRepoState {
         this.commitMessageFull = String.valueOf(properties.getOrDefault("git.commit.message.full", ""));
         this.commitMessageShort = String.valueOf(properties.getOrDefault("git.commit.message.short", ""));
         final String time = String.valueOf(properties.get("git.commit.time"));
-        if (time == null) {
+        if (time == null || time.equals("null")) {
             this.commitTime = 0;
         } else {
             // https://github.com/n0mer/gradle-git-properties/issues/71
