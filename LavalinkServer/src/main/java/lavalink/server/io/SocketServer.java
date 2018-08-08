@@ -80,6 +80,7 @@ public class SocketServer extends TextWebSocketHandler {
         shardCounts.put(userId, shardCount);
 
         contextMap.put(session.getId(), new SocketContext(audioPlayerManagerSupplier, session, this, userId, magmaApi));
+        log.info("Connection successfully established from " + session.getRemoteAddress());
     }
 
     @Override
