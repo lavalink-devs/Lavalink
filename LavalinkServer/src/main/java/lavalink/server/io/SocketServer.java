@@ -81,7 +81,6 @@ public class SocketServer extends TextWebSocketHandler {
         shardCounts.put(userId, shardCount);
 
         contextMap.put(session.getId(), new SocketContext(audioPlayerManagerSupplier, session, this, userId, magmaApi));
-        session.setTextMessageSizeLimit(512);
         log.info("Connection successfully established from " + session.getRemoteAddress());
     }
 
@@ -103,7 +102,7 @@ public class SocketServer extends TextWebSocketHandler {
         }
     }
 
-    private void handleTextMessageSafe(WebSocketSession session, TextMessage message) throws IOException {
+    private void handleTextMessageSafe(WebSocketSession session, TextMessage message) {
         JSONObject json = new JSONObject(message.getPayload());
 
         log.info(message.getPayload());
