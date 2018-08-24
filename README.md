@@ -67,6 +67,7 @@ users about the compatibility of their clients to the Lavalink server.
 * [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
 * [Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET) (.NET)
 * [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink) ([DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/), .NET)
+* [gavalink](https://github.com/foxbot/gavalink) (Go)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ### Supports 2.x:
