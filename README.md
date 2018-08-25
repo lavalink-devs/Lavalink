@@ -68,6 +68,7 @@ users about the compatibility of their clients to the Lavalink server.
 * [Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET) (.NET)
 * [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink) ([DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/), .NET)
 * [Luna](https://github.com/CharlotteDunois/Luna) ([Yasmin](https://github.com/CharlotteDunois/Yasmin) or generic, PHP)
+* [gavalink](https://github.com/foxbot/gavalink) (Go)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ### Supports 2.x:
