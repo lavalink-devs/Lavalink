@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.2.RELEASE'
-        gradleGitVersion = '1.5.1'
+        springBootVersion = '2.0.4.RELEASE'
+        gradleGitVersion = '1.5.2'
         sonarqubeVersion = '2.6.2'
     }
     repositories {
@@ -47,19 +47,19 @@ subprojects {
         //@formatter:off
 
         lavaplayerVersion               = '1.3.7'
-        magmaVersion                    = '0.4.4'
+        magmaVersion                    = '0.5.0'
         jdaNasVersion                   = '1.0.6'
-        jappVersion                     = '1.2'
+        jappVersion                     = '1.3'
 
         springBootVersion               = "${springBootVersion}"
         springWebSocketVersion          = '5.0.8.RELEASE'
-        logbackVersion                  = '1.2.3'
-        sentryLogbackVersion            = '1.7.0'
-        oshiVersion                     = '3.5.0'
-        jsonOrgVersion                  = '20180130'
-        spotbugsAnnotationsVersion      = '3.1.3'
-        prometheusVersion               = '0.4.0'
-        commonsLangVersion              = '3.7'
+        logbackVersion                  = '1.3.0-alpha4'
+        sentryLogbackVersion            = '1.7.7'
+        oshiVersion                     = '3.8.1'
+        jsonOrgVersion                  = '20180813'
+        spotbugsAnnotationsVersion      = '3.1.6'
+        prometheusVersion               = '0.5.0'
+        commonsLangVersion              = '3.8'
 
         //@formatter:on
     }
