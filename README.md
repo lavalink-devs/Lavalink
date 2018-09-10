@@ -69,10 +69,10 @@ users about the compatibility of their clients to the Lavalink server.
 * [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink) ([DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/), .NET)
 * [Luna](https://github.com/CharlotteDunois/Luna) ([Yasmin](https://github.com/CharlotteDunois/Yasmin) or generic, PHP)
 * [gavalink](https://github.com/foxbot/gavalink) (Go)
+* [Magma](https://github.com/initzx/magma/) (discord.py, Python)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ### Supports 2.x:
-* [Magma](https://github.com/initzx/magma/) (discord.py, Python)
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
 * [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) (Discord.js, JavaScript)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
