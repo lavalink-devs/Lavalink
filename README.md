@@ -23,6 +23,39 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 
 Please see [here](CHANGELOG.md)
 
+## Versioning policy
+
+The public api ("api" in a very broad sense) of Lavalink can be categorized into two main domains:
+- **Client Domain:** The api exposed to clients, consisting of both the websocket protocol, and any public http endpoints
+- **Server Domain:** The server application with its runtime environment, its configuration, etc.
+
+Changes that might be breaking to one domain need not be breaking to the other.
+Examples: 
+- Removing an endpoint. This is a breaking change for the client domain, but is
+not a breaking change for running the server itself.
+- Upgrading the minimum Java version: This is a breaking change for the server domain,
+but client implementations couldn't care less about it. 
+
+Given the above, the following versioning pattern lends itself well to the Lavalink project:
+
+_**api.major.minor.patch**_
+
+- **Api**: Bumped when breaking changes are comitted to the client domain of Lavalink  
+Examples: Removing an endpoint, altering output of an endpoint in a non backwards compatible manner  
+- **Major**: Bumped when breaking changes are comitted to the Lavalink server domain  
+Examples: Bumping the required Java version, altering the configuration in a non backwards compatible manner
+- **Minor**: New features in any domain
+Examples: New optional endpoint or op code, additional configuration options, change of large subsystems or dependencies
+- **Patch**: Bug fixes in any domain
+Examples: Fixing a race condition, fixing unexpected exceptions, fixing output that is not according to specs, etc.
+
+While major, minor and patch will do a best effort to adhere to [Semantic Versioning](https://semver.org/),
+prepending it with an additional api version makes life easier for developers of client implementations
+in two ways: It is a clear way for the Lavalink project to communicate the actually relevant breaking changes 
+to client developers, and in turn, client developers can use the api version to clearly communicate to their
+users about the compatibility of their clients to the Lavalink server.
+
+
 ## Client libraries:
 ### Supports 3.x and older:
 * [Lavalink-Client](https://github.com/FredBoat/Lavalink-Client) (JDA or generic, Java)
@@ -34,6 +67,8 @@ Please see [here](CHANGELOG.md)
 * [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
 * [Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET) (.NET)
 * [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink) ([DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/), .NET)
+* [Luna](https://github.com/CharlotteDunois/Luna) ([Yasmin](https://github.com/CharlotteDunois/Yasmin) or generic, PHP)
+* [gavalink](https://github.com/foxbot/gavalink) (Go)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ### Supports 2.x:
