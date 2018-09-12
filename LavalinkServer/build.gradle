@@ -36,7 +36,7 @@ test {
 }
 
 dependencies {
-    compile group: 'space.npstr', name: 'Magma', version: magmaVersion
+    compile 'com.github.Frederikam2:magma:bee4ebfbeb' //compile group: 'space.npstr', name: 'Magma', version: magmaVersion
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
     compile group: 'com.sedmelluq', name: 'jda-nas', version: jdaNasVersion
 

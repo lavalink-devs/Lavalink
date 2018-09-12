@@ -56,7 +56,6 @@ public class SocketServer extends TextWebSocketHandler {
 
     private static final Logger log = LoggerFactory.getLogger(SocketServer.class);
 
-    private final MagmaApi magmaApi = MagmaApi.of(this::getAudioSendFactory);
     // userId <-> shardCount
     private final Map<String, Integer> shardCounts = new ConcurrentHashMap<>();
     private final Map<String, SocketContext> contextMap = new HashMap<>();
@@ -80,7 +79,7 @@ public class SocketServer extends TextWebSocketHandler {
 
         shardCounts.put(userId, shardCount);
 
-        contextMap.put(session.getId(), new SocketContext(audioPlayerManagerSupplier, session, this, userId, magmaApi));
+        contextMap.put(session.getId(), new SocketContext(audioPlayerManagerSupplier, session, this, userId));
         log.info("Connection successfully established from " + session.getRemoteAddress());
     }
 
@@ -137,7 +136,7 @@ public class SocketServer extends TextWebSocketHandler {
                         .endpoint(endpoint)
                         .token(token)
                         .build();
-                magmaApi.provideVoiceServerUpdate(member, serverUpdate);
+                sktContext.getMagma().provideVoiceServerUpdate(member, serverUpdate);
                 break;
 
             /* Player ops */
@@ -166,7 +165,7 @@ public class SocketServer extends TextWebSocketHandler {
                             .userId(context.getUserId())
                             .guildId(json.getString("guildId"))
                             .build();
-                    magmaApi.setSendHandler(m, context.getPlayer(json.getString("guildId")));
+                    context.getMagma().setSendHandler(m, context.getPlayer(json.getString("guildId")));
 
                     sendPlayerUpdate(session, player);
                 } catch (IOException e) {
@@ -199,8 +198,8 @@ public class SocketServer extends TextWebSocketHandler {
                         .userId(socketContext.getUserId())
                         .guildId(json.getString("guildId"))
                         .build();
-                magmaApi.removeSendHandler(mem);
-                magmaApi.closeConnection(mem);
+                socketContext.getMagma().removeSendHandler(mem);
+                socketContext.getMagma().closeConnection(mem);
                 break;
             default:
                 log.warn("Unexpected operation: " + json.getString("op"));
@@ -221,7 +220,7 @@ public class SocketServer extends TextWebSocketHandler {
         return contextMap.values();
     }
 
-    private IAudioSendFactory getAudioSendFactory(Member member) {
+    IAudioSendFactory getAudioSendFactory(Member member) {
         int shardCount = shardCounts.getOrDefault(member.getUserId(), 1);
         int shardId = Util.getShardFromSnowflake(member.getGuildId(), shardCount);
 

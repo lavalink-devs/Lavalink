@@ -24,13 +24,19 @@ package lavalink.server.io;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import lavalink.server.player.Player;
+import lavalink.server.util.Util;
+import lavalink.server.util.Ws;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
 import space.npstr.magma.MagmaApi;
 import space.npstr.magma.MagmaMember;
 import space.npstr.magma.Member;
+import space.npstr.magma.events.api.MagmaEvent;
+import space.npstr.magma.events.api.WebSocketClosedEvent;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +44,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class SocketContext {
@@ -53,12 +60,13 @@ public class SocketContext {
     private ScheduledExecutorService statsExecutor;
     public final ScheduledExecutorService playerUpdateService;
 
-    SocketContext(Supplier<AudioPlayerManager> audioPlayerManagerSupplier, WebSocketSession socket, SocketServer socketServer, String userId,
-                  MagmaApi magmaApi) {
+    SocketContext(Supplier<AudioPlayerManager> audioPlayerManagerSupplier, WebSocketSession socket,
+                  SocketServer socketServer, String userId) {
         this.audioPlayerManager = audioPlayerManagerSupplier.get();
         this.socket = socket;
         this.userId = userId;
-        this.magmaApi = magmaApi;
+        this.magmaApi = MagmaApi.of(socketServer::getAudioSendFactory);
+        magmaApi.getEventStream().subscribe(this::handleMagmaEvent);
 
         statsExecutor = Executors.newSingleThreadScheduledExecutor();
         statsExecutor.scheduleAtFixedRate(new StatsTask(this, socketServer), 0, 1, TimeUnit.MINUTES);
@@ -97,6 +105,25 @@ public class SocketContext {
         return newList;
     }
 
+    MagmaApi getMagma() {
+        return magmaApi;
+    }
+
+    private void handleMagmaEvent(MagmaEvent magmaEvent) {
+        if (magmaEvent instanceof WebSocketClosedEvent) {
+            WebSocketClosedEvent event = (WebSocketClosedEvent) magmaEvent;
+            JSONObject out = new JSONObject();
+            out.put("op", "event");
+            out.put("type", "WebSocketClosedEvent");
+            out.put("guildId", event.getMember().getGuildId());
+            out.put("reason", event.getReason());
+            out.put("code", event.getCloseCode());
+            out.put("byRemote", event.isByRemote());
+
+            Ws.send(socket, out);
+        }
+    }
+
     void shutdown() {
         log.info("Shutting down " + getPlayingPlayers().size() + " playing players.");
         statsExecutor.shutdown();
@@ -112,6 +139,7 @@ public class SocketContext {
         });
 
         players.values().forEach(Player::stop);
+        magmaApi.shutdown();
     }
 
     public AudioPlayerManager getAudioPlayerManager() {
