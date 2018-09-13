@@ -75,7 +75,11 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
     }
 
     public void seekTo(long position) {
-        player.getPlayingTrack().setPosition(position);
+        AudioTrack track = player.getPlayingTrack();
+
+        if (track == null) throw new RuntimeException("Can't seek when not playing anything");
+
+        track.setPosition(position);
     }
 
     public void setVolume(int volume) {
