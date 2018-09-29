@@ -65,14 +65,15 @@ users about the compatibility of their clients to the Lavalink server.
 * [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) ([eris](https://github.com/abalabahaha/eris), JavaScript)
 * [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
+* [Victoria](https://github.com/Yucked/Bot.NET/tree/master/Victoria) ([Discord.NET](https://github.com/RogueException/Discord.Net), .NET)
 * [Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET) (.NET)
 * [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink) ([DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/), .NET)
 * [Luna](https://github.com/CharlotteDunois/Luna) ([Yasmin](https://github.com/CharlotteDunois/Yasmin) or generic, PHP)
 * [gavalink](https://github.com/foxbot/gavalink) (Go)
+* [Magma](https://github.com/initzx/magma/) (discord.py, Python)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ### Supports 2.x:
-* [Magma](https://github.com/initzx/magma/) (discord.py, Python)
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
 * [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) (Discord.js, JavaScript)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
