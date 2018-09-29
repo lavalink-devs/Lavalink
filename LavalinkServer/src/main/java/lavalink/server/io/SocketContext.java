@@ -24,7 +24,6 @@ package lavalink.server.io;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import lavalink.server.player.Player;
-import lavalink.server.util.Util;
 import lavalink.server.util.Ws;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -34,9 +33,8 @@ import space.npstr.magma.MagmaApi;
 import space.npstr.magma.MagmaMember;
 import space.npstr.magma.Member;
 import space.npstr.magma.events.api.MagmaEvent;
-import space.npstr.magma.events.api.WebSocketClosedEvent;
+import space.npstr.magma.events.api.WebSocketClosed;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +42,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class SocketContext {
@@ -110,8 +107,8 @@ public class SocketContext {
     }
 
     private void handleMagmaEvent(MagmaEvent magmaEvent) {
-        if (magmaEvent instanceof WebSocketClosedEvent) {
-            WebSocketClosedEvent event = (WebSocketClosedEvent) magmaEvent;
+        if (magmaEvent instanceof WebSocketClosed) {
+            WebSocketClosed event = (WebSocketClosed) magmaEvent;
             JSONObject out = new JSONObject();
             out.put("op", "event");
             out.put("type", "WebSocketClosedEvent");
