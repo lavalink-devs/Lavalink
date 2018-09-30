@@ -1,5 +1,6 @@
 # Implementation guidelines
-How to write your own client. The Java client will serve as an example implementation.
+How to write your own client. The Java [Lavalink-Client](https://github.com/FredBoat/Lavalink-Client) will serve as an example implementation.
+The Java client has support for JDA, but can also be adapted to work with other JVM libraries.
 
 ## Requirements
 * You must be able to send messages via a shard's mainWS connection.
@@ -10,8 +11,13 @@ How to write your own client. The Java client will serve as an example implement
     * Hybi 10
     * Hixie 76
     * Hixie 75
-    
-## Changes v1.3 -> v2.0 
+
+## Significant changes v2.0 -> v3.0 
+* The response of `/loadtracks` has been completely changed (again since the initial v3.0 pre-release).
+* Lavalink v3.0 now reports its version as a handshake response header.
+`Lavalink-Major-Version` has a value of `3` for v3.0 only. It's missing for any older version.
+
+## Significant changes v1.3 -> v2.0 
 With the release of v2.0 many unnecessary ops were removed:
 
 * `connect`
@@ -95,7 +101,7 @@ Make the player seek to a position of the track. Position is in millis
 }
 ```
 
-Set player volume. Volume may range from 0 to 150. 100 is default.
+Set player volume. Volume may range from 0 to 1000. 100 is default.
 ```json
 {
     "op": "volume",
@@ -116,7 +122,7 @@ and you can send the same VOICE_SERVER_UPDATE to a new node.
 
 ### Incoming messages
 See 
-[LavalinkSocket.java](https://github.com/Frederikam/Lavalink/blob/dev/LavalinkClient/src/main/java/lavalink/client/io/LavalinkSocket.java)
+[LavalinkSocket.java](https://github.com/FredBoat/Lavalink-Client/blob/master/src/main/java/lavalink/client/io/LavalinkSocket.java)
 for client implementation
 
 Position information about a player. Includes unix timestamp.
@@ -225,22 +231,47 @@ Authorization: youshallnotpass
 
 Response:
 ```json
-[
-  {
-    "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-    "info": {
-      "identifier": "dQw4w9WgXcQ",
-      "isSeekable": true,
-      "author": "RickAstleyVEVO",
-      "length": 212000,
-      "isStream": false,
-      "position": 0,
-      "title": "Rick Astley - Never Gonna Give You Up",
-      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+{
+  "loadType": "TRACK_LOADED",
+  "playlistInfo": {},
+  "tracks": [
+    {
+      "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+      "info": {
+        "identifier": "dQw4w9WgXcQ",
+        "isSeekable": true,
+        "author": "RickAstleyVEVO",
+        "length": 212000,
+        "isStream": false,
+        "position": 0,
+        "title": "Rick Astley - Never Gonna Give You Up",
+        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      }
     }
-  }
-]
+  ]
+}
 ```
+
+If the identifier leads to a playlist, `playlistInfo` will contain two properties, `name` and `selectedTrack`
+```json
+{
+  "loadType": "PLAYLIST_LOADED",
+  "playlistInfo": {
+    "name": "Example YouTube Playlist",
+    "selectedTrack": 3
+  },
+  "tracks": [
+    ...
+  ]
+}
+```
+
+Additionally, in every `/loadtracks` response, a `loadType` property is returned which can be used to judge the response from Lavalink properly. It can be one of the following:
+* `TRACK_LOADED` - Returned when a single track is loaded.
+* `PLAYLIST_LOADED` - Returned when a playlist is loaded.
+* `SEARCH_RESULT` - Returned when a search result is made (i.e `ytsearch: some song`).
+* `NO_MATCHES` - Returned if no matches/sources could be found for a given identifier.
+* `LOAD_FAILED` - Returned if Lavaplayer failed to load something for some reason.
 
 ### Special notes
 * When your shard's mainWS connection dies, so does all your lavalink audio connections.

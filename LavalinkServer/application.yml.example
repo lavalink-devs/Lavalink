@@ -1,6 +1,9 @@
 server: # REST server
   port: 2333
   address: 0.0.0.0
+spring:
+  main:
+    banner-mode: log
 lavalink:
   server:
     password: "youshallnotpass"
@@ -16,6 +19,27 @@ lavalink:
       mixer: true
       http: true
       local: false
-    sentryDsn: ""
     bufferDurationMs: 400
     youtubePlaylistLoadLimit: 600
+    gc-warnings: true
+
+metrics:
+  prometheus:
+    enabled: false
+    endpoint: /metrics
+
+sentry:
+  dsn: ""
+#  tags:
+#    some_key: some_value
+#    another_key: another_value
+
+logging:
+  file:
+    max-history: 30
+    max-size: 1GB
+  path: ./logs/
+
+  level:
+    root: INFO
+    lavalink: INFO

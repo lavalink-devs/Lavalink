@@ -1,19 +1,23 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'com.gorylenko.gradle-git-properties'
+apply plugin: 'org.ajoberstar.grgit'
 
 description = 'Play audio to discord voice channels'
 mainClassName = "lavalink.server.Launcher"
-version '2.0.1'
+version = "${versionFromTag()}".toString()
 ext {
     moduleName = 'Lavalink-Server'
 }
 
 bootJar {
     archiveName = "Lavalink.jar"
-
-    requiresUnpack '**/jda-nas*.jar' //otherwise we get missing classes exceptions
 }
+
+sourceCompatibility = 10
+targetCompatibility = 10
 
 bootRun {
     //compiling tests during bootRun increases the likelyhood of catching broken tests locally instead of on the CI
@@ -27,19 +31,62 @@ bootRun {
     }
 }
 
+test {
+    useJUnitPlatform()
+}
+
 dependencies {
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
     compile group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: jdaAudioVersion
-    compile group: 'com.github.FredBoat', name: 'jda-nas', version: jdaNasVersion
+    compile group: 'com.github.FredBoat.jda-nas', name: 'jda-nas', version: jdaNasVersion
     compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: jappVersion
     compile group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
     compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
-    compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
     compile group: 'io.sentry', name: 'sentry-logback', version: sentryLogbackVersion
     compile group: 'com.github.oshi', name: 'oshi-core', version: oshiVersion
     compile group: 'org.json', name: 'json', version: jsonOrgVersion
-    compile group: 'com.google.guava', name: 'guava', version: guavaVersion
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
+    compileOnly group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: spotbugsAnnotationsVersion
+
+    compile group: 'io.prometheus', name: 'simpleclient', version: prometheusVersion
+    compile group: 'io.prometheus', name: 'simpleclient_hotspot', version: prometheusVersion
+    compile group: 'io.prometheus', name: 'simpleclient_logback', version: prometheusVersion
+    compile group: 'io.prometheus', name: 'simpleclient_servlet', version: prometheusVersion
+}
+
+processResources {
+    //inject values into app.properties
+    filesMatching("**/app.properties") {
+        filter ReplaceTokens, tokens: [
+                "project.version"   : project.version,
+                "project.groupId"   : project.group,
+                "project.artifactId": project.ext.moduleName,
+                "env.BUILD_NUMBER"  : (System.getenv('CI') ? System.getenv('BUILD_NUMBER') : 'DEV'),
+                "env.BUILD_TIME"    : System.currentTimeMillis() + ''
+        ]
+    }
+}
+
+build {
+    doLast {
+        println 'Version: ' + version
+    }
+}
+
+@SuppressWarnings("GrMethodMayBeStatic")
+String versionFromTag() {
+
+    def headTag = grgit.tag.list().find {
+        it.commit == grgit.head()
+    }
+
+    def clean = grgit.status().clean //uncommitted changes? -> should be SNAPSHOT
+
+    if (headTag && clean) {
+        headTag.getName()
+    } else {
+        "${grgit.head().id}-SNAPSHOT"
+    }
 }
 
 //create a simple version file that we will be reading to create appropriate docker tags
