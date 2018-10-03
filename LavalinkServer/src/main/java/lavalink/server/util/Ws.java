@@ -14,6 +14,13 @@ public class Ws {
 
     private static final Logger log = LoggerFactory.getLogger(Ws.class);
 
+    /**
+     * Like #send(), but without logging an exception if the socket is closed.
+     */
+    public static void sendIfOpen(WebSocketSession session, JSONObject json) {
+        if (session.isOpen()) send(session, json);
+    }
+
     public static void send(WebSocketSession session, JSONObject json) {
         UndertowSession undertowSession = (UndertowSession) ((StandardWebSocketSession) session).getNativeSession();
         WebSockets.sendText(json.toString(), undertowSession.getWebSocketChannel(),

@@ -62,7 +62,7 @@ public class EventEmitter extends AudioEventAdapter {
 
         out.put("reason", endReason.toString());
 
-        Ws.send(linkPlayer.getSocket().getSession(), out);
+        Ws.sendIfOpen(linkPlayer.getSocket().getSession(), out);
     }
 
     // These exceptions are already logged by Lavaplayer
@@ -80,7 +80,7 @@ public class EventEmitter extends AudioEventAdapter {
 
         out.put("error", exception.getMessage());
 
-        Ws.send(linkPlayer.getSocket().getSession(), out);
+        Ws.sendIfOpen(linkPlayer.getSocket().getSession(), out);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class EventEmitter extends AudioEventAdapter {
 
         out.put("thresholdMs", thresholdMs);
 
-        Ws.send(linkPlayer.getSocket().getSession(), out);
+        Ws.sendIfOpen(linkPlayer.getSocket().getSession(), out);
         SocketServer.sendPlayerUpdate(linkPlayer.getSocket().getSession(), linkPlayer);
     }
 
