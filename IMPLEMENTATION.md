@@ -120,10 +120,19 @@ and you can send the same VOICE_SERVER_UPDATE to a new node.
 }
 ```
 
+Request player and voice info, either for a particular guild or all of them. Note that `guildId` and `getAll` are mutually exclusive, and you should only send one of the two. 
+
+```json
+{
+    "op": "reqState",
+    "guildId": "...",
+    "getAll": true
+}
+```
+
 ### Incoming messages
-See 
-[LavalinkSocket.java](https://github.com/FredBoat/Lavalink-Client/blob/master/src/main/java/lavalink/client/io/LavalinkSocket.java)
-for client implementation
+
+See [LavalinkSocket.java](https://github.com/FredBoat/Lavalink-Client/blob/master/src/main/java/lavalink/client/io/LavalinkSocket.java) for client implementation
 
 Position information about a player. Includes unix timestamp.
 ```json
@@ -137,7 +146,36 @@ Position information about a player. Includes unix timestamp.
 }
 ```
 
+`resState` is always sent in response to `reqState`. 
+
+* `time` is a unix timestamp, similar to the one given in `playerUpdate`.
+* `guildId` is the non-null guild ID.
+* `connected` shows if we have a connected voice connection to one of Discord's voice servers.
+* `player` holds data about lavaplayer state. May be null.
+* `track` is a base64 representation of a lavaplayer track. May be null.
+* `position` is the position of the current track. Will be `-1` if there is no track.
+* `paused` is whether or not the player is paused. 
+
+```json
+{
+    "op": "resState",
+    "time": 1500467109,
+    "array": [
+        {
+            "guildId": "...",
+            "connected": true,
+            "player": {
+                "track": "lavaplayer binary blob",
+                "position": 60000,
+                "paused": false,
+            }
+        }
+    ]
+}
+```
+
 A collection of stats sent every minute. 
+
 ```json
 {
     "op": "stats",
@@ -289,10 +327,43 @@ Additionally, in every `/loadtracks` response, a `loadType` property is returned
 * `NO_MATCHES` - Returned if no matches/sources could be found for a given identifier.
 * `LOAD_FAILED` - Returned if Lavaplayer failed to load something for some reason.
 
+### Resuming Lavalink sessions
+
+What happens after your client disconnects is dependent on whether or not the session has been configured for resuming.
+
+* If resuming is disabled all voice connections are closed immediately.
+* If resuming is enabled all music will continue playing. You will then be able to resume your session, allowing you to control the players again.
+
+To enable resuming, you must send a `configureResuming` message.
+
+* `key` is the string you will need to send when resuming the session. Set to null to disable resuming altogether. Defaults to null.
+* `timeout` is the number of seconds after disconnecting before the session is closed anyways. This is useful for avoiding accidental leaks. Defaults to `60` (seconds).
+
+```json
+{
+    "op": "configureResuming",
+    "key": "myResumeKey",
+    "timeout": 60
+}
+```
+
+To resume a session, specify the resume key in your WebSocket handshake request headers:
+
+```
+Resume-Key: The resume key of the session you want to resume.
+```
+
+You can tell if your session was resumed by looking at the handshake response headerr `Session-Resumed` which is either `true` or `false`:
+
+```
+Session-Resumed: true
+```
+
 ### Special notes
-* When your shard's mainWS connection dies, so does all your lavalink audio connections.
-    * This also includes resumes
-* When a client connection to Lavalink-Server disconnects, all connections and players for that session are shut down.
+
+* When your shard's main WS connection dies, so does all your lavalink audio connections.
+  * This also includes resumes
+
 * If Lavalink-Server suddenly dies (think SIGKILL) the client will have to terminate any audio connections by sending this event:
 ```json
 {"op":4,"d":{"self_deaf":false,"guild_id":"GUILD_ID_HERE","channel_id":null,"self_mute":false}}
