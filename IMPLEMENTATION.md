@@ -173,7 +173,7 @@ Server emitted an event. See the client implementation below.
 ```json
 {
     "op": "event",
-    ...
+    "type": "..."
 }
 ```
 
@@ -185,7 +185,7 @@ Server emitted an event. See the client implementation below.
  * 2. TrackExceptionEvent
  * 3. TrackStuckEvent
  * <p>
- * The remaining are caused by the client
+ * The remaining lavaplayer events are caused by client actions, and are therefore not forwarded via WS.
  */
 private void handleEvent(JSONObject json) throws IOException {
     LavalinkPlayer player = (LavalinkPlayer) lavalink.getPlayer(json.getString("guildId"));
@@ -220,6 +220,22 @@ private void handleEvent(JSONObject json) throws IOException {
 ```
 
 See also: [AudioTrackEndReason.java](https://github.com/sedmelluq/lavaplayer/blob/master/main/src/main/java/com/sedmelluq/discord/lavaplayer/track/AudioTrackEndReason.java)
+
+Additionally there is also the `WebSocketClosedEvent`, which signals when an audio web socket (to Discord) is closed.
+This can happen for various reasons (normal and abnormal), e.g when using an expired voice server update.
+4xxx codes are usually bad.
+See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes).
+
+```json
+{
+    "op": "event",
+    "type": "WebSocketClosedEvent",
+    "guildId": "...",
+    "code": 4006,
+    "reason": "Your session is no longer valid.",
+    "byRemote": true
+}
+```
 
 ### REST API
 The REST api is used to resolve audio tracks for use with the `play` op. 

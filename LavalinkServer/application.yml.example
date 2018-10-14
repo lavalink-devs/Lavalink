@@ -1,4 +1,4 @@
-server: # REST server
+server: # REST and WS server
   port: 2333
   address: 0.0.0.0
 spring:
@@ -7,9 +7,6 @@ spring:
 lavalink:
   server:
     password: "youshallnotpass"
-    ws:
-      port: 80
-      host: 0.0.0.0
     sources:
       youtube: true
       bandcamp: true

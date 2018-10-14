@@ -36,7 +36,11 @@ public class AppInfo {
         this.groupId = prop.getProperty("groupId");
         this.artifactId = prop.getProperty("artifactId");
         this.buildNumber = prop.getProperty("buildNumber");
-        this.buildTime = Long.parseLong(prop.getProperty("buildTime"));
+        long bTime = -1L;
+        try {
+            bTime = Long.parseLong(prop.getProperty("buildTime"));
+        } catch (NumberFormatException ignored) { }
+        this.buildTime = bTime;
     }
 
     public String getVersion() {

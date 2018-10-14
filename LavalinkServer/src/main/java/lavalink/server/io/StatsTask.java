@@ -25,6 +25,7 @@ package lavalink.server.io;
 import lavalink.server.Launcher;
 import lavalink.server.player.AudioLossCounter;
 import lavalink.server.player.Player;
+import lavalink.server.util.Ws;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,8 @@ import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OSProcess;
 import oshi.software.os.OperatingSystem;
+
+import java.io.IOException;
 
 public class StatsTask implements Runnable {
 
@@ -56,7 +59,7 @@ public class StatsTask implements Runnable {
         }
     }
 
-    public void sendStats() {
+    private void sendStats() throws IOException {
         JSONObject out = new JSONObject();
 
         final int[] playersTotal = {0};
@@ -116,14 +119,14 @@ public class StatsTask implements Runnable {
             out.put("frameStats", frames);
         }
 
-        context.getSocket().send(out.toString());
+        Ws.send(context.getSession(), out);
     }
 
     private double uptime = 0;
     private double cpuTime = 0;
 
     private double getProcessRecentCpuUsage() {
-        double output = 0d;
+        double output;
         HardwareAbstractionLayer hal = si.getHardware();
         OperatingSystem os = si.getOperatingSystem();
         OSProcess p = os.getProcess(os.getProcessId());
