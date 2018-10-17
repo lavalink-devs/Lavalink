@@ -86,7 +86,9 @@ String versionFromTag() {
         it.commit == grgit.head()
     }
 
-    def clean = grgit.status().clean //uncommitted changes? -> should be SNAPSHOT
+    // Uncommitted changes? -> should be SNAPSHOT
+    // Also watch out for false positives in the CI build
+    def clean = grgit.status().clean && System.getenv('CI') == null
 
     if (headTag && clean) {
         headTag.getName()
