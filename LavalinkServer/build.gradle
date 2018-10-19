@@ -20,7 +20,7 @@ sourceCompatibility = 10
 targetCompatibility = 10
 
 bootRun {
-    //compiling tests during bootRun increases the likelyhood of catching broken tests locally instead of on the CI
+    //compiling tests during bootRun increases the likelihood of catching broken tests locally instead of on the CI
     dependsOn compileTestJava
 
     //pass in custom jvm args
