@@ -83,7 +83,7 @@ build {
 String versionFromTag() {
 
     def headTag = grgit.tag.list().find {
-        it.commit == grgit.head()
+        it.commit.getId() == grgit.head().getId()
     }
 
     // Uncommitted changes? -> should be SNAPSHOT
