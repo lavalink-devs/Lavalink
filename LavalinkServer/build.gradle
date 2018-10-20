@@ -88,7 +88,7 @@ String versionFromTag() {
 
     // Uncommitted changes? -> should be SNAPSHOT
     // Also watch out for false positives in the CI build
-    def clean = grgit.status().clean && System.getenv('CI') == null
+    def clean = grgit.status().clean || System.getenv('CI') != null
 
     if (!clean) {
         println("Git state is dirty, setting version as snapshot")
