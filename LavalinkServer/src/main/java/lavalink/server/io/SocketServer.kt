@@ -55,6 +55,7 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
     private val shardCounts = ConcurrentHashMap<String, Int>()
     private val contextMap = HashMap<String, SocketContext>()
     private val sendFactories = ConcurrentHashMap<Int, IAudioSendFactory>()
+    private val handlers = WebSocketHandlers(contextMap)
 
 
     val contexts: Collection<SocketContext>
@@ -98,95 +99,14 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
         }
 
         when (json.getString("op")) {
-            /* JDAA ops */
-            "voiceUpdate" -> {
-                val sessionId = json.getString("sessionId")
-                val guildId = json.getString("guildId")
-
-                val event = json.getJSONObject("event")
-                val endpoint = event.optString("endpoint")
-                val token = event.getString("token")
-
-                //discord sometimes send a partial server update missing the endpoint, which can be ignored.
-                if (endpoint == null || endpoint.isEmpty()) {
-                    return
-                }
-
-                val sktContext = contextMap[session.id]!!
-                val member = MagmaMember.builder()
-                        .userId(sktContext.userId)
-                        .guildId(guildId)
-                        .build()
-                val serverUpdate = MagmaServerUpdate.builder()
-                        .sessionId(sessionId)
-                        .endpoint(endpoint)
-                        .token(token)
-                        .build()
-                sktContext.magma.provideVoiceServerUpdate(member, serverUpdate)
-            }
-
-            /* Player ops */
-            "play" -> try {
-                val ctx = contextMap[session.id]!!
-                val player = ctx.getPlayer(json.getString("guildId"))
-                val track = Util.toAudioTrack(ctx.audioPlayerManager, json.getString("track"))
-                if (json.has("startTime")) {
-                    track.position = json.getLong("startTime")
-                }
-                if (json.has("endTime")) {
-                    track.setMarker(TrackMarker(json.getLong("endTime"), TrackEndMarkerHandler(player)))
-                }
-
-                player.setPause(json.optBoolean("pause", false))
-                if (json.has("volume")) {
-                    player.setVolume(json.getInt("volume"))
-                }
-
-                player.play(track)
-
-                val context = contextMap[session.id]!!
-
-                val m = MagmaMember.builder()
-                        .userId(context.userId)
-                        .guildId(json.getString("guildId"))
-                        .build()
-                context.magma.setSendHandler(m, context.getPlayer(json.getString("guildId")))
-
-                sendPlayerUpdate(session, player)
-            } catch (e: IOException) {
-                throw RuntimeException(e)
-            }
-
-            "stop" -> {
-                val player = contextMap[session.id]!!.getPlayer(json.getString("guildId"))
-                player.stop()
-            }
-            "pause" -> {
-                val player = contextMap[session.id]!!.getPlayer(json.getString("guildId"))
-                player.setPause(json.getBoolean("pause"))
-                sendPlayerUpdate(session, player)
-            }
-            "seek" -> {
-                val player = contextMap[session.id]!!.getPlayer(json.getString("guildId"))
-                player.seekTo(json.getLong("position"))
-                sendPlayerUpdate(session, player)
-            }
-            "volume" -> {
-                val player = contextMap[session.id]!!.getPlayer(json.getString("guildId"))
-                player.setVolume(json.getInt("volume"))
-            }
-            "destroy" -> {
-                val socketContext = contextMap[session.id]!!
-                val player = socketContext.players.remove(json.getString("guildId"))
-                player?.stop()
-                val mem = MagmaMember.builder()
-                        .userId(socketContext.userId)
-                        .guildId(json.getString("guildId"))
-                        .build()
-                socketContext.magma.removeSendHandler(mem)
-                socketContext.magma.closeConnection(mem)
-            }
-            else -> log.warn("Unexpected operation: " + json.getString("op"))
+            "voiceUpdate" -> handlers.voiceUpdate(session, json)
+            "play"        -> handlers.play(session, json)
+            "stop"        -> handlers.stop(session, json)
+            "pause"       -> handlers.pause(session, json)
+            "seek"        -> handlers.seek(session, json)
+            "volume"      -> handlers.volume(session, json)
+            "destroy"     -> handlers.destroy(session, json)
+            else          -> log.warn("Unexpected operation: " + json.getString("op"))
         }
     }
 
