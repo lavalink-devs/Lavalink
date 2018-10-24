@@ -20,7 +20,7 @@ sourceCompatibility = 10
 targetCompatibility = 10
 
 bootRun {
-    //compiling tests during bootRun increases the likelyhood of catching broken tests locally instead of on the CI
+    //compiling tests during bootRun increases the likelihood of catching broken tests locally instead of on the CI
     dependsOn compileTestJava
 
     //pass in custom jvm args
@@ -36,16 +36,22 @@ test {
 }
 
 dependencies {
+    compile group: 'space.npstr', name: 'Magma', version: magmaVersion
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
-    compile group: 'com.github.DV8FromTheWorld', name: 'JDA-Audio', version: jdaAudioVersion
-    compile group: 'com.github.FredBoat.jda-nas', name: 'jda-nas', version: jdaNasVersion
+    compile group: 'com.sedmelluq', name: 'jda-nas', version: jdaNasVersion
+
     compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: jappVersion
-    compile group: 'org.java-websocket', name: 'Java-WebSocket', version: javaWebSocketVersion
+    //required by japp
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: commonsLangVersion
+    compile group: 'org.springframework', name: 'spring-websocket', version: springWebSocketVersion
     compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
     compile group: 'io.sentry', name: 'sentry-logback', version: sentryLogbackVersion
     compile group: 'com.github.oshi', name: 'oshi-core', version: oshiVersion
     compile group: 'org.json', name: 'json', version: jsonOrgVersion
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
+    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion) {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-undertow', version: springBootVersion
     compileOnly group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: spotbugsAnnotationsVersion
 
     compile group: 'io.prometheus', name: 'simpleclient', version: prometheusVersion
@@ -77,10 +83,16 @@ build {
 String versionFromTag() {
 
     def headTag = grgit.tag.list().find {
-        it.commit == grgit.head()
+        it.commit.getId() == grgit.head().getId()
     }
 
-    def clean = grgit.status().clean //uncommitted changes? -> should be SNAPSHOT
+    // Uncommitted changes? -> should be SNAPSHOT
+    // Also watch out for false positives in the CI build
+    def clean = grgit.status().clean || System.getenv('CI') != null
+
+    if (!clean) {
+        println("Git state is dirty, setting version as snapshot")
+    }
 
     if (headTag && clean) {
         headTag.getName()

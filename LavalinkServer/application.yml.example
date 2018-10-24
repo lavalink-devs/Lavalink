@@ -1,4 +1,4 @@
-server: # REST server
+server: # REST and WS server
   port: 2333
   address: 0.0.0.0
 spring:
@@ -7,9 +7,6 @@ spring:
 lavalink:
   server:
     password: "youshallnotpass"
-    ws:
-      port: 80
-      host: 0.0.0.0
     sources:
       youtube: true
       bandcamp: true
@@ -20,7 +17,7 @@ lavalink:
       http: true
       local: false
     bufferDurationMs: 400
-    youtubePlaylistLoadLimit: 600
+    youtubePlaylistLoadLimit: 6 # Number of pages at 100 each
     gc-warnings: true
 
 metrics:

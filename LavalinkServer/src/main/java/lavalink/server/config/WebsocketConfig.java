@@ -1,31 +1,29 @@
 package lavalink.server.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import lavalink.server.io.HandshakeInterceptorImpl;
+import lavalink.server.io.SocketServer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-/**
- * Created by napster on 05.03.18.
- */
-@ConfigurationProperties(prefix = "lavalink.server.ws")
-@Component
-public class WebsocketConfig {
+@Configuration
+@EnableWebSocket
+public class WebsocketConfig implements WebSocketConfigurer {
 
-    private int port = 80;
-    private String host = "0.0.0.0";
+    private final SocketServer server;
+    private final HandshakeInterceptorImpl handshakeInterceptor;
 
-    public int getPort() {
-        return port;
+    @Autowired
+    public WebsocketConfig(SocketServer server, HandshakeInterceptorImpl handshakeInterceptor) {
+        this.server = server;
+        this.handshakeInterceptor = handshakeInterceptor;
     }
 
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(server, "/")
+                .addInterceptors(handshakeInterceptor);
     }
 }
