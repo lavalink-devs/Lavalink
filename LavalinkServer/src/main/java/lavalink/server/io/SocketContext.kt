@@ -40,19 +40,28 @@ import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
 import java.util.function.Supplier
 
-class SocketContext internal constructor(audioPlayerManagerSupplier: Supplier<AudioPlayerManager>, val session: WebSocketSession,
-                                         socketServer: SocketServer, val userId: String) {
+class SocketContext internal constructor(
+        audioPlayerManagerSupplier: Supplier<AudioPlayerManager>,
+        var session: WebSocketSession,
+        val socketServer: SocketServer,
+        val userId: String
+) {
+
+    companion object {
+        private val log = LoggerFactory.getLogger(SocketContext::class.java)
+    }
 
     val audioPlayerManager: AudioPlayerManager = audioPlayerManagerSupplier.get()
     internal val magma: MagmaApi = MagmaApi.of { socketServer.getAudioSendFactory(it) }
     //guildId <-> Player
     val players = ConcurrentHashMap<String, Player>()
-    private val statsExecutor: ScheduledExecutorService
+    private val executor: ScheduledExecutorService
     val playerUpdateService: ScheduledExecutorService
+    var sessionPaused = false
 
     /** Null means disabled. See implementation notes */
     var resumeKey: String? = null
-    var resumeTimeout: Int = 60 // Seconds
+    var resumeTimeout = 60L // Seconds
 
     val playingPlayers: List<Player>
         get() {
@@ -65,8 +74,8 @@ class SocketContext internal constructor(audioPlayerManagerSupplier: Supplier<Au
     init {
         magma.eventStream.subscribe { this.handleMagmaEvent(it) }
 
-        statsExecutor = Executors.newSingleThreadScheduledExecutor()
-        statsExecutor.scheduleAtFixedRate(StatsTask(this, socketServer), 0, 1, TimeUnit.MINUTES)
+        executor = Executors.newSingleThreadScheduledExecutor()
+        executor.scheduleAtFixedRate(StatsTask(this, socketServer), 0, 1, TimeUnit.MINUTES)
 
         playerUpdateService = Executors.newScheduledThreadPool(2) { r ->
             val thread = Thread(r)
@@ -99,9 +108,21 @@ class SocketContext internal constructor(audioPlayerManagerSupplier: Supplier<Au
         }
     }
 
+    fun pauseSession() {
+        sessionPaused = true
+        executor.schedule({
+            socketServer.onSessionResumeTimeout(this)
+        }, resumeTimeout, TimeUnit.SECONDS)
+    }
+
+    fun resumeSession(session: WebSocketSession) {
+        sessionPaused = false
+        this.session = session
+    }
+
     internal fun shutdown() {
         log.info("Shutting down " + playingPlayers.size + " playing players.")
-        statsExecutor.shutdown()
+        executor.shutdown()
         audioPlayerManager.shutdown()
         playerUpdateService.shutdown()
         players.keys.forEach { guildId ->
@@ -115,10 +136,5 @@ class SocketContext internal constructor(audioPlayerManagerSupplier: Supplier<Au
 
         players.values.forEach(Consumer<Player> { it.stop() })
         magma.shutdown()
-    }
-
-    companion object {
-
-        private val log = LoggerFactory.getLogger(SocketContext::class.java)
     }
 }

@@ -60,6 +60,8 @@ public class StatsTask implements Runnable {
     }
 
     private void sendStats() {
+        if (context.getSessionPaused()) return;
+
         JSONObject out = new JSONObject();
 
         final int[] playersTotal = {0};

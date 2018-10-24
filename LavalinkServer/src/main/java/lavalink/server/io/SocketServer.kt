@@ -49,10 +49,24 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
 
     // userId <-> shardCount
     private val shardCounts = ConcurrentHashMap<String, Int>()
-    private val contextMap = HashMap<String, SocketContext>()
+    val contextMap = HashMap<String, SocketContext>()
     private val sendFactories = ConcurrentHashMap<Int, IAudioSendFactory>()
-    private val handlers = WebSocketHandlers(contextMap)
+    @Suppress("LeakingThis")
+    private val handlers = WebSocketHandlers(this)
+    private val resumableSessions = mutableMapOf<String, SocketContext>()
 
+    companion object {
+        private val log = LoggerFactory.getLogger(SocketServer::class.java)
+
+        fun sendPlayerUpdate(session: WebSocketSession, player: Player) {
+            val json = JSONObject()
+            json.put("op", "playerUpdate")
+            json.put("guildId", player.guildId)
+            json.put("state", player.state)
+
+            Ws.send(session, json)
+        }
+    }
 
     val contexts: Collection<SocketContext>
         get() = contextMap.values
@@ -71,6 +85,22 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
         val context = contextMap.remove(session!!.id)
         if (context != null) {
             log.info("Connection closed from {} -- {}", session.remoteAddress, status)
+
+            if (context.resumeKey != null) {
+                resumableSessions[context.resumeKey!!] = context
+                context.pauseSession()
+                log.info("Connection closed from {} with status {} -- " +
+                        "Session can be resumed within the next {} seconds with key {}",
+                        session.remoteAddress,
+                        status,
+                        context.resumeTimeout,
+                        context.resumeKey
+                )
+                return
+            }
+
+            log.info("Connection closed from {} -- {}", session.remoteAddress, status)
+
             context.shutdown()
         }
     }
@@ -127,17 +157,8 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
         }
     }
 
-    companion object {
-
-        private val log = LoggerFactory.getLogger(SocketServer::class.java)
-
-        fun sendPlayerUpdate(session: WebSocketSession, player: Player) {
-            val json = JSONObject()
-            json.put("op", "playerUpdate")
-            json.put("guildId", player.guildId)
-            json.put("state", player.state)
-
-            Ws.send(session, json)
-        }
+    internal fun onSessionResumeTimeout(context: SocketContext) {
+        resumableSessions.remove(context.resumeKey)
+        context.shutdown()
     }
 }

@@ -9,7 +9,9 @@ import space.npstr.magma.MagmaMember
 import space.npstr.magma.MagmaServerUpdate
 import java.util.HashMap
 
-class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
+class WebSocketHandlers(socketServer: SocketServer) {
+
+    private val contextMap = socketServer.contextMap
 
     fun voiceUpdate(session: WebSocketSession, json: JSONObject) {
         val sessionId = json.getString("sessionId")
