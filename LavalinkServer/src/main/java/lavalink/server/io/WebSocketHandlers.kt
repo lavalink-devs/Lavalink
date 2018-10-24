@@ -100,4 +100,10 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         socketContext.magma.closeConnection(mem)
     }
 
+    fun configureResuming(session: WebSocketSession, json: JSONObject) {
+        val socketContext = contextMap[session.id]!!
+        socketContext.resumeKey = json.optString("key")
+        if (json.has("timeout")) socketContext.resumeTimeout = json.getInt("timeout")
+    }
+
 }

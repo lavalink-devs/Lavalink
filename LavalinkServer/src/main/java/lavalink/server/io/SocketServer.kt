@@ -25,11 +25,9 @@ package lavalink.server.io
 import com.github.shredder121.asyncaudio.jda.AsyncPacketProviderFactory
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import com.sedmelluq.discord.lavaplayer.track.TrackMarker
 import lavalink.server.config.AudioSendFactoryConfiguration
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.Player
-import lavalink.server.player.TrackEndMarkerHandler
 import lavalink.server.util.Util
 import lavalink.server.util.Ws
 import net.dv8tion.jda.core.audio.factory.IAudioSendFactory
@@ -40,10 +38,8 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
-import space.npstr.magma.*
-
-import java.io.IOException
-import java.util.HashMap
+import space.npstr.magma.Member
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Supplier
 
@@ -99,14 +95,17 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
         }
 
         when (json.getString("op")) {
-            "voiceUpdate" -> handlers.voiceUpdate(session, json)
-            "play"        -> handlers.play(session, json)
-            "stop"        -> handlers.stop(session, json)
-            "pause"       -> handlers.pause(session, json)
-            "seek"        -> handlers.seek(session, json)
-            "volume"      -> handlers.volume(session, json)
-            "destroy"     -> handlers.destroy(session, json)
-            else          -> log.warn("Unexpected operation: " + json.getString("op"))
+            // @formatter:off
+            "voiceUpdate"       -> handlers.voiceUpdate(session, json)
+            "play"              -> handlers.play(session, json)
+            "stop"              -> handlers.stop(session, json)
+            "pause"             -> handlers.pause(session, json)
+            "seek"              -> handlers.seek(session, json)
+            "volume"            -> handlers.volume(session, json)
+            "destroy"           -> handlers.destroy(session, json)
+            "configureResuming" -> handlers.configureResuming(session, json)
+            else                -> log.warn("Unexpected operation: " + json.getString("op"))
+            // @formatter:on
         }
     }
 

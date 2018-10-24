@@ -50,6 +50,10 @@ class SocketContext internal constructor(audioPlayerManagerSupplier: Supplier<Au
     private val statsExecutor: ScheduledExecutorService
     val playerUpdateService: ScheduledExecutorService
 
+    /** Null means disabled. See implementation notes */
+    var resumeKey: String? = null
+    var resumeTimeout: Int = 60 // Seconds
+
     val playingPlayers: List<Player>
         get() {
             val newList = LinkedList<Player>()
