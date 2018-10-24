@@ -353,7 +353,7 @@ To resume a session, specify the resume key in your WebSocket handshake request 
 Resume-Key: The resume key of the session you want to resume.
 ```
 
-You can tell if your session was resumed by looking at the handshake response headerr `Session-Resumed` which is either `true` or `false`:
+You can tell if your session was resumed by looking at the handshake response header `Session-Resumed` which is either `true` or `false`:
 
 ```
 Session-Resumed: true

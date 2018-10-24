@@ -33,10 +33,7 @@ import space.npstr.magma.MagmaMember
 import space.npstr.magma.events.api.MagmaEvent
 import space.npstr.magma.events.api.WebSocketClosed
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.*
 import java.util.function.Consumer
 import java.util.function.Supplier
 
@@ -62,6 +59,7 @@ class SocketContext internal constructor(
     /** Null means disabled. See implementation notes */
     var resumeKey: String? = null
     var resumeTimeout = 60L // Seconds
+    var sessionTimeoutFuture: ScheduledFuture<Unit>? = null
 
     val playingPlayers: List<Player>
         get() {
@@ -108,14 +106,16 @@ class SocketContext internal constructor(
         }
     }
 
-    fun pauseSession() {
+    fun pause() {
         sessionPaused = true
-        executor.schedule({
+        sessionTimeoutFuture = executor.schedule<Unit>({
             socketServer.onSessionResumeTimeout(this)
         }, resumeTimeout, TimeUnit.SECONDS)
     }
 
-    fun resumeSession(session: WebSocketSession) {
+    fun canResume() = sessionTimeoutFuture?.cancel(false) ?: false
+
+    fun resume(session: WebSocketSession) {
         sessionPaused = false
         this.session = session
     }

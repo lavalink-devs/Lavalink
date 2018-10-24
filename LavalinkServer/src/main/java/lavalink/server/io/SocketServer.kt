@@ -44,8 +44,11 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Supplier
 
 @Service
-class SocketServer(private val serverConfig: ServerConfig, private val audioPlayerManagerSupplier: Supplier<AudioPlayerManager>,
-                   private val audioSendFactoryConfiguration: AudioSendFactoryConfiguration) : TextWebSocketHandler() {
+class SocketServer(
+        private val serverConfig: ServerConfig,
+        private val audioPlayerManagerSupplier: Supplier<AudioPlayerManager>,
+        private val audioSendFactoryConfiguration: AudioSendFactoryConfiguration
+) : TextWebSocketHandler() {
 
     // userId <-> shardCount
     private val shardCounts = ConcurrentHashMap<String, Int>()
@@ -74,35 +77,48 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
     override fun afterConnectionEstablished(session: WebSocketSession) {
         val shardCount = Integer.parseInt(session.handshakeHeaders.getFirst("Num-Shards")!!)
         val userId = session.handshakeHeaders.getFirst("User-Id")!!
+        val resumeKey = session.handshakeHeaders.getFirst("Resume-Key")
 
         shardCounts[userId] = shardCount
+
+        var resumable: SocketContext? = null
+        if (resumeKey != null) resumable = resumableSessions.remove(resumeKey)
+
+        if (resumable != null) {
+            contextMap[session.id] = resumable
+            resumable.resume(session)
+            log.info("Resumed session with key $resumeKey")
+            return
+        }
 
         contextMap[session.id] = SocketContext(audioPlayerManagerSupplier, session, this, userId)
         log.info("Connection successfully established from " + session.remoteAddress!!)
     }
 
     override fun afterConnectionClosed(session: WebSocketSession?, status: CloseStatus?) {
-        val context = contextMap.remove(session!!.id)
-        if (context != null) {
-            log.info("Connection closed from {} -- {}", session.remoteAddress, status)
-
-            if (context.resumeKey != null) {
-                resumableSessions[context.resumeKey!!] = context
-                context.pauseSession()
-                log.info("Connection closed from {} with status {} -- " +
-                        "Session can be resumed within the next {} seconds with key {}",
-                        session.remoteAddress,
-                        status,
-                        context.resumeTimeout,
-                        context.resumeKey
-                )
-                return
+        val context = contextMap.remove(session!!.id) ?: return
+        if (context.resumeKey != null) {
+            resumableSessions.remove(context.resumeKey!!)?.let { removed ->
+                log.warn("Shutdown resumable session with key ${removed.resumeKey} because it has the same key as a " +
+                        "newly disconnected resumable session.")
+                removed.shutdown()
             }
 
-            log.info("Connection closed from {} -- {}", session.remoteAddress, status)
-
-            context.shutdown()
+            resumableSessions[context.resumeKey!!] = context
+            context.pause()
+            log.info("Connection closed from {} with status {} -- " +
+                    "Session can be resumed within the next {} seconds with key {}",
+                    session.remoteAddress,
+                    status,
+                    context.resumeTimeout,
+                    context.resumeKey
+            )
+            return
         }
+
+        log.info("Connection closed from {} -- {}", session.remoteAddress, status)
+
+        context.shutdown()
     }
 
     override fun handleTextMessage(session: WebSocketSession?, message: TextMessage?) {
@@ -143,8 +159,8 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
         val shardCount = shardCounts.getOrDefault(member.userId, 1)
         val shardId = Util.getShardFromSnowflake(member.guildId, shardCount)
 
-        return sendFactories.computeIfAbsent(shardId % audioSendFactoryConfiguration.audioSendFactoryCount
-        ) { _ ->
+        return sendFactories.computeIfAbsent(shardId % audioSendFactoryConfiguration.audioSendFactoryCount)
+        { _ ->
             val customBuffer = serverConfig.bufferDurationMs
             val nativeAudioSendFactory: NativeAudioSendFactory
             nativeAudioSendFactory = if (customBuffer != null) {
@@ -161,4 +177,6 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
         resumableSessions.remove(context.resumeKey)
         context.shutdown()
     }
+
+    internal fun canResume(key: String) = resumableSessions[key]?.canResume() ?: false
 }
