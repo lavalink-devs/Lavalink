@@ -139,7 +139,7 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
         if (myFuture == null || myFuture.isCancelled()) {
-            myFuture = socketContext.playerUpdateService.scheduleAtFixedRate(() -> {
+            myFuture = socketContext.getPlayerUpdateService().scheduleAtFixedRate(() -> {
                 SocketServer.Companion.sendPlayerUpdate(socketContext.getSession(), this);
             }, 0, 5, TimeUnit.SECONDS);
         }
