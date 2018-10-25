@@ -159,7 +159,7 @@ Position information about a player. Includes unix timestamp.
 {
     "op": "resState",
     "time": 1500467109,
-    "array": [
+    "guilds": [
         {
             "guildId": "...",
             "player": {

@@ -35,6 +35,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -98,6 +99,15 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
 
     SocketContext getSocket() {
         return socketContext;
+    }
+
+    @Nullable
+    public AudioTrack getPlayingTrack() {
+        return player.getPlayingTrack();
+    }
+
+    public boolean isPaused() {
+        return player.isPaused();
     }
 
     @Override

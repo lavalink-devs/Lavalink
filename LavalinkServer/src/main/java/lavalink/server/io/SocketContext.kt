@@ -40,7 +40,7 @@ import java.util.function.Supplier
 class SocketContext internal constructor(
         audioPlayerManagerSupplier: Supplier<AudioPlayerManager>,
         var session: WebSocketSession,
-        val socketServer: SocketServer,
+        private val socketServer: SocketServer,
         val userId: String
 ) {
 
