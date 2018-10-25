@@ -150,7 +150,6 @@ Position information about a player. Includes unix timestamp.
 
 * `time` is a unix timestamp, similar to the one given in `playerUpdate`.
 * `guildId` is the non-null guild ID.
-* `connected` shows if we have a connected voice connection to one of Discord's voice servers.
 * `player` holds data about lavaplayer state. May be null.
 * `track` is a base64 representation of a lavaplayer track. May be null.
 * `position` is the position of the current track. Will be `-1` if there is no track.
@@ -163,11 +162,10 @@ Position information about a player. Includes unix timestamp.
     "array": [
         {
             "guildId": "...",
-            "connected": true,
             "player": {
                 "track": "lavaplayer binary blob",
                 "position": 60000,
-                "paused": false,
+                "paused": false
             }
         }
     ]
