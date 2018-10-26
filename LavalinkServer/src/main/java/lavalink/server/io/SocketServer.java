@@ -34,6 +34,7 @@ import lavalink.server.player.TrackEndMarkerHandler;
 import lavalink.server.util.Util;
 import lavalink.server.util.Ws;
 import net.dv8tion.jda.core.audio.factory.IAudioSendFactory;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -189,6 +190,15 @@ public class SocketServer extends TextWebSocketHandler {
             case "volume":
                 Player player4 = contextMap.get(session.getId()).getPlayer(json.getString("guildId"));
                 player4.setVolume(json.getInt("volume"));
+                break;
+            case "equalizer":
+                Player player6 = contextMap.get(session.getId()).getPlayer(json.getString("guildId"));
+                JSONArray bands = json.getJSONArray("bands");
+
+                for (int i = 0; i < bands.length(); i++) {
+                    JSONObject band = bands.getJSONObject(i);
+                    player6.setBandGain(band.getInt("band"), band.getFloat("gain"));
+                }
                 break;
             case "destroy":
                 SocketContext socketContext = contextMap.get(session.getId());
