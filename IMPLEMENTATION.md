@@ -124,7 +124,7 @@ Using the player equalizer
 }
 ```
 There are 16 bands (0-15) that can be changed.
-`gain` must be a float between -0.25 and 1.0, where 0.0 indicates no change
+`gain` must be a float between -0.25 and 1.0, where 0.0 indicates no change.
 
 Tell the server to potentially disconnect from the voice server and potentially remove the player with all its data.
 This is useful if you want to move to a new node for a voice connection. Calling this op does not affect voice state,
