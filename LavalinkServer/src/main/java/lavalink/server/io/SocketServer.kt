@@ -105,6 +105,7 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
             "pause"       -> handlers.pause(session, json)
             "seek"        -> handlers.seek(session, json)
             "volume"      -> handlers.volume(session, json)
+            "equalizer"   -> handlers.equalizer(session, json)
             "destroy"     -> handlers.destroy(session, json)
             else          -> log.warn("Unexpected operation: " + json.getString("op"))
         }

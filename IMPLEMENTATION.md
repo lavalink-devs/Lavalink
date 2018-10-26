@@ -110,6 +110,22 @@ Set player volume. Volume may range from 0 to 1000. 100 is default.
 }
 ```
 
+Using the player equalizer
+```json
+{
+    "op": "equalizer",
+    "guildId": "...",
+    "bands": [
+        {
+            "band": 0,
+            "gain": 0.2
+        }
+    ]
+}
+```
+There are 16 bands (0-15) that can be changed.
+`gain` must be a float between -0.25 and 1.0, where 0.0 indicates no change.
+
 Tell the server to potentially disconnect from the voice server and potentially remove the player with all its data.
 This is useful if you want to move to a new node for a voice connection. Calling this op does not affect voice state,
 and you can send the same VOICE_SERVER_UPDATE to a new node.
