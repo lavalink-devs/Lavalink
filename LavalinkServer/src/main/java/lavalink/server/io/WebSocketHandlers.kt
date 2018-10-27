@@ -88,6 +88,16 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         player.setVolume(json.getInt("volume"))
     }
 
+    fun equalizer(session: WebSocketSession, json: JSONObject) {
+        val player = contextMap[session.id]!!.getPlayer(json.getString("guildId"))
+        val bands = json.getJSONArray("bands")
+
+        for (i in 0 until bands.length()) {
+            val band = bands.getJSONObject(i)
+            player.setBandGain(band.getInt("band"), band.getFloat("gain"))
+        }
+    }
+
     fun destroy(session: WebSocketSession, json: JSONObject) {
         val socketContext = contextMap[session.id]!!
         val player = socketContext.players.remove(json.getString("guildId"))
