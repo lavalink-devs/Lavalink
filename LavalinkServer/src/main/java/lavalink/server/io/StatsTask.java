@@ -59,7 +59,7 @@ public class StatsTask implements Runnable {
         }
     }
 
-    private void sendStats() throws IOException {
+    private void sendStats() {
         JSONObject out = new JSONObject();
 
         final int[] playersTotal = {0};

@@ -100,7 +100,7 @@ public class EventEmitter extends AudioEventAdapter {
         out.put("thresholdMs", thresholdMs);
 
         Ws.sendIfOpen(linkPlayer.getSocket().getSession(), out);
-        SocketServer.sendPlayerUpdate(linkPlayer.getSocket().getSession(), linkPlayer);
+        SocketServer.Companion.sendPlayerUpdate(linkPlayer.getSocket().getSession(), linkPlayer);
     }
 
 }
