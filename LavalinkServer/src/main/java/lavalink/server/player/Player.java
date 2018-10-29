@@ -91,6 +91,7 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
     }
 
     public void setBandGain(int band, float gain) {
+        log.debug("Setting band {}'s gain to {}", band, gain);
         equalizerFactory.setGain(band, gain);
 
         if (gain == 0.0f) {
@@ -110,7 +111,7 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
                 this.player.setFilterFactory(null);
                 this.isEqualizerApplied = false;
             }
-        } else {
+        } else if (!this.isEqualizerApplied) {
             this.player.setFilterFactory(equalizerFactory);
             this.isEqualizerApplied = true;
         }
