@@ -133,7 +133,7 @@ public class AudioLoaderRestHandler {
         }
 
         final HttpHeaders headers = new HttpHeaders();
-        headers.add("Lavalink-Major-Version", "3");
+        headers.add("Lavalink-Api-Version", "3");
 
         return new AudioLoader(audioPlayerManager).load(identifier)
                 .thenApply(this::encodeLoadResult)
