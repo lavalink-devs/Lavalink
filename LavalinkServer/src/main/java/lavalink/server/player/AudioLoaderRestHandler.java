@@ -132,12 +132,9 @@ public class AudioLoaderRestHandler {
             return CompletableFuture.completedFuture(notAuthed.get());
         }
 
-        final HttpHeaders headers = new HttpHeaders();
-        headers.add("Lavalink-Major-Version", "3");
-
         return new AudioLoader(audioPlayerManager).load(identifier)
                 .thenApply(this::encodeLoadResult)
-                .thenApply(loadResultJson -> new ResponseEntity<>(loadResultJson.toString(), headers, HttpStatus.OK));
+                .thenApply(loadResultJson -> new ResponseEntity<>(loadResultJson.toString(), HttpStatus.OK));
     }
 
     @GetMapping(value = "/decodetrack", produces = "application/json")
