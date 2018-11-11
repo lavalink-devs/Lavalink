@@ -307,6 +307,8 @@ Additionally, in every `/loadtracks` response, a `loadType` property is returned
 * `NO_MATCHES` - Returned if no matches/sources could be found for a given identifier.
 * `LOAD_FAILED` - Returned if Lavaplayer failed to load something for some reason.
 
+All REST responses from Lavalink include a `Lavalink-Api-Version` header.
+
 ### Special notes
 * When your shard's mainWS connection dies, so does all your lavalink audio connections.
     * This also includes resumes
