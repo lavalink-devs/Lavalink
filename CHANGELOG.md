@@ -14,6 +14,18 @@ Contributors:
 [@Frederikam](https://github.com/Frederikam/),
 [@calebj](https://github.com/calebj)
 
+## v3.1.2
+* Add API version header to all responses
+
+Contributor:
+[@Devoxin](https://github.com/Devoxin)
+
+## v3.1.1
+* Add equalizer support
+
+Contributor:
+[@Devoxin](https://github.com/Devoxin)
+
 ## v3.1
 * Replaced JDAA with Magma
 * Added an event for when the Discord voice WebSocket is closed
