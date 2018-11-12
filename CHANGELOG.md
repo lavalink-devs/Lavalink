@@ -3,6 +3,12 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v3.1.2
+* Add API version header to all responses
+
+Contributor:
+[@Devoxin](https://github.com/Devoxin)
+
 ## v3.1.1
 * Add equalizer support
 * Update lavaplayer to 1.3.10
@@ -13,18 +19,6 @@ Contributors:
 [@Devoxin](https://github.com/Devoxin),
 [@Frederikam](https://github.com/Frederikam/),
 [@calebj](https://github.com/calebj)
-
-## v3.1.2
-* Add API version header to all responses
-
-Contributor:
-[@Devoxin](https://github.com/Devoxin)
-
-## v3.1.1
-* Add equalizer support
-
-Contributor:
-[@Devoxin](https://github.com/Devoxin)
 
 ## v3.1
 * Replaced JDAA with Magma
