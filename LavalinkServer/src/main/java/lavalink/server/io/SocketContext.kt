@@ -118,14 +118,13 @@ class SocketContext internal constructor(
      */
     fun send(payload: JSONObject) = send(payload.toString())
 
-    /**
-     * Either sends the payload now or queues it up
-     */
-    fun send(payload: String) {
+    private fun send(payload: String) {
         if (sessionPaused) {
             resumeEventQueue.add(payload)
             return
         }
+
+        if (!session.isOpen) return
 
         val undertowSession = (session as StandardWebSocketSession).nativeSession as UndertowSession
         WebSockets.sendText(payload, undertowSession.webSocketChannel,
