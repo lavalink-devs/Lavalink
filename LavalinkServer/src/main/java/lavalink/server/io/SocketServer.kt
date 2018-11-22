@@ -149,7 +149,6 @@ class SocketServer(
             "volume"            -> handlers.volume(session, json)
             "destroy"           -> handlers.destroy(session, json)
             "configureResuming" -> handlers.configureResuming(session, json)
-            "reqState"          -> handlers.reqState(session, json)
             else                -> log.warn("Unexpected operation: " + json.getString("op"))
             // @formatter:on
         }

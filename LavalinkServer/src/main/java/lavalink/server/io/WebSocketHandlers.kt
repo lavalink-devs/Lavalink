@@ -3,7 +3,6 @@ package lavalink.server.io
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker
 import lavalink.server.player.TrackEndMarkerHandler
 import lavalink.server.util.Util
-import org.json.JSONArray
 import org.json.JSONObject
 import org.springframework.web.socket.WebSocketSession
 import space.npstr.magma.MagmaMember
@@ -108,47 +107,6 @@ class WebSocketHandlers(socketServer: SocketServer) {
         val socketContext = contextMap[session.id]!!
         socketContext.resumeKey = json.optString("key")
         if (json.has("timeout")) socketContext.resumeTimeout = json.getLong("timeout")
-    }
-
-    fun reqState(session: WebSocketSession, json: JSONObject) {
-        val context = contextMap[session.id]!!
-        val guildIds: List<String> = if (json.optBoolean("getAll")) {
-            context.players.keys().toList()
-        } else {
-            listOf(json.getString("guildId")!!)
-        }
-
-        val out = JSONObject().apply {
-            put("op", "resState")
-            put("time", System.currentTimeMillis())
-        }
-
-        val array = JSONArray()
-
-        guildIds.forEach {
-            val player = context.players[it]
-            val playerJson = if (player != null) {
-                JSONObject().apply {
-                    val track = player.playingTrack
-                    if (track != null) {
-                        put("track", Util.toMessage(context.audioPlayerManager, track))
-                        put("position", track.position)
-                    } else {
-                        put("track", JSONObject.NULL)
-                        put("position", JSONObject.NULL)
-                    }
-                    put("paused", player.isPaused)
-                }
-            } else null
-
-            val guildJson = JSONObject().apply {
-                put("guildId", it)
-                put("player", playerJson ?: JSONObject.NULL)
-            }
-            array.put(guildJson)
-        }
-        out.put("guilds", array)
-        context.send(out)
     }
 
 }
