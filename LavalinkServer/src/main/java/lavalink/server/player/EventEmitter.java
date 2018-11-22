@@ -30,7 +30,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import lavalink.server.io.SocketServer;
 import lavalink.server.util.Util;
-import lavalink.server.util.Ws;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +61,7 @@ public class EventEmitter extends AudioEventAdapter {
 
         out.put("reason", endReason.toString());
 
-        Ws.sendIfOpen(linkPlayer.getSocket().getSession(), out);
+        linkPlayer.getSocket().send(out);
     }
 
     // These exceptions are already logged by Lavaplayer
@@ -80,7 +79,7 @@ public class EventEmitter extends AudioEventAdapter {
 
         out.put("error", exception.getMessage());
 
-        Ws.sendIfOpen(linkPlayer.getSocket().getSession(), out);
+        linkPlayer.getSocket().send(out);
     }
 
     @Override
@@ -99,8 +98,8 @@ public class EventEmitter extends AudioEventAdapter {
 
         out.put("thresholdMs", thresholdMs);
 
-        Ws.sendIfOpen(linkPlayer.getSocket().getSession(), out);
-        SocketServer.Companion.sendPlayerUpdate(linkPlayer.getSocket().getSession(), linkPlayer);
+        linkPlayer.getSocket().send(out);
+        SocketServer.Companion.sendPlayerUpdate(linkPlayer.getSocket(), linkPlayer);
     }
 
 }

@@ -23,11 +23,15 @@
 package lavalink.server.io
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import io.undertow.websockets.core.WebSocketCallback
+import io.undertow.websockets.core.WebSocketChannel
+import io.undertow.websockets.core.WebSockets
+import io.undertow.websockets.jsr.UndertowSession
 import lavalink.server.player.Player
-import lavalink.server.util.Ws
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.WebSocketSession
+import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
 import space.npstr.magma.MagmaApi
 import space.npstr.magma.MagmaMember
 import space.npstr.magma.events.api.MagmaEvent
@@ -53,7 +57,9 @@ class SocketContext internal constructor(
     val players = ConcurrentHashMap<String, Player>()
     private val executor: ScheduledExecutorService
     val playerUpdateService: ScheduledExecutorService
+    @Volatile
     var sessionPaused = false
+    private val resumeEventQueue = ConcurrentLinkedQueue<String>()
 
     /** Null means disabled. See implementation notes */
     var resumeKey: String? = null
@@ -96,7 +102,7 @@ class SocketContext internal constructor(
             out.put("code", magmaEvent.closeCode)
             out.put("byRemote", magmaEvent.isByRemote)
 
-            Ws.send(session, out)
+            send(out)
         }
     }
 
@@ -107,11 +113,47 @@ class SocketContext internal constructor(
         }, resumeTimeout, TimeUnit.SECONDS)
     }
 
-    fun canResume() = sessionTimeoutFuture?.cancel(false) ?: false
+    /**
+     * Either sends the payload now or queues it up
+     */
+    fun send(payload: JSONObject) = send(payload.toString())
+
+    /**
+     * Either sends the payload now or queues it up
+     */
+    fun send(payload: String) {
+        if (sessionPaused) {
+            resumeEventQueue.add(payload)
+            return
+        }
+
+        val undertowSession = (session as StandardWebSocketSession).nativeSession as UndertowSession
+        WebSockets.sendText(payload, undertowSession.webSocketChannel,
+                object : WebSocketCallback<Void> {
+                    override fun complete(channel: WebSocketChannel, context: Void) {
+                        log.trace("Sent {}", payload)
+                    }
+
+                    override fun onError(channel: WebSocketChannel, context: Void, throwable: Throwable) {
+                        log.error("Error", throwable)
+                    }
+                })
+    }
+
+    /**
+     * @return true if we can resume, false otherwise
+     */
+    fun stopResumeTimeout() = sessionTimeoutFuture?.cancel(false) ?: false
 
     fun resume(session: WebSocketSession) {
         sessionPaused = false
         this.session = session
+        log.info("Replaying ${resumeEventQueue.size} events")
+
+        // Bulk actions are not guaranteed to be atomic, so we need to do this imperatively
+        while (resumeEventQueue.isNotEmpty()) {
+            send(resumeEventQueue.remove())
+        }
     }
 
     internal fun shutdown() {

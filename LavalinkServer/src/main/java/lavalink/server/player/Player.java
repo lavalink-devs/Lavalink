@@ -152,7 +152,7 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
             myFuture = socketContext.getPlayerUpdateService().scheduleAtFixedRate(() -> {
                 if (socketContext.getSessionPaused()) return;
 
-                SocketServer.Companion.sendPlayerUpdate(socketContext.getSession(), this);
+                SocketServer.Companion.sendPlayerUpdate(socketContext, this);
             }, 0, 5, TimeUnit.SECONDS);
         }
     }

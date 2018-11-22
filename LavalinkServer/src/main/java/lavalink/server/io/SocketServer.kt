@@ -29,7 +29,6 @@ import lavalink.server.config.AudioSendFactoryConfiguration
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.Player
 import lavalink.server.util.Util
-import lavalink.server.util.Ws
 import net.dv8tion.jda.core.audio.factory.IAudioSendFactory
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
@@ -61,13 +60,13 @@ class SocketServer(
     companion object {
         private val log = LoggerFactory.getLogger(SocketServer::class.java)
 
-        fun sendPlayerUpdate(session: WebSocketSession, player: Player) {
+        fun sendPlayerUpdate(socketContext: SocketContext, player: Player) {
             val json = JSONObject()
             json.put("op", "playerUpdate")
             json.put("guildId", player.guildId)
             json.put("state", player.state)
 
-            Ws.send(session, json)
+            socketContext.send(json)
         }
     }
 
@@ -161,7 +160,7 @@ class SocketServer(
         val shardId = Util.getShardFromSnowflake(member.guildId, shardCount)
 
         return sendFactories.computeIfAbsent(shardId % audioSendFactoryConfiguration.audioSendFactoryCount)
-        { _ ->
+        {
             val customBuffer = serverConfig.bufferDurationMs
             val nativeAudioSendFactory: NativeAudioSendFactory
             nativeAudioSendFactory = if (customBuffer != null) {
@@ -179,5 +178,5 @@ class SocketServer(
         context.shutdown()
     }
 
-    internal fun canResume(key: String) = resumableSessions[key]?.canResume() ?: false
+    internal fun canResume(key: String) = resumableSessions[key]?.stopResumeTimeout() ?: false
 }
