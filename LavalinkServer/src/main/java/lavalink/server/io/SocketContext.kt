@@ -34,7 +34,6 @@ import space.npstr.magma.events.api.MagmaEvent
 import space.npstr.magma.events.api.WebSocketClosed
 import java.util.*
 import java.util.concurrent.*
-import java.util.function.Consumer
 import java.util.function.Supplier
 
 class SocketContext internal constructor(
@@ -59,7 +58,7 @@ class SocketContext internal constructor(
     /** Null means disabled. See implementation notes */
     var resumeKey: String? = null
     var resumeTimeout = 60L // Seconds
-    var sessionTimeoutFuture: ScheduledFuture<Unit>? = null
+    private var sessionTimeoutFuture: ScheduledFuture<Unit>? = null
 
     val playingPlayers: List<Player>
         get() {
@@ -83,13 +82,8 @@ class SocketContext internal constructor(
         }
     }
 
-    internal fun getPlayer(guildId: String): Player {
-        return players.computeIfAbsent(guildId
-        ) { _ -> Player(this, guildId, audioPlayerManager) }
-    }
-
-    internal fun getPlayers(): Map<String, Player> {
-        return players
+    internal fun getPlayer(guildId: String) = players.computeIfAbsent(guildId) {
+        Player(this, guildId, audioPlayerManager)
     }
 
     private fun handleMagmaEvent(magmaEvent: MagmaEvent) {
@@ -134,7 +128,7 @@ class SocketContext internal constructor(
             magma.closeConnection(member)
         }
 
-        players.values.forEach(Consumer<Player> { it.stop() })
+        players.values.forEach(Player::stop)
         magma.shutdown()
     }
 }
