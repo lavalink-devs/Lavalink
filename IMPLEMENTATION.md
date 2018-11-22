@@ -120,16 +120,6 @@ and you can send the same VOICE_SERVER_UPDATE to a new node.
 }
 ```
 
-Request player and voice info, either for a particular guild or all of them. Note that `guildId` and `getAll` are mutually exclusive, and you should only send one of the two. 
-
-```json
-{
-    "op": "reqState",
-    "guildId": "...",
-    "getAll": true
-}
-```
-
 ### Incoming messages
 
 See [LavalinkSocket.java](https://github.com/FredBoat/Lavalink-Client/blob/master/src/main/java/lavalink/client/io/LavalinkSocket.java) for client implementation
@@ -143,32 +133,6 @@ Position information about a player. Includes unix timestamp.
         "time": 1500467109,
         "position": 60000
     }
-}
-```
-
-`resState` is always sent in response to `reqState`. 
-
-* `time` is a unix timestamp, similar to the one given in `playerUpdate`.
-* `guildId` is the non-null guild ID.
-* `player` holds data about lavaplayer state. May be null.
-* `track` is a base64 representation of a lavaplayer track. May be null.
-* `position` is the position of the current track. Will be `-1` if there is no track.
-* `paused` is whether or not the player is paused. 
-
-```json
-{
-    "op": "resState",
-    "time": 1500467109,
-    "guilds": [
-        {
-            "guildId": "...",
-            "player": {
-                "track": "lavaplayer binary blob",
-                "position": 60000,
-                "paused": false
-            }
-        }
-    ]
 }
 ```
 
@@ -356,6 +320,9 @@ You can tell if your session was resumed by looking at the handshake response he
 ```
 Session-Resumed: true
 ```
+
+When a session is paused, any events that would normally have been sent is queued up. When the session is resumed, this
+queue is then emptied and the events are then replayed. 
 
 ### Special notes
 
