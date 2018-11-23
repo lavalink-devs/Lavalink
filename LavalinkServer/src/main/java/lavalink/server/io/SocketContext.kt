@@ -153,6 +153,8 @@ class SocketContext internal constructor(
         while (resumeEventQueue.isNotEmpty()) {
             send(resumeEventQueue.remove())
         }
+
+        players.values.forEach { it -> SocketServer.sendPlayerUpdate(this, it) }
     }
 
     internal fun shutdown() {
