@@ -3,6 +3,12 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v3.2
+* Added resuming
+
+Contributor:
+[@Frederikam](https://github.com/Frederikam/)
+
 ## v3.1.2
 * Add API version header to all responses
 
