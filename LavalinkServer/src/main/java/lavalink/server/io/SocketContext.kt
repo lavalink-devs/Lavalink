@@ -129,11 +129,11 @@ class SocketContext internal constructor(
         val undertowSession = (session as StandardWebSocketSession).nativeSession as UndertowSession
         WebSockets.sendText(payload, undertowSession.webSocketChannel,
                 object : WebSocketCallback<Void> {
-                    override fun complete(channel: WebSocketChannel, context: Void) {
+                    override fun complete(channel: WebSocketChannel, context: Void?) {
                         log.trace("Sent {}", payload)
                     }
 
-                    override fun onError(channel: WebSocketChannel, context: Void, throwable: Throwable) {
+                    override fun onError(channel: WebSocketChannel, context: Void?, throwable: Throwable) {
                         log.error("Error", throwable)
                     }
                 })
