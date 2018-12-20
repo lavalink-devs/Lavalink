@@ -89,7 +89,9 @@ public class StatsTask implements Runnable {
         JSONObject cpu = new JSONObject();
         cpu.put("cores", Runtime.getRuntime().availableProcessors());
         cpu.put("systemLoad", hal.getProcessor().getSystemCpuLoad());
-        cpu.put("lavalinkLoad", getProcessRecentCpuUsage());
+        double load = getProcessRecentCpuUsage();
+        if (!Double.isFinite(load)) load = 0;
+        cpu.put("lavalinkLoad", load);
 
         out.put("cpu", cpu);
 

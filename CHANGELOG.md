@@ -3,6 +3,29 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v3.1.2
+* Add API version header to all responses
+
+Contributor:
+[@Devoxin](https://github.com/Devoxin)
+
+## v3.1.1
+* Add equalizer support
+* Update lavaplayer to 1.3.10
+* Fixed automatic versioning
+* Added build config to upload binaries to GitHub releases from CI
+
+Contributors:
+[@Devoxin](https://github.com/Devoxin),
+[@Frederikam](https://github.com/Frederikam/),
+[@calebj](https://github.com/calebj)
+
+## v3.1
+* Replaced JDAA with Magma
+* Added an event for when the Discord voice WebSocket is closed
+* Replaced Tomcat and Java_Websocket with Undertow. WS and REST is now handled by the same 
+server and port. Port is specified by `server.port`.
+
 ## v3.0
 * **Breaking:** The minimum required Java version to run the server is now Java 10.   
 **Please note**: Java 10 will be obsolete

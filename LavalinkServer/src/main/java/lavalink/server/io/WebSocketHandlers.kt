@@ -8,9 +8,7 @@ import org.springframework.web.socket.WebSocketSession
 import space.npstr.magma.MagmaMember
 import space.npstr.magma.MagmaServerUpdate
 
-class WebSocketHandlers(socketServer: SocketServer) {
-
-    private val contextMap = socketServer.contextMap
+class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
 
     fun voiceUpdate(session: WebSocketSession, json: JSONObject) {
         val sessionId = json.getString("sessionId")
@@ -91,6 +89,16 @@ class WebSocketHandlers(socketServer: SocketServer) {
         player.setVolume(json.getInt("volume"))
     }
 
+    fun equalizer(session: WebSocketSession, json: JSONObject) {
+        val player = contextMap[session.id]!!.getPlayer(json.getString("guildId"))
+        val bands = json.getJSONArray("bands")
+
+        for (i in 0 until bands.length()) {
+            val band = bands.getJSONObject(i)
+            player.setBandGain(band.getInt("band"), band.getFloat("gain"))
+        }
+    }
+
     fun destroy(session: WebSocketSession, json: JSONObject) {
         val socketContext = contextMap[session.id]!!
         val player = socketContext.players.remove(json.getString("guildId"))
@@ -108,5 +116,4 @@ class WebSocketHandlers(socketServer: SocketServer) {
         socketContext.resumeKey = json.optString("key")
         if (json.has("timeout")) socketContext.resumeTimeout = json.getLong("timeout")
     }
-
 }

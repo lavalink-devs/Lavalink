@@ -65,7 +65,8 @@ users about the compatibility of their clients to the Lavalink server.
 * [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) ([eris](https://github.com/abalabahaha/eris), JavaScript)
 * [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
-* [Victoria](https://github.com/Yucked/Bot.NET/tree/master/Victoria) ([Discord.NET](https://github.com/RogueException/Discord.Net), .NET)
+* [SharpLink](https://github.com/Devoxin/SharpLink) ([Discord.Net](https://github.com/RogueException/Discord.Net), .NET)
+* [Victoria](https://github.com/Yucked/Victoria) ([Discord.NET](https://github.com/RogueException/Discord.Net), .NET)
 * [Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET) (.NET)
 * [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink) ([DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/), .NET)
 * [Luna](https://github.com/CharlotteDunois/Luna) ([Yasmin](https://github.com/CharlotteDunois/Yasmin) or generic, PHP)
@@ -79,7 +80,7 @@ users about the compatibility of their clients to the Lavalink server.
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ## Server configuration
-Download from [the CI server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1)
+Download binaries from [the CI server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1) or [the GitHub releases](https://github.com/Frederikam/Lavalink/releases).
 
 Put an `application.yml` file in your working directory. [Example](https://github.com/Frederikam/Lavalink/blob/master/LavalinkServer/application.yml.example)
 

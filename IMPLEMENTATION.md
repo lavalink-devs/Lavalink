@@ -110,6 +110,24 @@ Set player volume. Volume may range from 0 to 1000. 100 is default.
 }
 ```
 
+Using the player equalizer
+```json
+{
+    "op": "equalizer",
+    "guildId": "...",
+    "bands": [
+        {
+            "band": 0,
+            "gain": 0.2
+        }
+    ]
+}
+```
+There are 15 bands (0-14) that can be changed.
+`gain` is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
+where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could
+also change the volume of the output.
+
 Tell the server to potentially disconnect from the voice server and potentially remove the player with all its data.
 This is useful if you want to move to a new node for a voice connection. Calling this op does not affect voice state,
 and you can send the same VOICE_SERVER_UPDATE to a new node.
@@ -288,6 +306,8 @@ Additionally, in every `/loadtracks` response, a `loadType` property is returned
 * `SEARCH_RESULT` - Returned when a search result is made (i.e `ytsearch: some song`).
 * `NO_MATCHES` - Returned if no matches/sources could be found for a given identifier.
 * `LOAD_FAILED` - Returned if Lavaplayer failed to load something for some reason.
+
+All REST responses from Lavalink include a `Lavalink-Api-Version` header.
 
 ### Resuming Lavalink sessions
 

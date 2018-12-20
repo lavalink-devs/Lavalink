@@ -23,21 +23,25 @@
 package lavalink.server.io
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import lavalink.server.player.Player
+import space.npstr.magma.MagmaMember
 import io.undertow.websockets.core.WebSocketCallback
 import io.undertow.websockets.core.WebSocketChannel
 import io.undertow.websockets.core.WebSockets
 import io.undertow.websockets.jsr.UndertowSession
-import lavalink.server.player.Player
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
 import space.npstr.magma.MagmaApi
-import space.npstr.magma.MagmaMember
 import space.npstr.magma.events.api.MagmaEvent
 import space.npstr.magma.events.api.WebSocketClosed
 import java.util.*
 import java.util.concurrent.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.TimeUnit
 import java.util.function.Supplier
 
 class SocketContext internal constructor(
@@ -55,8 +59,6 @@ class SocketContext internal constructor(
     internal val magma: MagmaApi = MagmaApi.of { socketServer.getAudioSendFactory(it) }
     //guildId <-> Player
     val players = ConcurrentHashMap<String, Player>()
-    private val executor: ScheduledExecutorService
-    val playerUpdateService: ScheduledExecutorService
     @Volatile
     var sessionPaused = false
     private val resumeEventQueue = ConcurrentLinkedQueue<String>()
@@ -65,6 +67,8 @@ class SocketContext internal constructor(
     var resumeKey: String? = null
     var resumeTimeout = 60L // Seconds
     private var sessionTimeoutFuture: ScheduledFuture<Unit>? = null
+    private val executor: ScheduledExecutorService
+    val playerUpdateService: ScheduledExecutorService
 
     val playingPlayers: List<Player>
         get() {
@@ -90,6 +94,10 @@ class SocketContext internal constructor(
 
     internal fun getPlayer(guildId: String) = players.computeIfAbsent(guildId) {
         Player(this, guildId, audioPlayerManager)
+    }
+
+    internal fun getPlayers(): Map<String, Player> {
+        return players
     }
 
     private fun handleMagmaEvent(magmaEvent: MagmaEvent) {

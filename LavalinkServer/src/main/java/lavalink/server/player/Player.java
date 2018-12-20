@@ -22,6 +22,8 @@
 
 package lavalink.server.player;
 
+import com.sedmelluq.discord.lavaplayer.filter.equalizer.Equalizer;
+import com.sedmelluq.discord.lavaplayer.filter.equalizer.EqualizerFactory;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
@@ -49,6 +51,8 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
     private AudioLossCounter audioLossCounter = new AudioLossCounter();
     private AudioFrame lastFrame = null;
     private ScheduledFuture myFuture = null;
+    private EqualizerFactory equalizerFactory = new EqualizerFactory();
+    private boolean isEqualizerApplied = false;
 
     public Player(SocketContext socketContext, String guildId, AudioPlayerManager audioPlayerManager) {
         this.socketContext = socketContext;
@@ -85,6 +89,33 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
 
     public void setVolume(int volume) {
         player.setVolume(volume);
+    }
+
+    public void setBandGain(int band, float gain) {
+        log.debug("Setting band {}'s gain to {}", band, gain);
+        equalizerFactory.setGain(band, gain);
+
+        if (gain == 0.0f) {
+            if (!isEqualizerApplied) {
+                return;
+            }
+
+            boolean shouldDisable = true;
+
+            for (int i = 0; i < Equalizer.BAND_COUNT; i++) {
+                if (equalizerFactory.getGain(i) != 0.0f) {
+                    shouldDisable = false;
+                }
+            }
+
+            if (shouldDisable) {
+                this.player.setFilterFactory(null);
+                this.isEqualizerApplied = false;
+            }
+        } else if (!this.isEqualizerApplied) {
+            this.player.setFilterFactory(equalizerFactory);
+            this.isEqualizerApplied = true;
+        }
     }
 
     public JSONObject getState() {

@@ -45,6 +45,8 @@ public class AudioPlayerConfiguration {
             if (sources.isHttp()) audioPlayerManager.registerSourceManager(new HttpAudioSourceManager());
             if (sources.isLocal()) audioPlayerManager.registerSourceManager(new LocalAudioSourceManager());
 
+            audioPlayerManager.getConfiguration().setFilterHotSwapEnabled(true);
+
             return audioPlayerManager;
         };
     }
