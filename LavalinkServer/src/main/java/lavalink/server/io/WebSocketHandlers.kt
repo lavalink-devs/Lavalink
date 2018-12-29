@@ -1,7 +1,5 @@
 package lavalink.server.io
 
-import com.sedmelluq.discord.lavaplayer.track.TrackMarker
-import lavalink.server.player.TrackEndMarkerHandler
 import lavalink.server.util.Util
 import org.json.JSONObject
 import org.springframework.web.socket.WebSocketSession
@@ -39,14 +37,17 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
     fun play(session: WebSocketSession, json: JSONObject) {
         val ctx = contextMap[session.id]!!
         val player = ctx.getPlayer(json.getString("guildId"))
-        val track = Util.toAudioTrack(ctx.audioPlayerManager, json.getString("track"))
-        if (json.has("startTime")) {
-            track.position = json.getLong("startTime")
-        }
-        if (json.has("endTime")) {
-            track.setMarker(TrackMarker(json.getLong("endTime"), TrackEndMarkerHandler(player)))
-        }
+        var track = Util.toAudioTrack(ctx.audioPlayerManager, json.getString("track"))
+        val noReplaceSame = json.optBoolean("noReplaceSame", false)
 
+        if (noReplaceSame && track.identifier == player.playingTrack?.identifier) {
+            track = player.playingTrack
+        } else {
+            if (json.has("startTime")) {
+                track.position = json.getLong("startTime")
+            }
+        }
+        
         player.setPause(json.optBoolean("pause", false))
         if (json.has("volume")) {
             player.setVolume(json.getInt("volume"))
