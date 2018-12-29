@@ -47,7 +47,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
                 track.position = json.getLong("startTime")
             }
         }
-        
+
         player.setPause(json.optBoolean("pause", false))
         if (json.has("volume")) {
             player.setVolume(json.getInt("volume"))
