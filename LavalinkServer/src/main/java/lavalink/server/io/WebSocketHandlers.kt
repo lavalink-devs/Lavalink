@@ -40,12 +40,14 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         var track = Util.toAudioTrack(ctx.audioPlayerManager, json.getString("track"))
         val noReplaceSame = json.optBoolean("noReplaceSame", false)
 
-        if (noReplaceSame && track.identifier == player.playingTrack?.identifier) {
+        val shouldPlay = if (noReplaceSame && track.identifier == player.playingTrack?.identifier) {
             track = player.playingTrack
+            false
         } else {
             if (json.has("startTime")) {
                 track.position = json.getLong("startTime")
             }
+            true
         }
 
         player.setPause(json.optBoolean("pause", false))
@@ -53,7 +55,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
             player.setVolume(json.getInt("volume"))
         }
 
-        player.play(track)
+        if (shouldPlay) player.play(track)
 
         val context = contextMap[session.id]!!
 
@@ -114,7 +116,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
 
     fun configureResuming(session: WebSocketSession, json: JSONObject) {
         val socketContext = contextMap[session.id]!!
-        socketContext.resumeKey = json.optString("key")
+        socketContext.resumeKey = json.optString("key", null)
         if (json.has("timeout")) socketContext.resumeTimeout = json.getLong("timeout")
     }
 }
