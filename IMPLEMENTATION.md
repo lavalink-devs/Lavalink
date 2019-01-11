@@ -65,7 +65,7 @@ Provide an intercepted voice server update. This causes the server to connect to
 Cause the player to play a track.
 `startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
 `endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default the track plays until it's end as per the encoded data.
-`noReplaceSame` if set to true, and the provided track is also the playing one, the track position will be unchanged. Defaults to false. 
+`noReplace` if set to true, this operation will be ignored if a track is already playing or paused.
 ```json
 {
     "op": "play",
@@ -73,7 +73,7 @@ Cause the player to play a track.
     "track": "...",
     "startTime": "60000",
     "endTime": "120000",
-    "noReplaceSame": false
+    "noReplace": false
 }
 ```
 

@@ -2,11 +2,17 @@ package lavalink.server.io
 
 import lavalink.server.util.Util
 import org.json.JSONObject
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.web.socket.WebSocketSession
 import space.npstr.magma.MagmaMember
 import space.npstr.magma.MagmaServerUpdate
 
 class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
+
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(WebSocketHandlers::class.java)
+    }
 
     fun voiceUpdate(session: WebSocketSession, json: JSONObject) {
         val sessionId = json.getString("sessionId")
@@ -37,17 +43,17 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
     fun play(session: WebSocketSession, json: JSONObject) {
         val ctx = contextMap[session.id]!!
         val player = ctx.getPlayer(json.getString("guildId"))
-        var track = Util.toAudioTrack(ctx.audioPlayerManager, json.getString("track"))
-        val noReplaceSame = json.optBoolean("noReplaceSame", false)
+        val noReplace = json.optBoolean("noReplace", false)
 
-        val shouldPlay = if (noReplaceSame && track.identifier == player.playingTrack?.identifier) {
-            track = player.playingTrack
-            false
-        } else {
-            if (json.has("startTime")) {
-                track.position = json.getLong("startTime")
-            }
-            true
+        if (noReplace && player.playingTrack != null) {
+            log.info("Skipping play request because of noReplace")
+            return
+        }
+
+        val track = Util.toAudioTrack(ctx.audioPlayerManager, json.getString("track"))
+
+        if (json.has("startTime")) {
+            track.position = json.getLong("startTime")
         }
 
         player.setPause(json.optBoolean("pause", false))
@@ -55,7 +61,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
             player.setVolume(json.getInt("volume"))
         }
 
-        if (shouldPlay) player.play(track)
+        player.play(track)
 
         val context = contextMap[session.id]!!
 
