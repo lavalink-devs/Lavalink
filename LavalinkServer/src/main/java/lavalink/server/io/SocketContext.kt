@@ -24,30 +24,50 @@ package lavalink.server.io
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import lavalink.server.player.Player
-import lavalink.server.util.Ws
+import space.npstr.magma.MagmaMember
+import io.undertow.websockets.core.WebSocketCallback
+import io.undertow.websockets.core.WebSocketChannel
+import io.undertow.websockets.core.WebSockets
+import io.undertow.websockets.jsr.UndertowSession
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.WebSocketSession
+import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
 import space.npstr.magma.MagmaApi
-import space.npstr.magma.MagmaMember
 import space.npstr.magma.events.api.MagmaEvent
 import space.npstr.magma.events.api.WebSocketClosed
 import java.util.*
+import java.util.concurrent.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
-import java.util.function.Consumer
 import java.util.function.Supplier
 
-class SocketContext internal constructor(audioPlayerManagerSupplier: Supplier<AudioPlayerManager>, val session: WebSocketSession,
-                                         socketServer: SocketServer, val userId: String) {
+class SocketContext internal constructor(
+        audioPlayerManagerSupplier: Supplier<AudioPlayerManager>,
+        var session: WebSocketSession,
+        private val socketServer: SocketServer,
+        val userId: String
+) {
+
+    companion object {
+        private val log = LoggerFactory.getLogger(SocketContext::class.java)
+    }
 
     val audioPlayerManager: AudioPlayerManager = audioPlayerManagerSupplier.get()
     internal val magma: MagmaApi = MagmaApi.of { socketServer.getAudioSendFactory(it) }
     //guildId <-> Player
     val players = ConcurrentHashMap<String, Player>()
-    private val statsExecutor: ScheduledExecutorService
+    @Volatile
+    var sessionPaused = false
+    private val resumeEventQueue = ConcurrentLinkedQueue<String>()
+
+    /** Null means disabled. See implementation notes */
+    var resumeKey: String? = null
+    var resumeTimeout = 60L // Seconds
+    private var sessionTimeoutFuture: ScheduledFuture<Unit>? = null
+    private val executor: ScheduledExecutorService
     val playerUpdateService: ScheduledExecutorService
 
     val playingPlayers: List<Player>
@@ -61,8 +81,8 @@ class SocketContext internal constructor(audioPlayerManagerSupplier: Supplier<Au
     init {
         magma.eventStream.subscribe { this.handleMagmaEvent(it) }
 
-        statsExecutor = Executors.newSingleThreadScheduledExecutor()
-        statsExecutor.scheduleAtFixedRate(StatsTask(this, socketServer), 0, 1, TimeUnit.MINUTES)
+        executor = Executors.newSingleThreadScheduledExecutor()
+        executor.scheduleAtFixedRate(StatsTask(this, socketServer), 0, 1, TimeUnit.MINUTES)
 
         playerUpdateService = Executors.newScheduledThreadPool(2) { r ->
             val thread = Thread(r)
@@ -72,9 +92,8 @@ class SocketContext internal constructor(audioPlayerManagerSupplier: Supplier<Au
         }
     }
 
-    internal fun getPlayer(guildId: String): Player {
-        return players.computeIfAbsent(guildId
-        ) { _ -> Player(this, guildId, audioPlayerManager) }
+    internal fun getPlayer(guildId: String) = players.computeIfAbsent(guildId) {
+        Player(this, guildId, audioPlayerManager)
     }
 
     internal fun getPlayers(): Map<String, Player> {
@@ -91,13 +110,64 @@ class SocketContext internal constructor(audioPlayerManagerSupplier: Supplier<Au
             out.put("code", magmaEvent.closeCode)
             out.put("byRemote", magmaEvent.isByRemote)
 
-            Ws.send(session, out)
+            send(out)
         }
+    }
+
+    fun pause() {
+        sessionPaused = true
+        sessionTimeoutFuture = executor.schedule<Unit>({
+            socketServer.onSessionResumeTimeout(this)
+        }, resumeTimeout, TimeUnit.SECONDS)
+    }
+
+    /**
+     * Either sends the payload now or queues it up
+     */
+    fun send(payload: JSONObject) = send(payload.toString())
+
+    private fun send(payload: String) {
+        if (sessionPaused) {
+            resumeEventQueue.add(payload)
+            return
+        }
+
+        if (!session.isOpen) return
+
+        val undertowSession = (session as StandardWebSocketSession).nativeSession as UndertowSession
+        WebSockets.sendText(payload, undertowSession.webSocketChannel,
+                object : WebSocketCallback<Void> {
+                    override fun complete(channel: WebSocketChannel, context: Void?) {
+                        log.trace("Sent {}", payload)
+                    }
+
+                    override fun onError(channel: WebSocketChannel, context: Void?, throwable: Throwable) {
+                        log.error("Error", throwable)
+                    }
+                })
+    }
+
+    /**
+     * @return true if we can resume, false otherwise
+     */
+    fun stopResumeTimeout() = sessionTimeoutFuture?.cancel(false) ?: false
+
+    fun resume(session: WebSocketSession) {
+        sessionPaused = false
+        this.session = session
+        log.info("Replaying ${resumeEventQueue.size} events")
+
+        // Bulk actions are not guaranteed to be atomic, so we need to do this imperatively
+        while (resumeEventQueue.isNotEmpty()) {
+            send(resumeEventQueue.remove())
+        }
+
+        players.values.forEach { it -> SocketServer.sendPlayerUpdate(this, it) }
     }
 
     internal fun shutdown() {
         log.info("Shutting down " + playingPlayers.size + " playing players.")
-        statsExecutor.shutdown()
+        executor.shutdown()
         audioPlayerManager.shutdown()
         playerUpdateService.shutdown()
         players.keys.forEach { guildId ->
@@ -109,12 +179,7 @@ class SocketContext internal constructor(audioPlayerManagerSupplier: Supplier<Au
             magma.closeConnection(member)
         }
 
-        players.values.forEach(Consumer<Player> { it.stop() })
+        players.values.forEach(Player::stop)
         magma.shutdown()
-    }
-
-    companion object {
-
-        private val log = LoggerFactory.getLogger(SocketContext::class.java)
     }
 }

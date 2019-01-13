@@ -20,7 +20,6 @@ import java.util.Properties;
  */
 
 @Configuration
-@SuppressWarnings("WeakerAccess")
 public class SentryConfiguration {
 
     private static final Logger log = LoggerFactory.getLogger(SentryConfiguration.class);
@@ -59,6 +58,7 @@ public class SentryConfiguration {
         // set the git commit hash this was build on as the release
         Properties gitProps = new Properties();
         try {
+            //noinspection ConstantConditions
             gitProps.load(Launcher.class.getClassLoader().getResourceAsStream("git.properties"));
         } catch (NullPointerException | IOException e) {
             log.error("Failed to load git repo information", e);
