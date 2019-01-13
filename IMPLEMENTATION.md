@@ -52,7 +52,7 @@ User-Id: The user id of the bot you are playing music with
 ```
 
 ### Outgoing messages
-Provide an intercepted voice server update. This causes the server to connect to the voice channel
+Provide an intercepted voice server update. This causes the server to connect to the voice channel.
 ```json
 {
     "op": "voiceUpdate",
