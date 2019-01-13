@@ -10,10 +10,12 @@ Contributor:
 [@Frederikam](https://github.com/Frederikam/)
 
 ## v3.2
-* Added resuming
+* Added support for resuming
+* Added noReplace option to the play op
+* Sending the same voice server update will not cause an existing connection to reconnect
 
 Contributor:
-[@Frederikam](https://github.com/Frederikam/)
+[@Frederikam](https://github.com/Frederikam)
 
 ## v3.1.2
 * Add API version header to all responses
