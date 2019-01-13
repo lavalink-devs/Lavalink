@@ -1,5 +1,6 @@
 package lavalink.server.io;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -13,8 +14,8 @@ import java.io.IOException;
 public class ResponseHeaderFilter extends OncePerRequestFilter {
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws IOException, ServletException {
+    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
+                                    @NotNull FilterChain filterChain) throws IOException, ServletException {
         response.addHeader("Lavalink-Api-Version", "3");
         filterChain.doFilter(request, response);
     }

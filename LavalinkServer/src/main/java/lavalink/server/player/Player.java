@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -131,6 +132,15 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
         return socketContext;
     }
 
+    @Nullable
+    public AudioTrack getPlayingTrack() {
+        return player.getPlayingTrack();
+    }
+
+    public boolean isPaused() {
+        return player.isPaused();
+    }
+
     @Override
     public boolean canProvide() {
         lastFrame = player.provide();
@@ -171,7 +181,9 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
         if (myFuture == null || myFuture.isCancelled()) {
             myFuture = socketContext.getPlayerUpdateService().scheduleAtFixedRate(() -> {
-                SocketServer.Companion.sendPlayerUpdate(socketContext.getSession(), this);
+                if (socketContext.getSessionPaused()) return;
+
+                SocketServer.Companion.sendPlayerUpdate(socketContext, this);
             }, 0, 5, TimeUnit.SECONDS);
         }
     }
