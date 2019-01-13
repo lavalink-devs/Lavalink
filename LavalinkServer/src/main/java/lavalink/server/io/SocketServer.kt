@@ -31,7 +31,6 @@ import lavalink.server.config.ServerConfig
 import lavalink.server.player.Player
 import lavalink.server.player.TrackEndMarkerHandler
 import lavalink.server.util.Util
-import lavalink.server.util.Ws
 import net.dv8tion.jda.core.audio.factory.IAudioSendFactory
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
@@ -40,23 +39,38 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
-import space.npstr.magma.*
-
-import java.io.IOException
+import space.npstr.magma.Member
 import java.util.HashMap
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Supplier
 
 @Service
-class SocketServer(private val serverConfig: ServerConfig, private val audioPlayerManagerSupplier: Supplier<AudioPlayerManager>,
-                   private val audioSendFactoryConfiguration: AudioSendFactoryConfiguration) : TextWebSocketHandler() {
+class SocketServer(
+        private val serverConfig: ServerConfig,
+        private val audioPlayerManagerSupplier: Supplier<AudioPlayerManager>,
+        private val audioSendFactoryConfiguration: AudioSendFactoryConfiguration
+) : TextWebSocketHandler() {
 
     // userId <-> shardCount
     private val shardCounts = ConcurrentHashMap<String, Int>()
-    private val contextMap = HashMap<String, SocketContext>()
+    val contextMap = HashMap<String, SocketContext>()
     private val sendFactories = ConcurrentHashMap<Int, IAudioSendFactory>()
+    @Suppress("LeakingThis")
     private val handlers = WebSocketHandlers(contextMap)
+    private val resumableSessions = mutableMapOf<String, SocketContext>()
 
+    companion object {
+        private val log = LoggerFactory.getLogger(SocketServer::class.java)
+
+        fun sendPlayerUpdate(socketContext: SocketContext, player: Player) {
+            val json = JSONObject()
+            json.put("op", "playerUpdate")
+            json.put("guildId", player.guildId)
+            json.put("state", player.state)
+
+            socketContext.send(json)
+        }
+    }
 
     val contexts: Collection<SocketContext>
         get() = contextMap.values
@@ -64,6 +78,19 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
     override fun afterConnectionEstablished(session: WebSocketSession) {
         val shardCount = Integer.parseInt(session.handshakeHeaders.getFirst("Num-Shards")!!)
         val userId = session.handshakeHeaders.getFirst("User-Id")!!
+        val resumeKey = session.handshakeHeaders.getFirst("Resume-Key")
+
+        shardCounts[userId] = shardCount
+
+        var resumable: SocketContext? = null
+        if (resumeKey != null) resumable = resumableSessions.remove(resumeKey)
+
+        if (resumable != null) {
+            contextMap[session.id] = resumable
+            resumable.resume(session)
+            log.info("Resumed session with key $resumeKey")
+            return
+        }
 
         shardCounts[userId] = shardCount
 
@@ -72,11 +99,29 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
     }
 
     override fun afterConnectionClosed(session: WebSocketSession?, status: CloseStatus?) {
-        val context = contextMap.remove(session!!.id)
-        if (context != null) {
-            log.info("Connection closed from {} -- {}", session.remoteAddress, status)
-            context.shutdown()
+        val context = contextMap.remove(session!!.id) ?: return
+        if (context.resumeKey != null) {
+            resumableSessions.remove(context.resumeKey!!)?.let { removed ->
+                log.warn("Shutdown resumable session with key ${removed.resumeKey} because it has the same key as a " +
+                        "newly disconnected resumable session.")
+                removed.shutdown()
+            }
+
+            resumableSessions[context.resumeKey!!] = context
+            context.pause()
+            log.info("Connection closed from {} with status {} -- " +
+                    "Session can be resumed within the next {} seconds with key {}",
+                    session.remoteAddress,
+                    status,
+                    context.resumeTimeout,
+                    context.resumeKey
+            )
+            return
         }
+
+        log.info("Connection closed from {} -- {}", session.remoteAddress, status)
+
+        context.shutdown()
     }
 
     override fun handleTextMessage(session: WebSocketSession?, message: TextMessage?) {
@@ -99,15 +144,18 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
         }
 
         when (json.getString("op")) {
-            "voiceUpdate" -> handlers.voiceUpdate(session, json)
-            "play"        -> handlers.play(session, json)
-            "stop"        -> handlers.stop(session, json)
-            "pause"       -> handlers.pause(session, json)
-            "seek"        -> handlers.seek(session, json)
-            "volume"      -> handlers.volume(session, json)
-            "equalizer"   -> handlers.equalizer(session, json)
-            "destroy"     -> handlers.destroy(session, json)
-            else          -> log.warn("Unexpected operation: " + json.getString("op"))
+            // @formatter:off
+            "voiceUpdate"       -> handlers.voiceUpdate(session, json)
+            "play"              -> handlers.play(session, json)
+            "stop"              -> handlers.stop(session, json)
+            "pause"             -> handlers.pause(session, json)
+            "seek"              -> handlers.seek(session, json)
+            "volume"            -> handlers.volume(session, json)
+            "destroy"           -> handlers.destroy(session, json)
+            "configureResuming" -> handlers.configureResuming(session, json)
+            "equalizer"         -> handlers.equalizer(session, json)
+            else                -> log.warn("Unexpected operation: " + json.getString("op"))
+            // @formatter:on
         }
     }
 
@@ -116,7 +164,7 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
         val shardId = Util.getShardFromSnowflake(member.guildId, shardCount)
 
         return sendFactories.computeIfAbsent(shardId % audioSendFactoryConfiguration.audioSendFactoryCount
-        ) { _ ->
+        ) {
             val customBuffer = serverConfig.bufferDurationMs
             val nativeAudioSendFactory: NativeAudioSendFactory
             nativeAudioSendFactory = if (customBuffer != null) {
@@ -129,17 +177,10 @@ class SocketServer(private val serverConfig: ServerConfig, private val audioPlay
         }
     }
 
-    companion object {
-
-        private val log = LoggerFactory.getLogger(SocketServer::class.java)
-
-        fun sendPlayerUpdate(session: WebSocketSession, player: Player) {
-            val json = JSONObject()
-            json.put("op", "playerUpdate")
-            json.put("guildId", player.guildId)
-            json.put("state", player.state)
-
-            Ws.send(session, json)
-        }
+    internal fun onSessionResumeTimeout(context: SocketContext) {
+        resumableSessions.remove(context.resumeKey)
+        context.shutdown()
     }
+
+    internal fun canResume(key: String) = resumableSessions[key]?.stopResumeTimeout() ?: false
 }
