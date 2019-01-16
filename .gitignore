@@ -8,3 +8,6 @@
 build/*
 *.jar
 !gradle/wrapper/gradle-wrapper.jar
+.project
+.classpath
+.settings
