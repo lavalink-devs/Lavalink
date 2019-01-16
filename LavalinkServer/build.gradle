@@ -18,8 +18,7 @@ bootJar {
     archiveName = "Lavalink.jar"
 }
 
-sourceCompatibility = 8
-targetCompatibility = 8
+sourceCompatibility = targetCompatibility = 1.8
 
 bootRun {
     //compiling tests during bootRun increases the likelihood of catching broken tests locally instead of on the CI
