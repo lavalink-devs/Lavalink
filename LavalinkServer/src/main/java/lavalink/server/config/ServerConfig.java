@@ -50,7 +50,7 @@ public class ServerConfig {
     /**
      * @deprecated use {@link SentryConfigProperties} instead.
      */
-    @Deprecated(since = "3")
+    @Deprecated
     public String getSentryDsn() {
         return sentryDsn;
     }
