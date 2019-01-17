@@ -3,6 +3,12 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v3.2.0.3
+* Add compatibility for Java 8-10
+
+Contributor:
+[@MinnDevelopment](https://github.com/MinnDevelopment/)
+
 ## v3.2.0.2
 * Patched magma
 
