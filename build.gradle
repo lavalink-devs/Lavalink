@@ -24,7 +24,7 @@ allprojects {
         mavenCentral()                     // main maven repo
         jcenter()                          // JDA and some other stuff
         mavenLocal()                       // useful for developing
-        maven { url "https://jitpack.io" } // build projects directly from github 
+        maven { url "https://jitpack.io" } // build projects directly from github
     }
 
     group = 'lavalink'
@@ -50,7 +50,7 @@ subprojects {
         //@formatter:off
 
         lavaplayerVersion               = '1.3.10'
-        magmaVersion                    = '0.8.3'
+        magmaVersion                    = '0.9.0'
         jdaNasVersion                   = '1.0.6'
         jappVersion                     = '1.3'
 
