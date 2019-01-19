@@ -5,12 +5,6 @@ The Java client has support for JDA, but can also be adapted to work with other 
 ## Requirements
 * You must be able to send messages via a shard's mainWS connection.
 * You must be able to intercept voice server updates from mainWS on your shard connection.
-* One of the following WS drafts (all but RFC 6455 is deprecated but should work):
-    * RFC 6455
-    * Hybi 17
-    * Hybi 10
-    * Hixie 76
-    * Hixie 75
 
 ## Significant changes v2.0 -> v3.0 
 * The response of `/loadtracks` has been completely changed (again since the initial v3.0 pre-release).
