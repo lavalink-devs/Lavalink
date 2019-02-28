@@ -20,10 +20,7 @@ public class AudioSendFactoryConfiguration {
 
         log.info("OS: " + System.getProperty("os.name") + ", Arch: " + System.getProperty("os.arch"));
 
-        if ((os.contains("Windows") || os.contains("Linux"))
-                && !System.getProperty("os.arch").equalsIgnoreCase("arm")
-                && !System.getProperty("os.arch").equalsIgnoreCase("arm-linux")
-                ) {
+        if (os.contains("Windows") || os.contains("Linux")) {
             nasSupported = true;
             log.info("JDA-NAS supported system detected. Enabled native audio sending.");
 
