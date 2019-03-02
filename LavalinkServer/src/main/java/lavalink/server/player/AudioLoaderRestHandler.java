@@ -26,11 +26,13 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import lavalink.server.config.ServerConfig;
+import lavalink.server.io.RequestAuthorizationFilter;
 import lavalink.server.util.Util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +41,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -46,8 +50,9 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
+@Configuration
 @RestController
-public class AudioLoaderRestHandler {
+public class AudioLoaderRestHandler implements WebMvcConfigurer {
 
     private static final Logger log = LoggerFactory.getLogger(AudioLoaderRestHandler.class);
     private final AudioPlayerManager audioPlayerManager;
@@ -63,18 +68,9 @@ public class AudioLoaderRestHandler {
         log.info("GET " + path);
     }
 
-    //returns an empty answer if the auth succeeded, or a response to send back immediately
-    private <T> Optional<ResponseEntity<T>> checkAuthorization(HttpServletRequest request) {
-        if (request.getHeader("Authorization") == null) {
-            return Optional.of(new ResponseEntity<>(HttpStatus.UNAUTHORIZED));
-        }
-
-        if (!request.getHeader("Authorization").equals(serverConfig.getPassword())) {
-            log.warn("Authorization failed");
-            return Optional.of(new ResponseEntity<>(HttpStatus.FORBIDDEN));
-        }
-
-        return Optional.empty();
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new RequestAuthorizationFilter(serverConfig));
     }
 
     private JSONObject trackToJSON(AudioTrack audioTrack) {
@@ -126,11 +122,6 @@ public class AudioLoaderRestHandler {
 
         log(request);
 
-        Optional<ResponseEntity<String>> notAuthed = checkAuthorization(request);
-        if (notAuthed.isPresent()) {
-            return CompletableFuture.completedFuture(notAuthed.get());
-        }
-
         return new AudioLoader(audioPlayerManager).load(identifier)
                 .thenApply(this::encodeLoadResult)
                 .thenApply(loadResultJson -> new ResponseEntity<>(loadResultJson.toString(), HttpStatus.OK));
@@ -143,11 +134,6 @@ public class AudioLoaderRestHandler {
 
         log(request);
 
-        Optional<ResponseEntity<String>> notAuthed = checkAuthorization(request);
-        if (notAuthed.isPresent()) {
-            return notAuthed.get();
-        }
-
         AudioTrack audioTrack = Util.toAudioTrack(audioPlayerManager, track);
 
         return new ResponseEntity<>(trackToJSON(audioTrack).toString(), HttpStatus.OK);
@@ -159,11 +145,6 @@ public class AudioLoaderRestHandler {
             throws IOException {
 
         log(request);
-
-        Optional<ResponseEntity<String>> notAuthed = checkAuthorization(request);
-        if (notAuthed.isPresent()) {
-            return notAuthed.get();
-        }
 
         JSONArray requestJSON = new JSONArray(body);
         JSONArray responseJSON = new JSONArray();
