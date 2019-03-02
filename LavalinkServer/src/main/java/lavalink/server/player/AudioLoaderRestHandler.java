@@ -112,6 +112,10 @@ public class AudioLoaderRestHandler implements WebMvcConfigurer {
         json.put("loadType", result.loadResultType);
         json.put("tracks", tracks);
 
+        if (result.loadResultType == ResultStatus.LOAD_FAILED && result.exception != null) {
+            json.put("exception", result.exception);
+        }
+
         return json;
     }
 

@@ -40,10 +40,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AudioLoader implements AudioLoadResultHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AudioLoader.class);
-    private static final LoadResult NO_MATCHES = new LoadResult(Collections.emptyList(),
-            null, ResultStatus.NO_MATCHES, null);
-    private static final LoadResult LOAD_FAILED = new LoadResult(Collections.emptyList(),
-            null, ResultStatus.LOAD_FAILED, null);
+    private static final LoadResult NO_MATCHES = new LoadResult(ResultStatus.NO_MATCHES, Collections.emptyList(),
+            null, null, null);
+    //private static final LoadResult LOAD_FAILED = new LoadResult(ResultStatus.LOAD_FAILED, Collections.emptyList(),
+    //        null, null, null);
 
     private final AudioPlayerManager audioPlayerManager;
 
@@ -71,7 +71,7 @@ public class AudioLoader implements AudioLoadResultHandler {
         log.info("Loaded track " + audioTrack.getInfo().title);
         ArrayList<AudioTrack> result = new ArrayList<>();
         result.add(audioTrack);
-        this.loadResult.complete(new LoadResult(result, null, ResultStatus.TRACK_LOADED, null));
+        this.loadResult.complete(new LoadResult(ResultStatus.TRACK_LOADED, result, null, null, null));
     }
 
     @Override
@@ -88,7 +88,7 @@ public class AudioLoader implements AudioLoadResultHandler {
         ResultStatus status = audioPlaylist.isSearchResult() ? ResultStatus.SEARCH_RESULT : ResultStatus.PLAYLIST_LOADED;
         List<AudioTrack> loadedItems = audioPlaylist.getTracks();
 
-        this.loadResult.complete(new LoadResult(loadedItems, playlistName, status, selectedTrack));
+        this.loadResult.complete(new LoadResult(status, loadedItems, playlistName, selectedTrack, null));
     }
 
     @Override
@@ -100,7 +100,8 @@ public class AudioLoader implements AudioLoadResultHandler {
     @Override
     public void loadFailed(FriendlyException e) {
         log.error("Load failed", e);
-        this.loadResult.complete(LOAD_FAILED);
+        this.loadResult.complete(new LoadResult(ResultStatus.LOAD_FAILED, Collections.emptyList(),
+                null, null, e.getLocalizedMessage()));
     }
 
 }
