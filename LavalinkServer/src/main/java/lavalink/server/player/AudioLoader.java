@@ -42,8 +42,6 @@ public class AudioLoader implements AudioLoadResultHandler {
     private static final Logger log = LoggerFactory.getLogger(AudioLoader.class);
     private static final LoadResult NO_MATCHES = new LoadResult(ResultStatus.NO_MATCHES, Collections.emptyList(),
             null, null, null);
-    //private static final LoadResult LOAD_FAILED = new LoadResult(ResultStatus.LOAD_FAILED, Collections.emptyList(),
-    //        null, null, null);
 
     private final AudioPlayerManager audioPlayerManager;
 
