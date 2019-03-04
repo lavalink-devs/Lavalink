@@ -50,7 +50,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-@Configuration
 @RestController
 public class AudioLoaderRestHandler implements WebMvcConfigurer {
 
