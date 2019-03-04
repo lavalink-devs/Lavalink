@@ -99,7 +99,7 @@ public class AudioLoader implements AudioLoadResultHandler {
     public void loadFailed(FriendlyException e) {
         log.error("Load failed", e);
         this.loadResult.complete(new LoadResult(ResultStatus.LOAD_FAILED, Collections.emptyList(),
-                null, null, e.getLocalizedMessage()));
+                null, null, e));
     }
 
 }

@@ -1,5 +1,6 @@
 package lavalink.server.player;
 
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import javax.annotation.Nullable;
@@ -11,11 +12,11 @@ class LoadResult {
     public List<AudioTrack> tracks;
     public String playlistName;
     public Integer selectedTrack;
-    public String exception;
+    public FriendlyException exception;
 
     public LoadResult(ResultStatus loadResultType, List<AudioTrack> tracks,
                       @Nullable String playlistName, @Nullable Integer selectedTrack,
-                      @Nullable String exception) {
+                      @Nullable FriendlyException exception) {
         // Exception is only provided when loadResultType is LOAD_FAILED.
 
         this.loadResultType = loadResultType;
