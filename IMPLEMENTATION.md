@@ -316,7 +316,10 @@ If the loadType is `LOAD_FAILED`, the response will contain an `exception` which
   "loadType": "LOAD_FAILED",
   "playlistInfo": {},
   "tracks": [],
-  "exception": "The uploader has not made this video available in your country."
+  "exception": {
+    "friendlyMessage": "The uploader has not made this video available in your country.",
+    "severity": "COMMON"
+  }
 }
 ```
 
