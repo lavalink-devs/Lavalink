@@ -311,7 +311,7 @@ Additionally, in every `/loadtracks` response, a `loadType` property is returned
 
 If the loadType is `LOAD_FAILED`, the response will contain an `exception` object with `message` and `severity` properties.
 `message` is a string detailing why the track failed to load, and is okay to display to end-users. Severity represents how common the error is.
-A severity level of `COMMON` indicates that the error is non-fatal and can usually just be ignored.
+A severity level of `COMMON` indicates that the error is non-fatal and that the issue is not from Lavalink itself.
 
 ```json
 {

@@ -26,7 +26,6 @@ public class RequestAuthorizationFilter implements HandlerInterceptor, WebMvcCon
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // TODO: Log IP
         String authorization = request.getHeader("Authorization");
 
         if (authorization == null || !authorization.equals(serverConfig.getPassword())) {
