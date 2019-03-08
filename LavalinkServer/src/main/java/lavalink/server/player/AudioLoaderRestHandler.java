@@ -26,13 +26,11 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import lavalink.server.config.ServerConfig;
-import lavalink.server.io.RequestAuthorizationFilter;
 import lavalink.server.util.Util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,17 +39,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 @RestController
-public class AudioLoaderRestHandler implements WebMvcConfigurer {
+public class AudioLoaderRestHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AudioLoaderRestHandler.class);
     private final AudioPlayerManager audioPlayerManager;
@@ -65,11 +59,6 @@ public class AudioLoaderRestHandler implements WebMvcConfigurer {
     private void log(HttpServletRequest request) {
         String path = request.getServletPath();
         log.info("GET " + path);
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new RequestAuthorizationFilter(serverConfig));
     }
 
     private JSONObject trackToJSON(AudioTrack audioTrack) {
@@ -113,7 +102,7 @@ public class AudioLoaderRestHandler implements WebMvcConfigurer {
 
         if (result.loadResultType == ResultStatus.LOAD_FAILED && result.exception != null) {
             JSONObject exception = new JSONObject();
-            exception.put("friendlyMessage", result.exception.getLocalizedMessage());
+            exception.put("message", result.exception.getLocalizedMessage());
             exception.put("severity", result.exception.severity.toString());
 
             json.put("exception", exception);

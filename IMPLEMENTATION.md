@@ -309,7 +309,9 @@ Additionally, in every `/loadtracks` response, a `loadType` property is returned
 * `NO_MATCHES` - Returned if no matches/sources could be found for a given identifier.
 * `LOAD_FAILED` - Returned if Lavaplayer failed to load something for some reason.
 
-If the loadType is `LOAD_FAILED`, the response will contain an `exception` which provides an insight as to why loading of the track failed.
+If the loadType is `LOAD_FAILED`, the response will contain an `exception` object with `message` and `severity` properties.
+`message` is a string detailing why the track failed to load, and is okay to display to end-users. Severity represents how common the error is.
+A severity level of `COMMON` indicates that the error is non-fatal and can usually just be ignored.
 
 ```json
 {
@@ -317,7 +319,7 @@ If the loadType is `LOAD_FAILED`, the response will contain an `exception` which
   "playlistInfo": {},
   "tracks": [],
   "exception": {
-    "friendlyMessage": "The uploader has not made this video available in your country.",
+    "message": "The uploader has not made this video available in your country.",
     "severity": "COMMON"
   }
 }

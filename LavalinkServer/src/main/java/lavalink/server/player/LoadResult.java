@@ -15,14 +15,20 @@ class LoadResult {
     public FriendlyException exception;
 
     public LoadResult(ResultStatus loadResultType, List<AudioTrack> tracks,
-                      @Nullable String playlistName, @Nullable Integer selectedTrack,
-                      @Nullable FriendlyException exception) {
-        // Exception is only provided when loadResultType is LOAD_FAILED.
+                      @Nullable String playlistName, @Nullable Integer selectedTrack) {
 
         this.loadResultType = loadResultType;
         this.tracks = Collections.unmodifiableList(tracks);
         this.playlistName = playlistName;
         this.selectedTrack = selectedTrack;
+        this.exception = null;
+    }
+
+    public LoadResult(FriendlyException exception) {
+        this.loadResultType = ResultStatus.LOAD_FAILED;
+        this.tracks = Collections.emptyList();
+        this.playlistName = null;
+        this.selectedTrack = null;
         this.exception = exception;
     }
 }
