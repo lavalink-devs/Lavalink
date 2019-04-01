@@ -78,7 +78,6 @@ users about the compatibility of their clients to the Lavalink server.
 
 ### Supports 2.x:
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
-* [discord.js-lavalink](https://github.com/MrJacz/discord.js-lavalink/) (Discord.js, JavaScript)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ## Server configuration
