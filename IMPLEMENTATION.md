@@ -309,6 +309,22 @@ Additionally, in every `/loadtracks` response, a `loadType` property is returned
 * `NO_MATCHES` - Returned if no matches/sources could be found for a given identifier.
 * `LOAD_FAILED` - Returned if Lavaplayer failed to load something for some reason.
 
+If the loadType is `LOAD_FAILED`, the response will contain an `exception` object with `message` and `severity` properties.
+`message` is a string detailing why the track failed to load, and is okay to display to end-users. Severity represents how common the error is.
+A severity level of `COMMON` indicates that the error is non-fatal and that the issue is not from Lavalink itself.
+
+```json
+{
+  "loadType": "LOAD_FAILED",
+  "playlistInfo": {},
+  "tracks": [],
+  "exception": {
+    "message": "The uploader has not made this video available in your country.",
+    "severity": "COMMON"
+  }
+}
+```
+
 All REST responses from Lavalink include a `Lavalink-Api-Version` header.
 
 ### Resuming Lavalink sessions
