@@ -2,7 +2,7 @@ buildscript {
     ext {
         springBootVersion = '2.1.4.RELEASE'
         gradleGitVersion = '1.5.2'
-        sonarqubeVersion = '2.6.2'
+        sonarqubeVersion = '2.7'
         kotlinVersion = '1.2.71'
         testLoggerVersion = '1.6.0'
         versionsPluginVersion = '0.21.0'
