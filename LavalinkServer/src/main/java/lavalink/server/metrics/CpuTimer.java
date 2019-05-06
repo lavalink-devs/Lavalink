@@ -21,9 +21,9 @@ public class CpuTimer {
         try {
             //between 0.0 and 1.0, 1.0 meaning all CPU cores were running threads of this JVM
             // see com.sun.management.OperatingSystemMXBean#getProcessCpuLoad and https://www.ibm.com/support/knowledgecenter/en/SSYKE2_7.1.0/com.ibm.java.api.71.doc/com.ibm.lang.management/com/ibm/lang/management/OperatingSystemMXBean.html#getProcessCpuLoad()
-            Double processCpuTime = callDoubleGetter("getProcessCpuLoad", this.osBean);
+            Double processCpuLoad = callDoubleGetter("getProcessCpuLoad", this.osBean);
 
-            return processCpuTime != null ? processCpuTime : ERROR;
+            return processCpuLoad != null ? processCpuLoad : ERROR;
         } catch (Exception e) {
             log.debug("Could not access process cpu time", e);
             return ERROR;
@@ -34,9 +34,9 @@ public class CpuTimer {
         try {
             //between 0.0 and 1.0, 1.0 meaning all CPU cores were busy
             // see com.sun.management.OperatingSystemMXBean#getSystemCpuLoad and https://www.ibm.com/support/knowledgecenter/en/SSYKE2_7.1.0/com.ibm.java.api.71.doc/com.ibm.lang.management/com/ibm/lang/management/OperatingSystemMXBean.html#getSystemCpuLoad()
-            Double processCpuTime = callDoubleGetter("getSystemCpuLoad", this.osBean);
+            Double systemCpuLoad = callDoubleGetter("getSystemCpuLoad", this.osBean);
 
-            return processCpuTime != null ? processCpuTime : ERROR;
+            return systemCpuLoad != null ? systemCpuLoad : ERROR;
         } catch (Exception e) {
             log.debug("Could not access system cpu time", e);
             return ERROR;
