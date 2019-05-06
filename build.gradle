@@ -73,9 +73,3 @@ subprojects {
 ext {
     moduleName = 'Lavalink-Parent'
 }
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.10.2'
-    //noinspection UnnecessaryQualifiedReference
-    distributionType = Wrapper.DistributionType.ALL
-}
