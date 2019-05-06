@@ -11,16 +11,22 @@ import static junit.framework.TestCase.assertTrue;
 public class CpuTimerTest {
 
     @Test
-    public void getProcessRecentCpuUsage() {
+    public void getProcessRecentCpuUsage() throws InterruptedException {
         CpuTimer cpuTimer = new CpuTimer();
-        cpuTimer.getProcessRecentCpuUsage(); //first call may be negative
+        if (cpuTimer.getProcessRecentCpuUsage() <= CpuTimer.ERROR) {
+            //first call may be negative and/or the specific JVM requires a bit more time to populate
+            Thread.sleep(1000);
+        }
         assertTrue(cpuTimer.getProcessRecentCpuUsage() > CpuTimer.ERROR);
     }
 
     @Test
-    public void getSystemRecentCpuUsage() {
+    public void getSystemRecentCpuUsage() throws InterruptedException {
         CpuTimer cpuTimer = new CpuTimer();
-        cpuTimer.getSystemRecentCpuUsage(); //first call may be negative
+        if (cpuTimer.getSystemRecentCpuUsage() <= CpuTimer.ERROR) {
+            //first call may be negative and/or the specific JVM requires a bit more time to populate
+            Thread.sleep(1000);
+        }
         assertTrue(cpuTimer.getSystemRecentCpuUsage() > CpuTimer.ERROR);
     }
 }
