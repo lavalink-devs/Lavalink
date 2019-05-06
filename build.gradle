@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.4.RELEASE'
+        springBootVersion = '2.1.4.RELEASE'
         gradleGitVersion = '1.5.2'
         sonarqubeVersion = '2.6.2'
         kotlinVersion = '1.2.71'
