@@ -3,7 +3,7 @@ buildscript {
         springBootVersion = '2.1.4.RELEASE'
         gradleGitVersion = '1.5.2'
         sonarqubeVersion = '2.7'
-        kotlinVersion = '1.2.71'
+        kotlinVersion = '1.3.31'
         testLoggerVersion = '1.6.0'
         versionsPluginVersion = '0.21.0'
     }
