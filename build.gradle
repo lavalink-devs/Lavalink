@@ -5,6 +5,7 @@ buildscript {
         sonarqubeVersion = '2.6.2'
         kotlinVersion = '1.2.71'
         testLoggerVersion = '1.6.0'
+        versionsPluginVersion = '0.21.0'
     }
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
@@ -17,6 +18,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion"
         classpath "com.adarshr:gradle-test-logger-plugin:$testLoggerVersion"
+        classpath "com.github.ben-manes:gradle-versions-plugin:$versionsPluginVersion"
     }
 }
 
@@ -35,6 +37,8 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
+    apply plugin: 'com.github.ben-manes.versions'
+
     if (project.hasProperty("includeAnalysis")) {
         project.logger.lifecycle("applying analysis plugins")
         apply from: "../analysis.gradle"
@@ -67,6 +71,19 @@ subprojects {
         commonsLangVersion              = '3.8'
 
         //@formatter:on
+    }
+
+    dependencyUpdates.resolutionStrategy {
+        componentSelection { rules ->
+            rules.all { ComponentSelection selection ->
+                boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm', 'preview', 'b', 'ea'].any { qualifier ->
+                    selection.candidate.version ==~ /(?i).*[.-]$qualifier[.\d-+]*/
+                }
+                if (rejected) {
+                    selection.reject('Release candidate')
+                }
+            }
+        }
     }
 }
 
