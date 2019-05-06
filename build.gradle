@@ -68,7 +68,7 @@ subprojects {
         jsonOrgVersion                  = '20180813'
         spotbugsAnnotationsVersion      = '3.1.6'
         prometheusVersion               = '0.5.0'
-        commonsLangVersion              = '3.8'
+        commonsLangVersion              = '3.9'
 
         //@formatter:on
     }
