@@ -67,7 +67,7 @@ subprojects {
         oshiVersion                     = '3.13.2'
         jsonOrgVersion                  = '20180813'
         spotbugsAnnotationsVersion      = '3.1.6'
-        prometheusVersion               = '0.5.0'
+        prometheusVersion               = '0.6.0'
         commonsLangVersion              = '3.9'
 
         //@formatter:on
