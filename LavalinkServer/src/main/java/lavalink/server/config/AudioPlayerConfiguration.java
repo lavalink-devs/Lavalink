@@ -10,6 +10,7 @@ import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceM
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,7 @@ public class AudioPlayerConfiguration {
 
             if (sources.isYoutube()) {
                 YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager();
+                youtube.configureBuilder(HttpClientBuilder::disableCookieManagement);
                 Integer playlistLoadLimit = serverConfig.getYoutubePlaylistLoadLimit();
 
                 if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit);
