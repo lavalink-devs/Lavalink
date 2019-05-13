@@ -16,13 +16,18 @@ public class RequestAuthorizationFilter implements HandlerInterceptor, WebMvcCon
 
     private static final Logger log = LoggerFactory.getLogger(RequestAuthorizationFilter.class);
     private ServerConfig serverConfig;
+    private MetricsPrometheusConfigProperties metricsConfig;
 
-    public RequestAuthorizationFilter(ServerConfig serverConfig) {
+    public RequestAuthorizationFilter(ServerConfig serverConfig, MetricsPrometheusConfigProperties metricsConfig) {
         this.serverConfig = serverConfig;
+        this.metricsConfig = metricsConfig;
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        // Collecting metrics is anonymous
+        if (request.getContextPath().equals(metricsConfig.getEndpoint())) return true;
+
         String authorization = request.getHeader("Authorization");
 
         if (authorization == null || !authorization.equals(serverConfig.getPassword())) {
