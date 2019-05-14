@@ -52,9 +52,6 @@ dependencies {
     }
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-undertow', version: springBootVersion
     compileOnly group: 'com.github.spotbugs', name: 'spotbugs-annotations', version: spotbugsAnnotationsVersion
-    
-    // https://stackoverflow.com/questions/52709747/update-to-spring-5-1-java-lang-noclassdeffounderror-org-springframework-http
-    compile group: 'org.reactivestreams', name: 'reactive-streams', version reactiveStreamsVersion
 
     compile group: 'io.prometheus', name: 'simpleclient', version: prometheusVersion
     compile group: 'io.prometheus', name: 'simpleclient_hotspot', version: prometheusVersion
