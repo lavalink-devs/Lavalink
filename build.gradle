@@ -1,12 +1,10 @@
 buildscript {
     ext {
-        springBootVersion = '2.1.4.RELEASE'
-        gradleGitVersion = '2.0.0'
-        grgitVersion = '3.1.1'
-        sonarqubeVersion = '2.7'
-        kotlinVersion = '1.3.31'
+        springBootVersion = '2.0.4.RELEASE'
+        gradleGitVersion = '1.5.2'
+        sonarqubeVersion = '2.6.2'
+        kotlinVersion = '1.2.71'
         testLoggerVersion = '1.6.0'
-        versionsPluginVersion = '0.21.0'
     }
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
@@ -14,13 +12,11 @@ buildscript {
     }
     dependencies {
         classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:${gradleGitVersion}"
-        classpath "org.ajoberstar.grgit:grgit-gradle:$grgitVersion"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarqubeVersion}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion"
         classpath "com.adarshr:gradle-test-logger-plugin:$testLoggerVersion"
-        classpath "com.github.ben-manes:gradle-versions-plugin:$versionsPluginVersion"
     }
 }
 
@@ -39,8 +35,6 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
-    apply plugin: 'com.github.ben-manes.versions'
-
     if (project.hasProperty("includeAnalysis")) {
         project.logger.lifecycle("applying analysis plugins")
         apply from: "../analysis.gradle"
@@ -63,32 +57,25 @@ subprojects {
         jappVersion                     = '1.3'
 
         springBootVersion               = "${springBootVersion}"
-        springWebSocketVersion          = '5.1.6.RELEASE'
+        springWebSocketVersion          = '5.0.8.RELEASE'
         logbackVersion                  = '1.2.3'
-        sentryLogbackVersion            = '1.7.22'
-        oshiVersion                     = '3.13.2'
+        sentryLogbackVersion            = '1.7.7'
+        oshiVersion                     = '3.13.0'
         jsonOrgVersion                  = '20180813'
-        spotbugsAnnotationsVersion      = '3.1.12'
-        prometheusVersion               = '0.6.0'
-        commonsLangVersion              = '3.9'
+        spotbugsAnnotationsVersion      = '3.1.6'
+        prometheusVersion               = '0.5.0'
+        commonsLangVersion              = '3.8'
 
         //@formatter:on
-    }
-
-    dependencyUpdates.resolutionStrategy {
-        componentSelection { rules ->
-            rules.all { ComponentSelection selection ->
-                boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm', 'preview', 'b', 'ea'].any { qualifier ->
-                    selection.candidate.version ==~ /(?i).*[.-]$qualifier[.\d-+]*/
-                }
-                if (rejected) {
-                    selection.reject('Release candidate')
-                }
-            }
-        }
     }
 }
 
 ext {
     moduleName = 'Lavalink-Parent'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.10.2'
+    //noinspection UnnecessaryQualifiedReference
+    distributionType = Wrapper.DistributionType.ALL
 }
