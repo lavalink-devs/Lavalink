@@ -27,7 +27,9 @@ public class RequestAuthorizationFilter implements HandlerInterceptor, WebMvcCon
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // Collecting metrics is anonymous
         if (!metricsConfig.getEndpoint().isEmpty()
-                && request.getContextPath().equals(metricsConfig.getEndpoint())) return true;
+                && request.getServletPath().equals(metricsConfig.getEndpoint())) return true;
+
+        if (request.getServletPath().equals("/error")) return true;
 
         String authorization = request.getHeader("Authorization");
 
