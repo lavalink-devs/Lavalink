@@ -31,7 +31,7 @@ public class AudioPlayerConfiguration {
             }
 
             if (sources.isYoutube()) {
-                YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager();
+                YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled());
                 Integer playlistLoadLimit = serverConfig.getYoutubePlaylistLoadLimit();
 
                 if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit);
