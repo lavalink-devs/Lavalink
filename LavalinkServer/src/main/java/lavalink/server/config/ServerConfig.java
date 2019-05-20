@@ -39,6 +39,7 @@ public class ServerConfig {
     private Integer youtubePlaylistLoadLimit;
     private boolean gcWarnings = true;
     private boolean youtubeSearchEnabled = true;
+    private boolean soundcloudSearchEnabled = true;
 
     public String getPassword() {
         return password;
@@ -92,5 +93,13 @@ public class ServerConfig {
 
     public void setYoutubeSearchEnabled(boolean youtubeSearchEnabled) {
         this.youtubeSearchEnabled = youtubeSearchEnabled;
+    }
+
+    public boolean isSoundcloudSearchEnabled() {
+        return soundcloudSearchEnabled;
+    }
+
+    public void setSoundcloudSearchEnabled(boolean soundcloudSearchEnabled) {
+        this.soundcloudSearchEnabled = soundcloudSearchEnabled;
     }
 }
