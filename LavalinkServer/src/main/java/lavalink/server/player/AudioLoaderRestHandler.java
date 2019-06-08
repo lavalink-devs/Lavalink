@@ -42,8 +42,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 @RestController
@@ -61,20 +59,6 @@ public class AudioLoaderRestHandler {
     private void log(HttpServletRequest request) {
         String path = request.getServletPath();
         log.info("GET " + path);
-    }
-
-    //returns an empty answer if the auth succeeded, or a response to send back immediately
-    private <T> Optional<ResponseEntity<T>> checkAuthorization(HttpServletRequest request) {
-        if (request.getHeader("Authorization") == null) {
-            return Optional.of(new ResponseEntity<>(HttpStatus.UNAUTHORIZED));
-        }
-
-        if (!request.getHeader("Authorization").equals(serverConfig.getPassword())) {
-            log.warn("Authorization failed");
-            return Optional.of(new ResponseEntity<>(HttpStatus.FORBIDDEN));
-        }
-
-        return Optional.empty();
     }
 
     private JSONObject trackToJSON(AudioTrack audioTrack) {
@@ -116,6 +100,14 @@ public class AudioLoaderRestHandler {
         json.put("loadType", result.loadResultType);
         json.put("tracks", tracks);
 
+        if (result.loadResultType == ResultStatus.LOAD_FAILED && result.exception != null) {
+            JSONObject exception = new JSONObject();
+            exception.put("message", result.exception.getLocalizedMessage());
+            exception.put("severity", result.exception.severity.toString());
+
+            json.put("exception", exception);
+        }
+
         return json;
     }
 
@@ -125,11 +117,6 @@ public class AudioLoaderRestHandler {
                                                                  @RequestParam String identifier) {
 
         log(request);
-
-        Optional<ResponseEntity<String>> notAuthed = checkAuthorization(request);
-        if (notAuthed.isPresent()) {
-            return CompletableFuture.completedFuture(notAuthed.get());
-        }
 
         return new AudioLoader(audioPlayerManager).load(identifier)
                 .thenApply(this::encodeLoadResult)
@@ -143,11 +130,6 @@ public class AudioLoaderRestHandler {
 
         log(request);
 
-        Optional<ResponseEntity<String>> notAuthed = checkAuthorization(request);
-        if (notAuthed.isPresent()) {
-            return notAuthed.get();
-        }
-
         AudioTrack audioTrack = Util.toAudioTrack(audioPlayerManager, track);
 
         return new ResponseEntity<>(trackToJSON(audioTrack).toString(), HttpStatus.OK);
@@ -159,11 +141,6 @@ public class AudioLoaderRestHandler {
             throws IOException {
 
         log(request);
-
-        Optional<ResponseEntity<String>> notAuthed = checkAuthorization(request);
-        if (notAuthed.isPresent()) {
-            return notAuthed.get();
-        }
 
         JSONArray requestJSON = new JSONArray(body);
         JSONArray responseJSON = new JSONArray();

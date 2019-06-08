@@ -32,6 +32,7 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 
 import java.time.Instant;
 import java.time.ZoneId;

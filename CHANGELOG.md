@@ -3,6 +3,18 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v3.2.1
+
+* Update dependencies -- fixes frequent youtube HTTP errors
+* Return `FriendlyException` message on `LOAD_FAILED` #174
+* Add option to disable `ytsearch` and `scsearch` #194
+
+Contributors:
+[@Devoxin](https://github.com/Devoxin),
+[@duncte123](https://github.com/duncte123),
+[@Frederikam](https://github.com/Frederikam), and
+[@napstr](https://github.com/napstr)
+
 ## v3.2.0.3
 * Add compatibility for Java 8-10
 

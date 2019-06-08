@@ -31,14 +31,14 @@ public class AudioPlayerConfiguration {
             }
 
             if (sources.isYoutube()) {
-                YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager();
+                YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled());
                 Integer playlistLoadLimit = serverConfig.getYoutubePlaylistLoadLimit();
 
                 if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit);
                 audioPlayerManager.registerSourceManager(youtube);
             }
             if (sources.isBandcamp()) audioPlayerManager.registerSourceManager(new BandcampAudioSourceManager());
-            if (sources.isSoundcloud()) audioPlayerManager.registerSourceManager(new SoundCloudAudioSourceManager());
+            if (sources.isSoundcloud()) audioPlayerManager.registerSourceManager(new SoundCloudAudioSourceManager(serverConfig.isSoundcloudSearchEnabled()));
             if (sources.isTwitch()) audioPlayerManager.registerSourceManager(new TwitchStreamAudioSourceManager());
             if (sources.isVimeo()) audioPlayerManager.registerSourceManager(new VimeoAudioSourceManager());
             if (sources.isMixer()) audioPlayerManager.registerSourceManager(new BeamAudioSourceManager());
