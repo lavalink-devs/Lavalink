@@ -219,9 +219,14 @@ private void handleEvent(JSONObject json) throws IOException {
             );
             break;
         case "TrackExceptionEvent":
+            JSONObject jsonEx = json.getJSONObject("exception");
             event = new TrackExceptionEvent(player,
                     LavalinkUtil.toAudioTrack(json.getString("track")),
-                    new RemoteTrackException(json.getString("error"))
+                    new FriendlyException(
+                        jsonEx.getString("message"),
+                        FriendlyException.Severity.valueOf(jsonEx.getString("severity")),
+                        new Exception(jsonEx.getString("cause"))
+                    )
             );
             break;
         case "TrackStuckEvent":
