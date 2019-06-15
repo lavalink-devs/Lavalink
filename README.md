@@ -69,6 +69,7 @@ users about the compatibility of their clients to the Lavalink server.
 * [Victoria](https://github.com/Yucked/Victoria) ([Discord.NET](https://github.com/RogueException/Discord.Net), .NET)
 * [Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET) (.NET)
 * [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink) ([DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/), .NET)
+* [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET) ([Discord.Net](https://github.com/RogueException/Discord.Net), [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/), .NET)
 * [Luna](https://github.com/CharlotteDunois/Luna) ([Yasmin](https://github.com/CharlotteDunois/Yasmin) or generic, PHP)
 * [gavalink](https://github.com/foxbot/gavalink) (Go)
 * [Magma](https://github.com/initzx/magma/) (discord.py, Python)
