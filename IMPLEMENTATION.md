@@ -12,6 +12,10 @@ The Java client has support for JDA, but can also be adapted to work with other 
     * Hixie 76
     * Hixie 75
 
+## Significant changes v3.0 -> v4.0
+The `error` string on the `TrackExceptionEvent` has been deprecated and replaced by 
+the `exception` object following the same structure as the `LOAD_FAILED` error on [`/loadtracks`](#rest-api)
+
 ## Significant changes v2.0 -> v3.0 
 * The response of `/loadtracks` has been completely changed (again since the initial v3.0 pre-release).
 * Lavalink v3.0 now reports its version as a handshake response header.
@@ -219,9 +223,14 @@ private void handleEvent(JSONObject json) throws IOException {
             );
             break;
         case "TrackExceptionEvent":
+            JSONObject jsonEx = json.getJSONObject("exception");
             event = new TrackExceptionEvent(player,
                     LavalinkUtil.toAudioTrack(json.getString("track")),
-                    new RemoteTrackException(json.getString("error"))
+                    new FriendlyException(
+                        jsonEx.getString("message"),
+                        FriendlyException.Severity.valueOf(jsonEx.getString("severity")),
+                        new RuntimeException(jsonEx.getString("cause"))
+                    )
             );
             break;
         case "TrackStuckEvent":
