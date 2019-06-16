@@ -6,11 +6,9 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * You must be able to send messages via a shard's mainWS connection.
 * You must be able to intercept voice server updates from mainWS on your shard connection.
 
-## Significant changes v3.3 -> v3.4
-* Added filters
-* The `error` string on the `TrackExceptionEvent` has been deprecated and replaced by 
+## Significant changes v3.0 -> v3.1
+The `error` string on the `TrackExceptionEvent` has been deprecated and replaced by 
 the `exception` object following the same structure as the `LOAD_FAILED` error on [`/loadtracks`](#rest-api)
-* Added the `connected` boolean to player updates.
 
 ## Significant changes v2.0 -> v3.0 
 * The response of `/loadtracks` has been completely changed (again since the initial v3.0 pre-release).
