@@ -12,7 +12,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
     * Hixie 76
     * Hixie 75
 
-## Significant changes v3.0 -> v3.1
+## Significant changes v3.0 -> v4.0
 The `error` string on the `TrackExceptionEvent` has been deprecated and replaced by 
 the `exception` object following the same structure as the `LOAD_FAILED` error on [`/loadtracks`](#rest-api)
 
