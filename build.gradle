@@ -53,8 +53,8 @@ subprojects {
         //@formatter:off
 
         lavaplayerVersion               = '1.3.17'
-        //magmaVersion                    = '0.9.0' TODO update when jda-nas releases update
-        jdaNasVersion                   = '1.0.6'
+        magmaVersion                    = '0.10.2'
+        jdaNasVersion                   = '1.1.0'
         jappVersion                     = '1.3'
 
         springBootVersion               = "${springBootVersion}"
