@@ -53,6 +53,7 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
     private ScheduledFuture myFuture = null;
     private EqualizerFactory equalizerFactory = new EqualizerFactory();
     private boolean isEqualizerApplied = false;
+    private FilterChain filters;
 
     public Player(SocketContext socketContext, String guildId, AudioPlayerManager audioPlayerManager) {
         this.socketContext = socketContext;
@@ -188,4 +189,13 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
         }
     }
 
+    @Nullable
+    public FilterChain getFilters() {
+        return filters;
+    }
+
+    public void setFilters(FilterChain filters) {
+        this.filters = filters;
+        player.setFilterFactory(filters);
+    }
 }
