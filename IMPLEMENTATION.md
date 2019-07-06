@@ -136,13 +136,7 @@ Volume may range from 0 to 1000. 100 is default.
 
 The `filters` op sets the filters. All the filters are optional, and leaving them out of this message will disable them.
 
-Adding a filter can have adverse effects on performance. These filters force Lavaplayer to decode all audio to PCM,
-even if the input was already in the Opus format that Discord uses. This means decoding and encoding audio that would
-normally require very little processing. This is often the case with YouTube videos.
-
 JSON comments are for illustration purposes only, and will not be accepted by the server.
-
-Note that filters may take a moment to apply. 
 
 ```yaml
 {
