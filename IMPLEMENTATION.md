@@ -2,6 +2,8 @@
 How to write your own client. The Java [Lavalink-Client](https://github.com/FredBoat/Lavalink-Client) will serve as an example implementation.
 The Java client has support for JDA, but can also be adapted to work with other JVM libraries.
 
+JSON comments are for illustration purposes only, and will not be accepted by the server.
+
 ## Requirements
 * You must be able to send messages via a shard's mainWS connection.
 * You must be able to intercept voice server updates from mainWS on your shard connection.
@@ -107,32 +109,60 @@ Make the player seek to a position of the track. Position is in millis
 }
 ```
 
-Set player volume. Volume may range from 0 to 1000. 100 is default.
-```json
-{
-    "op": "volume",
-    "guildId": "...",
-    "volume": 125
-}
-```
+The `filters` op sets the filters. All the filters are optional, and leaving them out of this message will disable them.
 
-Using the player equalizer
+Adding a filter can have adverse effects on performance. These filters force Lavaplayer to decode all audio to PCM,
+even if the input was already in the Opus format that Discord uses. This means decoding and encoding audio that would
+normally require very little processing. This is often the case with YouTube videos.
+
 ```json
 {
-    "op": "equalizer",
+    "op": "filters",
     "guildId": "...",
-    "bands": [
+    
+    // Float value where 1.0 is 100%. Values >1.0 may cause clipping
+    "volume": 1.0,
+    
+    // There are 15 bands (0-14) that can be changed.
+    // "gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
+    // where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could
+    // also change the volume of the output.
+    "equalizer": [
         {
             "band": 0,
             "gain": 0.2
         }
-    ]
+    ],
+    
+    // Uses equalization to eliminate part of a band, usually targeting vocals.
+    karaoke: {
+        "level": 1.0,
+        "monoLevel": 1.0,
+        "filterBand": 220.0,
+        "filterWidth": 100.0
+    },
+    
+    // Changes the speed, pitch, and rate. All default to 1.
+    timescale: {
+        "speed": 1.0,
+        "pitch": 1.0,
+        "rate": 1.0
+    },
+    
+    // Uses amplification to create a shuddering effect, where the volume quickly oscillates.
+    // Example: https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
+    tremolo: {
+        frequency: 2.0, // 0 < x
+        depth: 0.5      // 0 < x ≤ 1
+    },
+    
+    // Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
+    vibrato: {
+        frequency: 2.0, // 0 < x ≤ 14
+        depth: 0.5      // 0 < x ≤ 1
+    }
 }
 ```
-There are 15 bands (0-14) that can be changed.
-`gain` is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
-where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could
-also change the volume of the output.
 
 Tell the server to potentially disconnect from the voice server and potentially remove the player with all its data.
 This is useful if you want to move to a new node for a voice connection. Calling this op does not affect voice state,

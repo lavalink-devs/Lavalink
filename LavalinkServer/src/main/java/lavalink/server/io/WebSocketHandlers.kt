@@ -64,7 +64,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         if (json.has("volume")) {
             if(!loggedVolumeDeprecationWarning) log.warn("The volume property in the play operation has been deprecated" +
                     "and will be removed in v4. Please configure a filter instead. Note that the new filter takes a " +
-                    "float value 0.0-1.0")
+                    "float value with 1.0 being 100%")
             loggedVolumeDeprecationWarning = true
             val filters = player.filters ?: FilterChain()
             filters.volume = VolumeConfig(json.getFloat("volume") / 100)
