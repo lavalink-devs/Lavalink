@@ -55,6 +55,9 @@ public class Player extends AudioEventAdapter {
     private AudioFrame lastFrame = null;
     private FilterChain filters;
     private ScheduledFuture<?> myFuture = null;
+    private final EqualizerFactory equalizerFactory = new EqualizerFactory();
+    private boolean isEqualizerApplied = false;
+    private FilterChain filters;
 
     public Player(SocketContext socketContext, String guildId, AudioPlayerManager audioPlayerManager, ServerConfig serverConfig) {
         this.socketContext = socketContext;
@@ -181,11 +184,6 @@ public class Player extends AudioEventAdapter {
 
     public void setFilters(FilterChain filters) {
         this.filters = filters;
-
-        if (filters.isEnabled()) {
-            player.setFilterFactory(filters);
-        } else {
-            player.setFilterFactory(null);
-        }
+        player.setFilterFactory(filters);
     }
 }
