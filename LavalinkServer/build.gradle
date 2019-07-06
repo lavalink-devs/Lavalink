@@ -48,6 +48,7 @@ dependencies {
     compile group: 'io.sentry', name: 'sentry-logback', version: sentryLogbackVersion
     compile group: 'com.github.oshi', name: 'oshi-core', version: oshiVersion
     compile group: 'org.json', name: 'json', version: jsonOrgVersion
+    compile group: 'com.google.code.gson', name: 'gson', version: gsonVersion
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion) {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
     }
