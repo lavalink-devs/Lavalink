@@ -2,8 +2,6 @@
 How to write your own client. The Java [Lavalink-Client](https://github.com/FredBoat/Lavalink-Client) will serve as an example implementation.
 The Java client has support for JDA, but can also be adapted to work with other JVM libraries.
 
-JSON comments are for illustration purposes only, and will not be accepted by the server.
-
 ## Requirements
 * You must be able to send messages via a shard's mainWS connection.
 * You must be able to intercept voice server updates from mainWS on your shard connection.
@@ -115,7 +113,9 @@ Adding a filter can have adverse effects on performance. These filters force Lav
 even if the input was already in the Opus format that Discord uses. This means decoding and encoding audio that would
 normally require very little processing. This is often the case with YouTube videos.
 
-```json
+JSON comments are for illustration purposes only, and will not be accepted by the server.
+
+```yaml
 {
     "op": "filters",
     "guildId": "...",
