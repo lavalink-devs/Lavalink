@@ -1,7 +1,7 @@
 package lavalink.server.io
 
-import lavalink.server.player.FilterChain
-import lavalink.server.player.VolumeConfig
+import lavalink.server.player.filters.Band
+import lavalink.server.player.filters.FilterChain
 import lavalink.server.util.Util
 import org.json.JSONObject
 import org.slf4j.Logger
@@ -17,6 +17,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
     }
 
     private var loggedVolumeDeprecationWarning = false
+    private var loggedEqualizerDeprecationWarning = false
 
     fun voiceUpdate(session: WebSocketSession, json: JSONObject) {
         val sessionId = json.getString("sessionId")
@@ -67,7 +68,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
                     "float value with 1.0 being 100%")
             loggedVolumeDeprecationWarning = true
             val filters = player.filters ?: FilterChain()
-            filters.volume = VolumeConfig(json.getFloat("volume") / 100)
+            filters.volume = json.getFloat("volume") / 100
             player.filters = filters
         }
 
@@ -109,13 +110,20 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
     }
 
     fun equalizer(session: WebSocketSession, json: JSONObject) {
-        val player = session.context.getPlayer(json.getString("guildId"))
-        val bands = json.getJSONArray("bands")
+        if (!loggedEqualizerDeprecationWarning) log.warn("The 'equalizer' op has been deprecated in favour of the " +
+                "'filters' op. Please switch to use that one, as this op will get removed in v4.")
+        loggedEqualizerDeprecationWarning = true
 
-        for (i in 0 until bands.length()) {
-            val band = bands.getJSONObject(i)
-            player.setBandGain(band.getInt("band"), band.getFloat("gain"))
+        val player = session.context.getPlayer(json.getString("guildId"))
+
+        val list = mutableListOf<Band>()
+        json.getJSONArray("bands").forEach { b ->
+            val band = b as JSONObject
+            list.add(Band(band.getInt("band"), band.getFloat("gain")))
         }
+        val filters = player.filters ?: FilterChain()
+        filters.equalizer = list
+        player.filters = filters
     }
 
     fun destroy(session: WebSocketSession, json: JSONObject) {
@@ -136,11 +144,9 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         if (json.has("timeout")) socketContext.resumeTimeout = json.getLong("timeout")
     }
 
-    fun configureFilters(session: WebSocketSession, json: JSONObject) {
-        val player = session.context.getPlayer(json.getString("guildId"))
-        val filters = player.filters ?: FilterChain()
-        filters.parse(json)
-        player.filters = filters
+    fun filters(session: WebSocketSession, guildId: String, json: String) {
+        val player = session.context.getPlayer(guildId)
+        player.filters = FilterChain.parse(json)
     }
 
     private val WebSocketSession.context get() = contextMap[this.id] ?: error("Unknown context for WS session")

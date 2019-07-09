@@ -31,6 +31,7 @@ public class SentryConfiguration {
         boolean warnDeprecatedDsnConfig = false;
         if (dsn == null || dsn.isEmpty()) {
             //try deprecated config location
+            //noinspection deprecation
             dsn = serverConfig.getSentryDsn();
             warnDeprecatedDsnConfig = true;
         }
