@@ -22,6 +22,7 @@
 
 package lavalink.server.io
 
+import com.github.shredder121.asyncaudio.jda.AsyncPacketProviderFactory
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import lavalink.server.config.AudioSendFactoryConfiguration
@@ -170,8 +171,7 @@ class SocketServer(
                 NativeAudioSendFactory()
             }
 
-            // TODO AsyncPacketProviderFactory.adapt(nativeAudioSendFactory)
-            nativeAudioSendFactory;
+            AsyncPacketProviderFactory.adapt(nativeAudioSendFactory)
         }
     }
 
