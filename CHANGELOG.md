@@ -12,8 +12,14 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 Contributors:
 [@Devoxin](https://github.com/Devoxin),
 [@duncte123](https://github.com/duncte123),
-[@Frederikam](https://github.com/Frederikam/), and
+[@Frederikam](https://github.com/Frederikam), and
 [@napstr](https://github.com/napstr)
+
+## v3.2.0.3
+* Add compatibility for Java 8-10
+
+Contributor:
+[@MinnDevelopment](https://github.com/MinnDevelopment/)
 
 ## v3.2.0.2
 * Patched magma

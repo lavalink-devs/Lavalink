@@ -5,12 +5,6 @@ The Java client has support for JDA, but can also be adapted to work with other 
 ## Requirements
 * You must be able to send messages via a shard's mainWS connection.
 * You must be able to intercept voice server updates from mainWS on your shard connection.
-* One of the following WS drafts (all but RFC 6455 is deprecated but should work):
-    * RFC 6455
-    * Hybi 17
-    * Hybi 10
-    * Hixie 76
-    * Hixie 75
 
 ## Significant changes v2.0 -> v3.0 
 * The response of `/loadtracks` has been completely changed (again since the initial v3.0 pre-release).
@@ -63,9 +57,13 @@ Provide an intercepted voice server update. This causes the server to connect to
 ```
 
 Cause the player to play a track.
+
 `startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
+
 `endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default the track plays until it's end as per the encoded data.
-`noReplace` if set to true, this operation will be ignored if a track is already playing or paused.
+
+If `noReplace` is set to true, this operation will be ignored if a track is already playing or paused.
+
 ```json
 {
     "op": "play",
