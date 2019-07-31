@@ -1,9 +1,0 @@
-${Ansi.GREEN}       .  ${Ansi.RED} _                  _ _       _    ${Ansi.GREEN}__ _ _
-${Ansi.GREEN}      /\\ ${Ansi.RED}| | __ ___   ____ _| (_)_ __ | | __${Ansi.GREEN}\ \ \ \
-${Ansi.GREEN}     ( ( )${Ansi.RED}| |/ _` \ \ / / _` | | | '_ \| |/ /${Ansi.GREEN} \ \ \ \
-${Ansi.GREEN}      \\/ ${Ansi.RED}| | (_| |\ V / (_| | | | | | |   < ${Ansi.GREEN}  ) ) ) )
-${Ansi.GREEN}       '  ${Ansi.RED}|_|\__,_| \_/ \__,_|_|_|_| |_|_|\_\${Ansi.GREEN} / / / /
-${Ansi.DEFAULT}    =========================================${Ansi.GREEN}/_/_/_/
-
-${Ansi.GREEN}    :: Lavalink    :: ${Ansi.DEFAULT}      ${application.version}
-${Ansi.GREEN}    :: Spring Boot :: ${Ansi.DEFAULT}      ${spring-boot.formatted-version}

@@ -27,12 +27,12 @@ import lavalink.server.info.AppInfo;
 import lavalink.server.info.GitRepoState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -56,6 +56,7 @@ public class Launcher {
 
         SpringApplication sa = new SpringApplication(Launcher.class);
         sa.setWebApplicationType(WebApplicationType.SERVLET);
+        sa.setBannerMode(Banner.Mode.OFF); // We have our own
         sa.addListeners(
                 event -> {
                     if (event instanceof ApplicationEnvironmentPreparedEvent) {
@@ -77,7 +78,7 @@ public class Launcher {
         GitRepoState gitRepoState = new GitRepoState();
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss z")
-                .withZone(ZoneId.of("Europe/Copenhagen"));
+                .withZone(ZoneId.of("UTC"));
         String buildTime = dtf.format(Instant.ofEpochMilli(appInfo.getBuildTime()));
         String commitTime = dtf.format(Instant.ofEpochMilli(gitRepoState.getCommitTime() * 1000));
 
