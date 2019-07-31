@@ -8,9 +8,10 @@ assignees: ''
 ---
 
 **Describe the bug**
-[//]: # Please describe the issue in details
+<!-- Please describe the issue in details -->
 
-Lavalink version used:
+Lavalink version used: <!-- NOT Lavaplayer version -->
+
 Client used:
 
-[//]: # Remember to include Lavalink logs
+<!-- Remember to include Lavalink logs -->
