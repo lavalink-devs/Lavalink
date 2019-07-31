@@ -7,11 +7,16 @@ assignees: ''
 
 ---
 
-**Describe the bug**
+## Description
 <!-- Please describe the issue in details -->
 
-Lavalink version used: <!-- NOT Lavaplayer version -->
 
-Client used:
+## Version info
+**Client used:**
+
+Output of `java -jar Lavalink.jar --version`:
+```
+(paste here)
+```
 
 <!-- Remember to include Lavalink logs -->
