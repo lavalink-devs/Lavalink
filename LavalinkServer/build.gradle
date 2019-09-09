@@ -68,7 +68,7 @@ processResources {
                 "project.version"   : project.version,
                 "project.groupId"   : project.group,
                 "project.artifactId": project.ext.moduleName,
-                "env.BUILD_NUMBER"  : (System.getenv('CI') ? System.getenv('BUILD_NUMBER') : 'DEV'),
+                "env.BUILD_NUMBER"  : (System.getenv('CI') ? System.getenv('BUILD_NUMBER') : 'Unofficial'),
                 "env.BUILD_TIME"    : System.currentTimeMillis() + ''
         ]
     }
