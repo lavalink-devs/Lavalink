@@ -3,8 +3,18 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
-## v3.2.1
+## v3.2.1.1
+* Updated Lavaplayer to 1.3.19. This release includes a patch which fixes loading youtube URLs. 
+https://github.com/sedmelluq/lavaplayer/pull/199
+* Made the WebSocket handshake return code 401 instead of 200 on bad auth. #208
 
+Contributors:
+[@Frederikam](https://github.com/Frederikam) and
+[@Devoxin](https://github.com/Devoxin)
+
+
+
+## v3.2.1
 * Update dependencies -- fixes frequent youtube HTTP errors
 * Return `FriendlyException` message on `LOAD_FAILED` #174
 * Add option to disable `ytsearch` and `scsearch` #194
@@ -12,8 +22,14 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 Contributors:
 [@Devoxin](https://github.com/Devoxin),
 [@duncte123](https://github.com/duncte123),
-[@Frederikam](https://github.com/Frederikam/), and
+[@Frederikam](https://github.com/Frederikam), and
 [@napstr](https://github.com/napstr)
+
+## v3.2.0.3
+* Add compatibility for Java 8-10
+
+Contributor:
+[@MinnDevelopment](https://github.com/MinnDevelopment/)
 
 ## v3.2.0.2
 * Patched magma
