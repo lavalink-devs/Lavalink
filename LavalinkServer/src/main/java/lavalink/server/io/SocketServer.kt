@@ -37,7 +37,7 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
-import space.npstr.magma.Member
+import space.npstr.magma.api.Member
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Supplier
