@@ -24,7 +24,7 @@ package lavalink.server.io
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import lavalink.server.player.Player
-import space.npstr.magma.MagmaMember
+import space.npstr.magma.api.MagmaMember
 import io.undertow.websockets.core.WebSocketCallback
 import io.undertow.websockets.core.WebSocketChannel
 import io.undertow.websockets.core.WebSockets
@@ -33,9 +33,10 @@ import org.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
-import space.npstr.magma.MagmaApi
-import space.npstr.magma.events.api.MagmaEvent
-import space.npstr.magma.events.api.WebSocketClosed
+import space.npstr.magma.MagmaFactory
+import space.npstr.magma.api.MagmaApi
+import space.npstr.magma.api.event.MagmaEvent
+import space.npstr.magma.api.event.WebSocketClosed
 import java.util.*
 import java.util.concurrent.*
 import java.util.concurrent.ConcurrentHashMap
@@ -56,7 +57,7 @@ class SocketContext internal constructor(
     }
 
     val audioPlayerManager: AudioPlayerManager = audioPlayerManagerSupplier.get()
-    internal val magma: MagmaApi = MagmaApi.of { socketServer.getAudioSendFactory(it) }
+    internal val magma: MagmaApi = MagmaFactory.of { socketServer.getAudioSendFactory(it) }
     //guildId <-> Player
     val players = ConcurrentHashMap<String, Player>()
     @Volatile

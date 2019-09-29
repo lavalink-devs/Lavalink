@@ -34,9 +34,9 @@ bootRun {
 }
 
 dependencies {
-    compile group: 'club.minnced', name: 'magma', version: magmaVersion
+    compile group: 'space.npstr', name: 'Magma', version: magmaVersion
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
-    compile group: 'com.sedmelluq', name: 'jda-nas', version: jdaNasVersion
+    compile group: 'com.sedmelluq', name: 'jda-nas', version: jdaNasVersion 
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlinVersion
 
     compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: jappVersion

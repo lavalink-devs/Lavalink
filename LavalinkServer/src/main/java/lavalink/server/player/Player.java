@@ -32,12 +32,13 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
-import net.dv8tion.jda.core.audio.AudioSendHandler;
+import net.dv8tion.jda.api.audio.AudioSendHandler;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
+import java.nio.ByteBuffer;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -155,8 +156,8 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
     }
 
     @Override
-    public byte[] provide20MsAudio() {
-        return lastFrame.getData();
+    public ByteBuffer provide20MsAudio() {
+        return ByteBuffer.wrap(lastFrame.getData());
     }
 
     @Override
