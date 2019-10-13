@@ -21,6 +21,7 @@ public class GitRepoState {
 
     private static final Logger log = LoggerFactory.getLogger(GitRepoState.class);
 
+    private boolean loaded = false;
     private final String branch;
     private final String commitId;
     private final String commitIdAbbrev;
@@ -36,8 +37,9 @@ public class GitRepoState {
         Properties properties = new Properties();
         try {
             properties.load(GitRepoState.class.getClassLoader().getResourceAsStream("git.properties"));
+            loaded = true;
         } catch (NullPointerException e) {
-            log.info("Failed to load git repo information. Did you build with the git gradle plugin? Is the git.properties file present?");
+            log.trace("Failed to load git repo information. Did you build with the git gradle plugin? Is the git.properties file present?");
         } catch (IOException e) {
             log.info("Failed to load git repo information due to suspicious IOException", e);
         }
@@ -92,6 +94,10 @@ public class GitRepoState {
      */
     public long getCommitTime() {
         return this.commitTime;
+    }
+
+    public boolean isLoaded() {
+        return loaded;
     }
 }
 

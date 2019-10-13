@@ -34,9 +34,9 @@ bootRun {
 }
 
 dependencies {
-    compile group: 'club.minnced', name: 'magma', version: magmaVersion
     compile group: 'com.github.Devoxin', name: 'lavaplayer', version: lavaplayerVersion
-    compile group: 'com.sedmelluq', name: 'jda-nas', version: jdaNasVersion
+    compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
+    compile group: 'com.sedmelluq', name: 'jda-nas', version: jdaNasVersion 
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlinVersion
 
     compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: jappVersion
@@ -68,7 +68,7 @@ processResources {
                 "project.version"   : project.version,
                 "project.groupId"   : project.group,
                 "project.artifactId": project.ext.moduleName,
-                "env.BUILD_NUMBER"  : (System.getenv('CI') ? System.getenv('BUILD_NUMBER') : 'DEV'),
+                "env.BUILD_NUMBER"  : (System.getenv('CI') ? System.getenv('BUILD_NUMBER') : 'Unofficial'),
                 "env.BUILD_TIME"    : System.currentTimeMillis() + ''
         ]
     }
