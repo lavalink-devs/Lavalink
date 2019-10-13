@@ -34,6 +34,7 @@ bootRun {
 }
 
 dependencies {
+    compile group: 'space.npstr', name: 'Magma', version: magmaVersion
     compile group: 'com.github.Devoxin', name: 'lavaplayer', version: lavaplayerVersion
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
     compile group: 'com.sedmelluq', name: 'jda-nas', version: jdaNasVersion 
