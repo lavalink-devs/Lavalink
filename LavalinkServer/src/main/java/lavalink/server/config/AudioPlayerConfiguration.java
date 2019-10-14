@@ -10,6 +10,9 @@ import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceM
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.tools.Ipv6Block;
+import com.sedmelluq.discord.lavaplayer.tools.http.BalancingIpv6RoutePlanner;
+import org.apache.http.conn.routing.HttpRoutePlanner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -31,10 +34,17 @@ public class AudioPlayerConfiguration {
             }
 
             if (sources.isYoutube()) {
-                YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled());
+                YoutubeAudioSourceManager youtube;
+                if (!serverConfig.getBalancingBlock().isEmpty()) {
+                    HttpRoutePlanner planner = new BalancingIpv6RoutePlanner(new Ipv6Block(serverConfig.getBalancingBlock()));
+                    youtube = new YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled(), planner);
+                } else {
+                    youtube = new YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled());
+                }
                 Integer playlistLoadLimit = serverConfig.getYoutubePlaylistLoadLimit();
 
                 if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit);
+
                 audioPlayerManager.registerSourceManager(youtube);
             }
             if (sources.isBandcamp()) audioPlayerManager.registerSourceManager(new BandcampAudioSourceManager());
