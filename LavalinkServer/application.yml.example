@@ -19,6 +19,10 @@ lavalink:
     soundcloudSearchEnabled: true
     gc-warnings: true
 
+    # An IPv6 CIDR block to use as local addresses when connecting to certain audio sources.
+    # Leave blank for normal routing.
+    balancingBlock: ""
+
 metrics:
   prometheus:
     enabled: false
