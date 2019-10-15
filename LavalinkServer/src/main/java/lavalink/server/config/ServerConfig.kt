@@ -25,7 +25,6 @@ package lavalink.server.config
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 
-
 @ConfigurationProperties(prefix = "lavalink.server")
 @Component
 class ServerConfig {
@@ -38,4 +37,5 @@ class ServerConfig {
     var isYoutubeSearchEnabled = true
     var isSoundcloudSearchEnabled = true
     var balancingBlock = ""
+    var excludedIps: List<String> = emptyList()
 }
