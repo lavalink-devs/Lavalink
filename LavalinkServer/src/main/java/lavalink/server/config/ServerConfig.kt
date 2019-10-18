@@ -36,7 +36,4 @@ class ServerConfig {
     var isGcWarnings = true
     var isYoutubeSearchEnabled = true
     var isSoundcloudSearchEnabled = true
-    var balancingBlock = ""
-    var excludedIps: List<String> = emptyList()
-    var rotateOnBan = false
 }

@@ -10,12 +10,13 @@ import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceM
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.tools.Ipv4Block
 import com.sedmelluq.discord.lavaplayer.tools.Ipv6Block
-import com.sedmelluq.discord.lavaplayer.tools.http.BalancingIpv6RoutePlanner
-import com.sedmelluq.discord.lavaplayer.tools.http.RotatingIpv6RoutePlanner
+import com.sedmelluq.discord.lavaplayer.tools.http.BalancingIpRoutePlanner
+import com.sedmelluq.discord.lavaplayer.tools.http.RotatingIpRoutePlanner
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
-import java.net.Inet6Address
+import java.net.InetAddress
 import java.util.function.Predicate
 import java.util.function.Supplier
 
@@ -26,7 +27,7 @@ import java.util.function.Supplier
 class AudioPlayerConfiguration {
 
     @Bean
-    fun audioPlayerManagerSupplier(sources: AudioSourcesConfig, serverConfig: ServerConfig) = Supplier<AudioPlayerManager> {
+    fun audioPlayerManagerSupplier(sources: AudioSourcesConfig, serverConfig: ServerConfig, rateLimitConfig: RateLimitConfig) = Supplier<AudioPlayerManager> {
         val audioPlayerManager = DefaultAudioPlayerManager()
 
         if (serverConfig.isGcWarnings) {
@@ -35,15 +36,20 @@ class AudioPlayerConfiguration {
 
         if (sources.isYoutube) {
             val youtube: YoutubeAudioSourceManager
-            youtube = if (serverConfig.balancingBlock.isNotEmpty()) {
-                val blacklisted = serverConfig.excludedIps.map { Inet6Address.getByName(it) }
-                val filter = Predicate<Inet6Address> {
+            youtube = if (rateLimitConfig.ipBlock.isNotEmpty()) {
+                val blacklisted = rateLimitConfig.excludedIps.map { InetAddress.getByName(it) }
+                val filter = Predicate<InetAddress> {
                     !blacklisted.contains(it)
                 }
-                val planner = if (serverConfig.rotateOnBan) {
-                    RotatingIpv6RoutePlanner(Ipv6Block(serverConfig.balancingBlock), filter)
-                } else {
-                    BalancingIpv6RoutePlanner(Ipv6Block(serverConfig.balancingBlock), filter)
+                val ipBlock = when {
+                    rateLimitConfig.ipVersion == "4" -> Ipv4Block(rateLimitConfig.ipBlock)
+                    rateLimitConfig.ipVersion == "6" -> Ipv6Block(rateLimitConfig.ipBlock)
+                    else -> throw RuntimeException("Invalid IP Version: only 4 and 6 are supported, " + rateLimitConfig.ipVersion + " given")
+                }
+                val planner = when {
+                    rateLimitConfig.stategy == "RotateOnBan" -> RotatingIpRoutePlanner(ipBlock, filter)
+                    rateLimitConfig.stategy == "LoadBalance" -> BalancingIpRoutePlanner(ipBlock, filter)
+                    else -> throw RuntimeException("Invalid strategy, only RotateOnBan and LoadBalance can be used")
                 }
 
                 YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled, planner)
