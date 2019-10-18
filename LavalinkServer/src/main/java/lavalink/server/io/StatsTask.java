@@ -72,7 +72,7 @@ public class StatsTask implements Runnable {
         out.put("op", "stats");
         out.put("players", playersTotal[0]);
         out.put("playingPlayers", playersPlaying[0]);
-        out.put("uptime", System.currentTimeMillis() - Launcher.startTime);
+        out.put("uptime", System.currentTimeMillis() - Launcher.INSTANCE.getStartTime());
 
         // In bytes
         JSONObject mem = new JSONObject();
