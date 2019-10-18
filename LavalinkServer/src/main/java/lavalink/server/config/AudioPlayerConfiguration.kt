@@ -47,8 +47,8 @@ class AudioPlayerConfiguration {
                     else -> throw RuntimeException("Invalid IP Version: only 4 and 6 are supported, " + rateLimitConfig.ipVersion + " given")
                 }
                 val planner = when {
-                    rateLimitConfig.stategy == "RotateOnBan" -> RotatingIpRoutePlanner(ipBlock, filter)
-                    rateLimitConfig.stategy == "LoadBalance" -> BalancingIpRoutePlanner(ipBlock, filter)
+                    rateLimitConfig.strategy == "RotateOnBan" -> RotatingIpRoutePlanner(ipBlock, filter)
+                    rateLimitConfig.strategy == "LoadBalance" -> BalancingIpRoutePlanner(ipBlock, filter)
                     else -> throw RuntimeException("Invalid strategy, only RotateOnBan and LoadBalance can be used")
                 }
 
