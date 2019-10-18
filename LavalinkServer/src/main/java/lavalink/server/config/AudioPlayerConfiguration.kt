@@ -35,12 +35,12 @@ class AudioPlayerConfiguration {
 
         if (sources.isYoutube) {
             val youtube: YoutubeAudioSourceManager
-            youtube = if (serverConfig.balancingBlock.isNotEmpty() && !serverConfig.rotateOnBan) {
+            youtube = if (serverConfig.balancingBlock.isNotEmpty()) {
                 val blacklisted = serverConfig.excludedIps.map { Inet6Address.getByName(it) }
                 val filter = Predicate<Inet6Address> {
                     !blacklisted.contains(it)
                 }
-                val planner = if(serverConfig.rotateOnBan) {
+                val planner = if (serverConfig.rotateOnBan) {
                     RotatingIpv6RoutePlanner(Ipv6Block(serverConfig.balancingBlock), filter)
                 } else {
                     BalancingIpv6RoutePlanner(Ipv6Block(serverConfig.balancingBlock), filter)
