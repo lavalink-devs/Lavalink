@@ -38,4 +38,5 @@ class ServerConfig {
     var isSoundcloudSearchEnabled = true
     var balancingBlock = ""
     var excludedIps: List<String> = emptyList()
+    var rotateOnBan = false
 }

@@ -12,6 +12,7 @@ import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.tools.Ipv6Block
 import com.sedmelluq.discord.lavaplayer.tools.http.BalancingIpv6RoutePlanner
+import com.sedmelluq.discord.lavaplayer.tools.http.RotatingIpv6RoutePlanner
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
 import java.net.Inet6Address
@@ -34,12 +35,16 @@ class AudioPlayerConfiguration {
 
         if (sources.isYoutube) {
             val youtube: YoutubeAudioSourceManager
-            youtube = if (serverConfig.balancingBlock.isNotEmpty()) {
+            youtube = if (serverConfig.balancingBlock.isNotEmpty() && !serverConfig.rotateOnBan) {
                 val blacklisted = serverConfig.excludedIps.map { Inet6Address.getByName(it) }
                 val filter = Predicate<Inet6Address> {
                     !blacklisted.contains(it)
                 }
-                val planner = BalancingIpv6RoutePlanner(Ipv6Block(serverConfig.balancingBlock), filter)
+                val planner = if(serverConfig.rotateOnBan) {
+                    RotatingIpv6RoutePlanner(Ipv6Block(serverConfig.balancingBlock), filter)
+                } else {
+                    BalancingIpv6RoutePlanner(Ipv6Block(serverConfig.balancingBlock), filter)
+                }
 
                 YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled, planner)
             } else {
