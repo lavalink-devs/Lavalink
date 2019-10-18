@@ -7,10 +7,16 @@ assignees: ''
 
 ---
 
-**Describe the bug**
-[//]: # Please describe the issue in details
+## Description
+<!-- Please describe the issue in details -->
 
-Lavalink version used:
-Client used:
 
-[//]: # Remember to include Lavalink logs
+## Version info
+**Client used:**
+
+Output of `java -jar Lavalink.jar --version`:
+```
+(paste here)
+```
+
+<!-- Remember to include Lavalink logs -->
