@@ -10,6 +10,7 @@ import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceM
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.tools.IpBlock
 import com.sedmelluq.discord.lavaplayer.tools.Ipv4Block
 import com.sedmelluq.discord.lavaplayer.tools.Ipv6Block
 import com.sedmelluq.discord.lavaplayer.tools.http.BalancingIpRoutePlanner
@@ -41,10 +42,11 @@ class AudioPlayerConfiguration {
                 val filter = Predicate<InetAddress> {
                     !blacklisted.contains(it)
                 }
+
                 val ipBlock = when {
-                    rateLimitConfig.ipVersion == "4" -> Ipv4Block(rateLimitConfig.ipBlock)
-                    rateLimitConfig.ipVersion == "6" -> Ipv6Block(rateLimitConfig.ipBlock)
-                    else -> throw RuntimeException("Invalid IP Version: only 4 and 6 are supported, " + rateLimitConfig.ipVersion + " given")
+                    Ipv4Block.isIpv4CidrBlock(rateLimitConfig.ipBlock) -> Ipv4Block(rateLimitConfig.ipBlock)
+                    Ipv6Block.isIpv6CidrBlock(rateLimitConfig.ipBlock) -> Ipv6Block(rateLimitConfig.ipBlock)
+                    else -> throw RuntimeException("Invalid IP Block, make sure to provide a valid CIDR notation")
                 }
                 val planner = when {
                     rateLimitConfig.strategy == "RotateOnBan" -> RotatingIpRoutePlanner(ipBlock, filter)

@@ -19,7 +19,6 @@ lavalink:
     soundcloudSearchEnabled: true
     gc-warnings: true
     ratelimit:
-      #ipVersion: '6'
       ipBlock: ""
       #excludedIps: ["...", "..."]
       #strategy: 'RotateOnBan' # RotateOnBan | LoadBalance

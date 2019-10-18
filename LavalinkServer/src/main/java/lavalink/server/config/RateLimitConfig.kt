@@ -7,9 +7,8 @@ import org.springframework.stereotype.Component
 @Component
 class RateLimitConfig {
 
-    var ipVersion = "6"
     var ipBlock = ""
     var excludedIps: List<String> = emptyList()
-    var strategy = "RotateOnBan" // LoadBalance
+    var strategy = "RotateOnBan" // RotateOnBan | LoadBalance
 
 }
