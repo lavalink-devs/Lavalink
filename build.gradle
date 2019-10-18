@@ -51,7 +51,7 @@ subprojects {
 
     ext {
         //@formatter:off
-        lavaplayerVersion               = '15e514696c8d0e2e3bc5d5572db6ca777106b3bb'
+        lavaplayerVersion               = '64ab1a7acf982c1bc48d33a4427418cd025b3c08'
         magmaVersion                    = '0.12.3'
         jdaNasVersion                   = '1.1.0'
         jappVersion                     = '1.3.2-MINN'
