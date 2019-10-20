@@ -16,6 +16,7 @@ import com.sedmelluq.discord.lavaplayer.tools.Ipv6Block
 import com.sedmelluq.discord.lavaplayer.tools.http.BalancingIpRoutePlanner
 import com.sedmelluq.discord.lavaplayer.tools.http.RotatingIpRoutePlanner
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Component
 import java.net.InetAddress
 import java.util.function.Predicate
@@ -24,12 +25,13 @@ import java.util.function.Supplier
 /**
  * Created by napster on 05.03.18.
  */
-@Component
-class AudioPlayerConfiguration {
+@Configuration
+class AudioPlayerConfiguration(sources: AudioSourcesConfig, serverConfig: ServerConfig, rateLimitConfig: RateLimitConfig, routePlannerService: RoutePlannerService) {
 
-    @Bean
-    fun audioPlayerManagerSupplier(sources: AudioSourcesConfig, serverConfig: ServerConfig, rateLimitConfig: RateLimitConfig) = Supplier<AudioPlayerManager> {
-        val audioPlayerManager = DefaultAudioPlayerManager()
+    private final val audioPlayerManager: AudioPlayerManager
+
+    init {
+        audioPlayerManager = DefaultAudioPlayerManager()
 
         if (serverConfig.isGcWarnings) {
             audioPlayerManager.enableGcMonitoring()
@@ -38,22 +40,7 @@ class AudioPlayerConfiguration {
         if (sources.isYoutube) {
             val youtube: YoutubeAudioSourceManager
             youtube = if (rateLimitConfig.ipBlock.isNotEmpty()) {
-                val blacklisted = rateLimitConfig.excludedIps.map { InetAddress.getByName(it) }
-                val filter = Predicate<InetAddress> {
-                    !blacklisted.contains(it)
-                }
-
-                val ipBlock = when {
-                    Ipv4Block.isIpv4CidrBlock(rateLimitConfig.ipBlock) -> Ipv4Block(rateLimitConfig.ipBlock)
-                    Ipv6Block.isIpv6CidrBlock(rateLimitConfig.ipBlock) -> Ipv6Block(rateLimitConfig.ipBlock)
-                    else -> throw RuntimeException("Invalid IP Block, make sure to provide a valid CIDR notation")
-                }
-                val planner = when {
-                    rateLimitConfig.strategy == "RotateOnBan" -> RotatingIpRoutePlanner(ipBlock, filter)
-                    rateLimitConfig.strategy == "LoadBalance" -> BalancingIpRoutePlanner(ipBlock, filter)
-                    else -> throw RuntimeException("Invalid strategy, only RotateOnBan and LoadBalance can be used")
-                }
-
+                val planner = routePlannerService.routePlanner()
                 YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled, planner)
             } else {
                 YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled)
@@ -73,7 +60,10 @@ class AudioPlayerConfiguration {
         if (sources.isLocal) audioPlayerManager.registerSourceManager(LocalAudioSourceManager())
 
         audioPlayerManager.configuration.isFilterHotSwapEnabled = true
+    }
 
+    @Bean
+    fun audioPlayerManagerSupplier(sources: AudioSourcesConfig, serverConfig: ServerConfig, rateLimitConfig: RateLimitConfig) = Supplier {
         audioPlayerManager
     }
 
