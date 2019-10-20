@@ -26,12 +26,11 @@ import java.util.function.Supplier
  * Created by napster on 05.03.18.
  */
 @Configuration
-class AudioPlayerConfiguration(sources: AudioSourcesConfig, serverConfig: ServerConfig, rateLimitConfig: RateLimitConfig, routePlannerService: RoutePlannerService) {
+class AudioPlayerConfiguration() {
 
-    private final val audioPlayerManager: AudioPlayerManager
-
-    init {
-        audioPlayerManager = DefaultAudioPlayerManager()
+    @Bean
+    fun audioPlayerManagerSupplier(sources: AudioSourcesConfig, serverConfig: ServerConfig, rateLimitConfig: RateLimitConfig, routePlannerService: RoutePlannerService) = Supplier<AudioPlayerManager> {
+        val audioPlayerManager = DefaultAudioPlayerManager()
 
         if (serverConfig.isGcWarnings) {
             audioPlayerManager.enableGcMonitoring()
@@ -60,10 +59,7 @@ class AudioPlayerConfiguration(sources: AudioSourcesConfig, serverConfig: Server
         if (sources.isLocal) audioPlayerManager.registerSourceManager(LocalAudioSourceManager())
 
         audioPlayerManager.configuration.isFilterHotSwapEnabled = true
-    }
 
-    @Bean
-    fun audioPlayerManagerSupplier(sources: AudioSourcesConfig, serverConfig: ServerConfig, rateLimitConfig: RateLimitConfig) = Supplier {
         audioPlayerManager
     }
 
