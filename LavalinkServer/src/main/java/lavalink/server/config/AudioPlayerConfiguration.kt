@@ -67,8 +67,7 @@ class AudioPlayerConfiguration() {
 
     @Bean
     fun routePlanner(rateLimitConfig: RateLimitConfig?): AbstractRoutePlanner? {
-        if (rateLimitConfig?.ipBlock?.isNotEmpty() != true)
-            return null
+        if (rateLimitConfig?.ipBlock?.isNotEmpty() != true) return null
         val blacklisted = rateLimitConfig.excludedIps.map { InetAddress.getByName(it) }
         val filter = Predicate<InetAddress> {
             !blacklisted.contains(it)
