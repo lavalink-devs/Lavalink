@@ -25,7 +25,7 @@ import java.util.function.Supplier
  * Created by napster on 05.03.18.
  */
 @Configuration
-class AudioPlayerConfiguration() {
+class AudioPlayerConfiguration {
 
     @Bean
     fun audioPlayerManagerSupplier(sources: AudioSourcesConfig, serverConfig: ServerConfig, rateLimitConfig: RateLimitConfig?, routePlanner: AbstractRoutePlanner?) = Supplier<AudioPlayerManager> {
