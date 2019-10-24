@@ -78,8 +78,8 @@ class AudioPlayerConfiguration {
             else -> throw RuntimeException("Invalid IP Block, make sure to provide a valid CIDR notation")
         }
         return when {
-            rateLimitConfig.strategy.toLowerCase().trim() == "rotateonban" -> RotatingIpRoutePlanner(ipBlock, filter)
-            rateLimitConfig.strategy.toLowerCase().trim() == "loadbalance" -> BalancingIpRoutePlanner(ipBlock, filter)
+            rateLimitConfig.strategy.toLowerCase().trim() == "rotateonban" -> RotatingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
+            rateLimitConfig.strategy.toLowerCase().trim() == "loadbalance" -> BalancingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
             else -> throw RuntimeException("Invalid strategy, only RotateOnBan and LoadBalance can be used")
         }
     }

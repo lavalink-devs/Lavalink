@@ -10,5 +10,6 @@ class RateLimitConfig {
     var ipBlock = ""
     var excludedIps: List<String> = emptyList()
     var strategy = "RotateOnBan" // RotateOnBan | LoadBalance
+    var searchTriggersFail = true
 
 }

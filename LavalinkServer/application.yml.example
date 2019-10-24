@@ -22,6 +22,7 @@ lavalink:
       ipBlock: ""
       #excludedIps: ["...", "..."]
       #strategy: 'RotateOnBan' # RotateOnBan | LoadBalance
+      #searchTriggersFail: true # Whether a search 429 should trigger marking the ip as failing
 
 metrics:
   prometheus:
