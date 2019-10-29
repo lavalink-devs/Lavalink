@@ -12,10 +12,7 @@ import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.tools.Ipv4Block
 import com.sedmelluq.discord.lavaplayer.tools.Ipv6Block
-import com.sedmelluq.discord.lavaplayer.tools.http.AbstractRoutePlanner
-import com.sedmelluq.discord.lavaplayer.tools.http.BalancingIpRoutePlanner
-import com.sedmelluq.discord.lavaplayer.tools.http.NanoIpRoutePlanner
-import com.sedmelluq.discord.lavaplayer.tools.http.RotatingIpRoutePlanner
+import com.sedmelluq.discord.lavaplayer.tools.http.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.net.InetAddress
@@ -78,10 +75,12 @@ class AudioPlayerConfiguration {
             Ipv6Block.isIpv6CidrBlock(rateLimitConfig.ipBlock) -> Ipv6Block(rateLimitConfig.ipBlock)
             else -> throw RuntimeException("Invalid IP Block, make sure to provide a valid CIDR notation")
         }
+        val strategy = rateLimitConfig.strategy.toLowerCase().trim()
         return when {
-            rateLimitConfig.strategy.toLowerCase().trim() == "rotateonban" -> RotatingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
-            rateLimitConfig.strategy.toLowerCase().trim() == "loadbalance" -> BalancingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
-            rateLimitConfig.strategy.toLowerCase().trim() == "nanoswitch" -> NanoIpRoutePlanner(ipBlock, rateLimitConfig.searchTriggersFail)
+            strategy == "rotateonban" -> RotatingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
+            strategy == "loadbalance" -> BalancingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
+            strategy == "nanoswitch" -> NanoIpRoutePlanner(ipBlock, rateLimitConfig.searchTriggersFail)
+            strategy == "rotatingnanoswitch" -> RotatingNanoIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
             else -> throw RuntimeException("Invalid strategy, only RotateOnBan, LoadBalance and NanoSwitch can be used")
         }
     }
