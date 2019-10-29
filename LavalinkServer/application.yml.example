@@ -21,7 +21,7 @@ lavalink:
     ratelimit:
       ipBlock: ""
       #excludedIps: ["...", "..."]
-      #strategy: 'RotateOnBan' # RotateOnBan | LoadBalance | NanoSwitch
+      #strategy: 'RotateOnBan' # RotateOnBan | LoadBalance | NanoSwitch | RotatingNanoSwitch
       #searchTriggersFail: true # Whether a search 429 should trigger marking the ip as failing
 
 metrics:
