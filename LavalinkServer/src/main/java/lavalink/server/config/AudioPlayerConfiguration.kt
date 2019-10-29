@@ -14,6 +14,7 @@ import com.sedmelluq.discord.lavaplayer.tools.Ipv4Block
 import com.sedmelluq.discord.lavaplayer.tools.Ipv6Block
 import com.sedmelluq.discord.lavaplayer.tools.http.AbstractRoutePlanner
 import com.sedmelluq.discord.lavaplayer.tools.http.BalancingIpRoutePlanner
+import com.sedmelluq.discord.lavaplayer.tools.http.NanoIpRoutePlanner
 import com.sedmelluq.discord.lavaplayer.tools.http.RotatingIpRoutePlanner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -80,7 +81,8 @@ class AudioPlayerConfiguration {
         return when {
             rateLimitConfig.strategy.toLowerCase().trim() == "rotateonban" -> RotatingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
             rateLimitConfig.strategy.toLowerCase().trim() == "loadbalance" -> BalancingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
-            else -> throw RuntimeException("Invalid strategy, only RotateOnBan and LoadBalance can be used")
+            rateLimitConfig.strategy.toLowerCase().trim() == "nanoswitch" -> NanoIpRoutePlanner(ipBlock, rateLimitConfig.searchTriggersFail)
+            else -> throw RuntimeException("Invalid strategy, only RotateOnBan, LoadBalance and NanoSwitch can be used")
         }
     }
 
