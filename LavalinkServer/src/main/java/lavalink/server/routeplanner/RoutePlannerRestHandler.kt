@@ -1,7 +1,9 @@
 package lavalink.server.routeplanner
 
 import com.sedmelluq.discord.lavaplayer.tools.http.AbstractRoutePlanner
+import com.sedmelluq.discord.lavaplayer.tools.http.NanoIpRoutePlanner
 import com.sedmelluq.discord.lavaplayer.tools.http.RotatingIpRoutePlanner
+import com.sedmelluq.discord.lavaplayer.tools.http.RotatingNanoIpRoutePlanner
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -99,6 +101,15 @@ class RoutePlannerRestHandler(val routePlanner: AbstractRoutePlanner?) {
             jsonObject.put("rotateIndex", planner.rotateIndex)
             jsonObject.put("ipIndex", planner.index)
             jsonObject.put("currentAddress", planner.currentAddress?.toString())
+        }
+
+        if(planner is NanoIpRoutePlanner) {
+            jsonObject.put("estAddressIndex", planner.estCurrentAddress())
+        }
+
+        if(planner is RotatingNanoIpRoutePlanner) {
+            jsonObject.put("blockIndex", planner.currentBlock.longValueExact())
+            jsonObject.put("estAddressIndex", planner.estAddressIndexInBlock)
         }
 
         val ipBlock = planner?.ipBlock
