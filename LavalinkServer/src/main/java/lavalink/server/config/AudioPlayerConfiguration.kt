@@ -10,9 +10,10 @@ import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceM
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
-import com.sedmelluq.discord.lavaplayer.tools.Ipv4Block
-import com.sedmelluq.discord.lavaplayer.tools.Ipv6Block
-import com.sedmelluq.discord.lavaplayer.tools.http.*
+import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotator
+import com.sedmelluq.lava.extensions.youtuberotator.planner.*
+import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv4Block
+import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.net.InetAddress
@@ -34,12 +35,12 @@ class AudioPlayerConfiguration {
         }
 
         if (sources.isYoutube) {
-            val youtube: YoutubeAudioSourceManager = if (rateLimitConfig != null && rateLimitConfig.ipBlock.isNotEmpty() && routePlanner != null) {
-                YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled, routePlanner)
-            } else {
-                YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled)
+            if (rateLimitConfig != null && rateLimitConfig.ipBlock.isNotEmpty() && routePlanner != null) {
+                YoutubeIpRotator.setup(audioPlayerManager, routePlanner)
             }
             val playlistLoadLimit = serverConfig.youtubePlaylistLoadLimit
+
+            val youtube = YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled)
 
             if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit)
 
@@ -79,7 +80,7 @@ class AudioPlayerConfiguration {
         return when {
             strategy == "rotateonban" -> RotatingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
             strategy == "loadbalance" -> BalancingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
-            strategy == "nanoswitch" -> NanoIpRoutePlanner(ipBlock, rateLimitConfig.searchTriggersFail)
+            strategy == "nanoswitch" -> NanoIpRoutePlanner(ipBlock as Ipv6Block?, rateLimitConfig.searchTriggersFail)
             strategy == "rotatingnanoswitch" -> RotatingNanoIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
             else -> throw RuntimeException("Invalid strategy, only RotateOnBan, LoadBalance and NanoSwitch can be used")
         }
