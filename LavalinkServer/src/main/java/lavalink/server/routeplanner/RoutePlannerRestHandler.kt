@@ -1,9 +1,9 @@
 package lavalink.server.routeplanner
 
-import com.sedmelluq.discord.lavaplayer.tools.http.AbstractRoutePlanner
-import com.sedmelluq.discord.lavaplayer.tools.http.NanoIpRoutePlanner
-import com.sedmelluq.discord.lavaplayer.tools.http.RotatingIpRoutePlanner
-import com.sedmelluq.discord.lavaplayer.tools.http.RotatingNanoIpRoutePlanner
+import com.sedmelluq.lava.extensions.youtuberotator.planner.AbstractRoutePlanner
+import com.sedmelluq.lava.extensions.youtuberotator.planner.NanoIpRoutePlanner
+import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingIpRoutePlanner
+import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -104,7 +104,7 @@ class RoutePlannerRestHandler(val routePlanner: AbstractRoutePlanner?) {
         }
 
         if(planner is NanoIpRoutePlanner) {
-            jsonObject.put("estAddressIndex", planner.estCurrentAddress())
+            jsonObject.put("estAddressIndex", planner.currentAddress)
         }
 
         if(planner is RotatingNanoIpRoutePlanner) {
