@@ -14,6 +14,7 @@ import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotator
 import com.sedmelluq.lava.extensions.youtuberotator.planner.*
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv4Block
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.net.InetAddress
@@ -26,6 +27,8 @@ import java.util.function.Supplier
 @Configuration
 class AudioPlayerConfiguration {
 
+    private val log = LoggerFactory.getLogger(AudioPlayerConfiguration::class.java)
+
     @Bean
     fun audioPlayerManagerSupplier(sources: AudioSourcesConfig, serverConfig: ServerConfig, rateLimitConfig: RateLimitConfig?, routePlanner: AbstractRoutePlanner?) = Supplier<AudioPlayerManager> {
         val audioPlayerManager = DefaultAudioPlayerManager()
@@ -35,7 +38,7 @@ class AudioPlayerConfiguration {
         }
 
         if (sources.isYoutube) {
-            if (rateLimitConfig != null && rateLimitConfig.ipBlock.isNotEmpty() && routePlanner != null) {
+            if (rateLimitConfig != null && routePlanner != null) {
                 YoutubeIpRotator.setup(audioPlayerManager, routePlanner)
             }
             val playlistLoadLimit = serverConfig.youtubePlaylistLoadLimit
@@ -66,22 +69,38 @@ class AudioPlayerConfiguration {
 
     @Bean
     fun routePlanner(rateLimitConfig: RateLimitConfig?): AbstractRoutePlanner? {
-        if (rateLimitConfig?.ipBlock?.isNotEmpty() != true) return null
+        if(rateLimitConfig == null) {
+            log.debug("No rate limit config block found, skipping setup of route planner")
+            return null
+        }
+        val ipBlockList = ArrayList(rateLimitConfig.ipBlocks)
+        if (rateLimitConfig.ipBlock.isNotEmpty()) {
+            log.warn("Usage of deprecated `ipBlock` found, please use `ipBlocks` list instead!")
+            ipBlockList.add(rateLimitConfig.ipBlock)
+        }
+        if (ipBlockList.isEmpty()) {
+            log.debug("List of ip blocks is empty, skipping setup of route planner")
+            return null
+        }
+
         val blacklisted = rateLimitConfig.excludedIps.map { InetAddress.getByName(it) }
         val filter = Predicate<InetAddress> {
             !blacklisted.contains(it)
         }
+
+        // TODO: SETUP MULTIPLE IP BLOCKS
+
         val ipBlock = when {
             Ipv4Block.isIpv4CidrBlock(rateLimitConfig.ipBlock) -> Ipv4Block(rateLimitConfig.ipBlock)
             Ipv6Block.isIpv6CidrBlock(rateLimitConfig.ipBlock) -> Ipv6Block(rateLimitConfig.ipBlock)
             else -> throw RuntimeException("Invalid IP Block, make sure to provide a valid CIDR notation")
         }
         val strategy = rateLimitConfig.strategy.toLowerCase().trim()
-        return when {
-            strategy == "rotateonban" -> RotatingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
-            strategy == "loadbalance" -> BalancingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
-            strategy == "nanoswitch" -> NanoIpRoutePlanner(ipBlock as Ipv6Block?, rateLimitConfig.searchTriggersFail)
-            strategy == "rotatingnanoswitch" -> RotatingNanoIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
+        return when (strategy) {
+            "rotateonban" -> RotatingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
+            "loadbalance" -> BalancingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
+            "nanoswitch" -> NanoIpRoutePlanner(ipBlock as Ipv6Block?, rateLimitConfig.searchTriggersFail)
+            "rotatingnanoswitch" -> RotatingNanoIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
             else -> throw RuntimeException("Invalid strategy, only RotateOnBan, LoadBalance and NanoSwitch can be used")
         }
     }

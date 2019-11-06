@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component
 @Component
 class RateLimitConfig {
 
+    @Deprecated(message = "Use `ipBlocks` list instead")
     var ipBlock = ""
+    var ipBlocks: List<String> = emptyList()
     var excludedIps: List<String> = emptyList()
     var strategy = "RotateOnBan" // RotateOnBan | LoadBalance
     var searchTriggersFail = true
