@@ -109,7 +109,7 @@ class RoutePlannerRestHandler(val routePlanner: AbstractRoutePlanner?) {
 
         if(planner is RotatingNanoIpRoutePlanner) {
             jsonObject.put("blockIndex", planner.currentBlock.longValueExact())
-            jsonObject.put("estAddressIndex", planner.estAddressIndexInBlock)
+            jsonObject.put("estAddressIndex", planner.addressIndexInBlock)
         }
 
         val ipBlock = planner?.ipBlock
@@ -127,7 +127,6 @@ class RoutePlannerRestHandler(val routePlanner: AbstractRoutePlanner?) {
             failingAddressesJson.put(failingAdressData)
         }
 
-        jsonObject.put("lastAddress", planner?.lastAddress)
         jsonObject.put("ipBlock", ipBlockJson)
         jsonObject.put("failingAddresses", failingAddressesJson)
         return jsonObject

@@ -30,7 +30,7 @@ class AudioPlayerConfiguration {
     private val log = LoggerFactory.getLogger(AudioPlayerConfiguration::class.java)
 
     @Bean
-    fun audioPlayerManagerSupplier(sources: AudioSourcesConfig, serverConfig: ServerConfig, rateLimitConfig: RateLimitConfig?, routePlanner: AbstractRoutePlanner?) = Supplier<AudioPlayerManager> {
+    fun audioPlayerManagerSupplier(sources: AudioSourcesConfig, serverConfig: ServerConfig, routePlanner: AbstractRoutePlanner?) = Supplier<AudioPlayerManager> {
         val audioPlayerManager = DefaultAudioPlayerManager()
 
         if (serverConfig.isGcWarnings) {
@@ -38,15 +38,12 @@ class AudioPlayerConfiguration {
         }
 
         if (sources.isYoutube) {
-            if (rateLimitConfig != null && routePlanner != null) {
+            if (routePlanner != null) {
                 YoutubeIpRotator.setup(audioPlayerManager, routePlanner)
             }
-            val playlistLoadLimit = serverConfig.youtubePlaylistLoadLimit
-
             val youtube = YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled)
-
+            val playlistLoadLimit = serverConfig.youtubePlaylistLoadLimit
             if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit)
-
             audioPlayerManager.registerSourceManager(youtube)
         }
         if (sources.isBandcamp) audioPlayerManager.registerSourceManager(BandcampAudioSourceManager())
@@ -87,21 +84,21 @@ class AudioPlayerConfiguration {
         val filter = Predicate<InetAddress> {
             !blacklisted.contains(it)
         }
-
-        // TODO: SETUP MULTIPLE IP BLOCKS
-
-        val ipBlock = when {
-            Ipv4Block.isIpv4CidrBlock(rateLimitConfig.ipBlock) -> Ipv4Block(rateLimitConfig.ipBlock)
-            Ipv6Block.isIpv6CidrBlock(rateLimitConfig.ipBlock) -> Ipv6Block(rateLimitConfig.ipBlock)
-            else -> throw RuntimeException("Invalid IP Block, make sure to provide a valid CIDR notation")
+        val ipBlocks = ipBlockList.map {
+            when {
+                Ipv4Block.isIpv4CidrBlock(it) -> Ipv4Block(it)
+                Ipv6Block.isIpv6CidrBlock(it) -> Ipv6Block(it)
+                else -> throw RuntimeException("Invalid IP Block '$it', make sure to provide a valid CIDR notation")
+            }
         }
+
         val strategy = rateLimitConfig.strategy.toLowerCase().trim()
         return when (strategy) {
-            "rotateonban" -> RotatingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
-            "loadbalance" -> BalancingIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
-            "nanoswitch" -> NanoIpRoutePlanner(ipBlock as Ipv6Block?, rateLimitConfig.searchTriggersFail)
-            "rotatingnanoswitch" -> RotatingNanoIpRoutePlanner(ipBlock, filter, rateLimitConfig.searchTriggersFail)
-            else -> throw RuntimeException("Invalid strategy, only RotateOnBan, LoadBalance and NanoSwitch can be used")
+            "rotateonban" -> RotatingIpRoutePlanner(ipBlocks, filter, rateLimitConfig.searchTriggersFail)
+            "loadbalance" -> BalancingIpRoutePlanner(ipBlocks, filter, rateLimitConfig.searchTriggersFail)
+            "nanoswitch" -> NanoIpRoutePlanner(ipBlocks, rateLimitConfig.searchTriggersFail)
+            "rotatingnanoswitch" -> RotatingNanoIpRoutePlanner(ipBlocks, filter, rateLimitConfig.searchTriggersFail)
+            else -> throw RuntimeException("Unknown strategy!")
         }
     }
 
