@@ -19,7 +19,7 @@ lavalink:
     soundcloudSearchEnabled: true
     gc-warnings: true
     ratelimit:
-      ipBlock: ""
+      #ipBlocks: ["127.0.0.1/31", "127.0.0.3/32"]
       #excludedIps: ["...", "..."]
       #strategy: 'RotateOnBan' # RotateOnBan | LoadBalance | NanoSwitch | RotatingNanoSwitch
       #searchTriggersFail: true # Whether a search 429 should trigger marking the ip as failing
