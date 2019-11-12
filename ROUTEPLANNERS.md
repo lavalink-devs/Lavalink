@@ -1,17 +1,19 @@
 # RoutePlanner Strategies
 
-> ***Terminology***
->
-> **Ip block / CIDR block**
->
-> An IP block or CIDR block are addresses which are next to each other
->
-> (e.g.) 1.0.0.0, 1.0.0.1, 1.0.0.2, ...
->
-> **Combined IP Block**
->
-> A combined IP Block is created when multiple IPs / CIDR blocks are added to the 
-> configuration file. Lavaplayer will treat them as a single virtual IP-Block.
+***Terminology***
+
+**Ip block / CIDR block**
+
+An IP block or CIDR block are addresses which are next to each other
+
+(e.g.) 1.0.0.0, 1.0.0.1, 1.0.0.2, ...
+
+For more information about CIDR blocks, refer to [this article](https://docs.netgate.com/pfsense/en/latest/book/network/understanding-cidr-subnet-mask-notation.html).
+
+**Combined IP Block**
+
+A combined IP Block is created when multiple IPs / CIDR blocks are added to the 
+configuration file. Lavaplayer will treat them as a single virtual IP-Block.
 
 ## RotateOnBan Strategy
 ### RoutePlanner
