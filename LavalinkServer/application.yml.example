@@ -18,14 +18,11 @@ lavalink:
     youtubeSearchEnabled: true
     soundcloudSearchEnabled: true
     gc-warnings: true
-
-    # An IPv6 CIDR block to use as local addresses when connecting to certain audio sources.
-    # Must be a /63 or larger.
-    # Leave blank for normal routing.
-    balancingBlock: ""
-
-    # List of IPs in the block to exclude. Useful if your gateway is a member of the same block.
-    #excludedIps: ["...", "..."]
+    #ratelimit:
+      #ipBlocks: ["127.0.0.1/31", "127.0.0.3/32", "..."] # list of ip blocks
+      #excludedIps: ["...", "..."] # ips which should be explicit excluded from usage by lavalink
+      #strategy: "RotateOnBan" # RotateOnBan | LoadBalance | NanoSwitch | RotatingNanoSwitch
+      #searchTriggersFail: true # Whether a search 429 should trigger marking the ip as failing
 
 metrics:
   prometheus:

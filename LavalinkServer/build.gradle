@@ -35,7 +35,8 @@ bootRun {
 
 dependencies {
     compile group: 'space.npstr', name: 'Magma', version: magmaVersion
-    compile group: 'com.github.FredBoat', name: 'lavaplayer', version: lavaplayerVersion
+    compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
+    compile group: 'com.sedmelluq', name: 'lavaplayer-ext-youtube-rotator', version: lavaplayerIpRotatorVersion
     compile group: 'com.sedmelluq', name: 'jda-nas', version: jdaNasVersion 
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlinVersion
 
