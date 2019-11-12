@@ -255,7 +255,7 @@ See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and
 }
 ```
 
-### REST API
+### Track Loading API
 The REST api is used to resolve audio tracks for use with the `play` op. 
 ```
 GET /loadtracks?identifier=dQw4w9WgXcQ HTTP/1.1
@@ -324,9 +324,9 @@ A severity level of `COMMON` indicates that the error is non-fatal and that the 
 ```
 
 ---
-#### RoutePlanner Endpoints
+### RoutePlanner API
 Additionally there are a few REST endpoints for the ip rotation extension
-##### RoutePlanner Status
+#### RoutePlanner Status
 ```
 GET /routeplanner/status
 Host: localhost:8080
@@ -360,7 +360,7 @@ Fields which are always present are: `class`, `details.ipBlock` and
 
 The following classes have additional detail fields:
 
-###### RotatingIpRoutePlanner
+#### RotatingIpRoutePlanner
 `details.rotateIndex` String containing the number of rotations which happened 
 since the restart of Lavalink
 
@@ -368,11 +368,11 @@ since the restart of Lavalink
 
 `details.currentAddress` The currently used ip address
 
-###### NanoIpRoutePlanner
+#### NanoIpRoutePlanner
 `details.currentAddressIndex` long representing the current offset in the ip 
 block
 
-###### RotatingNanoIpRoutePlanner
+#### RotatingNanoIpRoutePlanner
 `details.blockIndex` String containing the the information in which /64 block ips 
 are chosen. This number increases on each ban.
 
@@ -380,7 +380,7 @@ are chosen. This number increases on each ban.
 block
 
 
-##### Unmark a failed address
+#### Unmark a failed address
 ```
 GET /routeplanner/free/address
 Host: localhost:8080
@@ -398,7 +398,7 @@ Response:
 
 204 - No Content
 
-##### Unmark all failed address
+#### Unmark all failed address
 ```
 GET /routeplanner/free/all
 Host: localhost:8080
@@ -409,9 +409,9 @@ Response:
 
 204 - No Content
 
-All REST responses from Lavalink include a `Lavalink-Api-Version` header.
-
 ---
+
+All REST responses from Lavalink include a `Lavalink-Api-Version` header.
 
 ### Resuming Lavalink sessions
 
