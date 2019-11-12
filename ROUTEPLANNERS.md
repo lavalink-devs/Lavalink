@@ -39,13 +39,13 @@ get banned when you have not enough IP's in the used CIDR.
 ### RoutePlanner
 This strategy uses the `NanoIpRoutePlanner`.
 ### Implementation
-This strategy switches the ip on each clock-update and uses the current nano-time
+This strategy switches the IP on each clock update and uses the current nanosecond
 as offset in the used block.
 ### Requirements / Recommendations
 This strategy requires at least a (combined) /64 IPv6 CIDR (18 quintillion 
 addresses).
 
-If you have a CIDR which is (combined) bigger than a /64, its recommended to use
+If you have a CIDR which is (combined) bigger than a /64, it is recommended to use
 `RotatingNanoSwitch` instead.
 
 ## RotatingNanoSwitch Strategy
@@ -62,6 +62,6 @@ addresses).
 
 For a working rotation you need at least 2 /64 IPv6 CIDRs.
 
-Its not recommended using combined /64s here (e.g. 2 different /65s). But you can 
+It is not recommended using combined /64s here (e.g. 2 different /65s), though you can 
 combine multiple /64s (or bigger) without issues, because this strategy 
 rotates on these.
