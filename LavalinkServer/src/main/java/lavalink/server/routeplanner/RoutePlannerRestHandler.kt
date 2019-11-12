@@ -18,7 +18,7 @@ import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 @RestController
-class RoutePlannerRestHandler(val routePlanner: AbstractRoutePlanner?) {
+class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
 
     /**
      * Returns current information about the active AbstractRoutePlanner
@@ -29,7 +29,7 @@ class RoutePlannerRestHandler(val routePlanner: AbstractRoutePlanner?) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "No route planner enabled")
         }
         return ResponseEntity.ok(
-                RoutePlannerStatus(routePlanner?.javaClass?.canonicalName ?: "", getDetailBlock(routePlanner)))
+                RoutePlannerStatus(routePlanner.javaClass.canonicalName, getDetailBlock(routePlanner)))
     }
 
     /**
@@ -42,7 +42,7 @@ class RoutePlannerRestHandler(val routePlanner: AbstractRoutePlanner?) {
         }
         try {
             val address = InetAddress.getByName(requestBody.getString("address"))
-            routePlanner!!.freeAddress(address)
+            routePlanner.freeAddress(address)
             return ResponseEntity.noContent().build()
         } catch (exception: UnknownHostException) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid address: " + exception.message, exception)
@@ -57,7 +57,7 @@ class RoutePlannerRestHandler(val routePlanner: AbstractRoutePlanner?) {
         if (routePlanner == null) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "No route planner enabled")
         }
-        routePlanner!!.freeAllAddresses()
+        routePlanner.freeAllAddresses()
         return ResponseEntity.noContent().build()
     }
 
