@@ -40,7 +40,7 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
      */
     @PostMapping("/routeplanner/free/address")
     fun freeSingleAddress(request: HttpServletRequest, @RequestBody requestBody: JSONObject): ResponseEntity<Void> {
-        routePlanner ?: throw RoutePlannerDisabled()
+        routePlanner ?: throw RoutePlannerDisabledException()
         try {
             val address = InetAddress.getByName(requestBody.getString("address"))
             routePlanner.freeAddress(address)
@@ -55,7 +55,7 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
      */
     @PostMapping("/routeplanner/free/all")
     fun freeAllAddresses(request: HttpServletRequest): ResponseEntity<Void> {
-        routePlanner ?: throw RoutePlannerDisabled()
+        routePlanner ?: throw RoutePlannerDisabledException()
         routePlanner.freeAllAddresses()
         return ResponseEntity.noContent().build()
     }
@@ -127,5 +127,5 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
     data class FailingAddress(val failingAddress: String, val failingTimestamp: Long, val failingTime: String)
     data class IpBlockStatus(val type: String, val size: String)
 
-    class RoutePlannerDisabled : ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Can't access disabled route planner")
+    class RoutePlannerDisabledException : ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Can't access disabled route planner")
 }
