@@ -25,11 +25,14 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
      */
     @GetMapping("/routeplanner/status")
     fun getStatus(request: HttpServletRequest): ResponseEntity<RoutePlannerStatus> {
-        routePlanner ?: throw RoutePlannerDisabled()
-        return ResponseEntity.ok(RoutePlannerStatus(
-                routePlanner.javaClass.canonicalName,
-                getDetailBlock(routePlanner)
-        ))
+        val status = when (routePlanner) {
+            null -> RoutePlannerStatus(null, null)
+            else -> RoutePlannerStatus(
+                    routePlanner.javaClass.simpleName,
+                    getDetailBlock(routePlanner)
+            )
+        }
+        return ResponseEntity.ok(status)
     }
 
     /**
@@ -92,7 +95,7 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
         }
     }
 
-    data class RoutePlannerStatus(val `class`: String, val details: IRoutePlannerStatus)
+    data class RoutePlannerStatus(val `class`: String?, val details: IRoutePlannerStatus?)
 
     interface IRoutePlannerStatus
     data class GenericRoutePlannerStatus(

@@ -335,7 +335,7 @@ Authorization: youshallnotpass
 Response:
 ```json
 {
-    "class": "com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner",
+    "class": "RotatingNanoIpRoutePlanner",
     "details": {
         "ipBlock": {
             "type": "Inet6Address",
@@ -356,7 +356,8 @@ Response:
 
 The response is different based on each route planner. 
 Fields which are always present are: `class`, `details.ipBlock` and 
-`details.failingAddresses`
+`details.failingAddresses`. If no route planner is set, both `class` and
+`details` will be null, and the other endpoints will result in status 500.
 
 The following classes have additional detail fields:
 
