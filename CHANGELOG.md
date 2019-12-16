@@ -3,6 +3,9 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v3.2.2
+* Made Lavalink emit the TrackStartEvent
+
 ## v3.2.1.1
 * Updated Lavaplayer to 1.3.19. This release includes a patch which fixes loading youtube URLs. 
 https://github.com/sedmelluq/lavaplayer/pull/199
