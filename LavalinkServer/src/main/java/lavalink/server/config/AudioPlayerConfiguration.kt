@@ -6,6 +6,10 @@ import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManag
 import com.sedmelluq.discord.lavaplayer.source.beam.BeamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudDataReader
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudFormatHandler
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudHtmlDataLoader
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudPlaylistLoader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
@@ -50,8 +54,20 @@ class AudioPlayerConfiguration {
             if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit)
             audioPlayerManager.registerSourceManager(youtube)
         }
+        if (sources.isSoundcloud) {
+            val dataReader = DefaultSoundCloudDataReader();
+            val htmlDataLoader = DefaultSoundCloudHtmlDataLoader();
+            val formatHandler = DefaultSoundCloudFormatHandler();
+
+            audioPlayerManager.registerSourceManager(SoundCloudAudioSourceManager(
+                    serverConfig.isSoundcloudSearchEnabled,
+                    dataReader,
+                    htmlDataLoader,
+                    formatHandler,
+                    DefaultSoundCloudPlaylistLoader(htmlDataLoader, dataReader, formatHandler)
+            ));
+        }
         if (sources.isBandcamp) audioPlayerManager.registerSourceManager(BandcampAudioSourceManager())
-        if (sources.isSoundcloud) audioPlayerManager.registerSourceManager(SoundCloudAudioSourceManager.createDefault())
         if (sources.isTwitch) audioPlayerManager.registerSourceManager(TwitchStreamAudioSourceManager())
         if (sources.isVimeo) audioPlayerManager.registerSourceManager(VimeoAudioSourceManager())
         if (sources.isMixer) audioPlayerManager.registerSourceManager(BeamAudioSourceManager())
@@ -71,7 +87,7 @@ class AudioPlayerConfiguration {
     @Bean
     fun routePlanner(serverConfig: ServerConfig): AbstractRoutePlanner? {
         val rateLimitConfig = serverConfig.ratelimit
-        if(rateLimitConfig == null) {
+        if (rateLimitConfig == null) {
             log.debug("No rate limit config block found, skipping setup of route planner")
             return null
         }
