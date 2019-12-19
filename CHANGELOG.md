@@ -8,6 +8,12 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 * Update Lavaplayer to 1.3.32.
 * Docker container now uses a non-root user.
 
+Contributors:
+[@Frederikam](https://github.com/Frederikam),
+[@ByteAlex](https://github.com/ByteAlex),
+[@duncte123](https://github.com/duncte123), and
+[@james7132](https://github.com/james7132)
+
 ## v3.2.1.1
 * Updated Lavaplayer to 1.3.19. This release includes a patch which fixes loading youtube URLs. 
 https://github.com/sedmelluq/lavaplayer/pull/199
