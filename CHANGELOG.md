@@ -3,6 +3,10 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v3.3
+
+Officially limit Lavalink to JRE 11 and up. Magma has long been having issues with older versions.
+
 ## v3.2.2
 * IP rotation system for getting around certain ratelimits.
 * Update Lavaplayer to 1.3.32.
