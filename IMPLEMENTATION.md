@@ -255,7 +255,7 @@ See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and
 }
 ```
 
-### REST API
+### Track Loading API
 The REST api is used to resolve audio tracks for use with the `play` op. 
 ```
 GET /loadtracks?identifier=dQw4w9WgXcQ HTTP/1.1
@@ -322,6 +322,95 @@ A severity level of `COMMON` indicates that the error is non-fatal and that the 
   }
 }
 ```
+
+---
+### RoutePlanner API
+Additionally there are a few REST endpoints for the ip rotation extension
+#### RoutePlanner Status
+```
+GET /routeplanner/status
+Host: localhost:8080
+Authorization: youshallnotpass
+```
+Response:
+```json
+{
+    "class": "RotatingNanoIpRoutePlanner",
+    "details": {
+        "ipBlock": {
+            "type": "Inet6Address",
+            "size": "1208925819614629174706176"
+        },
+        "failingAddresses": [
+            {
+                "address": "/1.0.0.0",
+                "failingTimestamp": 1573520707545,
+                "failingTime": "Mon Nov 11 20:05:07 EST 2019"
+            }
+        ],
+        "blockIndex": "0",
+        "currentAddressIndex": "36792023813"
+    }
+}
+```
+
+The response is different based on each route planner. 
+Fields which are always present are: `class`, `details.ipBlock` and 
+`details.failingAddresses`. If no route planner is set, both `class` and
+`details` will be null, and the other endpoints will result in status 500.
+
+The following classes have additional detail fields:
+
+#### RotatingIpRoutePlanner
+`details.rotateIndex` String containing the number of rotations which happened 
+since the restart of Lavalink
+
+`details.ipIndex` String containing the current offset in the block
+
+`details.currentAddress` The currently used ip address
+
+#### NanoIpRoutePlanner
+`details.currentAddressIndex` long representing the current offset in the ip 
+block
+
+#### RotatingNanoIpRoutePlanner
+`details.blockIndex` String containing the the information in which /64 block ips 
+are chosen. This number increases on each ban.
+
+`details.currentAddressIndex` long representing the current offset in the ip 
+block
+
+
+#### Unmark a failed address
+```
+GET /routeplanner/free/address
+Host: localhost:8080
+Authorization: youshallnotpass
+```
+
+Request Body:
+```json
+{
+    "address": "1.0.0.1"
+}
+```
+
+Response:
+
+204 - No Content
+
+#### Unmark all failed address
+```
+GET /routeplanner/free/all
+Host: localhost:8080
+Authorization: youshallnotpass
+```
+
+Response:
+
+204 - No Content
+
+---
 
 All REST responses from Lavalink include a `Lavalink-Api-Version` header.
 
