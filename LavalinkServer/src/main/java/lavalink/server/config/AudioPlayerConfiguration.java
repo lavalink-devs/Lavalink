@@ -6,7 +6,7 @@ import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManag
 import com.sedmelluq.discord.lavaplayer.source.beam.BeamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.*;
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
@@ -38,7 +38,19 @@ public class AudioPlayerConfiguration {
                 audioPlayerManager.registerSourceManager(youtube);
             }
             if (sources.isBandcamp()) audioPlayerManager.registerSourceManager(new BandcampAudioSourceManager());
-            if (sources.isSoundcloud()) audioPlayerManager.registerSourceManager(new SoundCloudAudioSourceManager(serverConfig.isSoundcloudSearchEnabled()));
+            if (sources.isSoundcloud()) {
+                SoundCloudDataReader dataReader = new DefaultSoundCloudDataReader();
+                SoundCloudHtmlDataLoader htmlDataLoader = new DefaultSoundCloudHtmlDataLoader();
+                SoundCloudFormatHandler formatHandler = new DefaultSoundCloudFormatHandler();
+
+                audioPlayerManager.registerSourceManager(new SoundCloudAudioSourceManager(
+                        serverConfig.isSoundcloudSearchEnabled(),
+                        dataReader,
+                        htmlDataLoader,
+                        formatHandler,
+                        new DefaultSoundCloudPlaylistLoader(htmlDataLoader, dataReader, formatHandler)
+                ));
+            }
             if (sources.isTwitch()) audioPlayerManager.registerSourceManager(new TwitchStreamAudioSourceManager());
             if (sources.isVimeo()) audioPlayerManager.registerSourceManager(new VimeoAudioSourceManager());
             if (sources.isMixer()) audioPlayerManager.registerSourceManager(new BeamAudioSourceManager());
