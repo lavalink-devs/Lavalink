@@ -328,7 +328,7 @@ A severity level of `COMMON` indicates that the error is non-fatal and that the 
 Additionally there are a few REST endpoints for the ip rotation extension
 #### RoutePlanner Status
 ```
-POST /routeplanner/status
+GET /routeplanner/status
 Host: localhost:8080
 Authorization: youshallnotpass
 ```
@@ -383,7 +383,7 @@ block
 
 #### Unmark a failed address
 ```
-GET /routeplanner/free/address
+POST /routeplanner/free/address
 Host: localhost:8080
 Authorization: youshallnotpass
 ```
