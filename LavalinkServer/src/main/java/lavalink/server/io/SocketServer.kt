@@ -45,7 +45,7 @@ import java.util.function.Supplier
 @Service
 class SocketServer(
         private val serverConfig: ServerConfig,
-        private val audioPlayerManagerSupplier: Supplier<AudioPlayerManager>,
+        private val audioPlayerManager: AudioPlayerManager,
         private val audioSendFactoryConfiguration: AudioSendFactoryConfiguration
 ) : TextWebSocketHandler() {
 
@@ -92,7 +92,7 @@ class SocketServer(
 
         shardCounts[userId] = shardCount
 
-        contextMap[session.id] = SocketContext(audioPlayerManagerSupplier, session, this, userId)
+        contextMap[session.id] = SocketContext(audioPlayerManager, session, this, userId)
         log.info("Connection successfully established from " + session.remoteAddress!!)
     }
 
