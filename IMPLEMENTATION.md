@@ -199,9 +199,10 @@ Server emitted an event. See the client implementation below.
 /**
  * Implementation details:
  * The only events extending {@link lavalink.client.player.event.PlayerEvent} produced by the remote server are these:
- * 1. TrackEndEvent
- * 2. TrackExceptionEvent
- * 3. TrackStuckEvent
+ * 1. TrackStartEvent
+ * 2. TrackEndEvent
+ * 3. TrackExceptionEvent
+ * 4. TrackStuckEvent
  * <p>
  * The remaining lavaplayer events are caused by client actions, and are therefore not forwarded via WS.
  */
