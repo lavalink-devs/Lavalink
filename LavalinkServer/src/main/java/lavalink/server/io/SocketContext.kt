@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit
 import java.util.function.Supplier
 
 class SocketContext internal constructor(
-        audioPlayerManagerSupplier: Supplier<AudioPlayerManager>,
+        val audioPlayerManager: AudioPlayerManager,
         var session: WebSocketSession,
         private val socketServer: SocketServer,
         val userId: String
@@ -56,7 +56,6 @@ class SocketContext internal constructor(
         private val log = LoggerFactory.getLogger(SocketContext::class.java)
     }
 
-    val audioPlayerManager: AudioPlayerManager = audioPlayerManagerSupplier.get()
     internal val magma: MagmaApi = MagmaFactory.of { socketServer.getAudioSendFactory(it) }
     //guildId <-> Player
     val players = ConcurrentHashMap<String, Player>()
@@ -169,7 +168,6 @@ class SocketContext internal constructor(
     internal fun shutdown() {
         log.info("Shutting down " + playingPlayers.size + " playing players.")
         executor.shutdown()
-        audioPlayerManager.shutdown()
         playerUpdateService.shutdown()
         players.keys.forEach { guildId ->
             val member = MagmaMember.builder()
