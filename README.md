@@ -19,6 +19,15 @@ Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 * Prometheus metrics
 * Docker images
 
+## Requirements
+
+* Java 11 LTS or greater required.
+* OpenJDK or Zulu running on Linux AMD64 is officially supported.
+
+Support for Darwin (Mac), Windows AMD64, and Linux ARM (Raspberry Pi) is provided on a best-effort basis. This is dependent on Lavaplayer's native libraries.
+
+Support for other JVMs is also best-effort. Periodic CPU utilization stats are prone to not work everywhere.
+
 ## Changelog
 
 Please see [here](CHANGELOG.md)
