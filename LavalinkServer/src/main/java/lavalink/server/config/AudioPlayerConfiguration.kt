@@ -47,6 +47,7 @@ class AudioPlayerConfiguration {
 
         if (sources.isYoutube) {
             val youtube = YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled)
+            youtube.configureBuilder { it.disableCookieManagement() }
             if (routePlanner != null) {
                 YoutubeIpRotator.setup(youtube, routePlanner)
             }
