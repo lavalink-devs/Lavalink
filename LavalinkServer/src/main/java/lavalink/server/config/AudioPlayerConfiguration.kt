@@ -48,7 +48,13 @@ class AudioPlayerConfiguration {
         if (sources.isYoutube) {
             val youtube = YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled)
             if (routePlanner != null) {
-                YoutubeIpRotator.setup(youtube, routePlanner)
+                val retryLimit = serverConfig.ratelimit?.retryLimit ?: -1
+                when {
+                    retryLimit < 0 -> YoutubeIpRotator.setup(youtube, routePlanner)
+                    retryLimit == 0 -> YoutubeIpRotator.setup(youtube, routePlanner, Int.MAX_VALUE)
+                    else -> YoutubeIpRotator.setup(youtube, routePlanner, retryLimit)
+
+                }
             }
             val playlistLoadLimit = serverConfig.youtubePlaylistLoadLimit
             if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit)
