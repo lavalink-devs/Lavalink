@@ -1,4 +1,4 @@
-FROM openjdk:13-jre-slim
+FROM azul/zulu-openjdk:13
 
 # Run as non-root user
 RUN groupadd -g 322 lavalink && \

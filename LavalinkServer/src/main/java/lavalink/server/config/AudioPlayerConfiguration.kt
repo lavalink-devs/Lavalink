@@ -38,7 +38,7 @@ class AudioPlayerConfiguration {
     private val log = LoggerFactory.getLogger(AudioPlayerConfiguration::class.java)
 
     @Bean
-    fun audioPlayerManagerSupplier(sources: AudioSourcesConfig, serverConfig: ServerConfig, routePlanner: AbstractRoutePlanner?) = Supplier<AudioPlayerManager> {
+    fun audioPlayerManagerSupplier(sources: AudioSourcesConfig, serverConfig: ServerConfig, routePlanner: AbstractRoutePlanner?): AudioPlayerManager {
         val audioPlayerManager = DefaultAudioPlayerManager()
 
         if (serverConfig.isGcWarnings) {
@@ -48,7 +48,13 @@ class AudioPlayerConfiguration {
         if (sources.isYoutube) {
             val youtube = YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled)
             if (routePlanner != null) {
-                YoutubeIpRotator.setup(youtube, routePlanner)
+                val retryLimit = serverConfig.ratelimit?.retryLimit ?: -1
+                when {
+                    retryLimit < 0 -> YoutubeIpRotator.setup(youtube, routePlanner)
+                    retryLimit == 0 -> YoutubeIpRotator.setup(youtube, routePlanner, Int.MAX_VALUE)
+                    else -> YoutubeIpRotator.setup(youtube, routePlanner, retryLimit)
+
+                }
             }
             val playlistLoadLimit = serverConfig.youtubePlaylistLoadLimit
             if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit)
@@ -76,12 +82,7 @@ class AudioPlayerConfiguration {
 
         audioPlayerManager.configuration.isFilterHotSwapEnabled = true
 
-        audioPlayerManager
-    }
-
-    @Bean
-    fun restAudioPlayerManager(supplier: Supplier<AudioPlayerManager>): AudioPlayerManager {
-        return supplier.get()
+        return audioPlayerManager
     }
 
     @Bean
