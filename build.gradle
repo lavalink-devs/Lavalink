@@ -54,7 +54,7 @@ subprojects {
         //@formatter:off
         lavaplayerVersion               = '1.3.38'
         lavaplayerIpRotatorVersion      = '0.1.7'
-        magmaVersion                    = '0.12.5'
+        magmaVersion                    = '0.12.6'
         jdaNasVersion                   = '1.1.0'
         jappVersion                     = '1.3.2-MINN'
 

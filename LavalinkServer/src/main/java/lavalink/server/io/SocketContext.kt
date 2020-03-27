@@ -33,6 +33,8 @@ import org.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
+import org.xnio.OptionMap
+import org.xnio.Options
 import space.npstr.magma.MagmaFactory
 import space.npstr.magma.api.MagmaApi
 import space.npstr.magma.api.event.MagmaEvent
@@ -56,9 +58,15 @@ class SocketContext internal constructor(
         private val log = LoggerFactory.getLogger(SocketContext::class.java)
     }
 
-    internal val magma: MagmaApi = MagmaFactory.of { socketServer.getAudioSendFactory(it) }
+    internal val magma: MagmaApi = MagmaFactory.of(
+            { socketServer.getAudioSendFactory(it) },
+            OptionMap.EMPTY,
+            OptionMap.create(Options.SSL_PROTOCOL, "TLSv1.2")
+    )
+
     //guildId <-> Player
     val players = ConcurrentHashMap<String, Player>()
+
     @Volatile
     var sessionPaused = false
     private val resumeEventQueue = ConcurrentLinkedQueue<String>()
