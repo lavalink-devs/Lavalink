@@ -4,7 +4,7 @@ Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
 ## v3.3.1
-* Update Magma and Lavalink.
+* Update Magma and Lavaplayer.
 * Added TrackStartEvent event.
 * Added retryLimit configuration option.
 * Use a single AudioPlayerManager for all WS connections, reducing overhead.
