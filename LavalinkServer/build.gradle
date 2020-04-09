@@ -34,6 +34,7 @@ bootRun {
 }
 
 dependencies {
+    compile group: 'moe.kyokobot', name: 'koe', version: koeVersion
     compile group: 'space.npstr.Magma', name: 'magma', version: magmaVersion
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
     compile group: 'com.sedmelluq', name: 'lavaplayer-ext-youtube-rotator', version: lavaplayerIpRotatorVersion
