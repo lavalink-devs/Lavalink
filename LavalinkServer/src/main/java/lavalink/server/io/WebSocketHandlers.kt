@@ -6,8 +6,6 @@ import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.WebSocketSession
-import space.npstr.magma.api.MagmaMember
-import space.npstr.magma.api.MagmaServerUpdate
 
 class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
 

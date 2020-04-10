@@ -22,16 +22,11 @@
 
 package lavalink.server.io
 
-import com.github.shredder121.asyncaudio.jda.AsyncPacketProviderFactory
-import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import lavalink.server.config.AudioSendFactoryConfiguration
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.Player
-import lavalink.server.util.Util
 import moe.kyokobot.koe.Koe
 import moe.kyokobot.koe.KoeOptions
-import net.dv8tion.jda.api.audio.factory.IAudioSendFactory
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -39,7 +34,6 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
-import space.npstr.magma.api.Member
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -47,14 +41,12 @@ import java.util.concurrent.ConcurrentHashMap
 class SocketServer(
         private val serverConfig: ServerConfig,
         private val audioPlayerManager: AudioPlayerManager,
-        private val audioSendFactoryConfiguration: AudioSendFactoryConfiguration,
         koeOptions: KoeOptions
 ) : TextWebSocketHandler() {
 
     // userId <-> shardCount
     private val shardCounts = ConcurrentHashMap<String, Int>()
     val contextMap = HashMap<String, SocketContext>()
-    private val sendFactories = ConcurrentHashMap<Int, IAudioSendFactory>()
     @Suppress("LeakingThis")
     private val handlers = WebSocketHandlers(contextMap)
     private val resumableSessions = mutableMapOf<String, SocketContext>()

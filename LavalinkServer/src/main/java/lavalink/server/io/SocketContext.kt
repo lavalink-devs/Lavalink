@@ -36,8 +36,6 @@ import org.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
-import space.npstr.magma.api.event.MagmaEvent
-import space.npstr.magma.api.event.WebSocketClosed
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -48,7 +46,7 @@ import java.util.concurrent.TimeUnit
 
 class SocketContext internal constructor(
         val audioPlayerManager: AudioPlayerManager,
-        var session: WebSocketSession,
+        private var session: WebSocketSession,
         private val socketServer: SocketServer,
         val userId: String,
         private val koe: KoeClient
@@ -97,20 +95,6 @@ class SocketContext internal constructor(
 
     internal fun getPlayers(): Map<String, Player> {
         return players
-    }
-
-    private fun handleMagmaEvent(magmaEvent: MagmaEvent) {
-        if (magmaEvent is WebSocketClosed) {
-            val out = JSONObject()
-            out.put("op", "event")
-            out.put("type", "WebSocketClosedEvent")
-            out.put("guildId", magmaEvent.member.guildId)
-            out.put("reason", magmaEvent.reason)
-            out.put("code", magmaEvent.closeCode)
-            out.put("byRemote", magmaEvent.isByRemote)
-
-            send(out)
-        }
     }
 
     /**
@@ -181,7 +165,7 @@ class SocketContext internal constructor(
             send(resumeEventQueue.remove())
         }
 
-        players.values.forEach { it -> SocketServer.sendPlayerUpdate(this, it) }
+        players.values.forEach { SocketServer.sendPlayerUpdate(this, it) }
     }
 
     internal fun shutdown() {

@@ -36,15 +36,10 @@ bootRun {
 dependencies {
     compile group: 'moe.kyokobot', name: 'koe', version: koeVersion
     compile group: 'moe.kyokobot.koe', name: 'ext-udpqueue', version: koeVersion
-    compile group: 'space.npstr.Magma', name: 'magma', version: magmaVersion
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
     compile group: 'com.sedmelluq', name: 'lavaplayer-ext-youtube-rotator', version: lavaplayerIpRotatorVersion
-    compile group: 'com.sedmelluq', name: 'jda-nas', version: jdaNasVersion 
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlinVersion
 
-    compile group: 'com.github.shredder121', name: 'jda-async-packetprovider', version: jappVersion
-    //required by japp
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: commonsLangVersion
     compile group: 'org.springframework', name: 'spring-websocket', version: springWebSocketVersion
     compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
     compile group: 'io.sentry', name: 'sentry-logback', version: sentryLogbackVersion
