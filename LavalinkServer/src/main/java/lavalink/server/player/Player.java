@@ -30,19 +30,20 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
+import io.netty.buffer.ByteBuf;
 import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
-import net.dv8tion.jda.api.audio.AudioSendHandler;
+import moe.kyokobot.koe.audio.AudioFrameProvider;
+import moe.kyokobot.koe.codec.Codec;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
-import java.nio.ByteBuffer;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class Player extends AudioEventAdapter implements AudioSendHandler {
+public class Player extends AudioEventAdapter implements AudioFrameProvider {
 
     private static final Logger log = LoggerFactory.getLogger(Player.class);
 
@@ -143,7 +144,7 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
     }
 
     @Override
-    public boolean canProvide() {
+    public boolean canSendFrame() {
         lastFrame = player.provide();
 
         if(lastFrame == null) {
@@ -156,13 +157,8 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
     }
 
     @Override
-    public ByteBuffer provide20MsAudio() {
-        return ByteBuffer.wrap(lastFrame.getData());
-    }
-
-    @Override
-    public boolean isOpus() {
-        return true;
+    public void retrieve(Codec codec, ByteBuf buf) {
+        buf.writeBytes(lastFrame.getData());
     }
 
     public AudioLossCounter getAudioLossCounter() {

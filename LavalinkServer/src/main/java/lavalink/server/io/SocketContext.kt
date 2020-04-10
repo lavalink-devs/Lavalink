@@ -23,46 +23,40 @@
 package lavalink.server.io
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import lavalink.server.player.Player
-import space.npstr.magma.api.MagmaMember
 import io.undertow.websockets.core.WebSocketCallback
 import io.undertow.websockets.core.WebSocketChannel
 import io.undertow.websockets.core.WebSockets
 import io.undertow.websockets.jsr.UndertowSession
+import lavalink.server.player.Player
+import moe.kyokobot.koe.KoeClient
+import moe.kyokobot.koe.KoeEventAdapter
+import moe.kyokobot.koe.VoiceConnection
+import moe.kyokobot.koe.VoiceServerInfo
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
-import org.xnio.OptionMap
-import org.xnio.Options
-import space.npstr.magma.MagmaFactory
-import space.npstr.magma.api.MagmaApi
 import space.npstr.magma.api.event.MagmaEvent
 import space.npstr.magma.api.event.WebSocketClosed
 import java.util.*
-import java.util.concurrent.*
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
-import java.util.function.Supplier
 
 class SocketContext internal constructor(
         val audioPlayerManager: AudioPlayerManager,
         var session: WebSocketSession,
         private val socketServer: SocketServer,
-        val userId: String
+        val userId: String,
+        private val koe: KoeClient
 ) {
 
     companion object {
         private val log = LoggerFactory.getLogger(SocketContext::class.java)
     }
-
-    internal val magma: MagmaApi = MagmaFactory.of(
-            { socketServer.getAudioSendFactory(it) },
-            OptionMap.EMPTY,
-            OptionMap.create(Options.SSL_PROTOCOL, "TLSv1.2")
-    )
 
     //guildId <-> Player
     val players = ConcurrentHashMap<String, Player>()
@@ -75,7 +69,7 @@ class SocketContext internal constructor(
     var resumeKey: String? = null
     var resumeTimeout = 60L // Seconds
     private var sessionTimeoutFuture: ScheduledFuture<Unit>? = null
-    private val executor: ScheduledExecutorService
+    private val executor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
     val playerUpdateService: ScheduledExecutorService
 
     val playingPlayers: List<Player>
@@ -87,9 +81,6 @@ class SocketContext internal constructor(
 
 
     init {
-        magma.eventStream.subscribe { this.handleMagmaEvent(it) }
-
-        executor = Executors.newSingleThreadScheduledExecutor()
         executor.scheduleAtFixedRate(StatsTask(this, socketServer), 0, 1, TimeUnit.MINUTES)
 
         playerUpdateService = Executors.newScheduledThreadPool(2) { r ->
@@ -120,6 +111,26 @@ class SocketContext internal constructor(
 
             send(out)
         }
+    }
+
+    /**
+     * Gets or creates a voice connection
+     */
+    fun getVoiceConnection(guild: Long): VoiceConnection {
+        var conn = koe.getConnection(guild)
+        if (conn == null) {
+            conn = koe.createConnection(guild)
+            conn.registerListener(EventHandler(guild.toString()))
+        }
+        return conn
+    }
+
+    /**
+     * Disposes of a voice connection
+     */
+    fun destroy(guild: Long) {
+        players.remove(guild.toString())?.stop()
+        koe.destroyConnection(guild)
     }
 
     fun pause() {
@@ -177,16 +188,21 @@ class SocketContext internal constructor(
         log.info("Shutting down " + playingPlayers.size + " playing players.")
         executor.shutdown()
         playerUpdateService.shutdown()
-        players.keys.forEach { guildId ->
-            val member = MagmaMember.builder()
-                    .userId(userId)
-                    .guildId(guildId)
-                    .build()
-            magma.removeSendHandler(member)
-            magma.closeConnection(member)
-        }
-
         players.values.forEach(Player::stop)
-        magma.shutdown()
+        koe.close()
+    }
+
+    private inner class EventHandler(private val guildId: String) : KoeEventAdapter() {
+        override fun gatewayClosed(code: Int, reason: String?, byRemote: Boolean) {
+            val out = JSONObject()
+            out.put("op", "event")
+            out.put("type", "WebSocketClosedEvent")
+            out.put("guildId", guildId)
+            out.put("reason", reason)
+            out.put("code", code)
+            out.put("byRemote", byRemote)
+
+            send(out)
+        }
     }
 }
