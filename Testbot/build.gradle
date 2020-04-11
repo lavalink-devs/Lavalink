@@ -3,6 +3,7 @@ apply plugin: 'application'
 
 group 'lavalink'
 version '1.0'
+mainClassName = "lavalink.TestbotKt"
 
 repositories {
     mavenCentral()
