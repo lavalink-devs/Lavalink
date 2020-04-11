@@ -151,13 +151,13 @@ public class Player extends AudioEventAdapter implements AudioFrameProvider {
             audioLossCounter.onLoss();
             return false;
         } else {
-            audioLossCounter.onSuccess();
             return true;
         }
     }
 
     @Override
     public void retrieve(Codec codec, ByteBuf buf) {
+        audioLossCounter.onSuccess();
         buf.writeBytes(lastFrame.getData());
     }
 
