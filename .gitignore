@@ -11,3 +11,5 @@ build/*
 .project
 .classpath
 .settings
+/Testbot/build/
+/Testbot/out/
