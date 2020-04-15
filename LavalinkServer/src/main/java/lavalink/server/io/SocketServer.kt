@@ -22,14 +22,11 @@
 
 package lavalink.server.io
 
-import com.github.shredder121.asyncaudio.jda.AsyncPacketProviderFactory
-import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import lavalink.server.config.AudioSendFactoryConfiguration
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.Player
-import lavalink.server.util.Util
-import net.dv8tion.jda.api.audio.factory.IAudioSendFactory
+import moe.kyokobot.koe.Koe
+import moe.kyokobot.koe.KoeOptions
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -37,25 +34,23 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
-import space.npstr.magma.api.Member
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import java.util.function.Supplier
 
 @Service
 class SocketServer(
         private val serverConfig: ServerConfig,
         private val audioPlayerManager: AudioPlayerManager,
-        private val audioSendFactoryConfiguration: AudioSendFactoryConfiguration
+        koeOptions: KoeOptions
 ) : TextWebSocketHandler() {
 
     // userId <-> shardCount
     private val shardCounts = ConcurrentHashMap<String, Int>()
     val contextMap = HashMap<String, SocketContext>()
-    private val sendFactories = ConcurrentHashMap<Int, IAudioSendFactory>()
     @Suppress("LeakingThis")
     private val handlers = WebSocketHandlers(contextMap)
     private val resumableSessions = mutableMapOf<String, SocketContext>()
+    private val koe = Koe.koe(koeOptions)
 
     companion object {
         private val log = LoggerFactory.getLogger(SocketServer::class.java)
@@ -92,7 +87,13 @@ class SocketServer(
 
         shardCounts[userId] = shardCount
 
-        contextMap[session.id] = SocketContext(audioPlayerManager, session, this, userId)
+        contextMap[session.id] = SocketContext(
+                audioPlayerManager,
+                session,
+                this,
+                userId,
+                koe.newClient(userId.toLong())
+        )
         log.info("Connection successfully established from " + session.remoteAddress!!)
     }
 
@@ -154,24 +155,6 @@ class SocketServer(
             "equalizer"         -> handlers.equalizer(session, json)
             else                -> log.warn("Unexpected operation: " + json.getString("op"))
             // @formatter:on
-        }
-    }
-
-    fun getAudioSendFactory(member: Member): IAudioSendFactory {
-        val shardCount = shardCounts.getOrDefault(member.userId, 1)
-        val shardId = Util.getShardFromSnowflake(member.guildId, shardCount)
-
-        return sendFactories.computeIfAbsent(shardId % audioSendFactoryConfiguration.audioSendFactoryCount
-        ) {
-            val customBuffer = serverConfig.bufferDurationMs
-            val nativeAudioSendFactory: NativeAudioSendFactory
-            nativeAudioSendFactory = if (customBuffer != null) {
-                NativeAudioSendFactory(customBuffer)
-            } else {
-                NativeAudioSendFactory()
-            }
-
-            AsyncPacketProviderFactory.adapt(nativeAudioSendFactory)
         }
     }
 
