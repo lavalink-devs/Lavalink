@@ -35,6 +35,7 @@ class ServerConfig {
     var youtubePlaylistLoadLimit: Int? = null
     var isGcWarnings = true
     var isYoutubeSearchEnabled = true
+    var youtubeTimeout = -1
     var isSoundcloudSearchEnabled = true
     var ratelimit: RateLimitConfig? = null
 }

@@ -22,12 +22,12 @@ import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingIpRoutePlann
 import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv4Block
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block
+import org.apache.http.client.config.RequestConfig
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.net.InetAddress
 import java.util.function.Predicate
-import java.util.function.Supplier
 
 /**
  * Created by napster on 05.03.18.
@@ -47,6 +47,15 @@ class AudioPlayerConfiguration {
 
         if (sources.isYoutube) {
             val youtube = YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled)
+            if (serverConfig.youtubeTimeout != -1) {
+                youtube.configureRequests {
+                    RequestConfig.copy(it).apply {
+                        setConnectTimeout(serverConfig.youtubeTimeout)
+                        setSocketTimeout(serverConfig.youtubeTimeout)
+                        setConnectionRequestTimeout(serverConfig.youtubeTimeout)
+                    }.build()
+                }
+            }
             if (routePlanner != null) {
                 val retryLimit = serverConfig.ratelimit?.retryLimit ?: -1
                 when {
