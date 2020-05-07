@@ -1,6 +1,6 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: Technical issue
+about: Use this if you are having a problem with Lavalink
 title: ''
 labels: ''
 assignees: ''
@@ -14,9 +14,10 @@ assignees: ''
 ## Version info
 **Client used:**
 
-Output of `java -jar Lavalink.jar --version`:
+Output of `java -version`:
 ```
 (paste here)
 ```
 
-<!-- Remember to include Lavalink logs -->
+<!-- You must include your lavalink logs -->
+<!-- If you can't provide a log, at least provide the output of "java -jar Lavalink.jar --version" -->
