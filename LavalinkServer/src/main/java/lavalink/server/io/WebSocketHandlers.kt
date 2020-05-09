@@ -13,7 +13,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         private val log: Logger = LoggerFactory.getLogger(WebSocketHandlers::class.java)
     }
 
-    fun voiceUpdate(session: WebSocketSession, json: JSONObject) {
+    fun voiceUpdate(context: SocketContext, json: JSONObject) {
         val sessionId = json.getString("sessionId")
         val guildId = json.getLong("guildId")
 
@@ -24,13 +24,11 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         //discord sometimes send a partial server update missing the endpoint, which can be ignored.
         endpoint ?: return
 
-        val sktContext = contextMap[session.id]!!
-        sktContext.getVoiceConnection(guildId).connect(VoiceServerInfo(sessionId, endpoint, token));
+        context.getVoiceConnection(guildId).connect(VoiceServerInfo(sessionId, endpoint, token));
     }
 
-    fun play(session: WebSocketSession, json: JSONObject) {
-        val ctx = contextMap[session.id]!!
-        val player = ctx.getPlayer(json.getString("guildId"))
+    fun play(context: SocketContext, json: JSONObject) {
+        val player = context.getPlayer(json.getString("guildId"))
         val noReplace = json.optBoolean("noReplace", false)
 
         if (noReplace && player.playingTrack != null) {
@@ -38,7 +36,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
             return
         }
 
-        val track = Util.toAudioTrack(ctx.audioPlayerManager, json.getString("track"))
+        val track = Util.toAudioTrack(context.audioPlayerManager, json.getString("track"))
 
         if (json.has("startTime")) {
             track.position = json.getLong("startTime")
@@ -51,38 +49,34 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
 
         player.play(track)
 
-        val context = contextMap[session.id]!!
-
         val conn = context.getVoiceConnection(player.guildId.toLong())
         context.getPlayer(json.getString("guildId")).provideTo(conn)
     }
 
-    fun stop(session: WebSocketSession, json: JSONObject) {
-        val player = contextMap[session.id]!!.getPlayer(json.getString("guildId"))
+    fun stop(context: SocketContext, json: JSONObject) {
+        val player = context.getPlayer(json.getString("guildId"))
         player.stop()
     }
 
-    fun pause(session: WebSocketSession, json: JSONObject) {
-        val context = contextMap[session.id]!!
+    fun pause(context: SocketContext, json: JSONObject) {
         val player = context.getPlayer(json.getString("guildId"))
         player.setPause(json.getBoolean("pause"))
         SocketServer.sendPlayerUpdate(context, player)
     }
 
-    fun seek(session: WebSocketSession, json: JSONObject) {
-        val context = contextMap[session.id]!!
+    fun seek(context: SocketContext, json: JSONObject) {
         val player = context.getPlayer(json.getString("guildId"))
         player.seekTo(json.getLong("position"))
         SocketServer.sendPlayerUpdate(context, player)
     }
 
-    fun volume(session: WebSocketSession, json: JSONObject) {
-        val player = contextMap[session.id]!!.getPlayer(json.getString("guildId"))
+    fun volume(context: SocketContext, json: JSONObject) {
+        val player = context.getPlayer(json.getString("guildId"))
         player.setVolume(json.getInt("volume"))
     }
 
-    fun equalizer(session: WebSocketSession, json: JSONObject) {
-        val player = contextMap[session.id]!!.getPlayer(json.getString("guildId"))
+    fun equalizer(context: SocketContext, json: JSONObject) {
+        val player = context.getPlayer(json.getString("guildId"))
         val bands = json.getJSONArray("bands")
 
         for (i in 0 until bands.length()) {
@@ -91,13 +85,12 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         }
     }
 
-    fun destroy(session: WebSocketSession, json: JSONObject) {
-        contextMap[session.id]!!.destroy(json.getLong("guildId"))
+    fun destroy(context: SocketContext, json: JSONObject) {
+        context.destroy(json.getLong("guildId"))
     }
 
-    fun configureResuming(session: WebSocketSession, json: JSONObject) {
-        val socketContext = contextMap[session.id]!!
-        socketContext.resumeKey = json.optString("key", null)
-        if (json.has("timeout")) socketContext.resumeTimeout = json.getLong("timeout")
+    fun configureResuming(context: SocketContext, json: JSONObject) {
+        context.resumeKey = json.optString("key", null)
+        if (json.has("timeout")) context.resumeTimeout = json.getLong("timeout")
     }
 }
