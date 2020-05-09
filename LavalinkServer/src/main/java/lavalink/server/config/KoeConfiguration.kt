@@ -30,7 +30,7 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
                         bufferSize, UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION)
                 bufferSize = UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION
             }
-            setFramePollerFactory(UdpQueueFramePollerFactory())
+            setFramePollerFactory(UdpQueueFramePollerFactory(bufferSize, Runtime.getRuntime().availableProcessors()))
         } else {
             log.warn("This system and architecture appears to not support native audio sending! "
                     + "GC pauses may cause your bot to stutter during playback.")
