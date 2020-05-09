@@ -53,8 +53,8 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
 
         val context = contextMap[session.id]!!
 
-        context.getVoiceConnection(player.guildId.toLong())
-                .setAudioSender(context.getPlayer(json.getString("guildId")))
+        val conn = context.getVoiceConnection(player.guildId.toLong())
+        context.getPlayer(json.getString("guildId")).provideTo(conn)
     }
 
     fun stop(session: WebSocketSession, json: JSONObject) {
