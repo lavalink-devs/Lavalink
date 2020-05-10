@@ -168,7 +168,7 @@ public class Player extends AudioEventAdapter {
     }
 
     public void provideTo(VoiceConnection connection) {
-        new Provider(connection);
+        connection.setAudioSender(new Provider(connection));
     }
 
     private class Provider extends OpusAudioFrameProvider {
