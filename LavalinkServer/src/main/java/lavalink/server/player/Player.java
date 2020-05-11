@@ -67,6 +67,7 @@ public class Player extends AudioEventAdapter {
 
     public void play(AudioTrack track) {
         player.playTrack(track);
+        SocketServer.Companion.sendPlayerUpdate(socketContext, this);
     }
 
     public void stop() {
