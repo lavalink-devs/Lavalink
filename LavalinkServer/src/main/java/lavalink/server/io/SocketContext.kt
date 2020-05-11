@@ -182,7 +182,7 @@ class SocketContext internal constructor(
             out.put("op", "event")
             out.put("type", "WebSocketClosedEvent")
             out.put("guildId", guildId)
-            out.put("reason", reason)
+            out.put("reason", reason ?: "")
             out.put("code", code)
             out.put("byRemote", byRemote)
 
