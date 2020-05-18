@@ -4,6 +4,8 @@ Allows for sending audio without it ever reaching any of your shards.
 
 Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
 
+A [very simple example bot](Testbot) is available.
+
 [![JDA guild](https://discordapp.com/api/guilds/125227483518861312/embed.png?style=banner2)](https://discord.gg/jtAWrzU)
 
 ## Features
