@@ -12,7 +12,7 @@ assignees: ''
 
 
 ## Version info
-**Client used:**
+**Client used:** <!-- The library you use to connect to Lavalink -->
 
 Output of `java -version`:
 ```
