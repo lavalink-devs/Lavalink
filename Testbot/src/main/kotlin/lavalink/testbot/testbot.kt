@@ -19,17 +19,27 @@ import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.cache.CacheFlag.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.lang.IllegalArgumentException
 import java.net.URI
 
 private val log: Logger = LoggerFactory.getLogger("Testbot")
 private lateinit var jda: JDA
 private val lavalink = JdaLavalink(1) { _ -> jda }
 private val playerManager = DefaultAudioPlayerManager()
+lateinit var host: String
+lateinit var password: String
 
-fun main() {
+fun main(args: Array<String>) {
+    if (args.size < 3) {
+        throw IllegalArgumentException("Expected 3 arguments. Please refer to the readme.")
+    }
+
+    val token = args[0]
+    host = args[1]
+    password = args[2]
     AudioSourceManagers.registerRemoteSources(playerManager)
 
-    jda = JDABuilder.createDefault(System.getenv("TOKEN"),
+    jda = JDABuilder.createDefault(token,
             GatewayIntent.GUILD_MESSAGES,
             GatewayIntent.GUILD_VOICE_STATES)
             .disableCache(CLIENT_STATUS, ACTIVITY, CLIENT_STATUS, EMOTE, MEMBER_OVERRIDES)
@@ -45,7 +55,7 @@ object Listener : ListenerAdapter() {
 
     override fun onReady(event: ReadyEvent) {
         lavalink.setUserId(jda.selfUser.id)
-        lavalink.addNode(URI("ws://localhost:2333"), "youshallnotpass")
+        lavalink.addNode(URI(host), password)
     }
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
@@ -78,7 +88,7 @@ fun play(channel: TextChannel, member: Member, message: String) {
             }
 
             override fun trackLoaded(track: AudioTrack) {
-                channel.sendMessage("Playing " + track.info.title).queue()
+                channel.sendMessage("Playing `${track.info.title}`").queue()
                 link.player.playTrack(track)
             }
 
@@ -87,13 +97,13 @@ fun play(channel: TextChannel, member: Member, message: String) {
             }
 
             override fun playlistLoaded(playlist: AudioPlaylist) {
-                val track = playlist.selectedTrack ?: playlist.tracks.firstOrNull()
-                if (track == null) {
+                val loaded = playlist.selectedTrack ?: playlist.tracks.firstOrNull()
+                if (loaded == null) {
                     channel.sendMessage("Empty playlist").queue()
                     return
                 }
-                channel.sendMessage("Playing " + track.info.title).queue()
-                link.player.playTrack(track)
+                channel.sendMessage("Playing `${loaded.info.title}` from list `${playlist.name}`").queue()
+                link.player.playTrack(loaded)
             }
         })
     }
