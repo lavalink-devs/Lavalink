@@ -39,8 +39,10 @@ dependencies {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
     compile group: 'moe.kyokobot.koe', name: 'ext-udpqueue', version: koeVersion
-    compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
-    compile group: 'com.sedmelluq', name: 'lavaplayer-ext-youtube-rotator', version: lavaplayerIpRotatorVersion
+    compile group: 'com.github.FredBoat', name: 'lavaplayer', version: "0d91444efb215dc98e99199de8eb4389c74c1f58"
+    compile (group: 'com.sedmelluq', name: 'lavaplayer-ext-youtube-rotator', version: lavaplayerIpRotatorVersion) {
+        exclude group: "com.sedmelluq", module: "lavaplayer"
+    }
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlinVersion
 
     compile group: 'org.springframework', name: 'spring-websocket', version: springWebSocketVersion
