@@ -49,7 +49,6 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         }
 
         if (json.has("stopTime")) {
-
             val stopTime = json.getLong("stopTime")
             if (stopTime > 0) {
                 val handler = TrackEndMarkerHandler(player)
