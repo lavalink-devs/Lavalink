@@ -28,6 +28,7 @@ import io.undertow.websockets.core.WebSocketChannel
 import io.undertow.websockets.core.WebSockets
 import io.undertow.websockets.jsr.UndertowSession
 import lavalink.server.player.Player
+import lavalink.server.config.ServerConfig
 import moe.kyokobot.koe.KoeClient
 import moe.kyokobot.koe.KoeEventAdapter
 import moe.kyokobot.koe.VoiceConnection
@@ -46,6 +47,7 @@ import java.util.concurrent.TimeUnit
 
 class SocketContext internal constructor(
         val audioPlayerManager: AudioPlayerManager,
+        val serverConfig: ServerConfig,
         private var session: WebSocketSession,
         private val socketServer: SocketServer,
         val userId: String,
@@ -90,7 +92,7 @@ class SocketContext internal constructor(
     }
 
     internal fun getPlayer(guildId: String) = players.computeIfAbsent(guildId) {
-        Player(this, guildId, audioPlayerManager)
+        Player(this, guildId, audioPlayerManager, serverConfig)
     }
 
     internal fun getPlayers(): Map<String, Player> {

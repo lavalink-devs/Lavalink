@@ -89,6 +89,7 @@ class SocketServer(
 
         contextMap[session.id] = SocketContext(
                 audioPlayerManager,
+                serverConfig,
                 session,
                 this,
                 userId,
