@@ -33,6 +33,7 @@ import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import io.netty.buffer.ByteBuf;
 import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
+import lavalink.server.config.ServerConfig;
 import moe.kyokobot.koe.VoiceConnection;
 import moe.kyokobot.koe.media.OpusAudioFrameProvider;
 import org.json.JSONObject;
@@ -49,6 +50,7 @@ public class Player extends AudioEventAdapter {
 
     private final SocketContext socketContext;
     private final String guildId;
+    private final ServerConfig serverConfig;
     private final AudioPlayer player;
     private final AudioLossCounter audioLossCounter = new AudioLossCounter();
     private AudioFrame lastFrame = null;
@@ -56,9 +58,10 @@ public class Player extends AudioEventAdapter {
     private final EqualizerFactory equalizerFactory = new EqualizerFactory();
     private boolean isEqualizerApplied = false;
 
-    public Player(SocketContext socketContext, String guildId, AudioPlayerManager audioPlayerManager) {
+    public Player(SocketContext socketContext, String guildId, AudioPlayerManager audioPlayerManager, ServerConfig serverConfig) {
         this.socketContext = socketContext;
         this.guildId = guildId;
+        this.serverConfig = serverConfig;
         this.player = audioPlayerManager.createPlayer();
         this.player.addListener(this);
         this.player.addListener(new EventEmitter(audioPlayerManager, this));
@@ -148,6 +151,10 @@ public class Player extends AudioEventAdapter {
         return audioLossCounter;
     }
 
+    private int getInterval() {
+        return serverConfig.getPlayerUpdateInterval();
+    }
+
     public boolean isPlaying() {
         return player.getPlayingTrack() != null && !player.isPaused();
     }
@@ -164,7 +171,7 @@ public class Player extends AudioEventAdapter {
                 if (socketContext.getSessionPaused()) return;
 
                 SocketServer.Companion.sendPlayerUpdate(socketContext, this);
-            }, 0, 5, TimeUnit.SECONDS);
+            }, 0, this.getInterval(), TimeUnit.SECONDS);
         }
     }
 
