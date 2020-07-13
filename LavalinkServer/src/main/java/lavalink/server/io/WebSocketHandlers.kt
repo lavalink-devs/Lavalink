@@ -1,11 +1,12 @@
 package lavalink.server.io
 
+import com.sedmelluq.discord.lavaplayer.track.TrackMarker
+import lavalink.server.player.TrackEndMarkerHandler
 import lavalink.server.util.Util
 import moe.kyokobot.koe.VoiceServerInfo
 import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.web.socket.WebSocketSession
 
 class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
 
@@ -24,7 +25,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         //discord sometimes send a partial server update missing the endpoint, which can be ignored.
         endpoint ?: return
 
-        context.getVoiceConnection(guildId).connect(VoiceServerInfo(sessionId, endpoint, token));
+        context.getVoiceConnection(guildId).connect(VoiceServerInfo(sessionId, endpoint, token))
     }
 
     fun play(context: SocketContext, json: JSONObject) {
@@ -45,6 +46,15 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         player.setPause(json.optBoolean("pause", false))
         if (json.has("volume")) {
             player.setVolume(json.getInt("volume"))
+        }
+
+        if (json.has("endTime")) {
+            val stopTime = json.getLong("endTime")
+            if (stopTime > 0) {
+                val handler = TrackEndMarkerHandler(player)
+                val marker = TrackMarker(stopTime, handler)
+                track.setMarker(marker)
+            }
         }
 
         player.play(track)
