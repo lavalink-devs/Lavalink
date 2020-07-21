@@ -2,7 +2,7 @@
 Standalone audio sending node based on Lavaplayer and JDA-Audio.
 Allows for sending audio without it ever reaching any of your shards.
 
-Being used in production by FredBoat, Dyno, Rythm, LewdBot, and more.
+Being used in production by FredBoat, Dyno, LewdBot, and more.
 
 A [very simple example bot](Testbot) is available.
 
@@ -79,6 +79,7 @@ users about the compatibility of their clients to the Lavalink server.
 * [LavaClient](https://github.com/lavaclient/lavaclient) (JavaScript)
 * [Shoukaku](https://github.com/Deivu/Shoukaku) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
 * [Lavacord](https://github.com/lavacord/lavacord) (JavaScript)
+* [LavaJS](https://github.com/Projects-Me/LavaJS) ([discord.js](https://github.com/discordjs/discord.js), JavaScript/TypeScript)
 * [SharpLink](https://github.com/Devoxin/SharpLink) ([Discord.Net](https://github.com/RogueException/Discord.Net), .NET)
 * [Victoria](https://github.com/Yucked/Victoria) ([Discord.NET](https://github.com/RogueException/Discord.Net), .NET)
 * [Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET) (.NET)

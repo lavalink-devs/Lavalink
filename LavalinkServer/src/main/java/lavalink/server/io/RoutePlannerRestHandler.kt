@@ -39,10 +39,11 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
      * Removes a single address from the addresses which are currently marked as failing
      */
     @PostMapping("/routeplanner/free/address")
-    fun freeSingleAddress(request: HttpServletRequest, @RequestBody requestBody: JSONObject): ResponseEntity<Void> {
+    fun freeSingleAddress(request: HttpServletRequest, @RequestBody requestBody: String): ResponseEntity<Void> {
         routePlanner ?: throw RoutePlannerDisabledException()
         try {
-            val address = InetAddress.getByName(requestBody.getString("address"))
+            val jsonObject = JSONObject(requestBody)
+            val address = InetAddress.getByName(jsonObject.getString("address"))
             routePlanner.freeAddress(address)
             return ResponseEntity.noContent().build()
         } catch (exception: UnknownHostException) {
