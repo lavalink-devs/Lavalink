@@ -14,7 +14,7 @@ import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceM
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
-import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotator
+import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup
 import com.sedmelluq.lava.extensions.youtuberotator.planner.AbstractRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.planner.BalancingIpRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.planner.NanoIpRoutePlanner
@@ -50,9 +50,9 @@ class AudioPlayerConfiguration {
             if (routePlanner != null) {
                 val retryLimit = serverConfig.ratelimit?.retryLimit ?: -1
                 when {
-                    retryLimit < 0 -> YoutubeIpRotator.setup(youtube, routePlanner)
-                    retryLimit == 0 -> YoutubeIpRotator.setup(youtube, routePlanner, Int.MAX_VALUE)
-                    else -> YoutubeIpRotator.setup(youtube, routePlanner, retryLimit)
+                    retryLimit < 0 -> YoutubeIpRotatorSetup(routePlanner).forSource(youtube).setup()
+                    retryLimit == 0 -> YoutubeIpRotatorSetup(routePlanner).forSource(youtube).withRetryLimit(Int.MAX_VALUE).setup()
+                    else -> YoutubeIpRotatorSetup(routePlanner).forSource(youtube).withRetryLimit(retryLimit).setup()
 
                 }
             }

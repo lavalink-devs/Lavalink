@@ -66,7 +66,7 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
      */
     private fun getDetailBlock(planner: AbstractRoutePlanner): IRoutePlannerStatus {
         val ipBlock = planner.ipBlock
-        val ipBlockStatus = IpBlockStatus(ipBlock.type.simpleName, ipBlock.size.toString() ?: "0")
+        val ipBlockStatus = IpBlockStatus(ipBlock.type.simpleName, ipBlock.size.toString())
 
         val failingAddresses = planner.failingAddresses
         val failingAddressesStatus = failingAddresses.entries.map {

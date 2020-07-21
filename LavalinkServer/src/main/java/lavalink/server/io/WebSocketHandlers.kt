@@ -1,12 +1,12 @@
 package lavalink.server.io
 
+import com.sedmelluq.discord.lavaplayer.track.TrackMarker
+import lavalink.server.player.TrackEndMarkerHandler
 import lavalink.server.util.Util
+import moe.kyokobot.koe.VoiceServerInfo
 import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.web.socket.WebSocketSession
-import space.npstr.magma.api.MagmaMember
-import space.npstr.magma.api.MagmaServerUpdate
 
 class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
 
@@ -14,35 +14,22 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         private val log: Logger = LoggerFactory.getLogger(WebSocketHandlers::class.java)
     }
 
-    fun voiceUpdate(session: WebSocketSession, json: JSONObject) {
+    fun voiceUpdate(context: SocketContext, json: JSONObject) {
         val sessionId = json.getString("sessionId")
-        val guildId = json.getString("guildId")
+        val guildId = json.getLong("guildId")
 
         val event = json.getJSONObject("event")
-        val endpoint = event.optString("endpoint")
-        val token = event.getString("token")
+        val endpoint: String? = event.optString("endpoint")
+        val token: String = event.getString("token")
 
         //discord sometimes send a partial server update missing the endpoint, which can be ignored.
-        if (endpoint == null || endpoint.isEmpty()) {
-            return
-        }
+        endpoint ?: return
 
-        val sktContext = contextMap[session.id]!!
-        val member = MagmaMember.builder()
-                .userId(sktContext.userId)
-                .guildId(guildId)
-                .build()
-        val serverUpdate = MagmaServerUpdate.builder()
-                .sessionId(sessionId)
-                .endpoint(endpoint)
-                .token(token)
-                .build()
-        sktContext.magma.provideVoiceServerUpdate(member, serverUpdate)
+        context.getVoiceConnection(guildId).connect(VoiceServerInfo(sessionId, endpoint, token))
     }
 
-    fun play(session: WebSocketSession, json: JSONObject) {
-        val ctx = contextMap[session.id]!!
-        val player = ctx.getPlayer(json.getString("guildId"))
+    fun play(context: SocketContext, json: JSONObject) {
+        val player = context.getPlayer(json.getString("guildId"))
         val noReplace = json.optBoolean("noReplace", false)
 
         if (noReplace && player.playingTrack != null) {
@@ -50,7 +37,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
             return
         }
 
-        val track = Util.toAudioTrack(ctx.audioPlayerManager, json.getString("track"))
+        val track = Util.toAudioTrack(context.audioPlayerManager, json.getString("track"))
 
         if (json.has("startTime")) {
             track.position = json.getLong("startTime")
@@ -61,45 +48,45 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
             player.setVolume(json.getInt("volume"))
         }
 
+        if (json.has("endTime")) {
+            val stopTime = json.getLong("endTime")
+            if (stopTime > 0) {
+                val handler = TrackEndMarkerHandler(player)
+                val marker = TrackMarker(stopTime, handler)
+                track.setMarker(marker)
+            }
+        }
+
         player.play(track)
 
-        val context = contextMap[session.id]!!
-
-        val m = MagmaMember.builder()
-                .userId(context.userId)
-                .guildId(json.getString("guildId"))
-                .build()
-        context.magma.setSendHandler(m, context.getPlayer(json.getString("guildId")))
-
-        SocketServer.sendPlayerUpdate(ctx, player)
+        val conn = context.getVoiceConnection(player.guildId.toLong())
+        context.getPlayer(json.getString("guildId")).provideTo(conn)
     }
 
-    fun stop(session: WebSocketSession, json: JSONObject) {
-        val player = contextMap[session.id]!!.getPlayer(json.getString("guildId"))
+    fun stop(context: SocketContext, json: JSONObject) {
+        val player = context.getPlayer(json.getString("guildId"))
         player.stop()
     }
 
-    fun pause(session: WebSocketSession, json: JSONObject) {
-        val context = contextMap[session.id]!!
+    fun pause(context: SocketContext, json: JSONObject) {
         val player = context.getPlayer(json.getString("guildId"))
         player.setPause(json.getBoolean("pause"))
         SocketServer.sendPlayerUpdate(context, player)
     }
 
-    fun seek(session: WebSocketSession, json: JSONObject) {
-        val context = contextMap[session.id]!!
+    fun seek(context: SocketContext, json: JSONObject) {
         val player = context.getPlayer(json.getString("guildId"))
         player.seekTo(json.getLong("position"))
         SocketServer.sendPlayerUpdate(context, player)
     }
 
-    fun volume(session: WebSocketSession, json: JSONObject) {
-        val player = contextMap[session.id]!!.getPlayer(json.getString("guildId"))
+    fun volume(context: SocketContext, json: JSONObject) {
+        val player = context.getPlayer(json.getString("guildId"))
         player.setVolume(json.getInt("volume"))
     }
 
-    fun equalizer(session: WebSocketSession, json: JSONObject) {
-        val player = contextMap[session.id]!!.getPlayer(json.getString("guildId"))
+    fun equalizer(context: SocketContext, json: JSONObject) {
+        val player = context.getPlayer(json.getString("guildId"))
         val bands = json.getJSONArray("bands")
 
         for (i in 0 until bands.length()) {
@@ -108,21 +95,12 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         }
     }
 
-    fun destroy(session: WebSocketSession, json: JSONObject) {
-        val socketContext = contextMap[session.id]!!
-        val player = socketContext.players.remove(json.getString("guildId"))
-        player?.stop()
-        val mem = MagmaMember.builder()
-                .userId(socketContext.userId)
-                .guildId(json.getString("guildId"))
-                .build()
-        socketContext.magma.removeSendHandler(mem)
-        socketContext.magma.closeConnection(mem)
+    fun destroy(context: SocketContext, json: JSONObject) {
+        context.destroy(json.getLong("guildId"))
     }
 
-    fun configureResuming(session: WebSocketSession, json: JSONObject) {
-        val socketContext = contextMap[session.id]!!
-        socketContext.resumeKey = json.optString("key", null)
-        if (json.has("timeout")) socketContext.resumeTimeout = json.getLong("timeout")
+    fun configureResuming(context: SocketContext, json: JSONObject) {
+        context.resumeKey = json.optString("key", null)
+        if (json.has("timeout")) context.resumeTimeout = json.getLong("timeout")
     }
 }
