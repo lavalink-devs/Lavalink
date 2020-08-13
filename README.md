@@ -88,6 +88,7 @@ users about the compatibility of their clients to the Lavalink server.
 * [Magma](https://github.com/initzx/magma/) (discord.py, Python)
 * [lavapotion](https://github.com/SamOphis/lavapotion) (Elixir)
 * [WaveLink](https://github.com/EvieePy/Wavelink)(discord.py, Python)
+* [Lavalink-rs](https://gitlab.com/nitsuga5124/lavalink-rs/)(Async Libraries, Rust)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ### Supports 2.x:
