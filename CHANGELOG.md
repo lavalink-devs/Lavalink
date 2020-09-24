@@ -3,6 +3,8 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v3.3.1.2
+* Update lavaplayer to [@Devoxin](https://github.com/Devoxin)'s' fork
 
 ## v3.3.1.1
 * Updated Lavaplayer to `1.3.50`. This notably fixes YouTube search.
