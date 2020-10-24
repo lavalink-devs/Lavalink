@@ -3,6 +3,24 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v3.3.2
+* Replaced Magma with Koe.
+* Finally implemented `stopTime` for `play` op.
+* Added `playerUpdateInterval` config option.
+* Added `environment` to Sentry config.
+* Fixed #332
+* Updated IP rotator.
+* Update lavaplayer to `1.3.59` from devoxin's fork.
+* Added a Testbot for development.
+
+Contributors:
+[@Frederikam](https://github.com/Frederikam),
+[@Thewsomeguy](https://github.com/Thewsomeguy),
+[@Neuheit](https://github.com/Neuheit),
+[@Sangoon_Is_Noob](https://github.com/Sangoon_Is_Noob),
+[@TheEssem](https://github.com/Essem), and
+[@Devoxin](https://github.com/Devoxin)
+
 ## v3.3.1.3
 * Update lavaplayer to `1.3.53` from devoxin's fork.
 
