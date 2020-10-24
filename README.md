@@ -4,6 +4,8 @@ Allows for sending audio without it ever reaching any of your shards.
 
 Being used in production by FredBoat, Dyno, LewdBot, and more.
 
+A [very simple example bot](Testbot) is available.
+
 [![JDA guild](https://discordapp.com/api/guilds/125227483518861312/embed.png?style=banner2)](https://discord.gg/jtAWrzU)
 
 ## Features
@@ -68,7 +70,6 @@ users about the compatibility of their clients to the Lavalink server.
 
 
 ## Client libraries:
-### Supports 3.x and older:
 * [Lavalink-Client](https://github.com/FredBoat/Lavalink-Client) (JDA or generic, Java)
 * [LavaClient](https://github.com/SamOphis/LavaClient) (Java)
 * [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
@@ -93,10 +94,6 @@ users about the compatibility of their clients to the Lavalink server.
 * [Lavalink-rs](https://gitlab.com/nitsuga5124/lavalink-rs/) (Async Libraries, Rust)
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
-### Supports 2.x:
-* [eris-lavalink](https://github.com/briantanner/eris-lavalink) (Eris, JavaScript)
-* Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
-
 ## Server configuration
 Download binaries from [the CI server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1) or [the GitHub releases](https://github.com/Frederikam/Lavalink/releases).
 
@@ -107,6 +104,3 @@ Run with `java -jar Lavalink.jar`
 Docker images are available on the [Docker hub](https://hub.docker.com/r/fredboat/lavalink/).
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/fredboat/lavalink.svg)](https://hub.docker.com/r/fredboat/lavalink/) [![Docker layers](https://images.microbadger.com/badges/image/fredboat/lavalink:dev.svg)](https://microbadger.com/images/fredboat/lavalink:dev "Get your own image badge on microbadger.com")
-
-# Acknowledgements
-This project contains modified code from https://github.com/sedmelluq/jda-nas v1.0.5
