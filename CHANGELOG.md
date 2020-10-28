@@ -3,6 +3,9 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v3.3.2.1
+* Updated to Sedmelluq's Lavaplayer 1.3.53
+
 ## v3.3.2
 * Replaced Magma with Koe.
 * Finally implemented `stopTime` for `play` op.
