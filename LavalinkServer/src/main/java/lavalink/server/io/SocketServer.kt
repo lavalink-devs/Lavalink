@@ -46,7 +46,7 @@ class SocketServer(
 
     // userId <-> shardCount
     private val shardCounts = ConcurrentHashMap<String, Int>()
-    val contextMap = HashMap<String, SocketContext>()
+    val contextMap = ConcurrentHashMap<String, SocketContext>()
     @Suppress("LeakingThis")
     private val handlers = WebSocketHandlers(contextMap)
     private val resumableSessions = mutableMapOf<String, SocketContext>()
