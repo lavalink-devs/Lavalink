@@ -47,7 +47,7 @@ User-Id: The user id of the bot you are playing music with
 
 ### Outgoing messages
 
-#### Provides a voice update
+#### Provide a voice server update
 
 Provide an intercepted voice server update. This causes the server to connect to the voice channel.
 
@@ -60,17 +60,17 @@ Provide an intercepted voice server update. This causes the server to connect to
 }
 ```
 
-#### Plays a track
+#### Play a track
 
 `startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
 
 `endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default the track plays until it's end as per the encoded data.
 
-`volume` is an optional setting which determines the default volume of the player.
+`volume` is an optional setting which changes the volume if provided.
 
 If `noReplace` is set to true, this operation will be ignored if a track is already playing or paused. This is an optional field.
 
-If `pause` is set to true, the playback will be paused by default. This is an optional field.
+If `pause` is set to true, the playback will be paused. This is an optional field.
 
 ```json
 {
@@ -358,7 +358,7 @@ A severity level of `COMMON` indicates that the error is non-fatal and that the 
 
 Additionally there are a few REST endpoints for the ip rotation extension
 
-#### RoutePlanner Status
+#### Get RoutePlanner status
 
 ```
 GET /routeplanner/status
