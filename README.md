@@ -76,6 +76,7 @@ users about the compatibility of their clients to the Lavalink server.
 * [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
 * [playlink](https://github.com/OverleapCo/Playlink) (Javascript/Typescript)
 * [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
+* [Gorilink](https://github.com/Gorillas-Team/Gorilink) (JavaScript)
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) ([eris](https://github.com/abalabahaha/eris), JavaScript)
 * [LavaClient](https://github.com/lavaclient/lavaclient) (JavaScript)
 * [Shoukaku](https://github.com/Deivu/Shoukaku) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
