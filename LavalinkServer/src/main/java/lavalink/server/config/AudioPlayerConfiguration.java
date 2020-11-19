@@ -7,6 +7,10 @@ import com.sedmelluq.discord.lavaplayer.source.beam.BeamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudDataReader;
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudFormatHandler;
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudHtmlDataLoader;
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudPlaylistLoader;
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
@@ -37,8 +41,21 @@ public class AudioPlayerConfiguration {
                 if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit);
                 audioPlayerManager.registerSourceManager(youtube);
             }
+            if (sources.isSoundcloud()) {
+                DefaultSoundCloudDataReader dataReader = new DefaultSoundCloudDataReader();
+                DefaultSoundCloudHtmlDataLoader htmlDataLoader = new DefaultSoundCloudHtmlDataLoader();
+                DefaultSoundCloudFormatHandler formatHandler = new DefaultSoundCloudFormatHandler();
+
+                audioPlayerManager.registerSourceManager(new SoundCloudAudioSourceManager(
+                        serverConfig.isSoundcloudSearchEnabled(),
+                        dataReader,
+                        htmlDataLoader,
+                        formatHandler,
+                        new DefaultSoundCloudPlaylistLoader(htmlDataLoader, dataReader, formatHandler)
+                ));
+            }
             if (sources.isBandcamp()) audioPlayerManager.registerSourceManager(new BandcampAudioSourceManager());
-            if (sources.isSoundcloud()) audioPlayerManager.registerSourceManager(new SoundCloudAudioSourceManager(serverConfig.isSoundcloudSearchEnabled()));
+            //if (sources.isSoundcloud()) audioPlayerManager.registerSourceManager(new SoundCloudAudioSourceManager(serverConfig.isSoundcloudSearchEnabled()));   
             if (sources.isTwitch()) audioPlayerManager.registerSourceManager(new TwitchStreamAudioSourceManager());
             if (sources.isVimeo()) audioPlayerManager.registerSourceManager(new VimeoAudioSourceManager());
             if (sources.isMixer()) audioPlayerManager.registerSourceManager(new BeamAudioSourceManager());
