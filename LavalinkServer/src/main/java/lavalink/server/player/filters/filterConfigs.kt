@@ -7,11 +7,12 @@ import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter
 import com.github.natanbc.lavadsp.volume.VolumePcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.AudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter
+import com.sedmelluq.discord.lavaplayer.filter.UniversalPcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.equalizer.Equalizer
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat
 
 class VolumeConfig(private var volume: Float) : FilterConfig() {
-    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): AudioFilter {
+    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter {
         return VolumePcmAudioFilter(output, format.channelCount).also {
             it.volume = volume
         }
@@ -27,7 +28,7 @@ class EqualizerConfig(bands: List<Band>) : FilterConfig() {
         bands.forEach { array[it.band] = it.gain }
     }
 
-    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): AudioFilter =
+    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter =
             Equalizer(format.channelCount, output, array)
 
     override val isEnabled: Boolean get() = array.any { it != 0.0f }
@@ -41,7 +42,7 @@ class KaraokeConfig(
         private val filterBand: Float = 220.0f,
         private val filterWidth: Float = 100.0f
 ) : FilterConfig() {
-    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): AudioFilter {
+    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter {
         return KaraokePcmAudioFilter(output, format.channelCount, format.sampleRate)
                 .setLevel(level)
                 .setMonoLevel(monoLevel)
@@ -57,7 +58,7 @@ class TimescaleConfig(
         private val rate: Double = 1.0
 ) : FilterConfig() {
 
-    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): AudioFilter {
+    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter {
         return TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate)
                 .setSpeed(speed)
                 .setPitch(pitch)
@@ -71,7 +72,7 @@ class TremoloConfig(
         private val frequency: Float = 2.0f,
         private val depth: Float = 0.5f
 ) : FilterConfig() {
-    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): AudioFilter {
+    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter {
         return TremoloPcmAudioFilter(output, format.channelCount, format.sampleRate)
                 .setFrequency(frequency)
                 .setDepth(depth)
@@ -85,7 +86,7 @@ class VibratoConfig(
         private val depth: Float = 0.5f
 ) : FilterConfig() {
 
-    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): AudioFilter {
+    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter {
         return VibratoPcmAudioFilter(output, format.channelCount, format.sampleRate)
                 .setFrequency(frequency)
                 .setDepth(depth)
@@ -96,6 +97,6 @@ class VibratoConfig(
 }
 
 abstract class FilterConfig {
-    abstract fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): AudioFilter
+    abstract fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter
     abstract val isEnabled: Boolean
 }
