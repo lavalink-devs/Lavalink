@@ -3,8 +3,82 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
-## v3.2.1
+## v3.3.2.1
+* Updated to Sedmelluq's Lavaplayer 1.3.53
 
+## v3.3.2
+* Replaced Magma with Koe.
+* Finally implemented `stopTime` for `play` op.
+* Added `playerUpdateInterval` config option.
+* Added `environment` to Sentry config.
+* Fixed #332
+* Updated IP rotator.
+* Update lavaplayer to `1.3.59` from devoxin's fork.
+* Added a Testbot for development.
+
+Contributors:
+[@Frederikam](https://github.com/Frederikam),
+[@Thewsomeguy](https://github.com/Thewsomeguy),
+[@Neuheit](https://github.com/Neuheit),
+[@Sangoon_Is_Noob](https://github.com/Sangoon_Is_Noob),
+[@TheEssem](https://github.com/Essem), and
+[@Devoxin](https://github.com/Devoxin)
+
+## v3.3.1.4
+* Update lavaplayer to `1.3.54.3` from devoxin's fork.
+
+
+## v3.3.1.3
+* Update lavaplayer to `1.3.53` from devoxin's fork.
+
+## v3.3.1.2
+* Update lavaplayer to [@Devoxin](https://github.com/Devoxin)'s' fork
+
+## v3.3.1.1
+* Updated Lavaplayer to `1.3.50`. This notably fixes YouTube search.
+
+Search patch contributed by [@Frederikam](https://github.com/Frederikam)
+
+## v3.3.1
+* Update Magma and Lavaplayer.
+* Added TrackStartEvent event.
+* Added retryLimit configuration option.
+* Use a single AudioPlayerManager for all WS connections, reducing overhead.
+* Docker images now use Zulu JDK 13 to mitigate TLS 1.3 problems.
+
+Contributors:
+[@Frederikam](https://github.com/Frederikam),
+[@duncte123](https://github.com/duncte123),
+[@ByteAlex](https://github.com/ByteAlex), and
+[@Xavinlol](https://github.com/Xavinlol)
+
+## v3.3
+
+Officially limit Lavalink to JRE 11 and up. Magma has long been having issues with older versions.
+
+## v3.2.2
+* IP rotation system for getting around certain ratelimits.
+* Update Lavaplayer to 1.3.32.
+* Docker container now uses a non-root user.
+
+Contributors:
+[@Frederikam](https://github.com/Frederikam),
+[@ByteAlex](https://github.com/ByteAlex),
+[@duncte123](https://github.com/duncte123), and
+[@james7132](https://github.com/james7132)
+
+## v3.2.1.1
+* Updated Lavaplayer to 1.3.19. This release includes a patch which fixes loading youtube URLs. 
+https://github.com/sedmelluq/lavaplayer/pull/199
+* Made the WebSocket handshake return code 401 instead of 200 on bad auth. #208
+
+Contributors:
+[@Frederikam](https://github.com/Frederikam) and
+[@Devoxin](https://github.com/Devoxin)
+
+
+
+## v3.2.1
 * Update dependencies -- fixes frequent youtube HTTP errors
 * Return `FriendlyException` message on `LOAD_FAILED` #174
 * Add option to disable `ytsearch` and `scsearch` #194
@@ -12,8 +86,14 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 Contributors:
 [@Devoxin](https://github.com/Devoxin),
 [@duncte123](https://github.com/duncte123),
-[@Frederikam](https://github.com/Frederikam/), and
+[@Frederikam](https://github.com/Frederikam), and
 [@napstr](https://github.com/napstr)
+
+## v3.2.0.3
+* Add compatibility for Java 8-10
+
+Contributor:
+[@MinnDevelopment](https://github.com/MinnDevelopment/)
 
 ## v3.2.0.2
 * Patched magma

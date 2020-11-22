@@ -1,9 +1,6 @@
 server: # REST and WS server
   port: 2333
   address: 0.0.0.0
-spring:
-  main:
-    banner-mode: log
 lavalink:
   server:
     password: "youshallnotpass"
@@ -18,9 +15,16 @@ lavalink:
       local: false
     bufferDurationMs: 400
     youtubePlaylistLoadLimit: 6 # Number of pages at 100 each
+    playerUpdateInterval: 5 # How frequently to send player updates to clients, in seconds
     youtubeSearchEnabled: true
     soundcloudSearchEnabled: true
     gc-warnings: true
+    #ratelimit:
+      #ipBlocks: ["1.0.0.0/8", "..."] # list of ip blocks
+      #excludedIps: ["...", "..."] # ips which should be explicit excluded from usage by lavalink
+      #strategy: "RotateOnBan" # RotateOnBan | LoadBalance | NanoSwitch | RotatingNanoSwitch
+      #searchTriggersFail: true # Whether a search 429 should trigger marking the ip as failing
+      #retryLimit: -1 # -1 = use default lavaplayer value | 0 = infinity | >0 = retry will happen this numbers times
 
 metrics:
   prometheus:
@@ -29,6 +33,7 @@ metrics:
 
 sentry:
   dsn: ""
+  environment: ""
 #  tags:
 #    some_key: some_value
 #    another_key: another_value

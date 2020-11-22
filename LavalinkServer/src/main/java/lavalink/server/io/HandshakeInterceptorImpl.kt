@@ -3,6 +3,7 @@ package lavalink.server.io
 import lavalink.server.config.ServerConfig
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.server.ServerHttpRequest
 import org.springframework.http.server.ServerHttpResponse
 import org.springframework.stereotype.Controller
@@ -24,8 +25,6 @@ constructor(private val serverConfig: ServerConfig, private val socketServer: So
      */
     override fun beforeHandshake(request: ServerHttpRequest, response: ServerHttpResponse, wsHandler: WebSocketHandler,
                                  attributes: Map<String, Any>): Boolean {
-        response.headers.add("Lavalink-Major-Version", "3")
-
         val password = request.headers.getFirst("Authorization")
         val matches = password == serverConfig.password
 
@@ -33,6 +32,7 @@ constructor(private val serverConfig: ServerConfig, private val socketServer: So
             log.info("Incoming connection from " + request.remoteAddress)
         } else {
             log.error("Authentication failed from " + request.remoteAddress)
+            response.setStatusCode(HttpStatus.UNAUTHORIZED)
         }
 
         val resumeKey = request.headers.getFirst("Resume-Key")
