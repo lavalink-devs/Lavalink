@@ -6,6 +6,11 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * You must be able to send messages via a shard's mainWS connection.
 * You must be able to intercept voice server updates from mainWS on your shard connection.
 
+## Significant changes v3.3 -> v3.4
+* Added filters
+* The `error` string on the `TrackExceptionEvent` has been deprecated and replaced by 
+the `exception` object following the same structure as the `LOAD_FAILED` error on [`/loadtracks`](#rest-api)
+
 ## Significant changes v2.0 -> v3.0 
 * The response of `/loadtracks` has been completely changed (again since the initial v3.0 pre-release).
 * Lavalink v3.0 now reports its version as a handshake response header.
@@ -116,35 +121,56 @@ The position is in milliseconds.
 }
 ```
 
-#### Set player volume
+#### Using filters
 
-Volume may range from 0 to 1000. 100 is default.
+The `filters` op sets the filters. All the filters are optional, and leaving them out of this message will disable them.
 
-```json
+Adding a filter can have adverse effects on performance. These filters force Lavaplayer to decode all audio to PCM,
+even if the input was already in the Opus format that Discord uses. This means decoding and encoding audio that would
+normally require very little processing. This is often the case with YouTube videos.
+
+JSON comments are for illustration purposes only, and will not be accepted by the server.
+
+```yaml
 {
-    "op": "volume",
+    "op": "filters",
     "guildId": "...",
-    "volume": 125
-}
-```
-
-#### Using the player equalizer
-
-There are 15 bands (0-14) that can be changed.
-`gain` is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
-where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could
-also change the volume of the output.
-
-```json
-{
-    "op": "equalizer",
-    "guildId": "...",
-    "bands": [
+    
+    // Float value where 1.0 is 100%. Values >1.0 may cause clipping
+    "volume": 1.0,
+    
+    // There are 15 bands (0-14) that can be changed.
+    // "gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
+    // where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could
+    // also change the volume of the output.
+    "equalizer": [
         {
             "band": 0,
             "gain": 0.2
         }
-    ]
+    ],
+    
+    // Uses equalization to eliminate part of a band, usually targeting vocals.
+    karaoke: {
+        "level": 1.0,
+        "monoLevel": 1.0,
+        "filterBand": 220.0,
+        "filterWidth": 100.0
+    },
+    
+    // Changes the speed, pitch, and rate. All default to 1.
+    timescale: {
+        "speed": 1.0,
+        "pitch": 1.0,
+        "rate": 1.0
+    },
+    
+    // Uses amplification to create a shuddering effect, where the volume quickly oscillates.
+    // Example: https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
+    tremolo: {
+        frequency: 2.0, // 0 < x
+        depth: 0.5      // 0 < x ≤ 1
+    }
 }
 ```
 
@@ -246,9 +272,14 @@ private void handleEvent(JSONObject json) throws IOException {
             );
             break;
         case "TrackExceptionEvent":
+            JSONObject jsonEx = json.getJSONObject("exception");
             event = new TrackExceptionEvent(player,
                     LavalinkUtil.toAudioTrack(json.getString("track")),
-                    new RemoteTrackException(json.getString("error"))
+                    new FriendlyException(
+                        jsonEx.getString("message"),
+                        FriendlyException.Severity.valueOf(jsonEx.getString("severity")),
+                        new RuntimeException(jsonEx.getString("cause"))
+                    )
             );
             break;
         case "TrackStuckEvent":
