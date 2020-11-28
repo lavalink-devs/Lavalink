@@ -170,6 +170,12 @@ JSON comments are for illustration purposes only, and will not be accepted by th
     tremolo: {
         frequency: 2.0, // 0 < x
         depth: 0.5      // 0 < x ≤ 1
+    },
+    
+    // Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
+    vibrato: {
+        frequency: 2.0, // 0 < x ≤ 14
+        depth: 0.5      // 0 < x ≤ 1
     }
 }
 ```
