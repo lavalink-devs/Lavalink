@@ -46,7 +46,11 @@ User-Id: The user id of the bot you are playing music with
 ```
 
 ### Outgoing messages
+
+#### Provide a voice server update
+
 Provide an intercepted voice server update. This causes the server to connect to the voice channel.
+
 ```json
 {
     "op": "voiceUpdate",
@@ -56,13 +60,17 @@ Provide an intercepted voice server update. This causes the server to connect to
 }
 ```
 
-Cause the player to play a track.
+#### Play a track
 
 `startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
 
 `endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default the track plays until it's end as per the encoded data.
 
-If `noReplace` is set to true, this operation will be ignored if a track is already playing or paused.
+`volume` is an optional setting which changes the volume if provided.
+
+If `noReplace` is set to true, this operation will be ignored if a track is already playing or paused. This is an optional field.
+
+If `pause` is set to true, the playback will be paused. This is an optional field.
 
 ```json
 {
@@ -71,11 +79,14 @@ If `noReplace` is set to true, this operation will be ignored if a track is alre
     "track": "...",
     "startTime": "60000",
     "endTime": "120000",
-    "noReplace": false
+    "volume": "100",
+    "noReplace": false,
+    "pause": false,
 }
 ```
 
-Cause the player to stop
+#### Stop a player 
+
 ```json
 {
     "op": "stop",
@@ -83,7 +94,8 @@ Cause the player to stop
 }
 ```
 
-Set player pause
+#### Pause the playback
+
 ```json
 {
     "op": "pause",
@@ -92,7 +104,10 @@ Set player pause
 }
 ```
 
-Make the player seek to a position of the track. Position is in millis
+#### Seek a track 
+
+The position is in milliseconds.
+
 ```json
 {
     "op": "seek",
@@ -101,7 +116,10 @@ Make the player seek to a position of the track. Position is in millis
 }
 ```
 
-Set player volume. Volume may range from 0 to 1000. 100 is default.
+#### Set player volume
+
+Volume may range from 0 to 1000. 100 is default.
+
 ```json
 {
     "op": "volume",
@@ -110,7 +128,13 @@ Set player volume. Volume may range from 0 to 1000. 100 is default.
 }
 ```
 
-Using the player equalizer
+#### Using the player equalizer
+
+There are 15 bands (0-14) that can be changed.
+`gain` is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
+where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could
+also change the volume of the output.
+
 ```json
 {
     "op": "equalizer",
@@ -123,14 +147,13 @@ Using the player equalizer
     ]
 }
 ```
-There are 15 bands (0-14) that can be changed.
-`gain` is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
-where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could
-also change the volume of the output.
+
+#### Destroy a player
 
 Tell the server to potentially disconnect from the voice server and potentially remove the player with all its data.
 This is useful if you want to move to a new node for a voice connection. Calling this op does not affect voice state,
 and you can send the same VOICE_SERVER_UPDATE to a new node.
+
 ```json
 {
     "op": "destroy",
@@ -203,7 +226,7 @@ Server emitted an event. See the client implementation below.
  * 2. TrackEndEvent
  * 3. TrackExceptionEvent
  * 4. TrackStuckEvent
- * <p>
+ * 
  * The remaining lavaplayer events are caused by client actions, and are therefore not forwarded via WS.
  */
 private void handleEvent(JSONObject json) throws IOException {
@@ -330,15 +353,21 @@ A severity level of `COMMON` indicates that the error is non-fatal and that the 
 ```
 
 ---
+
 ### RoutePlanner API
+
 Additionally there are a few REST endpoints for the ip rotation extension
-#### RoutePlanner Status
+
+#### Get RoutePlanner status
+
 ```
 GET /routeplanner/status
 Host: localhost:8080
 Authorization: youshallnotpass
 ```
+
 Response:
+
 ```json
 {
     "class": "RotatingNanoIpRoutePlanner",
@@ -368,6 +397,7 @@ Fields which are always present are: `class`, `details.ipBlock` and
 The following classes have additional detail fields:
 
 #### RotatingIpRoutePlanner
+
 `details.rotateIndex` String containing the number of rotations which happened 
 since the restart of Lavalink
 
@@ -376,18 +406,20 @@ since the restart of Lavalink
 `details.currentAddress` The currently used ip address
 
 #### NanoIpRoutePlanner
+
 `details.currentAddressIndex` long representing the current offset in the ip 
 block
 
 #### RotatingNanoIpRoutePlanner
+
 `details.blockIndex` String containing the the information in which /64 block ips 
 are chosen. This number increases on each ban.
 
 `details.currentAddressIndex` long representing the current offset in the ip 
-block
-
+block.
 
 #### Unmark a failed address
+
 ```
 POST /routeplanner/free/address
 Host: localhost:8080
@@ -395,6 +427,7 @@ Authorization: youshallnotpass
 ```
 
 Request Body:
+
 ```json
 {
     "address": "1.0.0.1"
@@ -406,6 +439,7 @@ Response:
 204 - No Content
 
 #### Unmark all failed address
+
 ```
 POST /routeplanner/free/all
 Host: localhost:8080
@@ -461,6 +495,7 @@ queue is then emptied and the events are then replayed.
   * This also includes resumes
 
 * If Lavalink-Server suddenly dies (think SIGKILL) the client will have to terminate any audio connections by sending this event:
+
 ```json
 {"op":4,"d":{"self_deaf":false,"guild_id":"GUILD_ID_HERE","channel_id":null,"self_mute":false}}
 ```
