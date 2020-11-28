@@ -44,7 +44,6 @@ class SocketServer(
 ) : TextWebSocketHandler() {
 
     // userId <-> shardCount
-    private val shardCounts = ConcurrentHashMap<String, Int>()
     val contextMap = ConcurrentHashMap<String, SocketContext>()
     @Suppress("LeakingThis")
     private val handlers = WebSocketHandlers(contextMap)
@@ -68,11 +67,8 @@ class SocketServer(
         get() = contextMap.values
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
-        val shardCount = Integer.parseInt(session.handshakeHeaders.getFirst("Num-Shards")!!)
         val userId = session.handshakeHeaders.getFirst("User-Id")!!
         val resumeKey = session.handshakeHeaders.getFirst("Resume-Key")
-
-        shardCounts[userId] = shardCount
 
         var resumable: SocketContext? = null
         if (resumeKey != null) resumable = resumableSessions.remove(resumeKey)
@@ -83,8 +79,6 @@ class SocketServer(
             log.info("Resumed session with key $resumeKey")
             return
         }
-
-        shardCounts[userId] = shardCount
 
         contextMap[session.id] = SocketContext(
                 audioPlayerManager,

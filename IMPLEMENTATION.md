@@ -46,7 +46,6 @@ the JDA client takes advantage of JDA's websocket write thread to send OP 4s for
 When opening a websocket connection, you must supply 3 required headers:
 ```
 Authorization: Password matching the server config
-Num-Shards: Total number of shards your bot is operating on
 User-Id: The user id of the bot you are playing music with
 ```
 
