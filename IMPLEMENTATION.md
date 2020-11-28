@@ -47,6 +47,7 @@ When opening a websocket connection, you must supply 3 required headers:
 ```
 Authorization: Password matching the server config
 User-Id: The user id of the bot you are playing music with
+Client-Name: The name of your client
 ```
 
 ### Outgoing messages
@@ -85,7 +86,7 @@ If `pause` is set to true, the playback will be paused. This is an optional fiel
     "endTime": "120000",
     "volume": "100",
     "noReplace": false,
-    "pause": false,
+    "pause": false
 }
 ```
 

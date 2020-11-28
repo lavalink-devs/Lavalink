@@ -69,6 +69,8 @@ class SocketServer(
     override fun afterConnectionEstablished(session: WebSocketSession) {
         val userId = session.handshakeHeaders.getFirst("User-Id")!!
         val resumeKey = session.handshakeHeaders.getFirst("Resume-Key")
+        val clientName = session.handshakeHeaders.getFirst("Client-Name")
+        val userAgent = session.handshakeHeaders.getFirst("User-Agent")
 
         var resumable: SocketContext? = null
         if (resumeKey != null) resumable = resumableSessions.remove(resumeKey)
@@ -88,7 +90,13 @@ class SocketServer(
                 userId,
                 koe.newClient(userId.toLong())
         )
-        log.info("Connection successfully established from " + session.remoteAddress!!)
+
+        if (clientName != null) {
+            log.info("Connection successfully established from $clientName")
+        } else {
+            log.info("Connection successfully established")
+            log.warn("Library developers: Please specify a 'Client-Name' header. User agent: $userAgent")
+        }
     }
 
     override fun afterConnectionClosed(session: WebSocketSession?, status: CloseStatus?) {
