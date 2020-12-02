@@ -93,9 +93,14 @@ class SocketServer(
 
         if (clientName != null) {
             log.info("Connection successfully established from $clientName")
-        } else {
-            log.info("Connection successfully established")
+            return
+        }
+
+        log.info("Connection successfully established")
+        if (userAgent != null) {
             log.warn("Library developers: Please specify a 'Client-Name' header. User agent: $userAgent")
+        } else {
+            log.warn("Library developers: Please specify a 'Client-Name' header.")
         }
     }
 
