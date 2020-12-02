@@ -47,7 +47,7 @@ When opening a websocket connection, you must supply 3 required headers:
 ```
 Authorization: Password matching the server config
 User-Id: The user id of the bot you are playing music with
-Client-Name: The name of your client
+Client-Name: The name of your client. Optionally in the format NAME/VERSION
 ```
 
 ### Outgoing messages
