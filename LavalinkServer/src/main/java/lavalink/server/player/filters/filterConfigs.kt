@@ -4,6 +4,8 @@ import com.github.natanbc.lavadsp.karaoke.KaraokePcmAudioFilter
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter
 import com.github.natanbc.lavadsp.tremolo.TremoloPcmAudioFilter
 import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter
+import com.github.natanbc.lavadsp.distortion.DistortionPcmAudioFilter
+import com.github.natanbc.lavadsp.rotation.RotationPcmAudioFilter
 import com.github.natanbc.lavadsp.volume.VolumePcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.AudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter
@@ -94,6 +96,44 @@ class VibratoConfig(
 
     override val isEnabled: Boolean get() = depth != 0.0f
 
+}
+
+class DistortionConfig(
+        private val sinOffset: Float = 0.0f,
+        private val sinScale: Float = 1.0f,
+        private val cosOffset: Float = 0.0f,
+        private val cosScale: Float = 1.0f,
+        private val tanOffset: Float = 0.0f,
+        private val tanScale: Float = 1.0f,
+        private val offset: Float = 0.0f,
+        private val scale: Float = 1.0f
+) : FilterConfig() {
+
+    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter {
+        return DistortionPcmAudioFilter(output, format.channelCount)
+                .setSinOffset(sinOffset)
+                .setSinScale(sinScale)
+                .setCosOffset(cosOffset)
+                .setCosScale(cosScale)
+                .setTanOffset(tanOffset)
+                .setTanScale(tanScale)
+                .setOffset(offset)
+                .setScale(scale)
+    }
+
+    override val isEnabled: Boolean get() = sinOffset != 0.0f || sinScale != 1.0f || cosOffset != 0.0f || cosScale != 1.0f || tanOffset != 0.0f || tanScale != 1.0f || offset != 0.0f || scale != 1.0f
+
+}
+
+class RotationConfig(
+    private val rotationHz: Double = 0.0
+) : FilterConfig() {
+    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter {
+        return RotationPcmAudioFilter(output, format.sampleRate)
+                .setRotationSpeed(rotationHz)
+    }
+
+    override val isEnabled: Boolean get() = rotationHz != 0.0
 }
 
 abstract class FilterConfig {

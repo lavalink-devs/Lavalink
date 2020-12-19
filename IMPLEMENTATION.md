@@ -176,7 +176,25 @@ JSON comments are for illustration purposes only, and will not be accepted by th
     vibrato: {
         frequency: 2.0, // 0 < x ≤ 14
         depth: 0.5      // 0 < x ≤ 1
+    },
+    // Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to: https://youtu.be/QB9EB8mTKcc (without the reverb)
+    rotation: {
+        rotationHz: 0 // the best value would be 0.2, It is he frequency the audio should rotate around the listener, in Hertz.
+    },
+    //Distortion effect. It can generate some pretty unique audio effects.
+    distortion: {
+        sinOffset: 0,
+        sinScale: 1,
+        cosOffset: 0,
+        cosScale: 1,
+        tanOffset: 0,
+        tanScale: 1,
+        offset: 0,
+        scale: 1
+    } 
     }
+    
+
 }
 ```
 
