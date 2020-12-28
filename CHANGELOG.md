@@ -3,6 +3,9 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 3.3.2.3
+* Update Lavaplayer to 1.3.65, fixes Soundcloud
+
 ## v3.3.2.2
 * Updated Lavaplayer to 1.3.61
 * Fixed a ConcurrentModificationException ([Thewsomeguy](https://github.com/Thewsomeguy))
