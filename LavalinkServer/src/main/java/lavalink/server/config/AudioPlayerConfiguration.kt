@@ -22,7 +22,6 @@ import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingIpRoutePlann
 import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv4Block
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block
-import moe.kyokobot.koe.codec.udpqueue.UdpQueueFramePollerFactory
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -52,7 +51,8 @@ class AudioPlayerConfiguration {
                 log.warn("Buffer size of {}ms is illegal. Defaulting to {}", it, defaultFrameBufferDuration)
             }
 
-            val bufferDuration = it.takeIf { it > 200 } ?: defaultFrameBufferDuration
+            val bufferDuration = it.takeIf { it >= 200 } ?: defaultFrameBufferDuration
+            log.debug("Setting frame buffer duration to {}", bufferDuration)
             audioPlayerManager.frameBufferDuration = bufferDuration
         }
 
