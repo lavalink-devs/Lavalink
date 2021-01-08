@@ -22,6 +22,7 @@ import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingIpRoutePlann
 import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv4Block
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block
+import moe.kyokobot.koe.codec.udpqueue.UdpQueueFramePollerFactory
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -43,6 +44,16 @@ class AudioPlayerConfiguration {
 
         if (serverConfig.isGcWarnings) {
             audioPlayerManager.enableGcMonitoring()
+        }
+
+        val defaultFrameBufferDuration = audioPlayerManager.frameBufferDuration
+        serverConfig.frameBufferDurationMs?.let {
+            if (it < 200) { // At the time of writing, LP enforces a minimum of 200ms.
+                log.warn("Buffer size of {}ms is illegal. Defaulting to {}", it, defaultFrameBufferDuration)
+            }
+
+            val bufferDuration = it.takeIf { it > 200 } ?: defaultFrameBufferDuration
+            audioPlayerManager.frameBufferDuration = bufferDuration
         }
 
         if (sources.isYoutube) {
