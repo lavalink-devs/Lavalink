@@ -45,6 +45,17 @@ class AudioPlayerConfiguration {
             audioPlayerManager.enableGcMonitoring()
         }
 
+        val defaultFrameBufferDuration = audioPlayerManager.frameBufferDuration
+        serverConfig.frameBufferDurationMs?.let {
+            if (it < 200) { // At the time of writing, LP enforces a minimum of 200ms.
+                log.warn("Buffer size of {}ms is illegal. Defaulting to {}", it, defaultFrameBufferDuration)
+            }
+
+            val bufferDuration = it.takeIf { it >= 200 } ?: defaultFrameBufferDuration
+            log.debug("Setting frame buffer duration to {}", bufferDuration)
+            audioPlayerManager.frameBufferDuration = bufferDuration
+        }
+
         if (sources.isYoutube) {
             val youtube = YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled)
             if (routePlanner != null) {
