@@ -59,7 +59,7 @@ subprojects {
         jdaNasVersion                   = '1.1.0'
         jappVersion                     = '1.3.2-MINN'
         koeVersion                      = '1.0.1'
-        lavaDspVersion                  = 'fc90262'
+        lavaDspVersion                  = '0.7.6'
 
         springBootVersion               = "${springBootVersion}"
         springWebSocketVersion          = '5.1.9.RELEASE'
