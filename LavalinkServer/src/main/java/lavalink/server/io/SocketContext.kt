@@ -37,6 +37,7 @@ import org.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
+import java.net.InetSocketAddress
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -90,6 +91,8 @@ class SocketContext internal constructor(
             thread
         }
     }
+
+    internal fun getPlayer(guildId: Long) = getPlayer(guildId.toString())
 
     internal fun getPlayer(guildId: String) = players.computeIfAbsent(guildId) {
         Player(this, guildId, audioPlayerManager, serverConfig)
@@ -189,6 +192,12 @@ class SocketContext internal constructor(
             out.put("byRemote", byRemote)
 
             send(out)
+
+            SocketServer.sendPlayerUpdate(this@SocketContext, this@SocketContext.getPlayer(guildId))
+        }
+
+        override fun gatewayReady(target: InetSocketAddress?, ssrc: Int) {
+            SocketServer.sendPlayerUpdate(this@SocketContext, this@SocketContext.getPlayer(guildId))
         }
     }
 }

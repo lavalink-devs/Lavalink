@@ -10,6 +10,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * Added filters
 * The `error` string on the `TrackExceptionEvent` has been deprecated and replaced by 
 the `exception` object following the same structure as the `LOAD_FAILED` error on [`/loadtracks`](#rest-api)
+* Added the `connected` boolean to player updates.
 
 ## Significant changes v2.0 -> v3.0 
 * The response of `/loadtracks` has been completely changed (again since the initial v3.0 pre-release).
@@ -197,14 +198,18 @@ and you can send the same VOICE_SERVER_UPDATE to a new node.
 
 See [LavalinkSocket.java](https://github.com/FredBoat/Lavalink-Client/blob/master/src/main/java/lavalink/client/io/LavalinkSocket.java) for client implementation
 
-Position information about a player. Includes unix timestamp.
+This event includes:
+* Unix timestamp in milliseconds.
+* Track position in milliseconds. Omitted if not playing anything.
+* `connected` is true when connected to the voice gateway.
 ```json
 {
     "op": "playerUpdate",
     "guildId": "...",
     "state": {
         "time": 1500467109,
-        "position": 60000
+        "position": 60000,
+        "connected": true
     }
 }
 ```
