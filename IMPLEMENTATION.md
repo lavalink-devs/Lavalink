@@ -179,7 +179,7 @@ JSON comments are for illustration purposes only, and will not be accepted by th
     },
     // Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to: https://youtu.be/QB9EB8mTKcc (without the reverb)
     rotation: {
-        rotationHz: 0 // the best value would be 0.2, It is he frequency the audio should rotate around the listener, in Hertz.
+        rotationHz: 0 // The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above.
     },
     //Distortion effect. It can generate some pretty unique audio effects.
     distortion: {
