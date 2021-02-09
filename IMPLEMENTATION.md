@@ -152,7 +152,7 @@ JSON comments are for illustration purposes only, and will not be accepted by th
     ],
     
     // Uses equalization to eliminate part of a band, usually targeting vocals.
-    karaoke: {
+    "karaoke": {
         "level": 1.0,
         "monoLevel": 1.0,
         "filterBand": 220.0,
@@ -160,7 +160,7 @@ JSON comments are for illustration purposes only, and will not be accepted by th
     },
     
     // Changes the speed, pitch, and rate. All default to 1.
-    timescale: {
+    "timescale": {
         "speed": 1.0,
         "pitch": 1.0,
         "rate": 1.0
@@ -168,30 +168,30 @@ JSON comments are for illustration purposes only, and will not be accepted by th
     
     // Uses amplification to create a shuddering effect, where the volume quickly oscillates.
     // Example: https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
-    tremolo: {
-        frequency: 2.0, // 0 < x
-        depth: 0.5      // 0 < x ≤ 1
+    "tremolo": {
+        "frequency": 2.0, // 0 < x
+        "depth": 0.5      // 0 < x ≤ 1
     },
     
     // Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
-    vibrato: {
-        frequency: 2.0, // 0 < x ≤ 14
-        depth: 0.5      // 0 < x ≤ 1
+    "vibrato": {
+        "frequency": 2.0, // 0 < x ≤ 14
+        "depth": 0.5      // 0 < x ≤ 1
     },
     // Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to: https://youtu.be/QB9EB8mTKcc (without the reverb)
-    rotation: {
-        rotationHz: 0 // The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above.
+    "rotation": {
+        "rotationHz": 0 // The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above.
     },
     //Distortion effect. It can generate some pretty unique audio effects.
-    distortion: {
-        sinOffset: 0,
-        sinScale: 1,
-        cosOffset: 0,
-        cosScale: 1,
-        tanOffset: 0,
-        tanScale: 1,
-        offset: 0,
-        scale: 1
+    "distortion": {
+        "sinOffset": 0,
+        "sinScale": 1,
+        "cosOffset": 0,
+        "cosScale": 1,
+        "tanOffset": 0,
+        "tanScale": 1,
+        "offset": 0,
+        "scale": 1
     } 
     }
     
