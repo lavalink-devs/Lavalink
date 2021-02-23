@@ -30,7 +30,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         //discord sometimes send a partial server update missing the endpoint, which can be ignored.
         endpoint ?: return
 
-        context.getVoiceConnection(guildId).connect(VoiceServerInfo(sessionId, endpoint, token))
+        context.getVoiceConnection(context.getPlayer(guildId)).connect(VoiceServerInfo(sessionId, endpoint, token))
     }
 
     fun play(context: SocketContext, json: JSONObject) {
@@ -70,7 +70,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
 
         player.play(track)
 
-        val conn = context.getVoiceConnection(player.guildId.toLong())
+        val conn = context.getVoiceConnection(player)
         context.getPlayer(json.getString("guildId")).provideTo(conn)
     }
 
