@@ -57,7 +57,7 @@ class SocketServer(
             val json = JSONObject()
 
             val state = player.state
-            val connected = socketContext.getVoiceConnection(player.guildId.toLong()).gatewayConnection?.isOpen == true
+            val connected = socketContext.getVoiceConnection(player).gatewayConnection?.isOpen == true
             state.put("connected", connected)
 
             json.put("op", "playerUpdate")
