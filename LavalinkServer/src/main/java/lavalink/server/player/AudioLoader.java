@@ -80,7 +80,9 @@ public class AudioLoader implements AudioLoadResultHandler {
         Integer selectedTrack = null;
         if (!audioPlaylist.isSearchResult()) {
             playlistName = audioPlaylist.getName();
-            selectedTrack = audioPlaylist.getTracks().indexOf(audioPlaylist.getSelectedTrack());
+            if(audioPlaylist.getSelectedTrack() != null){
+                selectedTrack = audioPlaylist.getTracks().indexOf(audioPlaylist.getSelectedTrack());
+            }
         }
 
         ResultStatus status = audioPlaylist.isSearchResult() ? ResultStatus.SEARCH_RESULT : ResultStatus.PLAYLIST_LOADED;
