@@ -389,7 +389,7 @@ Response:
 }
 ```
 
-If the identifier leads to a playlist, `playlistInfo` will contain two properties, `name` and `selectedTrack`
+If the identifier leads to a playlist, `playlistInfo` will contain two properties, `name` and `selectedTrack`(-1 if no selected track found)
 ```json
 {
   "loadType": "PLAYLIST_LOADED",
