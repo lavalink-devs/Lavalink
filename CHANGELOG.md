@@ -3,6 +3,9 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 3.3.2.5
+* Update Lavaplayer to 1.3.76
+
 ## 3.3.2.4
 * Update Lavaplayer to 1.3.74
 
