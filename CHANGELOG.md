@@ -51,7 +51,7 @@ Search patch contributed by [@Frederikam](https://github.com/Frederikam)
 * Docker images now use Zulu JDK 13 to mitigate TLS 1.3 problems.
 
 Contributors:
-[@Frederikam](https://github.com/Frederikam),
+[@freyacodes](https://github.com/freyacodes),
 [@duncte123](https://github.com/duncte123),
 [@ByteAlex](https://github.com/ByteAlex), and
 [@Xavinlol](https://github.com/Xavinlol)
