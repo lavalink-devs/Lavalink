@@ -165,7 +165,7 @@ Java 11 by that time.
 
 Contributors:
 [@Devoxin](https://github.com/Devoxin),
-[@Frederikam](https://github.com/freyacodes/),
+[@freyacodes](https://github.com/freyacodes/),
 [@napstr](https://github.com/napstr),
 [@SamOphis](https://github.com/SamOphis)
 
