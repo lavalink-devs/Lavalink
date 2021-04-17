@@ -125,6 +125,6 @@ object Launcher {
                 }
         )
         sa.run(*args)
-        log.info("You can safely ignore the big red warning about illegal reflection. See https://github.com/Frederikam/Lavalink/issues/295")
+        log.info("You can safely ignore the big red warning about illegal reflection. See https://github.com/freyacodes/Lavalink/issues/295")
     }
 }
