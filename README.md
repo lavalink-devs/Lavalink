@@ -70,7 +70,7 @@ users about the compatibility of their clients to the Lavalink server.
 
 
 ## Client libraries:
-* [Lavalink-Client](https://github.com/FredBoat/Lavalink-Client) (JDA or generic, Java)
+* [Lavalink-Client](https://github.com/freyacodes/lavalink-client) (JDA or generic, Java)
 * [LavaClient](https://github.com/SamOphis/LavaClient) (Java)
 * [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
 * [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
@@ -93,7 +93,7 @@ users about the compatibility of their clients to the Lavalink server.
 * [lavapotion](https://github.com/SamOphis/lavapotion) (Elixir)
 * [WaveLink](https://github.com/EvieePy/Wavelink) (discord.py, Python)
 * [Lavalink-rs](https://gitlab.com/nitsuga5124/lavalink-rs/) (Async Libraries, Rust)
-* Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
+* Or [create your own](https://github.com/freyacodes/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ## Server configuration
 Download binaries from [the CI server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1) or [the GitHub releases](https://github.com/freyacodes/Lavalink/releases).
