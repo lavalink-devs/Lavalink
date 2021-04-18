@@ -380,7 +380,7 @@ Response:
 
 Decode multiple tracks into info their info
 ```
-GET /decodetracks HTTP/1.1
+POST /decodetracks HTTP/1.1
 Host: localhost:8080
 Authorization: youshallnotpass
 ```
