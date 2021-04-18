@@ -30,7 +30,7 @@ Support for Darwin (Mac), Windows AMD64, and Linux ARM (Raspberry Pi) is provide
 
 Support for other JVMs is also best-effort. Periodic CPU utilization stats are prone to not work everywhere.
 
-**\*Java 11 appears to have some issues with Discord's TLS 1.3. Java 14 has other undiagnosed HTTPS problems. Use Java 13. Docker images have been updated.** See [#258](https://github.com/Frederikam/Lavalink/issues/258), [#260](https://github.com/Frederikam/Lavalink/issues/260)
+**\*Java 11 appears to have some issues with Discord's TLS 1.3. Java 14 has other undiagnosed HTTPS problems. Use Java 13. Docker images have been updated.** See [#258](https://github.com/freyacodes/Lavalink/issues/258), [#260](https://github.com/freyacodes/Lavalink/issues/260)
 
 ## Changelog
 
@@ -96,9 +96,9 @@ users about the compatibility of their clients to the Lavalink server.
 * Or [create your own](https://github.com/Frederikam/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ## Server configuration
-Download binaries from [the CI server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1) or [the GitHub releases](https://github.com/Frederikam/Lavalink/releases).
+Download binaries from [the CI server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1) or [the GitHub releases](https://github.com/freyacodes/Lavalink/releases).
 
-Put an `application.yml` file in your working directory. [Example](https://github.com/Frederikam/Lavalink/blob/master/LavalinkServer/application.yml.example)
+Put an `application.yml` file in your working directory. [Example](https://github.com/freyacodes/Lavalink/blob/master/LavalinkServer/application.yml.example)
 
 Run with `java -jar Lavalink.jar`
 

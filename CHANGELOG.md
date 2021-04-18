@@ -21,7 +21,7 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 * Added a Testbot for development.
 
 Contributors:
-[@Frederikam](https://github.com/Frederikam),
+[@freyacodes](https://github.com/freyacodes),
 [@Thewsomeguy](https://github.com/Thewsomeguy),
 [@Neuheit](https://github.com/Neuheit),
 [@Sangoon_Is_Noob](https://github.com/Sangoon_Is_Noob),
@@ -41,7 +41,7 @@ Contributors:
 ## v3.3.1.1
 * Updated Lavaplayer to `1.3.50`. This notably fixes YouTube search.
 
-Search patch contributed by [@Frederikam](https://github.com/Frederikam)
+Search patch contributed by [@freyacodes](https://github.com/freyacodes)
 
 ## v3.3.1
 * Update Magma and Lavaplayer.
@@ -51,7 +51,7 @@ Search patch contributed by [@Frederikam](https://github.com/Frederikam)
 * Docker images now use Zulu JDK 13 to mitigate TLS 1.3 problems.
 
 Contributors:
-[@Frederikam](https://github.com/Frederikam),
+[@freyacodes](https://github.com/freyacodes),
 [@duncte123](https://github.com/duncte123),
 [@ByteAlex](https://github.com/ByteAlex), and
 [@Xavinlol](https://github.com/Xavinlol)
@@ -66,7 +66,7 @@ Officially limit Lavalink to JRE 11 and up. Magma has long been having issues wi
 * Docker container now uses a non-root user.
 
 Contributors:
-[@Frederikam](https://github.com/Frederikam),
+[@freyacodes](https://github.com/freyacodes),
 [@ByteAlex](https://github.com/ByteAlex),
 [@duncte123](https://github.com/duncte123), and
 [@james7132](https://github.com/james7132)
@@ -77,7 +77,7 @@ https://github.com/sedmelluq/lavaplayer/pull/199
 * Made the WebSocket handshake return code 401 instead of 200 on bad auth. #208
 
 Contributors:
-[@Frederikam](https://github.com/Frederikam) and
+[@freyacodes](https://github.com/freyacodes) and
 [@Devoxin](https://github.com/Devoxin)
 
 
@@ -90,7 +90,7 @@ Contributors:
 Contributors:
 [@Devoxin](https://github.com/Devoxin),
 [@duncte123](https://github.com/duncte123),
-[@Frederikam](https://github.com/Frederikam), and
+[@freyacodes](https://github.com/freyacodes), and
 [@napstr](https://github.com/napstr)
 
 ## v3.2.0.3
@@ -103,12 +103,12 @@ Contributor:
 * Patched magma
 
 Contributor:
-[@Frederikam](https://github.com/Frederikam/)
+[@freyacodes](https://github.com/freyacodes/)
 
 ## v3.2.0.1
 * Bumped to Java 11. Treating this as a patch version, as v3.2 still requires Java 11 due to a Magma update. 
 
-[@Frederikam](https://github.com/Frederikam)
+[@freyacodes](https://github.com/freyacodes)
 
 ## v3.2
 * Added support for resuming
@@ -116,7 +116,7 @@ Contributor:
 * Sending the same voice server update will not cause an existing connection to reconnect
 
 Contributor:
-[@Frederikam](https://github.com/Frederikam)
+[@freyacodes](https://github.com/freyacodes)
 
 ## v3.1.2
 * Add API version header to all responses
@@ -132,7 +132,7 @@ Contributor:
 
 Contributors:
 [@Devoxin](https://github.com/Devoxin),
-[@Frederikam](https://github.com/Frederikam/),
+[@freyacodes](https://github.com/freyacodes/),
 [@calebj](https://github.com/calebj)
 
 ## v3.1
@@ -146,49 +146,49 @@ server and port. Port is specified by `server.port`.
 **Please note**: Java 10 will be obsolete
 as of [September 2018 with the release of Java 11](http://www.java-countdown.xyz/). Expect a Lavalink major version release that will be targetting
 Java 11 by that time.
-* **Breaking:** Changes to the output of the /loadtracks endpoint. [\#91](https://github.com/Frederikam/Lavalink/pull/91), [\#114](https://github.com/Frederikam/Lavalink/pull/114), [\#116](https://github.com/Frederikam/Lavalink/pull/116)
+* **Breaking:** Changes to the output of the /loadtracks endpoint. [\#91](https://github.com/freyacodes/Lavalink/pull/91), [\#114](https://github.com/Frederikam/Lavalink/pull/114), [\#116](https://github.com/freyacodes/Lavalink/pull/116)
 * **Breaking:** The Java client has been moved to a [new repository](https://github.com/FredBoat/Lavalink-Client).
 * **Breaking:** The Java client has been made generic. This is a breaking change so please read the [migration guide](https://github.com/FredBoat/Lavalink-Client#migrating-from-v2-to-v3).
-* Better configurable logging. [\#97](https://github.com/Frederikam/Lavalink/pull/97)
-* Add custom sentry tags, change sentry dsn configuration location. [\#103](https://github.com/Frederikam/Lavalink/pull/103)
-* Add Lavalink version header to websocket handshake. [\#111](https://github.com/Frederikam/Lavalink/pull/111)
-* Use git tags for easier version visibility. [\#129](https://github.com/Frederikam/Lavalink/pull/129)
+* Better configurable logging. [\#97](https://github.com/freyacodes/Lavalink/pull/97)
+* Add custom sentry tags, change sentry dsn configuration location. [\#103](https://github.com/freyacodes/Lavalink/pull/103)
+* Add Lavalink version header to websocket handshake. [\#111](https://github.com/freyacodes/Lavalink/pull/111)
+* Use git tags for easier version visibility. [\#129](https://github.com/freyacodes/Lavalink/pull/129)
 
 Contributors:
 [@Devoxin](https://github.com/Devoxin),
-[@Frederikam](https://github.com/Frederikam/),
+[@freyacodes](https://github.com/freyacodes/),
 [@napstr](https://github.com/napstr),
 [@SamOphis](https://github.com/SamOphis)
 
 ## v2.2
-* Lavaplayer updated to 1.3.x [\#115](https://github.com/Frederikam/Lavalink/pull/115)
-* Version command line flag [\#121](https://github.com/Frederikam/Lavalink/pull/121)
-* Fix race condition in `/loadtracks` endpoint leading to some requests never completing [\#125](https://github.com/Frederikam/Lavalink/pull/125)
+* Lavaplayer updated to 1.3.x [\#115](https://github.com/freyacodes/Lavalink/pull/115)
+* Version command line flag [\#121](https://github.com/freyacodes/Lavalink/pull/121)
+* Fix race condition in `/loadtracks` endpoint leading to some requests never completing [\#125](https://github.com/freyacodes/Lavalink/pull/125)
 
 Contributors:
 [@Devoxin](https://github.com/Devoxin),
-[@Frederikam](https://github.com/Frederikam/),
+[@freyacodes](https://github.com/freyacodes/),
 [@napstr](https://github.com/napstr)
 
 ## v2.1
-* Add prometheus metrics [\#105](https://github.com/Frederikam/Lavalink/pull/105), [\#106](https://github.com/Frederikam/Lavalink/pull/106)
+* Add prometheus metrics [\#105](https://github.com/freyacodes/Lavalink/pull/105), [\#106](https://github.com/freyacodes/Lavalink/pull/106)
 
 Contributors:
-[@Frederikam](https://github.com/Frederikam/),
+[@freyacodes](https://github.com/freyacodes/),
 [@napstr](https://github.com/napstr),
 [@Repulser](https://github.com/Repulser/)
 
 ## v2.0.1
-* Configurable playlist load limit [\#60](https://github.com/Frederikam/Lavalink/pull/60)
-* [Docker Releases](https://hub.docker.com/r/fredboat/lavalink/), [\#74](https://github.com/Frederikam/Lavalink/pull/74)
+* Configurable playlist load limit [\#60](https://github.com/freyacodes/Lavalink/pull/60)
+* [Docker Releases](https://hub.docker.com/r/fredboat/lavalink/), [\#74](https://github.com/freyacodes/Lavalink/pull/74)
 
 Contributors:
 [@Devoxin](https://github.com/Devoxin),
-[@Frederikam](https://github.com/Frederikam/),
+[@freyacodes](https://github.com/freyacodes/),
 [@itslukej](https://github.com/itslukej/),
 [@napstr](https://github.com/napstr),
 [@Repulser](https://github.com/Repulser/)
 
 ## v2.0
-Please see [here](https://github.com/Frederikam/Lavalink/commit/b8dd3c8a7e186755c1ab343d19a552baecf138e7)
-and [here](https://github.com/Frederikam/Lavalink/commit/08a34c99a47a18ade7bd14e6c55ab92348caaa88)
+Please see [here](https://github.com/freyacodes/Lavalink/commit/b8dd3c8a7e186755c1ab343d19a552baecf138e7)
+and [here](https://github.com/freyacodes/Lavalink/commit/08a34c99a47a18ade7bd14e6c55ab92348caaa88)
