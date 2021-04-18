@@ -70,7 +70,7 @@ users about the compatibility of their clients to the Lavalink server.
 
 
 ## Client libraries:
-* [Lavalink-Client](https://github.com/FredBoat/Lavalink-Client) (JDA or generic, Java)
+* [Lavalink-Client](https://github.com/freyacodes/lavalink-client) (JDA or generic, Java)
 * [LavaClient](https://github.com/SamOphis/LavaClient) (Java)
 * [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
 * [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)

@@ -156,8 +156,8 @@ server and port. Port is specified by `server.port`.
 as of [September 2018 with the release of Java 11](http://www.java-countdown.xyz/). Expect a Lavalink major version release that will be targetting
 Java 11 by that time.
 * **Breaking:** Changes to the output of the /loadtracks endpoint. [\#91](https://github.com/freyacodes/Lavalink/pull/91), [\#114](https://github.com/freyacodes/Lavalink/pull/114), [\#116](https://github.com/freyacodes/Lavalink/pull/116)
-* **Breaking:** The Java client has been moved to a [new repository](https://github.com/FredBoat/Lavalink-Client).
-* **Breaking:** The Java client has been made generic. This is a breaking change so please read the [migration guide](https://github.com/FredBoat/Lavalink-Client#migrating-from-v2-to-v3).
+* **Breaking:** The Java client has been moved to a [new repository](https://github.com/freyacodes/Lavalink-Client).
+* **Breaking:** The Java client has been made generic. This is a breaking change so please read the [migration guide](https://github.com/freyacodes/Lavalink-Client#migrating-from-v2-to-v3).
 * Better configurable logging. [\#97](https://github.com/freyacodes/Lavalink/pull/97)
 * Add custom sentry tags, change sentry dsn configuration location. [\#103](https://github.com/freyacodes/Lavalink/pull/103)
 * Add Lavalink version header to websocket handshake. [\#111](https://github.com/freyacodes/Lavalink/pull/111)

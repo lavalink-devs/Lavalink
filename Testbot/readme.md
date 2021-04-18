@@ -1,7 +1,7 @@
 # Lavalink Testbot
 This is a minimalistic example of a bot using Lavalink. This example is based upon Lavalink-Client for Java.
 
-https://github.com/FredBoat/Lavalink-Client
+https://github.com/freyacodes/lavalink-client
 
 This uses Lavaplayer to load tracks rather than initially loading tracks via Lavalink. Non-JVM (Java) bots will need
 to query the `/loadtracks` endpoint.
