@@ -352,7 +352,7 @@ A severity level of `COMMON` indicates that the error is non-fatal and that the 
 }
 ```
 
-### Decode Track API
+### Track Decoding API
 
 Decode a single track into its info
 ```
