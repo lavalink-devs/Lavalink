@@ -352,6 +352,66 @@ A severity level of `COMMON` indicates that the error is non-fatal and that the 
 }
 ```
 
+### Decode Track API
+
+decodes a single track into info
+```
+GET /decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA== HTTP/1.1
+Host: localhost:8080
+Authorization: youshallnotpass
+```
+
+```
+Response:
+```json
+{
+  "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+  "info": {
+    "identifier": "dQw4w9WgXcQ",
+    "isSeekable": true,
+    "author": "RickAstleyVEVO",
+    "length": 212000,
+    "isStream": false,
+    "position": 0,
+    "title": "Rick Astley - Never Gonna Give You Up",
+    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  }
+}
+```
+
+decodes multiple tracks into info
+```
+GET /decodetracks HTTP/1.1
+Host: localhost:8080
+Authorization: youshallnotpass
+```
+Request:
+```json
+[
+   "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+   ...
+]
+```
+
+Response:
+```json
+[
+    {
+      "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+      "info": {
+        "identifier": "dQw4w9WgXcQ",
+        "isSeekable": true,
+        "author": "RickAstleyVEVO",
+        "length": 212000,
+        "isStream": false,
+        "position": 0,
+        "title": "Rick Astley - Never Gonna Give You Up",
+        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      }
+    },
+    ...
+]
+```
 ---
 
 ### RoutePlanner API
