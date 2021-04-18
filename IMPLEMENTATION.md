@@ -361,7 +361,6 @@ Host: localhost:8080
 Authorization: youshallnotpass
 ```
 
-```
 Response:
 ```json
 {
@@ -385,6 +384,7 @@ GET /decodetracks HTTP/1.1
 Host: localhost:8080
 Authorization: youshallnotpass
 ```
+
 Request:
 ```json
 [
