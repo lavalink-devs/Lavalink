@@ -448,7 +448,8 @@ Response:
     "isStream": false,
     "position": 0,
     "title": "Rick Astley - Never Gonna Give You Up",
-    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "sourceName": "youtube"
   }
 }
 ```
@@ -481,7 +482,8 @@ Response:
         "isStream": false,
         "position": 0,
         "title": "Rick Astley - Never Gonna Give You Up",
-        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "sourceName": "youtube"
       }
     },
     ...
