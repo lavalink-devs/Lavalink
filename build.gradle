@@ -25,10 +25,7 @@ buildscript {
 allprojects {
 
     repositories {
-        maven {
-            name 'm2-dv8tion'
-            url 'https://m2.dv8tion.net/releases'
-        }
+        maven { url 'https://m2.dv8tion.net/releases' }
         mavenCentral()                     // main maven repo
         jcenter()                          // JDA and some other stuff
         mavenLocal()                       // useful for developing
