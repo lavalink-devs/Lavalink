@@ -6,6 +6,8 @@ import com.github.natanbc.lavadsp.tremolo.TremoloPcmAudioFilter
 import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter
 import com.github.natanbc.lavadsp.distortion.DistortionPcmAudioFilter
 import com.github.natanbc.lavadsp.rotation.RotationPcmAudioFilter
+import com.github.natanbc.lavadsp.channelmix.ChannelMixPcmAudioFilter
+import com.github.natanbc.lavadsp.lowpass.LowPassPcmAudioFilter
 import com.github.natanbc.lavadsp.volume.VolumePcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.AudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter
@@ -134,6 +136,34 @@ class RotationConfig(
     }
 
     override val isEnabled: Boolean get() = rotationHz != 0.0
+}
+
+class ChannelmixConfig(
+    private val leftToLeft: Float = 1.0f,
+    private val leftToRight: Float = 0.0f,
+    private val rightToLeft: Float = 0.0f,
+    private val rightToRight: Float = 1.0f
+) : FilterConfig() {
+    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter {
+        return ChannelMixPcmAudioFilter(output)
+                .setLeftToLeft(leftToLeft)
+                .setLeftToRight(leftToRight)
+                .setRightToRight(rightToRight)
+                .setRightToLeft(rightToLeft)
+    }
+
+    override val isEnabled: Boolean get() = leftToLeft != 1.0f || rightToRight != 1.0f || rightToLeft != 0.0f || leftToRight != 0.0f
+}
+
+class LowpassConfig(
+    private val smoothing: Float = 20.0f
+) : FilterConfig() {
+    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter {
+        return LowPassPcmAudioFilter(output, format.sampleRate)
+                .setSmoothing(smoothing)
+    }
+
+    override val isEnabled: Boolean get() = smoothing != 20.0f
 }
 
 abstract class FilterConfig {

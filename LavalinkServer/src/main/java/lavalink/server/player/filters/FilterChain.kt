@@ -23,6 +23,8 @@ class FilterChain : PcmFilterFactory {
     private val vibrato: VibratoConfig? = null
     private val distortion: DistortionConfig? = null
     private val rotation: RotationConfig? = null
+    private val channelmix: ChannelmixConfig? = null
+    private val lowpass: LowpassConfig? = null
 
     private fun buildList() = listOfNotNull(
             volume?.let { VolumeConfig(it) },
@@ -32,7 +34,9 @@ class FilterChain : PcmFilterFactory {
             tremolo,
             vibrato,
             distortion,
-            rotation
+            rotation,
+            channelmix,
+            lowpass
     )
 
     val isEnabled get() = buildList().any { it.isEnabled }

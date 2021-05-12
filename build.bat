@@ -1,0 +1,2 @@
+gradlew bootJar
+pause
