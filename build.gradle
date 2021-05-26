@@ -29,7 +29,7 @@ allprojects {
         jcenter()                          // JDA and some other stuff
         mavenLocal()                       // useful for developing
         maven { url "https://jitpack.io" } // build projects directly from github
-        maven { url 'https://dl.bintray.com/sedmelluq/com.sedmelluq' }
+        maven { url 'https://m2.dv8tion.net/releases' }
     }
 
     group = 'lavalink'
@@ -59,7 +59,7 @@ subprojects {
         jdaNasVersion                   = '1.1.0'
         jappVersion                     = '1.3.2-MINN'
         koeVersion                      = '1.0.1'
-        lavaDspVersion                  = '0.7.6'
+        lavaDspVersion                  = '0.7.7'
 
         springBootVersion               = "${springBootVersion}"
         springWebSocketVersion          = '5.1.9.RELEASE'
