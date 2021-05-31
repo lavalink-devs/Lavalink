@@ -42,7 +42,7 @@ public class StatsTask implements Runnable {
 
     private final SystemInfo si = new SystemInfo();
     private final HardwareAbstractionLayer hal = si.getHardware();
-    // CPU ticks used for calculations in CPU load.
+    /** CPU ticks used for calculations in CPU load. */
     private long[] prevTicks;
 
     StatsTask(SocketContext context, SocketServer socketServer) {
