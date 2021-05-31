@@ -24,16 +24,13 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
                     || arch.equals("x86", ignoreCase = true)
                     // Many ARM variants, but should raise lib if it fails to load.
                     || arch.contains("arm", ignoreCase = true)
+                    || arch.contains("aarch64", ignoreCase = true)
                     ||
-            os.contains("windows", ignoreCase = true)
+                    os.contains("windows", ignoreCase = true)
                     && arch.equals("amd64", ignoreCase = true)
                     || arch.equals("x86", ignoreCase = true)
                     ||
-            os.contains("darwin", ignoreCase = true)
-                    && arch.equals("amd64", ignoreCase = true)
-                    || arch.equals("x86", ignoreCase = true)
-                    ||
-            os.contains("darwin")
+                    os.contains("darwin", ignoreCase = true)
                     && arch.equals("amd64", ignoreCase = true)
                     || arch.equals("aarch64", ignoreCase = true)
 
