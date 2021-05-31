@@ -90,7 +90,7 @@ public class StatsTask implements Runnable {
         if(prevTicks == null) {
             prevTicks = hal.getProcessor().getSystemCpuLoadTicks();
         }
-        cpu.put("systemLoad", hal.getProcessor().getSystemCpuLoadBetweenTicks(cpuLoad));
+        cpu.put("systemLoad", hal.getProcessor().getSystemCpuLoadBetweenTicks(prevTicks));
         prevTicks = hal.getProcessor().getSystemCpuLoadTicks();
         double load = getProcessRecentCpuUsage();
         if (!Double.isFinite(load)) load = 0;
