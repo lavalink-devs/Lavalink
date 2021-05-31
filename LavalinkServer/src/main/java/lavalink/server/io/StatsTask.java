@@ -42,7 +42,7 @@ public class StatsTask implements Runnable {
 
     private final SystemInfo si = new SystemInfo();
     private final HardwareAbstractionLayer hal = si.getHardware();
-    private long[] cpuLoad;
+    private long[] prevTicks;
 
     StatsTask(SocketContext context, SocketServer socketServer) {
         this.context = context;
@@ -87,11 +87,11 @@ public class StatsTask implements Runnable {
 
         JSONObject cpu = new JSONObject();
         cpu.put("cores", Runtime.getRuntime().availableProcessors());
-        if(cpuLoad == null) {
-            cpuLoad = hal.getProcessor().getSystemCpuLoadTicks();
+        if(prevTicks == null) {
+            prevTicks = hal.getProcessor().getSystemCpuLoadTicks();
         }
         cpu.put("systemLoad", hal.getProcessor().getSystemCpuLoadBetweenTicks(cpuLoad));
-        hal.getProcessor().getSystemCpuLoadTicks();
+        prevTicks = hal.getProcessor().getSystemCpuLoadTicks();
         double load = getProcessRecentCpuUsage();
         if (!Double.isFinite(load)) load = 0;
         cpu.put("lavalinkLoad", load);
