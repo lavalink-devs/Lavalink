@@ -65,7 +65,7 @@ subprojects {
         springWebSocketVersion          = '5.1.9.RELEASE'
         logbackVersion                  = '1.2.3'
         sentryLogbackVersion            = '1.7.7'
-        oshiVersion                     = '3.13.3'
+        oshiVersion                     = '5.7.4'
         jsonOrgVersion                  = '20180813'
         spotbugsAnnotationsVersion      = '3.1.6'
         prometheusVersion               = '0.5.0'
