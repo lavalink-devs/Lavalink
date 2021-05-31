@@ -19,7 +19,7 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
         val arch = System.getProperty("os.arch")
 
         val nasSupported =
-            os.contains("linux", ignoreCase = true)
+                    os.contains("linux", ignoreCase = true)
                     && arch.equals("amd64", ignoreCase = true)
                     || arch.equals("x86", ignoreCase = true)
                     // Many ARM variants, but should raise lib if it fails to load.
