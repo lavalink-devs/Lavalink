@@ -31,7 +31,7 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
                     || arch.equals("x86", ignoreCase = true)
                     ||
                     os.contains("darwin", ignoreCase = true)
-                    && arch.equals("amd64", ignoreCase = true)
+                    && arch.equals("x86_64", ignoreCase = true)
                     || arch.equals("aarch64", ignoreCase = true)
 
         if (nasSupported) {
