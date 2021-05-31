@@ -21,18 +21,21 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
         val nasSupported =
             os.contains("linux", ignoreCase = true)
                     && arch.equals("amd64", ignoreCase = true)
-                    && arch.equals("x86", ignoreCase = true)
+                    || arch.equals("x86", ignoreCase = true)
                     // Many ARM variants, but should raise lib if it fails to load.
-                    && arch.contains("arm", ignoreCase = true)
+                    || arch.contains("arm", ignoreCase = true)
+                    ||
             os.contains("windows", ignoreCase = true)
                     && arch.equals("amd64", ignoreCase = true)
-                    && arch.equals("x86", ignoreCase = true)
+                    || arch.equals("x86", ignoreCase = true)
+                    ||
             os.contains("darwin", ignoreCase = true)
                     && arch.equals("amd64", ignoreCase = true)
-                    && arch.equals("x86", ignoreCase = true)
+                    || arch.equals("x86", ignoreCase = true)
+                    ||
             os.contains("darwin")
                     && arch.equals("amd64", ignoreCase = true)
-                    && arch.equals("aarch64", ignoreCase = true)
+                    || arch.equals("aarch64", ignoreCase = true)
 
         if (nasSupported) {
             log.info("Enabling JDA-NAS")
