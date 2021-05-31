@@ -192,11 +192,13 @@ Note that filters may take a moment to apply.
         "frequency": 2.0, // 0 < x ≤ 14
         "depth": 0.5      // 0 < x ≤ 1
     },
+    
     // Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to: https://youtu.be/QB9EB8mTKcc (without the reverb)
     "rotation": {
         "rotationHz": 0 // The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above.
     },
-    //Distortion effect. It can generate some pretty unique audio effects.
+    
+    // Distortion effect. It can generate some pretty unique audio effects.
     "distortion": {
         "sinOffset": 0,
         "sinScale": 1,
@@ -207,9 +209,21 @@ Note that filters may take a moment to apply.
         "offset": 0,
         "scale": 1
     } 
+    
+    // Mixes both channels (left and right), with a configurable factor on how much each channel affects the other.
+    // With the defaults, both channels are kept independent from each other.
+    // Setting all factors to 0.5 means both channels get the same audio.
+    "channelMix": {
+        "leftToLeft": 1.0,
+        "leftToRight": 0.0,
+        "rightToLeft": 0.0,
+        "rightToRight": 1.0,
     }
     
-
+    // Higher frequencies get suppressed, while lower frequencies pass through this filter, thus the name low pass.
+    "lowPass": {
+        "smoothing": 20.0
+    }
 }
 ```
 
