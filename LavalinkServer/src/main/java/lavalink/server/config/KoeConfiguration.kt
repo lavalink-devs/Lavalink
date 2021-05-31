@@ -14,9 +14,9 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
 
     @Bean
     fun koeOptions(): KoeOptions = KoeOptions.builder().apply {
-        log.info("OS: " + System.getProperty("os.name") + ", Arch: " + System.getProperty("os.arch"))
         val os = System.getProperty("os.name")
         val arch = System.getProperty("os.arch")
+        log.info("OS: " + os + ", Arch: " + arch)
 
         val nasSupported =
                     os.contains("linux", ignoreCase = true)
@@ -34,8 +34,10 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
                     && arch.equals("amd64", ignoreCase = true)
                     || arch.equals("aarch64", ignoreCase = true)
 
-        if (nasSupported) {
-            log.info("Enabling JDA-NAS")
+        val jdaenabled = serverConfig.jdanas
+        if(jdaenabled) {
+            if (nasSupported) {
+            log.info("Enabling JDA-NAS.")
             var bufferSize = serverConfig.bufferDurationMs ?: UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION
             if (bufferSize <= 0) {
                 log.warn("Buffer size of {}ms is illegal. Defaulting to {}",
@@ -46,6 +48,9 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
         } else {
             log.warn("This system and architecture appears to not support native audio sending! "
                     + "GC pauses may cause your bot to stutter during playback.")
+        }
+        } else {
+            log.warn("JDA-NAS is disabled.")
         }
     }.create()
 }
