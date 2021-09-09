@@ -8,7 +8,7 @@ import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudDataReader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudFormatHandler
-import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudHtmlDataLoader
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudDataLoader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudPlaylistLoader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
@@ -73,15 +73,15 @@ class AudioPlayerConfiguration {
         }
         if (sources.isSoundcloud) {
             val dataReader = DefaultSoundCloudDataReader();
-            val htmlDataLoader = DefaultSoundCloudHtmlDataLoader();
+            val dataLoader = DefaultSoundCloudDataLoader();
             val formatHandler = DefaultSoundCloudFormatHandler();
 
             audioPlayerManager.registerSourceManager(SoundCloudAudioSourceManager(
                     serverConfig.isSoundcloudSearchEnabled,
                     dataReader,
-                    htmlDataLoader,
+                    dataLoader,
                     formatHandler,
-                    DefaultSoundCloudPlaylistLoader(htmlDataLoader, dataReader, formatHandler)
+                    DefaultSoundCloudPlaylistLoader(dataLoader, dataReader, formatHandler)
             ));
         }
         if (sources.isBandcamp) audioPlayerManager.registerSourceManager(BandcampAudioSourceManager())
