@@ -97,6 +97,7 @@ users about the compatibility of their clients to the Lavalink server.
 * [WaveLink](https://github.com/EvieePy/Wavelink) (discord.py, Python)
 * [Lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs/) (All `tokio` Libraries, Rust)
 * [lavasnek_rs](https://github.com/vicky5124/lavasnek_rs/) (All `asyncio` Libraries, Python)
+* [Pomice](https://github.com/cloudwithax/pomice) (discord.py, Python)
 * Or [create your own](https://github.com/freyacodes/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ## Server configuration
