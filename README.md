@@ -72,6 +72,7 @@ users about the compatibility of their clients to the Lavalink server.
 ## Client libraries:
 * [Lavalink-Client](https://github.com/freyacodes/lavalink-client) (JDA or generic, Java)
 * [LavaClient](https://github.com/SamOphis/LavaClient) (Java)
+* [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt) (Kord, JDA, generic, Kotlin (Coroutines))
 * [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
 * [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
 * [playlink](https://github.com/OverleapCo/Playlink) (Javascript/Typescript)
@@ -98,7 +99,6 @@ users about the compatibility of their clients to the Lavalink server.
 * [Lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs/) (All `tokio` Libraries, Rust)
 * [lavasnek_rs](https://github.com/vicky5124/lavasnek_rs/) (All `asyncio` Libraries, Python)
 * [Pomice](https://github.com/cloudwithax/pomice) (discord.py, Python)
-* [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt) (Kord, JDA, generic, Kotlin (Coroutines))
 * Or [create your own](https://github.com/freyacodes/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ## Server configuration
