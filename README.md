@@ -79,7 +79,7 @@ users about the compatibility of their clients to the Lavalink server.
 * [Gorilink](https://github.com/Gorillas-Team/Gorilink) (JavaScript)
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) ([eris](https://github.com/abalabahaha/eris), JavaScript)
 * [LavaClient](https://github.com/lavaclient/lavaclient) (JavaScript)
-* [Shoukaku](https://github.com/Deivu/Shoukaku) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
+* [Shoukaku](https://github.com/Deivu/Shoukaku) (JavaScript)
 * [erela.js](https://github.com/MenuDocs/erela.js) (JavaScript)
 * [Lavacord](https://github.com/lavacord/lavacord) (JavaScript)
 * [LavaJS](https://github.com/Overleap/LavaJS) ([discord.js](https://github.com/discordjs/discord.js), JavaScript/TypeScript)
