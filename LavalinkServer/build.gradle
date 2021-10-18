@@ -39,7 +39,7 @@ dependencies {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
     compile group: 'moe.kyokobot.koe', name: 'ext-udpqueue', version: koeVersion
-    compile group: 'com.github.Walkyst', name: 'lavaplayer-fork', version: '3a54cbd43b'
+    compile group: 'com.github.Walkyst', name: 'lavaplayer-fork', version: '07f96f1'
     //compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
     compile(group: 'com.sedmelluq', name: 'lavaplayer-ext-youtube-rotator', version: lavaplayerIpRotatorVersion) {
         exclude group: 'com.sedmelluq', module: 'lavaplayer'
