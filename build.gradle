@@ -30,6 +30,9 @@ allprojects {
         mavenLocal()                       // useful for developing
         maven { url "https://jitpack.io" } // build projects directly from github
         maven { url 'https://dl.bintray.com/sedmelluq/com.sedmelluq' }
+        maven {
+            url 'https://m2.dv8tion.net/releases'
+        }
     }
 
     group = 'lavalink'

@@ -26,6 +26,10 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         endpoint ?: return
 
         context.getVoiceConnection(guildId).connect(VoiceServerInfo(sessionId, endpoint, token))
+
+        //fix: when the player gets moved into another channel the session is resumed but no audio is played.
+        val conn = context.getVoiceConnection(guildId)
+        context.getPlayer(guildId.toString()).provideTo(conn)
     }
 
     fun play(context: SocketContext, json: JSONObject) {
