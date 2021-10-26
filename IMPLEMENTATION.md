@@ -11,6 +11,8 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * The `error` string on the `TrackExceptionEvent` has been deprecated and replaced by 
 the `exception` object following the same structure as the `LOAD_FAILED` error on [`/loadtracks`](#rest-api)
 * Added the `connected` boolean to player updates.
+* Added source name to REST api track objects
+* Clients are now requested to make their name known during handshake
 
 ## Significant changes v2.0 -> v3.0 
 * The response of `/loadtracks` has been completely changed (again since the initial v3.0 pre-release).
