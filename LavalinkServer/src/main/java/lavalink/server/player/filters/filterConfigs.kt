@@ -8,6 +8,8 @@ import com.github.natanbc.lavadsp.vibrato.VibratoPcmAudioFilter
 import com.github.natanbc.lavadsp.distortion.DistortionPcmAudioFilter
 import com.github.natanbc.lavadsp.lowpass.LowPassPcmAudioFilter
 import com.github.natanbc.lavadsp.rotation.RotationPcmAudioFilter
+import com.github.natanbc.lavadsp.channelmix.ChannelMixPcmAudioFilter
+import com.github.natanbc.lavadsp.lowpass.LowPassPcmAudioFilter
 import com.github.natanbc.lavadsp.volume.VolumePcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.AudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter
