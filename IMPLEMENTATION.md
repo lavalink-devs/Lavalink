@@ -460,12 +460,8 @@ Response:
   "isStream": false,
   "position": 0,
   "title": "Rick Astley - Never Gonna Give You Up",
-<<<<<<< HEAD
   "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   "sourceName": "youtube"
-=======
-  "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
->>>>>>> master
 }
 ```
 
