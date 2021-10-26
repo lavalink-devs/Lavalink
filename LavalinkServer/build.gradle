@@ -39,8 +39,12 @@ dependencies {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
     compile group: 'moe.kyokobot.koe', name: 'ext-udpqueue', version: koeVersion
-    compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
-    compile group: 'com.sedmelluq', name: 'lavaplayer-ext-youtube-rotator', version: lavaplayerIpRotatorVersion
+    compile group: 'com.github.walkyst', name: 'lavaplayer-fork', version: '1.3.96'
+    //compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
+    compile(group: 'com.sedmelluq', name: 'lavaplayer-ext-youtube-rotator', version: lavaplayerIpRotatorVersion) {
+        exclude group: 'com.sedmelluq', module: 'lavaplayer'
+    }
+    compile group: 'com.github.natanbc', name: 'lavadsp', version: lavaDspVersion
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlinVersion
 
     compile group: 'org.springframework', name: 'spring-websocket', version: springWebSocketVersion
@@ -48,6 +52,7 @@ dependencies {
     compile group: 'io.sentry', name: 'sentry-logback', version: sentryLogbackVersion
     compile group: 'com.github.oshi', name: 'oshi-core', version: oshiVersion
     compile group: 'org.json', name: 'json', version: jsonOrgVersion
+    compile group: 'com.google.code.gson', name: 'gson', version: gsonVersion
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion) {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
     }

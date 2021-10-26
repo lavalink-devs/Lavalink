@@ -41,6 +41,9 @@ public class StatsTask implements Runnable {
     private final SocketServer socketServer;
 
     private final SystemInfo si = new SystemInfo();
+    private final HardwareAbstractionLayer hal = si.getHardware();
+    /** CPU ticks used for calculations in CPU load. */
+    private long[] prevTicks;
 
     StatsTask(SocketContext context, SocketServer socketServer) {
         this.context = context;
@@ -82,13 +85,17 @@ public class StatsTask implements Runnable {
         mem.put("reservable", Runtime.getRuntime().maxMemory());
         out.put("memory", mem);
 
-        HardwareAbstractionLayer hal = si.getHardware();
-
-
 
         JSONObject cpu = new JSONObject();
         cpu.put("cores", Runtime.getRuntime().availableProcessors());
-        cpu.put("systemLoad", hal.getProcessor().getSystemCpuLoad());
+        // prevTicks will be null so set it to a value.
+        if(prevTicks == null) {
+            prevTicks = hal.getProcessor().getSystemCpuLoadTicks();
+        }
+        // Compare current CPU ticks with previous to establish a CPU load and return double.
+        cpu.put("systemLoad", hal.getProcessor().getSystemCpuLoadBetweenTicks(prevTicks));
+        // Set new prevTicks to current value for more accurate baseline, and checks in next schedule.
+        prevTicks = hal.getProcessor().getSystemCpuLoadTicks();
         double load = getProcessRecentCpuUsage();
         if (!Double.isFinite(load)) load = 0;
         cpu.put("lavalinkLoad", load);

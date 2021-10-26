@@ -37,6 +37,7 @@ import org.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
+import java.net.InetSocketAddress
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -91,6 +92,8 @@ class SocketContext internal constructor(
         }
     }
 
+    internal fun getPlayer(guildId: Long) = getPlayer(guildId.toString())
+
     internal fun getPlayer(guildId: String) = players.computeIfAbsent(guildId) {
         Player(this, guildId, audioPlayerManager, serverConfig)
     }
@@ -102,11 +105,12 @@ class SocketContext internal constructor(
     /**
      * Gets or creates a voice connection
      */
-    fun getVoiceConnection(guild: Long): VoiceConnection {
-        var conn = koe.getConnection(guild)
+    fun getVoiceConnection(player: Player): VoiceConnection {
+        val guildId = player.guildId.toLong()
+        var conn = koe.getConnection(guildId)
         if (conn == null) {
-            conn = koe.createConnection(guild)
-            conn.registerListener(EventHandler(guild.toString()))
+            conn = koe.createConnection(guildId)
+            conn.registerListener(EventHandler(player))
         }
         return conn
     }
@@ -178,17 +182,23 @@ class SocketContext internal constructor(
         koe.close()
     }
 
-    private inner class EventHandler(private val guildId: String) : KoeEventAdapter() {
+    private inner class EventHandler(private val player: Player) : KoeEventAdapter() {
         override fun gatewayClosed(code: Int, reason: String?, byRemote: Boolean) {
             val out = JSONObject()
             out.put("op", "event")
             out.put("type", "WebSocketClosedEvent")
-            out.put("guildId", guildId)
+            out.put("guildId", player.guildId)
             out.put("reason", reason ?: "")
             out.put("code", code)
             out.put("byRemote", byRemote)
 
             send(out)
+
+            SocketServer.sendPlayerUpdate(this@SocketContext, player)
+        }
+
+        override fun gatewayReady(target: InetSocketAddress?, ssrc: Int) {
+            SocketServer.sendPlayerUpdate(this@SocketContext, player)
         }
     }
 }

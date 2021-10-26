@@ -94,6 +94,11 @@ public class EventEmitter extends AudioEventAdapter {
         }
 
         out.put("error", exception.getMessage());
+        JSONObject exceptionJson = new JSONObject();
+        exceptionJson.put("message", exception.getMessage());
+        exceptionJson.put("severity", exception.severity.toString());
+        exceptionJson.put("cause", Util.getRootCause(exception).toString());
+        out.put("exception", exceptionJson);
 
         linkPlayer.getSocket().send(out);
     }

@@ -34,7 +34,6 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 @Service
@@ -45,7 +44,6 @@ class SocketServer(
 ) : TextWebSocketHandler() {
 
     // userId <-> shardCount
-    private val shardCounts = ConcurrentHashMap<String, Int>()
     val contextMap = ConcurrentHashMap<String, SocketContext>()
     @Suppress("LeakingThis")
     private val handlers = WebSocketHandlers(contextMap)
@@ -57,10 +55,14 @@ class SocketServer(
 
         fun sendPlayerUpdate(socketContext: SocketContext, player: Player) {
             val json = JSONObject()
+
+            val state = player.state
+            val connected = socketContext.getVoiceConnection(player).gatewayConnection?.isOpen == true
+            state.put("connected", connected)
+
             json.put("op", "playerUpdate")
             json.put("guildId", player.guildId)
-            json.put("state", player.state)
-
+            json.put("state", state)
             socketContext.send(json)
         }
     }
@@ -69,11 +71,10 @@ class SocketServer(
         get() = contextMap.values
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
-        val shardCount = Integer.parseInt(session.handshakeHeaders.getFirst("Num-Shards")!!)
         val userId = session.handshakeHeaders.getFirst("User-Id")!!
         val resumeKey = session.handshakeHeaders.getFirst("Resume-Key")
-
-        shardCounts[userId] = shardCount
+        val clientName = session.handshakeHeaders.getFirst("Client-Name")
+        val userAgent = session.handshakeHeaders.getFirst("User-Agent")
 
         var resumable: SocketContext? = null
         if (resumeKey != null) resumable = resumableSessions.remove(resumeKey)
@@ -85,8 +86,6 @@ class SocketServer(
             return
         }
 
-        shardCounts[userId] = shardCount
-
         contextMap[session.id] = SocketContext(
                 audioPlayerManager,
                 serverConfig,
@@ -95,7 +94,18 @@ class SocketServer(
                 userId,
                 koe.newClient(userId.toLong())
         )
-        log.info("Connection successfully established from " + session.remoteAddress!!)
+
+        if (clientName != null) {
+            log.info("Connection successfully established from $clientName")
+            return
+        }
+
+        log.info("Connection successfully established")
+        if (userAgent != null) {
+            log.warn("Library developers: Please specify a 'Client-Name' header. User agent: $userAgent")
+        } else {
+            log.warn("Library developers: Please specify a 'Client-Name' header.")
+        }
     }
 
     override fun afterConnectionClosed(session: WebSocketSession?, status: CloseStatus?) {
@@ -157,6 +167,7 @@ class SocketServer(
             "destroy"           -> handlers.destroy(context, json)
             "configureResuming" -> handlers.configureResuming(context, json)
             "equalizer"         -> handlers.equalizer(context, json)
+            "filters"           -> handlers.filters(context, json.getString("guildId"), message.payload)
             else                -> log.warn("Unexpected operation: " + json.getString("op"))
             // @formatter:on
         }

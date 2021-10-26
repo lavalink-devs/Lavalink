@@ -8,7 +8,7 @@ import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudDataReader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudFormatHandler
-import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudHtmlDataLoader
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudDataLoader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudPlaylistLoader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
@@ -45,6 +45,17 @@ class AudioPlayerConfiguration {
             audioPlayerManager.enableGcMonitoring()
         }
 
+        val defaultFrameBufferDuration = audioPlayerManager.frameBufferDuration
+        serverConfig.frameBufferDurationMs?.let {
+            if (it < 200) { // At the time of writing, LP enforces a minimum of 200ms.
+                log.warn("Buffer size of {}ms is illegal. Defaulting to {}", it, defaultFrameBufferDuration)
+            }
+
+            val bufferDuration = it.takeIf { it >= 200 } ?: defaultFrameBufferDuration
+            log.debug("Setting frame buffer duration to {}", bufferDuration)
+            audioPlayerManager.frameBufferDuration = bufferDuration
+        }
+
         if (sources.isYoutube) {
             val youtube = YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled)
             if (routePlanner != null) {
@@ -62,15 +73,15 @@ class AudioPlayerConfiguration {
         }
         if (sources.isSoundcloud) {
             val dataReader = DefaultSoundCloudDataReader();
-            val htmlDataLoader = DefaultSoundCloudHtmlDataLoader();
+            val dataLoader = DefaultSoundCloudDataLoader();
             val formatHandler = DefaultSoundCloudFormatHandler();
 
             audioPlayerManager.registerSourceManager(SoundCloudAudioSourceManager(
                     serverConfig.isSoundcloudSearchEnabled,
                     dataReader,
-                    htmlDataLoader,
+                    dataLoader,
                     formatHandler,
-                    DefaultSoundCloudPlaylistLoader(htmlDataLoader, dataReader, formatHandler)
+                    DefaultSoundCloudPlaylistLoader(dataLoader, dataReader, formatHandler)
             ));
         }
         if (sources.isBandcamp) audioPlayerManager.registerSourceManager(BandcampAudioSourceManager())

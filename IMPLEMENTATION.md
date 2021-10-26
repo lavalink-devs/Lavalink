@@ -6,6 +6,14 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * You must be able to send messages via a shard's mainWS connection.
 * You must be able to intercept voice server updates from mainWS on your shard connection.
 
+## Significant changes v3.3 -> v3.4
+* Added filters
+* The `error` string on the `TrackExceptionEvent` has been deprecated and replaced by 
+the `exception` object following the same structure as the `LOAD_FAILED` error on [`/loadtracks`](#rest-api)
+* Added the `connected` boolean to player updates.
+* Added source name to REST api track objects
+* Clients are now requested to make their name known during handshake
+
 ## Significant changes v2.0 -> v3.0 
 * The response of `/loadtracks` has been completely changed (again since the initial v3.0 pre-release).
 * Lavalink v3.0 now reports its version as a handshake response header.
@@ -41,8 +49,8 @@ the JDA client takes advantage of JDA's websocket write thread to send OP 4s for
 When opening a websocket connection, you must supply 3 required headers:
 ```
 Authorization: Password matching the server config
-Num-Shards: Total number of shards your bot is operating on
 User-Id: The user id of the bot you are playing music with
+Client-Name: The name of your client. Optionally in the format NAME/VERSION
 ```
 
 ### Outgoing messages
@@ -81,7 +89,7 @@ If `pause` is set to true, the playback will be paused. This is an optional fiel
     "endTime": "120000",
     "volume": "100",
     "noReplace": false,
-    "pause": false,
+    "pause": false
 }
 ```
 
@@ -128,23 +136,96 @@ Volume may range from 0 to 1000. 100 is default.
 }
 ```
 
-#### Using the player equalizer
+#### Using filters
 
-There are 15 bands (0-14) that can be changed.
-`gain` is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
-where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could
-also change the volume of the output.
+The `filters` op sets the filters. All the filters are optional, and leaving them out of this message will disable them.
 
-```json
+Adding a filter can have adverse effects on performance. These filters force Lavaplayer to decode all audio to PCM,
+even if the input was already in the Opus format that Discord uses. This means decoding and encoding audio that would
+normally require very little processing. This is often the case with YouTube videos.
+
+JSON comments are for illustration purposes only, and will not be accepted by the server.
+
+Note that filters may take a moment to apply. 
+
+```yaml
 {
-    "op": "equalizer",
+    "op": "filters",
     "guildId": "...",
-    "bands": [
+    
+    // Float value where 1.0 is 100%. Values >1.0 may cause clipping
+    "volume": 1.0,
+    
+    // There are 15 bands (0-14) that can be changed.
+    // "gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
+    // where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could
+    // also change the volume of the output.
+    "equalizer": [
         {
             "band": 0,
             "gain": 0.2
         }
-    ]
+    ],
+    
+    // Uses equalization to eliminate part of a band, usually targeting vocals.
+    "karaoke": {
+        "level": 1.0,
+        "monoLevel": 1.0,
+        "filterBand": 220.0,
+        "filterWidth": 100.0
+    },
+    
+    // Changes the speed, pitch, and rate. All default to 1.
+    "timescale": {
+        "speed": 1.0,
+        "pitch": 1.0,
+        "rate": 1.0
+    },
+    
+    // Uses amplification to create a shuddering effect, where the volume quickly oscillates.
+    // Example: https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
+    "tremolo": {
+        "frequency": 2.0, // 0 < x
+        "depth": 0.5      // 0 < x ≤ 1
+    },
+    
+    // Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
+    "vibrato": {
+        "frequency": 2.0, // 0 < x ≤ 14
+        "depth": 0.5      // 0 < x ≤ 1
+    },
+    
+    // Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to: https://youtu.be/QB9EB8mTKcc (without the reverb)
+    "rotation": {
+        "rotationHz": 0 // The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above.
+    },
+    
+    // Distortion effect. It can generate some pretty unique audio effects.
+    "distortion": {
+        "sinOffset": 0,
+        "sinScale": 1,
+        "cosOffset": 0,
+        "cosScale": 1,
+        "tanOffset": 0,
+        "tanScale": 1,
+        "offset": 0,
+        "scale": 1
+    } 
+    
+    // Mixes both channels (left and right), with a configurable factor on how much each channel affects the other.
+    // With the defaults, both channels are kept independent from each other.
+    // Setting all factors to 0.5 means both channels get the same audio.
+    "channelMix": {
+        "leftToLeft": 1.0,
+        "leftToRight": 0.0,
+        "rightToLeft": 0.0,
+        "rightToRight": 1.0,
+    }
+    
+    // Higher frequencies get suppressed, while lower frequencies pass through this filter, thus the name low pass.
+    "lowPass": {
+        "smoothing": 20.0
+    }
 }
 ```
 
@@ -165,14 +246,18 @@ and you can send the same VOICE_SERVER_UPDATE to a new node.
 
 See [LavalinkSocket.java](https://github.com/freyacodes/lavalink-client/blob/master/src/main/java/lavalink/client/io/LavalinkSocket.java) for client implementation
 
-Position information about a player. Includes unix timestamp.
+This event includes:
+* Unix timestamp in milliseconds.
+* Track position in milliseconds. Omitted if not playing anything.
+* `connected` is true when connected to the voice gateway.
 ```json
 {
     "op": "playerUpdate",
     "guildId": "...",
     "state": {
         "time": 1500467109,
-        "position": 60000
+        "position": 60000,
+        "connected": true
     }
 }
 ```
@@ -246,9 +331,14 @@ private void handleEvent(JSONObject json) throws IOException {
             );
             break;
         case "TrackExceptionEvent":
+            JSONObject jsonEx = json.getJSONObject("exception");
             event = new TrackExceptionEvent(player,
                     LavalinkUtil.toAudioTrack(json.getString("track")),
-                    new RemoteTrackException(json.getString("error"))
+                    new FriendlyException(
+                        jsonEx.getString("message"),
+                        FriendlyException.Severity.valueOf(jsonEx.getString("severity")),
+                        new RuntimeException(jsonEx.getString("cause"))
+                    )
             );
             break;
         case "TrackStuckEvent":
@@ -308,7 +398,8 @@ Response:
         "isStream": false,
         "position": 0,
         "title": "Rick Astley - Never Gonna Give You Up",
-        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "sourceName": "youtube"
       }
     }
   ]
@@ -371,7 +462,8 @@ Response:
   "isStream": false,
   "position": 0,
   "title": "Rick Astley - Never Gonna Give You Up",
-  "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  "sourceName": "youtube"
 }
 ```
 
@@ -403,7 +495,8 @@ Response:
         "isStream": false,
         "position": 0,
         "title": "Rick Astley - Never Gonna Give You Up",
-        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "sourceName": "youtube"
       }
     },
     ...
@@ -558,7 +651,7 @@ queue is then emptied and the events are then replayed.
 ```
 
 # Common pitfalls
-Admidtedly Lavalink isn't inherently the most intuitive thing ever, and people tend to run into the same mistakes over again. Please double check the following if you run into problems developing your client and you can't connect to a voice channel or play audio:
+Admittedly Lavalink isn't inherently the most intuitive thing ever, and people tend to run into the same mistakes over again. Please double check the following if you run into problems developing your client and you can't connect to a voice channel or play audio:
 
 1. Check that you are forwarding sendWS events to **Discord**.
 2. Check that you are intercepting **VOICE_SERVER_UPDATE**s to **Lavalink**. Do not edit the event object from Discord.
