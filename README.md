@@ -43,19 +43,19 @@ The public api ("api" in a very broad sense) of Lavalink can be categorized into
 - **Server Domain:** The server application with its runtime environment, its configuration, etc.
 
 Changes that might be breaking to one domain need not be breaking to the other.
-Examples: 
+Examples:
 - Removing an endpoint. This is a breaking change for the client domain, but is
 not a breaking change for running the server itself.
 - Upgrading the minimum Java version: This is a breaking change for the server domain,
-but client implementations couldn't care less about it. 
+but client implementations couldn't care less about it.
 
 Given the above, the following versioning pattern lends itself well to the Lavalink project:
 
 _**api.major.minor.patch**_
 
-- **Api**: Bumped when breaking changes are comitted to the client domain of Lavalink  
-Examples: Removing an endpoint, altering output of an endpoint in a non backwards compatible manner  
-- **Major**: Bumped when breaking changes are comitted to the Lavalink server domain  
+- **Api**: Bumped when breaking changes are comitted to the client domain of Lavalink
+Examples: Removing an endpoint, altering output of an endpoint in a non backwards compatible manner
+- **Major**: Bumped when breaking changes are comitted to the Lavalink server domain
 Examples: Bumping the required Java version, altering the configuration in a non backwards compatible manner
 - **Minor**: New features in any domain
 Examples: New optional endpoint or op code, additional configuration options, change of large subsystems or dependencies
@@ -64,7 +64,7 @@ Examples: Fixing a race condition, fixing unexpected exceptions, fixing output t
 
 While major, minor and patch will do a best effort to adhere to [Semantic Versioning](https://semver.org/),
 prepending it with an additional api version makes life easier for developers of client implementations
-in two ways: It is a clear way for the Lavalink project to communicate the actually relevant breaking changes 
+in two ways: It is a clear way for the Lavalink project to communicate the actually relevant breaking changes
 to client developers, and in turn, client developers can use the api version to clearly communicate to their
 users about the compatibility of their clients to the Lavalink server.
 
@@ -72,6 +72,7 @@ users about the compatibility of their clients to the Lavalink server.
 ## Client libraries:
 * [Lavalink-Client](https://github.com/freyacodes/lavalink-client) (JDA or generic, Java)
 * [LavaClient](https://github.com/SamOphis/LavaClient) (Java)
+* [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt) (Kord, JDA, generic, Kotlin (Coroutines))
 * [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
 * [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
 * [playlink](https://github.com/OverleapCo/Playlink) (Javascript/Typescript)
@@ -79,10 +80,11 @@ users about the compatibility of their clients to the Lavalink server.
 * [Gorilink](https://github.com/Gorillas-Team/Gorilink) (JavaScript)
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) ([eris](https://github.com/abalabahaha/eris), JavaScript)
 * [LavaClient](https://github.com/lavaclient/lavaclient) (JavaScript)
-* [Shoukaku](https://github.com/Deivu/Shoukaku) (JavaScript)
+* [Shoukaku](https://github.com/Deivu/Shoukaku) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
 * [erela.js](https://github.com/MenuDocs/erela.js) (JavaScript)
 * [Lavacord](https://github.com/lavacord/lavacord) (JavaScript)
-* [LavaJS](https://github.com/Overleap/LavaJS) ([discord.js](https://github.com/discordjs/discord.js), JavaScript/TypeScript)
+* [LavaJS](https://github.com/OverleapCo/LavaJS) ([discord.js](https://github.com/discordjs/discord.js), JavaScript/TypeScript)
+* [@skyra/audio](https://github.com/skyra-project/audio) ([discord.js](https://github.com/discordjs/discord.js), JavaScript/TypeScript)
 * [EvoLava](https://github.com/EvolveJS/EvoLava) ([EvolveJS](https://github.com/EvolveJS/EvolveJS), Javascript/Typescript)
 * [SharpLink](https://github.com/Devoxin/SharpLink) ([Discord.Net](https://github.com/RogueException/Discord.Net), .NET)
 * [Victoria](https://github.com/Yucked/Victoria) ([Discord.NET](https://github.com/RogueException/Discord.Net), .NET)
@@ -90,10 +92,13 @@ users about the compatibility of their clients to the Lavalink server.
 * [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink) ([DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/), .NET)
 * [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET) ([Discord.Net](https://github.com/RogueException/Discord.Net), [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/), .NET)
 * [gavalink](https://github.com/foxbot/gavalink) (Go)
+* [waterlink](https://github.com/lukasl-dev/waterlink) (Go)
 * [Magma](https://github.com/initzx/magma/) (discord.py, Python)
 * [lavapotion](https://github.com/SamOphis/lavapotion) (Elixir)
 * [WaveLink](https://github.com/EvieePy/Wavelink) (discord.py, Python)
-* [Lavalink-rs](https://gitlab.com/nitsuga5124/lavalink-rs/) (Async Libraries, Rust)
+* [Lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs/) (All `tokio` Libraries, Rust)
+* [lavasnek_rs](https://github.com/vicky5124/lavasnek_rs/) (All `asyncio` Libraries, Python)
+* [Pomice](https://github.com/cloudwithax/pomice) (discord.py, Python)
 * Or [create your own](https://github.com/freyacodes/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ## Server configuration

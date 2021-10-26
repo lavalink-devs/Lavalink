@@ -404,7 +404,7 @@ Response:
 }
 ```
 
-If the identifier leads to a playlist, `playlistInfo` will contain two properties, `name` and `selectedTrack`
+If the identifier leads to a playlist, `playlistInfo` will contain two properties, `name` and `selectedTrack`(-1 if no selectedTrack found)
 ```json
 {
   "loadType": "PLAYLIST_LOADED",
@@ -460,8 +460,12 @@ Response:
   "isStream": false,
   "position": 0,
   "title": "Rick Astley - Never Gonna Give You Up",
+<<<<<<< HEAD
   "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   "sourceName": "youtube"
+=======
+  "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+>>>>>>> master
 }
 ```
 
