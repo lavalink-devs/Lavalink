@@ -82,6 +82,7 @@ users about the compatibility of their clients to the Lavalink server.
 * [Shoukaku](https://github.com/Deivu/Shoukaku) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
 * [erela.js](https://github.com/MenuDocs/erela.js) (JavaScript)
 * [Lavacord](https://github.com/lavacord/lavacord) (JavaScript)
+* [Lavacoffee](https://github.com/XzFirzal/lavacoffee) (JavaScript) 
 * [LavaJS](https://github.com/OverleapCo/LavaJS) ([discord.js](https://github.com/discordjs/discord.js), JavaScript/TypeScript)
 * [@skyra/audio](https://github.com/skyra-project/audio) ([discord.js](https://github.com/discordjs/discord.js), JavaScript/TypeScript)
 * [EvoLava](https://github.com/EvolveJS/EvoLava) ([EvolveJS](https://github.com/EvolveJS/EvolveJS), Javascript/Typescript)
