@@ -73,6 +73,7 @@ users about the compatibility of their clients to the Lavalink server.
 * [Lavalink-Client](https://github.com/freyacodes/lavalink-client) (JDA or generic, Java)
 * [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt) (Kord, JDA, generic, Kotlin (Coroutines))
 * [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
+* [Lavapy](https://github.com/Aspect1103/Lavapy) (discord.py, Python)
 * [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
 * [playlink](https://github.com/OverleapCo/Playlink) (Javascript/Typescript)
 * [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
