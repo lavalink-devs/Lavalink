@@ -75,6 +75,10 @@ public class Player extends AudioEventAdapter {
         player.stopTrack();
     }
 
+    public void destroy() {
+        player.destroy();
+    }
+
     public void setPause(boolean b) {
         player.setPaused(b);
     }

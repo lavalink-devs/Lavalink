@@ -119,7 +119,7 @@ class SocketContext internal constructor(
      * Disposes of a voice connection
      */
     fun destroy(guild: Long) {
-        players.remove(guild.toString())?.stop()
+        players.remove(guild.toString())?.destroy()
         koe.destroyConnection(guild)
     }
 
@@ -178,7 +178,9 @@ class SocketContext internal constructor(
         log.info("Shutting down " + playingPlayers.size + " playing players.")
         executor.shutdown()
         playerUpdateService.shutdown()
-        players.values.forEach(Player::stop)
+        players.values.forEach {
+            destroy(it.guildId.toLong())
+        }
         koe.close()
     }
 
