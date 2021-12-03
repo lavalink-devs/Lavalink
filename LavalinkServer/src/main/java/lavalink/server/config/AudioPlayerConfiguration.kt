@@ -2,6 +2,7 @@ package lavalink.server.config
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.beam.BeamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager
@@ -22,6 +23,7 @@ import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingIpRoutePlann
 import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv4Block
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block
+import lavalink.api.AudioPlayerManagerConfiguration
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -38,7 +40,13 @@ class AudioPlayerConfiguration {
     private val log = LoggerFactory.getLogger(AudioPlayerConfiguration::class.java)
 
     @Bean
-    fun audioPlayerManagerSupplier(sources: AudioSourcesConfig, serverConfig: ServerConfig, routePlanner: AbstractRoutePlanner?): AudioPlayerManager {
+    fun audioPlayerManagerSupplier(
+        sources: AudioSourcesConfig,
+        serverConfig: ServerConfig,
+        routePlanner: AbstractRoutePlanner?,
+        audioSourceManagers: Collection<AudioSourceManager>,
+        audioPlayerManagerConfigurations: Collection<AudioPlayerManagerConfiguration>
+    ): AudioPlayerManager {
         val audioPlayerManager = DefaultAudioPlayerManager()
 
         if (serverConfig.isGcWarnings) {
@@ -91,9 +99,23 @@ class AudioPlayerConfiguration {
         if (sources.isHttp) audioPlayerManager.registerSourceManager(HttpAudioSourceManager())
         if (sources.isLocal) audioPlayerManager.registerSourceManager(LocalAudioSourceManager())
 
+        if (audioSourceManagers.isNotEmpty()) {
+            audioSourceManagers.forEach {
+                audioPlayerManager.registerSourceManager(it)
+                log.info("Registered {} provided from a plugin", it)
+            }
+
+        }
+
         audioPlayerManager.configuration.isFilterHotSwapEnabled = true
 
-        return audioPlayerManager
+        var am: AudioPlayerManager = audioPlayerManager
+
+        audioPlayerManagerConfigurations.forEach {
+            am = it.configure(am)
+        }
+
+        return am
     }
 
     @Bean
