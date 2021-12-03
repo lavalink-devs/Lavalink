@@ -95,7 +95,7 @@ class SocketContext internal constructor(
     internal fun getPlayer(guildId: Long) = getPlayer(guildId.toString())
 
     internal fun getPlayer(guildId: String) = players.computeIfAbsent(guildId) {
-        Player(this, guildId, audioPlayerManager, serverConfig)
+        Player(this, guildId.toLong(), audioPlayerManager, serverConfig)
     }
 
     internal fun getPlayers(): Map<String, Player> {
@@ -106,7 +106,7 @@ class SocketContext internal constructor(
      * Gets or creates a voice connection
      */
     fun getVoiceConnection(player: Player): VoiceConnection {
-        val guildId = player.guildId.toLong()
+        val guildId = player.guildId
         var conn = koe.getConnection(guildId)
         if (conn == null) {
             conn = koe.createConnection(guildId)
@@ -179,7 +179,7 @@ class SocketContext internal constructor(
         executor.shutdown()
         playerUpdateService.shutdown()
         players.values.forEach {
-            destroy(it.guildId.toLong())
+            destroy(it.guildId)
         }
         koe.close()
     }

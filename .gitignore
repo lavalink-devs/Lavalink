@@ -13,3 +13,5 @@ build/*
 .settings
 /Testbot/build/
 /Testbot/out/
+/plugin-api/build/
+/plugin-api/out/
