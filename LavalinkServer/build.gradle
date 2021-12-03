@@ -34,6 +34,7 @@ bootRun {
 }
 
 dependencies {
+    compile project(":plugin-api")
     compile (group: 'moe.kyokobot.koe', name: 'core', version: koeVersion) {
         // This version of SLF4J does not recognise Logback 1.2.3
         exclude group: "org.slf4j", module: "slf4j-api"

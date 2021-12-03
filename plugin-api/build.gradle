@@ -4,8 +4,9 @@ plugins {
 
 group 'lavalink'
 
+sourceCompatibility = targetCompatibility = 11
+
 repositories {
-    mavenCentral()
     mavenCentral()
 }
 
@@ -13,8 +14,6 @@ dependencies {
     compile group: 'moe.kyokobot.koe', name: 'ext-udpqueue', version: koeVersion
     compile group: 'com.github.walkyst', name: 'lavaplayer-fork', version: '1.3.96'
     compile group: 'org.json', name: 'json', version: jsonOrgVersion
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
 
 test {
