@@ -29,7 +29,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.net.InetAddress
 import java.util.function.Predicate
-import java.util.function.Supplier
 
 /**
  * Created by napster on 05.03.18.
@@ -80,9 +79,9 @@ class AudioPlayerConfiguration {
             audioPlayerManager.registerSourceManager(youtube)
         }
         if (sources.isSoundcloud) {
-            val dataReader = DefaultSoundCloudDataReader();
-            val dataLoader = DefaultSoundCloudDataLoader();
-            val formatHandler = DefaultSoundCloudFormatHandler();
+            val dataReader = DefaultSoundCloudDataReader()
+            val dataLoader = DefaultSoundCloudDataLoader()
+            val formatHandler = DefaultSoundCloudFormatHandler()
 
             audioPlayerManager.registerSourceManager(SoundCloudAudioSourceManager(
                     serverConfig.isSoundcloudSearchEnabled,
@@ -90,7 +89,7 @@ class AudioPlayerConfiguration {
                     dataLoader,
                     formatHandler,
                     DefaultSoundCloudPlaylistLoader(dataLoader, dataReader, formatHandler)
-            ));
+            ))
         }
         if (sources.isBandcamp) audioPlayerManager.registerSourceManager(BandcampAudioSourceManager())
         if (sources.isTwitch) audioPlayerManager.registerSourceManager(TwitchStreamAudioSourceManager())
@@ -99,12 +98,9 @@ class AudioPlayerConfiguration {
         if (sources.isHttp) audioPlayerManager.registerSourceManager(HttpAudioSourceManager())
         if (sources.isLocal) audioPlayerManager.registerSourceManager(LocalAudioSourceManager())
 
-        if (audioSourceManagers.isNotEmpty()) {
-            audioSourceManagers.forEach {
-                audioPlayerManager.registerSourceManager(it)
-                log.info("Registered {} provided from a plugin", it)
-            }
-
+        audioSourceManagers.forEach {
+            audioPlayerManager.registerSourceManager(it)
+            log.info("Registered {} provided from a plugin", it)
         }
 
         audioPlayerManager.configuration.isFilterHotSwapEnabled = true
