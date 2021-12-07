@@ -5,12 +5,15 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import java.io.File
+import java.io.FileOutputStream
 import java.io.InputStream
 import java.net.URL
 import java.net.URLClassLoader
+import java.nio.channels.Channels
 import java.nio.file.Files
 import java.util.*
 import java.util.jar.JarFile
+import java.util.regex.Pattern
 
 
 @SpringBootApplication
@@ -24,7 +27,47 @@ class PluginManager(config: PluginsConfig) {
     }
 
     private fun manageDownloads(config: PluginsConfig) {
-        // todo
+        if (config.plugins.isEmpty()) return
+        val directory = File("./plugins")
+        directory.mkdir()
+
+        data class PluginJar(val name: String, val version: String, val file: File)
+        val pattern = Pattern.compile("([^-])+([^-]+).jar]")
+        val pluginJars = directory.listFiles()!!.mapNotNull { f ->
+            val matcher = pattern.matcher(f.name)
+            if (!matcher.matches()) return@mapNotNull null
+            PluginJar(matcher.group(1), matcher.group(2), f)
+        }
+
+        data class Declaration(val group: String, val name: String, val version: String, val repository: String)
+        val declarations = config.plugins.map { declaration ->
+            if (declaration.dependency == null || declaration.repository == null) throw RuntimeException("Illegal declaration $declaration")
+            val fragments = declaration.dependency!!.split(":")
+            if (fragments.size != 3) throw RuntimeException("Invalid dependency \"${declaration.dependency}\"")
+            val repository = if (declaration.repository!!.endsWith("/")) declaration.repository!! else declaration.repository!! + "/"
+            Declaration(fragments[0], fragments[1], fragments[2], repository)
+        }
+
+        declarations.forEach { declaration ->
+            // Delete any jars of different versions
+            pluginJars.forEach { jar ->
+                if (declaration.name == jar.name && declaration.version != jar.version) {
+                    if(!jar.file.delete()) throw RuntimeException("Failed to delete ${jar.file.path}")
+                    log.info("Deleted ${jar.file.path}")
+                }
+            }
+
+            val url = declaration.run { "$repository${group.replace(".", "/")}/$name/$version.jar" }
+            val file = File(directory, declaration.run { "$group-$version.jar" })
+            downloadJar(file, url)
+        }
+    }
+
+    private fun downloadJar(output: File, url: String) {
+        log.info("Downloading $url")
+        Channels.newChannel(URL(url).openStream()).use {
+            FileOutputStream(output).channel.transferFrom(it, 0, Long.MAX_VALUE)
+        }
     }
 
     private fun readClasspathManifests(): List<PluginManifest> {
