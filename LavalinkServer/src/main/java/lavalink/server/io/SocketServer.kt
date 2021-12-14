@@ -23,6 +23,7 @@
 package lavalink.server.io
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import dev.arbjerg.lavalink.api.PluginEventHandler
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.Player
 import moe.kyokobot.koe.Koe
@@ -40,7 +41,8 @@ import java.util.concurrent.ConcurrentHashMap
 class SocketServer(
         private val serverConfig: ServerConfig,
         private val audioPlayerManager: AudioPlayerManager,
-        koeOptions: KoeOptions
+        koeOptions: KoeOptions,
+        private val eventHandlers: Collection<PluginEventHandler>
 ) : TextWebSocketHandler() {
 
     // userId <-> shardCount
@@ -86,14 +88,17 @@ class SocketServer(
             return
         }
 
-        contextMap[session.id] = SocketContext(
+        val socketContext = SocketContext(
                 audioPlayerManager,
                 serverConfig,
                 session,
                 this,
                 userId,
-                koe.newClient(userId.toLong())
+                koe.newClient(userId.toLong()),
+                eventHandlers
         )
+        contextMap[session.id] = socketContext
+        socketContext.eventEmitter.onWebSocketOpen()
 
         if (clientName != null) {
             log.info("Connection successfully established from $clientName")
@@ -130,7 +135,7 @@ class SocketServer(
         }
 
         log.info("Connection closed from {} -- {}", session.remoteAddress, status)
-
+        context.eventEmitter.onWebSocketClose()
         context.shutdown()
     }
 
@@ -155,6 +160,7 @@ class SocketServer(
 
         val context = contextMap[session.id]
                 ?: throw IllegalStateException("No context for session ID ${session.id}. Broken websocket?")
+        context.eventEmitter.onWebsocketMessageIn(message.payload)
 
         when (json.getString("op")) {
             // @formatter:off

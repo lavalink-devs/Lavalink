@@ -1,9 +1,9 @@
 package lavalink.server.io
 
-import lavalink.server.player.filters.Band
-import lavalink.server.player.filters.FilterChain
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker
 import lavalink.server.player.TrackEndMarkerHandler
+import lavalink.server.player.filters.Band
+import lavalink.server.player.filters.FilterChain
 import lavalink.server.util.Util
 import moe.kyokobot.koe.VoiceServerInfo
 import org.json.JSONObject
@@ -122,7 +122,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
     }
 
     fun destroy(context: SocketContext, json: JSONObject) {
-        context.destroy(json.getLong("guildId"))
+        context.destroyPlayer(json.getLong("guildId"))
     }
 
     fun configureResuming(context: SocketContext, json: JSONObject) {
