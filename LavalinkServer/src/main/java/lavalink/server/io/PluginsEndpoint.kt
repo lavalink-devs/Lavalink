@@ -1,6 +1,6 @@
 package lavalink.server.io
 
-import lavalink.api.PluginInfo
+import dev.arbjerg.lavalink.api.PluginInfo
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 

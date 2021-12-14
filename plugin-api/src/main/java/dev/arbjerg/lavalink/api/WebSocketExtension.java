@@ -1,4 +1,4 @@
-package lavalink.api;
+package dev.arbjerg.lavalink.api;
 
 import org.json.JSONObject;
 

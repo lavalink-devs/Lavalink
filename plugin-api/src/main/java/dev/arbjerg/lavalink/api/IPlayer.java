@@ -1,4 +1,4 @@
-package lavalink.api;
+package dev.arbjerg.lavalink.api;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;

@@ -9,8 +9,9 @@ buildscript {
     repositories {
         mavenLocal()
         maven { url "https://plugins.gradle.org/m2/" }
-        maven { url 'http://repo.spring.io/plugins-release' }
+        maven { url 'https://repo.spring.io/plugins-release' }
         maven { url 'https://jitpack.io' }
+        maven { url 'https://m2.dv8tion.net/releases' }
     }
     dependencies {
         classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:${gradleGitVersion}"
@@ -26,7 +27,6 @@ allprojects {
 
     repositories {
         mavenCentral()                     // main maven repo
-        jcenter()                          // JDA and some other stuff
         mavenLocal()                       // useful for developing
         maven { url "https://jitpack.io" } // build projects directly from github
         maven { url 'https://m2.dv8tion.net/releases' }

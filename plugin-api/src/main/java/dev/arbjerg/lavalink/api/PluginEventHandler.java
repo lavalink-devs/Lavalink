@@ -1,6 +1,4 @@
-package lavalink.api;
-
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+package dev.arbjerg.lavalink.api;
 
 /**
  * Must be provided as a bean

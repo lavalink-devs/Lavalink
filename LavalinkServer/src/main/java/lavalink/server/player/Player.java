@@ -29,7 +29,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import io.netty.buffer.ByteBuf;
-import lavalink.api.ISocketContext;
+import dev.arbjerg.lavalink.api.ISocketContext;
 import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
 import lavalink.server.player.filters.FilterChain;
@@ -39,7 +39,7 @@ import moe.kyokobot.koe.media.OpusAudioFrameProvider;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import lavalink.api.IPlayer;
+import dev.arbjerg.lavalink.api.IPlayer;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.ScheduledFuture;
