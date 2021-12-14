@@ -23,6 +23,7 @@
 package lavalink.server
 
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary
+import lavalink.server.bootstrap.PluginManager
 import lavalink.server.info.AppInfo
 import lavalink.server.info.GitRepoState
 import org.slf4j.LoggerFactory
@@ -104,27 +105,40 @@ object Launcher {
     @JvmStatic
     fun main(args: Array<String>) {
         if (args.isNotEmpty() &&
-                (args[0].equals("-v", ignoreCase = true) || args[0].equals("--version", ignoreCase = true))) {
+            (args[0].equals("-v", ignoreCase = true) || args[0].equals("--version", ignoreCase = true))) {
             println(getVersionInfo(indentation = "", vanity = false))
             return
         }
+        launchPluginBootstrap()
+        log.info("You can safely ignore the big red warning about illegal reflection. See https://github.com/freyacodes/Lavalink/issues/295")
+        launchMain(args)
+    }
 
+    private fun launchPluginBootstrap() {
+        SpringApplication(PluginManager::class.java).run {
+            setBannerMode(Banner.Mode.OFF)
+            setAdditionalProfiles("bootstrap")
+            run()
+        }
+        return
+    }
+
+    private fun launchMain(args: Array<String>) {
         val sa = SpringApplication(LavalinkApplication::class.java)
         sa.webApplicationType = WebApplicationType.SERVLET
         sa.setBannerMode(Banner.Mode.OFF) // We have our own
         sa.addListeners(
-                ApplicationListener { event: Any ->
-                    if (event is ApplicationEnvironmentPreparedEvent) {
-                        log.info(getVersionInfo())
-                    }
-                },
-                ApplicationListener { event: Any ->
-                    if (event is ApplicationFailedEvent) {
-                        log.error("Application failed", event.exception)
-                    }
+            ApplicationListener { event: Any ->
+                if (event is ApplicationEnvironmentPreparedEvent) {
+                    log.info(getVersionInfo())
                 }
+            },
+            ApplicationListener { event: Any ->
+                if (event is ApplicationFailedEvent) {
+                    log.error("Application failed", event.exception)
+                }
+            }
         )
         sa.run(*args)
-        log.info("You can safely ignore the big red warning about illegal reflection. See https://github.com/freyacodes/Lavalink/issues/295")
     }
 }

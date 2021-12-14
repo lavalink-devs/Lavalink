@@ -3,6 +3,7 @@ package lavalink.server.bootstrap
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.context.annotation.Profile
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import java.io.File
 import java.io.FileOutputStream
@@ -17,6 +18,7 @@ import java.util.regex.Pattern
 
 
 @SpringBootApplication
+@Profile("bootstrap")
 class PluginManager(config: PluginsConfig) {
     init {
         manageDownloads(config)
