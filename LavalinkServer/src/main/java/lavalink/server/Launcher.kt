@@ -31,9 +31,11 @@ import org.springframework.boot.Banner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent
 import org.springframework.boot.context.event.ApplicationFailedEvent
 import org.springframework.context.ApplicationListener
+import org.springframework.context.ConfigurableApplicationContext
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -52,7 +54,7 @@ object Launcher {
         val gitRepoState = GitRepoState()
 
         val dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss z")
-                .withZone(ZoneId.of("UTC"))
+            .withZone(ZoneId.of("UTC"))
         val buildTime = dtf.format(Instant.ofEpochMilli(appInfo.buildTime))
         val commitTime = dtf.format(Instant.ofEpochMilli(gitRepoState.commitTime * 1000))
 
@@ -104,41 +106,44 @@ object Launcher {
 
     @JvmStatic
     fun main(args: Array<String>) {
+
+        SpringApplicationBuilder()
+
         if (args.isNotEmpty() &&
-            (args[0].equals("-v", ignoreCase = true) || args[0].equals("--version", ignoreCase = true))) {
+            (args[0].equals("-v", ignoreCase = true) || args[0].equals("--version", ignoreCase = true))
+        ) {
             println(getVersionInfo(indentation = "", vanity = false))
             return
         }
-        launchPluginBootstrap()
+        val parent = launchPluginBootstrap()
         log.info("You can safely ignore the big red warning about illegal reflection. See https://github.com/freyacodes/Lavalink/issues/295")
-        launchMain(args)
+        launchMain(parent, args)
     }
 
-    private fun launchPluginBootstrap() {
-        SpringApplication(PluginManager::class.java).run {
-            setBannerMode(Banner.Mode.OFF)
-            setAdditionalProfiles("bootstrap")
-            run()
-        }
-        return
+    private fun launchPluginBootstrap() = SpringApplication(PluginManager::class.java).run {
+        setBannerMode(Banner.Mode.OFF)
+        setAdditionalProfiles("bootstrap")
+        webApplicationType = WebApplicationType.NONE
+        run()
     }
 
-    private fun launchMain(args: Array<String>) {
-        val sa = SpringApplication(LavalinkApplication::class.java)
-        sa.webApplicationType = WebApplicationType.SERVLET
-        sa.setBannerMode(Banner.Mode.OFF) // We have our own
-        sa.addListeners(
-            ApplicationListener { event: Any ->
-                if (event is ApplicationEnvironmentPreparedEvent) {
-                    log.info(getVersionInfo())
+    private fun launchMain(parent: ConfigurableApplicationContext, args: Array<String>) {
+        SpringApplicationBuilder()
+            .sources(LavalinkApplication::class.java)
+            .web(WebApplicationType.SERVLET)
+            .bannerMode(Banner.Mode.OFF)
+            .listeners(
+                ApplicationListener { event: Any ->
+                    if (event is ApplicationEnvironmentPreparedEvent) {
+                        log.info(getVersionInfo())
+                    }
+                },
+                ApplicationListener { event: Any ->
+                    if (event is ApplicationFailedEvent) {
+                        log.error("Application failed", event.exception)
+                    }
                 }
-            },
-            ApplicationListener { event: Any ->
-                if (event is ApplicationFailedEvent) {
-                    log.error("Application failed", event.exception)
-                }
-            }
-        )
-        sa.run(*args)
+            ).parent(parent)
+            .run(*args)
     }
 }
