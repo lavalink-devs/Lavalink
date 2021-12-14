@@ -9,5 +9,7 @@ public interface ISocketContext {
     Map<Long, IPlayer> getPlayers();
     void destroyPlayer(long guildId);
     void sendMessage(JSONObject message);
-    void closeWebsocket();
+    void closeWebSocket();
+    void closeWebSocket(int closeCode);
+    void closeWebSocket(int closeCode, String reason);
 }

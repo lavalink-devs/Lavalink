@@ -36,6 +36,7 @@ import moe.kyokobot.koe.KoeEventAdapter
 import moe.kyokobot.koe.VoiceConnection
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
+import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
 import java.net.InetSocketAddress
@@ -197,7 +198,15 @@ class SocketContext(
         koe.close()
     }
 
-    override fun closeWebsocket() {
+    override fun closeWebSocket(closeCode: Int, reason: String?) {
+        session.close(CloseStatus(closeCode, reason))
+    }
+
+    override fun closeWebSocket(closeCode: Int) {
+        closeWebSocket(closeCode, null)
+    }
+
+    override fun closeWebSocket() {
         session.close()
     }
 
