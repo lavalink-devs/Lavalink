@@ -1,17 +1,16 @@
 package lavalink.server.io
 
-import dev.arbjerg.lavalink.api.PluginInfo
+import lavalink.server.bootstrap.PluginManager
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class PluginsEndpoint(plugins: Collection<PluginInfo>) {
+class PluginsEndpoint {
 
-    private val data = plugins.map {
+    private val data = PluginManager.pluginManifests.map {
         mutableMapOf<Any, Any>().apply {
-            putAll(it.supplementalData)
             put("name", it.name)
-            put("version", "${it.major}.${it.minor}.${it.patch}")
+            put("version", it.version)
         }
     }
 
