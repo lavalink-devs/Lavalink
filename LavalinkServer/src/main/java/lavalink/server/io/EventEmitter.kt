@@ -11,18 +11,14 @@ class EventEmitter(private val context: SocketContext, private val listeners: Co
         private val log: Logger = LoggerFactory.getLogger(EventEmitter::class.java)
     }
 
-    fun onWebSocketOpen() = listeners.iterate { it.onWebSocketOpen(context) }
+    fun onWebSocketOpen() = iterate { it.onWebSocketOpen(context) }
+    fun onWebSocketClose() = iterate { it.onWebSocketClose(context) }
+    fun onWebsocketMessageIn(message: String) = iterate { it.onWebsocketMessageIn(context, message) }
+    fun onWebSocketMessageOut(message: String) = iterate { it.onWebSocketMessageOut(context, message) }
+    fun onNewPlayer(player: IPlayer)  = iterate { it.onNewPlayer(context, player) }
 
-    fun onWebSocketClose() = listeners.iterate { it.onWebSocketClose(context) }
-
-    fun onWebsocketMessageIn(message: String) = listeners.iterate { it.onWebsocketMessageIn(context, message) }
-
-    fun onWebSocketMessageOut(message: String) = listeners.iterate { it.onWebSocketMessageOut(context, message) }
-
-    fun onNewPlayer(player: IPlayer)  = listeners.iterate { it.onNewPlayer(context, player) }
-
-    private fun <V> Collection<V>.iterate(func: (V) -> Unit ) {
-        forEach {
+    private fun iterate(func: (PluginEventHandler) -> Unit ) {
+        listeners.forEach {
             try {
                 func(it)
             } catch (e: Exception) {
