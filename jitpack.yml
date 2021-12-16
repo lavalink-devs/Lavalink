@@ -1,4 +1,4 @@
 jdk:
   - openjdk11
 install:
-  - "./gradlew clean installBootDist :plugin-api:install"
+  - "./gradlew clean installBootDist"
