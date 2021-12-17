@@ -157,7 +157,7 @@ class PluginManager(config: PluginsConfig) {
 
     companion object {
         private val log: Logger = LoggerFactory.getLogger(PluginManager::class.java)
-        lateinit var pluginManifests: List<PluginManifest>
+        var pluginManifests: List<PluginManifest> = emptyList()
         var classLoader: ClassLoader = PluginManager::class.java.classLoader
     }
 }

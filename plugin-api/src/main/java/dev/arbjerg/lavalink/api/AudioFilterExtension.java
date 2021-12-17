@@ -9,12 +9,15 @@ import org.json.JSONObject;
  * The extension is used when a "filters" operation is received which has a value equal to {@link #getName()}
  */
 public interface AudioFilterExtension {
-    /** The key of the filter */
+    /**
+     * @return The key of the filter
+     */
     String getName();
 
     /**
      * Builds a filter for a particular player.
-     * @param data JSON data received from the client under the extension name key.
+     *
+     * @param data   JSON data received from the client under the extension name key.
      * @param format format as specified by Lavaplayer.
      * @param output the output to be used by the produced filter.
      * @return a filter which produces the desired audio effect.

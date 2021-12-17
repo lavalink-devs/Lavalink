@@ -49,7 +49,7 @@ public interface IPlayer {
     void setVolume(int volume);
 
     /**
-     * Whether the player is trying to produce audio
+     * @return Whether the player is trying to produce audio
      */
     boolean isPlaying();
 }
