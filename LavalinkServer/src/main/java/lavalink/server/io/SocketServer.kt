@@ -165,24 +165,7 @@ class SocketServer(
         val context = contextMap[session.id]
                 ?: throw IllegalStateException("No context for session ID ${session.id}. Broken websocket?")
         context.eventEmitter.onWebsocketMessageIn(message.payload)
-
-        context.wsHandler.
-
-        when (json.getString("op")) {
-            // @formatter:off
-            "voiceUpdate"       -> handlers.voiceUpdate(context, json)
-            "play"              -> handlers.play(context, json)
-            "stop"              -> handlers.stop(context, json)
-            "pause"             -> handlers.pause(context, json)
-            "seek"              -> handlers.seek(context, json)
-            "volume"            -> handlers.volume(context, json)
-            "destroy"           -> handlers.destroy(context, json)
-            "configureResuming" -> handlers.configureResuming(context, json)
-            "equalizer"         -> handlers.equalizer(context, json)
-            "filters"           -> handlers.filters(context, json.getString("guildId"), json)
-            else                -> log.warn("Unexpected operation: " + json.getString("op"))
-            // @formatter:on
-        }
+        context.wsHandler.handle(json)
     }
 
     internal fun onSessionResumeTimeout(context: SocketContext) {
