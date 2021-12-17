@@ -74,6 +74,7 @@ class SocketServer(
     val contexts: Collection<SocketContext>
         get() = contextMap.values
 
+    @Suppress("UastIncorrectHttpHeaderInspection")
     override fun afterConnectionEstablished(session: WebSocketSession) {
         val userId = session.handshakeHeaders.getFirst("User-Id")!!
         val resumeKey = session.handshakeHeaders.getFirst("Resume-Key")

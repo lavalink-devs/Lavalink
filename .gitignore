@@ -2,7 +2,7 @@
 *.iml
 /logs/
 /target/
-/application.yml
+/LavalinkServer/application.yml
 */dependency-reduced-pom.xml
 .gradle/*
 build/*
@@ -16,3 +16,5 @@ build/*
 /plugin-api/build/
 /plugin-api/out/
 gradle.properties
+application.yml
+plugins

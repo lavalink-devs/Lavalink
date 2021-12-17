@@ -137,8 +137,11 @@ object Launcher {
     private fun launchMain(parent: ConfigurableApplicationContext, args: Array<String>) {
         val properties = Properties()
         properties["componentScan"] = PluginManager.pluginManifests.map { it.path }
+            .toMutableList()
+            .apply { add("lavalink.server") }
         SpringApplicationBuilder()
             .sources(LavalinkApplication::class.java)
+            .resourceLoader()
             .properties(properties)
             .web(WebApplicationType.SERVLET)
             .bannerMode(Banner.Mode.OFF)

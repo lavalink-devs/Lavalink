@@ -57,8 +57,8 @@ class PluginManager(config: PluginsConfig) {
                 }
             }
 
-            val url = declaration.run { "$repository${group.replace(".", "/")}/$name/$version.jar" }
-            val file = File(directory, declaration.run { "$group-$version.jar" })
+            val url = declaration.run { "$repository${group.replace(".", "/")}/$name/$version/$name-$version.jar" }
+            val file = File(directory, declaration.run { "$name-$version.jar" })
             downloadJar(file, url)
         }
     }
@@ -104,7 +104,6 @@ class PluginManager(config: PluginsConfig) {
 
         jar.entries().asIterator().forEach { entry ->
             if (entry.isDirectory) return@forEach
-            if (!entry.name.endsWith(".class")) return@forEach
             if (!entry.name.startsWith("lavalink-plugins/")) return@forEach
             if (!entry.name.endsWith(".properties")) return@forEach
             manifests.add(parsePluginManifest(jar.getInputStream(entry)))
@@ -113,7 +112,7 @@ class PluginManager(config: PluginsConfig) {
         if (manifests.isEmpty()) {
             throw RuntimeException("No plugin manifest found in ${file.path}")
         }
-        val allowedPaths = manifests.map { it.path }
+        val allowedPaths = manifests.map { it.path.replace(".", "/") }
 
         jar.entries().asIterator().forEach { entry ->
             if (entry.isDirectory) return@forEach
@@ -134,7 +133,7 @@ class PluginManager(config: PluginsConfig) {
         val name = props.getProperty("name") ?: throw RuntimeException("Manifest is missing 'name'")
         val path = props.getProperty("path") ?: throw RuntimeException("Manifest is missing 'path'")
         val version = props.getProperty("version") ?: throw RuntimeException("Manifest is missing 'version'")
-        log.info("Found $name version $version")
+        log.info("Found plugin '$name' version $version")
         return PluginManifest(name, path, version)
     }
 
