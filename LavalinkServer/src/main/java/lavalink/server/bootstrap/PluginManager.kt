@@ -97,7 +97,7 @@ class PluginManager(config: PluginsConfig) {
     }
 
     private fun loadJar(file: File): MutableList<PluginManifest> {
-        val cl = URLClassLoader.newInstance(arrayOf(URL("jar:" + file.absolutePath + "!/")))
+        val cl = URLClassLoader.newInstance(arrayOf(URL("jar:file:${file.absolutePath}!/")))
         var classCount = 0
         val jar = JarFile(file)
         val manifests = mutableListOf<PluginManifest>()
