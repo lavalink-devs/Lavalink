@@ -15,7 +15,7 @@ dependencies {
     compile ('net.dv8tion:JDA:4.1.1_135') {
         exclude module: 'opus-java'
     }
-    compile "com.github.FredBoat:Lavalink-Client:f84b333518"
+    compile "com.github.FredBoat:Lavalink-Client:8d9b660"
     compile "ch.qos.logback:logback-classic:$logbackVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }

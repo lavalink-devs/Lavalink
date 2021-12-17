@@ -1,8 +1,6 @@
 package lavalink.testbot
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
-import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
@@ -25,7 +23,6 @@ import java.net.URI
 private val log: Logger = LoggerFactory.getLogger("Testbot")
 private lateinit var jda: JDA
 private val lavalink = JdaLavalink(1) { _ -> jda }
-private val playerManager = DefaultAudioPlayerManager()
 lateinit var host: String
 lateinit var password: String
 
@@ -37,7 +34,6 @@ fun main(args: Array<String>) {
     val token = args[0]
     host = args[1]
     password = args[2]
-    AudioSourceManagers.registerRemoteSources(playerManager)
 
     jda = JDABuilder.createDefault(token,
             GatewayIntent.GUILD_MESSAGES,
@@ -82,7 +78,7 @@ fun play(channel: TextChannel, member: Member, message: String) {
         link.connect(vc)
 
         val track = message.drop(";;play ".length).trim()
-        playerManager.loadItem(track, object : AudioLoadResultHandler {
+        link.node?.restClient?.loadItem(track, object : AudioLoadResultHandler {
             override fun loadFailed(e: FriendlyException) {
                 channel.sendMessage(e.message ?: e.toString()).queue()
             }
