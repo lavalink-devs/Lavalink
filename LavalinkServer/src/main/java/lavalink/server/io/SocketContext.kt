@@ -58,8 +58,8 @@ class SocketContext(
     val userId: String,
     private val koe: KoeClient,
     eventHandlers: Collection<PluginEventHandler>,
-    private val webSocketExtensions: List<WebSocketExtension>,
-    private val filterExtensions: List<AudioFilterExtension>
+    webSocketExtensions: List<WebSocketExtension>,
+    filterExtensions: List<AudioFilterExtension>
 
 ) : ISocketContext {
 

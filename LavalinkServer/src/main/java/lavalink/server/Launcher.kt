@@ -38,6 +38,7 @@ import org.springframework.context.ApplicationListener
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.FilterType
+import org.springframework.core.io.DefaultResourceLoader
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -139,12 +140,13 @@ object Launcher {
         properties["componentScan"] = PluginManager.pluginManifests.map { it.path }
             .toMutableList()
             .apply { add("lavalink.server") }
+
         SpringApplicationBuilder()
             .sources(LavalinkApplication::class.java)
-            .resourceLoader()
             .properties(properties)
             .web(WebApplicationType.SERVLET)
             .bannerMode(Banner.Mode.OFF)
+            .resourceLoader(DefaultResourceLoader(PluginManager.classLoader))
             .listeners(
                 ApplicationListener { event: Any ->
                     if (event is ApplicationEnvironmentPreparedEvent) {

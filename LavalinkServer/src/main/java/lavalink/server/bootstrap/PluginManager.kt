@@ -32,6 +32,7 @@ class PluginManager(config: PluginsConfig) {
         directory.mkdir()
 
         data class PluginJar(val name: String, val version: String, val file: File)
+
         val pattern = Pattern.compile("([^-])+([^-]+).jar]")
         val pluginJars = directory.listFiles()!!.mapNotNull { f ->
             val matcher = pattern.matcher(f.name)
@@ -40,11 +41,13 @@ class PluginManager(config: PluginsConfig) {
         }
 
         data class Declaration(val group: String, val name: String, val version: String, val repository: String)
+
         val declarations = config.plugins.map { declaration ->
             if (declaration.dependency == null || declaration.repository == null) throw RuntimeException("Illegal declaration $declaration")
             val fragments = declaration.dependency!!.split(":")
             if (fragments.size != 3) throw RuntimeException("Invalid dependency \"${declaration.dependency}\"")
-            val repository = if (declaration.repository!!.endsWith("/")) declaration.repository!! else declaration.repository!! + "/"
+            val repository =
+                if (declaration.repository!!.endsWith("/")) declaration.repository!! else declaration.repository!! + "/"
             Declaration(fragments[0], fragments[1], fragments[2], repository)
         }
 
@@ -52,7 +55,7 @@ class PluginManager(config: PluginsConfig) {
             // Delete any jars of different versions
             pluginJars.forEach { jar ->
                 if (declaration.name == jar.name && declaration.version != jar.version) {
-                    if(!jar.file.delete()) throw RuntimeException("Failed to delete ${jar.file.path}")
+                    if (!jar.file.delete()) throw RuntimeException("Failed to delete ${jar.file.path}")
                     log.info("Deleted ${jar.file.path}")
                 }
             }
@@ -79,25 +82,35 @@ class PluginManager(config: PluginsConfig) {
     private fun loadJars(): List<PluginManifest> {
         val directory = File("./plugins")
         if (!directory.isDirectory) return emptyList()
-
-        val manifests = mutableListOf<PluginManifest>()
+        val jarsToLoad = mutableListOf<File>()
 
         Files.list(File("./plugins").toPath()).forEach { path ->
             val file = path.toFile()
             if (!file.isFile) return@forEach
             if (file.extension != "jar") return@forEach
+            jarsToLoad.add(file)
+        }
+
+        if (jarsToLoad.isEmpty()) return emptyList()
+
+        val cl = URLClassLoader.newInstance(jarsToLoad.map { URL("jar:file:${it.absolutePath}!/") }.toTypedArray())
+        classLoader = cl
+
+        val manifests = mutableListOf<PluginManifest>()
+
+        jarsToLoad.forEach { file ->
             try {
-                manifests.addAll(loadJar(file))
+                manifests.addAll(loadJar(file, cl))
             } catch (e: Exception) {
                 throw RuntimeException("Error loading $file", e)
             }
         }
 
+
         return manifests
     }
 
-    private fun loadJar(file: File): MutableList<PluginManifest> {
-        val cl = URLClassLoader.newInstance(arrayOf(URL("jar:file:${file.absolutePath}!/")))
+    private fun loadJar(file: File, cl: URLClassLoader): MutableList<PluginManifest> {
         var classCount = 0
         val jar = JarFile(file)
         val manifests = mutableListOf<PluginManifest>()
@@ -140,5 +153,6 @@ class PluginManager(config: PluginsConfig) {
     companion object {
         private val log: Logger = LoggerFactory.getLogger(PluginManager::class.java)
         lateinit var pluginManifests: List<PluginManifest>
+        var classLoader: ClassLoader = PluginManager::class.java.classLoader
     }
 }
