@@ -25,6 +25,7 @@ package lavalink.server.io
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.api.PluginEventHandler
+import dev.arbjerg.lavalink.api.WebSocketExtension
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.Player
 import moe.kyokobot.koe.Koe
@@ -44,13 +45,12 @@ class SocketServer(
         private val audioPlayerManager: AudioPlayerManager,
         koeOptions: KoeOptions,
         private val eventHandlers: List<PluginEventHandler>,
-        filterExtensions: List<AudioFilterExtension>
+        private val webSocketExtensions: List<WebSocketExtension>,
+        private val filterExtensions: List<AudioFilterExtension>
 ) : TextWebSocketHandler() {
 
     // userId <-> shardCount
     val contextMap = ConcurrentHashMap<String, SocketContext>()
-    @Suppress("LeakingThis")
-    private val handlers = WebSocketHandlers(filterExtensions)
     private val resumableSessions = mutableMapOf<String, SocketContext>()
     private val koe = Koe.koe(koeOptions)
 
@@ -97,7 +97,9 @@ class SocketServer(
                 this,
                 userId,
                 koe.newClient(userId.toLong()),
-                eventHandlers
+                eventHandlers,
+                webSocketExtensions,
+                filterExtensions
         )
         contextMap[session.id] = socketContext
         socketContext.eventEmitter.onWebSocketOpen()
@@ -163,6 +165,8 @@ class SocketServer(
         val context = contextMap[session.id]
                 ?: throw IllegalStateException("No context for session ID ${session.id}. Broken websocket?")
         context.eventEmitter.onWebsocketMessageIn(message.payload)
+
+        context.wsHandler.
 
         when (json.getString("op")) {
             // @formatter:off

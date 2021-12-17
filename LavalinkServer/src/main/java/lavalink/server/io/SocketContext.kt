@@ -23,8 +23,10 @@
 package lavalink.server.io
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.api.ISocketContext
 import dev.arbjerg.lavalink.api.PluginEventHandler
+import dev.arbjerg.lavalink.api.WebSocketExtension
 import io.undertow.websockets.core.WebSocketCallback
 import io.undertow.websockets.core.WebSocketChannel
 import io.undertow.websockets.core.WebSockets
@@ -55,7 +57,10 @@ class SocketContext(
     private val socketServer: SocketServer,
     val userId: String,
     private val koe: KoeClient,
-    eventHandlers: Collection<PluginEventHandler>
+    eventHandlers: Collection<PluginEventHandler>,
+    private val webSocketExtensions: List<WebSocketExtension>,
+    private val filterExtensions: List<AudioFilterExtension>
+
 ) : ISocketContext {
 
     companion object {
@@ -66,6 +71,7 @@ class SocketContext(
     private val players = ConcurrentHashMap<Long, Player>()
 
     val eventEmitter = EventEmitter(this, eventHandlers)
+    val wsHandler = WebSocketHandler(this, webSocketExtensions, filterExtensions)
 
     @Volatile
     var sessionPaused = false
