@@ -8,9 +8,9 @@ plugins {
 
 group 'dev.arbjerg.lavalink'
 archivesBaseName = "plugin-api"
-version = "0.2.0"
+version = "0.3.0"
 
-sourceCompatibility = targetCompatibility = 11
+sourceCompatibility = targetCompatibility = 8
 
 dependencies {
     compile group: 'org.springframework', name: "spring-context", version: "5.1.9.RELEASE"
