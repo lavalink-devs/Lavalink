@@ -113,7 +113,7 @@ class SocketContext(
     }
 
     override fun getPlayers(): Map<Long, Player> {
-        return players
+        return players.toMap()
     }
 
     /**

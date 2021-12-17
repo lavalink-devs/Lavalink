@@ -11,7 +11,7 @@ class EventEmitter(private val context: SocketContext, private val listeners: Co
         private val log: Logger = LoggerFactory.getLogger(EventEmitter::class.java)
     }
 
-    fun onWebSocketOpen() = iterate { it.onWebSocketOpen(context) }
+    fun onWebSocketOpen(resumed: Boolean) = iterate { it.onWebSocketOpen(context, resumed) }
     fun onWebSocketClose() = iterate { it.onWebSocketClose(context) }
     fun onWebsocketMessageIn(message: String) = iterate { it.onWebsocketMessageIn(context, message) }
     fun onWebSocketMessageOut(message: String) = iterate { it.onWebSocketMessageOut(context, message) }

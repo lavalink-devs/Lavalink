@@ -88,6 +88,7 @@ class SocketServer(
             contextMap[session.id] = resumable
             resumable.resume(session)
             log.info("Resumed session with key $resumeKey")
+            resumable.eventEmitter.onWebSocketOpen(true)
             return
         }
 
@@ -103,7 +104,7 @@ class SocketServer(
                 filterExtensions
         )
         contextMap[session.id] = socketContext
-        socketContext.eventEmitter.onWebSocketOpen()
+        socketContext.eventEmitter.onWebSocketOpen(false)
 
         if (clientName != null) {
             log.info("Connection successfully established from $clientName")
