@@ -33,10 +33,10 @@ class PluginManager(config: PluginsConfig) {
 
         data class PluginJar(val name: String, val version: String, val file: File)
 
-        val pattern = Pattern.compile("([^-])+([^-]+).jar]")
+        val pattern = Pattern.compile("(.+)-(.+)\\.jar$")
         val pluginJars = directory.listFiles()!!.mapNotNull { f ->
             val matcher = pattern.matcher(f.name)
-            if (!matcher.matches()) return@mapNotNull null
+            if (!matcher.find()) return@mapNotNull null
             PluginJar(matcher.group(1), matcher.group(2), f)
         }
 
@@ -51,10 +51,15 @@ class PluginManager(config: PluginsConfig) {
             Declaration(fragments[0], fragments[1], fragments[2], repository)
         }
 
-        declarations.forEach { declaration ->
-            // Delete any jars of different versions
+        declarations.forEach declarationLoop@ { declaration ->
             pluginJars.forEach { jar ->
-                if (declaration.name == jar.name && declaration.version != jar.version) {
+                if (declaration.name == jar.name) {
+                    if (declaration.version == jar.version) {
+                        // We already have this jar so don't redownload it
+                        return@declarationLoop
+                    }
+
+                    // Delete jar of different versions
                     if (!jar.file.delete()) throw RuntimeException("Failed to delete ${jar.file.path}")
                     log.info("Deleted ${jar.file.path}")
                 }
