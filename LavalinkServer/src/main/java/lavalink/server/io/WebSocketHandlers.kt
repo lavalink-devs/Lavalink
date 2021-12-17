@@ -1,6 +1,7 @@
 package lavalink.server.io
 
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker
+import dev.arbjerg.lavalink.api.AudioFilterExtension
 import lavalink.server.player.TrackEndMarkerHandler
 import lavalink.server.player.filters.Band
 import lavalink.server.player.filters.FilterChain
@@ -10,7 +11,9 @@ import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
+class WebSocketHandlers(
+    val filterExtensions: List<AudioFilterExtension>
+) {
 
     companion object {
         private val log: Logger = LoggerFactory.getLogger(WebSocketHandlers::class.java)
@@ -116,9 +119,9 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         player.filters = filters
     }
 
-    fun filters(context: SocketContext, guildId: String, json: String) {
+    fun filters(context: SocketContext, guildId: String, json: JSONObject) {
         val player = context.getPlayer(guildId)
-        player.filters = FilterChain.parse(json)
+        player.filters = FilterChain.parse(json, filterExtensions)
     }
 
     fun destroy(context: SocketContext, json: JSONObject) {

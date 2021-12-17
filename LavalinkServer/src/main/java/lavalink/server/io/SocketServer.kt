@@ -23,6 +23,7 @@
 package lavalink.server.io
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.api.PluginEventHandler
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.Player
@@ -42,13 +43,14 @@ class SocketServer(
         private val serverConfig: ServerConfig,
         private val audioPlayerManager: AudioPlayerManager,
         koeOptions: KoeOptions,
-        private val eventHandlers: Collection<PluginEventHandler>
+        private val eventHandlers: List<PluginEventHandler>,
+        filterExtensions: List<AudioFilterExtension>
 ) : TextWebSocketHandler() {
 
     // userId <-> shardCount
     val contextMap = ConcurrentHashMap<String, SocketContext>()
     @Suppress("LeakingThis")
-    private val handlers = WebSocketHandlers(contextMap)
+    private val handlers = WebSocketHandlers(filterExtensions)
     private val resumableSessions = mutableMapOf<String, SocketContext>()
     private val koe = Koe.koe(koeOptions)
 
@@ -173,7 +175,7 @@ class SocketServer(
             "destroy"           -> handlers.destroy(context, json)
             "configureResuming" -> handlers.configureResuming(context, json)
             "equalizer"         -> handlers.equalizer(context, json)
-            "filters"           -> handlers.filters(context, json.getString("guildId"), message.payload)
+            "filters"           -> handlers.filters(context, json.getString("guildId"), json)
             else                -> log.warn("Unexpected operation: " + json.getString("op"))
             // @formatter:on
         }

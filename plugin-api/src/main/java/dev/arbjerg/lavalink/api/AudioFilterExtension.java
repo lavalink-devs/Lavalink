@@ -7,4 +7,5 @@ import org.json.JSONObject;
 public interface AudioFilterExtension {
     String getName();
     FloatPcmAudioFilter build(JSONObject data, AudioDataFormat format, FloatPcmAudioFilter output);
+    boolean isEnabled(JSONObject data);
 }
