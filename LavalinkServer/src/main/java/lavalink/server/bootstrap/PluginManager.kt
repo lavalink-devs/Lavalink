@@ -18,7 +18,6 @@ import java.util.regex.Pattern
 
 
 @SpringBootApplication
-@Profile("bootstrap")
 class PluginManager(config: PluginsConfig) {
     init {
         manageDownloads(config)

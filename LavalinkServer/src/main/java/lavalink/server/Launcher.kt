@@ -36,11 +36,19 @@ import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEven
 import org.springframework.boot.context.event.ApplicationFailedEvent
 import org.springframework.context.ApplicationListener
 import org.springframework.context.ConfigurableApplicationContext
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.FilterType
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.*
 
+@Suppress("SpringBootApplicationSetup", "SpringComponentScan")
 @SpringBootApplication
+@ComponentScan(
+    value = ["\${componentScan}"],
+    excludeFilters = [ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = [PluginManager::class])]
+)
 class LavalinkApplication
 
 object Launcher {
@@ -122,14 +130,16 @@ object Launcher {
 
     private fun launchPluginBootstrap() = SpringApplication(PluginManager::class.java).run {
         setBannerMode(Banner.Mode.OFF)
-        setAdditionalProfiles("bootstrap")
         webApplicationType = WebApplicationType.NONE
         run()
     }
 
     private fun launchMain(parent: ConfigurableApplicationContext, args: Array<String>) {
+        val properties = Properties()
+        properties["componentScan"] = PluginManager.pluginManifests.map { it.path }
         SpringApplicationBuilder()
             .sources(LavalinkApplication::class.java)
+            .properties(properties)
             .web(WebApplicationType.SERVLET)
             .bannerMode(Banner.Mode.OFF)
             .listeners(
