@@ -8,12 +8,12 @@ plugins {
 
 group 'dev.arbjerg.lavalink'
 archivesBaseName = "plugin-api"
-version = "0.5.0"
+version = "0.6.0"
 
 sourceCompatibility = targetCompatibility = 8
 
 dependencies {
-    compile group: 'org.springframework', name: "spring-context", version: "5.1.9.RELEASE"
+    compile group: 'org.springframework.boot', name: "spring-boot", version: springBootVersion
     compile group: 'com.github.walkyst', name: 'lavaplayer-fork', version: lavaplayerVersion
     compile group: 'org.json', name: 'json', version: jsonOrgVersion
 }
