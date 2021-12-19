@@ -14,6 +14,7 @@ import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceM
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeHttpContextFilter
 import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup
 import com.sedmelluq.lava.extensions.youtuberotator.planner.AbstractRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.planner.BalancingIpRoutePlanner
@@ -69,6 +70,19 @@ class AudioPlayerConfiguration {
             }
             val playlistLoadLimit = serverConfig.youtubePlaylistLoadLimit
             if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit)
+
+            val youtubeConfig = serverConfig.youtubeConfig
+            if (youtubeConfig != null) {
+                if (youtubeConfig.PAPISID.isNotBlank() && youtubeConfig.PSID.isNotBlank()) {
+                    YoutubeHttpContextFilter.setPAPISID(youtubeConfig.PAPISID)
+                    YoutubeHttpContextFilter.setPSID(youtubeConfig.PSID)
+                } else {
+                    log.info("PAPISID and PSID fields is blank, age restricted videos will be throw errors")
+                }
+            } else {
+                log.debug("Youtube config block is not found")
+            }
+
             audioPlayerManager.registerSourceManager(youtube)
         }
         if (sources.isSoundcloud) {

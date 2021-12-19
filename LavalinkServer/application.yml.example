@@ -25,6 +25,9 @@ lavalink:
       #strategy: "RotateOnBan" # RotateOnBan | LoadBalance | NanoSwitch | RotatingNanoSwitch
       #searchTriggersFail: true # Whether a search 429 should trigger marking the ip as failing
       #retryLimit: -1 # -1 = use default lavaplayer value | 0 = infinity | >0 = retry will happen this numbers times
+    #youtubeConfig: # Required for avoiding age restrictions by YouTube. Guide https://github.com/Walkyst/lavaplayer-fork/issues/18
+      #PAPISID:      ""
+      #PSID:         ""
 
 metrics:
   prometheus:
