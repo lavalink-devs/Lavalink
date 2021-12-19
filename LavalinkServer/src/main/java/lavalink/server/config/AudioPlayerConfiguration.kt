@@ -71,10 +71,16 @@ class AudioPlayerConfiguration {
             val playlistLoadLimit = serverConfig.youtubePlaylistLoadLimit
             if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit)
 
-            val youtubeConfig = sources.youtubeConfig
-            if (youtubeConfig.PAPISID.isNotBlank() && youtubeConfig.PSID.isNotBlank()) {
-                YoutubeHttpContextFilter.setPAPISID(youtubeConfig.PAPISID)
-                YoutubeHttpContextFilter.setPSID(youtubeConfig.PSID)
+            val youtubeConfig = serverConfig.youtubeConfig
+            if (youtubeConfig != null) {
+                if (youtubeConfig.PAPISID.isNotBlank() && youtubeConfig.PSID.isNotBlank()) {
+                    YoutubeHttpContextFilter.setPAPISID(youtubeConfig.PAPISID)
+                    YoutubeHttpContextFilter.setPSID(youtubeConfig.PSID)
+                } else {
+                    log.info("PAPISID and PSID fields is blank, age restricted videos will be throw errors")
+                }
+            } else {
+                log.debug("Youtube config block is not found")
             }
 
             audioPlayerManager.registerSourceManager(youtube)

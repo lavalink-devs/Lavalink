@@ -1,6 +1,6 @@
 package lavalink.server.config
 
-class YoutubeConfig {
-    var PAPISID = ""
-    var PSID = ""
-}
+data class YoutubeConfig(
+        var PAPISID: String = "",
+        var PSID: String = ""
+)

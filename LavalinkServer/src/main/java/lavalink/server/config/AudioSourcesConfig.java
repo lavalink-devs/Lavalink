@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 public class AudioSourcesConfig {
 
     private boolean youtube = true;
-    private YoutubeConfig youtubeConfig = new YoutubeConfig();
     private boolean bandcamp = true;
     private boolean soundcloud = true;
     private boolean twitch = true;
@@ -26,14 +25,6 @@ public class AudioSourcesConfig {
 
     public void setYoutube(boolean youtube) {
         this.youtube = youtube;
-    }
-
-    public YoutubeConfig getYoutubeConfig() {
-        return this.youtubeConfig;
-    }
-
-    public void setYoutubeConfig(YoutubeConfig youtube) {
-        this.youtubeConfig = youtube;
     }
 
     public boolean isBandcamp() {
