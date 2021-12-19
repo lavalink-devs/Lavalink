@@ -6,6 +6,9 @@ lavalink:
     password: "youshallnotpass"
     sources:
       youtube: true
+      youtubeConfig: # Required for avoiding age restrictions by YouTube. Guide https://github.com/Walkyst/lavaplayer-fork/issues/18
+        PAPISID:      ""
+        PSID:         ""
       bandcamp: true
       soundcloud: true
       twitch: true
