@@ -65,7 +65,7 @@ class SocketServer(
             state.put("connected", connected)
 
             json.put("op", "playerUpdate")
-            json.put("guildId", player.guildId)
+            json.put("guildId", player.guildId.toString())
             json.put("state", state)
             socketContext.send(json)
         }

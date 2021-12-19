@@ -221,7 +221,7 @@ class SocketContext(
             val out = JSONObject()
             out.put("op", "event")
             out.put("type", "WebSocketClosedEvent")
-            out.put("guildId", player.guildId)
+            out.put("guildId", player.guildId.toString())
             out.put("reason", reason ?: "")
             out.put("code", code)
             out.put("byRemote", byRemote)
