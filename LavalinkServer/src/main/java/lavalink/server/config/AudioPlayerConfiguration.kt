@@ -77,7 +77,7 @@ class AudioPlayerConfiguration {
                     YoutubeHttpContextFilter.setPAPISID(youtubeConfig.PAPISID)
                     YoutubeHttpContextFilter.setPSID(youtubeConfig.PSID)
                 } else {
-                    log.info("PAPISID and PSID fields is blank, age restricted videos will be throw errors")
+                    log.info("PAPISID and PSID fields are blank, age restricted videos will throw exceptions")
                 }
             } else {
                 log.debug("Youtube config block is not found")
