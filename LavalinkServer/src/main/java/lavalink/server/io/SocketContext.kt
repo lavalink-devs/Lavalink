@@ -133,7 +133,11 @@ class SocketContext(
      * Disposes of a voice connection
      */
     override fun destroyPlayer(guild: Long) {
-        players.remove(guild)?.destroy()
+        val player = players.remove(guild)
+        if (player != null) {
+            eventEmitter.onDestroyPlayer(player)
+            player.destroy()
+        }
         koe.destroyConnection(guild)
     }
 

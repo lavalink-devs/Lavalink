@@ -38,4 +38,11 @@ public interface PluginEventHandler {
      * @param player the new player
      */
     default void onNewPlayer(ISocketContext context, IPlayer player) {}
+
+    /**
+     * Fired upon a player being destroyed
+     * @param context the websocket
+     * @param player the player to be destroyed
+     */
+    default void onDestroyPlayer(ISocketContext context, IPlayer player) {}
 }
