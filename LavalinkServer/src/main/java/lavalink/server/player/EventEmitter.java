@@ -52,7 +52,7 @@ public class EventEmitter extends AudioEventAdapter {
         JSONObject out = new JSONObject();
         out.put("op", "event");
         out.put("type", "TrackStartEvent");
-        out.put("guildId", linkPlayer.getGuildId());
+        out.put("guildId", String.valueOf(linkPlayer.getGuildId()));
 
         try {
             out.put("track", Util.toMessage(audioPlayerManager, track));
@@ -68,7 +68,7 @@ public class EventEmitter extends AudioEventAdapter {
         JSONObject out = new JSONObject();
         out.put("op", "event");
         out.put("type", "TrackEndEvent");
-        out.put("guildId", linkPlayer.getGuildId());
+        out.put("guildId", String.valueOf(linkPlayer.getGuildId()));
         try {
             out.put("track", Util.toMessage(audioPlayerManager, track));
         } catch (IOException e) {
@@ -86,7 +86,7 @@ public class EventEmitter extends AudioEventAdapter {
         JSONObject out = new JSONObject();
         out.put("op", "event");
         out.put("type", "TrackExceptionEvent");
-        out.put("guildId", linkPlayer.getGuildId());
+        out.put("guildId", String.valueOf(linkPlayer.getGuildId()));
         try {
             out.put("track", Util.toMessage(audioPlayerManager, track));
         } catch (IOException e) {
@@ -110,7 +110,7 @@ public class EventEmitter extends AudioEventAdapter {
         JSONObject out = new JSONObject();
         out.put("op", "event");
         out.put("type", "TrackStuckEvent");
-        out.put("guildId", linkPlayer.getGuildId());
+        out.put("guildId", String.valueOf(linkPlayer.getGuildId()));
         try {
             out.put("track", Util.toMessage(audioPlayerManager, track));
         } catch (IOException e) {
