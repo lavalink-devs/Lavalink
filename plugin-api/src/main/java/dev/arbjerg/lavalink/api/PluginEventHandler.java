@@ -10,39 +10,39 @@ public abstract class PluginEventHandler {
      * @param context the websocket
      * @param resumed if the context was resumed and thus reused
      */
-    void onWebSocketOpen(ISocketContext context, boolean resumed) {}
+    public void onWebSocketOpen(ISocketContext context, boolean resumed) {}
 
     /**
      * Fired upon a WebSocket being closed
      * @param context the websocket
      */
-    void onWebSocketClose(ISocketContext context) {}
+    public void onWebSocketClose(ISocketContext context) {}
 
     /**
      * Fired upon a WebSocket message being received
      * @param context the websocket
      * @param message the message, presumably in JSON
      */
-    void onWebsocketMessageIn(ISocketContext context, String message) {}
+    public void onWebsocketMessageIn(ISocketContext context, String message) {}
 
     /**
      * Fired upon a WebSocket message being sent
      * @param context the websocket
      * @param message the message, presumably in JSON
      */
-    void onWebSocketMessageOut(ISocketContext context, String message) {}
+    public void onWebSocketMessageOut(ISocketContext context, String message) {}
 
     /**
      * Fired upon a new player being created
      * @param context the websocket
      * @param player the new player
      */
-    void onNewPlayer(ISocketContext context, IPlayer player) {}
+    public void onNewPlayer(ISocketContext context, IPlayer player) {}
 
     /**
      * Fired upon a player being destroyed
      * @param context the websocket
      * @param player the player to be destroyed
      */
-    void onDestroyPlayer(ISocketContext context, IPlayer player) {}
+    public void onDestroyPlayer(ISocketContext context, IPlayer player) {}
 }
