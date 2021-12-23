@@ -20,6 +20,7 @@ A [very simple example bot](Testbot) is available.
 * Basic authentication
 * Prometheus metrics
 * Docker images
+* [Plugin support](PLUGINS.md)
 
 ## Requirements
 
