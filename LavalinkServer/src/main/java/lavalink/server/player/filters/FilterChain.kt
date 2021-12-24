@@ -32,7 +32,7 @@ class FilterChain : PcmFilterFactory {
     private val channelMix: ChannelMixConfig? = null
     private val lowPass: LowPassConfig? = null
     @Transient
-    private lateinit var pluginFilters: List<PluginConfig>
+    private var pluginFilters: List<PluginConfig> = emptyList()
 
     private fun parsePluginConfigs(json: JSONObject, extensions: List<AudioFilterExtension>) {
         pluginFilters = extensions.mapNotNull {
