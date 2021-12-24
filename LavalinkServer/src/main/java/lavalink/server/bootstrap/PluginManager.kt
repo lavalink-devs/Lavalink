@@ -98,7 +98,7 @@ class PluginManager(config: PluginsConfig) {
 
         if (jarsToLoad.isEmpty()) return emptyList()
 
-        val cl = URLClassLoader.newInstance(jarsToLoad.map { URL("jar:file:${it.absolutePath}!/") }.toTypedArray())
+        val cl = URLClassLoader.newInstance(jarsToLoad.map { URL("jar:file:${it.absolutePath}!/") }.toTypedArray(), javaClass.classLoader)
         classLoader = cl
 
         val manifests = mutableListOf<PluginManifest>()
