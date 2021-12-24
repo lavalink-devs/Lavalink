@@ -34,8 +34,6 @@ Lavalink is configured by plugins using the Spring Boot framework using Spring a
 an extension to the WebSocket API by exposing a Spring bean like this:
 
 ```java
-import org.springframework.stereotype.Service;
-
 @Service
 class MyExtension implements WebSocketExtension {
     // ...
@@ -45,3 +43,15 @@ class MyExtension implements WebSocketExtension {
 You can also define custom REST endpoints and configuration file properties. See the Spring Boot documentation for
 [Spring Web MVC](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#web.servlet) and
 [type-safe configuration](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#features.external-config.typesafe-configuration-properties).
+
+If you simply want to add a Lavaplayer `AudioSourceManager` to Lavalink it is sufficient to simply provide it as a bean.
+For example:
+
+```java
+import org.springframework.stereotype.Service;
+
+@Service
+class MyAudioSourceManager implements AudioSourceManager {
+    // ...
+} 
+```
