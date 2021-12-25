@@ -10,6 +10,7 @@ import java.util.Map;
 public interface ISocketContext {
     /**
      * Returns the player of a guild. Never returns null.
+     *
      * @param guildId the guild the player is associated with
      * @return a potentially newly-created player
      */
@@ -31,6 +32,11 @@ public interface ISocketContext {
     void sendMessage(JSONObject message);
 
     /**
+     * @return the state of the context
+     */
+    State getState();
+
+    /**
      * Closes this WebSocket
      */
     void closeWebSocket();
@@ -41,9 +47,24 @@ public interface ISocketContext {
     void closeWebSocket(int closeCode);
 
     /**
-     *
      * @param closeCode the close code to send to the client
-     * @param reason the close reason to send to the client
+     * @param reason    the close reason to send to the client
      */
     void closeWebSocket(int closeCode, String reason);
+
+    enum State {
+        /**
+         * The context has an open WebSocket
+         */
+        OPEN,
+        /**
+         * The context does not have an open WebSocket, but can later be resumed
+         */
+        RESUMABLE,
+
+        /**
+         * The WebSocket has closed and this context will never be used again
+         */
+        DESTROYED
+    }
 }

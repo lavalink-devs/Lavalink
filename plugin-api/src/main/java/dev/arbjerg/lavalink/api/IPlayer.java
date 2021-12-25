@@ -13,6 +13,11 @@ public interface IPlayer {
     AudioPlayer getAudioPlayer();
 
     /**
+     * @return the player's current track which is either playing or paused. May be null
+     */
+    AudioTrack getTrack();
+
+    /**
      * @return the guild which this player belongs to. Immutable
      */
     long getGuildId();

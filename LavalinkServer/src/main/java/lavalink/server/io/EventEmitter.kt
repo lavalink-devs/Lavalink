@@ -12,7 +12,8 @@ class EventEmitter(private val context: SocketContext, private val listeners: Co
     }
 
     fun onWebSocketOpen(resumed: Boolean) = iterate { it.onWebSocketOpen(context, resumed) }
-    fun onWebSocketClose() = iterate { it.onWebSocketClose(context) }
+    fun onSocketContextPaused() = iterate { it.onSocketContextPaused(context) }
+    fun onSocketContextDestroyed() = iterate { it.onSocketContextDestroyed(context) }
     fun onWebsocketMessageIn(message: String) = iterate { it.onWebsocketMessageIn(context, message) }
     fun onWebSocketMessageOut(message: String) = iterate { it.onWebSocketMessageOut(context, message) }
     fun onNewPlayer(player: IPlayer)  = iterate { it.onNewPlayer(context, player) }

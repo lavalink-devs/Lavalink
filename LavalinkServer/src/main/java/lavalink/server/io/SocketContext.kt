@@ -146,10 +146,17 @@ class SocketContext(
         sessionTimeoutFuture = executor.schedule<Unit>({
             socketServer.onSessionResumeTimeout(this)
         }, resumeTimeout, TimeUnit.SECONDS)
+        eventEmitter.onSocketContextPaused()
     }
 
     override fun sendMessage(message: JSONObject) {
         send(message)
+    }
+
+    override fun getState(): ISocketContext.State = when {
+        session.isOpen -> ISocketContext.State.OPEN
+        sessionPaused -> ISocketContext.State.RESUMABLE
+        else -> ISocketContext.State.DESTROYED
     }
 
     /**
@@ -206,6 +213,7 @@ class SocketContext(
             this.destroyPlayer(it.guildId)
         }
         koe.close()
+        eventEmitter.onSocketContextDestroyed()
     }
 
     override fun closeWebSocket(closeCode: Int, reason: String?) {

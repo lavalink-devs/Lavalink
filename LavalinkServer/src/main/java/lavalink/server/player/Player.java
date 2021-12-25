@@ -91,6 +91,11 @@ public class Player extends AudioEventAdapter implements IPlayer {
     }
 
     @Override
+    public AudioTrack getTrack() {
+        return player.getPlayingTrack();
+    }
+
+    @Override
     public long getGuildId() {
         return guildId;
     }

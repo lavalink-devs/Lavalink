@@ -141,7 +141,6 @@ class SocketServer(
         }
 
         log.info("Connection closed from {} -- {}", session.remoteAddress, status)
-        context.eventEmitter.onWebSocketClose()
         context.shutdown()
     }
 
