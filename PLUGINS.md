@@ -5,7 +5,7 @@ WebSocket handling, REST endpoints, and much more.
 List of plugins:
 - [SponsorBlock](https://github.com/TopiSenpai/sponsorblock-plugin) for skipping sponsor segments in YouTube videos
 - [Spotify](https://github.com/TopiSenpai/spotify-plugin) for lazy loading Spotify playlists/albums/songs from YouTube
-- https://github.com/DuncteBot/Lavalink
+- [DuncteBot plugin](https://github.com/DuncteBot/skybot-lavalink-plugin) adds additional source mananagers that are not widely used
 
 Lavalink loads all .jar files placed in the `plugins` directory, which you may need to create yourself. Lavalink can
 also download plugin .jar files automatically by editing the configuration file. See the respective plugin repository
