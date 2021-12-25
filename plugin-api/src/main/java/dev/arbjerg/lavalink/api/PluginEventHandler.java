@@ -22,6 +22,7 @@ public abstract class PluginEventHandler {
 
     /**
      * Fired once the WebSocket is closed without being resumable or when a WebSocket can no longer be resumed
+     *
      * @param context the socket context
      */
     public void onSocketContextDestroyed(ISocketContext context) {}

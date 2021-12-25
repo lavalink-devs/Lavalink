@@ -7,9 +7,9 @@ import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManag
 import com.sedmelluq.discord.lavaplayer.source.beam.BeamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudDataLoader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudDataReader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudFormatHandler
-import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudDataLoader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudPlaylistLoader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
@@ -96,7 +96,6 @@ class AudioPlayerConfiguration {
         if (sources.isVimeo) audioPlayerManager.registerSourceManager(VimeoAudioSourceManager())
         if (sources.isMixer) audioPlayerManager.registerSourceManager(BeamAudioSourceManager())
         if (sources.isHttp) audioPlayerManager.registerSourceManager(HttpAudioSourceManager())
-        if (sources.isLocal) audioPlayerManager.registerSourceManager(LocalAudioSourceManager())
 
         audioSourceManagers.forEach {
             audioPlayerManager.registerSourceManager(it)
@@ -110,6 +109,9 @@ class AudioPlayerConfiguration {
         audioPlayerManagerConfigurations.forEach {
             am = it.configure(am)
         }
+
+        // This must be loaded last
+        if (sources.isLocal) audioPlayerManager.registerSourceManager(LocalAudioSourceManager())
 
         return am
     }

@@ -115,9 +115,6 @@ object Launcher {
 
     @JvmStatic
     fun main(args: Array<String>) {
-
-        SpringApplicationBuilder()
-
         if (args.isNotEmpty() &&
             (args[0].equals("-v", ignoreCase = true) || args[0].equals("--version", ignoreCase = true))
         ) {
