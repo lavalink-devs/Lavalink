@@ -18,9 +18,13 @@ import java.util.regex.Pattern
 
 @SpringBootApplication
 class PluginManager(config: PluginsConfig) {
+
+    final val pluginManifests: MutableList<PluginManifest> = mutableListOf()
+    var classLoader: ClassLoader = PluginManager::class.java.classLoader
+
     init {
         manageDownloads(config)
-        pluginManifests = mutableListOf<PluginManifest>().apply {
+        pluginManifests.apply {
             addAll(readClasspathManifests())
             addAll(loadJars())
         }
@@ -157,7 +161,5 @@ class PluginManager(config: PluginsConfig) {
 
     companion object {
         private val log: Logger = LoggerFactory.getLogger(PluginManager::class.java)
-        var pluginManifests: List<PluginManifest> = emptyList()
-        var classLoader: ClassLoader = PluginManager::class.java.classLoader
     }
 }

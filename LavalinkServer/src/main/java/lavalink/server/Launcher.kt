@@ -133,8 +133,9 @@ object Launcher {
     }
 
     private fun launchMain(parent: ConfigurableApplicationContext, args: Array<String>) {
+        val pluginManager = parent.getBean(PluginManager::class.java)
         val properties = Properties()
-        properties["componentScan"] = PluginManager.pluginManifests.map { it.path }
+        properties["componentScan"] = pluginManager.pluginManifests.map { it.path }
             .toMutableList()
             .apply { add("lavalink.server") }
 
@@ -143,7 +144,7 @@ object Launcher {
             .properties(properties)
             .web(WebApplicationType.SERVLET)
             .bannerMode(Banner.Mode.OFF)
-            .resourceLoader(DefaultResourceLoader(PluginManager.classLoader))
+            .resourceLoader(DefaultResourceLoader(pluginManager.classLoader))
             .listeners(
                 ApplicationListener { event: Any ->
                     if (event is ApplicationEnvironmentPreparedEvent) {
