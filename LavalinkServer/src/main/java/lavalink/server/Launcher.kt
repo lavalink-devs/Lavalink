@@ -136,8 +136,6 @@ object Launcher {
         val pluginManager = parent.getBean(PluginManager::class.java)
         val properties = Properties()
         properties["componentScan"] = pluginManager.pluginManifests.map { it.path }
-            .toMutableList()
-            .apply { add("lavalink.server") }
 
         SpringApplicationBuilder()
             .sources(LavalinkApplication::class.java)
