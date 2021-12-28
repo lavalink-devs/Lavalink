@@ -98,6 +98,7 @@ While major, minor and patch will do an optimum effort to adhere to [Semantic Ve
 * [Lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs/) (All `tokio` Libraries, Rust)
 * [lavasnek_rs](https://github.com/vicky5124/lavasnek_rs/) (All `asyncio` Libraries, Python)
 * [Pomice](https://github.com/cloudwithax/pomice) (discord.py, Python)
+* [lavaplayer-py](https://github.com/HazemMeqdad/lavaplayer) (All `asyncio` libs, Python)
 * Or [create your own](https://github.com/freyacodes/Lavalink/blob/master/IMPLEMENTATION.md)
 
 ## Server configuration
