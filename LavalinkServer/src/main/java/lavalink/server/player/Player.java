@@ -29,6 +29,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import io.netty.buffer.ByteBuf;
+import dev.arbjerg.lavalink.api.ISocketContext;
 import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
 import lavalink.server.player.filters.FilterChain;
@@ -38,17 +39,18 @@ import moe.kyokobot.koe.media.OpusAudioFrameProvider;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import dev.arbjerg.lavalink.api.IPlayer;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class Player extends AudioEventAdapter {
+public class Player extends AudioEventAdapter implements IPlayer {
 
     private static final Logger log = LoggerFactory.getLogger(Player.class);
 
     private final SocketContext socketContext;
-    private final String guildId;
+    private final long guildId;
     private final ServerConfig serverConfig;
     private final AudioPlayer player;
     private final AudioLossCounter audioLossCounter = new AudioLossCounter();
@@ -56,7 +58,7 @@ public class Player extends AudioEventAdapter {
     private FilterChain filters;
     private ScheduledFuture<?> myFuture = null;
 
-    public Player(SocketContext socketContext, String guildId, AudioPlayerManager audioPlayerManager, ServerConfig serverConfig) {
+    public Player(SocketContext socketContext, long guildId, AudioPlayerManager audioPlayerManager, ServerConfig serverConfig) {
         this.socketContext = socketContext;
         this.guildId = guildId;
         this.serverConfig = serverConfig;
@@ -83,8 +85,24 @@ public class Player extends AudioEventAdapter {
         player.setPaused(b);
     }
 
-    public String getGuildId() {
+    @Override
+    public AudioPlayer getAudioPlayer() {
+        return player;
+    }
+
+    @Override
+    public AudioTrack getTrack() {
+        return player.getPlayingTrack();
+    }
+
+    @Override
+    public long getGuildId() {
         return guildId;
+    }
+
+    @Override
+    public ISocketContext getSocketContext() {
+        return null;
     }
 
     public void seekTo(long position) {

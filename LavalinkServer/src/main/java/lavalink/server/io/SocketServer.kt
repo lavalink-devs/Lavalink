@@ -23,6 +23,9 @@
 package lavalink.server.io
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import dev.arbjerg.lavalink.api.AudioFilterExtension
+import dev.arbjerg.lavalink.api.PluginEventHandler
+import dev.arbjerg.lavalink.api.WebSocketExtension
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.Player
 import moe.kyokobot.koe.Koe
@@ -40,13 +43,14 @@ import java.util.concurrent.ConcurrentHashMap
 class SocketServer(
         private val serverConfig: ServerConfig,
         private val audioPlayerManager: AudioPlayerManager,
-        koeOptions: KoeOptions
+        koeOptions: KoeOptions,
+        private val eventHandlers: List<PluginEventHandler>,
+        private val webSocketExtensions: List<WebSocketExtension>,
+        private val filterExtensions: List<AudioFilterExtension>
 ) : TextWebSocketHandler() {
 
     // userId <-> shardCount
     val contextMap = ConcurrentHashMap<String, SocketContext>()
-    @Suppress("LeakingThis")
-    private val handlers = WebSocketHandlers(contextMap)
     private val resumableSessions = mutableMapOf<String, SocketContext>()
     private val koe = Koe.koe(koeOptions)
 
@@ -61,7 +65,7 @@ class SocketServer(
             state.put("connected", connected)
 
             json.put("op", "playerUpdate")
-            json.put("guildId", player.guildId)
+            json.put("guildId", player.guildId.toString())
             json.put("state", state)
             socketContext.send(json)
         }
@@ -70,6 +74,7 @@ class SocketServer(
     val contexts: Collection<SocketContext>
         get() = contextMap.values
 
+    @Suppress("UastIncorrectHttpHeaderInspection")
     override fun afterConnectionEstablished(session: WebSocketSession) {
         val userId = session.handshakeHeaders.getFirst("User-Id")!!
         val resumeKey = session.handshakeHeaders.getFirst("Resume-Key")
@@ -83,17 +88,23 @@ class SocketServer(
             contextMap[session.id] = resumable
             resumable.resume(session)
             log.info("Resumed session with key $resumeKey")
+            resumable.eventEmitter.onWebSocketOpen(true)
             return
         }
 
-        contextMap[session.id] = SocketContext(
+        val socketContext = SocketContext(
                 audioPlayerManager,
                 serverConfig,
                 session,
                 this,
                 userId,
-                koe.newClient(userId.toLong())
+                koe.newClient(userId.toLong()),
+                eventHandlers,
+                webSocketExtensions,
+                filterExtensions
         )
+        contextMap[session.id] = socketContext
+        socketContext.eventEmitter.onWebSocketOpen(false)
 
         if (clientName != null) {
             log.info("Connection successfully established from $clientName")
@@ -130,7 +141,6 @@ class SocketServer(
         }
 
         log.info("Connection closed from {} -- {}", session.remoteAddress, status)
-
         context.shutdown()
     }
 
@@ -155,22 +165,8 @@ class SocketServer(
 
         val context = contextMap[session.id]
                 ?: throw IllegalStateException("No context for session ID ${session.id}. Broken websocket?")
-
-        when (json.getString("op")) {
-            // @formatter:off
-            "voiceUpdate"       -> handlers.voiceUpdate(context, json)
-            "play"              -> handlers.play(context, json)
-            "stop"              -> handlers.stop(context, json)
-            "pause"             -> handlers.pause(context, json)
-            "seek"              -> handlers.seek(context, json)
-            "volume"            -> handlers.volume(context, json)
-            "destroy"           -> handlers.destroy(context, json)
-            "configureResuming" -> handlers.configureResuming(context, json)
-            "equalizer"         -> handlers.equalizer(context, json)
-            "filters"           -> handlers.filters(context, json.getString("guildId"), message.payload)
-            else                -> log.warn("Unexpected operation: " + json.getString("op"))
-            // @formatter:on
-        }
+        context.eventEmitter.onWebsocketMessageIn(message.payload)
+        context.wsHandler.handle(json)
     }
 
     internal fun onSessionResumeTimeout(context: SocketContext) {

@@ -2,13 +2,14 @@ package lavalink.server.config
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.beam.BeamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudDataLoader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudDataReader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudFormatHandler
-import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudDataLoader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudPlaylistLoader
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
@@ -23,12 +24,12 @@ import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingIpRoutePlann
 import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv4Block
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block
+import dev.arbjerg.lavalink.api.AudioPlayerManagerConfiguration
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.net.InetAddress
 import java.util.function.Predicate
-import java.util.function.Supplier
 
 /**
  * Created by napster on 05.03.18.
@@ -39,7 +40,13 @@ class AudioPlayerConfiguration {
     private val log = LoggerFactory.getLogger(AudioPlayerConfiguration::class.java)
 
     @Bean
-    fun audioPlayerManagerSupplier(sources: AudioSourcesConfig, serverConfig: ServerConfig, routePlanner: AbstractRoutePlanner?): AudioPlayerManager {
+    fun audioPlayerManagerSupplier(
+        sources: AudioSourcesConfig,
+        serverConfig: ServerConfig,
+        routePlanner: AbstractRoutePlanner?,
+        audioSourceManagers: Collection<AudioSourceManager>,
+        audioPlayerManagerConfigurations: Collection<AudioPlayerManagerConfiguration>
+    ): AudioPlayerManager {
         val audioPlayerManager = DefaultAudioPlayerManager()
 
         if (serverConfig.isGcWarnings) {
@@ -86,9 +93,9 @@ class AudioPlayerConfiguration {
             audioPlayerManager.registerSourceManager(youtube)
         }
         if (sources.isSoundcloud) {
-            val dataReader = DefaultSoundCloudDataReader();
-            val dataLoader = DefaultSoundCloudDataLoader();
-            val formatHandler = DefaultSoundCloudFormatHandler();
+            val dataReader = DefaultSoundCloudDataReader()
+            val dataLoader = DefaultSoundCloudDataLoader()
+            val formatHandler = DefaultSoundCloudFormatHandler()
 
             audioPlayerManager.registerSourceManager(SoundCloudAudioSourceManager(
                     serverConfig.isSoundcloudSearchEnabled,
@@ -96,18 +103,31 @@ class AudioPlayerConfiguration {
                     dataLoader,
                     formatHandler,
                     DefaultSoundCloudPlaylistLoader(dataLoader, dataReader, formatHandler)
-            ));
+            ))
         }
         if (sources.isBandcamp) audioPlayerManager.registerSourceManager(BandcampAudioSourceManager())
         if (sources.isTwitch) audioPlayerManager.registerSourceManager(TwitchStreamAudioSourceManager())
         if (sources.isVimeo) audioPlayerManager.registerSourceManager(VimeoAudioSourceManager())
         if (sources.isMixer) audioPlayerManager.registerSourceManager(BeamAudioSourceManager())
         if (sources.isHttp) audioPlayerManager.registerSourceManager(HttpAudioSourceManager())
-        if (sources.isLocal) audioPlayerManager.registerSourceManager(LocalAudioSourceManager())
+
+        audioSourceManagers.forEach {
+            audioPlayerManager.registerSourceManager(it)
+            log.info("Registered {} provided from a plugin", it)
+        }
 
         audioPlayerManager.configuration.isFilterHotSwapEnabled = true
 
-        return audioPlayerManager
+        var am: AudioPlayerManager = audioPlayerManager
+
+        audioPlayerManagerConfigurations.forEach {
+            am = it.configure(am)
+        }
+
+        // This must be loaded last
+        if (sources.isLocal) audioPlayerManager.registerSourceManager(LocalAudioSourceManager())
+
+        return am
     }
 
     @Bean

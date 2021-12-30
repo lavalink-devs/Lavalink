@@ -1,0 +1,79 @@
+plugins {
+    id 'java'
+    id 'maven'
+    id 'signing'
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group 'dev.arbjerg.lavalink'
+archivesBaseName = "plugin-api"
+version = "0.9.0"
+
+sourceCompatibility = targetCompatibility = 8
+
+dependencies {
+    compile group: 'org.springframework.boot', name: "spring-boot", version: springBootVersion
+    compile group: 'com.github.walkyst', name: 'lavaplayer-fork', version: lavaplayerVersion
+    compile group: 'org.json', name: 'json', version: jsonOrgVersion
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                from components.java
+                name = 'Lavalink Plugin API'
+                description = 'API for Lavalink plugin development'
+                url = 'https://github.com/freyacodes/lavalink'
+                licenses {
+                    license {
+                        name = 'The MIT License'
+                        url = 'https://github.com/freyacodes/Lavalink/blob/master/LICENSE'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'freya'
+                        name = 'Freya Arbjerg'
+                        url = "https://www.arbjerg.dev"
+                    }
+                }
+                scm {
+                    connection = 'scm:git:ssh://github.com/freyacodes/lavalink.git'
+                    developerConnection = 'scm:git:ssh://github.com/freyacodes/lavalink.git'
+                    url = 'https://github.com/freyacodes/lavalink'
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            // change URLs to point to your repos, e.g. http://my.org/repo
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                password = findProperty("ossrhPassword")
+                username = findProperty("ossrhUsername")
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+    useGpgCmd()
+}

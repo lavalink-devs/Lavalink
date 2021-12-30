@@ -377,8 +377,7 @@ See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and
 ### Track Loading API
 The REST api is used to resolve audio tracks for use with the `play` op. 
 ```
-GET /loadtracks?identifier=dQw4w9WgXcQ HTTP/1.1
-Host: localhost:8080
+GET /loadtracks?identifier=dQw4w9WgXcQ
 Authorization: youshallnotpass
 ```
 
@@ -447,8 +446,7 @@ A severity level of `COMMON` indicates that the error is non-fatal and that the 
 
 Decode a single track into its info
 ```
-GET /decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA== HTTP/1.1
-Host: localhost:8080
+GET /decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==
 Authorization: youshallnotpass
 ```
 
@@ -469,8 +467,7 @@ Response:
 
 Decode multiple tracks into info their info
 ```
-POST /decodetracks HTTP/1.1
-Host: localhost:8080
+POST /decodetracks
 Authorization: youshallnotpass
 ```
 
@@ -504,15 +501,35 @@ Response:
 ```
 ---
 
+### Get list of plugins
+Request information about the plugins running on Lavalink, if any.
+```
+GET /plugins
+Authorization: youshallnotpass
+```
+
+Response:
+```yaml
+[
+  {
+    "name": "some-plugin",
+    "version": "1.0.0"
+  },
+  {
+    "name": "foo-plugin",
+    "version": "1.2.3"
+  }
+]
+```
+
 ### RoutePlanner API
 
-Additionally there are a few REST endpoints for the ip rotation extension
+Additionally, there are a few REST endpoints for the ip rotation extension
 
 #### Get RoutePlanner status
 
 ```
 GET /routeplanner/status
-Host: localhost:8080
 Authorization: youshallnotpass
 ```
 

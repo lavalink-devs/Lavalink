@@ -23,6 +23,7 @@
 package lavalink.server
 
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary
+import lavalink.server.bootstrap.PluginManager
 import lavalink.server.info.AppInfo
 import lavalink.server.info.GitRepoState
 import org.slf4j.LoggerFactory
@@ -30,14 +31,25 @@ import org.springframework.boot.Banner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent
 import org.springframework.boot.context.event.ApplicationFailedEvent
 import org.springframework.context.ApplicationListener
+import org.springframework.context.ConfigurableApplicationContext
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.FilterType
+import org.springframework.core.io.DefaultResourceLoader
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.*
 
+@Suppress("SpringBootApplicationSetup", "SpringComponentScan")
 @SpringBootApplication
+@ComponentScan(
+    value = ["\${componentScan}"],
+    excludeFilters = [ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = [PluginManager::class])]
+)
 class LavalinkApplication
 
 object Launcher {
@@ -51,7 +63,7 @@ object Launcher {
         val gitRepoState = GitRepoState()
 
         val dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss z")
-                .withZone(ZoneId.of("UTC"))
+            .withZone(ZoneId.of("UTC"))
         val buildTime = dtf.format(Instant.ofEpochMilli(appInfo.buildTime))
         val commitTime = dtf.format(Instant.ofEpochMilli(gitRepoState.commitTime * 1000))
 
@@ -104,15 +116,35 @@ object Launcher {
     @JvmStatic
     fun main(args: Array<String>) {
         if (args.isNotEmpty() &&
-                (args[0].equals("-v", ignoreCase = true) || args[0].equals("--version", ignoreCase = true))) {
+            (args[0].equals("-v", ignoreCase = true) || args[0].equals("--version", ignoreCase = true))
+        ) {
             println(getVersionInfo(indentation = "", vanity = false))
             return
         }
+        val parent = launchPluginBootstrap()
+        log.info("You can safely ignore the big red warning about illegal reflection. See https://github.com/freyacodes/Lavalink/issues/295")
+        launchMain(parent, args)
+    }
 
-        val sa = SpringApplication(LavalinkApplication::class.java)
-        sa.webApplicationType = WebApplicationType.SERVLET
-        sa.setBannerMode(Banner.Mode.OFF) // We have our own
-        sa.addListeners(
+    private fun launchPluginBootstrap() = SpringApplication(PluginManager::class.java).run {
+        setBannerMode(Banner.Mode.OFF)
+        webApplicationType = WebApplicationType.NONE
+        run()
+    }
+
+    private fun launchMain(parent: ConfigurableApplicationContext, args: Array<String>) {
+        val pluginManager = parent.getBean(PluginManager::class.java)
+        val properties = Properties()
+        properties["componentScan"] = pluginManager.pluginManifests.map { it.path }
+            .toMutableList().apply { add("lavalink.server") }
+
+        SpringApplicationBuilder()
+            .sources(LavalinkApplication::class.java)
+            .properties(properties)
+            .web(WebApplicationType.SERVLET)
+            .bannerMode(Banner.Mode.OFF)
+            .resourceLoader(DefaultResourceLoader(pluginManager.classLoader))
+            .listeners(
                 ApplicationListener { event: Any ->
                     if (event is ApplicationEnvironmentPreparedEvent) {
                         log.info(getVersionInfo())
@@ -123,8 +155,7 @@ object Launcher {
                         log.error("Application failed", event.exception)
                     }
                 }
-        )
-        sa.run(*args)
-        log.info("You can safely ignore the big red warning about illegal reflection. See https://github.com/freyacodes/Lavalink/issues/295")
+            ).parent(parent)
+            .run(*args)
     }
 }

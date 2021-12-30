@@ -1,5 +1,8 @@
 rootProject.name = 'Lavalink-Parent'
 include ':Lavalink-Server'
 include ':Testbot'
+include ':plugin-api'
 
 project(':Lavalink-Server').projectDir = "$rootDir/LavalinkServer" as File
+include 'plugin-api'
+
