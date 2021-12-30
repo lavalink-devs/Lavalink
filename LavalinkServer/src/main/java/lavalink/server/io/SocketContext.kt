@@ -56,7 +56,7 @@ class SocketContext(
     private var session: WebSocketSession,
     private val socketServer: SocketServer,
     val userId: String,
-    private val koe: KoeClient,
+    val koe: KoeClient,
     eventHandlers: Collection<PluginEventHandler>,
     webSocketExtensions: List<WebSocketExtension>,
     filterExtensions: List<AudioFilterExtension>
