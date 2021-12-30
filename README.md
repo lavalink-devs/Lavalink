@@ -15,12 +15,12 @@ A [very simple example bot](Testbot) is available.
 * Event system
 * Seeking
 * Volume control
-* REST API for resolving lavaplayer tracks (used for non-JVM clients)
+* REST API for resolving Lavaplayer tracks
 * Statistics (good for load balancing)
 * Basic authentication
 * Prometheus metrics
 * Docker images
-* [Plugin support](PLUGINS.md)
+* [Plugin support](PLUGINS.md) (beta)
 
 ## Requirements
 
