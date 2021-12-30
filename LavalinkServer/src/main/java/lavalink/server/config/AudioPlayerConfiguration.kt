@@ -109,7 +109,7 @@ class AudioPlayerConfiguration {
         if (sources.isTwitch) audioPlayerManager.registerSourceManager(TwitchStreamAudioSourceManager())
         if (sources.isVimeo) audioPlayerManager.registerSourceManager(VimeoAudioSourceManager())
         if (sources.isMixer) audioPlayerManager.registerSourceManager(BeamAudioSourceManager())
-        if (sources.isHttp) audioPlayerManager.registerSourceManager(HttpAudioSourceManager())
+        if (sources.isLocal) audioPlayerManager.registerSourceManager(LocalAudioSourceManager())
 
         audioSourceManagers.forEach {
             audioPlayerManager.registerSourceManager(it)
@@ -125,7 +125,7 @@ class AudioPlayerConfiguration {
         }
 
         // This must be loaded last
-        if (sources.isLocal) audioPlayerManager.registerSourceManager(LocalAudioSourceManager())
+        if (sources.isHttp) audioPlayerManager.registerSourceManager(HttpAudioSourceManager())
 
         return am
     }
