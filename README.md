@@ -80,6 +80,7 @@ While major, minor and patch will do an optimum effort to adhere to [Semantic Ve
 * [eris-lavalink](https://github.com/briantanner/eris-lavalink) ([eris](https://github.com/abalabahaha/eris), JavaScript)
 * [LavaClient](https://github.com/lavaclient/lavaclient) (JavaScript)
 * [Shoukaku](https://github.com/Deivu/Shoukaku) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
+* [SpringLink](https://github.com/knyaoo/springlink) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
 * [erela.js](https://github.com/MenuDocs/erela.js) (JavaScript)
 * [Lavacord](https://github.com/lavacord/lavacord) (JavaScript)
 * [Lavacoffee](https://github.com/XzFirzal/lavacoffee) (JavaScript) 
