@@ -83,6 +83,7 @@ While major, minor and patch will do an optimum effort to adhere to [Semantic Ve
 * [erela.js](https://github.com/MenuDocs/erela.js) (JavaScript)
 * [Lavacord](https://github.com/lavacord/lavacord) (JavaScript)
 * [Lavacoffee](https://github.com/XzFirzal/lavacoffee) (JavaScript) 
+* [SpringLink](https://github.com/dragonfirefox/springlink) (JavaScript)
 * [LavaJS](https://github.com/OverleapCo/LavaJS) ([discord.js](https://github.com/discordjs/discord.js), JavaScript/TypeScript)
 * [@skyra/audio](https://github.com/skyra-project/audio) ([discord.js](https://github.com/discordjs/discord.js), JavaScript/TypeScript)
 * [EvoLava](https://github.com/EvolveJS/EvoLava) ([EvolveJS](https://github.com/EvolveJS/EvolveJS), Javascript/Typescript)
