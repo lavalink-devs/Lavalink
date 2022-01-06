@@ -18,6 +18,10 @@ import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv4Block
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block
 import dev.arbjerg.lavalink.api.AudioPlayerManagerConfiguration
 import org.apache.http.HttpHost
+import org.apache.http.auth.AuthScope
+import org.apache.http.auth.UsernamePasswordCredentials
+import org.apache.http.client.CredentialsProvider
+import org.apache.http.impl.client.BasicCredentialsProvider
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -126,8 +130,18 @@ class AudioPlayerConfiguration {
 
             serverConfig.httpConfig?.let { httpConfig ->
                 httpAudioSourceManager.configureBuilder {
-                    if (httpConfig.proxyHost.isNotBlank())
+                    if (httpConfig.proxyHost.isNotBlank()) {
+                        val credsProvider: CredentialsProvider = BasicCredentialsProvider()
+                        credsProvider.setCredentials(
+                            AuthScope(httpConfig.proxyHost, httpConfig.proxyPort),
+                            UsernamePasswordCredentials(httpConfig.proxyUser, httpConfig.proxyPassword)
+                        )
+
                         it.setProxy(HttpHost(httpConfig.proxyHost, httpConfig.proxyPort))
+                        if (httpConfig.proxyUser.isNotBlank()) {
+                            it.setDefaultCredentialsProvider(credsProvider)
+                        }
+                    }
                 }
             }
 
