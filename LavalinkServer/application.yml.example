@@ -28,6 +28,9 @@ lavalink:
     #youtubeConfig: # Required for avoiding age restrictions by YouTube. Guide https://github.com/Walkyst/lavaplayer-fork/issues/18
       #PAPISID:      ""
       #PSID:         ""
+    #httpConfig:
+      #proxyHost: "localhost"
+      #proxyPort: 3128
 
 metrics:
   prometheus:
