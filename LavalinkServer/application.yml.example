@@ -29,8 +29,10 @@ lavalink:
       #PAPISID:      ""
       #PSID:         ""
     #httpConfig:
-      #proxyHost: "localhost"
-      #proxyPort: 3128
+      #proxyHost: "localhost" # Hostname of the proxy, (ip or domain)
+      #proxyPort: 3128 # Proxy port, 3128 is the default for squidProxy
+      #proxyUser: "" # Optional user for basic authentication fields, leave blank if you don't use basic auth
+      #proxyPassword: "" # Password for basic authentication
 
 metrics:
   prometheus:
