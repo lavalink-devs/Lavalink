@@ -7,24 +7,17 @@ import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManag
 import com.sedmelluq.discord.lavaplayer.source.beam.BeamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager
-import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudDataLoader
-import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudDataReader
-import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudFormatHandler
-import com.sedmelluq.discord.lavaplayer.source.soundcloud.DefaultSoundCloudPlaylistLoader
-import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.*
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeHttpContextFilter
 import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup
-import com.sedmelluq.lava.extensions.youtuberotator.planner.AbstractRoutePlanner
-import com.sedmelluq.lava.extensions.youtuberotator.planner.BalancingIpRoutePlanner
-import com.sedmelluq.lava.extensions.youtuberotator.planner.NanoIpRoutePlanner
-import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingIpRoutePlanner
-import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner
+import com.sedmelluq.lava.extensions.youtuberotator.planner.*
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv4Block
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block
 import dev.arbjerg.lavalink.api.AudioPlayerManagerConfiguration
+import org.apache.http.HttpHost
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -70,7 +63,8 @@ class AudioPlayerConfiguration {
                 val retryLimit = serverConfig.ratelimit?.retryLimit ?: -1
                 when {
                     retryLimit < 0 -> YoutubeIpRotatorSetup(routePlanner).forSource(youtube).setup()
-                    retryLimit == 0 -> YoutubeIpRotatorSetup(routePlanner).forSource(youtube).withRetryLimit(Int.MAX_VALUE).setup()
+                    retryLimit == 0 -> YoutubeIpRotatorSetup(routePlanner).forSource(youtube)
+                        .withRetryLimit(Int.MAX_VALUE).setup()
                     else -> YoutubeIpRotatorSetup(routePlanner).forSource(youtube).withRetryLimit(retryLimit).setup()
 
                 }
@@ -97,13 +91,15 @@ class AudioPlayerConfiguration {
             val dataLoader = DefaultSoundCloudDataLoader()
             val formatHandler = DefaultSoundCloudFormatHandler()
 
-            audioPlayerManager.registerSourceManager(SoundCloudAudioSourceManager(
+            audioPlayerManager.registerSourceManager(
+                SoundCloudAudioSourceManager(
                     serverConfig.isSoundcloudSearchEnabled,
                     dataReader,
                     dataLoader,
                     formatHandler,
                     DefaultSoundCloudPlaylistLoader(dataLoader, dataReader, formatHandler)
-            ))
+                )
+            )
         }
         if (sources.isBandcamp) audioPlayerManager.registerSourceManager(BandcampAudioSourceManager())
         if (sources.isTwitch) audioPlayerManager.registerSourceManager(TwitchStreamAudioSourceManager())
@@ -125,7 +121,18 @@ class AudioPlayerConfiguration {
         }
 
         // This must be loaded last
-        if (sources.isHttp) audioPlayerManager.registerSourceManager(HttpAudioSourceManager())
+        if (sources.isHttp) {
+            val httpAudioSourceManager = HttpAudioSourceManager()
+
+            serverConfig.httpConfig?.let { httpConfig ->
+                httpAudioSourceManager.configureBuilder {
+                    if (httpConfig.proxyHost.isNotBlank())
+                        it.setProxy(HttpHost(httpConfig.proxyHost, httpConfig.proxyPort))
+                }
+            }
+
+            audioPlayerManager.registerSourceManager(httpAudioSourceManager)
+        }
 
         return am
     }
