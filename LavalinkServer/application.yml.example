@@ -28,7 +28,7 @@ lavalink:
     #youtubeConfig: # Required for avoiding age restrictions by YouTube. Guide https://github.com/Walkyst/lavaplayer-fork/issues/18
       #PAPISID:      ""
       #PSID:         ""
-    #httpConfig:
+    #httpConfig: # Useful for blocking bad-actors from ip-grabbing your music node and attacking it, this way only the http proxy will be attacked
       #proxyHost: "localhost" # Hostname of the proxy, (ip or domain)
       #proxyPort: 3128 # Proxy port, 3128 is the default for squidProxy
       #proxyUser: "" # Optional user for basic authentication fields, leave blank if you don't use basic auth
