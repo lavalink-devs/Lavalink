@@ -94,6 +94,7 @@ While major, minor and patch will do an optimum effort to adhere to [Semantic Ve
 * [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET) ([Discord.Net](https://github.com/RogueException/Discord.Net), [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/), .NET)
 * [gavalink](https://github.com/foxbot/gavalink) (Go)
 * [waterlink](https://github.com/lukasl-dev/waterlink) (Go)
+* [disgolink](https://github.com/DisgoOrg/disgolink) (Go, Disgo, DiscordGo or generic)
 * [Magma](https://github.com/initzx/magma/) (discord.py, Python)
 * [WaveLink](https://github.com/EvieePy/Wavelink) (discord.py, Python)
 * [Lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs/) (All `tokio` Libraries, Rust)
