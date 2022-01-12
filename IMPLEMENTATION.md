@@ -154,7 +154,7 @@ Note that filters may take a moment to apply.
     "guildId": "...",
     
     // Float value where 1.0 is 100%. Values >1.0 may cause clipping
-    "volume": 1.0,
+    "volume": 1.0, // 0 ≤ x ≤ 5
     
     // There are 15 bands (0-14) that can be changed.
     // "gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
@@ -162,8 +162,8 @@ Note that filters may take a moment to apply.
     // also change the volume of the output.
     "equalizer": [
         {
-            "band": 0,
-            "gain": 0.2
+            "band": 0,  // 0 ≤ x ≤ 14
+            "gain": 0.2 // -0.25 ≤ x ≤ 1
         }
     ],
     
@@ -177,9 +177,9 @@ Note that filters may take a moment to apply.
     
     // Changes the speed, pitch, and rate. All default to 1.
     "timescale": {
-        "speed": 1.0,
-        "pitch": 1.0,
-        "rate": 1.0
+        "speed": 1.0, // 0 ≤ x
+        "pitch": 1.0, // 0 ≤ x
+        "rate": 1.0   // 0 ≤ x
     },
     
     // Uses amplification to create a shuddering effect, where the volume quickly oscillates.
@@ -202,14 +202,14 @@ Note that filters may take a moment to apply.
     
     // Distortion effect. It can generate some pretty unique audio effects.
     "distortion": {
-        "sinOffset": 0,
-        "sinScale": 1,
-        "cosOffset": 0,
-        "cosScale": 1,
-        "tanOffset": 0,
-        "tanScale": 1,
-        "offset": 0,
-        "scale": 1
+        "sinOffset": 0.0,
+        "sinScale": 1.0,
+        "cosOffset": 0.0,
+        "cosScale": 1.0,
+        "tanOffset": 0.0,
+        "tanScale": 1.0,
+        "offset": 0.0,
+        "scale": 1.0
     } 
     
     // Mixes both channels (left and right), with a configurable factor on how much each channel affects the other.
