@@ -69,39 +69,40 @@ While major, minor and patch will do an optimum effort to adhere to [Semantic Ve
 
 
 ## Client libraries:
-* [Lavalink-Client](https://github.com/freyacodes/lavalink-client) (JDA or generic, Java)
-* [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt) (Kord, JDA, generic, Kotlin (Coroutines))
-* [Lavalink.py](https://github.com/Devoxin/Lavalink.py) (discord.py, Python)
-* [Lavapy](https://github.com/Aspect1103/Lavapy) (discord.py, Python)
-* [pylava](https://github.com/Pandentia/pylava) (discord.py, Python)
-* [playlink](https://github.com/OverleapCo/Playlink) (Javascript/Typescript)
-* [SandySounds](https://github.com/MrJohnCoder/SandySounds) (JavaScript)
-* [Gorilink](https://github.com/Gorillas-Team/Gorilink) (JavaScript)
-* [eris-lavalink](https://github.com/briantanner/eris-lavalink) ([eris](https://github.com/abalabahaha/eris), JavaScript)
-* [LavaClient](https://github.com/lavaclient/lavaclient) (JavaScript)
-* [Shoukaku](https://github.com/Deivu/Shoukaku) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
-* [SpringLink](https://github.com/knyaoo/springlink) ([discord.js](https://github.com/discordjs/discord.js), JavaScript)
-* [erela.js](https://github.com/MenuDocs/erela.js) (JavaScript)
-* [Lavacord](https://github.com/lavacord/lavacord) (JavaScript)
-* [Lavacoffee](https://github.com/XzFirzal/lavacoffee) (JavaScript) 
-* [LavaJS](https://github.com/OverleapCo/LavaJS) ([discord.js](https://github.com/discordjs/discord.js), JavaScript/TypeScript)
-* [@skyra/audio](https://github.com/skyra-project/audio) ([discord.js](https://github.com/discordjs/discord.js), JavaScript/TypeScript)
-* [EvoLava](https://github.com/EvolveJS/EvoLava) ([EvolveJS](https://github.com/EvolveJS/EvolveJS), Javascript/Typescript)
-* [SharpLink](https://github.com/Devoxin/SharpLink) ([Discord.Net](https://github.com/RogueException/Discord.Net), .NET)
-* [Victoria](https://github.com/Yucked/Victoria) ([Discord.NET](https://github.com/RogueException/Discord.Net), .NET)
-* [Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET) (.NET)
-* [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink) ([DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/), .NET)
-* [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET) ([Discord.Net](https://github.com/RogueException/Discord.Net), [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/), .NET)
-* [gavalink](https://github.com/foxbot/gavalink) (Go)
-* [waterlink](https://github.com/lukasl-dev/waterlink) (Go)
-* [disgolink](https://github.com/DisgoOrg/disgolink) (Go, Disgo, DiscordGo or generic)
-* [Magma](https://github.com/initzx/magma/) (discord.py, Python)
-* [WaveLink](https://github.com/EvieePy/Wavelink) (discord.py, Python)
-* [Lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs/) (All `tokio` Libraries, Rust)
-* [lavasnek_rs](https://github.com/vicky5124/lavasnek_rs/) (All `asyncio` Libraries, Python)
-* [Pomice](https://github.com/cloudwithax/pomice) (discord.py, Python)
-* [lavaplayer-py](https://github.com/HazemMeqdad/lavaplayer) (All `asyncio` libs, Python)
-* Or [create your own](https://github.com/freyacodes/Lavalink/blob/master/IMPLEMENTATION.md)
+Client | Language | Compatible With | Additional Information
+-------|----------|-----------------|-----------------------
+[Lavalink-Client](https://github.com/freyacodes/lavalink-client) | Java | JDA/**Any** 
+[Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt) | Kotlin | JDA/Kord/**Any** | Kotlin Coroutines
+[Lavalink.py](https://github.com/Devoxin/Lavalink.py) | Python | **Any**
+[lavasnek_rs](https://github.com/vicky5124/lavasnek_rs) | Python | **Any\*** | *`asyncio`-based libraries only
+[Pomice](https://github.com/cloudwithax/pomice) | Python | discord.py/**Any\*** | *`discord`-namespace/`discord.py`-derived libraries only
+[lavaplayer-py](https://github.com/HazemMeqdad/lavaplayer) | Python | **Any\*** | *`asyncio`-based libraries only
+[Lavapy](https://github.com/Aspect1103/Lavapy) | Python | discord.py
+[Magma](https://github.com/initzx/magma) | Python | discord.py
+[erela.js](https://github.com/MenuDocs/erela.js) | JavaScript | **Any**
+[LavaClient](https://github.com/lavaclient/lavaclient) | JavaScript | **Any**
+[Lavacoffee](https://github.com/XzFirzal/lavacoffee) | JavaScript | **Any**
+[Lavacord](https://github.com/lavacord/lavacord) | JavaScript | **Any**
+[@skyra/audio](https://github.com/skyra-project/audio) | JavaScript/TypeScript | discord.js
+[Shoukaku](https://github.com/Deivu/Shoukaku) | JavaScript | discord.js
+[SpringLink](https://github.com/knyaoo/springlink) | JavaScript | discord.js
+[Gorilink](https://github.com/Gorillas-Team/Gorilink) | JavaScript | discord.js
+[LavaJS](https://github.com/OverleapCo/LavaJS) | JavaScript/TypeScript | discord.js | Unmaintained
+[SandySounds](https://github.com/MrJohnCoder/SandySounds) | JavaScript | **Any** | Unmaintained
+[eris-lavalink](https://github.com/briantanner/eris-lavalink) | JavaScript | eris | Unmaintained
+[Victoria](https://github.com/Yucked/Victoria) | .NET | Discord.Net
+[Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET) | .NET | Discord\.Net/DSharpPlus
+[DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink) | .NET | DSharpPlus
+[Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET) | .NET | **Any** | Unmaintained
+[SharpLink](https://github.com/Devoxin/SharpLink) | .NET | Discord.Net | Unmaintained
+[disgolink](https://github.com/DisgoOrg/disgolink) | Go | Disgo/DiscordGo/**Any**
+[waterlink](https://github.com/lukasl-dev/waterlink) | Go | **Any**
+[gavalink](https://github.com/foxbot/gavalink) | Go | **Any** | Unmaintained
+[Lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs) | Rust | **Any\*** | *`tokio`-based libraries only
+
+Or alternatively, you can create your own client library, following the [implementation documentation](https://github.com/freyacodes/Lavalink/blob/master/IMPLEMENTATION.md).
+Any client libraries marked with `Unmaintained` have been marked as such as their repositories have not received any commits for at least 1 year since time of checking,
+however they are listed as they may still support Lavalink, and/or have not needed maintenance, however keep in mind that compatibility and full feature support is not guaranteed.
 
 ## Server configuration
 Download binaries from [the CI server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1) or [the GitHub releases](https://github.com/freyacodes/Lavalink/releases).
