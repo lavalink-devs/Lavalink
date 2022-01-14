@@ -57,6 +57,7 @@ public class Player extends AudioEventAdapter implements IPlayer {
     private AudioFrame lastFrame = null;
     private FilterChain filters;
     private ScheduledFuture<?> myFuture = null;
+    private boolean endMarkerHit = false;
 
     public Player(SocketContext socketContext, long guildId, AudioPlayerManager audioPlayerManager, ServerConfig serverConfig) {
         this.socketContext = socketContext;
@@ -115,6 +116,14 @@ public class Player extends AudioEventAdapter implements IPlayer {
 
     public void setVolume(int volume) {
         player.setVolume(volume);
+    }
+
+    public void setEndMarkerHit(boolean hit) {
+        this.endMarkerHit = hit;
+    }
+
+    public boolean getEndMarkerHit() {
+        return this.endMarkerHit;
     }
 
     public JSONObject getState() {

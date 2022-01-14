@@ -75,7 +75,12 @@ public class EventEmitter extends AudioEventAdapter {
             out.put("track", JSONObject.NULL);
         }
 
-        out.put("reason", endReason.toString());
+        if (linkPlayer.getEndMarkerHit()) {
+            out.put("reason", AudioTrackEndReason.FINISHED.toString());
+            linkPlayer.setEndMarkerHit(false);
+        } else {
+            out.put("reason", endReason.toString());
+        }
 
         linkPlayer.getSocket().send(out);
     }

@@ -34,7 +34,9 @@ public class TrackEndMarkerHandler implements TrackMarkerHandler {
 
     @Override
     public void handle(MarkerState state) {
-        if (state.equals(MarkerState.REACHED) | state.equals(MarkerState.BYPASSED))
+        if (state.equals(MarkerState.REACHED) | state.equals(MarkerState.BYPASSED)) {
+            player.setEndMarkerHit(true);
             player.stop();
+        }
     }
 }
