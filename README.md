@@ -84,7 +84,7 @@ Client | Language | Compatible With | Additional Information
 [Lavacoffee](https://github.com/XzFirzal/lavacoffee) | JavaScript | **Any**
 [Lavacord](https://github.com/lavacord/lavacord) | JavaScript | **Any**
 [@skyra/audio](https://github.com/skyra-project/audio) | JavaScript/TypeScript | discord.js
-[Shoukaku](https://github.com/Deivu/Shoukaku) | JavaScript | discord.js
+[Shoukaku](https://github.com/Deivu/Shoukaku) | JavaScript | **Any**
 [SpringLink](https://github.com/knyaoo/springlink) | JavaScript | discord.js
 [Gorilink](https://github.com/Gorillas-Team/Gorilink) | JavaScript | discord.js
 [LavaJS](https://github.com/OverleapCo/LavaJS) | JavaScript/TypeScript | discord.js | Unmaintained
