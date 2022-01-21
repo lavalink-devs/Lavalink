@@ -73,11 +73,11 @@ Client | Language | Compatible With | Additional Information
 -------|----------|-----------------|-----------------------
 [Lavalink-Client](https://github.com/freyacodes/lavalink-client) | Java | JDA/**Any** 
 [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt) | Kotlin | JDA/Kord/**Any** | Kotlin Coroutines
-[Wavelink](https://github.com/PythonistaGuild/Wavelink/tree/1.0) | Python | discord.py/**Any\*** | *`discord`-namespace/`discord.py`-derived libraries only
 [Lavalink.py](https://github.com/Devoxin/Lavalink.py) | Python | **Any**
 [lavasnek_rs](https://github.com/vicky5124/lavasnek_rs) | Python | **Any\*** | *`asyncio`-based libraries only
-[Pomice](https://github.com/cloudwithax/pomice) | Python | discord.py/**Any\*** | *`discord`-namespace/`discord.py`-derived libraries only
 [lavaplayer-py](https://github.com/HazemMeqdad/lavaplayer) | Python | **Any\*** | *`asyncio`-based libraries only
+[Wavelink](https://github.com/PythonistaGuild/Wavelink/tree/1.0) | Python | discord.py/**Any\*** | *`discord`-namespace/`discord.py`-derived libraries only
+[Pomice](https://github.com/cloudwithax/pomice) | Python | discord.py/**Any\*** | *`discord`-namespace/`discord.py`-derived libraries only
 [Lavapy](https://github.com/Aspect1103/Lavapy) | Python | discord.py
 [Magma](https://github.com/initzx/magma) | Python | discord.py
 [erela.js](https://github.com/MenuDocs/erela.js) | JavaScript | **Any**
