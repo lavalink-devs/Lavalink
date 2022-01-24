@@ -76,7 +76,7 @@ Client | Language | Compatible With | Additional Information
 [Lavalink.py](https://github.com/Devoxin/Lavalink.py) | Python | **Any**
 [lavasnek_rs](https://github.com/vicky5124/lavasnek_rs) | Python | **Any\*** | *`asyncio`-based libraries only
 [lavaplayer-py](https://github.com/HazemMeqdad/lavaplayer) | Python | **Any\*** | *`asyncio`-based libraries only
-[Wavelink](https://github.com/PythonistaGuild/Wavelink/tree/1.0) | Python | discord.py/**Any\*** | *`discord`-namespace/`discord.py`-derived libraries only
+[Wavelink](https://github.com/PythonistaGuild/Wavelink) | Python | discord.py/**Any\*** | *`discord`-namespace/`discord.py`-derived libraries only
 [Pomice](https://github.com/cloudwithax/pomice) | Python | discord.py/**Any\*** | *`discord`-namespace/`discord.py`-derived libraries only
 [Lavapy](https://github.com/Aspect1103/Lavapy) | Python | discord.py
 [Magma](https://github.com/initzx/magma) | Python | discord.py
