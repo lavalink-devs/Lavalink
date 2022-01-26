@@ -6,8 +6,8 @@ WebSocket handling, REST endpoints, and much more.
 
 List of plugins:
 - [Google Cloud TTS](https://github.com/DuncteBot/tts-plugin) A text to speech plugin using the [google cloud tts api](https://cloud.google.com/text-to-speech/docs)
-- [SponsorBlock](https://github.com/TopiSenpai/sponsorblock-plugin) for skipping sponsor segments in YouTube videos
-- [Spotify](https://github.com/TopiSenpai/spotify-plugin) for lazy loading Spotify playlists/albums/songs from YouTube
+- [SponsorBlock](https://github.com/Topis-Lavalink-Plugins/Sponsorblock-Plugin) for skipping sponsor segments in YouTube videos
+- [Spotify](https://github.com/Topis-Lavalink-Plugins/Spotify-Plugin) for lazy loading Spotify playlists/albums/songs from YouTube and other sources
 - [DuncteBot plugin](https://github.com/DuncteBot/skybot-lavalink-plugin) adds additional source managers that are not widely used
 
 Lavalink loads all .jar files placed in the `plugins` directory, which you may need to create yourself. Lavalink can
