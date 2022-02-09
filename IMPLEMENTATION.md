@@ -419,6 +419,8 @@ If the identifier leads to a playlist, `playlistInfo` will contain two propertie
 }
 ```
 
+If enabled by the `lavalink.server.allowTrackModifications` config value, any installed plugins may modify the contents of `playlistInfo` and each `info` object for a track
+
 Additionally, in every `/loadtracks` response, a `loadType` property is returned which can be used to judge the response from Lavalink properly. It can be one of the following:
 * `TRACK_LOADED` - Returned when a single track is loaded.
 * `PLAYLIST_LOADED` - Returned when a playlist is loaded.
@@ -441,6 +443,7 @@ A severity level of `COMMON` indicates that the error is non-fatal and that the 
   }
 }
 ```
+
 
 ### Track Decoding API
 
