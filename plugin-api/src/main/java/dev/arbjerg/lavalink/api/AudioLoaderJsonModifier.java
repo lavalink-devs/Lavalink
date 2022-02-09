@@ -6,20 +6,20 @@ import org.json.JSONObject;
 
 public interface AudioLoaderJsonModifier {
     /**
-     * Modifies a loaded playlist.
+     * Modifies an {@link AudioPlaylist}'s JSON.
      *
-     * @param jsonObject    JSON data that has been accumulated.
-     * @param playlist      the playlist that was loaded.
+     * @param jsonObject JSON data that has been accumulated.
+     * @param playlist   the playlist that was loaded.
      * @return the new {@link JSONObject}
      */
-    JSONObject playlist(JSONObject jsonObject, AudioPlaylist playlist);
+    JSONObject modifyAudioPlaylistJson(JSONObject jsonObject, AudioPlaylist playlist);
 
     /**
-     * Modifies a loaded playlist.
+     * Modifies an {@link AudioTrack}'s JSON.
      *
-     * @param jsonObject    JSON data that has been accumulated.
-     * @param audioTrack    the track that was loaded.
+     * @param jsonObject JSON data that has been accumulated.
+     * @param audioTrack the track that was loaded.
      * @return the new {@link JSONObject}
      */
-    JSONObject track(JSONObject jsonObject, AudioTrack audioTrack);
+    JSONObject modifyAudioTrackJson(JSONObject jsonObject, AudioTrack audioTrack);
 }

@@ -81,11 +81,11 @@ class AudioLoaderRestHandler(
             var info = track.toJSON()
             if (serverConfig.allowTrackModifications) {
                 (track.sourceManager as? AudioLoaderJsonModifier)?.let { source ->
-                    attemptModifier(source, info) { track(it, track) }?.let { info = it }
+                    attemptModifier(source, info) { modifyAudioTrackJson(it, track) }?.let { info = it }
                 }
 
                 for (ext in loaderExtensions) {
-                    attemptModifier(ext, info) { track(it, track) }?.let { info = it }
+                    attemptModifier(ext, info) { modifyAudioTrackJson(it, track) }?.let { info = it }
                 }
             }
 
@@ -107,11 +107,11 @@ class AudioLoaderRestHandler(
         if (serverConfig.allowTrackModifications) {
             if (result.loadResultType == ResultStatus.PLAYLIST_LOADED || result.loadResultType == ResultStatus.SEARCH_RESULT) {
                 result.tracks.firstOrNull()?.sourceManager?.intoOrNull<AudioLoaderJsonModifier>()?.let { source ->
-                    attemptModifier(source, playlist) { playlist(it, result.playlist) }?.let { playlist = it }
+                    attemptModifier(source, playlist) { modifyAudioPlaylistJson(it, result.playlist) }?.let { playlist = it }
                 }
 
                 for (ext in loaderExtensions) {
-                    attemptModifier(ext, playlist) { playlist(it, result.playlist) }?.let { playlist = it }
+                    attemptModifier(ext, playlist) { modifyAudioPlaylistJson(it, result.playlist) }?.let { playlist = it }
                 }
             }
         }
