@@ -69,7 +69,6 @@ class AudioLoaderRestHandler(
                 .put("sourceName", sourceManager?.sourceName)
         }
 
-        // TODO: check if this incredibly slow.
         private fun JSONObject.clone(): JSONObject = JSONObject(toMap())
     }
 
