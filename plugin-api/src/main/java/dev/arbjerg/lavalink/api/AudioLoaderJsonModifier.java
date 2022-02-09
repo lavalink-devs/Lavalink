@@ -4,6 +4,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import org.json.JSONObject;
 
+/**
+ * Allows modification of JSON objects returned by the `/loadtracks` endpoint.
+ */
 public interface AudioLoaderJsonModifier {
     /**
      * Modifies an {@link AudioPlaylist}'s JSON.

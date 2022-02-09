@@ -23,7 +23,6 @@ package lavalink.server.player
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import dev.arbjerg.lavalink.api.AudioLoaderExtension
 import dev.arbjerg.lavalink.api.AudioLoaderJsonModifier
 import lavalink.server.config.ServerConfig
 import lavalink.server.util.Util
@@ -41,7 +40,7 @@ import javax.servlet.http.HttpServletRequest
 class AudioLoaderRestHandler(
     private val audioPlayerManager: AudioPlayerManager,
     private val serverConfig: ServerConfig,
-    private val loaderExtensions: List<AudioLoaderExtension>
+    private val loaderExtensions: List<AudioLoaderJsonModifier>
 ) {
     companion object {
         private val log = LoggerFactory.getLogger(AudioLoaderRestHandler::class.java)
