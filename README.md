@@ -69,7 +69,7 @@ While major, minor and patch will do an optimum effort to adhere to [Semantic Ve
 
 
 ## Client libraries:
-Client | Language | Compatible With | Additional Information
+Client | Platform | Compatible With | Additional Information
 -------|----------|-----------------|-----------------------
 [Lavalink-Client](https://github.com/freyacodes/lavalink-client) | Java | JDA/**Any** 
 [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt) | Kotlin | JDA/Kord/**Any** | Kotlin Coroutines
