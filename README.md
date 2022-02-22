@@ -80,7 +80,7 @@ Client | Language | Compatible With | Additional Information
 [Pomice](https://github.com/cloudwithax/pomice) | Python | discord.py/**Any\*** | *`discord`-namespace/`discord.py`-derived libraries only
 [Lavapy](https://github.com/Aspect1103/Lavapy) | Python | discord.py
 [Magma](https://github.com/initzx/magma) | Python | discord.py
-[Lavadeno](https://github.com/lavaclient/lavadeno) | Deno.js | **Any**
+[Lavadeno](https://github.com/lavaclient/lavadeno) | Deno | **Any**
 [erela.js](https://github.com/MenuDocs/erela.js) | Node.js | **Any**
 [LavaClient](https://github.com/lavaclient/lavaclient) | Node.js | **Any**
 [Lavacoffee](https://github.com/XzFirzal/lavacoffee) | Node.js | **Any**
