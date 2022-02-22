@@ -69,7 +69,7 @@ While major, minor and patch will do an optimum effort to adhere to [Semantic Ve
 
 
 ## Client libraries:
-Client | Language | Compatible With | Additional Information
+Client | Platform | Compatible With | Additional Information
 -------|----------|-----------------|-----------------------
 [Lavalink-Client](https://github.com/freyacodes/lavalink-client) | Java | JDA/**Any** 
 [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt) | Kotlin | JDA/Kord/**Any** | Kotlin Coroutines
@@ -80,17 +80,18 @@ Client | Language | Compatible With | Additional Information
 [Pomice](https://github.com/cloudwithax/pomice) | Python | discord.py/**Any\*** | *`discord`-namespace/`discord.py`-derived libraries only
 [Lavapy](https://github.com/Aspect1103/Lavapy) | Python | discord.py
 [Magma](https://github.com/initzx/magma) | Python | discord.py
-[erela.js](https://github.com/MenuDocs/erela.js) | JavaScript | **Any**
-[LavaClient](https://github.com/lavaclient/lavaclient) | JavaScript | **Any**
-[Lavacoffee](https://github.com/XzFirzal/lavacoffee) | JavaScript | **Any**
-[Lavacord](https://github.com/lavacord/lavacord) | JavaScript | **Any**
-[@skyra/audio](https://github.com/skyra-project/audio) | JavaScript/TypeScript | discord.js
-[Shoukaku](https://github.com/Deivu/Shoukaku) | JavaScript | **Any**
-[SpringLink](https://github.com/knyaoo/springlink) | JavaScript | discord.js
-[Gorilink](https://github.com/Gorillas-Team/Gorilink) | JavaScript | discord.js
-[LavaJS](https://github.com/OverleapCo/LavaJS) | JavaScript/TypeScript | discord.js | Unmaintained
-[SandySounds](https://github.com/MrJohnCoder/SandySounds) | JavaScript | **Any** | Unmaintained
-[eris-lavalink](https://github.com/briantanner/eris-lavalink) | JavaScript | eris | Unmaintained
+[Lavadeno](https://github.com/lavaclient/lavadeno) | Deno | **Any**
+[erela.js](https://github.com/MenuDocs/erela.js) | Node.js | **Any**
+[LavaClient](https://github.com/lavaclient/lavaclient) | Node.js | **Any**
+[Lavacoffee](https://github.com/XzFirzal/lavacoffee) | Node.js | **Any**
+[Lavacord](https://github.com/lavacord/lavacord) | Node.js | **Any**
+[@skyra/audio](https://github.com/skyra-project/audio) | Node.js | discord.js
+[Shoukaku](https://github.com/Deivu/Shoukaku) | Node.js | **Any**
+[SpringLink](https://github.com/knyaoo/springlink) | Node.js | discord.js
+[Gorilink](https://github.com/Gorillas-Team/Gorilink) | Node.js | discord.js
+[LavaJS](https://github.com/OverleapCo/LavaJS) | Node.js | discord.js | Unmaintained
+[SandySounds](https://github.com/MrJohnCoder/SandySounds) | Node.js | **Any** | Unmaintained
+[eris-lavalink](https://github.com/briantanner/eris-lavalink) | Node.js | eris | Unmaintained
 [Victoria](https://github.com/Yucked/Victoria) | .NET | Discord.Net
 [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET) | .NET | Discord\.Net/DSharpPlus
 [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink) | .NET | DSharpPlus
