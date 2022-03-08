@@ -1,5 +1,7 @@
 package lavalink.server.config
 
+import com.sedmelluq.discord.lavaplayer.container.MediaContainerProbe
+import com.sedmelluq.discord.lavaplayer.container.MediaContainerRegistry
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
@@ -42,7 +44,8 @@ class AudioPlayerConfiguration {
         serverConfig: ServerConfig,
         routePlanner: AbstractRoutePlanner?,
         audioSourceManagers: Collection<AudioSourceManager>,
-        audioPlayerManagerConfigurations: Collection<AudioPlayerManagerConfiguration>
+        audioPlayerManagerConfigurations: Collection<AudioPlayerManagerConfiguration>,
+        mediaContainerProbes: Collection<MediaContainerProbe>
     ): AudioPlayerManager {
         val audioPlayerManager = DefaultAudioPlayerManager()
 
@@ -60,6 +63,8 @@ class AudioPlayerConfiguration {
             log.debug("Setting frame buffer duration to {}", bufferDuration)
             audioPlayerManager.frameBufferDuration = bufferDuration
         }
+
+        val mcr: MediaContainerRegistry = MediaContainerRegistry.extended(*mediaContainerProbes.toTypedArray())
 
         if (sources.isYoutube) {
             val youtube = YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled)
@@ -109,7 +114,7 @@ class AudioPlayerConfiguration {
         if (sources.isTwitch) audioPlayerManager.registerSourceManager(TwitchStreamAudioSourceManager())
         if (sources.isVimeo) audioPlayerManager.registerSourceManager(VimeoAudioSourceManager())
         if (sources.isMixer) audioPlayerManager.registerSourceManager(BeamAudioSourceManager())
-        if (sources.isLocal) audioPlayerManager.registerSourceManager(LocalAudioSourceManager())
+        if (sources.isLocal) audioPlayerManager.registerSourceManager(LocalAudioSourceManager(mcr))
 
         audioSourceManagers.forEach {
             audioPlayerManager.registerSourceManager(it)
@@ -126,7 +131,7 @@ class AudioPlayerConfiguration {
 
         // This must be loaded last
         if (sources.isHttp) {
-            val httpAudioSourceManager = HttpAudioSourceManager()
+            val httpAudioSourceManager = HttpAudioSourceManager(mcr)
 
             serverConfig.httpConfig?.let { httpConfig ->
                 httpAudioSourceManager.configureBuilder {
