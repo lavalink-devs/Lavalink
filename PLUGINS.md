@@ -9,7 +9,7 @@ List of plugins:
 - [SponsorBlock](https://github.com/Topis-Lavalink-Plugins/Sponsorblock-Plugin) for skipping sponsor segments in YouTube videos
 - [Topis Source Managers](https://github.com/Topis-Lavalink-Plugins/Topis-Source-Managers-Plugin) adds Spotify and Apple Music support
 - [DuncteBot plugin](https://github.com/DuncteBot/skybot-lavalink-plugin) adds additional source managers that are not widely used
-
+- [Extra Filter plugin](https://github.com/rohank05/lavalink-filter-plugin) adds additional audio filters to lavalink
 Lavalink loads all .jar files placed in the `plugins` directory, which you may need to create yourself. Lavalink can
 also download plugin .jar files automatically by editing the configuration file. See the respective plugin repository
 for instructions.
