@@ -226,6 +226,12 @@ Note that filters may take a moment to apply.
     "lowPass": {
         "smoothing": 20.0
     }
+    
+    // Creates an Echo effect
+    "echo": {
+        "delay": 1.0,
+        "decay": 1.0 // 0 ≤ x ≤ 1
+    }
 }
 ```
 
