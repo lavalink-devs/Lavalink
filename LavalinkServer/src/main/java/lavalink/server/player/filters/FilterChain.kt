@@ -31,6 +31,7 @@ class FilterChain : PcmFilterFactory {
     private val rotation: RotationConfig? = null
     private val channelMix: ChannelMixConfig? = null
     private val lowPass: LowPassConfig? = null
+    private val echo: EchoConfig? = null
     @Transient
     private var pluginFilters: List<PluginConfig> = emptyList()
 
@@ -52,6 +53,7 @@ class FilterChain : PcmFilterFactory {
             rotation,
             channelMix,
             lowPass,
+            echo,
             *pluginFilters.toTypedArray()
     )
 

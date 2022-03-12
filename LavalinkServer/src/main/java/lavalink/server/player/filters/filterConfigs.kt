@@ -9,6 +9,7 @@ import com.github.natanbc.lavadsp.distortion.DistortionPcmAudioFilter
 import com.github.natanbc.lavadsp.lowpass.LowPassPcmAudioFilter
 import com.github.natanbc.lavadsp.rotation.RotationPcmAudioFilter
 import com.github.natanbc.lavadsp.volume.VolumePcmAudioFilter
+import me.rohank05.echo.EchoPcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.AudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.UniversalPcmAudioFilter
@@ -165,6 +166,19 @@ class LowPassConfig(
     }
 
     override val isEnabled: Boolean get() = smoothing != 20.0f
+}
+
+class EchoConfig(
+    private val delay: Double = 1.0,
+    private val decay: Float = 1f
+): FilterConfig() {
+    override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter {
+        return EchoPcmAudioFilter(output, format.channelCount, format.sampleRate)
+            .setDelay(delay)
+            .setDecay(decay)
+    }
+
+    override val isEnabled: Boolean get() = delay != 1.0 || decay != 1f
 }
 
 abstract class FilterConfig {

@@ -59,6 +59,7 @@ dependencies {
         exclude group: 'com.sedmelluq', module: 'lavaplayer'
     }
     compile group: 'com.github.natanbc', name: 'lavadsp', version: lavaDspVersion
+    compile group: 'me.rohank05', name: 'lavadsp-extended', version: lavaDspExtendedVersion
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlinVersion
 
     compile group: 'org.springframework', name: 'spring-websocket', version: springWebSocketVersion
