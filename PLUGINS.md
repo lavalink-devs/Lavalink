@@ -59,3 +59,14 @@ class MyAudioSourceManager implements AudioSourceManager {
     // ...
 } 
 ```
+
+Likewise, if you just want to add a new MediaContainerProbe to use with the HTTP and local sources:
+
+```java
+import org.springframework.stereotype.Service;
+
+@Service
+class MyMediaContainerProbe implements MediaContainerProbe {
+    // ...
+} 
+```
