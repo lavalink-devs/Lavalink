@@ -22,15 +22,6 @@ def versionVal = version
 
 bootJar {
     archiveFileName = "Lavalink.jar"
-    doLast {
-        //copies the jar into a place where the Dockerfile can find it easily (and users maybe too)
-        copy {
-            from("build/libs/Lavalink-Server-${versionVal}.jar")
-            into("build/libs/")
-
-            rename(".*", "Lavalink.jar")
-        }
-    }
 }
 
 sourceCompatibility = targetCompatibility = 11
