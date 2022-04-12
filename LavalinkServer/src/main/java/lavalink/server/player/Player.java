@@ -34,7 +34,7 @@ import lavalink.server.io.SocketContext;
 import lavalink.server.io.SocketServer;
 import lavalink.server.player.filters.FilterChain;
 import lavalink.server.config.ServerConfig;
-import moe.kyokobot.koe.VoiceConnection;
+import moe.kyokobot.koe.MediaConnection;
 import moe.kyokobot.koe.media.OpusAudioFrameProvider;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -177,12 +177,12 @@ public class Player extends AudioEventAdapter implements IPlayer {
         }
     }
 
-    public void provideTo(VoiceConnection connection) {
+    public void provideTo(MediaConnection connection) {
         connection.setAudioSender(new Provider(connection));
     }
 
     private class Provider extends OpusAudioFrameProvider {
-        public Provider(VoiceConnection connection) {
+        public Provider(MediaConnection connection) {
             super(connection);
         }
 

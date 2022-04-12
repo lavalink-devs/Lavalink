@@ -64,7 +64,7 @@ class WebSocketHandler(
         context.koe.destroyConnection(guildId)
 
         val player = context.getPlayer(guildId)
-        val conn = context.getVoiceConnection(player)
+        val conn = context.getMediaConnection(player)
         conn.connect(VoiceServerInfo(sessionId, endpoint, token)).whenComplete { _, _ ->
             player.provideTo(conn)
         }
@@ -107,7 +107,7 @@ class WebSocketHandler(
 
         player.play(track)
 
-        val conn = context.getVoiceConnection(player)
+        val conn = context.getMediaConnection(player)
         context.getPlayer(json.getString("guildId")).provideTo(conn)
     }
 
