@@ -52,7 +52,8 @@ dependencies {
         // This version of SLF4J does not recognise Logback 1.2.3
         exclude group: "org.slf4j", module: "slf4j-api"
     }
-    compile group: 'moe.kyokobot.koe', name: 'ext-udpqueue', version: koeVersion
+    //compile group: 'moe.kyokobot.koe', name: 'ext-udpqueue', version: koeVersion
+    compile group: 'com.github.Walkyst.koe-fork', name: 'ext-udpqueue', version: 'cf59d95'
     compile group: 'com.github.walkyst', name: 'lavaplayer-fork', version: lavaplayerVersion
 
     //compile group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
