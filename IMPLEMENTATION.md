@@ -32,7 +32,7 @@ With the release of v2.0 many unnecessary ops were removed:
 
 With Lavalink 1.x the server had the responsibility of handling Discord VOICE_SERVER_UPDATEs as well as its own internal ratelimiting.
 This remote handling makes things unnecessarily complicated and adds a lot og points where things could go wrong. 
-One problem we noticed is that since JDAA is unaware of ratelimits on the bot's gateway connection, it would keep adding
+One problem we noticed is that since JDA is unaware of ratelimits on the bot's gateway connection, it would keep adding
 to the ratelimit queue to the gateway. With this update this is now the responsibility of the Lavalink client or the 
 Discord client.
 
