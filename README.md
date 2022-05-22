@@ -81,6 +81,7 @@ Client | Platform | Compatible With | Additional Information
 [Lavapy](https://github.com/Aspect1103/Lavapy) | Python | discord.py
 [Magma](https://github.com/initzx/magma) | Python | discord.py
 [Lavadeno](https://github.com/lavaclient/lavadeno) | Deno | **Any**
+[LavaJS](https://github.com/OverleapTechnologies/LavaJS) | Node.js | **Any**
 [erela.js](https://github.com/MenuDocs/erela.js) | Node.js | **Any**
 [LavaClient](https://github.com/lavaclient/lavaclient) | Node.js | **Any**
 [Lavacoffee](https://github.com/XzFirzal/lavacoffee) | Node.js | **Any**
@@ -89,7 +90,6 @@ Client | Platform | Compatible With | Additional Information
 [Shoukaku](https://github.com/Deivu/Shoukaku) | Node.js | **Any**
 [SpringLink](https://github.com/knyaoo/springlink) | Node.js | discord.js
 [Gorilink](https://github.com/Gorillas-Team/Gorilink) | Node.js | discord.js
-[LavaJS](https://github.com/OverleapCo/LavaJS) | Node.js | discord.js | Unmaintained
 [SandySounds](https://github.com/MrJohnCoder/SandySounds) | Node.js | **Any** | Unmaintained
 [eris-lavalink](https://github.com/briantanner/eris-lavalink) | Node.js | eris | Unmaintained
 [Victoria](https://github.com/Yucked/Victoria) | .NET | Discord.Net
