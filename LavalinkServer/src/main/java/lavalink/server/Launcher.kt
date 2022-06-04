@@ -34,6 +34,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent
 import org.springframework.boot.context.event.ApplicationFailedEvent
+import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.annotation.ComponentScan
@@ -148,6 +149,11 @@ object Launcher {
                 ApplicationListener { event: Any ->
                     if (event is ApplicationEnvironmentPreparedEvent) {
                         log.info(getVersionInfo())
+                    }
+                },
+                ApplicationListener { event: Any ->
+                    if (event is ApplicationReadyEvent) {
+                        log.info("Application is ready to accept connections.")
                     }
                 },
                 ApplicationListener { event: Any ->
