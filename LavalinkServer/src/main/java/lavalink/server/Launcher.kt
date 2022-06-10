@@ -153,7 +153,7 @@ object Launcher {
                 },
                 ApplicationListener { event: Any ->
                     if (event is ApplicationReadyEvent) {
-                        log.info("Application is ready to accept connections.")
+                        log.info("Lavalink is ready to accept connections.")
                     }
                 },
                 ApplicationListener { event: Any ->
