@@ -442,6 +442,11 @@ A severity level of `COMMON` indicates that the error is non-fatal and that the 
 }
 ```
 
+#### Track Searching
+Lavalink supports searching via YouTube, YouTube Music, and Soundcloud. To search, you must prefix your identifier with `ytsearch:`, `ytmsearch:`,  or `scsearch:`respectively.
+
+When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. Note that, disabling the respective source managers renders these search prefixes redundant. Plugins may also implement prefixes to allow for more search engines.
+
 ### Track Decoding API
 
 Decode a single track into its info
