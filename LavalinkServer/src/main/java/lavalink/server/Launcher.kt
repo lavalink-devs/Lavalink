@@ -149,15 +149,9 @@ object Launcher {
                 ApplicationListener { event: Any ->
                     if (event is ApplicationEnvironmentPreparedEvent) {
                         log.info(getVersionInfo())
-                    }
-                },
-                ApplicationListener { event: Any ->
-                    if (event is ApplicationReadyEvent) {
+                    } else if (event is ApplicationReadyEvent) {
                         log.info("Lavalink is ready to accept connections.")
-                    }
-                },
-                ApplicationListener { event: Any ->
-                    if (event is ApplicationFailedEvent) {
+                    } else if (event is ApplicationFailedEvent) {
                         log.error("Application failed", event.exception)
                     }
                 }
