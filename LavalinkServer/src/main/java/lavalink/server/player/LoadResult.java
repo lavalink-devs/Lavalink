@@ -2,8 +2,8 @@ package lavalink.server.player;
 
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
