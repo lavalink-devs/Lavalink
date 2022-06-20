@@ -60,6 +60,8 @@ dependencies {
     implementation(libs.json)
     implementation(libs.gson)
 
+    compileOnly(libs.spotbugs)
+
     testImplementation(libs.spring.boot.test)
 }
 

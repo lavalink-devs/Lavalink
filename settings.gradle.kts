@@ -66,6 +66,8 @@ fun VersionCatalogBuilder.common() {
     library("oshi",           "com.github.oshi",      "oshi-core").version("5.7.4")
     library("json",           "org.json",             "json").version("20180813")
     library("gson",           "com.google.code.gson", "gson").version("2.8.5")
+
+    library("spotbugs", "com.github.spotbugs", "spotbugs-annotations").version("3.1.6")
 }
 
 
