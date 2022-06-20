@@ -36,8 +36,10 @@ configurations {
 dependencies {
     implementation(projects.pluginApi)
 
-    implementation(libs.bundles.spring)
     implementation(libs.bundles.metrics)
+    implementation(libs.bundles.spring) {
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
+    }
 
     implementation(libs.koe) {
         // This version of SLF4J does not recognise Logback 1.2.3
