@@ -161,10 +161,10 @@ class LowPassConfig(
 ) : FilterConfig() {
     override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter {
         return LowPassPcmAudioFilter(output, format.channelCount)
-            .setSmoothing(smoothing)
+            .setSmoothing(smoothing.coerceAtLeast(0.5f))
     }
 
-    override val isEnabled: Boolean get() = smoothing != 20.0f
+    override val isEnabled: Boolean get() = smoothing >= 0.5f
 }
 
 abstract class FilterConfig {
