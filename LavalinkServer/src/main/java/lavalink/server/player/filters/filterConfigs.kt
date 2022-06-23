@@ -164,7 +164,7 @@ class LowPassConfig(
             .setSmoothing(smoothing)
     }
 
-    override val isEnabled: Boolean get() = smoothing >= 0.5f
+    override val isEnabled: Boolean get() = smoothing >= 1.0f
 }
 
 abstract class FilterConfig {

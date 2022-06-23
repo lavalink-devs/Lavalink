@@ -223,9 +223,9 @@ Note that filters may take a moment to apply.
     }
     
     // Higher frequencies get suppressed, while lower frequencies pass through this filter, thus the name low pass.
-    // Any smoothing values below 0.5 will disable the filter.
+    // Any smoothing values below 1 will disable the filter.
     "lowPass": {
-        "smoothing": 20.0 // 0.5 ≤ x
+        "smoothing": 20.0 // 1.0 ≤ x
     }
 }
 ```
