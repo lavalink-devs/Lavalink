@@ -67,11 +67,11 @@ class AudioPlayerConfiguration {
 
         val defaultTrackStuckThresholdMs = TimeUnit.NANOSECONDS.toMillis(audioPlayerManager.trackStuckThresholdNanos)
         serverConfig.trackStuckThresholdMs?.let {
-            if (it <= 0) {
+            if (it < 100) {
                 log.warn("Track Stuck Threshold of {}ms is too small. Defaulting to {}ms", it, defaultTrackStuckThresholdMs)
             }
 
-            val trackStuckThresholdMs: Long = it.takeIf { it > 0 } ?: defaultTrackStuckThresholdMs
+            val trackStuckThresholdMs: Long = it.takeIf { it >= 100 } ?: defaultTrackStuckThresholdMs
             log.debug("Setting Track Stuck Threshold to {}ms", trackStuckThresholdMs)
             audioPlayerManager.setTrackStuckThreshold(trackStuckThresholdMs)
         }
