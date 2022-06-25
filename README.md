@@ -91,7 +91,7 @@ Client | Platform | Compatible With | Additional Information
 [Poru](https://github.com/parasop/poru) | Node.js | **Any**
 [Shoukaku](https://github.com/Deivu/Shoukaku) | Node.js | **Any**
 [SpringLink](https://github.com/knyaoo/springlink) | Node.js | discord.js
-[Gorilink](https://github.com/Gorillas-Team/Gorilink) | Node.js | discord.js
+[Gorilink](https://github.com/Gorillas-Team/Gorilink) | Node.js | discord.js | Unmaintained
 [SandySounds](https://github.com/MrJohnCoder/SandySounds) | Node.js | **Any** | Unmaintained
 [eris-lavalink](https://github.com/briantanner/eris-lavalink) | Node.js | eris | Unmaintained
 [Victoria](https://github.com/Yucked/Victoria) | .NET | Discord.Net
