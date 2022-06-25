@@ -33,6 +33,7 @@ class ServerConfig {
     var sentryDsn = ""
     var bufferDurationMs: Int? = null
     var frameBufferDurationMs: Int? = null
+    var trackStuckThresholdMs: Long? = null
     var youtubePlaylistLoadLimit: Int? = null
     var playerUpdateInterval: Int = 5
     var isGcWarnings = true

@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.net.InetAddress
+import java.util.concurrent.TimeUnit
 import java.util.function.Predicate
 
 /**
@@ -62,6 +63,17 @@ class AudioPlayerConfiguration {
             val bufferDuration = it.takeIf { it >= 200 } ?: defaultFrameBufferDuration
             log.debug("Setting frame buffer duration to {}", bufferDuration)
             audioPlayerManager.frameBufferDuration = bufferDuration
+        }
+
+        val defaultTrackStuckThresholdMs = TimeUnit.NANOSECONDS.toMillis(audioPlayerManager.trackStuckThresholdNanos)
+        serverConfig.trackStuckThresholdMs?.let {
+            if (it < 100) {
+                log.warn("Track Stuck Threshold of {}ms is too small. Defaulting to {}ms", it, defaultTrackStuckThresholdMs)
+            }
+
+            val trackStuckThresholdMs: Long = it.takeIf { it >= 100 } ?: defaultTrackStuckThresholdMs
+            log.debug("Setting Track Stuck Threshold to {}ms", trackStuckThresholdMs)
+            audioPlayerManager.setTrackStuckThreshold(trackStuckThresholdMs)
         }
 
         val mcr: MediaContainerRegistry = MediaContainerRegistry.extended(*mediaContainerProbes.toTypedArray())
