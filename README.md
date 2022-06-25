@@ -88,6 +88,7 @@ Client | Platform | Compatible With | Additional Information
 [Lavacoffee](https://github.com/XzFirzal/lavacoffee) | Node.js | **Any**
 [Lavacord](https://github.com/lavacord/lavacord) | Node.js | **Any**
 [@skyra/audio](https://github.com/skyra-project/audio) | Node.js | discord.js
+[Poru](https://github.com/parasop/poru) | Node.js | **Any**
 [Shoukaku](https://github.com/Deivu/Shoukaku) | Node.js | **Any**
 [SpringLink](https://github.com/knyaoo/springlink) | Node.js | discord.js
 [Gorilink](https://github.com/Gorillas-Team/Gorilink) | Node.js | discord.js
