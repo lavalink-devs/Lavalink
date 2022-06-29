@@ -83,7 +83,7 @@ class AudioPlayerConfiguration {
             val youtube: YoutubeAudioSourceManager
             if (youtubeConfig != null) {
                 if (youtubeConfig.email.isBlank() && youtubeConfig.password.isBlank()) {
-                    log.info("Email and password fields are blank, age restricted videos will throw exceptions")
+                    log.info("Email and password fields are blank, some age restricted videos will throw exceptions")
                 }
                 youtube = YoutubeAudioSourceManager(
                     serverConfig.isYoutubeSearchEnabled,

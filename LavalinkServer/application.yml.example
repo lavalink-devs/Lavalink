@@ -26,7 +26,7 @@ lavalink:
       #strategy: "RotateOnBan" # RotateOnBan | LoadBalance | NanoSwitch | RotatingNanoSwitch
       #searchTriggersFail: true # Whether a search 429 should trigger marking the ip as failing
       #retryLimit: -1 # -1 = use default lavaplayer value | 0 = infinity | >0 = retry will happen this numbers times
-    #youtubeConfig: # Required for avoiding age restrictions by YouTube.
+    #youtubeConfig: # Required for avoiding all age restrictions by YouTube, some restricted videos still can be played without.
       #email: "" # Email of Google account
       #password: "" # Password of Google account
     #httpConfig: # Useful for blocking bad-actors from ip-grabbing your music node and attacking it, this way only the http proxy will be attacked
