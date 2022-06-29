@@ -48,9 +48,7 @@ dependencies {
     implementation(libs.koe.udpqueue)
 
     implementation(libs.lavaplayer)
-    implementation(libs.lavaplayer.ip.rotator) {
-        exclude(group = "com.sedmelluq", module = "lavaplayer")
-    }
+    implementation(libs.lavaplayer.ip.rotator)
 
     implementation(libs.lavadsp)
     implementation(libs.kotlin.reflect)

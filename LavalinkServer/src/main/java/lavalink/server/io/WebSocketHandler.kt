@@ -23,7 +23,6 @@ class WebSocketHandler(
         private val log: Logger = LoggerFactory.getLogger(WebSocketHandler::class.java)
     }
 
-    private var loggedVolumeDeprecationWarning = false
     private var loggedEqualizerDeprecationWarning = false
 
     private val handlers: Map<String, (JSONObject) -> Unit> = mutableMapOf(
@@ -87,13 +86,7 @@ class WebSocketHandler(
 
         player.setPause(json.optBoolean("pause", false))
         if (json.has("volume")) {
-            if(!loggedVolumeDeprecationWarning) log.warn("The volume property in the play operation has been deprecated " +
-                    "and will be removed in v4. Please configure a filter instead. Note that the new filter takes a " +
-                    "float value with 1.0 being 100%")
-            loggedVolumeDeprecationWarning = true
-            val filters = player.filters ?: FilterChain()
-            filters.volume = json.getFloat("volume") / 100
-            player.filters = filters
+            player.setVolume(json.getInt("volume"))
         }
 
         if (json.has("endTime")) {

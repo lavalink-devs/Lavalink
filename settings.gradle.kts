@@ -36,8 +36,10 @@ fun VersionCatalogBuilder.spring() {
 }
 
 fun VersionCatalogBuilder.voice() {
-    library("lavaplayer",            "com.github.walkyst", "lavaplayer-fork").version("1.3.97.1")
-    library("lavaplayer-ip-rotator", "com.sedmelluq",      "lavaplayer-ext-youtube-rotator").version("0.2.3")
+    version("lavaplayer", "1.3.98.1")
+
+    library("lavaplayer",            "com.github.walkyst.lavaplayer-fork", "lavaplayer").versionRef("lavaplayer")
+    library("lavaplayer-ip-rotator", "com.github.walkyst.lavaplayer-fork", "lavaplayer-ext-youtube-rotator").versionRef("lavaplayer")
     library("lavadsp",               "com.github.natanbc", "lavadsp").version("0.7.7")
 
     library("koe",          "moe.kyokobot.koe", "core").version("2.0.0-rc1")
