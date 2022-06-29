@@ -79,7 +79,25 @@ class AudioPlayerConfiguration {
         val mcr: MediaContainerRegistry = MediaContainerRegistry.extended(*mediaContainerProbes.toTypedArray())
 
         if (sources.isYoutube) {
-            val youtube = YoutubeAudioSourceManager(serverConfig.isYoutubeSearchEnabled)
+            val youtubeConfig = serverConfig.youtubeConfig
+            val youtube: YoutubeAudioSourceManager
+            if (youtubeConfig != null) {
+                if (youtubeConfig.email.isBlank() && youtubeConfig.password.isBlank()) {
+                    log.info("Email and password fields are blank, some age restricted videos will throw exceptions")
+                }
+                youtube = YoutubeAudioSourceManager(
+                    serverConfig.isYoutubeSearchEnabled,
+                    youtubeConfig.email,
+                    youtubeConfig.password
+                )
+            } else {
+                youtube = YoutubeAudioSourceManager(
+                    serverConfig.isYoutubeSearchEnabled,
+                    "",
+                    ""
+                )
+                log.debug("Youtube config block is not found")
+            }
             if (routePlanner != null) {
                 val retryLimit = serverConfig.ratelimit?.retryLimit ?: -1
                 when {
@@ -92,18 +110,6 @@ class AudioPlayerConfiguration {
             }
             val playlistLoadLimit = serverConfig.youtubePlaylistLoadLimit
             if (playlistLoadLimit != null) youtube.setPlaylistPageCount(playlistLoadLimit)
-
-            val youtubeConfig = serverConfig.youtubeConfig
-            if (youtubeConfig != null) {
-                if (youtubeConfig.PAPISID.isNotBlank() && youtubeConfig.PSID.isNotBlank()) {
-                    YoutubeHttpContextFilter.setPAPISID(youtubeConfig.PAPISID)
-                    YoutubeHttpContextFilter.setPSID(youtubeConfig.PSID)
-                } else {
-                    log.info("PAPISID and PSID fields are blank, age restricted videos will throw exceptions")
-                }
-            } else {
-                log.debug("Youtube config block is not found")
-            }
 
             audioPlayerManager.registerSourceManager(youtube)
         }
