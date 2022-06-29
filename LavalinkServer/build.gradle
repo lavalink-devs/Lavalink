@@ -51,12 +51,9 @@ dependencies {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
     implementation group: 'moe.kyokobot.koe', name: 'ext-udpqueue', version: koeVersion
-    implementation group: 'com.github.walkyst', name: 'lavaplayer-fork', version: lavaplayerVersion
+    implementation group: 'com.github.walkyst.lavaplayer-fork', name: 'lavaplayer', version: lavaplayerVersion
+    implementation group: 'com.github.walkyst.lavaplayer-fork', name: 'lavaplayer-ext-youtube-rotator', version: lavaplayerVersion
 
-    //implementation group: 'com.sedmelluq', name: 'lavaplayer', version: lavaplayerVersion
-    implementation(group: 'com.sedmelluq', name: 'lavaplayer-ext-youtube-rotator', version: lavaplayerIpRotatorVersion) {
-        exclude group: 'com.sedmelluq', module: 'lavaplayer'
-    }
     implementation group: 'com.github.natanbc', name: 'lavadsp', version: lavaDspVersion
     implementation group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlinVersion
 
