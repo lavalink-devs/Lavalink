@@ -51,7 +51,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            topisenpai/lavalink
+            fredboat/lavalink
           tags: |
             type=ref,event=branch
             type=ref,event=tag
