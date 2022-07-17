@@ -18,9 +18,9 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
         val os = System.getProperty("os.name")
         val arch = System.getProperty("os.arch")
 
-        // Maybe add Windows natives back?
-        val nasSupported = os.contains("linux", ignoreCase = true)
-                && arch.equals("amd64", ignoreCase = true)
+        // Filter darwin m1 out
+        val nasSupported = !os.contains("darwin", ignoreCase = true)
+                && !arch.equals("aarch64", ignoreCase = true)
 
         if (nasSupported) {
             log.info("Enabling JDA-NAS")

@@ -45,7 +45,10 @@ dependencies {
         // This version of SLF4J does not recognise Logback 1.2.3
         exclude(group = "org.slf4j", module = "slf4j-api")
     }
-    implementation(libs.koe.udpqueue)
+    implementation(libs.koe.udpqueue) {
+        exclude(module="udp-queue")
+    }
+    implementation(libs.bundles.udpqueue.natives)
 
     implementation(libs.lavaplayer)
     implementation(libs.lavaplayer.ip.rotator)
