@@ -2,6 +2,7 @@ package lavalink.server.config
 
 import moe.kyokobot.koe.KoeOptions
 import moe.kyokobot.koe.codec.udpqueue.UdpQueueFramePollerFactory
+import moe.kyokobot.koe.gateway.GatewayVersion
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
@@ -13,7 +14,10 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
     private val log: Logger = LoggerFactory.getLogger(KoeConfiguration::class.java)
 
     @Bean
-    fun koeOptions(): KoeOptions = KoeOptions.builder().apply {
+    fun koeOptions(): KoeOptions = KoeOptions.builder()
+        .setGatewayVersion(
+            GatewayVersion.valueOf(
+                serverConfig.voiceGatewayVersion.trim().toUpperCase())).apply {
         log.info("OS: " + System.getProperty("os.name") + ", Arch: " + System.getProperty("os.arch"))
         val os = System.getProperty("os.name")
         val arch = System.getProperty("os.arch")

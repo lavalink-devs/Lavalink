@@ -20,6 +20,7 @@ lavalink:
     youtubeSearchEnabled: true
     soundcloudSearchEnabled: true
     gc-warnings: true
+    voiceGatewayVersion: "V4" # Discord voice gateway version to use, available version: v4, v5
     #ratelimit:
       #ipBlocks: ["1.0.0.0/8", "..."] # list of ip blocks
       #excludedIps: ["...", "..."] # ips which should be explicit excluded from usage by lavalink
