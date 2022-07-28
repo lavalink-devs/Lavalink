@@ -96,6 +96,11 @@ class AudioPlayerConfiguration {
             audioPlayerManager.setTrackStuckThreshold(trackStuckThresholdMs)
         }
 
+        serverConfig.useSeekGhosting?.let { seekGhosting ->
+            log.debug("Setting useSeekGhosting to {}", seekGhosting)
+            audioPlayerManager.setUseSeekGhosting(seekGhosting)
+        }
+
         val mcr: MediaContainerRegistry = MediaContainerRegistry.extended(*mediaContainerProbes.toTypedArray())
 
         if (sources.isYoutube) {
