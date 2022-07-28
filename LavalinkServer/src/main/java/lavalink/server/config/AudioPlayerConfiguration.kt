@@ -2,6 +2,8 @@ package lavalink.server.config
 
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerProbe
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerRegistry
+import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration
+import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration.ResamplingQuality
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
@@ -63,6 +65,24 @@ class AudioPlayerConfiguration {
             val bufferDuration = it.takeIf { it >= 200 } ?: defaultFrameBufferDuration
             log.debug("Setting frame buffer duration to {}", bufferDuration)
             audioPlayerManager.frameBufferDuration = bufferDuration
+        }
+
+        val defaultOpusEncodingQuality = AudioConfiguration.OPUS_QUALITY_MAX
+        audioPlayerManager.configuration.let {
+            serverConfig.opusEncodingQuality?.let { opusQuality ->
+                if (opusQuality !in 0..10) {
+                    log.warn("Opus encoding quality {} is not within the range of 0 to 10. Defaulting to {}", opusQuality, defaultOpusEncodingQuality)
+                }
+
+                val qualitySetting = opusQuality.takeIf { it in 0..10 } ?: defaultOpusEncodingQuality
+                log.debug("Setting opusEncodingQuality to {}", qualitySetting)
+                it.opusEncodingQuality = qualitySetting
+            }
+
+            serverConfig.resamplingQuality.let { resamplingQuality ->
+                log.debug("Setting resamplingQuality to {}", resamplingQuality)
+                it.resamplingQuality = resamplingQuality
+            }
         }
 
         val defaultTrackStuckThresholdMs = TimeUnit.NANOSECONDS.toMillis(audioPlayerManager.trackStuckThresholdNanos)
