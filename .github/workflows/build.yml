@@ -34,7 +34,7 @@ jobs:
   docker:
     needs: gradle
     runs-on: ubuntu-latest
-    if: ${{ secrets.DOCKERHUB_USERNAME }} != '' && ${{ secrets.DOCKERHUB_TOKEN }} != ''
+    if: secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_TOKEN != ''
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -81,7 +81,7 @@ jobs:
   release:
     needs: gradle
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Checkout
         uses: actions/checkout@v2
