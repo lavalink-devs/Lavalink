@@ -79,7 +79,7 @@ class AudioPlayerConfiguration {
                 it.opusEncodingQuality = qualitySetting
             }
 
-            serverConfig.resamplingQuality.let { resamplingQuality ->
+            serverConfig.resamplingQuality?.let { resamplingQuality ->
                 log.debug("Setting resamplingQuality to {}", resamplingQuality)
                 it.resamplingQuality = resamplingQuality
             }

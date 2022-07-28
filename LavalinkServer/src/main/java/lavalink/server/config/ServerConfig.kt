@@ -35,7 +35,7 @@ class ServerConfig {
     var bufferDurationMs: Int? = null
     var frameBufferDurationMs: Int? = null
     var opusEncodingQuality: Int? = null
-    var resamplingQuality: ResamplingQuality = ResamplingQuality.LOW
+    var resamplingQuality: ResamplingQuality? = null
     var trackStuckThresholdMs: Long? = null
     var youtubePlaylistLoadLimit: Int? = null
     var playerUpdateInterval: Int = 5
