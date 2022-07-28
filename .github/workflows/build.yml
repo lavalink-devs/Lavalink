@@ -30,11 +30,18 @@ jobs:
         with:
           name: Lavalink.jar
           path: LavalinkServer/build/libs/Lavalink.jar
-
+      - name: Check whether container scanning should be enabled
+        id: enablecontainerscanning
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          echo "Run docker build: ${{ env.DOCKERHUB_USERNAME != '' }} && ${{ env.DOCKERHUB_TOKEN != '' }}"
+          echo "::set-output name=docker::${{ env.DOCKERHUB_USERNAME != '' }} && ${{ env.DOCKERHUB_TOKEN != '' }}"
   docker:
     needs: gradle
     runs-on: ubuntu-latest
-    if: secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_TOKEN != ''
+    if: needs.build.outputs.docker == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
