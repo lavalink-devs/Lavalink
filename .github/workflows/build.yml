@@ -8,6 +8,8 @@ on:
 jobs:
   gradle:
     runs-on: ubuntu-latest
+    outputs:
+      docker: ${{ steps.rundocker.outputs.rundocker }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -30,18 +32,20 @@ jobs:
         with:
           name: Lavalink.jar
           path: LavalinkServer/build/libs/Lavalink.jar
+
       - name: Check Docker Build
-        id: enablecontainerscanning
+        id: rundocker
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           echo "Run docker build: ${{ env.DOCKERHUB_USERNAME != '' }} && ${{ env.DOCKERHUB_TOKEN != '' }}"
-          echo "::set-output name=docker::${{ env.DOCKERHUB_USERNAME != '' }} && ${{ env.DOCKERHUB_TOKEN != '' }}"
+          echo "::set-output name=rundocker::${{ env.DOCKERHUB_USERNAME != '' }} && ${{ env.DOCKERHUB_TOKEN != '' }}"
+
   docker:
     needs: gradle
     runs-on: ubuntu-latest
-    if: needs.gradle.outputs.docker == 'true'
+    if: needs.gradle.outputs.rundocker == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
