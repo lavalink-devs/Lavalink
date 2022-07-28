@@ -39,8 +39,8 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
-          echo "Run docker build: ${{ env.DOCKERHUB_USERNAME != '' }} && ${{ env.DOCKERHUB_TOKEN != '' }}"
-          echo "::set-output name=rundocker::${{ env.DOCKERHUB_USERNAME != '' }} && ${{ env.DOCKERHUB_TOKEN != '' }}"
+          echo "Run docker build: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_TOKEN != '' }}
+          echo "::set-output name=rundocker::${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_TOKEN != '' }}"
 
   docker:
     needs: gradle
