@@ -9,7 +9,6 @@ on:
 jobs:
   gradle:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -36,7 +35,7 @@ jobs:
   docker:
     needs: gradle
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
+    if: ${{ secrets.DOCKERHUB_USERNAME }} != '' && ${{ secrets.DOCKERHUB_TOKEN }} != ''
     steps:
       - name: Checkout
         uses: actions/checkout@v2
