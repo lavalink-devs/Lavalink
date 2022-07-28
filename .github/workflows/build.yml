@@ -9,7 +9,7 @@ jobs:
   gradle:
     runs-on: ubuntu-latest
     outputs:
-      docker: ${{ steps.rundocker.outputs.rundocker }}
+      rundocker: ${{ steps.rundocker.outputs.rundocker }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
