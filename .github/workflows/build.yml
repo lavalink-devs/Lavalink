@@ -4,12 +4,12 @@ on:
   push:
     paths-ignore:
       - '**.md'
-  pull_request:
 
 jobs:
   gradle:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    outputs:
+      rundocker: ${{ steps.rundocker.outputs.rundocker }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -33,10 +33,19 @@ jobs:
           name: Lavalink.jar
           path: LavalinkServer/build/libs/Lavalink.jar
 
+      - name: Check Docker Build
+        id: rundocker
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          echo "Run docker build: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_TOKEN != '' }}"
+          echo "::set-output name=rundocker::${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_TOKEN != '' }}"
+
   docker:
     needs: gradle
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
+    if: needs.gradle.outputs.rundocker == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -83,7 +92,7 @@ jobs:
   release:
     needs: gradle
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Checkout
         uses: actions/checkout@v2
