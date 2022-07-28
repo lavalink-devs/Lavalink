@@ -30,7 +30,7 @@ jobs:
         with:
           name: Lavalink.jar
           path: LavalinkServer/build/libs/Lavalink.jar
-      - name: Check whether container scanning should be enabled
+      - name: Check Docker Build
         id: enablecontainerscanning
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
