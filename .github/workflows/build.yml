@@ -41,7 +41,7 @@ jobs:
   docker:
     needs: gradle
     runs-on: ubuntu-latest
-    if: needs.build.outputs.docker == 'true'
+    if: needs.gradle.outputs.docker == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
