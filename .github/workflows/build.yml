@@ -91,6 +91,8 @@ jobs:
 
   release:
     needs: gradle
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     steps:
