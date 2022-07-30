@@ -2,6 +2,8 @@ package lavalink.server.config
 
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerProbe
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerRegistry
+import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration
+import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration.ResamplingQuality
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
@@ -65,6 +67,24 @@ class AudioPlayerConfiguration {
             audioPlayerManager.frameBufferDuration = bufferDuration
         }
 
+        val defaultOpusEncodingQuality = AudioConfiguration.OPUS_QUALITY_MAX
+        audioPlayerManager.configuration.let {
+            serverConfig.opusEncodingQuality?.let { opusQuality ->
+                if (opusQuality !in 0..10) {
+                    log.warn("Opus encoding quality {} is not within the range of 0 to 10. Defaulting to {}", opusQuality, defaultOpusEncodingQuality)
+                }
+
+                val qualitySetting = opusQuality.takeIf { it in 0..10 } ?: defaultOpusEncodingQuality
+                log.debug("Setting opusEncodingQuality to {}", qualitySetting)
+                it.opusEncodingQuality = qualitySetting
+            }
+
+            serverConfig.resamplingQuality?.let { resamplingQuality ->
+                log.debug("Setting resamplingQuality to {}", resamplingQuality)
+                it.resamplingQuality = resamplingQuality
+            }
+        }
+
         val defaultTrackStuckThresholdMs = TimeUnit.NANOSECONDS.toMillis(audioPlayerManager.trackStuckThresholdNanos)
         serverConfig.trackStuckThresholdMs?.let {
             if (it < 100) {
@@ -74,6 +94,11 @@ class AudioPlayerConfiguration {
             val trackStuckThresholdMs: Long = it.takeIf { it >= 100 } ?: defaultTrackStuckThresholdMs
             log.debug("Setting Track Stuck Threshold to {}ms", trackStuckThresholdMs)
             audioPlayerManager.setTrackStuckThreshold(trackStuckThresholdMs)
+        }
+
+        serverConfig.useSeekGhosting?.let { seekGhosting ->
+            log.debug("Setting useSeekGhosting to {}", seekGhosting)
+            audioPlayerManager.setUseSeekGhosting(seekGhosting)
         }
 
         val mcr: MediaContainerRegistry = MediaContainerRegistry.extended(*mediaContainerProbes.toTypedArray())

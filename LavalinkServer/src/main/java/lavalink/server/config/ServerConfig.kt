@@ -22,6 +22,7 @@
 
 package lavalink.server.config
 
+import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration.ResamplingQuality
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 
@@ -33,7 +34,10 @@ class ServerConfig {
     var sentryDsn = ""
     var bufferDurationMs: Int? = null
     var frameBufferDurationMs: Int? = null
+    var opusEncodingQuality: Int? = null
+    var resamplingQuality: ResamplingQuality? = null
     var trackStuckThresholdMs: Long? = null
+    var useSeekGhosting: Boolean? = null
     var youtubePlaylistLoadLimit: Int? = null
     var playerUpdateInterval: Int = 5
     var isGcWarnings = true
