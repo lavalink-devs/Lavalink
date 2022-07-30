@@ -99,6 +99,7 @@ Client | Platform | Compatible With | Additional Information
 [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink) | .NET | DSharpPlus
 [Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET) | .NET | **Any** | Unmaintained
 [SharpLink](https://github.com/Devoxin/SharpLink) | .NET | Discord.Net | Unmaintained
+[DisCatSharp.Lavalink](https://github.com/Aiko-IT-Systems/DisCatSharp/tree/main/DisCatSharp.Lavalink) | .NET | DisCatSharp
 [disgolink](https://github.com/DisgoOrg/disgolink) | Go | Disgo/DiscordGo/**Any**
 [waterlink](https://github.com/lukasl-dev/waterlink) | Go | **Any**
 [gavalink](https://github.com/foxbot/gavalink) | Go | **Any** | Unmaintained
