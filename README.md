@@ -1,5 +1,5 @@
 # Lavalink
-A standalone audio sending node based on Lavaplayer and JDA-Audio.
+A standalone audio sending node based on [Lavaplayer](https://github.com/sedmelluq/lavaplayer) and [Koe](https://github.com/KyokoBot/koe).
 Allows for sending audio without it ever reaching any of your shards.
 
 Being used in production by FredBoat, Dyno, LewdBot, and more.
