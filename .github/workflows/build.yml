@@ -1,9 +1,10 @@
 name: Build
 
 on:
-  push:
-    paths-ignore:
-      - '**.md'
+  workflow_call:
+    secrets:
+      DOCKERHUB_USERNAME:
+      DOCKERHUB_TOKEN:
 
 jobs:
   gradle:
@@ -79,7 +80,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and Push
         uses: docker/build-push-action@v3
         with:
           file: LavalinkServer/docker/Dockerfile
@@ -88,23 +89,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-  release:
-    needs: gradle
-    permissions:
-      contents: write
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: Lavalink.jar
-
-      - name: Upload Artifacts to GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: Lavalink.jar

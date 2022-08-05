@@ -74,17 +74,10 @@ tasks {
     }
 
     processResources {
-        val buildNumber = if (System.getenv("CI") != null) {
-            System.getenv("BUILD_NUMBER") ?: "Unknown"
-        } else {
-            "Unofficial"
-        }
-
         val tokens = mapOf(
             "project.version"    to project.version,
             "project.groupId"    to project.group,
             "project.artifactId" to "Lavalink-Server",
-            "env.BUILD_NUMBER"   to buildNumber,
             "env.BUILD_TIME"     to System.currentTimeMillis().toString()
         )
 
@@ -137,11 +130,3 @@ fun versionFromTag(): String = Grgit.open(mapOf("currentDir" to project.rootDir)
 
     return if (headTag != null && clean) headTag.name else "${git.head().id}-SNAPSHOT"
 }
-
-//create a simple version file that we will be reading to create appropriate docker tags
-fun versionTxt() {
-    val versionTxt = File("$projectDir/VERSION.txt")
-    versionTxt.writeText("${project.version}\n")
-}
-
-versionTxt()
