@@ -1,6 +1,9 @@
 name: Build
 
 on:
+  push:
+    branches: [ '**' ]
+    paths-ignore: [ '**.md' ]
   workflow_call:
     secrets:
       DOCKERHUB_USERNAME:
