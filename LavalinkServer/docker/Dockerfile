@@ -1,4 +1,4 @@
-FROM azul/zulu-openjdk:18
+FROM eclipse-temurin:18
 
 # Run as non-root user
 RUN groupadd -g 322 lavalink && \
@@ -10,6 +10,6 @@ RUN chown -R lavalink:lavalink /opt/Lavalink
 
 USER lavalink
 
-COPY Lavalink.jar Lavalink.jar
+COPY LavalinkServer/build/libs/Lavalink.jar Lavalink.jar
 
 ENTRYPOINT ["java", "-Djdk.tls.client.protocols=TLSv1.1,TLSv1.2", "-Xmx4G", "-jar", "Lavalink.jar"]

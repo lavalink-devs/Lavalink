@@ -69,7 +69,6 @@ object Launcher {
         val commitTime = dtf.format(Instant.ofEpochMilli(gitRepoState.commitTime * 1000))
 
         val version = appInfo.version.takeUnless { it.startsWith("@") } ?: "Unknown"
-        val buildNumber = appInfo.buildNumber.takeUnless { it.startsWith("@") } ?: "Unofficial"
 
         return buildString {
             if (vanity) {
@@ -83,7 +82,6 @@ object Launcher {
             }
             appendln()
             append("${indentation}Version:        "); appendln(version)
-            append("${indentation}Build:          "); appendln(buildNumber)
             if (gitRepoState.isLoaded) {
                 append("${indentation}Build time:     "); appendln(buildTime)
                 append("${indentation}Branch          "); appendln(gitRepoState.branch)
