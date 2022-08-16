@@ -48,7 +48,7 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
             }
             try {
                 setFramePollerFactory(UdpQueueFramePollerFactory(bufferSize, Runtime.getRuntime().availableProcessors()))
-            } catch (e: UnsatisfiedLinkError) {
+            } catch (e: Throwable) {
                 log.warn("A minimum of GLIBC 2.25 is required to support native audio sending! "
                         + "GC pauses may cause your bot to stutter during playback.")
             }
