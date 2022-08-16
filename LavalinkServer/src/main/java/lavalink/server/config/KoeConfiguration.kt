@@ -49,8 +49,7 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
             try {
                 setFramePollerFactory(UdpQueueFramePollerFactory(bufferSize, Runtime.getRuntime().availableProcessors()))
             } catch (e: Throwable) {
-                log.warn("A minimum of GLIBC 2.25 is required to support native audio sending! "
-                        + "GC pauses may cause your bot to stutter during playback.")
+                log.warn("Failed to enable JDA-NAS! GC pauses may cause your bot to stutter during playback.", e)
             }
         } else {
             log.warn("This system and architecture appears to not support native audio sending! "
