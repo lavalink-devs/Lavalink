@@ -1,4 +1,4 @@
-FROM eclipse-temurin:18
+FROM eclipse-temurin:18-jre-focal
 
 # Run as non-root user
 RUN groupadd -g 322 lavalink && \
