@@ -46,7 +46,11 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
                         bufferSize, UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION)
                 bufferSize = UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION
             }
-            setFramePollerFactory(UdpQueueFramePollerFactory(bufferSize, Runtime.getRuntime().availableProcessors()))
+            try {
+                setFramePollerFactory(UdpQueueFramePollerFactory(bufferSize, Runtime.getRuntime().availableProcessors()))
+            } catch (e: Throwable) {
+                log.warn("Failed to enable JDA-NAS! GC pauses may cause your bot to stutter during playback.", e)
+            }
         } else {
             log.warn("This system and architecture appears to not support native audio sending! "
                     + "GC pauses may cause your bot to stutter during playback.")
