@@ -64,7 +64,7 @@ Provide an intercepted voice server update. This causes the server to connect to
     "op": "voiceUpdate",
     "guildId": "...",
     "sessionId": "...",
-    "event": "..."
+    "event": {...}
 }
 ```
 

@@ -1,5 +1,5 @@
 # Lavalink
-A standalone audio sending node based on Lavaplayer and JDA-Audio.
+A standalone audio sending node based on [Lavaplayer](https://github.com/sedmelluq/lavaplayer) and [Koe](https://github.com/KyokoBot/koe).
 Allows for sending audio without it ever reaching any of your shards.
 
 Being used in production by FredBoat, Dyno, LewdBot, and more.
@@ -87,7 +87,7 @@ Client | Platform | Compatible With | Additional Information
 [lavasnek_rs](https://github.com/vicky5124/lavasnek_rs) | Python | **Any\*** | *`asyncio`-based libraries only
 [lavaplayer-py](https://github.com/HazemMeqdad/lavaplayer) | Python | **Any\*** | *`asyncio`-based libraries only
 [Wavelink](https://github.com/PythonistaGuild/Wavelink) | Python | discord.py **V2**
-[Pomice](https://github.com/cloudwithax/pomice) | Python | discord.py/**Any\*** | *`discord`-namespace/`discord.py`-derived libraries only
+[Pomice](https://github.com/cloudwithax/pomice) | Python | discord.py **V2**
 [Slate](https://github.com/Axelware/slate) | Python | discord.py/**Any\*** | *`discord`-namespace/`discord.py`-derived libraries only
 [Lavapy](https://github.com/Aspect1103/Lavapy) | Python | discord.py
 [Magma](https://github.com/initzx/magma) | Python | discord.py
@@ -97,6 +97,7 @@ Client | Platform | Compatible With | Additional Information
 [LavaClient](https://github.com/lavaclient/lavaclient) | Node.js | **Any**
 [Lavacoffee](https://github.com/XzFirzal/lavacoffee) | Node.js | **Any**
 [Lavacord](https://github.com/lavacord/lavacord) | Node.js | **Any**
+[Moonlink.js](https://github.com/1Lucas1apk/moonlink.js) | Node.js | **Any**
 [@skyra/audio](https://github.com/skyra-project/audio) | Node.js | discord.js | Archived
 [Poru](https://github.com/parasop/poru) | Node.js | **Any**
 [Shoukaku](https://github.com/Deivu/Shoukaku) | Node.js | **Any**
@@ -109,6 +110,7 @@ Client | Platform | Compatible With | Additional Information
 [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink) | .NET | DSharpPlus
 [Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET) | .NET | **Any** | Unmaintained
 [SharpLink](https://github.com/Devoxin/SharpLink) | .NET | Discord.Net | Unmaintained
+[DisCatSharp.Lavalink](https://github.com/Aiko-IT-Systems/DisCatSharp/tree/main/DisCatSharp.Lavalink) | .NET | DisCatSharp
 [disgolink](https://github.com/DisgoOrg/disgolink) | Go | Disgo/DiscordGo/**Any**
 [waterlink](https://github.com/lukasl-dev/waterlink) | Go | **Any**
 [gavalink](https://github.com/foxbot/gavalink) | Go | **Any** | Unmaintained
