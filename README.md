@@ -15,11 +15,12 @@ A [basic example bot](Testbot) is available.
 * Event system
 * Seeking
 * Volume control
-* REST API for resolving lavaplayer tracks (used for non-JVM clients)
+* REST API for resolving Lavaplayer tracks
 * Statistics (good for load balancing)
 * Basic authentication
 * Prometheus metrics
 * Docker images
+* [Plugin support](PLUGINS.md) (beta)
 
 ## Requirements
 
@@ -27,6 +28,15 @@ A [basic example bot](Testbot) is available.
 * OpenJDK or Zulu running on Linux AMD64 is officially supported.
 
 Support for Darwin (Mac), Windows AMD64, and Linux ARM (Raspberry Pi) is provided on a best-effort basis. This is dependent on Lavaplayer's native libraries.
+
+Lavaplayer currently supports following architectures: 
+
+`Darwin (M1 & Intel)`, `Linux aarch32`, `Linux aarch64`, `Linux ARMv7+ 32/64`, `Linux ARMHF(v6) 32`, `Linux i386 32`, `Linux x86 64`, `Windows i386 32` and `Windows x86 64`
+
+JDA-NAS(Native Audio Buffer) & the Timescale filter are currently not supported on following architectures: 
+
+`Linux ARMHF(v6) 32` and `Linux aarch32`
+
 
 Support for other JVMs is also best-effort. Periodic CPU utilization stats are prone not to work everywhere.
 
@@ -111,7 +121,7 @@ Any client libraries marked with `Unmaintained` have been marked as such as thei
 however they are listed as they may still support Lavalink, and/or have not needed maintenance, however keep in mind that compatibility and full feature support is not guaranteed.
 
 ## Server configuration
-Download binaries from [the CI server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1) or [the GitHub releases](https://github.com/freyacodes/Lavalink/releases).
+Download binaries from [the GitHub actions](https://github.com/freyacodes/Lavalink/actions) or [the GitHub releases](https://github.com/freyacodes/Lavalink/releases)(specific versions prior to `v3.5` can be found in the [CI Server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1)). 
 
 Put an `application.yml` file in your working directory. ([Example here](https://github.com/freyacodes/Lavalink/blob/master/LavalinkServer/application.yml.example))
 

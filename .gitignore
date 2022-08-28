@@ -2,7 +2,7 @@
 *.iml
 /logs/
 /target/
-/application.yml
+/LavalinkServer/application.yml
 */dependency-reduced-pom.xml
 .gradle/*
 build/*
@@ -13,3 +13,8 @@ build/*
 .settings
 /Testbot/build/
 /Testbot/out/
+/plugin-api/build/
+/plugin-api/out/
+gradle.properties
+application.yml
+plugins

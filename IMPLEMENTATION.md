@@ -223,8 +223,9 @@ Note that filters may take a moment to apply.
     }
     
     // Higher frequencies get suppressed, while lower frequencies pass through this filter, thus the name low pass.
+    // Any smoothing values equal to, or less than 1.0 will disable the filter.
     "lowPass": {
-        "smoothing": 20.0
+        "smoothing": 20.0 // 1.0 < x
     }
 }
 ```
@@ -377,8 +378,7 @@ See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and
 ### Track Loading API
 The REST api is used to resolve audio tracks for use with the `play` op. 
 ```
-GET /loadtracks?identifier=dQw4w9WgXcQ HTTP/1.1
-Host: localhost:8080
+GET /loadtracks?identifier=dQw4w9WgXcQ
 Authorization: youshallnotpass
 ```
 
@@ -443,12 +443,16 @@ A severity level of `COMMON` indicates that the error is non-fatal and that the 
 }
 ```
 
+#### Track Searching
+Lavalink supports searching via YouTube, YouTube Music, and Soundcloud. To search, you must prefix your identifier with `ytsearch:`, `ytmsearch:`,  or `scsearch:`respectively.
+
+When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. Note that, disabling the respective source managers renders these search prefixes redundant. Plugins may also implement prefixes to allow for more search engines.
+
 ### Track Decoding API
 
 Decode a single track into its info
 ```
-GET /decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA== HTTP/1.1
-Host: localhost:8080
+GET /decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==
 Authorization: youshallnotpass
 ```
 
@@ -469,8 +473,7 @@ Response:
 
 Decode multiple tracks into info their info
 ```
-POST /decodetracks HTTP/1.1
-Host: localhost:8080
+POST /decodetracks
 Authorization: youshallnotpass
 ```
 
@@ -504,15 +507,35 @@ Response:
 ```
 ---
 
+### Get list of plugins
+Request information about the plugins running on Lavalink, if any.
+```
+GET /plugins
+Authorization: youshallnotpass
+```
+
+Response:
+```yaml
+[
+  {
+    "name": "some-plugin",
+    "version": "1.0.0"
+  },
+  {
+    "name": "foo-plugin",
+    "version": "1.2.3"
+  }
+]
+```
+
 ### RoutePlanner API
 
-Additionally there are a few REST endpoints for the ip rotation extension
+Additionally, there are a few REST endpoints for the ip rotation extension
 
 #### Get RoutePlanner status
 
 ```
 GET /routeplanner/status
-Host: localhost:8080
 Authorization: youshallnotpass
 ```
 

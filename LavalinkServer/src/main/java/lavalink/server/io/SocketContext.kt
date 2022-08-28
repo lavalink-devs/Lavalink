@@ -23,18 +23,22 @@
 package lavalink.server.io
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import dev.arbjerg.lavalink.api.AudioFilterExtension
+import dev.arbjerg.lavalink.api.ISocketContext
+import dev.arbjerg.lavalink.api.PluginEventHandler
+import dev.arbjerg.lavalink.api.WebSocketExtension
 import io.undertow.websockets.core.WebSocketCallback
 import io.undertow.websockets.core.WebSocketChannel
 import io.undertow.websockets.core.WebSockets
 import io.undertow.websockets.jsr.UndertowSession
-import lavalink.server.player.Player
 import lavalink.server.config.ServerConfig
+import lavalink.server.player.Player
 import moe.kyokobot.koe.KoeClient
 import moe.kyokobot.koe.KoeEventAdapter
-import moe.kyokobot.koe.VoiceConnection
-import moe.kyokobot.koe.VoiceServerInfo
+import moe.kyokobot.koe.MediaConnection
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
+import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
 import java.net.InetSocketAddress
@@ -46,21 +50,28 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
-class SocketContext internal constructor(
-        val audioPlayerManager: AudioPlayerManager,
-        val serverConfig: ServerConfig,
-        private var session: WebSocketSession,
-        private val socketServer: SocketServer,
-        val userId: String,
-        private val koe: KoeClient
-) {
+class SocketContext(
+    val audioPlayerManager: AudioPlayerManager,
+    val serverConfig: ServerConfig,
+    private var session: WebSocketSession,
+    private val socketServer: SocketServer,
+    val userId: String,
+    val koe: KoeClient,
+    eventHandlers: Collection<PluginEventHandler>,
+    webSocketExtensions: List<WebSocketExtension>,
+    filterExtensions: List<AudioFilterExtension>
+
+) : ISocketContext {
 
     companion object {
         private val log = LoggerFactory.getLogger(SocketContext::class.java)
     }
 
     //guildId <-> Player
-    val players = ConcurrentHashMap<String, Player>()
+    private val players = ConcurrentHashMap<Long, Player>()
+
+    val eventEmitter = EventEmitter(this, eventHandlers)
+    val wsHandler = WebSocketHandler(this, webSocketExtensions, filterExtensions)
 
     @Volatile
     var sessionPaused = false
@@ -92,25 +103,27 @@ class SocketContext internal constructor(
         }
     }
 
-    internal fun getPlayer(guildId: Long) = getPlayer(guildId.toString())
+    fun getPlayer(guildId: String) = getPlayer(guildId.toLong())
 
-    internal fun getPlayer(guildId: String) = players.computeIfAbsent(guildId) {
-        Player(this, guildId, audioPlayerManager, serverConfig)
+    override fun getPlayer(guildId: Long) = players.computeIfAbsent(guildId) {
+        val player = Player(this, guildId, audioPlayerManager, serverConfig)
+        eventEmitter.onNewPlayer(player)
+        player
     }
 
-    internal fun getPlayers(): Map<String, Player> {
-        return players
+    override fun getPlayers(): Map<Long, Player> {
+        return players.toMap()
     }
 
     /**
-     * Gets or creates a voice connection
+     * Gets or creates a media connection
      */
-    fun getVoiceConnection(player: Player): VoiceConnection {
-        val guildId = player.guildId.toLong()
+    fun getMediaConnection(player: Player): MediaConnection {
+        val guildId = player.guildId
         var conn = koe.getConnection(guildId)
         if (conn == null) {
             conn = koe.createConnection(guildId)
-            conn.registerListener(EventHandler(player))
+            conn.registerListener(WsEventHandler(player))
         }
         return conn
     }
@@ -118,8 +131,12 @@ class SocketContext internal constructor(
     /**
      * Disposes of a voice connection
      */
-    fun destroy(guild: Long) {
-        players.remove(guild.toString())?.stop()
+    override fun destroyPlayer(guild: Long) {
+        val player = players.remove(guild)
+        if (player != null) {
+            eventEmitter.onDestroyPlayer(player)
+            player.destroy()
+        }
         koe.destroyConnection(guild)
     }
 
@@ -128,6 +145,17 @@ class SocketContext internal constructor(
         sessionTimeoutFuture = executor.schedule<Unit>({
             socketServer.onSessionResumeTimeout(this)
         }, resumeTimeout, TimeUnit.SECONDS)
+        eventEmitter.onSocketContextPaused()
+    }
+
+    override fun sendMessage(message: JSONObject) {
+        send(message)
+    }
+
+    override fun getState(): ISocketContext.State = when {
+        session.isOpen -> ISocketContext.State.OPEN
+        sessionPaused -> ISocketContext.State.RESUMABLE
+        else -> ISocketContext.State.DESTROYED
     }
 
     /**
@@ -136,6 +164,8 @@ class SocketContext internal constructor(
     fun send(payload: JSONObject) = send(payload.toString())
 
     private fun send(payload: String) {
+        eventEmitter.onWebSocketMessageOut(payload)
+
         if (sessionPaused) {
             resumeEventQueue.add(payload)
             return
@@ -145,15 +175,15 @@ class SocketContext internal constructor(
 
         val undertowSession = (session as StandardWebSocketSession).nativeSession as UndertowSession
         WebSockets.sendText(payload, undertowSession.webSocketChannel,
-                object : WebSocketCallback<Void> {
-                    override fun complete(channel: WebSocketChannel, context: Void?) {
-                        log.trace("Sent {}", payload)
-                    }
+            object : WebSocketCallback<Void> {
+                override fun complete(channel: WebSocketChannel, context: Void?) {
+                    log.trace("Sent {}", payload)
+                }
 
-                    override fun onError(channel: WebSocketChannel, context: Void?, throwable: Throwable) {
-                        log.error("Error", throwable)
-                    }
-                })
+                override fun onError(channel: WebSocketChannel, context: Void?, throwable: Throwable) {
+                    log.error("Error", throwable)
+                }
+            })
     }
 
     /**
@@ -178,16 +208,31 @@ class SocketContext internal constructor(
         log.info("Shutting down " + playingPlayers.size + " playing players.")
         executor.shutdown()
         playerUpdateService.shutdown()
-        players.values.forEach(Player::stop)
+        players.values.forEach {
+            this.destroyPlayer(it.guildId)
+        }
         koe.close()
+        eventEmitter.onSocketContextDestroyed()
     }
 
-    private inner class EventHandler(private val player: Player) : KoeEventAdapter() {
+    override fun closeWebSocket(closeCode: Int, reason: String?) {
+        session.close(CloseStatus(closeCode, reason))
+    }
+
+    override fun closeWebSocket(closeCode: Int) {
+        closeWebSocket(closeCode, null)
+    }
+
+    override fun closeWebSocket() {
+        session.close()
+    }
+
+    private inner class WsEventHandler(private val player: Player) : KoeEventAdapter() {
         override fun gatewayClosed(code: Int, reason: String?, byRemote: Boolean) {
             val out = JSONObject()
             out.put("op", "event")
             out.put("type", "WebSocketClosedEvent")
-            out.put("guildId", player.guildId)
+            out.put("guildId", player.guildId.toString())
             out.put("reason", reason ?: "")
             out.put("code", code)
             out.put("byRemote", byRemote)

@@ -37,7 +37,7 @@ public class StatsTask implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(StatsTask.class);
 
-    private SocketContext context;
+    private final SocketContext context;
     private final SocketServer socketServer;
 
     private final SystemInfo si = new SystemInfo();

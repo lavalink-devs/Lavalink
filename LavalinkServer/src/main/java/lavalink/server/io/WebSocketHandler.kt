@@ -1,25 +1,55 @@
 package lavalink.server.io
 
+import com.sedmelluq.discord.lavaplayer.track.TrackMarker
+import dev.arbjerg.lavalink.api.AudioFilterExtension
+import dev.arbjerg.lavalink.api.WebSocketExtension
+import lavalink.server.player.TrackEndMarkerHandler
 import lavalink.server.player.filters.Band
 import lavalink.server.player.filters.FilterChain
-import com.sedmelluq.discord.lavaplayer.track.TrackMarker
-import lavalink.server.player.TrackEndMarkerHandler
 import lavalink.server.util.Util
 import moe.kyokobot.koe.VoiceServerInfo
 import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import kotlin.reflect.KFunction1
 
-class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
+class WebSocketHandler(
+    private val context: SocketContext,
+    private val wsExtensions: List<WebSocketExtension>,
+    private val filterExtensions: List<AudioFilterExtension>
+) {
 
     companion object {
-        private val log: Logger = LoggerFactory.getLogger(WebSocketHandlers::class.java)
+        private val log: Logger = LoggerFactory.getLogger(WebSocketHandler::class.java)
     }
 
-    private var loggedVolumeDeprecationWarning = false
     private var loggedEqualizerDeprecationWarning = false
 
-    fun voiceUpdate(context: SocketContext, json: JSONObject) {
+    private val handlers: Map<String, (JSONObject) -> Unit> = mutableMapOf(
+        "voiceUpdate" to ::voiceUpdate,
+        "play" to ::play,
+        "stop" to ::stop,
+        "pause" to ::pause,
+        "seek" to ::seek,
+        "volume" to ::volume,
+        "equalizer" to ::equalizer,
+        "filters" to ::filters,
+        "destroy" to ::destroy,
+        "configureResuming" to ::configureResuming
+    ).apply {
+        wsExtensions.forEach {
+            val func = fun(json: JSONObject) { it.onInvocation(context, json) }
+            this[it.opName] = func as KFunction1<JSONObject, Unit>
+        }
+    }
+
+    fun handle(json: JSONObject) {
+        val op = json.getString("op")
+        val handler = handlers[op] ?: return log.warn("Unknown op '$op'")
+        handler(json)
+    }
+
+    private fun voiceUpdate(json: JSONObject) {
         val sessionId = json.getString("sessionId")
         val guildId = json.getLong("guildId")
 
@@ -29,14 +59,17 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
 
         //discord sometimes send a partial server update missing the endpoint, which can be ignored.
         endpoint ?: return
+        //clear old connection
+        context.koe.destroyConnection(guildId)
 
         val player = context.getPlayer(guildId)
-        val conn = context.getVoiceConnection(player)
-        conn.connect(VoiceServerInfo(sessionId, endpoint, token))
-        player.provideTo(conn)
+        val conn = context.getMediaConnection(player)
+        conn.connect(VoiceServerInfo(sessionId, endpoint, token)).whenComplete { _, _ ->
+            player.provideTo(conn)
+        }
     }
 
-    fun play(context: SocketContext, json: JSONObject) {
+    private fun play(json: JSONObject) {
         val player = context.getPlayer(json.getString("guildId"))
         val noReplace = json.optBoolean("noReplace", false)
 
@@ -53,13 +86,7 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
 
         player.setPause(json.optBoolean("pause", false))
         if (json.has("volume")) {
-            if(!loggedVolumeDeprecationWarning) log.warn("The volume property in the play operation has been deprecated" +
-                    "and will be removed in v4. Please configure a filter instead. Note that the new filter takes a " +
-                    "float value with 1.0 being 100%")
-            loggedVolumeDeprecationWarning = true
-            val filters = player.filters ?: FilterChain()
-            filters.volume = json.getFloat("volume") / 100
-            player.filters = filters
+            player.setVolume(json.getInt("volume"))
         }
 
         if (json.has("endTime")) {
@@ -73,33 +100,33 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
 
         player.play(track)
 
-        val conn = context.getVoiceConnection(player)
+        val conn = context.getMediaConnection(player)
         context.getPlayer(json.getString("guildId")).provideTo(conn)
     }
 
-    fun stop(context: SocketContext, json: JSONObject) {
+    private fun stop(json: JSONObject) {
         val player = context.getPlayer(json.getString("guildId"))
         player.stop()
     }
 
-    fun pause(context: SocketContext, json: JSONObject) {
+    private fun pause(json: JSONObject) {
         val player = context.getPlayer(json.getString("guildId"))
         player.setPause(json.getBoolean("pause"))
         SocketServer.sendPlayerUpdate(context, player)
     }
 
-    fun seek(context: SocketContext, json: JSONObject) {
+    private fun seek(json: JSONObject) {
         val player = context.getPlayer(json.getString("guildId"))
         player.seekTo(json.getLong("position"))
         SocketServer.sendPlayerUpdate(context, player)
     }
 
-    fun volume(context: SocketContext, json: JSONObject) {
+    private fun volume(json: JSONObject) {
         val player = context.getPlayer(json.getString("guildId"))
         player.setVolume(json.getInt("volume"))
     }
 
-    fun equalizer(context: SocketContext, json: JSONObject) {
+    private fun equalizer(json: JSONObject) {
         if (!loggedEqualizerDeprecationWarning) log.warn("The 'equalizer' op has been deprecated in favour of the " +
                 "'filters' op. Please switch to use that one, as this op will get removed in v4.")
         loggedEqualizerDeprecationWarning = true
@@ -116,16 +143,16 @@ class WebSocketHandlers(private val contextMap: Map<String, SocketContext>) {
         player.filters = filters
     }
 
-    fun filters(context: SocketContext, guildId: String, json: String) {
-        val player = context.getPlayer(guildId)
-        player.filters = FilterChain.parse(json)
+    private fun filters(json: JSONObject) {
+        val player = context.getPlayer(json.getLong("guildId"))
+        player.filters = FilterChain.parse(json, filterExtensions)
     }
 
-    fun destroy(context: SocketContext, json: JSONObject) {
-        context.destroy(json.getLong("guildId"))
+    private fun destroy(json: JSONObject) {
+        context.destroyPlayer(json.getLong("guildId"))
     }
 
-    fun configureResuming(context: SocketContext, json: JSONObject) {
+    private fun configureResuming(json: JSONObject) {
         context.resumeKey = json.optString("key", null)
         if (json.has("timeout")) context.resumeTimeout = json.getLong("timeout")
     }

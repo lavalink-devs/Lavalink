@@ -1,18 +1,24 @@
 package lavalink.server.player.filters
 
 import com.google.gson.Gson
-import com.sedmelluq.discord.lavaplayer.filter.*
+import com.sedmelluq.discord.lavaplayer.filter.AudioFilter
+import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter
+import com.sedmelluq.discord.lavaplayer.filter.PcmFilterFactory
+import com.sedmelluq.discord.lavaplayer.filter.UniversalPcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import dev.arbjerg.lavalink.api.AudioFilterExtension
+import org.json.JSONObject
 
 class FilterChain : PcmFilterFactory {
 
     companion object {
-        private val log: Logger = LoggerFactory.getLogger(FilterChain::class.java)
         private val gson = Gson()
-        fun parse(json: String) = gson.fromJson(json, FilterChain::class.java)!!
+
+        fun parse(json: JSONObject, extensions: List<AudioFilterExtension>): FilterChain {
+            return gson.fromJson(json.toString(), FilterChain::class.java)!!
+                .apply { parsePluginConfigs(json, extensions) }
+        }
     }
 
     var volume: Float? = null
@@ -25,6 +31,15 @@ class FilterChain : PcmFilterFactory {
     private val rotation: RotationConfig? = null
     private val channelMix: ChannelMixConfig? = null
     private val lowPass: LowPassConfig? = null
+    @Transient
+    private var pluginFilters: List<PluginConfig> = emptyList()
+
+    private fun parsePluginConfigs(json: JSONObject, extensions: List<AudioFilterExtension>) {
+        pluginFilters = extensions.mapNotNull {
+            val obj = json.optJSONObject(it.name) ?: return@mapNotNull null
+            PluginConfig(it, obj)
+        }
+    }
 
     private fun buildList() = listOfNotNull(
             volume?.let { VolumeConfig(it) },
@@ -36,7 +51,8 @@ class FilterChain : PcmFilterFactory {
             distortion,
             rotation,
             channelMix,
-            lowPass
+            lowPass,
+            *pluginFilters.toTypedArray()
     )
 
     val isEnabled get() = buildList().any { it.isEnabled }
@@ -53,6 +69,12 @@ class FilterChain : PcmFilterFactory {
         }
 
         return pipeline.reversed().toMutableList() // Output last
+    }
+
+    private class PluginConfig(val extension: AudioFilterExtension, val json: JSONObject) : FilterConfig() {
+        override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter =
+            extension.build(json, format, output)
+        override val isEnabled = extension.isEnabled(json)
     }
 
 }

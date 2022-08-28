@@ -2,14 +2,19 @@ name: Build
 
 on:
   push:
-    paths-ignore:
-      - '**.md'
+    branches: [ '**' ]
+    paths-ignore: [ '**.md' ]
+  workflow_call:
+    secrets:
+      DOCKERHUB_USERNAME:
+      DOCKERHUB_TOKEN:
 
 jobs:
-  gradle:
+  build:
     runs-on: ubuntu-latest
-    outputs:
-      rundocker: ${{ steps.rundocker.outputs.rundocker }}
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -33,29 +38,8 @@ jobs:
           name: Lavalink.jar
           path: LavalinkServer/build/libs/Lavalink.jar
 
-      - name: Check Docker Build
-        id: rundocker
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-        run: |
-          echo "Run docker build: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_TOKEN != '' }}"
-          echo "::set-output name=rundocker::${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_TOKEN != '' }}"
-
-  docker:
-    needs: gradle
-    runs-on: ubuntu-latest
-    if: needs.gradle.outputs.rundocker == 'true'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: Lavalink.jar
-
       - name: Docker Meta
+        if: env.DOCKERHUB_USERNAME && env.DOCKERHUB_TOKEN
         id: meta
         uses: docker/metadata-action@v4
         with:
@@ -68,41 +52,27 @@ jobs:
             type=sha,prefix=
 
       - name: Set up QEMU
+        if: env.DOCKERHUB_USERNAME && env.DOCKERHUB_TOKEN
         uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
+        if: env.DOCKERHUB_USERNAME && env.DOCKERHUB_TOKEN
         uses: docker/setup-buildx-action@v2
 
       - name: Login to DockerHub
+        if: env.DOCKERHUB_USERNAME && env.DOCKERHUB_TOKEN
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and Push
+        if: env.DOCKERHUB_USERNAME && env.DOCKERHUB_TOKEN
         uses: docker/build-push-action@v3
         with:
           file: LavalinkServer/docker/Dockerfile
           context: .
-          platforms: linux/amd64,linux/arm/v7
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-  release:
-    needs: gradle
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: Lavalink.jar
-
-      - name: Upload Artifacts to GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: Lavalink.jar
