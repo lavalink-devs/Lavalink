@@ -45,7 +45,7 @@ fun VersionCatalogBuilder.voice() {
     library("koe",          "moe.kyokobot.koe", "core").version("2.0.0-rc1")
     library("koe-udpqueue", "moe.kyokobot.koe", "ext-udpqueue").version("2.0.0-rc1")
 
-    version("udpqueue", "0.2.3")
+    version("udpqueue", "0.2.4")
     val platforms = listOf("linux-x86-64", "linux-x86", "linux-aarch64", "linux-arm", "win-x86-64", "win-x86", "darwin")
     platforms.forEach {
         library("udpqueue-native-$it", "club.minnced", "udpqueue-native-$it").versionRef("udpqueue")
