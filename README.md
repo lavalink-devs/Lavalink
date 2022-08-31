@@ -101,7 +101,7 @@ Client | Platform | Compatible With | Additional Information
 [@skyra/audio](https://github.com/skyra-project/audio) | Node.js | discord.js | Archived
 [Poru](https://github.com/parasop/poru) | Node.js | **Any**
 [Shoukaku](https://github.com/Deivu/Shoukaku) | Node.js | **Any**
-[SpringLink](https://github.com/knyaoo/springlink) | Node.js | discord.js | Archived
+[Lavaudio](https://github.com/rilysh/lavaudio) | Node.js | **Any**
 [Gorilink](https://github.com/Gorillas-Team/Gorilink) | Node.js | discord.js | Archived/Unmaintained
 [SandySounds](https://github.com/MrJohnCoder/SandySounds) | Node.js | **Any** | Unmaintained
 [eris-lavalink](https://github.com/briantanner/eris-lavalink) | Node.js | eris | Unmaintained
