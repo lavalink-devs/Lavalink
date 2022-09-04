@@ -88,7 +88,7 @@ Client | Platform | Compatible With | Additional Information
 [lavaplayer-py](https://github.com/HazemMeqdad/lavaplayer) | Python | **Any\*** | *`asyncio`-based libraries only
 [Wavelink](https://github.com/PythonistaGuild/Wavelink) | Python | discord.py **V2**
 [Pomice](https://github.com/cloudwithax/pomice) | Python | discord.py **V2**
-[Slate](https://github.com/Axelware/slate) | Python | discord.py/**Any\*** | *`discord`-namespace/`discord.py`-derived libraries only
+[discord-ext-lava](https://github.com/Axelware/discord-ext-lava) | Python | discord.py
 [Lavapy](https://github.com/Aspect1103/Lavapy) | Python | discord.py
 [Magma](https://github.com/initzx/magma) | Python | discord.py
 [Lavadeno](https://github.com/lavaclient/lavadeno) | Deno | **Any**
