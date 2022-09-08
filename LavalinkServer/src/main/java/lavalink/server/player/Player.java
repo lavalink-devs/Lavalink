@@ -103,7 +103,7 @@ public class Player extends AudioEventAdapter implements IPlayer {
 
     @Override
     public ISocketContext getSocketContext() {
-        return null;
+        return socketContext;
     }
 
     public void seekTo(long position) {
