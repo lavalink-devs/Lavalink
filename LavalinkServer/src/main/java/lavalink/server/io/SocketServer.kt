@@ -61,8 +61,9 @@ class SocketServer(
             val json = JSONObject()
 
             val state = player.state
-            val connected = socketContext.getMediaConnection(player).gatewayConnection?.isOpen == true
-            state.put("connected", connected)
+            val connection = socketContext.getMediaConnection(player).gatewayConnection
+            state.put("connected", connection?.isOpen == true)
+            state.put("ping", connection?.ping ?: -1)
 
             json.put("op", "playerUpdate")
             json.put("guildId", player.guildId.toString())
