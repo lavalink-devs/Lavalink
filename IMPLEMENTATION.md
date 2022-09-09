@@ -251,6 +251,7 @@ This event includes:
 * Unix timestamp in milliseconds.
 * Track position in milliseconds. Omitted if not playing anything.
 * `connected` is true when connected to the voice gateway.
+* `ping` represents the number of milliseconds between heartbeat and ack. Could be `-1` if not connected.
 ```json
 {
     "op": "playerUpdate",
@@ -258,7 +259,8 @@ This event includes:
     "state": {
         "time": 1500467109,
         "position": 60000,
-        "connected": true
+        "connected": true,
+        "ping": 0
     }
 }
 ```
