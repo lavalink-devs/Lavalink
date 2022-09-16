@@ -55,7 +55,8 @@ class SocketContext(
     val serverConfig: ServerConfig,
     private var session: WebSocketSession,
     private val socketServer: SocketServer,
-    val userId: String,
+    private val userId: String,
+    private val clientName: String?,
     val koe: KoeClient,
     eventHandlers: Collection<PluginEventHandler>,
     webSocketExtensions: List<WebSocketExtension>,
@@ -104,6 +105,14 @@ class SocketContext(
     }
 
     fun getPlayer(guildId: String) = getPlayer(guildId.toLong())
+
+    override fun getUserId(): String {
+        return userId
+    }
+
+    override fun getClientName(): String? {
+        return clientName
+    }
 
     override fun getPlayer(guildId: Long) = players.computeIfAbsent(guildId) {
         val player = Player(this, guildId, audioPlayerManager, serverConfig)
