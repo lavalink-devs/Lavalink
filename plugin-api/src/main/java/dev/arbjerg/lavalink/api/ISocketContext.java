@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public interface ISocketContext {
     /**
-     * @return the User ID of the Client .
+     * @return the User ID of the Client.
      */
     String getUserId();
 
