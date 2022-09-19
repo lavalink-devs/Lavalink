@@ -113,7 +113,7 @@ public class AudioLoaderRestHandler {
         return json;
     }
 
-    @GetMapping(value = "/loadtracks", produces = "application/json")
+    @GetMapping(value = {"/loadtracks", "/v3/loadtracks"}, produces = "application/json")
     @ResponseBody
     public CompletionStage<ResponseEntity<String>> getLoadTracks(
             HttpServletRequest request,
@@ -125,7 +125,7 @@ public class AudioLoaderRestHandler {
                 .thenApply(loadResultJson -> new ResponseEntity<>(loadResultJson.toString(), HttpStatus.OK));
     }
 
-    @GetMapping(value = "/decodetrack", produces = "application/json")
+    @GetMapping(value = {"/decodetrack", "/v3/decodetrack"}, produces = "application/json")
     @ResponseBody
     public ResponseEntity<String> getDecodeTrack(HttpServletRequest request, @RequestParam String track)
             throws IOException {
@@ -137,7 +137,7 @@ public class AudioLoaderRestHandler {
         return new ResponseEntity<>(trackToJSON(audioTrack).toString(), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/decodetracks", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = {"/decodetracks", "/v3/decodetracks"}, consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponseEntity<String> postDecodeTracks(HttpServletRequest request, @RequestBody String body)
             throws IOException {

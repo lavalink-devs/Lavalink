@@ -41,18 +41,19 @@ import java.util.concurrent.ConcurrentHashMap
 
 @Service
 class SocketServer(
-        private val serverConfig: ServerConfig,
-        private val audioPlayerManager: AudioPlayerManager,
-        koeOptions: KoeOptions,
-        private val eventHandlers: List<PluginEventHandler>,
-        private val webSocketExtensions: List<WebSocketExtension>,
-        private val filterExtensions: List<AudioFilterExtension>
+    private val serverConfig: ServerConfig,
+    val audioPlayerManager: AudioPlayerManager,
+    koeOptions: KoeOptions,
+    private val eventHandlers: List<PluginEventHandler>,
+    private val webSocketExtensions: List<WebSocketExtension>,
+    private val filterExtensions: List<AudioFilterExtension>
 ) : TextWebSocketHandler() {
 
     // userId <-> shardCount
     val contextMap = ConcurrentHashMap<String, SocketContext>()
     private val resumableSessions = mutableMapOf<String, SocketContext>()
     private val koe = Koe.koe(koeOptions)
+    private val charPool: List<Char> = ('a'..'z') + ('0'..'9')
 
     companion object {
         private val log = LoggerFactory.getLogger(SocketServer::class.java)
@@ -72,12 +73,23 @@ class SocketServer(
         }
     }
 
+    private fun generateSessionId(): String {
+        var sessionId: String
+        do {
+            sessionId = (1..16)
+                .map { kotlin.random.Random.nextInt(0, charPool.size) }
+                .map(charPool::get)
+                .joinToString("");
+        } while (contextMap[sessionId] != null)
+        return sessionId
+    }
+
     val contexts: Collection<SocketContext>
         get() = contextMap.values
 
     @Suppress("UastIncorrectHttpHeaderInspection")
     override fun afterConnectionEstablished(session: WebSocketSession) {
-        val userId = session.handshakeHeaders.getFirst("User-Id")!!
+        val userId = session.handshakeHeaders.getFirst("User-Id")
         val resumeKey = session.handshakeHeaders.getFirst("Resume-Key")
         val clientName = session.handshakeHeaders.getFirst("Client-Name")
         val userAgent = session.handshakeHeaders.getFirst("User-Agent")
@@ -86,26 +98,39 @@ class SocketServer(
         if (resumeKey != null) resumable = resumableSessions.remove(resumeKey)
 
         if (resumable != null) {
-            contextMap[session.id] = resumable
+            contextMap[resumable.sessionId] = resumable
             resumable.resume(session)
             log.info("Resumed session with key $resumeKey")
             resumable.eventEmitter.onWebSocketOpen(true)
+            resumable.send(JSONObject()
+                .put("op", "ready")
+                .put("resumed", true)
+                .put("sessionId", resumable.sessionId)
+            )
             return
         }
 
+        val sessionId = generateSessionId()
+        session.attributes["sessionId"] = sessionId
+
         val socketContext = SocketContext(
-                audioPlayerManager,
-                serverConfig,
-                session,
-                this,
-                userId,
-                koe.newClient(userId.toLong()),
-                eventHandlers,
-                webSocketExtensions,
-                filterExtensions
+            sessionId,
+            audioPlayerManager,
+            serverConfig,
+            session,
+            this,
+            koe.newClient(userId!!.toLong()),
+            eventHandlers,
+            webSocketExtensions,
+            filterExtensions
         )
-        contextMap[session.id] = socketContext
+        contextMap[sessionId] = socketContext
         socketContext.eventEmitter.onWebSocketOpen(false)
+        socketContext.send(JSONObject()
+            .put("op", "ready")
+            .put("resumed", false)
+            .put("sessionId", sessionId)
+        )
 
         if (clientName != null) {
             log.info("Connection successfully established from $clientName")
@@ -124,19 +149,22 @@ class SocketServer(
         val context = contextMap.remove(session!!.id) ?: return
         if (context.resumeKey != null) {
             resumableSessions.remove(context.resumeKey!!)?.let { removed ->
-                log.warn("Shutdown resumable session with key ${removed.resumeKey} because it has the same key as a " +
-                        "newly disconnected resumable session.")
+                log.warn(
+                    "Shutdown resumable session with key ${removed.resumeKey} because it has the same key as a " +
+                            "newly disconnected resumable session."
+                )
                 removed.shutdown()
             }
 
             resumableSessions[context.resumeKey!!] = context
             context.pause()
-            log.info("Connection closed from {} with status {} -- " +
-                    "Session can be resumed within the next {} seconds with key {}",
-                    session.remoteAddress,
-                    status,
-                    context.resumeTimeout,
-                    context.resumeKey
+            log.info(
+                "Connection closed from {} with status {} -- " +
+                        "Session can be resumed within the next {} seconds with key {}",
+                session.remoteAddress,
+                status,
+                context.resumeTimeout,
+                context.resumeKey
             )
             return
         }
@@ -164,8 +192,8 @@ class SocketServer(
             return
         }
 
-        val context = contextMap[session.id]
-                ?: throw IllegalStateException("No context for session ID ${session.id}. Broken websocket?")
+        val context = contextMap[session.attributes["sessionId"]]
+            ?: throw IllegalStateException("No context for session ID ${session.id}. Broken websocket?")
         context.eventEmitter.onWebsocketMessageIn(message.payload)
         context.wsHandler.handle(json)
     }

@@ -15,7 +15,7 @@ public class InfoRestHandler {
         this.appInfo = appInfo;
     }
 
-    @GetMapping("/version")
+    @GetMapping(value = {"/version", "/v3/version"})
     public String version() {
         return appInfo.getVersionBuild();
     }

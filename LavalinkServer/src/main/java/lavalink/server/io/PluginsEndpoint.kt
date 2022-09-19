@@ -14,7 +14,7 @@ class PluginsEndpoint(pluginManager: PluginManager) {
         }
     }
 
-    @GetMapping("/plugins")
+    @GetMapping(value = ["/plugins", "/v3/plugins"])
     fun plugins() = data
 
 }

@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.server.ServerHttpRequest
 import org.springframework.http.server.ServerHttpResponse
 import org.springframework.stereotype.Controller
+import org.springframework.util.AlternativeJdkIdGenerator
+import org.springframework.util.IdGenerator
 import org.springframework.web.socket.WebSocketHandler
 import org.springframework.web.socket.server.HandshakeInterceptor
 
@@ -23,23 +25,24 @@ constructor(private val serverConfig: ServerConfig, private val socketServer: So
      *
      * @return true if authenticated
      */
+    @Suppress("UastIncorrectHttpHeaderInspection")
     override fun beforeHandshake(request: ServerHttpRequest, response: ServerHttpResponse, wsHandler: WebSocketHandler,
                                  attributes: Map<String, Any>): Boolean {
         val password = request.headers.getFirst("Authorization")
-        val matches = password == serverConfig.password
 
-        if (matches) {
-            log.info("Incoming connection from " + request.remoteAddress)
-        } else {
+        if(password != serverConfig.password) {
             log.error("Authentication failed from " + request.remoteAddress)
             response.setStatusCode(HttpStatus.UNAUTHORIZED)
+            return false
         }
+
+        log.info("Incoming connection from " + request.remoteAddress)
 
         val resumeKey = request.headers.getFirst("Resume-Key")
         val resuming = resumeKey != null && socketServer.canResume(resumeKey)
         response.headers.add("Session-Resumed", resuming.toString())
 
-        return matches
+        return true
     }
 
     // No action required

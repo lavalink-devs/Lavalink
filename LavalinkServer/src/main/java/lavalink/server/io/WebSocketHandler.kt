@@ -70,7 +70,7 @@ class WebSocketHandler(
     }
 
     private fun play(json: JSONObject) {
-        val player = context.getPlayer(json.getString("guildId"))
+        val player = context.getPlayer(json.getLong("guildId"))
         val noReplace = json.optBoolean("noReplace", false)
 
         if (noReplace && player.playingTrack != null) {
@@ -101,28 +101,28 @@ class WebSocketHandler(
         player.play(track)
 
         val conn = context.getMediaConnection(player)
-        context.getPlayer(json.getString("guildId")).provideTo(conn)
+        context.getPlayer(json.getLong("guildId")).provideTo(conn)
     }
 
     private fun stop(json: JSONObject) {
-        val player = context.getPlayer(json.getString("guildId"))
+        val player = context.getPlayer(json.getLong("guildId"))
         player.stop()
     }
 
     private fun pause(json: JSONObject) {
-        val player = context.getPlayer(json.getString("guildId"))
+        val player = context.getPlayer(json.getLong("guildId"))
         player.setPause(json.getBoolean("pause"))
         SocketServer.sendPlayerUpdate(context, player)
     }
 
     private fun seek(json: JSONObject) {
-        val player = context.getPlayer(json.getString("guildId"))
+        val player = context.getPlayer(json.getLong("guildId"))
         player.seekTo(json.getLong("position"))
         SocketServer.sendPlayerUpdate(context, player)
     }
 
     private fun volume(json: JSONObject) {
-        val player = context.getPlayer(json.getString("guildId"))
+        val player = context.getPlayer(json.getLong("guildId"))
         player.setVolume(json.getInt("volume"))
     }
 
@@ -131,7 +131,7 @@ class WebSocketHandler(
                 "'filters' op. Please switch to use that one, as this op will get removed in v4.")
         loggedEqualizerDeprecationWarning = true
 
-        val player = context.getPlayer(json.getString("guildId"))
+        val player = context.getPlayer(json.getLong("guildId"))
 
         val list = mutableListOf<Band>()
         json.getJSONArray("bands").forEach { b ->
