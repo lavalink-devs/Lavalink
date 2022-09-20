@@ -65,7 +65,7 @@ Client-Name: The name of your client. Optionally in the format NAME/VERSION
 
 See [LavalinkSocket.java](https://github.com/freyacodes/lavalink-client/blob/master/src/main/java/lavalink/client/io/LavalinkSocket.java) for client implementation
 
-### Ready OP
+#### Ready
 Dispatched by Lavalink upon successful connection and authorization. Contains fields determining if resuming was successful, as well as the session ID.
 ```json
 {
@@ -75,7 +75,7 @@ Dispatched by Lavalink upon successful connection and authorization. Contains fi
 }
 ```
 
-### Player Update OP
+#### Player Update
 This event includes:
 * Unix timestamp in milliseconds.
 * Track position in milliseconds. Omitted if not playing anything.
@@ -94,7 +94,7 @@ This event includes:
 }
 ```
 
-### Stats OP
+#### Stats
 A collection of stats sent every minute. 
 
 ```json
@@ -128,7 +128,7 @@ if (frames != null) {
 }
 ```
 
-### Event OP
+#### Event
 Server emitted an event. See the client implementation below.
 ```json
 {
@@ -208,11 +208,17 @@ See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and
 }
 ```
 
-### Get Players API
+### Rest API
+Lavalink exposes a REST API to allow for easy control of the players.
+All routes require the Authorization header with the configured password.
+```
+Authorization: youshallnotpass
+```
+
+#### Get Players
 Returns all players in this specific session.
 ```
 GET /v3/sessions/{sessionId}/players
-Authorization: youshallnotpass
 ```
 
 Response:
@@ -246,11 +252,10 @@ Response:
 ]
 ```
 
-### Get Player API
+#### Get Player
 Returns the player for this guild in this session.
 ```
 GET /v3/sessions/{sessionId}/players/{guildId}
-Authorization: youshallnotpass
 ```
 
 Response:
@@ -282,11 +287,10 @@ Response:
 }
 ```
 
-### Update Player API
+#### Update Player
 Updates the player for this guild in this specific.
 ```
 PATCH /v3/sessions/{sessionId}/players/{guildId}?noReplace=true
-Authorization: youshallnotpass
 ```
 
 All fields are optional.
@@ -339,7 +343,7 @@ Response:
 }
 ```
 
-### Filters
+#### Filters
 Filters are used in above requests and look like this
 ```js
 {
@@ -420,22 +424,20 @@ Filters are used in above requests and look like this
 }
 ```
 
-### Destroy Player API
+#### Destroy Player
 Destroys the player for this guild in this session.
 ```
 DELETE /v3/sessions/{sessionId}/players/{guildId}
-Authorization: youshallnotpass
 ```
 
 Response: 
 
 204 - No Content
 
-### Update Session API
+#### Update Session
 Updates the session with a resuming key and timeout.
 ```
 PATCH /v3/sessions/{sessionId}
-Authorization: youshallnotpass
 ```
 
 Request:
@@ -450,12 +452,11 @@ Response:
 
 204 - No Content
 
-### Track Loading API
+#### Track Loading
 The REST api is used to resolve audio tracks for use with the `play` op.
 > `/loadtracks?identifier=dQw4w9WgXcQ` is deprecated and for removal in v4
 ```
 GET /v3/loadtracks?identifier=dQw4w9WgXcQ
-Authorization: youshallnotpass
 ```
 <details open>
 <summary>Response(Deprecated)</summary>
@@ -549,13 +550,12 @@ Lavalink supports searching via YouTube, YouTube Music, and Soundcloud. To searc
 
 When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. Note that, disabling the respective source managers renders these search prefixes redundant. Plugins may also implement prefixes to allow for more search engines.
 
-### Track Decoding API
+#### Track Decoding
 
 Decode a single track into its info
 > `/decodetrack?track=QAAAjJ...AAA==` is deprecated and for removal in v4
 ```
 GET /v3/decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==
-Authorization: youshallnotpass
 ```
 
 Response:
@@ -631,12 +631,11 @@ Response:
 ```
 ---
 
-### Get list of plugins
+#### Get Plugins
 Request information about the plugins running on Lavalink, if any.
 > `/plugins` is deprecated and for removal in v4
 ```
 GET /v3/plugins
-Authorization: youshallnotpass
 ```
 
 Response:
@@ -653,7 +652,7 @@ Response:
 ]
 ```
 
-### Get Lavalink version
+#### Get Lavalink version
 Request Lavalink version,
 > `/version` is deprecated and for removal in v4
 ```
@@ -675,7 +674,6 @@ Additionally, there are a few REST endpoints for the ip rotation extension
 > `/routeplanner/status` is deprecated and for removal in v4
 ```
 GET /v3/routeplanner/status
-Authorization: youshallnotpass
 ```
 
 Response:
@@ -734,8 +732,6 @@ block.
 > `/routeplanner/free/address` is deprecated and for removal in v4
 ```
 POST /v3/routeplanner/free/address
-Host: localhost:8080
-Authorization: youshallnotpass
 ```
 
 Request Body:
@@ -754,8 +750,6 @@ Response:
 > `/routeplanner/free/all` is deprecated and for removal in v4
 ```
 POST /v3/routeplanner/free/all
-Host: localhost:8080
-Authorization: youshallnotpass
 ```
 
 Response:
