@@ -59,7 +59,7 @@ class SocketContext(
     val koe: KoeClient,
     eventHandlers: Collection<PluginEventHandler>,
     webSocketExtensions: List<WebSocketExtension>,
-    private val filterExtensions: List<AudioFilterExtension>
+    filterExtensions: List<AudioFilterExtension>
 ) : ISocketContext {
 
     companion object {
