@@ -11,7 +11,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * Deprecation of all outgoing messages(play, stop, pause, seek, volume, filters, destroy, voiceUpdate & configureResuming).
 * Deprecation of [`/loadtracks` response](#track-loading-api).
 * Deprecation of [track decoding response](#track-decoding-api).
-* Add of new incoming message [Ready OP](#ready-op) to get `sessionId` and `resume` status.
+* Addition of new WebSocket dispatch [Ready OP](#ready-op) to get `sessionId` and `resume` status.
 * Addition of new [Session](#update-session-api)/[Player](#get-player-api) REST API.
 
 ## Significant changes v3.3 -> v3.4
