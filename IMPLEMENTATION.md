@@ -573,7 +573,7 @@ Response:
 }
 ```
 
-Decode multiple tracks into info their info
+Decodes multiple tracks into their info
 > `/decodetracks` is deprecated and for removal in v4
 ```
 POST /v3/decodetracks
