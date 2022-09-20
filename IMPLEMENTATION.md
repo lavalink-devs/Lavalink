@@ -8,7 +8,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 
 ## Significant changes v3.5 -> v3.6
 * Deprecation of all endpoints and moved them to `/v3` namespace.
-* Deprecation of all outgoing messages(play, stop, pause, seek, volume, filters, destroy, voiceUpdate & configureResuming).
+* Deprecation of all outgoing messages (play, stop, pause, seek, volume, filters, destroy, voiceUpdate & configureResuming).
 * Deprecation of [`/loadtracks` response](#track-loading-api).
 * Deprecation of [track decoding response](#track-decoding-api).
 * Addition of new WebSocket dispatch [Ready OP](#ready-op) to get `sessionId` and `resume` status.
