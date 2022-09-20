@@ -53,199 +53,18 @@ User-Id: The user id of the bot you are playing music with
 Client-Name: The name of your client. Optionally in the format NAME/VERSION
 ```
 
-### Outgoing messages
-
-#### Provide a voice server update
-
-Provide an intercepted voice server update. This causes the server to connect to the voice channel.
-
-```json
-{
-    "op": "voiceUpdate",
-    "guildId": "...",
-    "sessionId": "...",
-    "event": {...}
-}
-```
-
-#### Play a track
-
-`startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
-
-`endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default the track plays until it's end as per the encoded data.
-
-`volume` is an optional setting which changes the volume if provided.
-
-If `noReplace` is set to true, this operation will be ignored if a track is already playing or paused. This is an optional field.
-
-If `pause` is set to true, the playback will be paused. This is an optional field.
-
-```json
-{
-    "op": "play",
-    "guildId": "...",
-    "track": "...",
-    "startTime": "60000",
-    "endTime": "120000",
-    "volume": "100",
-    "noReplace": false,
-    "pause": false
-}
-```
-
-#### Stop a player 
-
-```json
-{
-    "op": "stop",
-    "guildId": "..."
-}
-```
-
-#### Pause the playback
-
-```json
-{
-    "op": "pause",
-    "guildId": "...",
-    "pause": true
-}
-```
-
-#### Seek a track 
-
-The position is in milliseconds.
-
-```json
-{
-    "op": "seek",
-    "guildId": "...",
-    "position": 60000
-}
-```
-
-#### Set player volume
-
-Volume may range from 0 to 1000. 100 is default.
-
-```json
-{
-    "op": "volume",
-    "guildId": "...",
-    "volume": 125
-}
-```
-
-#### Using filters
-
-The `filters` op sets the filters. All the filters are optional, and leaving them out of this message will disable them.
-
-Adding a filter can have adverse effects on performance. These filters force Lavaplayer to decode all audio to PCM,
-even if the input was already in the Opus format that Discord uses. This means decoding and encoding audio that would
-normally require very little processing. This is often the case with YouTube videos.
-
-JSON comments are for illustration purposes only, and will not be accepted by the server.
-
-Note that filters may take a moment to apply. 
-
-```yaml
-{
-    "op": "filters",
-    "guildId": "...",
-    
-    // Float value where 1.0 is 100%. Values >1.0 may cause clipping
-    "volume": 1.0, // 0 ≤ x ≤ 5
-    
-    // There are 15 bands (0-14) that can be changed.
-    // "gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
-    // where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could
-    // also change the volume of the output.
-    "equalizer": [
-        {
-            "band": 0,  // 0 ≤ x ≤ 14
-            "gain": 0.2 // -0.25 ≤ x ≤ 1
-        }
-    ],
-    
-    // Uses equalization to eliminate part of a band, usually targeting vocals.
-    "karaoke": {
-        "level": 1.0,
-        "monoLevel": 1.0,
-        "filterBand": 220.0,
-        "filterWidth": 100.0
-    },
-    
-    // Changes the speed, pitch, and rate. All default to 1.
-    "timescale": {
-        "speed": 1.0, // 0 ≤ x
-        "pitch": 1.0, // 0 ≤ x
-        "rate": 1.0   // 0 ≤ x
-    },
-    
-    // Uses amplification to create a shuddering effect, where the volume quickly oscillates.
-    // Example: https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
-    "tremolo": {
-        "frequency": 2.0, // 0 < x
-        "depth": 0.5      // 0 < x ≤ 1
-    },
-    
-    // Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
-    "vibrato": {
-        "frequency": 2.0, // 0 < x ≤ 14
-        "depth": 0.5      // 0 < x ≤ 1
-    },
-    
-    // Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to: https://youtu.be/QB9EB8mTKcc (without the reverb)
-    "rotation": {
-        "rotationHz": 0 // The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above.
-    },
-    
-    // Distortion effect. It can generate some pretty unique audio effects.
-    "distortion": {
-        "sinOffset": 0.0,
-        "sinScale": 1.0,
-        "cosOffset": 0.0,
-        "cosScale": 1.0,
-        "tanOffset": 0.0,
-        "tanScale": 1.0,
-        "offset": 0.0,
-        "scale": 1.0
-    } 
-    
-    // Mixes both channels (left and right), with a configurable factor on how much each channel affects the other.
-    // With the defaults, both channels are kept independent from each other.
-    // Setting all factors to 0.5 means both channels get the same audio.
-    "channelMix": {
-        "leftToLeft": 1.0,
-        "leftToRight": 0.0,
-        "rightToLeft": 0.0,
-        "rightToRight": 1.0,
-    }
-    
-    // Higher frequencies get suppressed, while lower frequencies pass through this filter, thus the name low pass.
-    // Any smoothing values equal to, or less than 1.0 will disable the filter.
-    "lowPass": {
-        "smoothing": 20.0 // 1.0 < x
-    }
-}
-```
-
-#### Destroy a player
-
-Tell the server to potentially disconnect from the voice server and potentially remove the player with all its data.
-This is useful if you want to move to a new node for a voice connection. Calling this op does not affect voice state,
-and you can send the same VOICE_SERVER_UPDATE to a new node.
-
-```json
-{
-    "op": "destroy",
-    "guildId": "..."
-}
-```
-
 ### Incoming messages
 
 See [LavalinkSocket.java](https://github.com/freyacodes/lavalink-client/blob/master/src/main/java/lavalink/client/io/LavalinkSocket.java) for client implementation
+
+Tells you if you resumed successfully and your sessionId used for REST requests.
+```json
+{
+    "op": "ready",
+    "resumed": false,
+    "sessionId": "..."
+}
+```
 
 This event includes:
 * Unix timestamp in milliseconds.
@@ -377,10 +196,205 @@ See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and
 }
 ```
 
+### Get Players API
+Returns all players in this specific session.
+```
+GET /v3/sessions/{sessionId}/players
+Authorization: youshallnotpass
+```
+
+Response:
+```json
+[
+  {
+    "guildId": "...",
+    "track": {
+      "trackData": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+      "identifier": "dQw4w9WgXcQ",
+      "isSeekable": true,
+      "author": "RickAstleyVEVO",
+      "length": 212000,
+      "isStream": false,
+      "position": 0,
+      "title": "Rick Astley - Never Gonna Give You Up",
+      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "sourceName": "youtube"
+    },
+    "volume": 100,
+    "paused": false,
+    "voice": {
+      "token": "...",
+      "endpoint": "...",
+      "sessionId": "...",
+      "connected": true,
+      "ping": 10 // -1 if not connected
+    },
+    "filters": { ... }
+  }
+]
+```
+
+### Get Player API
+Returns the player for this guild in this session.
+```
+GET /v3/sessions/{sessionId}/players/{guildId}
+Authorization: youshallnotpass
+```
+
+Response:
+```json
+{
+  "guildId": "...",
+  "track": {
+    "trackData": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "identifier": "dQw4w9WgXcQ",
+    "isSeekable": true,
+    "author": "RickAstleyVEVO",
+    "length": 212000,
+    "isStream": false,
+    "position": 0,
+    "title": "Rick Astley - Never Gonna Give You Up",
+    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "sourceName": "youtube"
+  },
+  "volume": 100,
+  "paused": false,
+  "voice": {
+    "token": "...",
+    "endpoint": "...",
+    "sessionId": "...",
+    "connected": true,
+    "ping": 10 // -1 if not connected
+  },
+  "filters": { ... }
+}
+```
+
+### Update Player API
+Updates the player for this guild in this specific.
+```
+PATCH /v3/sessions/{sessionId}/players/{guildId}?noReplace=true
+Authorization: youshallnotpass
+```
+
+All fields are optional.
+You can provide eiter `trackData` or `identifier` or nothing, not both.
+Request:
+```json
+{
+    "trackData": "...",
+    "identifier": "...",
+    "startTime": 0,
+    "endTime": 0,
+    "volume": 100,
+    "position": 32400,
+    "pause": false,
+    "filters": { ... },
+    "sessionId": "...",
+    "event": {
+        "token": "...",
+        "endpoint": "..."
+    }
+}
+```
+
+Response: 
+// TODO
+
+### Filters
+Filters are used in above requests and look like this
+```js
+{
+  // Float value where 1.0 is 100%. Values >1.0 may cause clipping
+  "volume": 1.0, // 0 ≤ x ≤ 5
+  
+  // There are 15 bands (0-14) that can be changed.
+  // "gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
+  // where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could
+  // also change the volume of the output.
+  "equalizer": [
+    {
+      "band": 0,  // 0 ≤ x ≤ 14
+      "gain": 0.2 // -0.25 ≤ x ≤ 1
+    }
+  ],
+  
+  // Uses equalization to eliminate part of a band, usually targeting vocals.
+  "karaoke": {
+    "level": 1.0,
+    "monoLevel": 1.0,
+    "filterBand": 220.0,
+    "filterWidth": 100.0
+  },
+  
+  // Changes the speed, pitch, and rate. All default to 1.
+  "timescale": {
+    "speed": 1.0, // 0 ≤ x
+    "pitch": 1.0, // 0 ≤ x
+    "rate": 1.0   // 0 ≤ x
+  },
+  
+  // Uses amplification to create a shuddering effect, where the volume quickly oscillates.
+  // Example: https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
+  "tremolo": {
+    "frequency": 2.0, // 0 < x
+    "depth": 0.5      // 0 < x ≤ 1
+  },
+  
+  // Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
+  "vibrato": {
+    "frequency": 2.0, // 0 < x ≤ 14
+    "depth": 0.5      // 0 < x ≤ 1
+  },
+  
+  // Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to: https://youtu.be/QB9EB8mTKcc (without the reverb)
+  "rotation": {
+    "rotationHz": 0 // The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above.
+  },
+  
+  // Distortion effect. It can generate some pretty unique audio effects.
+  "distortion": {
+    "sinOffset": 0.0,
+    "sinScale": 1.0,
+    "cosOffset": 0.0,
+    "cosScale": 1.0,
+    "tanOffset": 0.0,
+    "tanScale": 1.0,
+    "offset": 0.0,
+    "scale": 1.0
+  } 
+  
+  // Mixes both channels (left and right), with a configurable factor on how much each channel affects the other.
+  // With the defaults, both channels are kept independent from each other.
+  // Setting all factors to 0.5 means both channels get the same audio.
+  "channelMix": {
+    "leftToLeft": 1.0,
+    "leftToRight": 0.0,
+    "rightToLeft": 0.0,
+    "rightToRight": 1.0,
+  }
+  
+  // Higher frequencies get suppressed, while lower frequencies pass through this filter, thus the name low pass.
+  // Any smoothing values equal to, or less than 1.0 will disable the filter.
+  "lowPass": {
+    "smoothing": 20.0 // 1.0 < x
+  }
+}
+```
+
+### Destroy Player API
+Destroys the player for this guild in this session.
+```
+DELETE /v3/sessions/{sessionId}/players/{guildId}
+Authorization: youshallnotpass
+```
+
+Response: 204 No Content
+
 ### Track Loading API
 The REST api is used to resolve audio tracks for use with the `play` op. 
 ```
-GET /loadtracks?identifier=dQw4w9WgXcQ
+GET /v3/loadtracks?identifier=dQw4w9WgXcQ
 Authorization: youshallnotpass
 ```
 
@@ -391,18 +405,16 @@ Response:
   "playlistInfo": {},
   "tracks": [
     {
-      "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-      "info": {
-        "identifier": "dQw4w9WgXcQ",
-        "isSeekable": true,
-        "author": "RickAstleyVEVO",
-        "length": 212000,
-        "isStream": false,
-        "position": 0,
-        "title": "Rick Astley - Never Gonna Give You Up",
-        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        "sourceName": "youtube"
-      }
+      "trackData": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+      "identifier": "dQw4w9WgXcQ",
+      "isSeekable": true,
+      "author": "RickAstleyVEVO",
+      "length": 212000,
+      "isStream": false,
+      "position": 0,
+      "title": "Rick Astley - Never Gonna Give You Up",
+      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "sourceName": "youtube"
     }
   ]
 }
@@ -454,7 +466,7 @@ When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. N
 
 Decode a single track into its info
 ```
-GET /decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==
+GET /v3/decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==
 Authorization: youshallnotpass
 ```
 
@@ -475,7 +487,7 @@ Response:
 
 Decode multiple tracks into info their info
 ```
-POST /decodetracks
+POST /v3/decodetracks
 Authorization: youshallnotpass
 ```
 
@@ -490,21 +502,19 @@ Request:
 Response:
 ```json
 [
-    {
-      "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-      "info": {
-        "identifier": "dQw4w9WgXcQ",
-        "isSeekable": true,
-        "author": "RickAstleyVEVO",
-        "length": 212000,
-        "isStream": false,
-        "position": 0,
-        "title": "Rick Astley - Never Gonna Give You Up",
-        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        "sourceName": "youtube"
-      }
-    },
-    ...
+  {
+    "trackData": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "identifier": "dQw4w9WgXcQ",
+    "isSeekable": true,
+    "author": "RickAstleyVEVO",
+    "length": 212000,
+    "isStream": false,
+    "position": 0,
+    "title": "Rick Astley - Never Gonna Give You Up",
+    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "sourceName": "youtube"
+  },
+  ...
 ]
 ```
 ---
@@ -512,7 +522,7 @@ Response:
 ### Get list of plugins
 Request information about the plugins running on Lavalink, if any.
 ```
-GET /plugins
+GET /v3/plugins
 Authorization: youshallnotpass
 ```
 
@@ -530,6 +540,19 @@ Response:
 ]
 ```
 
+### Get Lavalink version
+Request Lavalink version,
+```
+GET /v3/version
+Authorization: youshallnotpass
+```
+
+Response:
+```
+v3.5
+```
+
+
 ### RoutePlanner API
 
 Additionally, there are a few REST endpoints for the ip rotation extension
@@ -537,7 +560,7 @@ Additionally, there are a few REST endpoints for the ip rotation extension
 #### Get RoutePlanner status
 
 ```
-GET /routeplanner/status
+GET /v3/routeplanner/status
 Authorization: youshallnotpass
 ```
 
@@ -545,22 +568,22 @@ Response:
 
 ```json
 {
-    "class": "RotatingNanoIpRoutePlanner",
-    "details": {
-        "ipBlock": {
-            "type": "Inet6Address",
-            "size": "1208925819614629174706176"
-        },
-        "failingAddresses": [
-            {
-                "address": "/1.0.0.0",
-                "failingTimestamp": 1573520707545,
-                "failingTime": "Mon Nov 11 20:05:07 EST 2019"
-            }
-        ],
-        "blockIndex": "0",
-        "currentAddressIndex": "36792023813"
-    }
+  "class": "RotatingNanoIpRoutePlanner",
+  "details": {
+    "ipBlock": {
+      "type": "Inet6Address",
+      "size": "1208925819614629174706176"
+    },
+    "failingAddresses": [
+      {
+        "address": "/1.0.0.0",
+        "failingTimestamp": 1573520707545,
+        "failingTime": "Mon Nov 11 20:05:07 EST 2019"
+      }
+    ],
+    "blockIndex": "0",
+    "currentAddressIndex": "36792023813"
+  }
 }
 ```
 
@@ -596,7 +619,7 @@ block.
 #### Unmark a failed address
 
 ```
-POST /routeplanner/free/address
+POST /v3/routeplanner/free/address
 Host: localhost:8080
 Authorization: youshallnotpass
 ```
@@ -605,7 +628,7 @@ Request Body:
 
 ```json
 {
-    "address": "1.0.0.1"
+  "address": "1.0.0.1"
 }
 ```
 
@@ -616,7 +639,7 @@ Response:
 #### Unmark all failed address
 
 ```
-POST /routeplanner/free/all
+POST /v3/routeplanner/free/all
 Host: localhost:8080
 Authorization: youshallnotpass
 ```
@@ -643,9 +666,9 @@ To enable resuming, you must send a `configureResuming` message.
 
 ```json
 {
-    "op": "configureResuming",
-    "key": "myResumeKey",
-    "timeout": 60
+  "op": "configureResuming",
+  "key": "myResumeKey",
+  "timeout": 60
 }
 ```
 
@@ -673,6 +696,197 @@ queue is then emptied and the events are then replayed.
 
 ```json
 {"op":4,"d":{"self_deaf":false,"guild_id":"GUILD_ID_HERE","channel_id":null,"self_mute":false}}
+```
+
+### Outgoing messages(DEPRECATED)
+
+
+#### Provide a voice server update(DEPRECATED)
+
+Provide an intercepted voice server update. This causes the server to connect to the voice channel.
+
+```js
+{
+  "op": "voiceUpdate",
+  "guildId": "...",
+  "sessionId": "...",
+  "event": {...}
+}
+```
+
+#### Play a track(DEPRECATED)
+
+`startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
+
+`endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default the track plays until it's end as per the encoded data.
+
+`volume` is an optional setting which changes the volume if provided.
+
+If `noReplace` is set to true, this operation will be ignored if a track is already playing or paused. This is an optional field.
+
+If `pause` is set to true, the playback will be paused. This is an optional field.
+
+```json
+{
+  "op": "play",
+  "guildId": "...",
+  "track": "...",
+  "startTime": "60000",
+  "endTime": "120000",
+  "volume": "100",
+  "noReplace": false,
+  "pause": false
+}
+```
+
+#### Stop a player(DEPRECATED)
+
+```json
+{
+  "op": "stop",
+  "guildId": "..."
+}
+```
+
+#### Pause the playback(DEPRECATED)
+
+```json
+{
+  "op": "pause",
+  "guildId": "...",
+  "pause": true
+}
+```
+
+#### Seek a track(DEPRECATED)
+
+The position is in milliseconds.
+
+```json
+{
+  "op": "seek",
+  "guildId": "...",
+  "position": 60000
+}
+```
+
+#### Set player volume(DEPRECATED)
+
+Volume may range from 0 to 1000. 100 is default.
+
+```json
+{
+  "op": "volume",
+  "guildId": "...",
+  "volume": 125
+}
+```
+
+#### Using filters(DEPRECATED)
+
+The `filters` op sets the filters. All the filters are optional, and leaving them out of this message will disable them.
+
+Adding a filter can have adverse effects on performance. These filters force Lavaplayer to decode all audio to PCM,
+even if the input was already in the Opus format that Discord uses. This means decoding and encoding audio that would
+normally require very little processing. This is often the case with YouTube videos.
+
+JSON comments are for illustration purposes only, and will not be accepted by the server.
+
+Note that filters may take a moment to apply.
+
+```yaml
+{
+  "op": "filters",
+  "guildId": "...",
+  
+  // Float value where 1.0 is 100%. Values >1.0 may cause clipping
+  "volume": 1.0, // 0 ≤ x ≤ 5
+  
+  // There are 15 bands (0-14) that can be changed.
+  // "gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
+  // where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could
+  // also change the volume of the output.
+  "equalizer": [
+    {
+      "band": 0,  // 0 ≤ x ≤ 14
+      "gain": 0.2 // -0.25 ≤ x ≤ 1
+    }
+  ],
+  
+  // Uses equalization to eliminate part of a band, usually targeting vocals.
+  "karaoke": {
+    "level": 1.0,
+    "monoLevel": 1.0,
+    "filterBand": 220.0,
+    "filterWidth": 100.0
+  },
+  
+  // Changes the speed, pitch, and rate. All default to 1.
+  "timescale": {
+    "speed": 1.0, // 0 ≤ x
+    "pitch": 1.0, // 0 ≤ x
+    "rate": 1.0   // 0 ≤ x
+  },
+  
+  // Uses amplification to create a shuddering effect, where the volume quickly oscillates.
+  // Example: https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
+  "tremolo": {
+    "frequency": 2.0, // 0 < x
+    "depth": 0.5      // 0 < x ≤ 1
+  },
+  
+  // Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
+  "vibrato": {
+    "frequency": 2.0, // 0 < x ≤ 14
+    "depth": 0.5      // 0 < x ≤ 1
+  },
+  
+  // Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to: https://youtu.be/QB9EB8mTKcc (without the reverb)
+  "rotation": {
+    "rotationHz": 0 // The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above.
+  },
+  
+  // Distortion effect. It can generate some pretty unique audio effects.
+  "distortion": {
+    "sinOffset": 0.0,
+    "sinScale": 1.0,
+    "cosOffset": 0.0,
+    "cosScale": 1.0,
+    "tanOffset": 0.0,
+    "tanScale": 1.0,
+    "offset": 0.0,
+    "scale": 1.0
+  } 
+  
+  // Mixes both channels (left and right), with a configurable factor on how much each channel affects the other.
+  // With the defaults, both channels are kept independent from each other.
+  // Setting all factors to 0.5 means both channels get the same audio.
+  "channelMix": {
+    "leftToLeft": 1.0,
+    "leftToRight": 0.0,
+    "rightToLeft": 0.0,
+    "rightToRight": 1.0,
+  }
+  
+  // Higher frequencies get suppressed, while lower frequencies pass through this filter, thus the name low pass.
+  // Any smoothing values equal to, or less than 1.0 will disable the filter.
+  "lowPass": {
+    "smoothing": 20.0 // 1.0 < x
+  }
+}
+```
+
+#### Destroy a player(DEPRECATED)
+
+Tell the server to potentially disconnect from the voice server and potentially remove the player with all its data.
+This is useful if you want to move to a new node for a voice connection. Calling this op does not affect voice state,
+and you can send the same VOICE_SERVER_UPDATE to a new node.
+
+```json
+{
+  "op": "destroy",
+  "guildId": "..."
+}
 ```
 
 # Common pitfalls
