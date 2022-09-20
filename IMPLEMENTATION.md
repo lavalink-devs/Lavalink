@@ -225,9 +225,9 @@ Response:
       "identifier": "dQw4w9WgXcQ",
       "isSeekable": true,
       "author": "RickAstleyVEVO",
-      "length": 212000,
+      "length": 212000, // in ms
       "isStream": false,
-      "position": 0,
+      "position": 0, // in ms
       "title": "Rick Astley - Never Gonna Give You Up",
       "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "sourceName": "youtube"
@@ -239,7 +239,7 @@ Response:
       "endpoint": "...",
       "sessionId": "...",
       "connected": true,
-      "ping": 10 // -1 if not connected
+      "ping": 10 // in ms & -1 if not connected
     },
     "filters": { ... }
   }
@@ -262,9 +262,9 @@ Response:
     "identifier": "dQw4w9WgXcQ",
     "isSeekable": true,
     "author": "RickAstleyVEVO",
-    "length": 212000,
+    "length": 212000, // in ms
     "isStream": false,
-    "position": 0,
+    "position": 0, // in ms
     "title": "Rick Astley - Never Gonna Give You Up",
     "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     "sourceName": "youtube"
@@ -276,7 +276,7 @@ Response:
     "endpoint": "...",
     "sessionId": "...",
     "connected": true,
-    "ping": 10 // -1 if not connected
+    "ping": 10 // in ms & -1 if not connected
   },
   "filters": { ... }
 }
@@ -290,16 +290,16 @@ Authorization: youshallnotpass
 ```
 
 All fields are optional.
-You can provide eiter `trackData` or `identifier` or nothing, not both.
+You can provide either `trackData` or `identifier` or nothing, not both.
 Request:
 ```json
 {
     "trackData": "...",
     "identifier": "...",
-    "startTime": 0,
-    "endTime": 0,
+    "startTime": 0, // in ms
+    "endTime": 0, // in ms
     "volume": 100,
-    "position": 32400,
+    "position": 32400, // in ms
     "pause": false,
     "filters": { ... },
     "sessionId": "...",
@@ -319,9 +319,9 @@ Response:
     "identifier": "dQw4w9WgXcQ",
     "isSeekable": true,
     "author": "RickAstleyVEVO",
-    "length": 212000,
+    "length": 212000, // in ms
     "isStream": false,
-    "position": 0,
+    "position": 0, // in ms
     "title": "Rick Astley - Never Gonna Give You Up",
     "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     "sourceName": "youtube"
@@ -333,7 +333,7 @@ Response:
     "endpoint": "...",
     "sessionId": "...",
     "connected": true,
-    "ping": 10 // -1 if not connected
+    "ping": 10 // in ms & -1 if not connected
   },
   "filters": { ... }
 }
@@ -442,7 +442,7 @@ Request:
 ```json
 {
     "resumingKey": "...",
-    "timeout": 0
+    "timeout": 0 // in seconds
 }
 ```
 
@@ -471,9 +471,9 @@ Authorization: youshallnotpass
         "identifier": "dQw4w9WgXcQ",
         "isSeekable": true,
         "author": "RickAstleyVEVO",
-        "length": 212000,
+        "length": 212000, // in ms
         "isStream": false,
-        "position": 0,
+        "position": 0, // in ms
         "title": "Rick Astley - Never Gonna Give You Up",
         "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         "sourceName": "youtube"
@@ -496,9 +496,9 @@ Response:
       "identifier": "dQw4w9WgXcQ",
       "isSeekable": true,
       "author": "RickAstleyVEVO",
-      "length": 212000,
+      "length": 212000, // in ms
       "isStream": false,
-      "position": 0,
+      "position": 0, // in ms
       "title": "Rick Astley - Never Gonna Give You Up",
       "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "sourceName": "youtube"
@@ -564,9 +564,9 @@ Response:
   "identifier": "dQw4w9WgXcQ",
   "isSeekable": true,
   "author": "RickAstleyVEVO",
-  "length": 212000,
+  "length": 212000, // in ms
   "isStream": false,
-  "position": 0,
+  "position": 0, // in ms
   "title": "Rick Astley - Never Gonna Give You Up",
   "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   "sourceName": "youtube"
@@ -619,9 +619,9 @@ Response:
     "identifier": "dQw4w9WgXcQ",
     "isSeekable": true,
     "author": "RickAstleyVEVO",
-    "length": 212000,
+    "length": 212000, // in ms
     "isStream": false,
-    "position": 0,
+    "position": 0, // in ms
     "title": "Rick Astley - Never Gonna Give You Up",
     "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     "sourceName": "youtube"
