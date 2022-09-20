@@ -6,6 +6,14 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * You must be able to send messages via a shard's mainWS connection.
 * You must be able to intercept voice server updates from mainWS on your shard connection.
 
+## Significant changes v3.5 -> v3.6
+* Deprecation of all endpoints and moved them to `/v3` namespace.
+* Deprecation of all outgoing messages(play, stop, pause, seek, volume, filters, destroy, voiceUpdate & configureResuming).
+* Deprecation of [`/loadtracks` response](#track-loading-api).
+* Deprecation of [track decoding response](#track-decoding-api).
+* Add of new incoming message [Ready OP](#ready-op) to get `sessionId` and `resume` status.
+* Addition of new [Session](#update-session-api)/[Player](#get-player-api) REST API.
+
 ## Significant changes v3.3 -> v3.4
 * Added filters
 * The `error` string on the `TrackExceptionEvent` has been deprecated and replaced by 
@@ -57,6 +65,7 @@ Client-Name: The name of your client. Optionally in the format NAME/VERSION
 
 See [LavalinkSocket.java](https://github.com/freyacodes/lavalink-client/blob/master/src/main/java/lavalink/client/io/LavalinkSocket.java) for client implementation
 
+### Ready OP
 Tells you if you resumed successfully and your sessionId used for REST requests.
 ```json
 {
@@ -66,6 +75,7 @@ Tells you if you resumed successfully and your sessionId used for REST requests.
 }
 ```
 
+### Player Update OP
 This event includes:
 * Unix timestamp in milliseconds.
 * Track position in milliseconds. Omitted if not playing anything.
@@ -84,6 +94,7 @@ This event includes:
 }
 ```
 
+### Stats OP
 A collection of stats sent every minute. 
 
 ```json
@@ -117,6 +128,7 @@ if (frames != null) {
 }
 ```
 
+### Event OP
 Server emitted an event. See the client implementation below.
 ```json
 {
@@ -299,7 +311,33 @@ Request:
 ```
 
 Response: 
-// TODO
+```json
+{
+  "guildId": "...",
+  "track": {
+    "trackData": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "identifier": "dQw4w9WgXcQ",
+    "isSeekable": true,
+    "author": "RickAstleyVEVO",
+    "length": 212000,
+    "isStream": false,
+    "position": 0,
+    "title": "Rick Astley - Never Gonna Give You Up",
+    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "sourceName": "youtube"
+  },
+  "volume": 100,
+  "paused": false,
+  "voice": {
+    "token": "...",
+    "endpoint": "...",
+    "sessionId": "...",
+    "connected": true,
+    "ping": 10 // -1 if not connected
+  },
+  "filters": { ... }
+}
+```
 
 ### Filters
 Filters are used in above requests and look like this
@@ -389,14 +427,63 @@ DELETE /v3/sessions/{sessionId}/players/{guildId}
 Authorization: youshallnotpass
 ```
 
-Response: 204 No Content
+Response: 
+
+204 - No Content
+
+### Update Session API
+Updates the session with a resuming key and timeout.
+```
+PATCH /v3/sessions/{sessionId}
+Authorization: youshallnotpass
+```
+
+Request:
+```json
+{
+    "resumingKey": "...",
+    "timeout": 0
+}
+```
+
+Response:
+
+204 - No Content
 
 ### Track Loading API
-The REST api is used to resolve audio tracks for use with the `play` op. 
+The REST api is used to resolve audio tracks for use with the `play` op.
+> `/loadtracks?identifier=dQw4w9WgXcQ` is deprecated and for removal in v4
 ```
 GET /v3/loadtracks?identifier=dQw4w9WgXcQ
 Authorization: youshallnotpass
 ```
+<details open>
+<summary>Response(Deprecated)</summary>
+
+```json
+{
+  "loadType": "TRACK_LOADED",
+  "playlistInfo": {},
+  "tracks": [
+    {
+      "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+      "info": {
+        "identifier": "dQw4w9WgXcQ",
+        "isSeekable": true,
+        "author": "RickAstleyVEVO",
+        "length": 212000,
+        "isStream": false,
+        "position": 0,
+        "title": "Rick Astley - Never Gonna Give You Up",
+        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "sourceName": "youtube"
+      }
+    }
+  ]
+}
+```
+
+</details>
 
 Response:
 ```json
@@ -465,6 +552,7 @@ When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. N
 ### Track Decoding API
 
 Decode a single track into its info
+> `/decodetrack?track=QAAAjJ...AAA==` is deprecated and for removal in v4
 ```
 GET /v3/decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==
 Authorization: youshallnotpass
@@ -486,6 +574,7 @@ Response:
 ```
 
 Decode multiple tracks into info their info
+> `/decodetracks` is deprecated and for removal in v4
 ```
 POST /v3/decodetracks
 Authorization: youshallnotpass
@@ -498,6 +587,29 @@ Request:
    ...
 ]
 ```
+<details open>
+<summary>Response(Deprecated):</summary>
+
+```json
+[
+  {
+    "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "info": {
+      "identifier": "dQw4w9WgXcQ",
+      "isSeekable": true,
+      "author": "RickAstleyVEVO",
+      "length": 212000,
+      "isStream": false,
+      "position": 0,
+      "title": "Rick Astley - Never Gonna Give You Up",
+      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "sourceName": "youtube"
+    }
+  },
+  ...
+]
+```
+</details>
 
 Response:
 ```json
@@ -521,6 +633,7 @@ Response:
 
 ### Get list of plugins
 Request information about the plugins running on Lavalink, if any.
+> `/plugins` is deprecated and for removal in v4
 ```
 GET /v3/plugins
 Authorization: youshallnotpass
@@ -542,6 +655,7 @@ Response:
 
 ### Get Lavalink version
 Request Lavalink version,
+> `/version` is deprecated and for removal in v4
 ```
 GET /v3/version
 Authorization: youshallnotpass
@@ -558,7 +672,7 @@ v3.5
 Additionally, there are a few REST endpoints for the ip rotation extension
 
 #### Get RoutePlanner status
-
+> `/routeplanner/status` is deprecated and for removal in v4
 ```
 GET /v3/routeplanner/status
 Authorization: youshallnotpass
@@ -617,7 +731,7 @@ are chosen. This number increases on each ban.
 block.
 
 #### Unmark a failed address
-
+> `/routeplanner/free/address` is deprecated and for removal in v4
 ```
 POST /v3/routeplanner/free/address
 Host: localhost:8080
@@ -637,7 +751,7 @@ Response:
 204 - No Content
 
 #### Unmark all failed address
-
+> `/routeplanner/free/all` is deprecated and for removal in v4
 ```
 POST /v3/routeplanner/free/all
 Host: localhost:8080
