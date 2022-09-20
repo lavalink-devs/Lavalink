@@ -66,7 +66,7 @@ Client-Name: The name of your client. Optionally in the format NAME/VERSION
 See [LavalinkSocket.java](https://github.com/freyacodes/lavalink-client/blob/master/src/main/java/lavalink/client/io/LavalinkSocket.java) for client implementation
 
 ### Ready OP
-Tells you if you resumed successfully and your sessionId used for REST requests.
+Dispatched by Lavalink upon successful connection and authorization. Contains fields determining if resuming was successful, as well as the session ID.
 ```json
 {
     "op": "ready",
