@@ -21,7 +21,6 @@ public class AppInfo {
     private final String version;
     private final String groupId;
     private final String artifactId;
-    private final String buildNumber;
     private final long buildTime;
 
     public AppInfo() {
@@ -35,7 +34,6 @@ public class AppInfo {
         this.version = prop.getProperty("version");
         this.groupId = prop.getProperty("groupId");
         this.artifactId = prop.getProperty("artifactId");
-        this.buildNumber = prop.getProperty("buildNumber");
         long bTime = -1L;
         try {
             bTime = Long.parseLong(prop.getProperty("buildTime"));
@@ -55,15 +53,11 @@ public class AppInfo {
         return this.artifactId;
     }
 
-    public String getBuildNumber() {
-        return this.buildNumber;
-    }
-
     public long getBuildTime() {
         return this.buildTime;
     }
 
     public String getVersionBuild() {
-        return this.version + "_" + this.buildNumber;
+        return this.version;
     }
 }
