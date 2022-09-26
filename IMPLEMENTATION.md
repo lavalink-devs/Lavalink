@@ -662,7 +662,12 @@ Authorization: youshallnotpass
 Response:
 ```json
 {
-  "version": "3.6.0",
+  "version": {
+    "version": "v3.6.0",
+    "major": 3,
+    "minor": 6,
+    "patch": 0
+  },
   "buildTime": 1664223916812,
   "git": {
     "branch": "master",
@@ -680,7 +685,7 @@ Response:
 
 #### Get Lavalink version(DEPRECATED)
 Request Lavalink version.
-> `/version` is deprecated and for removal in v4
+> `/version` is deprecated and for removal in v4 use [`/info`](#get-lavalink-info) instead
 ```
 GET /version
 Authorization: youshallnotpass

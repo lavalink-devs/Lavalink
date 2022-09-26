@@ -48,34 +48,15 @@ Please see [here](CHANGELOG.md)
 
 ## Versioning policy
 
-- The public API ("API" in a very broad sense) of Lavalink can be categorized into two main domains:
-  - **Client Domain:** The API exposed to clients, consisting of both the WebSocket protocol and any public HTTP endpoints
-  - **Server Domain:** The server application with its runtime environment, its configuration, etc.
+Lavalink follows [Semantic Versioning](https://semver.org/).
 
-- A change that is breaking to one domain might not be breaking at all to another.
+Given a version number `MAJOR.MINOR.PATCH`, the following rules apply:
 
-  *Examples:*
-  - Removing an endpoint: This is a breaking change for the client domain but is not for running the server itself.
-  - Upgrading the minimum Java version: This is a breaking change for the server domain, but client implementations couldn't care less about it.
+    MAJOR breaking API changes
+    MINOR new backwards compatible features
+    PATCH backwards compatible bug fixes
 
-**Given the above, the following versioning pattern lends itself well to the Lavalink project:**
-
-_**api.major.minor.patch**_
-
-- **API**: Bumped when breaking changes are committed to the client domain of Lavalink
-
-  *Examples:* Removing an endpoint, altering the output of an endpoint in a non-backward-compatible manner
-- **Major**: Bumped when breaking changes are committed to the Lavalink server domain
-
-  *Examples:* Bumping the required Java version, altering the configuration in a non-backward-compatible manner
-- **Minor**: New features in any domain
-
-  *Examples:* New optional endpoint or opcode, additional configuration options, change of large subsystems or dependencies
-- **Patch**: Bug fixes in any domain
-
-Examples: Fixing a race condition, fixing unexpected exceptions, fixing output that is not according to specs, etc.
-
-While major, minor and patch will do an optimum effort to adhere to [Semantic Versioning](https://semver.org/), prepending it with an additional API version makes life easier for developers in two ways: It is a clear way for the Lavalink project to communicate the relevant breaking changes to client developers, and in return, client developers can use the API version to communicate to their users about the compatibility of their clients to the Lavalink server.
+Additional labels for release candidates are available as extensions to the `MAJOR.MINOR.PATCH-rcNUMBER`(`3.6.0-rc1`) format.
 
 
 ## Client libraries:
