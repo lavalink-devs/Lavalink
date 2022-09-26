@@ -652,11 +652,37 @@ Response:
 ]
 ```
 
-#### Get Lavalink version
-Request Lavalink version,
+#### Get Lavalink info
+Request Lavalink information.
+```
+GET /v3/info
+Authorization: youshallnotpass
+```
+
+Response:
+```json
+{
+  "version": "v3.6.0",
+  "buildTime": 1664223916812,
+  "git": {
+    "branch": "master",
+    "commit": "85c5ab5",
+    "commitTime": 1664223916812
+  },
+  "jvm": "13",
+  "lavaplayer": "1.3.98.4",
+  "sourceManagers": [
+    "youtube",
+    "soundcloud"
+  ]
+}
+```
+
+#### Get Lavalink version(DEPRECATED)
+Request Lavalink version.
 > `/version` is deprecated and for removal in v4
 ```
-GET /v3/version
+GET /version
 Authorization: youshallnotpass
 ```
 
