@@ -662,15 +662,15 @@ Authorization: youshallnotpass
 Response:
 ```json
 {
-  "version": "v3.6.0",
+  "version": "3.6.0",
   "buildTime": 1664223916812,
   "git": {
     "branch": "master",
     "commit": "85c5ab5",
     "commitTime": 1664223916812
   },
-  "jvm": "13",
-  "lavaplayer": "1.3.98.4",
+  "jvm": "18.0.2.1",
+  "lavaplayer": "1.3.98.4-original",
   "sourceManagers": [
     "youtube",
     "soundcloud"
