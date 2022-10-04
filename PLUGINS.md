@@ -11,6 +11,7 @@ List of plugins:
 - [DuncteBot plugin](https://github.com/DuncteBot/skybot-lavalink-plugin) adds additional source managers that are not widely used
 - [Extra Filter plugin](https://github.com/rohank05/lavalink-filter-plugin) adds additional audio filters to lavalink
 - [XM plugin](https://github.com/esmBot/lava-xm-plugin) adds support for various [music tracker module](https://en.wikipedia.org/wiki/Module_file) formats
+- [kaogurai plugin](https://github.com/kaogurai/lavalink-plugin) adds support for deezer (native play)
 
 Lavalink loads all .jar files placed in the `plugins` directory, which you may need to create yourself. Lavalink can
 also download plugin .jar files automatically by editing the configuration file. See the respective plugin repository
