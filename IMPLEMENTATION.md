@@ -226,7 +226,7 @@ Emitted when a track starts playing.
 |---------|--------|------------------------------------------|
 | track   | string | The track that started playing           |
 
-<details closed>
+<details>
 <summary>Example Payload</summary>
 
 ```json
@@ -269,7 +269,7 @@ Emitted when a track ends.
     "reason": "FINISHED"
 }
 ```
-<details>
+</details>
 
 ##### TrackExceptionEvent
 Emitted when a track throws an exception.
