@@ -98,6 +98,7 @@ Client | Platform | Compatible With | Additional Information
 [LavaClient](https://github.com/lavaclient/lavaclient) | Node.js | **Any**
 [Lavacoffee](https://github.com/XzFirzal/lavacoffee) | Node.js | **Any**
 [Lavacord](https://github.com/lavacord/lavacord) | Node.js | **Any**
+[FastLink]([https://github.com/1Lucas1apk/moonlink.js](https://github.com/ThePedroo/FastLink)) | Node.js | **Any**
 [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js) | Node.js | **Any**
 [@skyra/audio](https://github.com/skyra-project/audio) | Node.js | discord.js | Archived
 [Poru](https://github.com/parasop/poru) | Node.js | **Any**
