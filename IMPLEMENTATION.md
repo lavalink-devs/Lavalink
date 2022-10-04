@@ -77,7 +77,7 @@ Dispatched by Lavalink upon successful connection and authorization. Contains fi
 | resumed?  | bool   | If the session is resumed(Only present if a session id was present when connecting) |
 | sessionId | string | The Lavalink Session ID of this connection                                          |
 
-<details open>
+<details>
 <summary>Example Payload</summary>
 
 ```json
@@ -106,7 +106,7 @@ Dispatched every x(configurable in `application.yml`) seconds with the current s
 | connected | bool   | If Lavalink is connected to the voice gateway                                         |
 | ping      | int    | The ping of the node to the discord voice server in milliseconds(-1 if not connected) |
 
-<details open>
+<details>
 <summary>Example Payload</summary>
 
 ```json
@@ -159,7 +159,7 @@ A collection of stats sent every minute.
 | deficit | int  | The amount of frames that were deficit |
 
 
-<details open>
+<details>
 <summary>Example Payload</summary>
 
 ```json
@@ -198,7 +198,7 @@ Server emitted an event. See the client implementation below.
 | type  | string | The type of event   |
 | guild | string | The guild id        |
 
-<details open>
+<details>
 <summary>Example Payload</summary>
 
 ```yaml
@@ -226,7 +226,7 @@ Emitted when a track starts playing.
 |---------|--------|------------------------------------------|
 | track   | string | The track that started playing           |
 
-<details open>
+<details closed>
 <summary>Example Payload</summary>
 
 ```json
@@ -257,7 +257,7 @@ Emitted when a track ends.
 | REPLACED    | The track was replaced     | false          |
 | CLEANUP     | The track was cleaned up   | false          |
 
-<details open>
+<details>
 <summary>Example Payload</summary>
 
 ```json
@@ -294,7 +294,7 @@ Emitted when a track throws an exception.
 | FATAL      | Fatal       |
 
 
-<details open>
+<details>
 <summary>Example Payload</summary>
 
 ```json
@@ -321,7 +321,7 @@ Emitted when a track gets stuck while playing.
 | track       | string | The track that got stuck                        |
 | thresholdMs | int    | The threshold in milliseconds that was exceeded |
 
-<details open>
+<details>
 <summary>Example Payload</summary>
 
 ```json
@@ -348,7 +348,7 @@ See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and
 | reason   | string | The close reason                                                                                                                  |
 | byRemote | bool   | The close reason                                                                                                                  |
 
-<details open>
+<details>
 <summary>Example Payload</summary>
 
 ```json
@@ -614,7 +614,7 @@ This endpoint is used to resolve audio tracks for use with the [Update Player](#
 ```
 GET /v3/loadtracks?identifier=dQw4w9WgXcQ
 ```
-<details open>
+<details>
 <summary>Response(Deprecated)</summary>
 
 ```json
@@ -743,7 +743,7 @@ Request:
    ...
 ]
 ```
-<details open>
+<details>
 <summary>Response(Deprecated):</summary>
 
 ```json
