@@ -65,8 +65,21 @@ Client-Name: The name of your client. Optionally in the format NAME/VERSION
 
 See [LavalinkSocket.java](https://github.com/freyacodes/lavalink-client/blob/master/src/main/java/lavalink/client/io/LavalinkSocket.java) for client implementation
 
+Fields marked with `?` are optional.
+Types marked with `?` are nullable.
+
 #### Ready
 Dispatched by Lavalink upon successful connection and authorization. Contains fields determining if resuming was successful, as well as the session ID.
+
+| Field     | Type   | Description                                                                         |
+|-----------|--------|-------------------------------------------------------------------------------------|
+| op        | string | The type of payload                                                                 |
+| resumed?  | bool   | If the session is resumed(Only present if a session id was present when connecting) |
+| sessionId | string | The Lavalink Session ID of this connection                                          |
+
+<details open>
+<summary>Example Payload</summary>
+
 ```json
 {
     "op": "ready",
@@ -74,13 +87,28 @@ Dispatched by Lavalink upon successful connection and authorization. Contains fi
     "sessionId": "..."
 }
 ```
+</details>
 
 #### Player Update
-This event includes:
-* Unix timestamp in milliseconds.
-* Track position in milliseconds. Omitted if not playing anything.
-* `connected` is true when connected to the voice gateway.
-* `ping` represents the number of milliseconds between heartbeat and ack. Could be `-1` if not connected.
+Dispatched every x(configurable in `application.yml`) seconds with the current state of the player.
+
+| Field   | Type   | Description                              |
+|---------|--------|------------------------------------------|
+| op      | string | The type of payload                      |
+| guildId | string | The guild id of the player               |
+| state   | object | The [state](#player-state) of the player |
+
+##### Player State
+| Field     | Type   | Description                                                                           |
+|-----------|--------|---------------------------------------------------------------------------------------|
+| time      | string | Unix timestamp in milliseconds                                                        |
+| position? | int    | The position of the track in milliseconds                                             |
+| connected | bool   | If Lavalink is connected to the voice gateway                                         |
+| ping      | int    | The ping of the node to the discord voice server in milliseconds(-1 if not connected) |
+
+<details open>
+<summary>Example Payload</summary>
+
 ```json
 {
     "op": "playerUpdate",
@@ -93,109 +121,235 @@ This event includes:
     }
 }
 ```
+</details>
 
 #### Stats
 A collection of stats sent every minute. 
 
+| Field          | Type   | Description                                 |
+|----------------|--------|---------------------------------------------|
+| op             | string | The type of payload                         |
+| players        | int    | The amount of players connected to the node |
+| playingPlayers | int    | The amount of players playing a track       |
+| uptime         | int    | The uptime of the node in milliseconds      |
+| memory         | object | The [memory](#memory) stats of the node     |
+| cpu            | object | The [cpu](#cpu) stats of the node           |
+| frameStats     | object | The [frame stats](#frame-stats) of the node |
+
+##### Memory
+| Field      | Type | Description                              |
+|------------|------|------------------------------------------|
+| free       | int  | The amount of free memory in bytes       |
+| used       | int  | The amount of used memory in bytes       |
+| allocated  | int  | The amount of allocated memory in bytes  |
+| reservable | int  | The amount of reservable memory in bytes |
+
+##### CPU
+| Field        | Type   | Description                      |
+|--------------|--------|----------------------------------|
+| cores        | int    | The amount of cores the node has |
+| systemLoad   | double | The system load of the node      |
+| lavalinkLoad | double | The load of Lavalink on the node |
+
+##### Frame Stats
+| Field   | Type | Description                            |
+|---------|------|----------------------------------------|
+| sent    | int  | The amount of frames sent to Discord   |
+| nulled  | int  | The amount of frames that were nulled  |
+| deficit | int  | The amount of frames that were deficit |
+
+
+<details open>
+<summary>Example Payload</summary>
+
 ```json
 {
     "op": "stats",
-    ...
+    "players": 1,
+    "playingPlayers": 1,
+    "uptime": 123456789,
+    "memory": {
+        "free": 123456789,
+        "used": 123456789,
+        "allocated": 123456789,
+        "reservable": 123456789
+    },
+    "cpu": {
+        "cores": 4,
+        "systemLoad": 0.5,
+        "lavalinkLoad": 0.5
+    },
+    "frameStats": {
+        "sent": 123456789,
+        "nulled": 123456789,
+        "deficit": 123456789
+    }
 }
 ```
+</details>
 
-Example implementation of stats:
-```java
-players = json.getInt("players");
-playingPlayers = json.getInt("playingPlayers");
-uptime = json.getLong("uptime");
-
-memFree = json.getJSONObject("memory").getInt("free");
-memUsed = json.getJSONObject("memory").getInt("used");
-memAllocated = json.getJSONObject("memory").getInt("allocated");
-memReservable = json.getJSONObject("memory").getInt("reservable");
-
-cpuCores = json.getJSONObject("cpu").getInt("cores");
-systemLoad = json.getJSONObject("cpu").getDouble("systemLoad");
-lavalinkLoad = json.getJSONObject("cpu").getDouble("lavalinkLoad");
-
-JSONObject frames = json.optJSONObject("frameStats");
-
-if (frames != null) {
-    avgFramesSentPerMinute = frames.getInt("sent");
-    avgFramesNulledPerMinute = frames.getInt("nulled");
-    avgFramesDeficitPerMinute = frames.getInt("deficit");
-}
-```
 
 #### Event
 Server emitted an event. See the client implementation below.
+
+| Field | Type   | Description         |
+|-------|--------|---------------------|
+| op    | string | The type of payload |
+| type  | string | The type of event   |
+| guild | string | The guild id        |
+
+<details open>
+<summary>Example Payload</summary>
+
+```yaml
+{
+    "op": "event",
+    "type": "...",
+    "guildId": "...",
+    ...
+}
+```
+</details>
+
+| Event Type                                    | Description                                                              |
+|-----------------------------------------------|--------------------------------------------------------------------------|
+| [TrackStartEvent](#trackstartevent)           | Emitted when a track starts playing                                      |
+| [TrackEndEvent](#TrackEndEvent)               | Emitted when a track ends                                                |
+| [TrackExceptionEvent](#TrackExceptionEvent)   | Emitted when a track throws an exception                                 |
+| [TrackStuckEvent](#TrackStuckEvent)           | Emitted when a track gets stuck while playing                            |
+| [WebSocketClosedEvent](#WebSocketClosedEvent) | Emitted when the websocket connection to discord voice servers is closed |
+
+##### TrackStartEvent
+Emitted when a track starts playing.
+
+| Field   | Type   | Description                              |
+|---------|--------|------------------------------------------|
+| track   | string | The track that started playing           |
+
+<details open>
+<summary>Example Payload</summary>
+
 ```json
 {
     "op": "event",
-    "type": "..."
+    "type": "TrackStartEvent",
+    "guildId": "...",
+    "track": "..."
 }
 ```
 
-```java
-/**
- * Implementation details:
- * The only events extending {@link lavalink.client.player.event.PlayerEvent} produced by the remote server are these:
- * 1. TrackStartEvent
- * 2. TrackEndEvent
- * 3. TrackExceptionEvent
- * 4. TrackStuckEvent
- * 
- * The remaining lavaplayer events are caused by client actions, and are therefore not forwarded via WS.
- */
-private void handleEvent(JSONObject json) throws IOException {
-    LavalinkPlayer player = (LavalinkPlayer) lavalink.getPlayer(json.getString("guildId"));
-    PlayerEvent event = null;
+</details>
 
-    switch (json.getString("type")) {
-        case "TrackStartEvent":
-                event = new TrackStartEvent(player,
-                        LavalinkUtil.toAudioTrack(json.getString("track"))
-                );
-                break;
-        case "TrackEndEvent":
-            event = new TrackEndEvent(player,
-                    LavalinkUtil.toAudioTrack(json.getString("track")),
-                    AudioTrackEndReason.valueOf(json.getString("reason"))
-            );
-            break;
-        case "TrackExceptionEvent":
-            JSONObject jsonEx = json.getJSONObject("exception");
-            event = new TrackExceptionEvent(player,
-                    LavalinkUtil.toAudioTrack(json.getString("track")),
-                    new FriendlyException(
-                        jsonEx.getString("message"),
-                        FriendlyException.Severity.valueOf(jsonEx.getString("severity")),
-                        new RuntimeException(jsonEx.getString("cause"))
-                    )
-            );
-            break;
-        case "TrackStuckEvent":
-            event = new TrackStuckEvent(player,
-                    LavalinkUtil.toAudioTrack(json.getString("track")),
-                    json.getLong("thresholdMs")
-            );
-            break;
-        default:
-            log.warn("Unexpected event type: " + json.getString("type"));
-            break;
+##### TrackEndEvent
+Emitted when a track ends.
+
+| Field  | Type           | Description                  |
+|--------|----------------|------------------------------|
+| track  | string         | The track that ended playing |
+| reason | TrackEndReason | The reason the track ended   |
+
+##### TrackEndReason
+| Reason      | Description                | May Start Next |
+|-------------|----------------------------|----------------|
+| FINISH      | The track finished playing | true           |
+| LOAD_FAILED | The track failed to load   | true           |
+| STOPPED     | The track was stopped      | false          |
+| REPLACED    | The track was replaced     | false          |
+| CLEANUP     | The track was cleaned up   | false          |
+
+<details open>
+<summary>Example Payload</summary>
+
+```json
+{
+    "op": "event",
+    "type": "TrackEndEvent",
+    "guildId": "...",
+    "track": "...",
+    "reason": "FINISHED"
+}
+```
+<details>
+
+##### TrackExceptionEvent
+Emitted when a track throws an exception.
+
+| Field     | Type   | Description                        |
+|-----------|--------|------------------------------------|
+| track     | string | The track that threw the exception |
+| exception | object | The [Exception](#exception)        |
+
+##### Exception
+| Field    | Type     | Description                   |
+|----------|----------|-------------------------------|
+| message  | string   | The message of the exception  |
+| severity | Severity | The severity of the exception |
+| cause    | string   | The cause of the exception    |
+
+##### Severity
+| Severity   | Description |
+|------------|-------------|
+| COMMON     | Common      |
+| SUSPICIOUS | Suspicious  |
+| FATAL      | Fatal       |
+
+
+<details open>
+<summary>Example Payload</summary>
+
+```json
+{
+    "op": "event",
+    "type": "TrackExceptionEvent",
+    "guildId": "...",
+    "track": "...",
+    "exception": {
+        "message": "...",
+        "severity": "COMMON",
+        "cause": "..."
     }
-
-    if (event != null) player.emitEvent(event);
 }
 ```
+</details>
 
-See also: [AudioTrackEndReason.java](https://github.com/sedmelluq/lavaplayer/blob/master/main/src/main/java/com/sedmelluq/discord/lavaplayer/track/AudioTrackEndReason.java)
 
-Additionally there is also the `WebSocketClosedEvent`, which signals when an audio web socket (to Discord) is closed.
+##### TrackStuckEvent
+Emitted when a track gets stuck while playing.
+
+| Field       | Type   | Description                                     |
+|-------------|--------|-------------------------------------------------|
+| track       | string | The track that got stuck                        |
+| thresholdMs | int    | The threshold in milliseconds that was exceeded |
+
+<details open>
+<summary>Example Payload</summary>
+
+```json
+{
+    "op": "event",
+    "type": "TrackStuckEvent",
+    "guildId": "...",
+    "track": "...",
+    "thresholdMs": 123456789
+}
+```
+</details>
+
+
+##### WebSocketClosedEvent
+Emitted when an audio web socket (to Discord) is closed.
 This can happen for various reasons (normal and abnormal), e.g when using an expired voice server update.
 4xxx codes are usually bad.
 See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes).
+
+| Field    | Type   | Description                                                                                                                       |
+|----------|--------|-----------------------------------------------------------------------------------------------------------------------------------|
+| code     | int    | The [discord close event code](https://discord.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes) |
+| reason   | string | The close reason                                                                                                                  |
+| byRemote | bool   | The close reason                                                                                                                  |
+
+<details open>
+<summary>Example Payload</summary>
 
 ```json
 {
@@ -207,6 +361,8 @@ See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and
     "byRemote": true
 }
 ```
+</details>
+
 
 ### Rest API
 Lavalink exposes a REST API to allow for easy control of the players.
