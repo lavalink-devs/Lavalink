@@ -1196,6 +1196,8 @@ Response:
 ]
 ```
 
+---
+
 #### Get Lavalink version(DEPRECATED)
 Request Lavalink version.
 > `/version` is deprecated and for removal in v4 use [`/info`](#get-lavalink-info) instead
@@ -1321,6 +1323,8 @@ Request:
 Response:
 
 204 - No Content
+
+---
 
 #### Unmark all failed address
 > `/routeplanner/free/all` is deprecated and for removal in v4
