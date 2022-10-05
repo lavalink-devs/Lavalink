@@ -633,7 +633,7 @@ Filters are used in above requests and look like this
 | rotation?   | [Rotation](#rotation) object       | Lets you rotate the sound around the stereo channels/user headphones aka Audio Panning            |
 | distortion? | [Distortion](#distortion) object   | Lets you distort the audio                                                                        |
 | channelMix? | [Channel Mix](#channel-mix) object | Lets you mix both channels (left and right)                                                       |
-| lowPass?    | [Low Pass](#low-pass)object        | Lets you filter higher frequencies                                                                |
+| lowPass?    | [Low Pass](#low-pass) object        | Lets you filter higher frequencies                                                                |
 
 ##### Equalizer
 There are 15 bands (0-14) that can be changed.
