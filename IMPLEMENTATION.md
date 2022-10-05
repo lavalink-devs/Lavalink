@@ -38,9 +38,9 @@ With the release of v2.0 many unnecessary ops were removed:
 * `isConnectedReq`
 * `sendWS`
 
-With Lavalink 1.x the server had the responsibility of handling Discord VOICE_SERVER_UPDATEs as well as its own internal ratelimiting.
+With Lavalink 1.x the server had the responsibility of handling Discord `VOICE_SERVER_UPDATE`s as well as its own internal ratelimiting.
 This remote handling makes things unnecessarily complicated and adds a lot og points where things could go wrong. 
-One problem we noticed is that since JDAA is unaware of ratelimits on the bot's gateway connection, it would keep adding
+One problem we noticed is that since JD-AA is unaware of ratelimits on the bots gateway connection, it would keep adding
 to the ratelimit queue to the gateway. With this update this is now the responsibility of the Lavalink client or the 
 Discord client.
 
@@ -373,7 +373,7 @@ Emitted when a track gets stuck while playing.
 
 ##### WebSocketClosedEvent
 Emitted when an audio web socket (to Discord) is closed.
-This can happen for various reasons (normal and abnormal), e.g when using an expired voice server update.
+This can happen for various reasons (normal and abnormal), e.g. when using an expired voice server update.
 4xxx codes are usually bad.
 See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes).
 
@@ -419,11 +419,11 @@ GET /v3/sessions/{sessionId}/players
 | Field   | Type                               | Description                    |
 |---------|------------------------------------|--------------------------------|
 | guildId | string                             | The guild id of the player     |
-| track   | [Track](#track) ?object            | The current playing track      |
+| track   | ?[Track](#track) object            | The current playing track      |
 | volume  | int                                | The volume of the player       |
 | paused  | bool                               | Whether the player is paused   |
 | voice   | [Voice State](#voice-state) object | The voice state of the player  |
-| filters | [Filters](#filters) ?object        | The filters used by the player |              
+| filters | ?[Filters](#filters) object        | The filters used by the player |              
 
 ##### Track
 | Field      | Type    | Description                        |
@@ -546,7 +546,7 @@ Request:
 | endTime?    | int                                | The end time in milliseconds                                                                                                                  |
 | volume?     | int                                | The volume from 0 to 200                                                                                                                      |
 | paused?     | bool                               | Whether the player is paused                                                                                                                  |
-| filters?    | [Filters](#filters) ?object        | The new filters to apply. `null` will reset all filters                                                                                       |
+| filters?    | ?[Filters](#filters) object        | The new filters to apply. `null` will reset all filters                                                                                       |
 | sessionId?  | string                             | The session id from the [voice state update event](https://discord.com/developers/docs/topics/gateway-events#voice-state-update) from discord |
 | event?      | [Voice Event](#voice-event) object | The [voice server update event object](https://discord.com/developers/docs/topics/gateway-events#voice-server-update) from discord            |
 
@@ -623,7 +623,7 @@ Filters are used in above requests and look like this
 | Field       | Type                               | Description                                                                                       |
 |-------------|------------------------------------|---------------------------------------------------------------------------------------------------|
 | volume?     | float                              | Lets you adjust the player volume from 0 to 5.0 where 1.0 is 100%. Values >1.0 may cause clipping |
-| equalizer?  | array of [Equalizer](#equalizer)   | Lets you adjust 15 different bands                                                                |
+| equalizer?  | array of [Equalizers](#equalizer)  | Lets you adjust 15 different bands                                                                |
 | karaoke?    | [Karaoke](#karaoke)    object      | Lets you eliminate part of a band, usually targeting vocals.                                      |
 | timescale?  | [Timescale](#timescale) object     | Lets you change the speed, pitch, and rate                                                        |
 | tremolo?    | [Tremolo](#tremolo) object         | Lets you create a shuddering effect, where the volume quickly oscillates                          |
@@ -702,7 +702,7 @@ Distortion effect. It can generate some pretty unique audio effects.
 
 ##### Channel Mix
 Mixes both channels (left and right), with a configurable factor on how much each channel affects the other.
-With the defaults, both channels are kept independent from each other.
+With the defaults, both channels are kept independent of each other.
 Setting all factors to 0.5 means both channels get the same audio.
 
 | Field         | Type  | Description                                           |
@@ -833,7 +833,6 @@ GET /v3/loadtracks?identifier=dQw4w9WgXcQ
 ```json
 {
   "loadType": "TRACK_LOADED",
-  "playlistInfo": {},
   "tracks": [
     {
       "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
@@ -867,13 +866,13 @@ Response:
 
 ###### Load Result Type
 
-| Load Result Type | Description                                  |
-|------------------|----------------------------------------------|
-| TRACK_LOADED     | A track has been loaded                      |
-| PLAYLIST_LOADED  | A playlist has been loaded                   |
-| SEARCH_RESULT    | A search result has been loaded              |
-| NO_MATCHES       | There has been no matches to your identifier |
-| LOAD_FAILED      | Loading has failed                           |
+| Load Result Type  | Description                                  |
+|-------------------|----------------------------------------------|
+| `TRACK_LOADED`    | A track has been loaded                      |
+| `PLAYLIST_LOADED` | A playlist has been loaded                   |
+| `SEARCH_RESULT`   | A search result has been loaded              |
+| `NO_MATCHES`      | There has been no matches to your identifier |
+| `LOAD_FAILED`     | Loading has failed                           |
 
 ###### Playlist Info
 
@@ -1209,6 +1208,7 @@ Response:
 v3.6.0
 ```
 
+---
 
 ### RoutePlanner API
 
@@ -1221,6 +1221,56 @@ GET /v3/routeplanner/status
 ```
 
 Response:
+
+| Field   | Type                                        | Description                                                           |
+|---------|---------------------------------------------|-----------------------------------------------------------------------|
+| class   | ?[Route Planner Type](#route-planner-types) | The name of the RoutePlanner implementation being used by this server |
+| details | ?[Details](#details-object) object          | The status details of the RoutePlanner                                |
+
+##### Route Planner Types
+
+| Route Planner Type           | Description |
+|------------------------------|-------------|
+| `RotatingIpRoutePlanner`     | ...         |
+| `NanoIpRoutePlanner`         | ...         |
+| `RotatingNanoIpRoutePlanner` | ...         |
+
+##### Details Object
+
+| Field               | Type                                                  | Description                                                                           | Valid Types                                        |
+|---------------------|-------------------------------------------------------|---------------------------------------------------------------------------------------|----------------------------------------------------|
+| ipBlock             | [IP Block](#ip-block-object) object                   | The ip block being used                                                               | all                                                |
+| failingAddresses    | array of [Failing Addresses](#failing-address-object) | The failing addresses                                                                 | all                                                |
+| rotateIndex         | string                                                | The number of rotations                                                               | `RotatingIpRoutePlanner`                           |
+| ipIndex             | string                                                | The current offset in the block                                                       | `RotatingIpRoutePlanner`                           |
+| currentAddress      | string                                                | The current address being used                                                        | `RotatingIpRoutePlanner`                           |
+| currentAddressIndex | string                                                | The current current offset in the ip block                                            | `NanoIpRoutePlanner`, `RotatingNanoIpRoutePlanner` |
+| blockIndex          | string                                                | The information in which /64 block ips are chosen. This number increases on each ban. | `RotatingNanoIpRoutePlanner`                       |
+
+##### IP Block Object
+
+| Field | Type                            | Description              |
+|-------|---------------------------------|--------------------------|
+| type  | [IP Block Type](#ip-block-type) | The type of the ip block |
+| size  | string                          | The size of the ip block |
+
+##### IP Block Type
+
+| IP Block Type  | Description         |
+|----------------|---------------------|
+| `Inet4Address` | The ipv4 block type |
+| `Inet6Address` | The ipv6 block type |
+
+##### Failing Address Object
+
+| Field            | Type   | Description                                              |
+|------------------|--------|----------------------------------------------------------|
+| address          | string | The failing address                                      |
+| failingTimestamp | int    | The timestamp when the address failed                    |
+| failingTime      | string | The timestamp when the address failed as a pretty string |
+
+<details>
+<summary>Example Payload</summary>
 
 ```json
 {
@@ -1242,35 +1292,9 @@ Response:
   }
 }
 ```
+</details>
 
-The response is different based on each route planner. 
-Fields which are always present are: `class`, `details.ipBlock` and 
-`details.failingAddresses`. If no route planner is set, both `class` and
-`details` will be null, and the other endpoints will result in status 500.
-
-The following classes have additional detail fields:
-
-#### RotatingIpRoutePlanner
-
-`details.rotateIndex` String containing the number of rotations which happened 
-since the restart of Lavalink
-
-`details.ipIndex` String containing the current offset in the block
-
-`details.currentAddress` The currently used ip address
-
-#### NanoIpRoutePlanner
-
-`details.currentAddressIndex` long representing the current offset in the ip 
-block
-
-#### RotatingNanoIpRoutePlanner
-
-`details.blockIndex` String containing the the information in which /64 block ips 
-are chosen. This number increases on each ban.
-
-`details.currentAddressIndex` long representing the current offset in the ip 
-block.
+---
 
 #### Unmark a failed address
 > `/routeplanner/free/address` is deprecated and for removal in v4
@@ -1280,11 +1304,19 @@ POST /v3/routeplanner/free/address
 
 Request:
 
+| Field   | Type   | Description                                                                 |
+|---------|--------|-----------------------------------------------------------------------------|
+| address | string | The address to unmark as failed. This address must be in the same ip block. |
+
+<details>
+<summary>Example Payload</summary>
+
 ```json
 {
   "address": "1.0.0.1"
 }
 ```
+</details>
 
 Response:
 
@@ -1379,7 +1411,7 @@ Provide an intercepted voice server update. This causes the server to connect to
 
 `startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
 
-`endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default the track plays until it's end as per the encoded data.
+`endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default, the track plays until its end as per the encoded data.
 
 `volume` is an optional setting which changes the volume if provided.
 
@@ -1554,7 +1586,7 @@ and you can send the same VOICE_SERVER_UPDATE to a new node.
 ---
 
 # Common pitfalls
-Admittedly Lavalink isn't inherently the most intuitive thing ever, and people tend to run into the same mistakes over again. Please double-check the following if you run into problems developing your client and you can't connect to a voice channel or play audio:
+Admittedly Lavalink isn't inherently the most intuitive thing ever, and people tend to run into the same mistakes over again. Please double-check the following if you run into problems developing your client, and you can't connect to a voice channel or play audio:
 
 1. Check that you are forwarding sendWS events to **Discord**.
 2. Check that you are intercepting **VOICE_SERVER_UPDATE**s to **Lavalink**. Do not edit the event object from Discord.
