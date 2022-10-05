@@ -757,6 +757,7 @@ Any smoothing values equal to, or less than 1.0 will disable the filter.
   }
 }
 ```
+</details>
 
 #### Destroy Player
 Destroys the player for this guild in this session.
