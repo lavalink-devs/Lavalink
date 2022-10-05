@@ -1214,7 +1214,7 @@ Response:
 
 #### Get Lavalink version(DEPRECATED)
 Request Lavalink version.
-> `/version` is deprecated and for removal in v4 use [`/info`](#get-lavalink-info) instead
+> `/version` is deprecated and marked for removal in v4, use [`/info`](#get-lavalink-info) instead
 ```
 GET /version
 ```
