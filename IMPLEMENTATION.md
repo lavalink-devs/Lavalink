@@ -862,7 +862,7 @@ Response:
 |---------------|----------------------------------------|-----------------------------------------------------------|----------------------------------------------------|
 | loadType      | [LoadResultType](#load-result-type)    | The type of the result                                    | all                                                |
 | playlistInfo? | [Playlist Info](#playlist-info) object | Additional info if the the load type is `PLAYLIST_LOADED` | `PLAYLIST_LOADED`                                  |
-| tracks        | array of [tracks](#track)              | All tracks which have been loaded                         | `TRACK_LOADED`, `PLAYLIST_LOADED`, `SEARCH_RESULT` |
+| tracks        | array of [Tracks](#track)              | All tracks which have been loaded                         | `TRACK_LOADED`, `PLAYLIST_LOADED`, `SEARCH_RESULT` |
 | exception?    | [Exception](#exception-object) object  | The [Exception](#exception-object) this load failed with  | `LOAD_FAILED`                                      |
 
 ###### Load Result Type
