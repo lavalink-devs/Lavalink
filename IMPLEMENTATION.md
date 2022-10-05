@@ -640,6 +640,29 @@ There are 15 bands (0-14) that can be changed.
 "gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
 where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could also change the volume of the output.
 
+<details>
+<summary>Band Frequencies</summary>
+
+| Band | Frequency |
+|------|-----------|
+| 0    | 25 Hz     |
+| 1    | 40 Hz     |
+| 2    | 63 Hz     |
+| 3    | 100 Hz    |
+| 4    | 160 Hz    |
+| 5    | 250 Hz    |
+| 6    | 400 Hz    |
+| 7    | 630 Hz    |
+| 8    | 1000 Hz   |
+| 9    | 1600 Hz   |
+| 10   | 2500 Hz   |
+| 11   | 4000 Hz   |
+| 12   | 6300 Hz   |
+| 13   | 10000 Hz  |
+| 14   | 16000 Hz  |
+
+</details>
+
 | Field | Type  | Description             |
 |-------|-------|-------------------------|
 | bands | int   | The band (0 to 14)      |
