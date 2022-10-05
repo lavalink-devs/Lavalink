@@ -933,10 +933,6 @@ Response:
 ```yaml
 {
   "loadType": "SEARCH_RESULT",
-  "playlistInfo": {
-    "name": "Example YouTube Playlist",
-    "selectedTrack": 3
-  },
   "tracks": [
     ...
   ]
