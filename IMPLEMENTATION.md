@@ -633,26 +633,26 @@ Filters are used in above requests and look like this
 | rotation?   | [Rotation](#rotation) object       | Lets you rotate the sound around the stereo channels/user headphones aka Audio Panning            |
 | distortion? | [Distortion](#distortion) object   | Lets you distort the audio                                                                        |
 | channelMix? | [Channel Mix](#channel-mix) object | Lets you mix both channels (left and right)                                                       |
-| lowPass?    | [Low Pass](#low-pass) object        | Lets you filter higher frequencies                                                                |
+| lowPass?    | [Low Pass](#low-pass) object       | Lets you filter higher frequencies                                                                |
 
 ##### Equalizer
 There are 15 bands (0-14) that can be changed.
 "gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
 where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could also change the volume of the output.
 
-| Field | Type  | Description            |
-|-------|-------|------------------------|
+| Field | Type  | Description             |
+|-------|-------|-------------------------|
 | bands | int   | The band (0 to 14)      |
 | gain  | float | The gain (-0.25 to 1.0) |
 
 ##### Karaoke
 Uses equalization to eliminate part of a band, usually targeting vocals.
 
-| Field        | Type  | Description                                                            |
-|--------------|-------|------------------------------------------------------------------------|
+| Field        | Type  | Description                                                             |
+|--------------|-------|-------------------------------------------------------------------------|
 | level?       | float | The level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect)      |
 | monoLevel?   | float | The mono level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect) |
-| filterBand?  | float | The filter band (1.0 to 15.0)                                               |
+| filterBand?  | float | The filter band                                                         |
 | filterWidth? | float | The filter width (0.1 to 1.0 where 0.1 is narrow and 1.0 is wide)       |
 
 ##### Timescale
@@ -878,9 +878,9 @@ Response:
 
 ###### Playlist Info
 
-| Field         | Type   | Description                                                     |
-|---------------|--------|-----------------------------------------------------------------|
-| name          | string | The name of the loaded playlist                                 |
+| Field         | Type   | Description                                                      |
+|---------------|--------|------------------------------------------------------------------|
+| name          | string | The name of the loaded playlist                                  |
 | selectedTrack | int    | The selected track in this Playlist (-1 if no track is selected) |
 
 <details>
