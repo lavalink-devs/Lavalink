@@ -1341,7 +1341,7 @@ Response:
 ---
 
 #### Unmark all failed address
-> `/routeplanner/free/all` is deprecated and for removal in v4
+> `/routeplanner/free/all` is deprecated and marked for removal in v4
 ```
 POST /v3/routeplanner/free/all
 ```
