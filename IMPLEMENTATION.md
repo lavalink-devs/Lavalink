@@ -107,12 +107,14 @@ Dispatched by Lavalink upon successful connection and authorization. Contains fi
 
 ```json
 {
-    "op": "ready",
-    "resumed": false,
-    "sessionId": "..."
+  "op": "ready",
+  "resumed": false,
+  "sessionId": "..."
 }
 ```
 </details>
+
+---
 
 #### Player Update
 Dispatched every x(configurable in `application.yml`) seconds with the current state of the player.
@@ -135,17 +137,19 @@ Dispatched every x(configurable in `application.yml`) seconds with the current s
 
 ```json
 {
-    "op": "playerUpdate",
-    "guildId": "...",
-    "state": {
-        "time": 1500467109,
-        "position": 60000,
-        "connected": true,
-        "ping": 0
-    }
+  "op": "playerUpdate",
+  "guildId": "...",
+  "state": {
+    "time": 1500467109,
+    "position": 60000,
+    "connected": true,
+    "ping": 0
+  }
 }
 ```
 </details>
+
+---
 
 #### Stats
 A collection of stats sent every minute. 
@@ -187,48 +191,51 @@ A collection of stats sent every minute.
 
 ```json
 {
-    "op": "stats",
-    "players": 1,
-    "playingPlayers": 1,
-    "uptime": 123456789,
-    "memory": {
-        "free": 123456789,
-        "used": 123456789,
-        "allocated": 123456789,
-        "reservable": 123456789
-    },
-    "cpu": {
-        "cores": 4,
-        "systemLoad": 0.5,
-        "lavalinkLoad": 0.5
-    },
-    "frameStats": {
-        "sent": 123456789,
-        "nulled": 123456789,
-        "deficit": 123456789
-    }
+  "op": "stats",
+  "players": 1,
+  "playingPlayers": 1,
+  "uptime": 123456789,
+  "memory": {
+    "free": 123456789,
+    "used": 123456789,
+    "allocated": 123456789,
+    "reservable": 123456789
+  },
+  "cpu": {
+    "cores": 4,
+    "systemLoad": 0.5,
+    "lavalinkLoad": 0.5
+  },
+  "frameStats": {
+    "sent": 123456789,
+    "nulled": 123456789,
+    "deficit": 123456789
+  }
 }
 ```
 </details>
+
+---
 
 
 #### Event
 Server emitted an event. See the client implementation below.
 
-| Field   | Type                      | Description         |
-|---------|---------------------------|---------------------|
-| type    | [EventType](#event-types) | The type of event   |
-| guildId | string                    | The guild id        |
+| Field   | Type                      | Description                         |
+|---------|---------------------------|-------------------------------------|
+| type    | [EventType](#event-types) | The type of event                   |
+| guildId | string                    | The guild id                        |
+| ...     | ...                       | Extra fields depending on the event |
 
 <details>
 <summary>Example Payload</summary>
 
 ```yaml
 {
-    "op": "event",
-    "type": "...",
-    "guildId": "...",
-    ...
+  "op": "event",
+  "type": "...",
+  "guildId": "...",
+  ...
 }
 ```
 </details>
@@ -237,10 +244,10 @@ Server emitted an event. See the client implementation below.
 | Event Type                                    | Description                                                              |
 |-----------------------------------------------|--------------------------------------------------------------------------|
 | [TrackStartEvent](#trackstartevent)           | Emitted when a track starts playing                                      |
-| [TrackEndEvent](#TrackEndEvent)               | Emitted when a track ends                                                |
-| [TrackExceptionEvent](#TrackExceptionEvent)   | Emitted when a track throws an exception                                 |
-| [TrackStuckEvent](#TrackStuckEvent)           | Emitted when a track gets stuck while playing                            |
-| [WebSocketClosedEvent](#WebSocketClosedEvent) | Emitted when the websocket connection to discord voice servers is closed |
+| [TrackEndEvent](#trackendevent)               | Emitted when a track ends                                                |
+| [TrackExceptionEvent](#trackexceptionevent)   | Emitted when a track throws an exception                                 |
+| [TrackStuckEvent](#trackstuckevent)           | Emitted when a track gets stuck while playing                            |
+| [WebSocketClosedEvent](#websocketclosedevent) | Emitted when the websocket connection to discord voice servers is closed |
 
 ##### TrackStartEvent
 Emitted when a track starts playing.
@@ -254,14 +261,16 @@ Emitted when a track starts playing.
 
 ```json
 {
-    "op": "event",
-    "type": "TrackStartEvent",
-    "guildId": "...",
-    "track": "..."
+  "op": "event",
+  "type": "TrackStartEvent",
+  "guildId": "...",
+  "track": "..."
 }
 ```
 
 </details>
+
+---
 
 ##### TrackEndEvent
 Emitted when a track ends.
@@ -285,14 +294,16 @@ Emitted when a track ends.
 
 ```json
 {
-    "op": "event",
-    "type": "TrackEndEvent",
-    "guildId": "...",
-    "track": "...",
-    "reason": "FINISHED"
+  "op": "event",
+  "type": "TrackEndEvent",
+  "guildId": "...",
+  "track": "...",
+  "reason": "FINISHED"
 }
 ```
 </details>
+
+---
 
 ##### TrackExceptionEvent
 Emitted when a track throws an exception.
@@ -322,19 +333,20 @@ Emitted when a track throws an exception.
 
 ```json
 {
-    "op": "event",
-    "type": "TrackExceptionEvent",
-    "guildId": "...",
-    "track": "...",
-    "exception": {
-        "message": "...",
-        "severity": "COMMON",
-        "cause": "..."
-    }
+  "op": "event",
+  "type": "TrackExceptionEvent",
+  "guildId": "...",
+  "track": "...",
+  "exception": {
+    "message": "...",
+    "severity": "COMMON",
+    "cause": "..."
+  }
 }
 ```
 </details>
 
+---
 
 ##### TrackStuckEvent
 Emitted when a track gets stuck while playing.
@@ -349,15 +361,16 @@ Emitted when a track gets stuck while playing.
 
 ```json
 {
-    "op": "event",
-    "type": "TrackStuckEvent",
-    "guildId": "...",
-    "track": "...",
-    "thresholdMs": 123456789
+  "op": "event",
+  "type": "TrackStuckEvent",
+  "guildId": "...",
+  "track": "...",
+  "thresholdMs": 123456789
 }
 ```
 </details>
 
+---
 
 ##### WebSocketClosedEvent
 Emitted when an audio web socket (to Discord) is closed.
@@ -376,12 +389,12 @@ See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and
 
 ```json
 {
-    "op": "event",
-    "type": "WebSocketClosedEvent",
-    "guildId": "...",
-    "code": 4006,
-    "reason": "Your session is no longer valid.",
-    "byRemote": true
+  "op": "event",
+  "type": "WebSocketClosedEvent",
+  "guildId": "...",
+  "code": 4006,
+  "reason": "Your session is no longer valid.",
+  "byRemote": true
 }
 ```
 </details>
@@ -396,20 +409,24 @@ Authorization: youshallnotpass
 
 All routes are prefixed with `/v3` as of `v3.6`.
 
+---
+
+
 #### Get Players
 Returns a list players in this specific session.
 ```
-GET /sessions/{sessionId}/players
+GET /v3/sessions/{sessionId}/players
 ```
 
 ##### Player
 | Field   | Type    | Description                                   |
 |---------|---------|-----------------------------------------------|
 | guildId | string  | The guild id                                  |
-| track   | ?object | The current playing [track](#Track)           |
+| track   | ?object | The current playing [track](#track)           |
 | volume  | int     | The volume of the player                      |
 | paused  | bool    | Whether the player is paused                  |
-| voice   | object  | The [voice state](#Voice-State) of the player |
+| voice   | object  | The [voice state](#voice-state) of the player |
+| filters | ?object | The [filters](#filters) the player            |              
 
 ##### Track
 | Field      | Type    | Description                        |
@@ -425,7 +442,7 @@ GET /sessions/{sessionId}/players
 | uri        | ?string | The track uri                      |
 | sourceName | string  | The track source name              |
 
-#### Voice-State
+#### Voice State
 | Field     | Type   | Description                     |
 |-----------|--------|---------------------------------|
 | token     | string | The voice token                 |
@@ -468,10 +485,13 @@ GET /sessions/{sessionId}/players
 ```
 </details>
 
+---
+
+
 #### Get Player
 Returns the player for this guild in this session.
 ```
-GET /sessions/{sessionId}/players/{guildId}
+GET /v3/sessions/{sessionId}/players/{guildId}
 ```
 
 Response:
@@ -509,10 +529,13 @@ Response:
 ```
 </details>
 
+---
+
+
 #### Update Player
 Updates the player for this guild in this specific.
 ```
-PATCH /sessions/{sessionId}/players/{guildId}?noReplace=true
+PATCH /v3/sessions/{sessionId}/players/{guildId}?noReplace=true
 ```
 
 All fields are optional.
@@ -545,19 +568,19 @@ Request:
 
 ```yaml
 {
-    "trackData": "...",
-    "identifier": "...",
-    "startTime": 0, 
-    "endTime": 0, 
-    "volume": 100,
-    "position": 32400,
-    "paused": false,
-    "filters": { ... },
-    "sessionId": "...",
-    "event": {
-        "token": "...",
-        "endpoint": "..."
-    }
+  "trackData": "...",
+  "identifier": "...",
+  "startTime": 0, 
+  "endTime": 0, 
+  "volume": 100,
+  "position": 32400,
+  "paused": false,
+  "filters": { ... },
+  "sessionId": "...",
+  "event": {
+    "token": "...",
+    "endpoint": "..."
+  }
 }
 ```
 </details>
@@ -598,6 +621,9 @@ Response:
 }
 ```
 </details>
+
+---
+
 
 #### Filters
 Filters are used in above requests and look like this
@@ -759,20 +785,24 @@ Any smoothing values equal to, or less than 1.0 will disable the filter.
 ```
 </details>
 
+---
+
 #### Destroy Player
 Destroys the player for this guild in this session.
 ```
-DELETE /sessions/{sessionId}/players/{guildId}
+DELETE /v3/sessions/{sessionId}/players/{guildId}
 ```
 
 Response: 
 
 204 - No Content
 
+---
+
 #### Update Session
 Updates the session with a resuming key and timeout.
 ```
-PATCH /sessions/{sessionId}
+PATCH /v3/sessions/{sessionId}
 ```
 
 Request:
@@ -787,8 +817,8 @@ Request:
 
 ```json
 {
-    "resumingKey": "...",
-    "timeout": 0
+  "resumingKey": "...",
+  "timeout": 0
 }
 ```
 </details>
@@ -798,11 +828,13 @@ Response:
 
 204 - No Content
 
+---
+
 #### Track Loading
 This endpoint is used to resolve audio tracks for use with the [Update Player](#update-player) endpoint.
 > `/loadtracks?identifier=dQw4w9WgXcQ` is deprecated and for removal in v4
 ```
-GET /loadtracks?identifier=dQw4w9WgXcQ
+GET /v3/loadtracks?identifier=dQw4w9WgXcQ
 ```
 <details>
 <summary>Response(Deprecated)</summary>
@@ -818,9 +850,9 @@ GET /loadtracks?identifier=dQw4w9WgXcQ
         "identifier": "dQw4w9WgXcQ",
         "isSeekable": true,
         "author": "RickAstleyVEVO",
-        "length": 212000, // in ms
+        "length": 212000,
         "isStream": false,
-        "position": 0, // in ms
+        "position": 0,
         "title": "Rick Astley - Never Gonna Give You Up",
         "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         "sourceName": "youtube"
@@ -833,19 +865,48 @@ GET /loadtracks?identifier=dQw4w9WgXcQ
 </details>
 
 Response:
+
+##### Track Loading Result
+
+| Field         | Type                                | Description                                               | Valid Types                                        |
+|---------------|-------------------------------------|-----------------------------------------------------------|----------------------------------------------------|
+| loadType      | [LoadResultType](#load-result-type) | The type of the result                                    | all                                                |
+| playlistInfo? | object                              | Additional info if the the load type is `PLAYLIST_LOADED` | `PLAYLIST_LOADED`                                  |
+| tracks        | array of [tracks](#track)           | All tracks which have been loaded                         | `TRACK_LOADED`, `PLAYLIST_LOADED`, `SEARCH_RESULT` |
+| exception?    | object                              | The [Exception](#exception) this load failed with         | `LOAD_FAILED`                                      |
+
+###### Load Result Type
+
+| Load Result Type | Description                                  |
+|------------------|----------------------------------------------|
+| TRACK_LOADED     | A track has been loaded                      |
+| PLAYLIST_LOADED  | A playlist has been loaded                   |
+| SEARCH_RESULT    | A search result has been loaded              |
+| NO_MATCHES       | There has been no matches to your identifier |
+| LOAD_FAILED      | Loading has failed                           |
+
+###### Playlist Info
+
+| Field         | Type   | Description                                                     |
+|---------------|--------|-----------------------------------------------------------------|
+| name          | string | The name of the loaded playlist                                 |
+| selectedTrack | int    | The selected track in this Playlist(-1 if no track is selected) |
+
+<details>
+<summary>Track Loaded Example Payload</summary>
+
 ```json
 {
   "loadType": "TRACK_LOADED",
-  "playlistInfo": {},
   "tracks": [
     {
       "trackData": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
       "identifier": "dQw4w9WgXcQ",
       "isSeekable": true,
       "author": "RickAstleyVEVO",
-      "length": 212000, // in ms
+      "length": 212000,
       "isStream": false,
-      "position": 0, // in ms
+      "position": 0,
       "title": "Rick Astley - Never Gonna Give You Up",
       "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "sourceName": "youtube"
@@ -853,9 +914,12 @@ Response:
   ]
 }
 ```
+</details>
 
-If the identifier leads to a playlist, `playlistInfo` will contain two properties, `name` and `selectedTrack`(-1 if no selectedTrack found)
-```json
+<details>
+<summary>Playlist Loaded Example Payload</summary>
+
+```yaml
 {
   "loadType": "PLAYLIST_LOADED",
   "playlistInfo": {
@@ -867,29 +931,48 @@ If the identifier leads to a playlist, `playlistInfo` will contain two propertie
   ]
 }
 ```
+</details>
 
-Additionally, in every `/loadtracks` response, a `loadType` property is returned which can be used to judge the response from Lavalink properly. It can be one of the following:
-* `TRACK_LOADED` - Returned when a single track is loaded.
-* `PLAYLIST_LOADED` - Returned when a playlist is loaded.
-* `SEARCH_RESULT` - Returned when a search result is made (i.e `ytsearch: some song`).
-* `NO_MATCHES` - Returned if no matches/sources could be found for a given identifier.
-* `LOAD_FAILED` - Returned if Lavaplayer failed to load something for some reason.
+<details>
+<summary>Search Result Example Payload</summary>
 
-If the loadType is `LOAD_FAILED`, the response will contain an `exception` object with `message` and `severity` properties.
-`message` is a string detailing why the track failed to load, and is okay to display to end-users. Severity represents how common the error is.
-A severity level of `COMMON` indicates that the error is non-fatal and that the issue is not from Lavalink itself.
+```yaml
+{
+  "loadType": "SEARCH_RESULT",
+  "playlistInfo": {
+    "name": "Example YouTube Playlist",
+    "selectedTrack": 3
+  },
+  "tracks": [
+    ...
+  ]
+}
+```
+</details>
+
+<details>
+<summary>No Matches Example Payload</summary>
+
+```json
+{
+  "loadType": "NO_MATCHES"
+}
+```
+</details>
+
+<details>
+<summary>Load Failed Example Payload</summary>
 
 ```json
 {
   "loadType": "LOAD_FAILED",
-  "playlistInfo": {},
-  "tracks": [],
   "exception": {
     "message": "The uploader has not made this video available in your country.",
     "severity": "COMMON"
   }
 }
 ```
+</details>
 
 #### Track Searching
 Lavalink supports searching via YouTube, YouTube Music, and Soundcloud. To search, you must prefix your identifier with `ytsearch:`, `ytmsearch:`,  or `scsearch:`respectively.
@@ -901,7 +984,7 @@ When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. N
 Decode a single track into its info
 > `/decodetrack?track=QAAAjJ...AAA==` is deprecated and for removal in v4
 ```
-GET /decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==
+GET /v3/decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==
 ```
 
 Response:
@@ -922,7 +1005,7 @@ Response:
 Decodes multiple tracks into their info
 > `/decodetracks` is deprecated and for removal in v4
 ```
-POST /decodetracks
+POST /v3/decodetracks
 Authorization: youshallnotpass
 ```
 
@@ -981,7 +1064,7 @@ Response:
 Request information about the plugins running on Lavalink, if any.
 > `/plugins` is deprecated and for removal in v4
 ```
-GET /plugins
+GET /v3/plugins
 ```
 
 Response:
@@ -1001,7 +1084,7 @@ Response:
 #### Get Lavalink info
 Request Lavalink information.
 ```
-GET /info
+GET /v3/info
 Authorization: youshallnotpass
 ```
 
@@ -1050,7 +1133,7 @@ Additionally, there are a few REST endpoints for the ip rotation extension
 #### Get RoutePlanner status
 > `/routeplanner/status` is deprecated and for removal in v4
 ```
-GET /routeplanner/status
+GET /v3/routeplanner/status
 ```
 
 Response:
@@ -1108,7 +1191,7 @@ block.
 #### Unmark a failed address
 > `/routeplanner/free/address` is deprecated and for removal in v4
 ```
-POST /routeplanner/free/address
+POST /v3/routeplanner/free/address
 ```
 
 Request Body:
@@ -1126,7 +1209,7 @@ Response:
 #### Unmark all failed address
 > `/routeplanner/free/all` is deprecated and for removal in v4
 ```
-POST /routeplanner/free/all
+POST /v3/routeplanner/free/all
 ```
 
 Response:
@@ -1190,12 +1273,12 @@ queue is then emptied and the events are then replayed.
 
 Provide an intercepted voice server update. This causes the server to connect to the voice channel.
 
-```js
+```yaml
 {
   "op": "voiceUpdate",
   "guildId": "...",
   "sessionId": "...",
-  "event": {...}
+  "event": { ... }
 }
 ```
 
