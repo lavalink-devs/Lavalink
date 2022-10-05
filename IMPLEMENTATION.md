@@ -70,10 +70,10 @@ Types marked with `?` are nullable.
 
 Websocket messages all follow the following standard format:
 
-| Field | Type                 | Description                      |
-|-------|----------------------|----------------------------------|
-| op    | [OP Type](#op-types) | The op type                      |
-| ...   | ...                  | Extra fields depending on the op |
+| Field | Type                 | Description                           |
+|-------|----------------------|---------------------------------------|
+| op    | [OP Type](#op-types) | The op type                           |
+| ...   | ...                  | Extra fields depending on the op type |
 
 <details>
 <summary>Example Payload</summary>
@@ -88,13 +88,13 @@ Websocket messages all follow the following standard format:
 
 #### OP Types
 
-| OP Type                        | Description                                                  |
-|--------------------------------|--------------------------------------------------------------|
-| [ready](#ready)                | Emitted when you successfully connected to the Lavalink node |
-| [playerUpdate](#player-update) | Emitted when every x seconds with the latest player state    |
-| [event](#event)                | Emitted when an event is emitted                             |
+| OP Type                           | Description                                                  |
+|-----------------------------------|--------------------------------------------------------------|
+| [ready](#ready-op)                | Emitted when you successfully connected to the Lavalink node |
+| [playerUpdate](#player-update-op) | Emitted when every x seconds with the latest player state    |
+| [event](#event-op)                | Emitted when an event is emitted                             |
 
-#### Ready
+#### Ready OP
 Dispatched by Lavalink upon successful connection and authorization. Contains fields determining if resuming was successful, as well as the session ID.
 
 | Field     | Type   | Description                                                                         |
@@ -116,7 +116,7 @@ Dispatched by Lavalink upon successful connection and authorization. Contains fi
 
 ---
 
-#### Player Update
+#### Player Update OP
 Dispatched every x(configurable in `application.yml`) seconds with the current state of the player.
 
 | Field   | Type   | Description                              |
@@ -151,7 +151,7 @@ Dispatched every x(configurable in `application.yml`) seconds with the current s
 
 ---
 
-#### Stats
+#### Stats OP
 A collection of stats sent every minute. 
 
 | Field          | Type   | Description                                 |
@@ -218,7 +218,7 @@ A collection of stats sent every minute.
 ---
 
 
-#### Event
+#### Event OP
 Server emitted an event. See the client implementation below.
 
 | Field   | Type                      | Description                         |
@@ -399,6 +399,7 @@ See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and
 ```
 </details>
 
+---
 
 ### Rest API
 Lavalink exposes a REST API to allow for easy control of the players.
@@ -407,10 +408,7 @@ All routes require the Authorization header with the configured password.
 Authorization: youshallnotpass
 ```
 
-All routes are prefixed with `/v3` as of `v3.6`.
-
----
-
+All routes are prefixed with `/v3` as of `v3.6` and the old are deprecated.
 
 #### Get Players
 Returns a list players in this specific session.
@@ -431,7 +429,7 @@ GET /v3/sessions/{sessionId}/players
 ##### Track
 | Field      | Type    | Description                        |
 |------------|---------|------------------------------------|
-| trackData  | string  | The track data                     |
+| trackData  | string  | The encoded track data             |
 | identifier | string  | The track identifier               |
 | isSeekable | bool    | Whether the track is seekable      |
 | author     | string  | The track author                   |
@@ -486,7 +484,6 @@ GET /v3/sessions/{sessionId}/players
 </details>
 
 ---
-
 
 #### Get Player
 Returns the player for this guild in this session.
@@ -588,7 +585,7 @@ Request:
 
 Response: 
 
-[Player object](#Player)
+[Player Object](#Player)
 
 <details>
 <summary>Example Payload</summary>
@@ -623,7 +620,6 @@ Response:
 </details>
 
 ---
-
 
 #### Filters
 Filters are used in above requests and look like this
@@ -823,7 +819,6 @@ Request:
 ```
 </details>
 
-
 Response:
 
 204 - No Content
@@ -861,7 +856,6 @@ GET /v3/loadtracks?identifier=dQw4w9WgXcQ
   ]
 }
 ```
-
 </details>
 
 Response:
