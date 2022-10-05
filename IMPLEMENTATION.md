@@ -61,19 +61,44 @@ User-Id: The user id of the bot you are playing music with
 Client-Name: The name of your client. Optionally in the format NAME/VERSION
 ```
 
-### Incoming messages
+### Websocket Messages
 
 See [LavalinkSocket.java](https://github.com/freyacodes/lavalink-client/blob/master/src/main/java/lavalink/client/io/LavalinkSocket.java) for client implementation
 
 Fields marked with `?` are optional.
 Types marked with `?` are nullable.
 
+Websocket messages all follow the following standard format:
+
+| Field | Type           | Description                      |
+|-------|----------------|----------------------------------|
+| op    | [OP Type][#OP] | The op type                      |
+| ...   | ...            | Extra fields depending on the op |
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+{
+  "op": "...",
+  ...
+}
+```
+</details>
+
+#### OP Types
+
+| OP Type                        | Description                                                  |
+|--------------------------------|--------------------------------------------------------------|
+| [ready](#ready)                | Emitted when you successfully connected to the Lavalink node |
+| [playerUpdate](#player-update) | Emitted when every x seconds with the latest player state    |
+| [event](#event)                | Emitted when an event is emitted                             |
+
 #### Ready
 Dispatched by Lavalink upon successful connection and authorization. Contains fields determining if resuming was successful, as well as the session ID.
 
 | Field     | Type   | Description                                                                         |
 |-----------|--------|-------------------------------------------------------------------------------------|
-| op        | string | The type of payload                                                                 |
 | resumed?  | bool   | If the session is resumed(Only present if a session id was present when connecting) |
 | sessionId | string | The Lavalink Session ID of this connection                                          |
 
@@ -94,7 +119,6 @@ Dispatched every x(configurable in `application.yml`) seconds with the current s
 
 | Field   | Type   | Description                              |
 |---------|--------|------------------------------------------|
-| op      | string | The type of payload                      |
 | guildId | string | The guild id of the player               |
 | state   | object | The [state](#player-state) of the player |
 
@@ -128,7 +152,6 @@ A collection of stats sent every minute.
 
 | Field          | Type   | Description                                 |
 |----------------|--------|---------------------------------------------|
-| op             | string | The type of payload                         |
 | players        | int    | The amount of players connected to the node |
 | playingPlayers | int    | The amount of players playing a track       |
 | uptime         | int    | The uptime of the node in milliseconds      |
@@ -192,11 +215,10 @@ A collection of stats sent every minute.
 #### Event
 Server emitted an event. See the client implementation below.
 
-| Field | Type   | Description         |
-|-------|--------|---------------------|
-| op    | string | The type of payload |
-| type  | string | The type of event   |
-| guild | string | The guild id        |
+| Field   | Type                      | Description         |
+|---------|---------------------------|---------------------|
+| type    | [EventType](#event-types) | The type of event   |
+| guildId | string                    | The guild id        |
 
 <details>
 <summary>Example Payload</summary>
@@ -211,6 +233,7 @@ Server emitted an event. See the client implementation below.
 ```
 </details>
 
+##### Event Types
 | Event Type                                    | Description                                                              |
 |-----------------------------------------------|--------------------------------------------------------------------------|
 | [TrackStartEvent](#trackstartevent)           | Emitted when a track starts playing                                      |
@@ -346,7 +369,7 @@ See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and
 |----------|--------|-----------------------------------------------------------------------------------------------------------------------------------|
 | code     | int    | The [discord close event code](https://discord.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes) |
 | reason   | string | The close reason                                                                                                                  |
-| byRemote | bool   | The close reason                                                                                                                  |
+| byRemote | bool   | If the connection was closed by discord                                                                                           |
 
 <details>
 <summary>Example Payload</summary>
@@ -414,7 +437,7 @@ GET /sessions/{sessionId}/players
 <details>
 <summary>Example Payload</summary>
 
-```json
+```yaml
 [
   {
     "guildId": "...",
@@ -423,9 +446,9 @@ GET /sessions/{sessionId}/players
       "identifier": "dQw4w9WgXcQ",
       "isSeekable": true,
       "author": "RickAstleyVEVO",
-      "length": 212000, // in ms
+      "length": 212000, 
       "isStream": false,
-      "position": 0, // in ms
+      "position": 0, 
       "title": "Rick Astley - Never Gonna Give You Up",
       "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "sourceName": "youtube"
@@ -437,7 +460,7 @@ GET /sessions/{sessionId}/players
       "endpoint": "...",
       "sessionId": "...",
       "connected": true,
-      "ping": 10 // in ms & -1 if not connected
+      "ping": 10 
     },
     "filters": { ... }
   }
@@ -457,7 +480,7 @@ Response:
 <details>
 <summary>Example Payload</summary>
 
-```json
+```yaml
 {
   "guildId": "...",
   "track": {
@@ -465,9 +488,9 @@ Response:
     "identifier": "dQw4w9WgXcQ",
     "isSeekable": true,
     "author": "RickAstleyVEVO",
-    "length": 212000, // in ms
+    "length": 212000,
     "isStream": false,
-    "position": 0, // in ms
+    "position": 0,
     "title": "Rick Astley - Never Gonna Give You Up",
     "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     "sourceName": "youtube"
@@ -479,7 +502,7 @@ Response:
     "endpoint": "...",
     "sessionId": "...",
     "connected": true,
-    "ping": 10 // in ms & -1 if not connected
+    "ping": 10
   },
   "filters": { ... }
 }
@@ -497,6 +520,7 @@ You can provide either `trackData` or `identifier` or nothing, not both.
 
 Request:
 
+##### Player Update
 | Field       | Type    | Description                                    |
 |-------------|---------|------------------------------------------------|
 | trackData?  | ?string | The track data. `null` stops the current track |
