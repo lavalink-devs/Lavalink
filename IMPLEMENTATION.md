@@ -1191,7 +1191,7 @@ Response:
 
 #### Get Plugins(DEPRECATED)
 Request information about the plugins running on Lavalink, if any.
-> `/plugins` is deprecated and for removal in v4
+> `/plugins` is deprecated and marked for removal in v4
 ```
 GET /plugins
 ```
