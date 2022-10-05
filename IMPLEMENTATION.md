@@ -1313,7 +1313,7 @@ Response:
 ---
 
 #### Unmark a failed address
-> `/routeplanner/free/address` is deprecated and for removal in v4
+> `/routeplanner/free/address` is deprecated and marked for removal in v4
 ```
 POST /v3/routeplanner/free/address
 ```
