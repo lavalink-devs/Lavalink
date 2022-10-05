@@ -154,6 +154,8 @@ Dispatched every x(configurable in `application.yml`) seconds with the current s
 #### Stats OP
 A collection of stats sent every minute. 
 
+##### Stats Object
+
 | Field          | Type                               | Description                                 |
 |----------------|------------------------------------|---------------------------------------------|
 | players        | int                                | The amount of players connected to the node |
@@ -1172,6 +1174,18 @@ Response:
 }
 ```
 </details>
+
+---
+
+#### Get Lavalink stats
+Request Lavalink statistics.
+```
+GET /v3/stats
+```
+
+Response:
+
+[Stats Object](#stats-object)
 
 ---
 
