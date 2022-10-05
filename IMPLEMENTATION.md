@@ -650,10 +650,10 @@ Uses equalization to eliminate part of a band, usually targeting vocals.
 
 | Field        | Type  | Description                                                            |
 |--------------|-------|------------------------------------------------------------------------|
-| level?       | float | The level(0 to 1.0 where 0.0 is no effect and 1.0 is full effect)      |
-| monoLevel?   | float | The mono level(0 to 1.0 where 0.0 is no effect and 1.0 is full effect) |
-| filterBand?  | float | The filter band(1 to 15)                                               |
-| filterWidth? | float | The filter width(0.1 to 1.0 where 0.1 is narrow and 1.0 is wide)       |
+| level?       | float | The level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect)      |
+| monoLevel?   | float | The mono level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect) |
+| filterBand?  | float | The filter band (1.0 to 15.0)                                               |
+| filterWidth? | float | The filter width (0.1 to 1.0 where 0.1 is narrow and 1.0 is wide)       |
 
 ##### Timescale
 Changes the speed, pitch, and rate. All default to 1.
@@ -825,7 +825,7 @@ Response:
 
 #### Track Loading
 This endpoint is used to resolve audio tracks for use with the [Update Player](#update-player) endpoint.
-> `/loadtracks?identifier=dQw4w9WgXcQ` is deprecated and for removal in v4
+> `/loadtracks?identifier=dQw4w9WgXcQ` is deprecated and marked for removal in v4
 ```
 GET /v3/loadtracks?identifier=dQw4w9WgXcQ
 ```
@@ -971,7 +971,7 @@ When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. N
 #### Track Decoding
 
 Decode a single track into its info
-> `/decodetrack?track=QAAAjJ...AAA==` is deprecated and for removal in v4
+> `/decodetrack?track=QAAAjJ...AAA==` is deprecated and marked for removal in v4
 ```
 GET /v3/decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==
 ```
@@ -1022,7 +1022,7 @@ Response:
 ---
 
 Decodes multiple tracks into their info
-> `/decodetracks` is deprecated and for removal in v4
+> `/decodetracks` is deprecated and marked for removal in v4
 ```
 POST /v3/decodetracks
 ```
@@ -1231,7 +1231,7 @@ v3.6.0
 Additionally, there are a few REST endpoints for the ip rotation extension
 
 #### Get RoutePlanner status
-> `/routeplanner/status` is deprecated and for removal in v4
+> `/routeplanner/status` is deprecated and marked for removal in v4
 ```
 GET /v3/routeplanner/status
 ```
