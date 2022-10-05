@@ -1024,7 +1024,6 @@ Decodes multiple tracks into their info
 > `/decodetracks` is deprecated and for removal in v4
 ```
 POST /v3/decodetracks
-Authorization: youshallnotpass
 ```
 
 Request:
@@ -1098,7 +1097,6 @@ Array of [Track Objects](#track)
 Request Lavalink information.
 ```
 GET /v3/info
-Authorization: youshallnotpass
 ```
 
 Response:
@@ -1204,7 +1202,6 @@ Request Lavalink version.
 > `/version` is deprecated and for removal in v4 use [`/info`](#get-lavalink-info) instead
 ```
 GET /version
-Authorization: youshallnotpass
 ```
 
 Response:
@@ -1342,7 +1339,7 @@ You can tell if your session was resumed by looking at the handshake response he
 Session-Resumed: true
 ```
 
-In case your websocket library doesn't support reading headers you can listen to the [ready op](#ready-op) and check the `resumed` field.
+In case your websocket library doesn't support reading headers you can listen for the [ready op](#ready-op) and check the `resumed` field.
 
 When a session is paused, any events that would normally have been sent is queued up. When the session is resumed, this
 queue is then emptied and the events are then replayed. 
