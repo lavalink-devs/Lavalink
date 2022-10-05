@@ -881,7 +881,7 @@ Response:
 | Field         | Type   | Description                                                     |
 |---------------|--------|-----------------------------------------------------------------|
 | name          | string | The name of the loaded playlist                                 |
-| selectedTrack | int    | The selected track in this Playlist(-1 if no track is selected) |
+| selectedTrack | int    | The selected track in this Playlist (-1 if no track is selected) |
 
 <details>
 <summary>Track Loaded Example Payload</summary>
