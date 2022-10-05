@@ -70,10 +70,10 @@ Types marked with `?` are nullable.
 
 Websocket messages all follow the following standard format:
 
-| Field | Type           | Description                      |
-|-------|----------------|----------------------------------|
-| op    | [OP Type][#OP] | The op type                      |
-| ...   | ...            | Extra fields depending on the op |
+| Field | Type                 | Description                      |
+|-------|----------------------|----------------------------------|
+| op    | [OP Type](#op-types) | The op type                      |
+| ...   | ...                  | Extra fields depending on the op |
 
 <details>
 <summary>Example Payload</summary>
