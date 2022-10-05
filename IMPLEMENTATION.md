@@ -371,13 +371,49 @@ All routes require the Authorization header with the configured password.
 Authorization: youshallnotpass
 ```
 
+All routes are prefixed with `/v3` as of `v3.6`.
+
 #### Get Players
-Returns all players in this specific session.
+Returns a list players in this specific session.
 ```
-GET /v3/sessions/{sessionId}/players
+GET /sessions/{sessionId}/players
 ```
 
-Response:
+##### Player
+| Field   | Type    | Description                                   |
+|---------|---------|-----------------------------------------------|
+| guildId | string  | The guild id                                  |
+| track   | ?object | The current playing [track](#Track)           |
+| volume  | int     | The volume of the player                      |
+| paused  | bool    | Whether the player is paused                  |
+| voice   | object  | The [voice state](#Voice-State) of the player |
+
+##### Track
+| Field      | Type    | Description                        |
+|------------|---------|------------------------------------|
+| trackData  | string  | The track data                     |
+| identifier | string  | The track identifier               |
+| isSeekable | bool    | Whether the track is seekable      |
+| author     | string  | The track author                   |
+| length     | int     | The track length in milliseconds   |
+| isStream   | bool    | Whether the track is a stream      |
+| position   | int     | The track position in milliseconds |
+| title      | string  | The track title                    |
+| uri        | ?string | The track uri                      |
+| sourceName | string  | The track source name              |
+
+#### Voice-State
+| Field     | Type   | Description                     |
+|-----------|--------|---------------------------------|
+| token     | string | The voice token                 |
+| endpoint  | string | The voice endpoint              |
+| sessionId | string | The voice session id            |
+| connected | bool   | Whether the player is connected |
+| ping      | int    | The voice ping                  |
+
+<details>
+<summary>Example Payload</summary>
+
 ```json
 [
   {
@@ -407,14 +443,20 @@ Response:
   }
 ]
 ```
+</details>
 
 #### Get Player
 Returns the player for this guild in this session.
 ```
-GET /v3/sessions/{sessionId}/players/{guildId}
+GET /sessions/{sessionId}/players/{guildId}
 ```
 
 Response:
+
+[Player object](#Player)
+<details>
+<summary>Example Payload</summary>
+
 ```json
 {
   "guildId": "...",
@@ -442,25 +484,50 @@ Response:
   "filters": { ... }
 }
 ```
+</details>
 
 #### Update Player
 Updates the player for this guild in this specific.
 ```
-PATCH /v3/sessions/{sessionId}/players/{guildId}?noReplace=true
+PATCH /sessions/{sessionId}/players/{guildId}?noReplace=true
 ```
 
 All fields are optional.
 You can provide either `trackData` or `identifier` or nothing, not both.
+
 Request:
-```json
+
+| Field       | Type    | Description                                    |
+|-------------|---------|------------------------------------------------|
+| trackData?  | ?string | The track data. `null` stops the current track |
+| identifier? | string  | The track identifier                           |
+| startTime?  | int     | The start time in milliseconds                 |
+| endTime?    | int     | The end time in milliseconds                   |
+| volume?     | int     | The volume from 0 to 200                       |
+| position?   | int     | The position in milliseconds                   |
+| paused?     | bool    | Whether the player is paused                   |
+| filters?    | ?object | The [filters](#Filters)                        |
+| sessionId?  | string  | The session id                                 |
+| event?      | object  | The [voice event](#Voice Event)                |
+
+##### Voice Event
+| Field    | Type   | Description        |
+|----------|--------|--------------------|
+| token    | string | The voice token    |
+| endpoint | string | The voice endpoint |
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
 {
     "trackData": "...",
     "identifier": "...",
-    "startTime": 0, // in ms
-    "endTime": 0, // in ms
+    "startTime": 0, 
+    "endTime": 0, 
     "volume": 100,
-    "position": 32400, // in ms
-    "pause": false,
+    "position": 32400,
+    "paused": false,
     "filters": { ... },
     "sessionId": "...",
     "event": {
@@ -469,9 +536,17 @@ Request:
     }
 }
 ```
+</details>
+
 
 Response: 
-```json
+
+[Player object](#Player)
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
 {
   "guildId": "...",
   "track": {
@@ -479,9 +554,9 @@ Response:
     "identifier": "dQw4w9WgXcQ",
     "isSeekable": true,
     "author": "RickAstleyVEVO",
-    "length": 212000, // in ms
+    "length": 212000,
     "isStream": false,
-    "position": 0, // in ms
+    "position": 0,
     "title": "Rick Astley - Never Gonna Give You Up",
     "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     "sourceName": "youtube"
@@ -493,64 +568,150 @@ Response:
     "endpoint": "...",
     "sessionId": "...",
     "connected": true,
-    "ping": 10 // in ms & -1 if not connected
+    "ping": 10 
   },
   "filters": { ... }
 }
 ```
+</details>
 
 #### Filters
 Filters are used in above requests and look like this
-```js
+
+| Field       | Type   | Description                                                                |
+|-------------|--------|----------------------------------------------------------------------------|
+| volume?     | float  | The volume from 0 to 5.0 where 1.0 is 100%. Values >1.0 may cause clipping |
+| equalizer?  | array  | The list of [equalizer](#Equalizer)                                        |
+| karaoke?    | object | The [karaoke](#Karaoke)                                                    |
+| timescale?  | object | The [timescale](#Timescale)                                                |
+| tremolo?    | object | The [tremolo](#Tremolo)                                                    |
+| vibrato?    | object | The [vibrato](#Vibrato)                                                    |
+| rotation?   | object | The [rotation](#Rotation)                                                  |
+| distortion? | object | The [distortion](#Distortion)                                              |
+| channelMix? | object | The [channel mix](#Channel-Mix)                                            |
+| lowPass?    | object | The [low pass](#Low-Pass)                                                  |
+
+##### Equalizer
+There are 15 bands (0-14) that can be changed.
+"gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
+where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could also change the volume of the output.
+
+| Field | Type  | Description            |
+|-------|-------|------------------------|
+| bands | int   | The band(0 to 14)      |
+| gain  | float | The gain(-0.25 to 1.0) |
+
+##### Karaoke
+Uses equalization to eliminate part of a band, usually targeting vocals.
+
+| Field        | Type  | Description                                                            |
+|--------------|-------|------------------------------------------------------------------------|
+| level?       | float | The level(0 to 1.0 where 0.0 is no effect and 1.0 is full effect)      |
+| monoLevel?   | float | The mono level(0 to 1.0 where 0.0 is no effect and 1.0 is full effect) |
+| filterBand?  | float | The filter band(1 to 15)                                               |
+| filterWidth? | float | The filter width(0.1 to 1.0 where 0.1 is narrow and 1.0 is wide)       |
+
+##### Timescale
+Changes the speed, pitch, and rate. All default to 1.
+
+| Field  | Type  | Description              |
+|--------|-------|--------------------------|
+| speed? | float | The playback speed 0 ≤ x |
+| pitch? | float | The pitch 0 ≤ x          |
+| rate?  | float | The rate 0 ≤ x           |
+
+##### Tremolo
+Uses amplification to create a shuddering effect, where the volume quickly oscillates.
+https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
+
+| Field      | Type  | Description                  |
+|------------|-------|------------------------------|
+| frequency? | float | The frequency 0 < x          |
+| depth?     | float | The tremolo depth 0 < x ≤ 1  |
+
+##### Vibrato
+Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
+
+| Field      | Type  | Description                 |
+|------------|-------|-----------------------------|
+| frequency? | float | The frequency 0 < x ≤ 14    |
+| depth?     | float | The vibrato depth 0 < x ≤ 1 |
+
+##### Rotation
+Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to https://youtu.be/QB9EB8mTKcc (without the reverb)
+
+| Field       | Type  | Description                                                                                              |
+|-------------|-------|----------------------------------------------------------------------------------------------------------|
+| rotationHz? | float | The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above |
+
+##### Distortion
+Distortion effect. It can generate some pretty unique audio effects.
+
+| Field      | Type  | Description    |
+|------------|-------|----------------|
+| sinOffset? | float | The sin offset |
+| sinScale?  | float | The sin scale  |
+| cosOffset? | float | The cos offset |
+| cosScale?  | float | The cos scale  |
+| tanOffset? | float | The tan offset |
+| tanScale?  | float | The tan scale  |
+| offset?    | float | The offset     |
+| scale?     | float | The scale      |
+
+##### Channel Mix
+Mixes both channels (left and right), with a configurable factor on how much each channel affects the other.
+With the defaults, both channels are kept independent from each other.
+Setting all factors to 0.5 means both channels get the same audio.
+
+| Field         | Type  | Description                                           |
+|---------------|-------|-------------------------------------------------------|
+| leftToLeft?   | float | The left to left channel mix factor (0.0 ≤ x ≤ 1.0)   |
+| leftToRight?  | float | The left to right channel mix factor (0.0 ≤ x ≤ 1.0)  |
+| rightToLeft?  | float | The right to left channel mix factor (0.0 ≤ x ≤ 1.0)  |
+| rightToRight? | float | The right to right channel mix factor (0.0 ≤ x ≤ 1.0) |
+
+##### Low Pass
+Higher frequencies get suppressed, while lower frequencies pass through this filter, thus the name low pass.
+Any smoothing values equal to, or less than 1.0 will disable the filter.
+
+| Field      | Type  | Description                    |
+|------------|-------|--------------------------------|
+| smoothing? | float | The smoothing factor (1.0 < x) |
+
+<details>
+<summary>Example Payload</summary>
+
+```json
 {
-  // Float value where 1.0 is 100%. Values >1.0 may cause clipping
-  "volume": 1.0, // 0 ≤ x ≤ 5
-  
-  // There are 15 bands (0-14) that can be changed.
-  // "gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
-  // where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could
-  // also change the volume of the output.
+  "volume": 1.0,
   "equalizer": [
     {
-      "band": 0,  // 0 ≤ x ≤ 14
-      "gain": 0.2 // -0.25 ≤ x ≤ 1
+      "band": 0,
+      "gain": 0.2
     }
   ],
-  
-  // Uses equalization to eliminate part of a band, usually targeting vocals.
   "karaoke": {
     "level": 1.0,
     "monoLevel": 1.0,
     "filterBand": 220.0,
     "filterWidth": 100.0
   },
-  
-  // Changes the speed, pitch, and rate. All default to 1.
   "timescale": {
-    "speed": 1.0, // 0 ≤ x
-    "pitch": 1.0, // 0 ≤ x
-    "rate": 1.0   // 0 ≤ x
+    "speed": 1.0,
+    "pitch": 1.0,
+    "rate": 1.0
   },
-  
-  // Uses amplification to create a shuddering effect, where the volume quickly oscillates.
-  // Example: https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
   "tremolo": {
-    "frequency": 2.0, // 0 < x
-    "depth": 0.5      // 0 < x ≤ 1
+    "frequency": 2.0,
+    "depth": 0.5
   },
-  
-  // Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
   "vibrato": {
-    "frequency": 2.0, // 0 < x ≤ 14
-    "depth": 0.5      // 0 < x ≤ 1
+    "frequency": 2.0,
+    "depth": 0.5
   },
-  
-  // Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to: https://youtu.be/QB9EB8mTKcc (without the reverb)
   "rotation": {
-    "rotationHz": 0 // The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above.
+    "rotationHz": 0
   },
-  
-  // Distortion effect. It can generate some pretty unique audio effects.
   "distortion": {
     "sinOffset": 0.0,
     "sinScale": 1.0,
@@ -560,22 +721,15 @@ Filters are used in above requests and look like this
     "tanScale": 1.0,
     "offset": 0.0,
     "scale": 1.0
-  } 
-  
-  // Mixes both channels (left and right), with a configurable factor on how much each channel affects the other.
-  // With the defaults, both channels are kept independent from each other.
-  // Setting all factors to 0.5 means both channels get the same audio.
+  },
   "channelMix": {
     "leftToLeft": 1.0,
     "leftToRight": 0.0,
     "rightToLeft": 0.0,
-    "rightToRight": 1.0,
-  }
-  
-  // Higher frequencies get suppressed, while lower frequencies pass through this filter, thus the name low pass.
-  // Any smoothing values equal to, or less than 1.0 will disable the filter.
+    "rightToRight": 1.0
+  },
   "lowPass": {
-    "smoothing": 20.0 // 1.0 < x
+    "smoothing": 20.0
   }
 }
 ```
@@ -583,7 +737,7 @@ Filters are used in above requests and look like this
 #### Destroy Player
 Destroys the player for this guild in this session.
 ```
-DELETE /v3/sessions/{sessionId}/players/{guildId}
+DELETE /sessions/{sessionId}/players/{guildId}
 ```
 
 Response: 
@@ -593,16 +747,27 @@ Response:
 #### Update Session
 Updates the session with a resuming key and timeout.
 ```
-PATCH /v3/sessions/{sessionId}
+PATCH /sessions/{sessionId}
 ```
 
 Request:
+
+| Field       | Type   | Description                                              |
+|-------------|--------|----------------------------------------------------------|
+| resumingKey | string | The resuming key to be able to resume this session later |
+| timeout     | int    | The timeout in seconds                                   |
+
+<details>
+<summary>Example Payload</summary>
+
 ```json
 {
     "resumingKey": "...",
-    "timeout": 0 // in seconds
+    "timeout": 0
 }
 ```
+</details>
+
 
 Response:
 
@@ -612,7 +777,7 @@ Response:
 This endpoint is used to resolve audio tracks for use with the [Update Player](#update-player) endpoint.
 > `/loadtracks?identifier=dQw4w9WgXcQ` is deprecated and for removal in v4
 ```
-GET /v3/loadtracks?identifier=dQw4w9WgXcQ
+GET /loadtracks?identifier=dQw4w9WgXcQ
 ```
 <details>
 <summary>Response(Deprecated)</summary>
@@ -711,7 +876,7 @@ When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. N
 Decode a single track into its info
 > `/decodetrack?track=QAAAjJ...AAA==` is deprecated and for removal in v4
 ```
-GET /v3/decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==
+GET /decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==
 ```
 
 Response:
@@ -732,7 +897,7 @@ Response:
 Decodes multiple tracks into their info
 > `/decodetracks` is deprecated and for removal in v4
 ```
-POST /v3/decodetracks
+POST /decodetracks
 Authorization: youshallnotpass
 ```
 
@@ -791,7 +956,7 @@ Response:
 Request information about the plugins running on Lavalink, if any.
 > `/plugins` is deprecated and for removal in v4
 ```
-GET /v3/plugins
+GET /plugins
 ```
 
 Response:
@@ -811,7 +976,7 @@ Response:
 #### Get Lavalink info
 Request Lavalink information.
 ```
-GET /v3/info
+GET /info
 Authorization: youshallnotpass
 ```
 
@@ -860,7 +1025,7 @@ Additionally, there are a few REST endpoints for the ip rotation extension
 #### Get RoutePlanner status
 > `/routeplanner/status` is deprecated and for removal in v4
 ```
-GET /v3/routeplanner/status
+GET /routeplanner/status
 ```
 
 Response:
@@ -918,7 +1083,7 @@ block.
 #### Unmark a failed address
 > `/routeplanner/free/address` is deprecated and for removal in v4
 ```
-POST /v3/routeplanner/free/address
+POST /routeplanner/free/address
 ```
 
 Request Body:
@@ -936,7 +1101,7 @@ Response:
 #### Unmark all failed address
 > `/routeplanner/free/all` is deprecated and for removal in v4
 ```
-POST /v3/routeplanner/free/all
+POST /routeplanner/free/all
 ```
 
 Response:
