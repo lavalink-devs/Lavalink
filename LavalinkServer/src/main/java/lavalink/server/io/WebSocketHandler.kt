@@ -11,16 +11,18 @@ import moe.kyokobot.koe.VoiceServerInfo
 import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import kotlin.reflect.KFunction1
 
 class WebSocketHandler(
     private val context: SocketContext,
-    private val wsExtensions: List<WebSocketExtension>,
+    wsExtensions: List<WebSocketExtension>,
     private val filterExtensions: List<AudioFilterExtension>
 ) {
-
     companion object {
         private val log: Logger = LoggerFactory.getLogger(WebSocketHandler::class.java)
+
+        fun WebSocketExtension.toHandler(ctx: SocketContext): Pair<String, (JSONObject) -> Unit> {
+            return opName to { onInvocation(ctx, it) }
+        }
     }
 
     private var loggedEqualizerDeprecationWarning = false
@@ -36,12 +38,7 @@ class WebSocketHandler(
         "filters" to ::filters,
         "destroy" to ::destroy,
         "configureResuming" to ::configureResuming
-    ).apply {
-        wsExtensions.forEach {
-            val func = fun(json: JSONObject) { it.onInvocation(context, json) }
-            this[it.opName] = func as KFunction1<JSONObject, Unit>
-        }
-    }
+    ) + wsExtensions.associate { it.toHandler(context) }
 
     fun handle(json: JSONObject) {
         val op = json.getString("op")
