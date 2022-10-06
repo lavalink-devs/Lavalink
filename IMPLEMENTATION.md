@@ -676,7 +676,7 @@ Uses equalization to eliminate part of a band, usually targeting vocals.
 | level?       | float | The level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect)      |
 | monoLevel?   | float | The mono level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect) |
 | filterBand?  | float | The filter band                                                         |
-| filterWidth? | float | The filter width (0.1 to 1.0 where 0.1 is narrow and 1.0 is wide)       |
+| filterWidth? | float | The filter width                                                        |
 
 ##### Timescale
 Changes the speed, pitch, and rate. All default to 1.
