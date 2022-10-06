@@ -19,6 +19,10 @@ for instructions.
 You can add your own plugin by submitting a pull-request to this file.
 
 ## Developing your own plugin
+
+> **Note:**  
+> If your plugin is developed in Kotlin make sure you are using **Kotlin v1.7.20**
+
 Follow these steps to quickly get started with plugin development:
 1. Create a copy of https://github.com/freyacodes/lavalink-plugin-template
 2. Rename the directories `org/example/plugin/` under `src/main/java/` to something more specific like
