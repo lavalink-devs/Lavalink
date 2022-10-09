@@ -94,7 +94,6 @@ Client | Platform | Compatible With | Additional Information
 [Magma](https://github.com/initzx/magma) | Python | discord.py
 [Lavadeno](https://github.com/lavaclient/lavadeno) | Deno | **Any**
 [LavaJS](https://github.com/OverleapTechnologies/LavaJS) | Node.js | **Any**
-[erela.js](https://github.com/MenuDocs/erela.js) | Node.js | **Any**
 [LavaClient](https://github.com/lavaclient/lavaclient) | Node.js | **Any**
 [Lavacoffee](https://github.com/XzFirzal/lavacoffee) | Node.js | **Any**
 [Lavacord](https://github.com/lavacord/lavacord) | Node.js | **Any**
