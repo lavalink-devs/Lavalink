@@ -12,7 +12,7 @@ public interface ISocketContext {
     /**
      * @return the User ID of the Client.
      */
-    String getUserId();
+    long getUserId();
 
     /**
      * @return the name of the Client, or null if it was not specified.

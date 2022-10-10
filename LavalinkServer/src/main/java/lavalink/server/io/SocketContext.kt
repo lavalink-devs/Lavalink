@@ -106,8 +106,8 @@ class SocketContext(
 
     fun getPlayer(guildId: String) = getPlayer(guildId.toLong())
 
-    override fun getUserId(): String {
-        return userId
+    override fun getUserId(): Long {
+        return userId.toLong()
     }
 
     override fun getClientName(): String? {
