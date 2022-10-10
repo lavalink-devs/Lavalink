@@ -7,13 +7,27 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * You must be able to intercept voice server updates from mainWS on your shard connection.
 
 ## Significant changes v3.5 -> v3.6
-* Deprecation of all endpoints and moved them to `/v3` namespace.
-* Deprecation of all client messages (play, stop, pause, seek, volume, filters, destroy, voiceUpdate & configureResuming).
-* Deprecation of [`/loadtracks` response](#track-loading).
+* Moved HTTP endpoints under the new `/v3` path.
+* Deprecation of the old HTTP paths.
+* WebSocket handshakes should be done with `/v3/websocket`. Handshakes on `/` is now deprecated.
+* Deprecation of all client-to-server messages (play, stop, pause, seek, volume, filters, destroy, voiceUpdate & configureResuming).
+* Addition of REST endpoints intended to replace client requests
 * Deprecation of [track decoding response](#track-decoding).
 * Addition of new WebSocket dispatch [Ready OP](#ready-op) to get `sessionId` and `resume` status.
 * Addition of new [Session](#update-session)/[Player](#get-player) REST API.
+* Addition of `/v3/info`, replaces `/plugins`.
+* Deprecation of `Track.track` in existing endpoints. Use `Track.encoded` instead.
 
+## Future breaking changes for v4
+* HTTP endpoints not under a version path (`/v3`, `/v4`) will be removed in v4
+* No WebSocket messages will be accepted by `/v4/websocket`.
+* `/v3` will still be available
+
+## Future breaking changes for v5
+* Removal of `/v3`. `/v4` will still be available
+
+<details>
+<summary>Older versions</summary>
 ## Significant changes v3.3 -> v3.4
 * Added filters
 * The `error` string on the `TrackExceptionEvent` has been deprecated and replaced by 
@@ -52,8 +66,12 @@ will be disconnected by Discord.
 Depending on your Discord library, it may be possible to take advantage of the library's OP 4 handling. For instance,
 the JDA client takes advantage of JDA's websocket write thread to send OP 4s for connects, disconnects and reconnects.
 
+</details>
+
 ## Protocol
 ### Opening a connection
+You can establish a WebSocket connection against the path `/v3/websocket`
+
 When opening a websocket connection, you must supply 3 required headers:
 ```
 Authorization: Password matching the server config
@@ -62,9 +80,6 @@ Client-Name: The name of your client. Optionally in the format NAME/VERSION
 ```
 
 ### Websocket Messages
-
-See [LavalinkSocket.java](https://github.com/freyacodes/lavalink-client/blob/master/src/main/java/lavalink/client/io/LavalinkSocket.java) for client implementation
-
 Fields marked with `?` are optional.
 Types marked with `?` are nullable.
 
@@ -92,15 +107,15 @@ Websocket messages all follow the following standard format:
 |-----------------------------------|--------------------------------------------------------------|
 | [ready](#ready-op)                | Emitted when you successfully connected to the Lavalink node |
 | [playerUpdate](#player-update-op) | Emitted when every x seconds with the latest player state    |
-| [event](#event-op)                | Emitted when an event is emitted                             |
+| [event](#event-op)                | Emitted when a player or voice event is emitted              |
 
 #### Ready OP
 Dispatched by Lavalink upon successful connection and authorization. Contains fields determining if resuming was successful, as well as the session ID.
 
-| Field     | Type   | Description                                                                         |
-|-----------|--------|-------------------------------------------------------------------------------------|
-| resumed?  | bool   | If the session is resumed(Only present if a session id was present when connecting) |
-| sessionId | string | The Lavalink Session ID of this connection                                          |
+| Field     | Type   | Description                                                                                    |
+|-----------|--------|------------------------------------------------------------------------------------------------|
+| resumed?  | bool   | If the session is resumed. (Only present if a session id was present when connecting)          |
+| sessionId | string | The Lavalink session ID of this connection. Not to be confused with a Discord voice session id |
 
 <details>
 <summary>Example Payload</summary>
@@ -125,12 +140,12 @@ Dispatched every x(configurable in `application.yml`) seconds with the current s
 | state   | [Player State](#player-state) object | The player state           |
 
 ##### Player State
-| Field     | Type   | Description                                                                           |
-|-----------|--------|---------------------------------------------------------------------------------------|
-| time      | string | Unix timestamp in milliseconds                                                        |
-| position? | int    | The position of the track in milliseconds                                             |
-| connected | bool   | If Lavalink is connected to the voice gateway                                         |
-| ping      | int    | The ping of the node to the discord voice server in milliseconds(-1 if not connected) |
+| Field     | Type | Description                                                                            |
+|-----------|------|----------------------------------------------------------------------------------------|
+| time      | int  | Unix timestamp in milliseconds                                                         |
+| position? | int  | The position of the track in milliseconds                                              |
+| connected | bool | If Lavalink is connected to the voice gateway                                          |
+| ping      | int  | The ping of the node to the discord voice server in milliseconds (-1 if not connected) |
 
 <details>
 <summary>Example Payload</summary>
@@ -402,14 +417,14 @@ See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and
 
 ---
 
-### Rest API
+### REST API
 Lavalink exposes a REST API to allow for easy control of the players.
-All routes require the Authorization header with the configured password.
+Most routes require the Authorization header with the configured password.
 ```
 Authorization: youshallnotpass
 ```
 
-All routes are prefixed with `/v3` as of `v3.6` and the old are deprecated.
+Routes are prefixed with `/v3` as of `v3.6`. Routes without an API prefix are to be removed in v4.
 
 #### Get Players
 Returns a list players in this specific session.
@@ -418,37 +433,46 @@ GET /v3/sessions/{sessionId}/players
 ```
 
 ##### Player
-| Field   | Type                               | Description                    |
-|---------|------------------------------------|--------------------------------|
-| guildId | string                             | The guild id of the player     |
-| track   | ?[Track](#track) object            | The current playing track      |
-| volume  | int                                | The volume of the player       |
-| paused  | bool                               | Whether the player is paused   |
-| voice   | [Voice State](#voice-state) object | The voice state of the player  |
-| filters | ?[Filters](#filters) object        | The filters used by the player |              
+| Field   | Type                               | Description                                          |
+|---------|------------------------------------|------------------------------------------------------|
+| guildId | string                             | The guild id of the player                           |
+| track   | ?[Track](#track) object            | The current playing track                            |
+| volume  | int                                | The volume of the player, range 0-150, in percentage |
+| paused  | bool                               | Whether the player is paused                         |
+| voice   | [Voice State](#voice-state) object | The voice state of the player                        |
+| filters | ?[Filters](#filters) object        | The filters used by the player                       |              
 
 ##### Track
-| Field      | Type    | Description                        |
-|------------|---------|------------------------------------|
-| trackData  | string  | The encoded track data             |
-| identifier | string  | The track identifier               |
-| isSeekable | bool    | Whether the track is seekable      |
-| author     | string  | The track author                   |
-| length     | int     | The track length in milliseconds   |
-| isStream   | bool    | Whether the track is a stream      |
-| position   | int     | The track position in milliseconds |
-| title      | string  | The track title                    |
-| uri        | ?string | The track uri                      |
-| sourceName | string  | The track source name              |
+| Field      | Type      | Description                               |
+|------------|-----------|-------------------------------------------|
+| encoded    | string    | The base64 encoded track data             |
+| info       | TrackInfo | Info about the track                      |
 
-#### Voice State
-| Field     | Type   | Description                     |
-|-----------|--------|---------------------------------|
-| token     | string | The voice token                 |
-| endpoint  | string | The voice endpoint              |
-| sessionId | string | The voice session id            |
-| connected | bool   | Whether the player is connected |
-| ping      | int    | The voice ping                  |
+##### TrackInfo
+| Field      | Type    | Description                               |
+|------------|---------|-------------------------------------------|
+| identifier | string  | The track identifier                      |
+| isSeekable | bool    | Whether the track is seekable             |
+| author     | string  | The track author                          |
+| length     | int     | The track length in milliseconds          |
+| isStream   | bool    | Whether the track is a stream             |
+| position   | int     | The track position in milliseconds        |
+| title      | string  | The track title                           |
+| uri        | ?string | The track uri                             |
+| sourceName | string  | The track source name                     |
+
+##### Voice State
+| Field     | Type   | Description                                           |
+|-----------|--------|-------------------------------------------------------|
+| token     | string | The Discord voice token to authenticate with          |
+| endpoint  | string | The Discord voice endpoint to connect to              |
+| sessionId | string | The Discord voice session id to authenticate with     |
+| connected | ?bool  | Whether the player is connected. Response only        |
+| ping      | ?int   | Roundtrip latency to the voice gateway. Response only |
+
+`token`, `endpoint`, and `sessionId` are the 3 required values for connecting to one of Discord's voice servers.
+`sessionId` is provided by the Voice State Update event sent by Discord, whereas the `endpoint` and `token` are provided
+with the Voice Server Update. Please refer to https://discord.com/developers/docs/topics/gateway-events#voice
 
 <details>
 <summary>Example Payload</summary>
@@ -530,40 +554,36 @@ Response:
 ---
 
 #### Update Player
-Updates the player for this guild in this specific.
+Updates the player for this guild.
 ```
 PATCH /v3/sessions/{sessionId}/players/{guildId}?noReplace=true
 ```
 
-You can provide either `trackData` or `identifier`, not both.
-
 Request:
 
 ##### Player Update
-| Field       | Type                               | Description                                                                                                                                   |
-|-------------|------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| trackData?  | ?string                            | The encoded track data to play. `null` stops the current track                                                                                |
-| identifier? | string                             | The track identifier to play                                                                                                                  |
-| position?   | int                                | The position in milliseconds                                                                                                                  |
-| endTime?    | int                                | The end time in milliseconds                                                                                                                  |
-| volume?     | int                                | The volume from 0 to 200                                                                                                                      |
-| paused?     | bool                               | Whether the player is paused                                                                                                                  |
-| filters?    | ?[Filters](#filters) object        | The new filters to apply. `null` will reset all filters                                                                                       |
-| sessionId?  | string                             | The session id from the [voice state update event](https://discord.com/developers/docs/topics/gateway-events#voice-state-update) from discord |
-| event?      | [Voice Event](#voice-event) object | The [voice server update event object](https://discord.com/developers/docs/topics/gateway-events#voice-server-update) from discord            |
+| Field         | Type                               | Description                                                                   |
+|---------------|------------------------------------|-------------------------------------------------------------------------------|
+| encodedTrack? | ?string                            | The encoded track data to play. `null` stops the current track                |
+| identifier?   | string                             | The track identifier to play                                                  |
+| position?     | int                                | The position in milliseconds                                                  |
+| endTime?      | int                                | The end time in milliseconds                                                  |
+| volume?       | int                                | The volume from 0 to 200                                                      |
+| paused?       | bool                               | Whether the player is paused                                                  |
+| filters?      | ?[Filters](#filters) object        | The new filters to apply. `null` will reset all filters                       |
+| voiceSession? | [Voice State](#voice-state) object | Information required for connecting to Discord, without `connected` or `ping` |
 
-##### Voice Event
-| Field    | Type   | Description        |
-|----------|--------|--------------------|
-| token    | string | The voice token    |
-| endpoint | string | The voice endpoint |
+Note that `encodedTrack` and `identifier` are mutually exclusive.
+
+When `identifier` is used, Lavalink will try to resolve the identifier as a single track. An error response is generated
+if no tracks or a playlist is resolved.
 
 <details>
 <summary>Example Payload</summary>
 
 ```yaml
 {
-  "trackData": "...",
+  "encodedTrack": "...",
   "identifier": "...",
   "startTime": 0, 
   "endTime": 0, 
@@ -592,16 +612,18 @@ Response:
 {
   "guildId": "...",
   "track": {
-    "trackData": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-    "identifier": "dQw4w9WgXcQ",
-    "isSeekable": true,
-    "author": "RickAstleyVEVO",
-    "length": 212000,
-    "isStream": false,
-    "position": 0,
-    "title": "Rick Astley - Never Gonna Give You Up",
-    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "sourceName": "youtube"
+    "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "info": {
+      "identifier": "dQw4w9WgXcQ",
+      "isSeekable": true,
+      "author": "RickAstleyVEVO",
+      "length": 212000,
+      "isStream": false,
+      "position": 0,
+      "title": "Rick Astley - Never Gonna Give You Up",
+      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "sourceName": "youtube"
+    }
   },
   "volume": 100,
   "paused": false,
@@ -855,12 +877,13 @@ GET /v3/loadtracks?identifier=dQw4w9WgXcQ
 <details>
 <summary>Response(Deprecated)</summary>
 
-```json
+```yaml
 {
   "loadType": "TRACK_LOADED",
   "tracks": [
     {
-      "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+      "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+      "track": "...", # Same as encoded, removed in /v4
       "info": {
         "identifier": "dQw4w9WgXcQ",
         "isSeekable": true,
@@ -889,7 +912,7 @@ Response:
 | tracks        | array of [Tracks](#track)              | All tracks which have been loaded                         | `TRACK_LOADED`, `PLAYLIST_LOADED`, `SEARCH_RESULT` |
 | exception?    | [Exception](#exception-object) object  | The [Exception](#exception-object) this load failed with  | `LOAD_FAILED`                                      |
 
-###### Load Result Type
+##### Load Result Type
 
 | Load Result Type  | Description                                  |
 |-------------------|----------------------------------------------|
@@ -899,7 +922,7 @@ Response:
 | `NO_MATCHES`      | There has been no matches to your identifier |
 | `LOAD_FAILED`     | Loading has failed                           |
 
-###### Playlist Info
+##### Playlist Info
 
 | Field         | Type   | Description                                                      |
 |---------------|--------|------------------------------------------------------------------|
@@ -909,12 +932,13 @@ Response:
 <details>
 <summary>Track Loaded Example Payload</summary>
 
-```json
+```yaml
 {
   "loadType": "TRACK_LOADED",
   "tracks": [
     {
-      "trackData": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+      "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+      "track": "...", # Same as encoded, removed in /v4
       "identifier": "dQw4w9WgXcQ",
       "isSeekable": true,
       "author": "RickAstleyVEVO",
@@ -993,40 +1017,23 @@ When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. N
 
 #### Track Decoding
 
-Decode a single track into its info
-> `/decodetrack?track=QAAAjJ...AAA==` is deprecated and marked for removal in v4
+Decode a single track into its info, where `BASE64` is the encoded base64 data.
+
 ```
-GET /v3/decodetrack?track=QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==
+GET /v3/decodetrack?track=BASE64
 ```
 
 Response:
 
-[Track Object](#track) without the `trackData` field
+[Track Object](#track)
 
 <details>
-<summary>Example Payload</summary>
+<summary>Response</summary>
 
-```json
+```yaml
 {
-  "identifier": "dQw4w9WgXcQ",
-  "isSeekable": true,
-  "author": "RickAstleyVEVO",
-  "length": 212000,
-  "isStream": false,
-  "position": 0,
-  "title": "Rick Astley - Never Gonna Give You Up",
-  "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  "sourceName": "youtube"
-}
-```
-</details>
-
-<details>
-<summary>Response(Deprecated)</summary>
-
-```json
-{
-  "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+  "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+  "track": "...", # Same as encoded, removed in /v4
   "info": {
     "identifier": "dQw4w9WgXcQ",
     "isSeekable": true,
@@ -1045,7 +1052,6 @@ Response:
 ---
 
 Decodes multiple tracks into their info
-> `/decodetracks` is deprecated and marked for removal in v4
 ```
 POST /v3/decodetracks
 ```
@@ -1070,34 +1076,13 @@ Response:
 Array of [Track Objects](#track)
 
 <details>
-<summary>Example Payload</summary>
+<summary>Response</summary>
 
 ```yaml
 [
   {
-    "trackData": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-    "identifier": "dQw4w9WgXcQ",
-    "isSeekable": true,
-    "author": "RickAstleyVEVO",
-    "length": 212000,
-    "isStream": false,
-    "position": 0,
-    "title": "Rick Astley - Never Gonna Give You Up",
-    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "sourceName": "youtube"
-  },
-  ...
-]
-```
-</details>
-
-<details>
-<summary>Response(Deprecated)</summary>
-
-```yaml
-[
-  {
-    "track": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "track": "...", # Same as encoded, removed in /v4
     "info": {
       "identifier": "dQw4w9WgXcQ",
       "isSeekable": true,
@@ -1212,7 +1197,7 @@ Response:
 
 ---
 
-#### Get Plugins(DEPRECATED)
+#### Get Plugins (DEPRECATED)
 Request information about the plugins running on Lavalink, if any.
 > `/plugins` is deprecated and marked for removal in v4
 ```
@@ -1235,7 +1220,7 @@ Response:
 
 ---
 
-#### Get Lavalink version(DEPRECATED)
+#### Get Lavalink version (DEPRECATED)
 Request Lavalink version.
 > `/version` is deprecated and marked for removal in v4, use [`/info`](#get-lavalink-info) instead
 ```
@@ -1432,10 +1417,11 @@ queue is then emptied and the events are then replayed.
 
 ---
 
+### Outgoing messages (DEPRECATED)
 <details>
-<summary> Outgoing messages(DEPRECATED)</summary>
+<summary>Show deprecated messages</summary>
 
-#### Provide a voice server update(DEPRECATED)
+#### Provide a voice server update (DEPRECATED)
 
 Provide an intercepted voice server update. This causes the server to connect to the voice channel.
 
@@ -1448,7 +1434,7 @@ Provide an intercepted voice server update. This causes the server to connect to
 }
 ```
 
-#### Play a track(DEPRECATED)
+#### Play a track (DEPRECATED)
 
 `startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
 
@@ -1473,7 +1459,7 @@ If `pause` is set to true, the playback will be paused. This is an optional fiel
 }
 ```
 
-#### Stop a player(DEPRECATED)
+#### Stop a player (DEPRECATED)
 
 ```json
 {
@@ -1482,7 +1468,7 @@ If `pause` is set to true, the playback will be paused. This is an optional fiel
 }
 ```
 
-#### Pause the playback(DEPRECATED)
+#### Pause the playback (DEPRECATED)
 
 ```json
 {
@@ -1492,7 +1478,7 @@ If `pause` is set to true, the playback will be paused. This is an optional fiel
 }
 ```
 
-#### Seek a track(DEPRECATED)
+#### Seek a track (DEPRECATED)
 
 The position is in milliseconds.
 
@@ -1504,7 +1490,7 @@ The position is in milliseconds.
 }
 ```
 
-#### Set player volume(DEPRECATED)
+#### Set player volume (DEPRECATED)
 
 Volume may range from 0 to 1000. 100 is default.
 
@@ -1516,7 +1502,7 @@ Volume may range from 0 to 1000. 100 is default.
 }
 ```
 
-#### Using filters(DEPRECATED)
+#### Using filters (DEPRECATED)
 
 The `filters` op sets the filters. All the filters are optional, and leaving them out of this message will disable them.
 
@@ -1610,7 +1596,7 @@ Note that filters may take a moment to apply.
 }
 ```
 
-#### Destroy a player(DEPRECATED)
+#### Destroy a player (DEPRECATED)
 
 Tell the server to potentially disconnect from the voice server and potentially remove the player with all its data.
 This is useful if you want to move to a new node for a voice connection. Calling this op does not affect voice state,
