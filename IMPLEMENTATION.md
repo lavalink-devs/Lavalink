@@ -1028,7 +1028,7 @@ Response:
 [Track Object](#track)
 
 <details>
-<summary>Response</summary>
+<summary>Example Payload</summary>
 
 ```yaml
 {
@@ -1076,7 +1076,7 @@ Response:
 Array of [Track Objects](#track)
 
 <details>
-<summary>Response</summary>
+<summary>Example Payload</summary>
 
 ```yaml
 [
