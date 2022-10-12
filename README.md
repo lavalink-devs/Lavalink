@@ -92,6 +92,7 @@ Client | Platform | Compatible With | Additional Information
 [discord-ext-lava](https://github.com/Axelware/discord-ext-lava) | Python | discord.py
 [Lavapy](https://github.com/Aspect1103/Lavapy) | Python | discord.py
 [Magma](https://github.com/initzx/magma) | Python | discord.py
+[interactions-lavalink](https://github.com/interactions-py/lavalink) | Python | interactions.py
 [Lavadeno](https://github.com/lavaclient/lavadeno) | Deno | **Any**
 [LavaJS](https://github.com/OverleapTechnologies/LavaJS) | Node.js | **Any**
 [LavaClient](https://github.com/lavaclient/lavaclient) | Node.js | **Any**
