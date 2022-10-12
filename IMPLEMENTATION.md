@@ -6,7 +6,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * You must be able to send messages via a shard's mainWS connection.
 * You must be able to intercept voice server updates from mainWS on your shard connection.
 
-## Significant changes v3.5 -> v3.6
+## Significant changes v3.6 -> v3.7
 * Moved HTTP endpoints under the new `/v3` path.
 * Deprecation of the old HTTP paths.
 * WebSocket handshakes should be done with `/v3/websocket`. Handshakes on `/` is now deprecated.
@@ -425,7 +425,7 @@ Most routes require the Authorization header with the configured password.
 Authorization: youshallnotpass
 ```
 
-Routes are prefixed with `/v3` as of `v3.6`. Routes without an API prefix are to be removed in v4.
+Routes are prefixed with `/v3` as of `v3.7`. Routes without an API prefix are to be removed in v4.
 
 #### Get Players
 Returns a list players in this specific session.
@@ -1153,7 +1153,7 @@ Response:
 ```json
 {
   "version": {
-    "string": "v3.6.0",
+    "string": "v3.7.0",
     "major": 3,
     "minor": 6,
     "patch": 0
@@ -1230,7 +1230,7 @@ GET /version
 
 Response:
 ```
-v3.6.0
+v3.7.0
 ```
 
 ---
