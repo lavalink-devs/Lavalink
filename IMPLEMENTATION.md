@@ -79,6 +79,8 @@ User-Id: The user id of the bot you are playing music with
 Client-Name: The name of your client. Optionally in the format NAME/VERSION
 ```
 
+Optionally you can supply the `Resume-Key` header. For more information on resuming see [Resuming](#resuming-lavalink-sessions)
+
 ### Websocket Messages
 Fields marked with `?` are optional.
 Types marked with `?` are nullable.
@@ -1366,7 +1368,7 @@ Response:
 
 ---
 
-### Resuming Lavalink sessions
+### Resuming Lavalink Sessions
 
 What happens after your client disconnects is dependent on whether the session has been configured for resuming.
 
