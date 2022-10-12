@@ -446,10 +446,11 @@ GET /v3/sessions/{sessionId}/players
 | filters | ?[Filters](#filters) object        | The filters used by the player                        |              
 
 ##### Track
-| Field      | Type                             | Description                               |
-|------------|----------------------------------|-------------------------------------------|
-| encoded    | string                           | The base64 encoded track data             |
-| info       | [Track Info](#track-info) object | Info about the track                      |
+| Field   | Type                             | Description                                                                   |
+|---------|----------------------------------|-------------------------------------------------------------------------------|
+| encoded | string                           | The base64 encoded track data                                                 |
+| track   | string                           | The base64 encoded track data (DEPRECATED as of v3.7.0 and for removal in v4) |
+| info    | [Track Info](#track-info) object | Info about the track                                                          |
 
 ##### Track Info
 | Field      | Type    | Description                               |
@@ -656,7 +657,7 @@ Filters are used in above requests and look like this
 |-------------|------------------------------------|---------------------------------------------------------------------------------------------------|
 | volume?     | float                              | Lets you adjust the player volume from 0 to 5.0 where 1.0 is 100%. Values >1.0 may cause clipping |
 | equalizer?  | array of [Equalizers](#equalizer)  | Lets you adjust 15 different bands                                                                |
-| karaoke?    | [Karaoke](#karaoke)    object      | Lets you eliminate part of a band, usually targeting vocals.                                      |
+| karaoke?    | [Karaoke](#karaoke)    object      | Lets you eliminate part of a band, usually targeting vocals                                       |
 | timescale?  | [Timescale](#timescale) object     | Lets you change the speed, pitch, and rate                                                        |
 | tremolo?    | [Tremolo](#tremolo) object         | Lets you create a shuddering effect, where the volume quickly oscillates                          |
 | vibrato?    | [Vibrato](#vibrato) object         | Lets you create a shuddering effect, where the pitch quickly oscillates                           |
