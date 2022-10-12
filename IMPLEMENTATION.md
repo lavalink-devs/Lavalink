@@ -434,14 +434,14 @@ GET /v3/sessions/{sessionId}/players
 ```
 
 ##### Player
-| Field   | Type                               | Description                                          |
-|---------|------------------------------------|------------------------------------------------------|
-| guildId | string                             | The guild id of the player                           |
-| track   | ?[Track](#track) object            | The current playing track                            |
-| volume  | int                                | The volume of the player, range 0-150, in percentage |
-| paused  | bool                               | Whether the player is paused                         |
-| voice   | [Voice State](#voice-state) object | The voice state of the player                        |
-| filters | ?[Filters](#filters) object        | The filters used by the player                       |              
+| Field   | Type                               | Description                                           |
+|---------|------------------------------------|-------------------------------------------------------|
+| guildId | string                             | The guild id of the player                            |
+| track   | ?[Track](#track) object            | The current playing track                             |
+| volume  | int                                | The volume of the player, range 0-1000, in percentage |
+| paused  | bool                               | Whether the player is paused                          |
+| voice   | [Voice State](#voice-state) object | The voice state of the player                         |
+| filters | ?[Filters](#filters) object        | The filters used by the player                        |              
 
 ##### Track
 | Field      | Type                             | Description                               |
