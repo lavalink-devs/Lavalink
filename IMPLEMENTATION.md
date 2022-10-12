@@ -1112,15 +1112,15 @@ Response:
 
 ##### Info Response
 
-| Field          | Type                               | Description                                        |
-|----------------|------------------------------------|----------------------------------------------------|
-| version        | [Version](#version-object) object  | The version of this Lavalink server                |
-| builtTime      | int                                | The time this Lavalink jar was built               |
-| git            | [Git](#git-object) object          | The git information of this Lavalink server        |
-| jvm            | string                             | The JVM version this Lavalink server runs on       |
-| lavaplayer     | string                             | The Lavaplayer version being used by this server   |
-| sourceManagers | array of strings                   | The source manager names being used by this server |
-| plugins        | array of [Plugins](#plugin-object) | The plugin names being used by this server         |
+| Field          | Type                               | Description                                                     |
+|----------------|------------------------------------|-----------------------------------------------------------------|
+| version        | [Version](#version-object) object  | The version of this Lavalink server                             |
+| builtTime      | int                                | The millisecond unix timestamp when this Lavalink jar was built |
+| git            | [Git](#git-object) object          | The git information of this Lavalink server                     |
+| jvm            | string                             | The JVM version this Lavalink server runs on                    |
+| lavaplayer     | string                             | The Lavaplayer version being used by this server                |
+| sourceManagers | array of strings                   | The source manager names being used by this server              |
+| plugins        | array of [Plugins](#plugin-object) | The plugin names being used by this server                      |
 
 ##### Version Object
 
