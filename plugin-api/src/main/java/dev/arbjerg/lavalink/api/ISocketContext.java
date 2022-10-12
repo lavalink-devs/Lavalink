@@ -1,6 +1,7 @@
 package dev.arbjerg.lavalink.api;
 
 import org.json.JSONObject;
+import org.springframework.lang.Nullable;
 
 import java.util.Map;
 
@@ -8,6 +9,17 @@ import java.util.Map;
  * Represents a WebSocket connection
  */
 public interface ISocketContext {
+    /**
+     * @return the User ID of the Client.
+     */
+    long getUserId();
+
+    /**
+     * @return the name of the Client, or null if it was not specified.
+     */
+    @Nullable
+    String getClientName();
+
     /**
      * Returns the player of a guild. Never returns null.
      *
