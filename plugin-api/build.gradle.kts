@@ -7,7 +7,7 @@ plugins {
 
 val archivesBaseName = "plugin-api"
 group = "dev.arbjerg.lavalink"
-version = "0.9.0"
+version = "3.6.0"
 
 dependencies {
     compileOnly(libs.spring.boot)
