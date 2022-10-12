@@ -428,7 +428,7 @@ Authorization: youshallnotpass
 Routes are prefixed with `/v3` as of `v3.7`. Routes without an API prefix are to be removed in v4.
 
 #### Get Players
-Returns a list players in this specific session.
+Returns a list of players in this specific session.
 ```
 GET /v3/sessions/{sessionId}/players
 ```
