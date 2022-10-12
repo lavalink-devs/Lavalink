@@ -28,6 +28,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 
 <details>
 <summary>Older versions</summary>
+  
 ## Significant changes v3.3 -> v3.4
 * Added filters
 * The `error` string on the `TrackExceptionEvent` has been deprecated and replaced by 
