@@ -6,6 +6,9 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 ## 3.6.0
 * new userId & clientName getters in the plugin-api. For more info see [here](https://github.com/freyacodes/Lavalink/pull/743).
 
+Contributors: 
+[@melike2d](https://github.com/melike2d)
+
 ## 3.5.1
 * update udpqueue.rs to `0.2.5` which fixes crashes when ipv6 is disabled
 * fix null socketContext in `IPlayer` for plugins
