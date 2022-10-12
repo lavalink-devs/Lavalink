@@ -6,13 +6,12 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * You must be able to send messages via a shard's mainWS connection.
 * You must be able to intercept voice server updates from mainWS on your shard connection.
 
-## Significant changes v3.6 -> v3.7
+## Significant changes v3.6.0 -> v3.7.0
 * Moved HTTP endpoints under the new `/v3` path.
 * Deprecation of the old HTTP paths.
 * WebSocket handshakes should be done with `/v3/websocket`. Handshakes on `/` is now deprecated.
 * Deprecation of all client-to-server messages (play, stop, pause, seek, volume, filters, destroy, voiceUpdate & configureResuming).
 * Addition of REST endpoints intended to replace client requests
-* Deprecation of [track decoding response](#track-decoding).
 * Addition of new WebSocket dispatch [Ready OP](#ready-op) to get `sessionId` and `resume` status.
 * Addition of new [Session](#update-session)/[Player](#get-player) REST API.
 * Addition of `/v3/info`, replaces `/plugins`.
@@ -55,7 +54,7 @@ With the release of v2.0 many unnecessary ops were removed:
 
 With Lavalink 1.x the server had the responsibility of handling Discord `VOICE_SERVER_UPDATE`s as well as its own internal ratelimiting.
 This remote handling makes things unnecessarily complicated and adds a lot og points where things could go wrong. 
-One problem we noticed is that since JD-AA is unaware of ratelimits on the bots gateway connection, it would keep adding
+One problem we noticed is that since JDA is unaware of ratelimits on the bots gateway connection, it would keep adding
 to the ratelimit queue to the gateway. With this update this is now the responsibility of the Lavalink client or the 
 Discord client.
 
@@ -108,6 +107,7 @@ Websocket messages all follow the following standard format:
 |-----------------------------------|--------------------------------------------------------------|
 | [ready](#ready-op)                | Emitted when you successfully connected to the Lavalink node |
 | [playerUpdate](#player-update-op) | Emitted when every x seconds with the latest player state    |
+| [stats](#stats-op)                | Emitted when the node sends stats once per minute            |
 | [event](#event-op)                | Emitted when a player or voice event is emitted              |
 
 #### Ready OP
@@ -159,7 +159,7 @@ Dispatched every x(configurable in `application.yml`) seconds with the current s
     "time": 1500467109,
     "position": 60000,
     "connected": true,
-    "ping": 0
+    "ping": 50
   }
 }
 ```
@@ -298,13 +298,13 @@ Emitted when a track ends.
 | reason | [TrackEndReason](#track-end-reason) | The reason the track ended   |
 
 ##### Track End Reason
-| Reason      | Description                | May Start Next |
-|-------------|----------------------------|----------------|
-| FINISH      | The track finished playing | true           |
-| LOAD_FAILED | The track failed to load   | true           |
-| STOPPED     | The track was stopped      | false          |
-| REPLACED    | The track was replaced     | false          |
-| CLEANUP     | The track was cleaned up   | false          |
+| Reason        | Description                | May Start Next |
+|---------------|----------------------------|----------------|
+| `FINISHED`    | The track finished playing | true           |
+| `LOAD_FAILED` | The track failed to load   | true           |
+| `STOPPED`     | The track was stopped      | false          |
+| `REPLACED`    | The track was replaced     | false          |
+| `CLEANUP`     | The track was cleaned up   | false          |
 
 <details>
 <summary>Example Payload</summary>
@@ -338,11 +338,11 @@ Emitted when a track throws an exception.
 | cause    | string                | The cause of the exception    |
 
 ##### Severity
-| Severity   | Description                                                                                                                                                                                                                            |
-|------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| COMMON     | The cause is known and expected, indicates that there is nothing wrong with the library itself                                                                                                                                         |
-| SUSPICIOUS | The cause might not be exactly known, but is possibly caused by outside factors. For example when an outside service responds in a format that we do not expect                                                                        |
-| FATAL      | If the probable cause is an issue with the library or when there is no way to tell what the cause might be. This is the default level and other levels are used in cases where the thrower has more in-depth knowledge about the error |
+| Severity     | Description                                                                                                                                                                                                                            |
+|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `COMMON`     | The cause is known and expected, indicates that there is nothing wrong with the library itself                                                                                                                                         |
+| `SUSPICIOUS` | The cause might not be exactly known, but is possibly caused by outside factors. For example when an outside service responds in a format that we do not expect                                                                        |
+| `FATAL`      | If the probable cause is an issue with the library or when there is no way to tell what the cause might be. This is the default level and other levels are used in cases where the thrower has more in-depth knowledge about the error |
 
 
 <details>
@@ -393,7 +393,7 @@ Emitted when a track gets stuck while playing.
 Emitted when an audio web socket (to Discord) is closed.
 This can happen for various reasons (normal and abnormal), e.g. when using an expired voice server update.
 4xxx codes are usually bad.
-See the [Discord docs](https://discordapp.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes).
+See the [Discord Docs](https://discordapp.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes).
 
 | Field    | Type   | Description                                                                                                                       |
 |----------|--------|-----------------------------------------------------------------------------------------------------------------------------------|
@@ -425,7 +425,7 @@ Most routes require the Authorization header with the configured password.
 Authorization: youshallnotpass
 ```
 
-Routes are prefixed with `/v3` as of `v3.7`. Routes without an API prefix are to be removed in v4.
+Routes are prefixed with `/v3` as of `v3.7.0`. Routes without an API prefix are to be removed in v4.
 
 #### Get Players
 Returns a list of players in this specific session.
@@ -444,12 +444,12 @@ GET /v3/sessions/{sessionId}/players
 | filters | ?[Filters](#filters) object        | The filters used by the player                       |              
 
 ##### Track
-| Field      | Type      | Description                               |
-|------------|-----------|-------------------------------------------|
-| encoded    | string    | The base64 encoded track data             |
-| info       | TrackInfo | Info about the track                      |
+| Field      | Type                             | Description                               |
+|------------|----------------------------------|-------------------------------------------|
+| encoded    | string                           | The base64 encoded track data             |
+| info       | [Track Info](#track-info) object | Info about the track                      |
 
-##### TrackInfo
+##### Track Info
 | Field      | Type    | Description                               |
 |------------|---------|-------------------------------------------|
 | identifier | string  | The track identifier                      |
@@ -463,13 +463,13 @@ GET /v3/sessions/{sessionId}/players
 | sourceName | string  | The track source name                     |
 
 ##### Voice State
-| Field     | Type   | Description                                           |
-|-----------|--------|-------------------------------------------------------|
-| token     | string | The Discord voice token to authenticate with          |
-| endpoint  | string | The Discord voice endpoint to connect to              |
-| sessionId | string | The Discord voice session id to authenticate with     |
-| connected | ?bool  | Whether the player is connected. Response only        |
-| ping      | ?int   | Roundtrip latency to the voice gateway. Response only |
+| Field      | Type   | Description                                                                                 |
+|------------|--------|---------------------------------------------------------------------------------------------|
+| token      | string | The Discord voice token to authenticate with                                                |
+| endpoint   | string | The Discord voice endpoint to connect to                                                    |
+| sessionId  | string | The Discord voice session id to authenticate with                                           |
+| connected? | bool   | Whether the player is connected. Response only                                              |
+| ping?      | int    | Roundtrip latency in milliseconds to the voice gateway (-1 if not connected). Response only |
 
 `token`, `endpoint`, and `sessionId` are the 3 required values for connecting to one of Discord's voice servers.
 `sessionId` is provided by the Voice State Update event sent by Discord, whereas the `endpoint` and `token` are provided
@@ -560,6 +560,12 @@ Updates the player for this guild.
 PATCH /v3/sessions/{sessionId}/players/{guildId}?noReplace=true
 ```
 
+Query Params:
+
+| Field     | Type | Description                                                                  |
+|-----------|------|------------------------------------------------------------------------------|
+| noReplace | bool | Whether to replace the current track with the new track. Defaults to `false` |
+
 Request:
 
 ##### Player Update
@@ -572,7 +578,7 @@ Request:
 | volume?       | int                                | The volume from 0 to 200                                                      |
 | paused?       | bool                               | Whether the player is paused                                                  |
 | filters?      | ?[Filters](#filters) object        | The new filters to apply. `null` will reset all filters                       |
-| voiceSession? | [Voice State](#voice-state) object | Information required for connecting to Discord, without `connected` or `ping` |
+| voice?        | [Voice State](#voice-state) object | Information required for connecting to Discord, without `connected` or `ping` |
 
 Note that `encodedTrack` and `identifier` are mutually exclusive.
 
@@ -592,15 +598,14 @@ if no tracks or a playlist is resolved.
   "position": 32400,
   "paused": false,
   "filters": { ... },
-  "sessionId": "...",
-  "event": {
+  "voice": {
     "token": "...",
-    "endpoint": "..."
+    "endpoint": "...",
+    "sessionId": "..."
   }
 }
 ```
 </details>
-
 
 Response: 
 
@@ -1155,7 +1160,7 @@ Response:
   "version": {
     "string": "v3.7.0",
     "major": 3,
-    "minor": 6,
+    "minor": 7,
     "patch": 0
   },
   "buildTime": 1664223916812,
@@ -1200,7 +1205,7 @@ Response:
 
 #### Get Plugins (DEPRECATED)
 Request information about the plugins running on Lavalink, if any.
-> `/plugins` is deprecated and marked for removal in v4
+> `/plugins` is deprecated and marked for removal in v4, use [`/info`](#get-lavalink-info) instead
 ```
 GET /plugins
 ```
