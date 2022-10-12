@@ -3,6 +3,51 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 3.6.0
+* new userId & clientName getters in the plugin-api. For more info see [here](https://github.com/freyacodes/Lavalink/pull/743).
+
+## 3.5.1
+* update udpqueue.rs to `0.2.5` which fixes crashes when ipv6 is disabled
+* fix null socketContext in `IPlayer` for plugins
+* new `ping` field in player update. see https://github.com/freyacodes/Lavalink/pull/738 for more info
+
+Contributors: 
+[@TopiSenpai](https://github.com/TopiSenpai),
+[@Devoxin](https://github.com/Devoxin), and 
+[@freyacodes](https://github.com/freyacodes) 
+
+## 3.5
+* New plugin system. For more info see [here](https://github.com/freyacodes/Lavalink/blob/master/PLUGINS.md).
+* Add support for HTTP proxying via httpConfig. For more info see [here](https://github.com/freyacodes/Lavalink/pull/595).
+* Update koe version to 2.0.0-rc1.
+  - this fixes the WebSocketClosedEvent with code 1006 problem.
+* Fix error when enabling timescale and lowpass filters.
+* Fix player not playing after moving between voice chats or changing regions.
+* Fix guild ids sent as numbers in json.
+* Fix missing timescale natives.
+* Fix setting endMarkerHit to correctly set FINISHED as the reason.
+* Undeprecation of the `volume` property in the `play` OP.
+* Configurable track stuck threshold. For more info see [here](https://github.com/freyacodes/Lavalink/pull/676).
+* Add JDA-NAS support for more CPU Architectures. For more info see [here](https://github.com/freyacodes/Lavalink/pull/692). Big thanks goes to @MinnDevelopment here.
+* Update lavaplayer to [`1.3.98.4`](https://github.com/Walkyst/lavaplayer-fork/releases/tag/1.3.98.4) which fixes the latest yt cipher issues and age restricted tracks
+
+Contributors: 
+[@freyacodes](https://github.com/freyacodes), 
+[@davidffa](https://github.com/davidffa), 
+[@Walkyst](https://github.com/Walkyst), 
+[@TopiSenpai](https://github.com/TopiSenpai), 
+[@duncte123](https://github.com/duncte123), 
+[@Kodehawa](https://github.com/Kodehawa), 
+[@Devoxin](https://github.com/Devoxin), 
+[@Muh9049](https://github.com/Muh9049), 
+[@melike2d](https://github.com/melike2d), 
+[@ToxicMushroom](https://github.com/ToxicMushroom), 
+[@mooner1022](https://github.com/mooner1022), 
+[@rohank05](https://github.com/rohank05), 
+[@Fabricio20](https://github.com/Fabricio20), 
+[@TheEssemm](https://github.com/TheEssemm), and 
+[@jack1142](https://github.com/jack1142)
+
 ## 3.4
 * New filters system
 * Deprecation of `TrackExceptionEvent.error`, replaced by `TrackExceptionEvent.exception`
