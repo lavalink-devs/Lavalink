@@ -271,9 +271,9 @@ Server emitted an event. See the client implementation below.
 ##### TrackStartEvent
 Emitted when a track starts playing.
 
-| Field   | Type   | Description                              |
-|---------|--------|------------------------------------------|
-| track   | string | The track that started playing           |
+| Field   | Type   | Description                            |
+|---------|--------|----------------------------------------|
+| track   | string | The encoded track that started playing |
 
 <details>
 <summary>Example Payload</summary>
@@ -294,10 +294,10 @@ Emitted when a track starts playing.
 ##### TrackEndEvent
 Emitted when a track ends.
 
-| Field  | Type                                | Description                  |
-|--------|-------------------------------------|------------------------------|
-| track  | string                              | The track that ended playing |
-| reason | [TrackEndReason](#track-end-reason) | The reason the track ended   |
+| Field  | Type                                | Description                          |
+|--------|-------------------------------------|--------------------------------------|
+| track  | string                              | The encoded track that ended playing |
+| reason | [TrackEndReason](#track-end-reason) | The reason the track ended           |
 
 ##### Track End Reason
 | Reason        | Description                | May Start Next |
@@ -327,10 +327,10 @@ Emitted when a track ends.
 ##### TrackExceptionEvent
 Emitted when a track throws an exception.
 
-| Field     | Type                                  | Description                        |
-|-----------|---------------------------------------|------------------------------------|
-| track     | string                                | The track that threw the exception |
-| exception | [Exception](#exception-object) object | The occurred exception             |
+| Field     | Type                                  | Description                                |
+|-----------|---------------------------------------|--------------------------------------------|
+| track     | string                                | The encoded track that threw the exception |
+| exception | [Exception](#exception-object) object | The occurred exception                     |
 
 ##### Exception Object
 | Field    | Type                  | Description                   |
@@ -372,7 +372,7 @@ Emitted when a track gets stuck while playing.
 
 | Field       | Type   | Description                                     |
 |-------------|--------|-------------------------------------------------|
-| track       | string | The track that got stuck                        |
+| track       | string | The encoded track that got stuck                |
 | thresholdMs | int    | The threshold in milliseconds that was exceeded |
 
 <details>
