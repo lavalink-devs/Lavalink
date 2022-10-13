@@ -107,7 +107,7 @@ Websocket messages all follow the following standard format:
 
 | OP Type                           | Description                                                  |
 |-----------------------------------|--------------------------------------------------------------|
-| [ready](#ready-op)                | Emitted when you successfully connected to the Lavalink node |
+| [ready](#ready-op)                | Emitted when you successfully connect to the Lavalink node   |
 | [playerUpdate](#player-update-op) | Emitted every x seconds with the latest player state         |
 | [stats](#stats-op)                | Emitted when the node sends stats once per minute            |
 | [event](#event-op)                | Emitted when a player or voice event is emitted              |
