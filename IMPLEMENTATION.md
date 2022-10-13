@@ -11,7 +11,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * Deprecation of the old HTTP paths.
 * WebSocket handshakes should be done with `/v3/websocket`. Handshakes on `/` is now deprecated.
 * Deprecation of all client-to-server messages (play, stop, pause, seek, volume, filters, destroy, voiceUpdate & configureResuming).
-* Addition of REST endpoints intended to replace client requests
+* Addition of REST endpoints intended to replace client requests.
 * Addition of new WebSocket dispatch [Ready OP](#ready-op) to get `sessionId` and `resume` status.
 * Addition of new [Session](#update-session)/[Player](#get-player) REST API.
 * Addition of `/v3/info`, replaces `/plugins`.
@@ -135,7 +135,7 @@ Dispatched by Lavalink upon successful connection and authorization. Contains fi
 ---
 
 #### Player Update OP
-Dispatched every x(configurable in `application.yml`) seconds with the current state of the player.
+Dispatched every x (configurable in `application.yml`) seconds with the current state of the player.
 
 | Field   | Type                                 | Description                |
 |---------|--------------------------------------|----------------------------|
@@ -399,7 +399,7 @@ See the [Discord Docs](https://discordapp.com/developers/docs/topics/opcodes-and
 
 | Field    | Type   | Description                                                                                                                       |
 |----------|--------|-----------------------------------------------------------------------------------------------------------------------------------|
-| code     | int    | The [discord close event code](https://discord.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes) |
+| code     | int    | The [Discord close event code](https://discord.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes) |
 | reason   | string | The close reason                                                                                                                  |
 | byRemote | bool   | If the connection was closed by discord                                                                                           |
 
@@ -710,7 +710,7 @@ Uses equalization to eliminate part of a band, usually targeting vocals.
 | filterWidth? | float | The filter width                                                        |
 
 ##### Timescale
-Changes the speed, pitch, and rate. All default to 1.
+Changes the speed, pitch, and rate. All default to 1.0.
 
 | Field  | Type  | Description              |
 |--------|-------|--------------------------|
@@ -1245,7 +1245,7 @@ v3.7.0
 
 ### RoutePlanner API
 
-Additionally, there are a few REST endpoints for the ip rotation extension
+Additionally, there are a few REST endpoints for the ip rotation extension.
 
 #### Get RoutePlanner status
 > `/routeplanner/status` is deprecated and marked for removal in v4
@@ -1262,11 +1262,11 @@ Response:
 
 ##### Route Planner Types
 
-| Route Planner Type           | Description |
-|------------------------------|-------------|
-| `RotatingIpRoutePlanner`     | ...         |
-| `NanoIpRoutePlanner`         | ...         |
-| `RotatingNanoIpRoutePlanner` | ...         |
+| Route Planner Type           | Description                                                                                                                  |
+|------------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| `RotatingIpRoutePlanner`     | IP address used is switched on ban. Recommended for IPv4 blocks or IPv6 blocks smaller than a /64.                            |
+| `NanoIpRoutePlanner`         | IP address used is switched on clock update. Use with at least 1 /64 IPv6 block.                                             |
+| `RotatingNanoIpRoutePlanner` | IP address used is switched on clock update, rotates to a different /64 block on ban. Use with at least 2x /64 IPv6 blocks.  |
 
 ##### Details Object
 
@@ -1376,7 +1376,7 @@ What happens after your client disconnects is dependent on whether the session h
 * If resuming is disabled all voice connections are closed immediately.
 * If resuming is enabled all music will continue playing. You will then be able to resume your session, allowing you to control the players again.
 
-To enable resuming, you must call the [Update Session](#update-session) endpoint with the `resumingKey` and `timeout`
+To enable resuming, you must call the [Update Session](#update-session) endpoint with the `resumingKey` and `timeout`.
 
 <details>
 <summary>Configure Resuming OP(DEPRECATED)</summary>
@@ -1415,7 +1415,7 @@ queue is then emptied and the events are then replayed.
 
 ### Special notes
 
-* When your shard's main WS connection dies, so does all your lavalink audio connections.
+* When your shard's main WS connection dies, so does all your Lavalink audio connections.
   * This also includes resumes
 
 * If Lavalink-Server suddenly dies (think SIGKILL) the client will have to terminate any audio connections by sending this event:
