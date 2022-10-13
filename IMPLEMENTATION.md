@@ -578,7 +578,7 @@ Request:
 | identifier?   | string                             | The track identifier to play                                                  |
 | position?     | int                                | The position in milliseconds                                                  |
 | endTime?      | int                                | The end time in milliseconds                                                  |
-| volume?       | int                                | The volume from 0 to 200                                                      |
+| volume?       | int                                | The volume from 0 to 1000                                                     |
 | paused?       | bool                               | Whether the player is paused                                                  |
 | filters?      | ?[Filters](#filters) object        | The new filters to apply. `null` will reset all filters                       |
 | voice?        | [Voice State](#voice-state) object | Information required for connecting to Discord, without `connected` or `ping` |
