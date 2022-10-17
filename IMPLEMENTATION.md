@@ -653,18 +653,18 @@ Response:
 #### Filters
 Filters are used in above requests and look like this
 
-| Field       | Type                               | Description                                                                                       |
-|-------------|------------------------------------|---------------------------------------------------------------------------------------------------|
-| volume?     | float                              | Lets you adjust the player volume from 0 to 5.0 where 1.0 is 100%. Values >1.0 may cause clipping |
-| equalizer?  | array of [Equalizers](#equalizer)  | Lets you adjust 15 different bands                                                                |
-| karaoke?    | [Karaoke](#karaoke)    object      | Lets you eliminate part of a band, usually targeting vocals                                       |
-| timescale?  | [Timescale](#timescale) object     | Lets you change the speed, pitch, and rate                                                        |
-| tremolo?    | [Tremolo](#tremolo) object         | Lets you create a shuddering effect, where the volume quickly oscillates                          |
-| vibrato?    | [Vibrato](#vibrato) object         | Lets you create a shuddering effect, where the pitch quickly oscillates                           |
-| rotation?   | [Rotation](#rotation) object       | Lets you rotate the sound around the stereo channels/user headphones aka Audio Panning            |
-| distortion? | [Distortion](#distortion) object   | Lets you distort the audio                                                                        |
-| channelMix? | [Channel Mix](#channel-mix) object | Lets you mix both channels (left and right)                                                       |
-| lowPass?    | [Low Pass](#low-pass) object       | Lets you filter higher frequencies                                                                |
+| Field       | Type                               | Description                                                                                         |
+|-------------|------------------------------------|-----------------------------------------------------------------------------------------------------|
+| volume?     | float                              | Lets you adjust the player volume from 0.0 to 5.0 where 1.0 is 100%. Values >1.0 may cause clipping |
+| equalizer?  | array of [Equalizers](#equalizer)  | Lets you adjust 15 different bands                                                                  |
+| karaoke?    | [Karaoke](#karaoke)    object      | Lets you eliminate part of a band, usually targeting vocals                                         |
+| timescale?  | [Timescale](#timescale) object     | Lets you change the speed, pitch, and rate                                                          |
+| tremolo?    | [Tremolo](#tremolo) object         | Lets you create a shuddering effect, where the volume quickly oscillates                            |
+| vibrato?    | [Vibrato](#vibrato) object         | Lets you create a shuddering effect, where the pitch quickly oscillates                             |
+| rotation?   | [Rotation](#rotation) object       | Lets you rotate the sound around the stereo channels/user headphones aka Audio Panning              |
+| distortion? | [Distortion](#distortion) object   | Lets you distort the audio                                                                          |
+| channelMix? | [Channel Mix](#channel-mix) object | Lets you mix both channels (left and right)                                                         |
+| lowPass?    | [Low Pass](#low-pass) object       | Lets you filter higher frequencies                                                                  |
 
 ##### Equalizer
 There are 15 bands (0-14) that can be changed.
@@ -712,28 +712,28 @@ Uses equalization to eliminate part of a band, usually targeting vocals.
 ##### Timescale
 Changes the speed, pitch, and rate. All default to 1.0.
 
-| Field  | Type  | Description              |
-|--------|-------|--------------------------|
-| speed? | float | The playback speed 0 ≤ x |
-| pitch? | float | The pitch 0 ≤ x          |
-| rate?  | float | The rate 0 ≤ x           |
+| Field  | Type  | Description                |
+|--------|-------|----------------------------|
+| speed? | float | The playback speed 0.0 ≤ x |
+| pitch? | float | The pitch 0.0 ≤ x          |
+| rate?  | float | The rate 0.0 ≤ x           |
 
 ##### Tremolo
 Uses amplification to create a shuddering effect, where the volume quickly oscillates.
 https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
 
-| Field      | Type  | Description                  |
-|------------|-------|------------------------------|
-| frequency? | float | The frequency 0 < x          |
-| depth?     | float | The tremolo depth 0 < x ≤ 1  |
+| Field      | Type  | Description                      |
+|------------|-------|----------------------------------|
+| frequency? | float | The frequency 0.0 < x            |
+| depth?     | float | The tremolo depth 0.0 < x ≤ 1.0  |
 
 ##### Vibrato
 Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
 
-| Field      | Type  | Description                 |
-|------------|-------|-----------------------------|
-| frequency? | float | The frequency 0 < x ≤ 14    |
-| depth?     | float | The vibrato depth 0 < x ≤ 1 |
+| Field      | Type  | Description                     |
+|------------|-------|---------------------------------|
+| frequency? | float | The frequency 0.0 < x ≤ 14.0    |
+| depth?     | float | The vibrato depth 0.0 < x ≤ 1.0 |
 
 ##### Rotation
 Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to https://youtu.be/QB9EB8mTKcc (without the reverb)
