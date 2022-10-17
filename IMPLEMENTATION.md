@@ -148,7 +148,7 @@ Dispatched every x (configurable in `application.yml`) seconds with the current 
 | time      | int  | Unix timestamp in milliseconds                                                         |
 | position? | int  | The position of the track in milliseconds                                              |
 | connected | bool | If Lavalink is connected to the voice gateway                                          |
-| ping      | int  | The ping of the node to the discord voice server in milliseconds (-1 if not connected) |
+| ping      | int  | The ping of the node to the Discord voice server in milliseconds (-1 if not connected) |
 
 <details>
 <summary>Example Payload</summary>
@@ -266,7 +266,7 @@ Server emitted an event. See the client implementation below.
 | [TrackEndEvent](#trackendevent)               | Emitted when a track ends                                                |
 | [TrackExceptionEvent](#trackexceptionevent)   | Emitted when a track throws an exception                                 |
 | [TrackStuckEvent](#trackstuckevent)           | Emitted when a track gets stuck while playing                            |
-| [WebSocketClosedEvent](#websocketclosedevent) | Emitted when the websocket connection to discord voice servers is closed |
+| [WebSocketClosedEvent](#websocketclosedevent) | Emitted when the websocket connection to Discord voice servers is closed |
 
 ##### TrackStartEvent
 Emitted when a track starts playing.
@@ -401,7 +401,7 @@ See the [Discord Docs](https://discordapp.com/developers/docs/topics/opcodes-and
 |----------|--------|-----------------------------------------------------------------------------------------------------------------------------------|
 | code     | int    | The [Discord close event code](https://discord.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes) |
 | reason   | string | The close reason                                                                                                                  |
-| byRemote | bool   | If the connection was closed by discord                                                                                           |
+| byRemote | bool   | If the connection was closed by Discord                                                                                           |
 
 <details>
 <summary>Example Payload</summary>
