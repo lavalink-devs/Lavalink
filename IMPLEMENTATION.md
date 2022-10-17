@@ -446,11 +446,11 @@ GET /v3/sessions/{sessionId}/players
 | filters | ?[Filters](#filters) object        | The filters used by the player                        |              
 
 ##### Track
-| Field   | Type                             | Description                                                                   |
-|---------|----------------------------------|-------------------------------------------------------------------------------|
-| encoded | string                           | The base64 encoded track data                                                 |
-| track   | string                           | The base64 encoded track data (DEPRECATED as of v3.7.0 and for removal in v4) |
-| info    | [Track Info](#track-info) object | Info about the track                                                          |
+| Field   | Type                             | Description                                                                          |
+|---------|----------------------------------|--------------------------------------------------------------------------------------|
+| encoded | string                           | The base64 encoded track data                                                        |
+| track   | string                           | The base64 encoded track data (DEPRECATED as of v3.7.0 and marked for removal in v4) |
+| info    | [Track Info](#track-info) object | Info about the track                                                                 |
 
 ##### Track Info
 | Field      | Type    | Description                               |
