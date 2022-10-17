@@ -17,4 +17,4 @@ build/*
 /plugin-api/out/
 gradle.properties
 application.yml
-plugins
+LavalinkServer/plugins
