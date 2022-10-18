@@ -1142,11 +1142,11 @@ Response:
 
 ##### Git Object
 
-| Field      | Type   | Description                                                |
-|------------|--------|------------------------------------------------------------|
-| branch     | string | The branch this Lavalink server was built                  |
-| commit     | string | The commit this Lavalink server was built                  |
-| commitTime | int    | The millisecond unix timestamp when the commit was created |
+| Field      | Type   | Description                                                    |
+|------------|--------|----------------------------------------------------------------|
+| branch     | string | The branch this Lavalink server was built                      |
+| commit     | string | The commit this Lavalink server was built                      |
+| commitTime | int    | The millisecond unix timestamp for when the commit was created |
 
 ##### Plugin Object
 
