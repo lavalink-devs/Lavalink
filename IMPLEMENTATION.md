@@ -7,7 +7,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * You must be able to intercept voice server updates from mainWS on your shard connection.
 
 ## Significant changes v3.6.0 -> v3.7.0
-* Moved HTTP endpoints under the new `/v3` path.
+* Moved HTTP endpoints under the new `/v3` path with `/version` as the only exception.
 * Deprecation of the old HTTP paths.
 * WebSocket handshakes should be done with `/v3/websocket`. Handshakes on `/` is now deprecated.
 * Deprecation of all client-to-server messages (play, stop, pause, seek, volume, filters, destroy, voiceUpdate & configureResuming).
@@ -16,6 +16,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * Addition of new [Session](#update-session)/[Player](#get-player) REST API.
 * Addition of `/v3/info`, replaces `/plugins`.
 * Deprecation of `Track.track` in existing endpoints. Use `Track.encoded` instead.
+* Deprecation of `TrackXEvent.track` in WebSocket dispatches. Use `TrackXEvent.encodedTrack` instead.
 
 ## Future breaking changes for v4
 * HTTP endpoints not under a version path (`/v3`, `/v4`) will be removed in v4
