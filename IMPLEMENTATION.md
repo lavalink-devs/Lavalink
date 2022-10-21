@@ -271,9 +271,10 @@ Server emitted an event. See the client implementation below.
 ##### TrackStartEvent
 Emitted when a track starts playing.
 
-| Field   | Type   | Description                            |
-|---------|--------|----------------------------------------|
-| track   | string | The encoded track that started playing |
+| Field        | Type   | Description                                                                                           |
+|--------------|--------|-------------------------------------------------------------------------------------------------------|
+| encodedTrack | string | The base64 encoded track that started playing                                                         |
+| track        | string | The base64 encoded track that started playing  (DEPRECATED as of v3.7.0 and marked for removal in v4) |
 
 <details>
 <summary>Example Payload</summary>
@@ -283,6 +284,7 @@ Emitted when a track starts playing.
   "op": "event",
   "type": "TrackStartEvent",
   "guildId": "...",
+  "encodedTrack": "...",
   "track": "..."
 }
 ```
@@ -294,10 +296,11 @@ Emitted when a track starts playing.
 ##### TrackEndEvent
 Emitted when a track ends.
 
-| Field  | Type                                | Description                          |
-|--------|-------------------------------------|--------------------------------------|
-| track  | string                              | The encoded track that ended playing |
-| reason | [TrackEndReason](#track-end-reason) | The reason the track ended           |
+| Field        | Type                                | Description                                                                                        |
+|--------------|-------------------------------------|----------------------------------------------------------------------------------------------------|
+| encodedTrack | string                              | The base64 encoded track that ended playing                                                        |
+| track        | string                              | The base64 encoded track that ended playing (DEPRECATED as of v3.7.0 and marked for removal in v4) |
+| reason       | [TrackEndReason](#track-end-reason) | The reason the track ended                                                                         |
 
 ##### Track End Reason
 | Reason        | Description                | May Start Next |
@@ -316,6 +319,7 @@ Emitted when a track ends.
   "op": "event",
   "type": "TrackEndEvent",
   "guildId": "...",
+  "encodedTrack": "...",
   "track": "...",
   "reason": "FINISHED"
 }
@@ -327,10 +331,11 @@ Emitted when a track ends.
 ##### TrackExceptionEvent
 Emitted when a track throws an exception.
 
-| Field     | Type                                  | Description                                |
-|-----------|---------------------------------------|--------------------------------------------|
-| track     | string                                | The encoded track that threw the exception |
-| exception | [Exception](#exception-object) object | The occurred exception                     |
+| Field        | Type                                  | Description                                                                                              |
+|--------------|---------------------------------------|----------------------------------------------------------------------------------------------------------|
+| encodedTrack | string                                | The base64 encoded track that threw the exception                                                        |
+| track        | string                                | The base64 encoded track that threw the exception (DEPRECATED as of v3.7.0 and marked for removal in v4) |
+| exception    | [Exception](#exception-object) object | The occurred exception                                                                                   |
 
 ##### Exception Object
 | Field    | Type                  | Description                   |
@@ -355,6 +360,7 @@ Emitted when a track throws an exception.
   "op": "event",
   "type": "TrackExceptionEvent",
   "guildId": "...",
+  "encodedTrack": "...",
   "track": "...",
   "exception": {
     "message": "...",
@@ -370,10 +376,11 @@ Emitted when a track throws an exception.
 ##### TrackStuckEvent
 Emitted when a track gets stuck while playing.
 
-| Field       | Type   | Description                                     |
-|-------------|--------|-------------------------------------------------|
-| track       | string | The encoded track that got stuck                |
-| thresholdMs | int    | The threshold in milliseconds that was exceeded |
+| Field        | Type   | Description                                                                                     |
+|--------------|--------|-------------------------------------------------------------------------------------------------|
+| encodedTrack | string | The base64 encoded track that got stuck                                                         |
+| track        | string | The base64 encoded track that got stuck  (DEPRECATED as of v3.7.0 and marked for removal in v4) |
+| thresholdMs  | int    | The threshold in milliseconds that was exceeded                                                 |
 
 <details>
 <summary>Example Payload</summary>
@@ -383,6 +390,7 @@ Emitted when a track gets stuck while playing.
   "op": "event",
   "type": "TrackStuckEvent",
   "guildId": "...",
+  "encodedTrack": "...",
   "track": "...",
   "thresholdMs": 123456789
 }
