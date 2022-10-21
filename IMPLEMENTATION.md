@@ -1229,16 +1229,15 @@ Response:
 
 ---
 
-#### Get Lavalink version (DEPRECATED)
+#### Get Lavalink version
 Request Lavalink version.
-> `/version` is deprecated and marked for removal in v4, use [`/info`](#get-lavalink-info) instead
 ```
 GET /version
 ```
 
 Response:
 ```
-v3.7.0
+3.7.0
 ```
 
 ---
