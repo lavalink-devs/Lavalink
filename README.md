@@ -62,7 +62,8 @@ Additional labels for release candidates are available as extensions to the `MAJ
 ## Client libraries:
 Client | Platform | Compatible With | Additional Information
 -------|----------|-----------------|-----------------------
-[Lavalink-Client](https://github.com/freyacodes/lavalink-client) | Java | JDA/**Any** 
+[Lavalink-Client](https://github.com/freyacodes/lavalink-client) | Java | JDA/**Any**
+[LavaClient](https://github.com/HoneycombsTeam/LavaClient) | Java | JDA
 [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt) | Kotlin | JDA/Kord/**Any** | Kotlin Coroutines
 [Lavalink.py](https://github.com/Devoxin/Lavalink.py) | Python | **Any**
 [lavasnek_rs](https://github.com/vicky5124/lavasnek_rs) | Python | **Any\*** | *`asyncio`-based libraries only
@@ -72,12 +73,13 @@ Client | Platform | Compatible With | Additional Information
 [discord-ext-lava](https://github.com/Axelware/discord-ext-lava) | Python | discord.py
 [Lavapy](https://github.com/Aspect1103/Lavapy) | Python | discord.py
 [Magma](https://github.com/initzx/magma) | Python | discord.py
+[interactions-lavalink](https://github.com/interactions-py/lavalink) | Python | interactions.py
 [Lavadeno](https://github.com/lavaclient/lavadeno) | Deno | **Any**
 [LavaJS](https://github.com/OverleapTechnologies/LavaJS) | Node.js | **Any**
-[erela.js](https://github.com/MenuDocs/erela.js) | Node.js | **Any**
 [LavaClient](https://github.com/lavaclient/lavaclient) | Node.js | **Any**
 [Lavacoffee](https://github.com/XzFirzal/lavacoffee) | Node.js | **Any**
 [Lavacord](https://github.com/lavacord/lavacord) | Node.js | **Any**
+[FastLink](https://github.com/ThePedroo/FastLink) | Node.js | **Any**
 [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js) | Node.js | **Any**
 [@skyra/audio](https://github.com/skyra-project/audio) | Node.js | discord.js | Archived
 [Poru](https://github.com/parasop/poru) | Node.js | **Any**

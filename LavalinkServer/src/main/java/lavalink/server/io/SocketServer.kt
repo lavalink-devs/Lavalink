@@ -99,6 +99,7 @@ class SocketServer(
                 session,
                 this,
                 userId,
+                clientName,
                 koe.newClient(userId.toLong()),
                 eventHandlers,
                 webSocketExtensions,
