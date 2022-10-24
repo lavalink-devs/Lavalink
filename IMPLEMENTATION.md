@@ -580,7 +580,6 @@ Query Params:
 
 Request:
 
-##### Player Update
 | Field         | Type                               | Description                                                                   |
 |---------------|------------------------------------|-------------------------------------------------------------------------------|
 | encodedTrack? | ?string                            | The encoded track data to play. `null` stops the current track                |
@@ -1038,7 +1037,7 @@ When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. N
 Decode a single track into its info, where `BASE64` is the encoded base64 data.
 
 ```
-GET /v3/decodetrack?track=BASE64
+GET /v3/decodetrack?encodedTrack=BASE64
 ```
 
 Response:
@@ -1142,13 +1141,13 @@ Response:
 
 ##### Version Object
 
-| Field      | Type   | Description                                 |
-|------------|--------|---------------------------------------------|
-| semver     | string | The full version of this Lavalink server    |
-| major      | int    | The major version of this Lavalink server   |
-| minor      | int    | The minor version of this Lavalink server   |
-| patch      | int    | The patch version of this Lavalink server   |
-| preRelease | string | The pre-release version according to semver |
+| Field      | Type    | Description                                                                        |
+|------------|---------|------------------------------------------------------------------------------------|
+| semver     | string  | The full version of this Lavalink server                                           |
+| major      | int     | The major version of this Lavalink server                                          |
+| minor      | int     | The minor version of this Lavalink server                                          |
+| patch      | int     | The patch version of this Lavalink server                                          |
+| preRelease | ?string | The pre-release version according to semver as a `.` separated list of identifiers |
 
 ##### Git Object
 
@@ -1171,10 +1170,11 @@ Response:
 ```json
 {
   "version": {
-    "string": "v3.7.0",
+    "string": "3.7.0-rc.1",
     "major": 3,
     "minor": 7,
-    "patch": 0
+    "patch": 0,
+    "preRelease": "rc.1"
   },
   "buildTime": 1664223916812,
   "git": {
