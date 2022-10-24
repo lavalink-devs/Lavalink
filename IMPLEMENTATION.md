@@ -1132,7 +1132,7 @@ Response:
 | Field          | Type                               | Description                                                     |
 |----------------|------------------------------------|-----------------------------------------------------------------|
 | version        | [Version](#version-object) object  | The version of this Lavalink server                             |
-| builtTime      | int                                | The millisecond unix timestamp when this Lavalink jar was built |
+| buildTime      | int                                | The millisecond unix timestamp when this Lavalink jar was built |
 | git            | [Git](#git-object) object          | The git information of this Lavalink server                     |
 | jvm            | string                             | The JVM version this Lavalink server runs on                    |
 | lavaplayer     | string                             | The Lavaplayer version being used by this server                |
