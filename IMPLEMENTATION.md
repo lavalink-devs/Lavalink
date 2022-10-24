@@ -18,6 +18,21 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * Deprecation of `Track.track` in existing endpoints. Use `Track.encoded` instead.
 * Deprecation of `TrackXEvent.track` in WebSocket dispatches. Use `TrackXEvent.encodedTrack` instead.
 
+<details>
+<summary>v3.7.0 Migration Guide</summary>
+
+Following ops are deprecated as of `v3.7.0` and replaced with the following endpoints and json fields:
+* `play` -> [Update Player](#update-player) `track` or `identifier` field
+* `stop` -> [Update Player](#update-player) `track` field with `null`
+* `pause` -> [Update Player](#update-player) `pause` field
+* `seek` -> [Update Player](#update-player) `position` field
+* `volume` -> [Update Player](#update-player) `volume` field
+* `filters` -> [Update Player](#update-player) `filters` field
+* `destroy` -> [Destroy Player](#destroy-player)
+* `voiceUpdate` -> [Update Player](#update-player) `voice` field
+* `configureResuming` -> [Update Session](#update-session)
+</details>
+
 ## Future breaking changes for v4
 * HTTP endpoints not under a version path (`/v3`, `/v4`) will be removed in v4.
 * No WebSocket messages will be accepted by `/v4/websocket`.
@@ -1440,6 +1455,7 @@ queue is then emptied and the events are then replayed.
 <summary>Show deprecated messages</summary>
 
 #### Provide a voice server update (DEPRECATED)
+> The `voiceUpdate` op is deprecated and marked for removal in v4, use [Update Player](#update-player) with the `voice` json field instead.
 
 Provide an intercepted voice server update. This causes the server to connect to the voice channel.
 
@@ -1453,6 +1469,7 @@ Provide an intercepted voice server update. This causes the server to connect to
 ```
 
 #### Play a track (DEPRECATED)
+> The `play` op is deprecated and marked for removal in v4, use [Update Player](#update-player) with the `track` or `identifier` json field instead.
 
 `startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
 
@@ -1478,6 +1495,7 @@ If `pause` is set to true, the playback will be paused. This is an optional fiel
 ```
 
 #### Stop a player (DEPRECATED)
+> The `stop` op is deprecated and marked for removal in v4, use [Update Player](#update-player) with the `track` json field as `null` instead.
 
 ```json
 {
@@ -1487,6 +1505,7 @@ If `pause` is set to true, the playback will be paused. This is an optional fiel
 ```
 
 #### Pause the playback (DEPRECATED)
+> The `pause` op is deprecated and marked for removal in v4, use [Update Player](#update-player) with the `paused` json field instead.
 
 ```json
 {
@@ -1497,6 +1516,7 @@ If `pause` is set to true, the playback will be paused. This is an optional fiel
 ```
 
 #### Seek a track (DEPRECATED)
+> The `seek` op is deprecated and marked for removal in v4, use [Update Player](#update-player) with the `position` json field instead.
 
 The position is in milliseconds.
 
@@ -1509,6 +1529,7 @@ The position is in milliseconds.
 ```
 
 #### Set player volume (DEPRECATED)
+> The `volume` op is deprecated and marked for removal in v4, use [Update Player](#update-player) with the `volume` json field instead.
 
 Volume may range from 0 to 1000. 100 is default.
 
@@ -1521,6 +1542,7 @@ Volume may range from 0 to 1000. 100 is default.
 ```
 
 #### Using filters (DEPRECATED)
+> The `filters` op is deprecated and marked for removal in v4, use [Update Player](#update-player) with the `filters` json field instead.
 
 The `filters` op sets the filters. All the filters are optional, and leaving them out of this message will disable them.
 
@@ -1615,6 +1637,7 @@ Note that filters may take a moment to apply.
 ```
 
 #### Destroy a player (DEPRECATED)
+> The `destroy` op is deprecated and marked for removal in v4, use [Destroy Player](#destroy-player) instead.
 
 Tell the server to potentially disconnect from the voice server and potentially remove the player with all its data.
 This is useful if you want to move to a new node for a voice connection. Calling this op does not affect voice state,
