@@ -9,7 +9,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 ## Significant changes v3.6.0 -> v3.7.0
 * Moved HTTP endpoints under the new `/v3` path with `/version` as the only exception.
 * Deprecation of the old HTTP paths.
-* WebSocket handshakes should be done with `/v3/websocket`. Handshakes on `/` is now deprecated.
+* WebSocket handshakes should be done to `/v3/websocket`. Handshakes on `/` are now deprecated.
 * Deprecation of all client-to-server messages (play, stop, pause, seek, volume, filters, destroy, voiceUpdate & configureResuming).
 * Addition of REST endpoints intended to replace client requests.
 * Addition of new WebSocket dispatch [Ready OP](#ready-op) to get `sessionId` and `resume` status.
@@ -55,7 +55,7 @@ With the release of v2.0 many unnecessary ops were removed:
 
 With Lavalink 1.x the server had the responsibility of handling Discord `VOICE_SERVER_UPDATE`s as well as its own internal ratelimiting.
 This remote handling makes things unnecessarily complicated and adds a lot og points where things could go wrong. 
-One problem we noticed is that since JDA is unaware of ratelimits on the bots gateway connection, it would keep adding
+One problem we noticed is that since JDA is unaware of ratelimits on the bot's gateway connection, it would keep adding
 to the ratelimit queue to the gateway. With this update this is now the responsibility of the Lavalink client or the 
 Discord client.
 
