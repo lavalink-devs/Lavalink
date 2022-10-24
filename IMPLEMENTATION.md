@@ -19,12 +19,12 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * Deprecation of `TrackXEvent.track` in WebSocket dispatches. Use `TrackXEvent.encodedTrack` instead.
 
 ## Future breaking changes for v4
-* HTTP endpoints not under a version path (`/v3`, `/v4`) will be removed in v4
+* HTTP endpoints not under a version path (`/v3`, `/v4`) will be removed in v4.
 * No WebSocket messages will be accepted by `/v4/websocket`.
-* `/v3` will still be available
+* `/v3` will still be available.
 
 ## Future breaking changes for v5
-* Removal of `/v3`. `/v4` will still be available
+* Removal of `/v3`. `/v4` will still be available.
 
 <details>
 <summary>Older versions</summary>
@@ -32,7 +32,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 ## Significant changes v3.3 -> v3.4
 * Added filters
 * The `error` string on the `TrackExceptionEvent` has been deprecated and replaced by 
-the [exception object](#exception-object)  following the same structure as the `LOAD_FAILED` error on [`/loadtracks`](#track-loading)
+the [exception object](#exception-object) following the same structure as the `LOAD_FAILED` error on [`/loadtracks`](#track-loading).
 * Added the `connected` boolean to player updates.
 * Added source name to REST api track objects
 * Clients are now requested to make their name known during handshake
