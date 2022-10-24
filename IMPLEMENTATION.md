@@ -1148,7 +1148,7 @@ Response:
 | major      | int    | The major version of this Lavalink server   |
 | minor      | int    | The minor version of this Lavalink server   |
 | patch      | int    | The patch version of this Lavalink server   |
-| preRelease | int    | The pre-release version according to senver |
+| preRelease | string | The pre-release version according to semver |
 
 ##### Git Object
 
