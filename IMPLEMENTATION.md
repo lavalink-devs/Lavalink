@@ -9,7 +9,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 ## Significant changes v3.6.0 -> v3.7.0
 * Moved HTTP endpoints under the new `/v3` path with `/version` as the only exception.
 * Deprecation of the old HTTP paths.
-* WebSocket handshakes should be done to `/v3/websocket`. Handshakes on `/` are now deprecated.
+* WebSocket handshakes should be done with `/v3/websocket`. Handshakes on `/` are now deprecated.
 * Deprecation of all client-to-server messages (play, stop, pause, seek, volume, filters, destroy, voiceUpdate & configureResuming).
 * Addition of REST endpoints intended to replace client requests.
 * Addition of new WebSocket dispatch [Ready OP](#ready-op) to get `sessionId` and `resume` status.
