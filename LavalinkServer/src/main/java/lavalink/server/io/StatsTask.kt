@@ -22,13 +22,10 @@
 package lavalink.server.io
 
 import dev.arbjerg.lavalink.protocol.Message
-import dev.arbjerg.lavalink.protocol.Message.Cpu
-import dev.arbjerg.lavalink.protocol.Message.FrameStats
-import lavalink.server.Launcher.startTime
+import lavalink.server.Launcher
 import lavalink.server.player.AudioLossCounter
 import org.slf4j.LoggerFactory
 import oshi.SystemInfo
-import java.util.function.Consumer
 
 class StatsTask(
     private val context: SocketContext,
@@ -38,7 +35,8 @@ class StatsTask(
     companion object {
         private val log = LoggerFactory.getLogger(StatsTask::class.java)
         private val si = SystemInfo()
-        private val hal = si.hardware
+        private val hal get() = si.hardware
+        private val os  get() = si.operatingSystem
         private var prevTicks: LongArray? = null
     }
 
@@ -52,59 +50,66 @@ class StatsTask(
 
     private fun sendStats() {
         if (context.sessionPaused) return
+
         val playersTotal = intArrayOf(0)
         val playersPlaying = intArrayOf(0)
-        socketServer.contexts.forEach(Consumer { socketContext: SocketContext ->
+        socketServer.contexts.forEach { socketContext ->
             playersTotal[0] += socketContext.players.size
             playersPlaying[0] += socketContext.playingPlayers.size
-        })
-        val uptime = System.currentTimeMillis() - startTime
+        }
+
+        val uptime = System.currentTimeMillis() - Launcher.startTime
 
         // In bytes
+        val runtime = Runtime.getRuntime()
         val mem = Message.Memory(
-            Runtime.getRuntime().freeMemory(),
-            Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory(),
-            Runtime.getRuntime().totalMemory(),
-            Runtime.getRuntime().maxMemory()
+            free       = runtime.freeMemory(),
+            used       = runtime.totalMemory() - runtime.freeMemory(),
+            allocated  = runtime.totalMemory(),
+            reservable = runtime.maxMemory()
         )
 
         // prevTicks will be null so set it to a value.
         if (prevTicks == null) {
             prevTicks = hal.processor.systemCpuLoadTicks
         }
-        // Set new prevTicks to current value for more accurate baseline, and checks in next schedule.
-        prevTicks = hal.processor.systemCpuLoadTicks
-        var load = processRecentCpuUsage
-        if (!java.lang.Double.isFinite(load)) load = 0.0
-        val cpu = Cpu(
-            Runtime.getRuntime().availableProcessors(),
-            hal.processor.getSystemCpuLoadBetweenTicks(prevTicks),
-            load
+
+        val cpu = Message.Cpu(
+            runtime.availableProcessors(),
+            systemLoad   = hal.processor.getSystemCpuLoadBetweenTicks(prevTicks),
+            lavalinkLoad = processRecentCpuUsage.takeIf { it.isFinite() } ?: 0.0
         )
+
+        // Set new prevTicks to current value for more accurate baseline, and checks in the next schedule.
+        prevTicks = hal.processor.systemCpuLoadTicks
+
+        var playerCount = 0
         var totalSent = 0
         var totalNulled = 0
-        var players = 0
         for (player in context.playingPlayers) {
             val counter = player.audioLossCounter
             if (!counter.isDataUsable) continue
-            players++
+            playerCount++
             totalSent += counter.lastMinuteSuccess
             totalNulled += counter.lastMinuteLoss
         }
-        val totalDeficit = players * AudioLossCounter.EXPECTED_PACKET_COUNT_PER_MIN - (totalSent + totalNulled)
-        var frameStats: FrameStats? = null
+
         // We can't divide by 0
-        if (players != 0) {
-            frameStats = FrameStats(
-                (totalSent / players).toLong(),
-                (totalNulled / players).toLong(),
-                (totalDeficit / players).toLong()
+        val frameStats = if (playerCount != 0) {
+            val totalDeficit = playerCount * AudioLossCounter.EXPECTED_PACKET_COUNT_PER_MIN - (totalSent + totalNulled)
+            Message.FrameStats(
+                (totalSent / playerCount).toLong(),
+                (totalNulled / playerCount).toLong(),
+                (totalDeficit / playerCount).toLong()
             )
+        } else {
+            null
         }
+
         context.send(
             Message.Stats(
                 frameStats,
-                players,
+                playerCount,
                 playersPlaying[0],
                 uptime,
                 mem,
@@ -119,11 +124,9 @@ class StatsTask(
     // Record for next invocation
     private val processRecentCpuUsage: Double
         get() {
-            val output: Double
-            val hal = si.hardware
-            val os = si.operatingSystem
             val p = os.getProcess(os.processId)
-            output = if (cpuTime != 0.0) {
+
+            val output: Double = if (cpuTime != 0.0) {
                 val uptimeDiff = p.upTime - uptime
                 val cpuDiff = p.kernelTime + p.userTime - cpuTime
                 cpuDiff / uptimeDiff

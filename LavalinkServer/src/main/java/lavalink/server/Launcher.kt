@@ -23,7 +23,6 @@
 package lavalink.server
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary
 import dev.arbjerg.lavalink.protocol.newObjectMapper
 import lavalink.server.bootstrap.PluginManager
