@@ -23,7 +23,6 @@ public class WebsocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(server, "/")
-                .addInterceptors(handshakeInterceptor);
+        registry.addHandler(server, "/", "/v3/websocket").addInterceptors(handshakeInterceptor);
     }
 }
