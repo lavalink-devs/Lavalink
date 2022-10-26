@@ -22,7 +22,10 @@
 
 package lavalink.server
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary
+import dev.arbjerg.lavalink.protocol.newObjectMapper
 import lavalink.server.bootstrap.PluginManager
 import lavalink.server.info.AppInfo
 import lavalink.server.info.GitRepoState
@@ -37,15 +40,18 @@ import org.springframework.boot.context.event.ApplicationFailedEvent
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
 import org.springframework.context.ConfigurableApplicationContext
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.FilterType
+import org.springframework.context.annotation.Primary
 import org.springframework.core.io.DefaultResourceLoader
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-@Suppress("SpringBootApplicationSetup", "SpringComponentScan")
+
+@Suppress("SpringComponentScan")
 @SpringBootApplication
 @ComponentScan(
     value = ["\${componentScan}"],
@@ -72,24 +78,24 @@ object Launcher {
 
         return buildString {
             if (vanity) {
-                appendln()
-                appendln()
-                appendln(getVanity())
+                appendLine()
+                appendLine()
+                appendLine(getVanity())
             }
             if (!gitRepoState.isLoaded) {
-                appendln()
-                appendln("$indentation*** Unable to find or load Git metadata ***")
+                appendLine()
+                appendLine("$indentation*** Unable to find or load Git metadata ***")
             }
-            appendln()
-            append("${indentation}Version:        "); appendln(version)
+            appendLine()
+            append("${indentation}Version:        "); appendLine(version)
             if (gitRepoState.isLoaded) {
-                append("${indentation}Build time:     "); appendln(buildTime)
-                append("${indentation}Branch          "); appendln(gitRepoState.branch)
-                append("${indentation}Commit:         "); appendln(gitRepoState.commitIdAbbrev)
-                append("${indentation}Commit time:    "); appendln(commitTime)
+                append("${indentation}Build time:     "); appendLine(buildTime)
+                append("${indentation}Branch          "); appendLine(gitRepoState.branch)
+                append("${indentation}Commit:         "); appendLine(gitRepoState.commitIdAbbrev)
+                append("${indentation}Commit time:    "); appendLine(commitTime)
             }
-            append("${indentation}JVM:            "); appendln(System.getProperty("java.version"))
-            append("${indentation}Lavaplayer      "); appendln(PlayerLibrary.VERSION)
+            append("${indentation}JVM:            "); appendLine(System.getProperty("java.version"))
+            append("${indentation}Lavaplayer      "); appendLine(PlayerLibrary.VERSION)
         }
     }
 
@@ -156,4 +162,10 @@ object Launcher {
             ).parent(parent)
             .run(*args)
     }
+}
+
+@Bean
+@Primary
+fun objectMapper(): ObjectMapper {
+    return newObjectMapper()
 }

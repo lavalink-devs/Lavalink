@@ -1,5 +1,6 @@
 package dev.arbjerg.lavalink.api;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat;
 import org.json.JSONObject;
@@ -22,11 +23,11 @@ public interface AudioFilterExtension {
      * @param output the output to be used by the produced filter.
      * @return a filter which produces the desired audio effect.
      */
-    FloatPcmAudioFilter build(JSONObject data, AudioDataFormat format, FloatPcmAudioFilter output);
+    FloatPcmAudioFilter build(JsonNode data, AudioDataFormat format, FloatPcmAudioFilter output);
 
     /**
      * @param data JSON data received from the client under the extension name key.
      * @return whether to build a filter. Returning false makes this extension do nothing.
      */
-    boolean isEnabled(JSONObject data);
+    boolean isEnabled(JsonNode data);
 }

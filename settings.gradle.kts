@@ -1,6 +1,7 @@
 rootProject.name = "Lavalink-Parent"
 
 include(":Lavalink-Server")
+include(":protocol")
 include(":Testbot")
 include(":plugin-api")
 include("plugin-api")
@@ -31,6 +32,7 @@ fun VersionCatalogBuilder.spring() {
     library("spring-boot-web",      "org.springframework.boot", "spring-boot-starter-web").versionRef("spring-boot")
     library("spring-boot-undertow", "org.springframework.boot", "spring-boot-starter-undertow") .versionRef("spring-boot")
     library("spring-boot-test",     "org.springframework.boot", "spring-boot-starter-test") .versionRef("spring-boot")
+    library("jackson-module-kotlin", "com.fasterxml.jackson.module", "jackson-module-kotlin").version("2.13.2")
 
     bundle("spring", listOf("spring-websocket", "spring-boot-web", "spring-boot-undertow"))
 }
@@ -38,7 +40,8 @@ fun VersionCatalogBuilder.spring() {
 fun VersionCatalogBuilder.voice() {
     version("lavaplayer", "1.3.98.4")
 
-    library("lavaplayer",            "com.github.walkyst.lavaplayer-fork", "lavaplayer").versionRef("lavaplayer")
+    //library("lavaplayer",            "com.github.walkyst.lavaplayer-fork", "lavaplayer").versionRef("lavaplayer")
+    library("lavaplayer",            "com.github.Devoxin.lavaplayer", "lavaplayer").version("0c8b910")
     library("lavaplayer-ip-rotator", "com.github.walkyst.lavaplayer-fork", "lavaplayer-ext-youtube-rotator").versionRef("lavaplayer")
     library("lavadsp",               "com.github.natanbc", "lavadsp").version("0.7.7")
 
@@ -66,7 +69,7 @@ fun VersionCatalogBuilder.metrics() {
 }
 
 fun VersionCatalogBuilder.common() {
-    version("kotlin", "1.3.61")
+    version("kotlin", "1.7.20")
 
     library("kotlin-reflect",     "org.jetbrains.kotlin", "kotlin-reflect").versionRef("kotlin")
     library("kotlin-stdlib-jdk8", "org.jetbrains.kotlin", "kotlin-stdlib-jdk8").versionRef("kotlin")

@@ -26,9 +26,9 @@ import com.sedmelluq.discord.lavaplayer.track.TrackMarkerHandler;
 
 public class TrackEndMarkerHandler implements TrackMarkerHandler {
 
-    private final Player player;
+    private final LavalinkPlayer player;
 
-    public TrackEndMarkerHandler(Player player) {
+    public TrackEndMarkerHandler(LavalinkPlayer player) {
         this.player = player;
     }
 

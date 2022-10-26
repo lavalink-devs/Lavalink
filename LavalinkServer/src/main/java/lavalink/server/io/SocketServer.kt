@@ -26,8 +26,11 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.api.PluginEventHandler
 import dev.arbjerg.lavalink.api.WebSocketExtension
+import dev.arbjerg.lavalink.protocol.Message
+import dev.arbjerg.lavalink.protocol.PlayerState
+import dev.arbjerg.lavalink.protocol.newObjectMapper
 import lavalink.server.config.ServerConfig
-import lavalink.server.player.Player
+import lavalink.server.player.LavalinkPlayer
 import moe.kyokobot.koe.Koe
 import moe.kyokobot.koe.KoeOptions
 import org.json.JSONObject
@@ -49,27 +52,29 @@ class SocketServer(
     private val filterExtensions: List<AudioFilterExtension>
 ) : TextWebSocketHandler() {
 
-    // userId <-> shardCount
+    // sessionID <-> Session
     val contextMap = ConcurrentHashMap<String, SocketContext>()
     private val resumableSessions = mutableMapOf<String, SocketContext>()
+    private val objectMapper = newObjectMapper()
     private val koe = Koe.koe(koeOptions)
     private val charPool: List<Char> = ('a'..'z') + ('0'..'9')
 
     companion object {
         private val log = LoggerFactory.getLogger(SocketServer::class.java)
 
-        fun sendPlayerUpdate(socketContext: SocketContext, player: Player) {
-            val json = JSONObject()
-
-            val state = player.state
+        fun sendPlayerUpdate(socketContext: SocketContext, player: LavalinkPlayer) {
             val connection = socketContext.getMediaConnection(player).gatewayConnection
-            state.put("connected", connection?.isOpen == true)
-            state.put("ping", connection?.ping ?: -1)
-
-            json.put("op", "playerUpdate")
-            json.put("guildId", player.guildId.toString())
-            json.put("state", state)
-            socketContext.send(json)
+            socketContext.send(
+                Message.PlayerUpdate(
+                    PlayerState(
+                        System.currentTimeMillis(),
+                        player.playingTrack?.position ?: 0,
+                        connection?.isOpen == true,
+                        connection?.ping ?: -1L
+                    ),
+                    player.guildId.toString()
+                )
+            )
         }
     }
 
@@ -79,7 +84,7 @@ class SocketServer(
             sessionId = (1..16)
                 .map { kotlin.random.Random.nextInt(0, charPool.size) }
                 .map(charPool::get)
-                .joinToString("");
+                .joinToString("")
         } while (contextMap[sessionId] != null)
         return sessionId
     }
@@ -89,7 +94,7 @@ class SocketServer(
 
     @Suppress("UastIncorrectHttpHeaderInspection")
     override fun afterConnectionEstablished(session: WebSocketSession) {
-        val userId = session.handshakeHeaders.getFirst("User-Id")
+        val userId = session.handshakeHeaders.getFirst("User-Id")!!
         val resumeKey = session.handshakeHeaders.getFirst("Resume-Key")
         val clientName = session.handshakeHeaders.getFirst("Client-Name")
         val userAgent = session.handshakeHeaders.getFirst("User-Agent")
@@ -102,11 +107,7 @@ class SocketServer(
             resumable.resume(session)
             log.info("Resumed session with key $resumeKey")
             resumable.eventEmitter.onWebSocketOpen(true)
-            resumable.send(JSONObject()
-                .put("op", "ready")
-                .put("resumed", true)
-                .put("sessionId", resumable.sessionId)
-            )
+            resumable.send(Message.Ready(true, resumable.sessionId))
             return
         }
 
@@ -114,25 +115,22 @@ class SocketServer(
         session.attributes["sessionId"] = sessionId
 
         val socketContext = SocketContext(
-                sessionId,
-                audioPlayerManager,
-                serverConfig,
-                session,
-                this,
-                userId,
-                clientName,
-                koe.newClient(userId.toLong()),
-                eventHandlers,
-                webSocketExtensions,
-                filterExtensions
+            sessionId,
+            audioPlayerManager,
+            serverConfig,
+            session,
+            this,
+            userId,
+            clientName,
+            koe.newClient(userId.toLong()),
+            eventHandlers,
+            webSocketExtensions,
+            filterExtensions,
+            objectMapper
         )
         contextMap[sessionId] = socketContext
         socketContext.eventEmitter.onWebSocketOpen(false)
-        socketContext.send(JSONObject()
-            .put("op", "ready")
-            .put("resumed", false)
-            .put("sessionId", sessionId)
-        )
+        socketContext.send(Message.Ready(false, sessionId))
 
         if (clientName != null) {
             log.info("Connection successfully established from $clientName")
@@ -147,8 +145,8 @@ class SocketServer(
         }
     }
 
-    override fun afterConnectionClosed(session: WebSocketSession?, status: CloseStatus?) {
-        val context = contextMap.remove(session!!.id) ?: return
+    override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
+        val context = contextMap.remove(session.id) ?: return
         if (context.resumeKey != null) {
             resumableSessions.remove(context.resumeKey!!)?.let { removed ->
                 log.warn(
@@ -175,16 +173,7 @@ class SocketServer(
         context.shutdown()
     }
 
-    override fun handleTextMessage(session: WebSocketSession?, message: TextMessage?) {
-        try {
-            handleTextMessageSafe(session!!, message!!)
-        } catch (e: Exception) {
-            log.error("Exception while handling websocket message", e)
-        }
-
-    }
-
-    private fun handleTextMessageSafe(session: WebSocketSession, message: TextMessage) {
+    override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
         val json = JSONObject(message.payload)
 
         log.info(message.payload)

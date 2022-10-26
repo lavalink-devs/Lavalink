@@ -1,5 +1,7 @@
 package lavalink.server.io
 
+import dev.arbjerg.lavalink.protocol.Plugin
+import dev.arbjerg.lavalink.protocol.Plugins
 import lavalink.server.bootstrap.PluginManager
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
@@ -7,14 +9,11 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class PluginsEndpoint(pluginManager: PluginManager) {
 
-    private val data = pluginManager.pluginManifests.map {
-        mutableMapOf<Any, Any>().apply {
-            put("name", it.name)
-            put("version", it.version)
-        }
+    private val plugins = pluginManager.pluginManifests.map {
+        Plugins(listOf<Plugin>().apply { Plugin(it.name, it.version) })
     }
 
-    @GetMapping(value = ["/plugins", "/v3/plugins"])
-    fun plugins() = data
+    @GetMapping("/plugins")
+    fun plugins() = plugins
 
 }

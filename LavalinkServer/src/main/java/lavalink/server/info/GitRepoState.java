@@ -20,8 +20,6 @@ import java.util.Properties;
 public class GitRepoState {
 
     private static final Logger log = LoggerFactory.getLogger(GitRepoState.class);
-
-    private boolean loaded = false;
     private final String branch;
     private final String commitId;
     private final String commitIdAbbrev;
@@ -30,10 +28,9 @@ public class GitRepoState {
     private final String commitMessageFull;
     private final String commitMessageShort;
     private final long commitTime; //epoch seconds
+    private boolean loaded = false;
 
-    @SuppressWarnings("ConstantConditions")
     public GitRepoState() {
-
         Properties properties = new Properties();
         try {
             properties.load(GitRepoState.class.getClassLoader().getResourceAsStream("git.properties"));

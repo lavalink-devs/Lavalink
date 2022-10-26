@@ -37,7 +37,7 @@ public class AppInfo {
         long bTime = -1L;
         try {
             bTime = Long.parseLong(prop.getProperty("buildTime"));
-        } catch (NumberFormatException ignored) { }
+        } catch (NumberFormatException ignored) {}
         this.buildTime = bTime;
     }
 

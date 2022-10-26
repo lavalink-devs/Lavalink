@@ -29,14 +29,14 @@ public class SentryConfiguration {
 
         String dsn = sentryConfig.getDsn();
         boolean warnDeprecatedDsnConfig = false;
-        if (dsn == null || dsn.isEmpty()) {
+        if (dsn.isEmpty()) {
             //try deprecated config location
             //noinspection deprecation
             dsn = serverConfig.getSentryDsn();
             warnDeprecatedDsnConfig = true;
         }
 
-        if (dsn != null && !dsn.isEmpty()) {
+        if (!dsn.isEmpty()) {
             turnOn(dsn, sentryConfig.getTags(), sentryConfig.getEnvironment());
             if (warnDeprecatedDsnConfig) {
                 log.warn("Please update the location of the sentry dsn in lavalinks config file / your environment "
@@ -45,42 +45,6 @@ public class SentryConfiguration {
         } else {
             turnOff();
         }
-    }
-
-
-    public void turnOn(String dsn, Map<String, String> tags, String environment) {
-        log.info("Turning on sentry");
-        SentryClient sentryClient = Sentry.init(dsn);
-        if (!environment.isBlank()) sentryClient.setEnvironment(environment);
-
-        if (tags != null) {
-            tags.forEach(sentryClient::addTag);
-        }
-
-        // set the git commit hash this was build on as the release
-        Properties gitProps = new Properties();
-        try {
-            //noinspection ConstantConditions
-            gitProps.load(Launcher.class.getClassLoader().getResourceAsStream("git.properties"));
-        } catch (NullPointerException | IOException e) {
-            log.error("Failed to load git repo information", e);
-        }
-
-        String commitHash = gitProps.getProperty("git.commit.id");
-        if (commitHash != null && !commitHash.isEmpty()) {
-            log.info("Setting sentry release to commit hash {}", commitHash);
-            sentryClient.setRelease(commitHash);
-        } else {
-            log.warn("No git commit hash found to set up sentry release");
-        }
-
-        getSentryLogbackAppender().start();
-    }
-
-    public void turnOff() {
-        log.warn("Turning off sentry");
-        Sentry.close();
-        getSentryLogbackAppender().stop();
     }
 
     //programmatically creates a sentry appender
@@ -102,6 +66,40 @@ public class SentryConfiguration {
             root.addAppender(sentryAppender);
         }
         return sentryAppender;
+    }
+
+    public void turnOn(String dsn, Map<String, String> tags, String environment) {
+        log.info("Turning on sentry");
+        SentryClient sentryClient = Sentry.init(dsn);
+        if (!environment.isBlank()) sentryClient.setEnvironment(environment);
+
+        if (tags != null) {
+            tags.forEach(sentryClient::addTag);
+        }
+
+        // set the git commit hash this was build on as the release
+        Properties gitProps = new Properties();
+        try {
+            gitProps.load(Launcher.class.getClassLoader().getResourceAsStream("git.properties"));
+        } catch (NullPointerException | IOException e) {
+            log.error("Failed to load git repo information", e);
+        }
+
+        String commitHash = gitProps.getProperty("git.commit.id");
+        if (commitHash != null && !commitHash.isEmpty()) {
+            log.info("Setting sentry release to commit hash {}", commitHash);
+            sentryClient.setRelease(commitHash);
+        } else {
+            log.warn("No git commit hash found to set up sentry release");
+        }
+
+        getSentryLogbackAppender().start();
+    }
+
+    public void turnOff() {
+        log.warn("Turning off sentry");
+        Sentry.close();
+        getSentryLogbackAppender().stop();
     }
 
 }

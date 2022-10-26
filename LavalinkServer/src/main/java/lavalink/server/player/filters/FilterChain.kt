@@ -1,6 +1,6 @@
 package lavalink.server.player.filters
 
-import com.google.gson.Gson
+import com.fasterxml.jackson.databind.JsonNode
 import com.sedmelluq.discord.lavaplayer.filter.AudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.PcmFilterFactory
@@ -8,56 +8,69 @@ import com.sedmelluq.discord.lavaplayer.filter.UniversalPcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.api.AudioFilterExtension
-import org.json.JSONObject
+import dev.arbjerg.lavalink.protocol.Filters
 
-class FilterChain : PcmFilterFactory {
-
+class FilterChain(
+    var volume: VolumeConfig? = null,
+    var equalizer: EqualizerConfig? = null,
+    val karaoke: KaraokeConfig? = null,
+    val timescale: TimescaleConfig? = null,
+    val tremolo: TremoloConfig? = null,
+    val vibrato: VibratoConfig? = null,
+    val distortion: DistortionConfig? = null,
+    val rotation: RotationConfig? = null,
+    val channelMix: ChannelMixConfig? = null,
+    val lowPass: LowPassConfig? = null
+) : PcmFilterFactory {
     companion object {
-        private val gson = Gson()
-
-        fun parse(json: JSONObject, extensions: List<AudioFilterExtension>): FilterChain {
-            return gson.fromJson(json.toString(), FilterChain::class.java)!!
-                .apply { parsePluginConfigs(json, extensions) }
+        fun parse(filters: Filters, extensions: List<AudioFilterExtension>): FilterChain {
+            return FilterChain(
+                filters.volume?.let { VolumeConfig(it) },
+                filters.equalizer?.let { EqualizerConfig(it) },
+                filters.karaoke?.let { KaraokeConfig(it) },
+                filters.timescale?.let { TimescaleConfig(it) },
+                filters.tremolo?.let { TremoloConfig(it) },
+                filters.vibrato?.let { VibratoConfig(it) },
+                filters.distortion?.let { DistortionConfig(it) },
+                filters.rotation?.let { RotationConfig(it) },
+                filters.channelMix?.let { ChannelMixConfig(it) },
+                filters.lowPass?.let { LowPassConfig(it) }
+            ).apply { parsePluginConfigs(filters.pluginFilters, extensions) }
         }
     }
 
-    var volume: Float? = null
-    var equalizer: List<Band>? = null
-    private val karaoke: KaraokeConfig? = null
-    private val timescale: TimescaleConfig? = null
-    private val tremolo: TremoloConfig? = null
-    private val vibrato: VibratoConfig? = null
-    private val distortion: DistortionConfig? = null
-    private val rotation: RotationConfig? = null
-    private val channelMix: ChannelMixConfig? = null
-    private val lowPass: LowPassConfig? = null
+
     @Transient
     private var pluginFilters: List<PluginConfig> = emptyList()
 
-    private fun parsePluginConfigs(json: JSONObject, extensions: List<AudioFilterExtension>) {
+    private fun parsePluginConfigs(dynamicValues: Map<String, JsonNode>, extensions: List<AudioFilterExtension>) {
         pluginFilters = extensions.mapNotNull {
-            val obj = json.optJSONObject(it.name) ?: return@mapNotNull null
-            PluginConfig(it, obj)
+            val json = dynamicValues[it.name] ?: return@mapNotNull null
+            PluginConfig(it, json)
         }
     }
 
     private fun buildList() = listOfNotNull(
-            volume?.let { VolumeConfig(it) },
-            equalizer?.let { EqualizerConfig(it) },
-            karaoke,
-            timescale,
-            tremolo,
-            vibrato,
-            distortion,
-            rotation,
-            channelMix,
-            lowPass,
-            *pluginFilters.toTypedArray()
+        volume,
+        equalizer,
+        karaoke,
+        timescale,
+        tremolo,
+        vibrato,
+        distortion,
+        rotation,
+        channelMix,
+        lowPass,
+        *pluginFilters.toTypedArray()
     )
 
     val isEnabled get() = buildList().any { it.isEnabled }
 
-    override fun buildChain(track: AudioTrack?, format: AudioDataFormat, output: UniversalPcmAudioFilter): MutableList<AudioFilter> {
+    override fun buildChain(
+        track: AudioTrack?,
+        format: AudioDataFormat,
+        output: UniversalPcmAudioFilter
+    ): MutableList<AudioFilter> {
         val enabledFilters = buildList().takeIf { it.isNotEmpty() }
             ?: return mutableListOf()
 
@@ -71,9 +84,26 @@ class FilterChain : PcmFilterFactory {
         return pipeline.reversed().toMutableList() // Output last
     }
 
-    private class PluginConfig(val extension: AudioFilterExtension, val json: JSONObject) : FilterConfig() {
+    fun toFilters(): Filters {
+        return Filters(
+            volume,
+            equalizer,
+            karaoke,
+            timescale,
+            tremolo,
+            vibrato,
+            distortion,
+            rotation,
+            channelMix,
+            lowPass,
+            pluginFilters.associate { it.extension.name to it.json }
+        )
+    }
+
+    private class PluginConfig(val extension: AudioFilterExtension, val json: JsonNode) : FilterConfig {
         override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter =
             extension.build(json, format, output)
+
         override val isEnabled = extension.isEnabled(json)
     }
 

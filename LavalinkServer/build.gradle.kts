@@ -34,6 +34,7 @@ configurations {
 }
 
 dependencies {
+    implementation(projects.protocol)
     implementation(projects.pluginApi)
 
     implementation(libs.bundles.metrics)

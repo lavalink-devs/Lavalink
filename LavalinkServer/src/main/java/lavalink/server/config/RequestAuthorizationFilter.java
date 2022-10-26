@@ -1,5 +1,6 @@
 package lavalink.server.config;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 public class RequestAuthorizationFilter implements HandlerInterceptor, WebMvcConfigurer {
 
     private static final Logger log = LoggerFactory.getLogger(RequestAuthorizationFilter.class);
-    private ServerConfig serverConfig;
-    private MetricsPrometheusConfigProperties metricsConfig;
+    private final ServerConfig serverConfig;
+    private final MetricsPrometheusConfigProperties metricsConfig;
 
     public RequestAuthorizationFilter(ServerConfig serverConfig, MetricsPrometheusConfigProperties metricsConfig) {
         this.serverConfig = serverConfig;
@@ -24,7 +25,7 @@ public class RequestAuthorizationFilter implements HandlerInterceptor, WebMvcCon
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) {
         // Collecting metrics is anonymous
         if (!metricsConfig.getEndpoint().isEmpty()
                 && request.getServletPath().equals(metricsConfig.getEndpoint())) return true;

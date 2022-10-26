@@ -31,9 +31,8 @@ import org.slf4j.LoggerFactory;
 
 public class AudioLossCounter extends AudioEventAdapter {
 
-    private static final Logger log = LoggerFactory.getLogger(AudioLossCounter.class);
-
     public static final int EXPECTED_PACKET_COUNT_PER_MIN = (60 * 1000) / 20; // 20ms packets
+    private static final Logger log = LoggerFactory.getLogger(AudioLossCounter.class);
     private static final int ACCEPTABLE_TRACK_SWITCH_TIME = 100; //ms
 
     private long curMinute = 0;
@@ -72,8 +71,8 @@ public class AudioLossCounter extends AudioEventAdapter {
         //log.info("\n" + lastTrackStarted + "\n" + lastTrackEnded + "\n" + playingSince);
 
         // Check that there isn't a significant gap in playback. If no track has ended yet, we can look past that
-        if(lastTrackStarted - lastTrackEnded > ACCEPTABLE_TRACK_SWITCH_TIME
-                && lastTrackEnded != Long.MAX_VALUE ) return false;
+        if (lastTrackStarted - lastTrackEnded > ACCEPTABLE_TRACK_SWITCH_TIME
+                && lastTrackEnded != Long.MAX_VALUE) return false;
 
         // Check that we have at least stats for last minute
         long lastMin = System.currentTimeMillis() / 60000 - 1;
@@ -84,7 +83,7 @@ public class AudioLossCounter extends AudioEventAdapter {
     private void checkTime() {
         long actualMinute = System.currentTimeMillis() / 60000;
 
-        if(curMinute != actualMinute) {
+        if (curMinute != actualMinute) {
             lastLoss = curLoss;
             lastSucc = curSucc;
             curLoss = 0;

@@ -3,7 +3,6 @@ package lavalink.server.config
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerProbe
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerRegistry
 import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration
-import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration.ResamplingQuality
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
@@ -15,7 +14,6 @@ import com.sedmelluq.discord.lavaplayer.source.soundcloud.*
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeHttpContextFilter
 import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup
 import com.sedmelluq.lava.extensions.youtuberotator.planner.*
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv4Block
@@ -30,6 +28,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.net.InetAddress
+import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.function.Predicate
 
@@ -71,7 +70,11 @@ class AudioPlayerConfiguration {
         audioPlayerManager.configuration.let {
             serverConfig.opusEncodingQuality?.let { opusQuality ->
                 if (opusQuality !in 0..10) {
-                    log.warn("Opus encoding quality {} is not within the range of 0 to 10. Defaulting to {}", opusQuality, defaultOpusEncodingQuality)
+                    log.warn(
+                        "Opus encoding quality {} is not within the range of 0 to 10. Defaulting to {}",
+                        opusQuality,
+                        defaultOpusEncodingQuality
+                    )
                 }
 
                 val qualitySetting = opusQuality.takeIf { it in 0..10 } ?: defaultOpusEncodingQuality
@@ -88,7 +91,11 @@ class AudioPlayerConfiguration {
         val defaultTrackStuckThresholdMs = TimeUnit.NANOSECONDS.toMillis(audioPlayerManager.trackStuckThresholdNanos)
         serverConfig.trackStuckThresholdMs?.let {
             if (it < 100) {
-                log.warn("Track Stuck Threshold of {}ms is too small. Defaulting to {}ms", it, defaultTrackStuckThresholdMs)
+                log.warn(
+                    "Track Stuck Threshold of {}ms is too small. Defaulting to {}ms",
+                    it,
+                    defaultTrackStuckThresholdMs
+                )
             }
 
             val trackStuckThresholdMs: Long = it.takeIf { it >= 100 } ?: defaultTrackStuckThresholdMs
@@ -129,6 +136,7 @@ class AudioPlayerConfiguration {
                     retryLimit < 0 -> YoutubeIpRotatorSetup(routePlanner).forSource(youtube).setup()
                     retryLimit == 0 -> YoutubeIpRotatorSetup(routePlanner).forSource(youtube)
                         .withRetryLimit(Int.MAX_VALUE).setup()
+
                     else -> YoutubeIpRotatorSetup(routePlanner).forSource(youtube).withRetryLimit(retryLimit).setup()
 
                 }
@@ -224,7 +232,7 @@ class AudioPlayerConfiguration {
             }
         }
 
-        return when (rateLimitConfig.strategy.toLowerCase().trim()) {
+        return when (rateLimitConfig.strategy.lowercase(Locale.getDefault()).trim()) {
             "rotateonban" -> RotatingIpRoutePlanner(ipBlocks, filter, rateLimitConfig.searchTriggersFail)
             "loadbalance" -> BalancingIpRoutePlanner(ipBlocks, filter, rateLimitConfig.searchTriggersFail)
             "nanoswitch" -> NanoIpRoutePlanner(ipBlocks, rateLimitConfig.searchTriggersFail)
