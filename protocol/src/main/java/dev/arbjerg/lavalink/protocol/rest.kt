@@ -53,25 +53,27 @@ data class SessionUpdate(
 data class LoadResult(
     var loadType: ResultStatus,
     var tracks: List<Track>,
-    var playlistName: String?,
-    var selectedTrack: Int?,
+    var playlistInfo: PlaylistInfo,
     var exception: Exception?
 ) {
     constructor(
         loadResultType: ResultStatus,
         tracks: List<Track>,
-        playlistName: String?,
-        selectedTrack: Int?
+        playlistInfo: PlaylistInfo,
     ) : this(
         loadResultType,
         tracks,
-        playlistName,
-        selectedTrack,
+        playlistInfo,
         null
     )
 
-    constructor(exception: Exception?) : this(ResultStatus.LOAD_FAILED, emptyList(), null, null, exception)
+    constructor(exception: Exception?) : this(ResultStatus.LOAD_FAILED, emptyList(), PlaylistInfo("", 0), exception)
 }
+
+data class PlaylistInfo(
+    val name: String,
+    val selectedTrack: Int
+)
 
 data class Exception(
     val message: String?,
