@@ -878,10 +878,10 @@ PATCH /v3/sessions/{sessionId}
 
 Request:
 
-| Field       | Type   | Description                                              |
-|-------------|--------|----------------------------------------------------------|
-| resumingKey | string | The resuming key to be able to resume this session later |
-| timeout     | int    | The timeout in seconds                                   |
+| Field        | Type    | Description                                              |
+|--------------|---------|----------------------------------------------------------|
+| resumingKey? | ?string | The resuming key to be able to resume this session later |
+| timeout?     | int     | The timeout in seconds (default is 60s)                  |
 
 <details>
 <summary>Example Payload</summary>
