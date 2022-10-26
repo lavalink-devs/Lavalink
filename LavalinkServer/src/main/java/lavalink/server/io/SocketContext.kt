@@ -56,6 +56,8 @@ class SocketContext(
     val serverConfig: ServerConfig,
     private var session: WebSocketSession,
     private val socketServer: SocketServer,
+    private val userId: String,
+    private val clientName: String?,
     val koe: KoeClient,
     eventHandlers: Collection<PluginEventHandler>,
     webSocketExtensions: List<WebSocketExtension>,
@@ -100,6 +102,16 @@ class SocketContext(
             thread.isDaemon = true
             thread
         }
+    }
+
+    fun getPlayer(guildId: String) = getPlayer(guildId.toLong())
+
+    override fun getUserId(): Long {
+        return userId.toLong()
+    }
+
+    override fun getClientName(): String? {
+        return clientName
     }
 
     override fun getPlayer(guildId: Long) = players.computeIfAbsent(guildId) {

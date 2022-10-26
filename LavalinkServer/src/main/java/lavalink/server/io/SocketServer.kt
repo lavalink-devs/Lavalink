@@ -114,15 +114,17 @@ class SocketServer(
         session.attributes["sessionId"] = sessionId
 
         val socketContext = SocketContext(
-            sessionId,
-            audioPlayerManager,
-            serverConfig,
-            session,
-            this,
-            koe.newClient(userId!!.toLong()),
-            eventHandlers,
-            webSocketExtensions,
-            filterExtensions
+                sessionId,
+                audioPlayerManager,
+                serverConfig,
+                session,
+                this,
+                userId,
+                clientName,
+                koe.newClient(userId.toLong()),
+                eventHandlers,
+                webSocketExtensions,
+                filterExtensions
         )
         contextMap[sessionId] = socketContext
         socketContext.eventEmitter.onWebSocketOpen(false)
