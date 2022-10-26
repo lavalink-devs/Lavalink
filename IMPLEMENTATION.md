@@ -356,7 +356,7 @@ Emitted when a track throws an exception.
 ##### Exception Object
 | Field    | Type                  | Description                   |
 |----------|-----------------------|-------------------------------|
-| message  | string                | The message of the exception  |
+| message  | ?string               | The message of the exception  |
 | severity | [Severity](#severity) | The severity of the exception |
 | cause    | string                | The cause of the exception    |
 
@@ -937,12 +937,12 @@ Response:
 
 ##### Track Loading Result
 
-| Field         | Type                                   | Description                                               | Valid Types                                        |
-|---------------|----------------------------------------|-----------------------------------------------------------|----------------------------------------------------|
-| loadType      | [LoadResultType](#load-result-type)    | The type of the result                                    | all                                                |
-| playlistInfo? | [Playlist Info](#playlist-info) object | Additional info if the the load type is `PLAYLIST_LOADED` | `PLAYLIST_LOADED`                                  |
-| tracks        | array of [Tracks](#track)              | All tracks which have been loaded                         | `TRACK_LOADED`, `PLAYLIST_LOADED`, `SEARCH_RESULT` |
-| exception?    | [Exception](#exception-object) object  | The [Exception](#exception-object) this load failed with  | `LOAD_FAILED`                                      |
+| Field        | Type                                   | Description                                               | Valid Types                                        |
+|--------------|----------------------------------------|-----------------------------------------------------------|----------------------------------------------------|
+| loadType     | [LoadResultType](#load-result-type)    | The type of the result                                    | all                                                |
+| playlistInfo | [Playlist Info](#playlist-info) object | Additional info if the the load type is `PLAYLIST_LOADED` | `PLAYLIST_LOADED`                                  |
+| tracks       | array of [Tracks](#track)              | All tracks which have been loaded                         | `TRACK_LOADED`, `PLAYLIST_LOADED`, `SEARCH_RESULT` |
+| exception?   | [Exception](#exception-object) object  | The [Exception](#exception-object) this load failed with  | `LOAD_FAILED`                                      |
 
 ##### Load Result Type
 
@@ -956,10 +956,10 @@ Response:
 
 ##### Playlist Info
 
-| Field         | Type   | Description                                                      |
-|---------------|--------|------------------------------------------------------------------|
-| name          | string | The name of the loaded playlist                                  |
-| selectedTrack | int    | The selected track in this Playlist (-1 if no track is selected) |
+| Field          | Type   | Description                                                      |
+|----------------|--------|------------------------------------------------------------------|
+| name?          | string | The name of the loaded playlist                                  |
+| selectedTrack? | int    | The selected track in this Playlist (-1 if no track is selected) |
 
 <details>
 <summary>Track Loaded Example Payload</summary>
@@ -967,6 +967,7 @@ Response:
 ```yaml
 {
   "loadType": "TRACK_LOADED",
+  "playlistInfo": {},
   "tracks": [
     {
       "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
@@ -1009,6 +1010,7 @@ Response:
 ```yaml
 {
   "loadType": "SEARCH_RESULT",
+  "playlistInfo": {},
   "tracks": [
     ...
   ]
@@ -1021,7 +1023,9 @@ Response:
 
 ```json
 {
-  "loadType": "NO_MATCHES"
+  "loadType": "NO_MATCHES",
+  "playlistInfo": {},
+  "tracks": []
 }
 ```
 </details>
@@ -1032,6 +1036,8 @@ Response:
 ```json
 {
   "loadType": "LOAD_FAILED",
+  "playlistInfo": {},
+  "tracks": [],
   "exception": {
     "message": "The uploader has not made this video available in your country.",
     "severity": "COMMON"
