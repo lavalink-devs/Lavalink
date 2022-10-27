@@ -32,11 +32,11 @@ class PlayerRestHandler(
     private fun getPlayers(
         request: HttpServletRequest,
         @PathVariable sessionId: String,
-    ): ResponseEntity<List<Player>> {
+    ): ResponseEntity<Players> {
         logRequest(log, request)
         val context = socketContext(socketServer, sessionId)
 
-        return ResponseEntity.ok(context.players.values.map { it.toPlayer(context) })
+        return ResponseEntity.ok(Players(context.players.values.map { it.toPlayer(context) }))
     }
 
     @GetMapping(value = ["/v3/sessions/{sessionId}/players/{guildId}"], produces = ["application/json"])

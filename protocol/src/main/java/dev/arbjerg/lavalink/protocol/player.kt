@@ -1,5 +1,12 @@
 package dev.arbjerg.lavalink.protocol
 
+import com.fasterxml.jackson.annotation.JsonValue
+
+data class Players(
+    @JsonValue
+    val players: List<Player>
+)
+
 data class Player(
     val guildId: String,
     val track: Track?,
