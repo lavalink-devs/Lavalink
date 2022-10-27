@@ -66,6 +66,11 @@ class PlayerRestHandler(
         @RequestParam noReplace: Boolean = false
     ): ResponseEntity<Player> {
         logRequest(log, request)
+
+        if (playerUpdate.encodedTrack.isPresent && playerUpdate.identifier.isPresent) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot specify both encodedTrack and identifier")
+        }
+
         val context = socketContext(socketServer, sessionId)
         val player = context.getPlayer(guildId)
 
@@ -110,14 +115,8 @@ class PlayerRestHandler(
             SocketServer.sendPlayerUpdate(context, player)
         }
 
-        if (playerUpdate.encodedTrack.isPresent && playerUpdate.identifier.isPresent) {
-            log.info("Received encodedTrack & identifier request for guild {}", guildId)
-
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot specify both encodedTrack and identifier")
-        }
-
         if (playerUpdate.encodedTrack.isPresent || playerUpdate.identifier.isPresent) {
-            log.info("Received encodedTrack request for guild {}", guildId)
+            log.info("Received encodedTrack or identifier request for guild {}", guildId)
 
             if (noReplace && player.playingTrack != null) {
                 log.info("Skipping play request because of noReplace")
