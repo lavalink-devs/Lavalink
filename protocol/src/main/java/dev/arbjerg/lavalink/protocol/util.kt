@@ -20,11 +20,3 @@ fun encodeTrack(audioPlayerManager: AudioPlayerManager, track: AudioTrack): Stri
     audioPlayerManager.encodeTrack(MessageOutput(baos), track)
     return Base64.encodeBase64String(baos.toByteArray())
 }
-
-fun encodeTrackSave(audioPlayerManager: AudioPlayerManager, track: AudioTrack): String? {
-    return try {
-        encodeTrack(audioPlayerManager, track)
-    } catch (e: IOException) {
-        null
-    }
-}

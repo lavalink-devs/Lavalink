@@ -25,7 +25,12 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.protocol.*
 import lavalink.server.io.SocketContext
+import lavalink.server.io.SocketServer
 import lavalink.server.player.LavalinkPlayer
+import org.slf4j.Logger
+import org.springframework.http.HttpStatus
+import org.springframework.web.server.ResponseStatusException
+import javax.servlet.http.HttpServletRequest
 
 
 fun AudioTrack.toTrack(audioPlayerManager: AudioPlayerManager): Track {
@@ -47,13 +52,13 @@ fun AudioTrack.toInfo(): TrackInfo {
     )
 }
 
-fun LavalinkPlayer.toPlayer(audioPlayerManager: AudioPlayerManager, context: SocketContext): Player {
+fun LavalinkPlayer.toPlayer(context: SocketContext): Player {
     val connection = context.getMediaConnection(this).gatewayConnection
     val voiceServerInfo = context.koe.getConnection(guildId)?.voiceServerInfo
 
     return Player(
         this.guildId.toString(),
-        this.playingTrack?.toTrack(audioPlayerManager),
+        this.playingTrack?.toTrack(context.audioPlayerManager),
         this.audioPlayer.volume,
         this.isPaused,
         VoiceState(
@@ -73,4 +78,14 @@ fun getRootCause(throwable: Throwable?): Throwable {
         rootCause = rootCause.cause
     }
     return rootCause
+}
+
+fun socketContext(socketServer: SocketServer, sessionId: String) =
+    socketServer.contextMap[sessionId] ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Session not found")
+
+fun existingPlayer(socketContext: SocketContext, guildId: Long) =
+    socketContext.players[guildId] ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found")
+
+fun logRequest(log: Logger, request: HttpServletRequest) {
+    log.info("${request.method} ${request.servletPath} ${request.parameterMap}")
 }

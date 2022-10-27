@@ -29,7 +29,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import dev.arbjerg.lavalink.protocol.Exception
 import dev.arbjerg.lavalink.protocol.Message
-import dev.arbjerg.lavalink.protocol.encodeTrackSave
+import dev.arbjerg.lavalink.protocol.encodeTrack
 import lavalink.server.io.SocketServer.Companion.sendPlayerUpdate
 import lavalink.server.util.getRootCause
 import org.slf4j.LoggerFactory
@@ -44,7 +44,7 @@ class EventEmitter(
     }
 
     override fun onTrackStart(player: AudioPlayer, track: AudioTrack) {
-        val encodedTrack = encodeTrackSave(audioPlayerManager, track)
+        val encodedTrack = encodeTrack(audioPlayerManager, track)
         this.player.socket.send(
             Message.TrackStartEvent(
                 encodedTrack,
@@ -62,7 +62,7 @@ class EventEmitter(
             endReason
         }
 
-        val encodedTrack = encodeTrackSave(audioPlayerManager, track)
+        val encodedTrack = encodeTrack(audioPlayerManager, track)
         this.player.socket.send(
             Message.TrackEndEvent(
                 encodedTrack,
@@ -75,7 +75,7 @@ class EventEmitter(
 
     // These exceptions are already logged by Lavaplayer
     override fun onTrackException(player: AudioPlayer, track: AudioTrack, exception: FriendlyException) {
-        val encodedTrack = encodeTrackSave(audioPlayerManager, track)
+        val encodedTrack = encodeTrack(audioPlayerManager, track)
         this.player.socket.send(
             Message.TrackExceptionEvent(
                 encodedTrack,
@@ -92,7 +92,7 @@ class EventEmitter(
 
     override fun onTrackStuck(player: AudioPlayer, track: AudioTrack, thresholdMs: Long) {
         log.warn(track.info.title + " got stuck! Threshold surpassed: " + thresholdMs)
-        val encodedTrack = encodeTrackSave(audioPlayerManager, track)
+        val encodedTrack = encodeTrack(audioPlayerManager, track)
         this.player.socket.send(
             Message.TrackStuckEvent(
                 encodedTrack,

@@ -114,28 +114,28 @@ sealed class Message(var op: Op) {
     )
 
     data class TrackStartEvent(
-        val encodedTrack: String?,
-        val track: String?,
+        val encodedTrack: String,
+        val track: String,
         override val guildId: String,
     ) : Event(EventType.TrackStart, guildId)
 
     data class TrackEndEvent(
-        val encodedTrack: String?,
-        val track: String?,
+        val encodedTrack: String,
+        val track: String,
         val reason: AudioTrackEndReason,
         override val guildId: String,
     ) : Event(EventType.TrackEnd, guildId)
 
     data class TrackExceptionEvent(
-        val encodedTrack: String?,
-        val track: String?,
+        val encodedTrack: String,
+        val track: String,
         val exception: Exception,
         override val guildId: String,
     ) : Event(EventType.TrackException, guildId)
 
     data class TrackStuckEvent(
-        val encodedTrack: String?,
-        val track: String?,
+        val encodedTrack: String,
+        val track: String,
         val thresholdMs: Long,
         override val guildId: String,
     ) : Event(EventType.TrackStuck, guildId)

@@ -26,10 +26,13 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.protocol.LoadResult
 import dev.arbjerg.lavalink.protocol.Track
 import dev.arbjerg.lavalink.protocol.decodeTrack
+import lavalink.server.util.logRequest
 import lavalink.server.util.toTrack
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 import java.util.concurrent.CompletionStage
 import javax.servlet.http.HttpServletRequest
 
@@ -40,32 +43,29 @@ class AudioLoaderRestHandler(private val audioPlayerManager: AudioPlayerManager)
         private val log = LoggerFactory.getLogger(AudioLoaderRestHandler::class.java)
     }
 
-    private fun log(request: HttpServletRequest) {
-        log.info("GET $request.servletPath")
-    }
-
     @GetMapping(value = ["/loadtracks", "/v3/loadtracks"], produces = ["application/json"])
     @ResponseBody
     fun loadTracks(
-        request: HttpServletRequest?,
+        request: HttpServletRequest,
         @RequestParam identifier: String?
     ): CompletionStage<ResponseEntity<LoadResult>> {
         log.info("Got request to load for identifier \"{}\"", identifier)
         return AudioLoader(audioPlayerManager).load(identifier).thenApply { ResponseEntity.ok(it) }
     }
 
-    // we need this for backwards compatibility
-    @GetMapping(value = ["/decodetrack"], produces = ["application/json"])
+    @GetMapping(value = ["/decodetrack", "/v3/decodetrack"], produces = ["application/json"])
     @ResponseBody
-    fun getDecodeTrackOld(request: HttpServletRequest, @RequestParam track: String): ResponseEntity<Track> {
-        return getDecodeTrack(request, track)
-    }
-
-    @GetMapping(value = ["/v3/decodetrack"], produces = ["application/json"])
-    @ResponseBody
-    fun getDecodeTrack(request: HttpServletRequest, @RequestParam encodedTrack: String): ResponseEntity<Track> {
-        log(request)
-        val audioTrack: AudioTrack = decodeTrack(audioPlayerManager, encodedTrack)
+    fun getDecodeTrack(
+        request: HttpServletRequest,
+        @RequestParam encodedTrack: String?,
+        @RequestParam track: String?
+    ): ResponseEntity<Track> {
+        logRequest(log, request)
+        val trackToDecode = encodedTrack ?: track ?: throw ResponseStatusException(
+            HttpStatus.BAD_REQUEST,
+            "No track to decode provided"
+        )
+        val audioTrack: AudioTrack = decodeTrack(audioPlayerManager, trackToDecode)
         return ResponseEntity.ok(audioTrack.toTrack(audioPlayerManager))
     }
 
@@ -79,7 +79,7 @@ class AudioLoaderRestHandler(private val audioPlayerManager: AudioPlayerManager)
         request: HttpServletRequest,
         @RequestBody encodedTracks: List<String>
     ): ResponseEntity<List<Track>> {
-        log(request)
+        logRequest(log, request)
         return ResponseEntity.ok(encodedTracks.map {
             decodeTrack(audioPlayerManager, it).toTrack(audioPlayerManager)
         })

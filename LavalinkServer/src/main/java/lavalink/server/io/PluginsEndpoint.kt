@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class PluginsEndpoint(pluginManager: PluginManager) {
 
-    private val plugins = pluginManager.pluginManifests.map {
-        Plugins(listOf<Plugin>().apply { Plugin(it.name, it.version) })
-    }
+    private val plugins = Plugins(pluginManager.pluginManifests.map { Plugin(it.name, it.version) })
 
     @GetMapping("/plugins")
     fun plugins() = plugins
