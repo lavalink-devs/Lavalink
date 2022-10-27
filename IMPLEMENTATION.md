@@ -287,10 +287,10 @@ Server emitted an event. See the client implementation below.
 ##### TrackStartEvent
 Emitted when a track starts playing.
 
-| Field        | Type    | Description                                                                                          |
-|--------------|---------|------------------------------------------------------------------------------------------------------|
-| encodedTrack | ?string | The base64 encoded track that started playing. `null` if track could not be encoded                  |
-| track        | ?string | The base64 encoded track that started playing (DEPRECATED as of v3.7.0 and marked for removal in v4) |
+| Field        | Type   | Description                                                                                          |
+|--------------|--------|------------------------------------------------------------------------------------------------------|
+| encodedTrack | string | The base64 encoded track that started playing                                                        |
+| track        | string | The base64 encoded track that started playing (DEPRECATED as of v3.7.0 and marked for removal in v4) |
 
 <details>
 <summary>Example Payload</summary>
@@ -314,8 +314,8 @@ Emitted when a track ends.
 
 | Field        | Type                                | Description                                                                                        |
 |--------------|-------------------------------------|----------------------------------------------------------------------------------------------------|
-| encodedTrack | ?string                             | The base64 encoded track that ended playing. `null` if track could not be encoded                  |
-| track        | ?string                             | The base64 encoded track that ended playing (DEPRECATED as of v3.7.0 and marked for removal in v4) |
+| encodedTrack | string                              | The base64 encoded track that ended playing                                                        |
+| track        | string                              | The base64 encoded track that ended playing (DEPRECATED as of v3.7.0 and marked for removal in v4) |
 | reason       | [TrackEndReason](#track-end-reason) | The reason the track ended                                                                         |
 
 ##### Track End Reason
@@ -349,8 +349,8 @@ Emitted when a track throws an exception.
 
 | Field        | Type                                  | Description                                                                                              |
 |--------------|---------------------------------------|----------------------------------------------------------------------------------------------------------|
-| encodedTrack | ?string                               | The base64 encoded track that threw the exception. `null` if track could not be encoded                  |
-| track        | ?string                               | The base64 encoded track that threw the exception (DEPRECATED as of v3.7.0 and marked for removal in v4) |
+| encodedTrack | string                                | The base64 encoded track that threw the exception                                                        |
+| track        | string                                | The base64 encoded track that threw the exception (DEPRECATED as of v3.7.0 and marked for removal in v4) |
 | exception    | [Exception](#exception-object) object | The occurred exception                                                                                   |
 
 ##### Exception Object
@@ -392,11 +392,11 @@ Emitted when a track throws an exception.
 ##### TrackStuckEvent
 Emitted when a track gets stuck while playing.
 
-| Field        | Type    | Description                                                                                     |
-|--------------|---------|-------------------------------------------------------------------------------------------------|
-| encodedTrack | ?string | The base64 encoded track that got stuck. `null` if track could not be encoded                   |
-| track        | ?string | The base64 encoded track that got stuck  (DEPRECATED as of v3.7.0 and marked for removal in v4) |
-| thresholdMs  | int     | The threshold in milliseconds that was exceeded                                                 |
+| Field        | Type   | Description                                                                                     |
+|--------------|--------|-------------------------------------------------------------------------------------------------|
+| encodedTrack | string | The base64 encoded track that got stuck                                                         |
+| track        | string | The base64 encoded track that got stuck  (DEPRECATED as of v3.7.0 and marked for removal in v4) |
+| thresholdMs  | int    | The threshold in milliseconds that was exceeded                                                 |
 
 <details>
 <summary>Example Payload</summary>
@@ -896,7 +896,22 @@ Request:
 
 Response:
 
-204 - No Content
+| Field       | Type    | Description                                              |
+|-------------|---------|----------------------------------------------------------|
+| resumingKey | ?string | The resuming key to be able to resume this session later |
+| timeout     | int     | The timeout in seconds (default is 60s)                  |
+
+<details>
+<summary>Example Payload</summary>
+
+```json
+{
+  "resumingKey": "...",
+  "timeout": 60
+}
+```
+
+</details>
 
 ---
 
