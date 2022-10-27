@@ -190,14 +190,14 @@ A collection of stats sent every minute.
 
 ##### Stats Object
 
-| Field          | Type                               | Description                                 |
-|----------------|------------------------------------|---------------------------------------------|
-| players        | int                                | The amount of players connected to the node |
-| playingPlayers | int                                | The amount of players playing a track       |
-| uptime         | int                                | The uptime of the node in milliseconds      |
-| memory         | [Memory](#memory) object           | The memory stats of the node                |
-| cpu            | [CPU](#cpu) object                 | The cpu stats of the node                   |
-| frameStats     | [Frame Stats](#frame-stats) object | The frame stats of the node                 |
+| Field          | Type                                | Description                                                    |
+|----------------|-------------------------------------|----------------------------------------------------------------|
+| players        | int                                 | The amount of players connected to the node                    |
+| playingPlayers | int                                 | The amount of players playing a track                          |
+| uptime         | int                                 | The uptime of the node in milliseconds                         |
+| memory         | [Memory](#memory) object            | The memory stats of the node                                   |
+| cpu            | [CPU](#cpu) object                  | The cpu stats of the node                                      |
+| frameStats     | ?[Frame Stats](#frame-stats) object | The frame stats of the node. `null` if the node has no players |
 
 ##### Memory
 | Field      | Type | Description                              |
