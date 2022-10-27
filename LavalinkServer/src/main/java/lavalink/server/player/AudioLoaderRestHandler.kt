@@ -22,7 +22,6 @@
 package lavalink.server.player
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.protocol.LoadResult
 import dev.arbjerg.lavalink.protocol.Track
 import dev.arbjerg.lavalink.protocol.decodeTrack
@@ -44,7 +43,6 @@ class AudioLoaderRestHandler(private val audioPlayerManager: AudioPlayerManager)
     }
 
     @GetMapping(value = ["/loadtracks", "/v3/loadtracks"], produces = ["application/json"])
-    @ResponseBody
     fun loadTracks(
         request: HttpServletRequest,
         @RequestParam identifier: String?
@@ -54,7 +52,6 @@ class AudioLoaderRestHandler(private val audioPlayerManager: AudioPlayerManager)
     }
 
     @GetMapping(value = ["/decodetrack", "/v3/decodetrack"], produces = ["application/json"])
-    @ResponseBody
     fun getDecodeTrack(
         request: HttpServletRequest,
         @RequestParam encodedTrack: String?,
@@ -65,8 +62,7 @@ class AudioLoaderRestHandler(private val audioPlayerManager: AudioPlayerManager)
             HttpStatus.BAD_REQUEST,
             "No track to decode provided"
         )
-        val audioTrack: AudioTrack = decodeTrack(audioPlayerManager, trackToDecode)
-        return ResponseEntity.ok(audioTrack.toTrack(audioPlayerManager))
+        return ResponseEntity.ok(decodeTrack(audioPlayerManager, trackToDecode).toTrack(trackToDecode))
     }
 
     @PostMapping(
@@ -74,14 +70,13 @@ class AudioLoaderRestHandler(private val audioPlayerManager: AudioPlayerManager)
         consumes = ["application/json"],
         produces = ["application/json"]
     )
-    @ResponseBody
     fun decodeTracks(
         request: HttpServletRequest,
         @RequestBody encodedTracks: List<String>
     ): ResponseEntity<List<Track>> {
         logRequest(log, request)
         return ResponseEntity.ok(encodedTracks.map {
-            decodeTrack(audioPlayerManager, it).toTrack(audioPlayerManager)
+            decodeTrack(audioPlayerManager, it).toTrack(it)
         })
     }
 

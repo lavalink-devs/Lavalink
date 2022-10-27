@@ -38,6 +38,10 @@ fun AudioTrack.toTrack(audioPlayerManager: AudioPlayerManager): Track {
     return Track(encoded, encoded, this.toInfo())
 }
 
+fun AudioTrack.toTrack(encoded: String): Track {
+    return Track(encoded, encoded, this.toInfo())
+}
+
 fun AudioTrack.toInfo(): TrackInfo {
     return TrackInfo(
         this.identifier,
