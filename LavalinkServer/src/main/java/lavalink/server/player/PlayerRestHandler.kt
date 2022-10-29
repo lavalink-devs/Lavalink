@@ -77,12 +77,12 @@ class PlayerRestHandler(
         playerUpdate.voice.takeIfPresent {
             log.info("Received voice server update for guild {}", guildId)
             //discord sometimes send a partial server update missing the endpoint, which can be ignored.
-            if (it.Endpoint.isNotEmpty()) {
+            if (it.endpoint.isNotEmpty()) {
                 //clear old connection
                 context.koe.destroyConnection(guildId)
 
                 val conn = context.getMediaConnection(player)
-                conn.connect(VoiceServerInfo(it.sessionID, it.Token, it.Endpoint)).whenComplete { _, _ ->
+                conn.connect(VoiceServerInfo(it.sessionId, it.token, it.endpoint)).whenComplete { _, _ ->
                     player.provideTo(conn)
                 }
             }
@@ -122,13 +122,11 @@ class PlayerRestHandler(
                 log.info("Skipping play request because of noReplace")
                 return ResponseEntity.ok(player.toPlayer(context))
             }
-            player.setPause(playerUpdate.paused.value)
+            player.setPause(if (playerUpdate.paused.isPresent) playerUpdate.paused.value else false)
 
             val track: AudioTrack? = if (playerUpdate.encodedTrack.isPresent) {
                 playerUpdate.encodedTrack.value?.let { encodedTrack ->
-                    decodeTrack(
-                        context.audioPlayerManager, encodedTrack
-                    )
+                    decodeTrack(context.audioPlayerManager, encodedTrack)
                 }
             } else {
                 val trackFuture = CompletableFuture<AudioTrack>()

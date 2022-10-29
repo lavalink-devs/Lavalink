@@ -35,9 +35,9 @@ data class TrackInfo(
 )
 
 data class VoiceState(
-    val Token: String,
-    val Endpoint: String,
-    val sessionID: String,
+    val token: String,
+    val endpoint: String,
+    val sessionId: String,
     val connected: Boolean,
     val ping: Long
 )
