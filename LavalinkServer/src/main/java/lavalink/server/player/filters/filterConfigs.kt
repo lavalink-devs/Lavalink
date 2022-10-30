@@ -1,5 +1,6 @@
 package lavalink.server.player.filters
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.natanbc.lavadsp.channelmix.ChannelMixPcmAudioFilter
 import com.github.natanbc.lavadsp.distortion.DistortionPcmAudioFilter
 import com.github.natanbc.lavadsp.karaoke.KaraokePcmAudioFilter
@@ -14,7 +15,7 @@ import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat
 import dev.arbjerg.lavalink.protocol.*
 import com.sedmelluq.discord.lavaplayer.filter.equalizer.Equalizer as LavaplayerEqualizer
 
-class VolumeConfig(volume: Volume) : Volume(volume.volume), FilterConfig {
+class VolumeConfig(val volume: Float) : FilterConfig {
     override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter {
         return VolumePcmAudioFilter(output).also {
             it.volume = volume
@@ -24,14 +25,12 @@ class VolumeConfig(volume: Volume) : Volume(volume.volume), FilterConfig {
     override val isEnabled: Boolean get() = volume != 1.0f
 }
 
-class EqualizerConfig(equalizer: Equalizer) : Equalizer(equalizer.bands), FilterConfig {
+class EqualizerConfig(val bands: List<Band>) : FilterConfig {
     private val array = FloatArray(LavaplayerEqualizer.BAND_COUNT) { 0.0f }
 
     init {
         bands.forEach { array[it.band] = it.gain }
     }
-
-    constructor(bands: List<Band>) : this(Equalizer(bands))
 
     override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter =
         LavaplayerEqualizer(format.channelCount, output, array)
@@ -162,5 +161,6 @@ class LowPassConfig(
 
 interface FilterConfig {
     fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter
+    @get:JsonIgnore
     val isEnabled: Boolean
 }

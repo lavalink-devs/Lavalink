@@ -2,37 +2,39 @@ package dev.arbjerg.lavalink.protocol
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.JsonNode
 
-open class Filters(
-    var volume: Volume? = null,
-    var equalizer: Equalizer? = null,
+data class Filters(
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    var volume: Float? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    var equalizer: List<Band>? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     val karaoke: Karaoke? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     val timescale: Timescale? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     val tremolo: Tremolo? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     val vibrato: Vibrato? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     val distortion: Distortion? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     val rotation: Rotation? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     val channelMix: ChannelMix? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     val lowPass: LowPass? = null,
 
     @JsonAnyGetter
     @JsonAnySetter
+    @get:JsonIgnore
     val pluginFilters: Map<String, JsonNode> = mutableMapOf()
 )
 
-open class Volume(
-    @JsonValue
-    val volume: Float,
-)
-
-open class Equalizer(
-    @JsonValue
-    val bands: List<Band>,
-)
-
-open class Band(
+data class Band(
     val band: Int,
     val gain: Float = 1.0f
 )

@@ -11,16 +11,16 @@ import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.protocol.Filters
 
 class FilterChain(
-    var volume: VolumeConfig? = null,
+    private var volume: VolumeConfig? = null,
     var equalizer: EqualizerConfig? = null,
-    val karaoke: KaraokeConfig? = null,
-    val timescale: TimescaleConfig? = null,
-    val tremolo: TremoloConfig? = null,
-    val vibrato: VibratoConfig? = null,
-    val distortion: DistortionConfig? = null,
-    val rotation: RotationConfig? = null,
-    val channelMix: ChannelMixConfig? = null,
-    val lowPass: LowPassConfig? = null
+    private val karaoke: KaraokeConfig? = null,
+    private val timescale: TimescaleConfig? = null,
+    private val tremolo: TremoloConfig? = null,
+    private val vibrato: VibratoConfig? = null,
+    private val distortion: DistortionConfig? = null,
+    private val rotation: RotationConfig? = null,
+    private val channelMix: ChannelMixConfig? = null,
+    private val lowPass: LowPassConfig? = null
 ) : PcmFilterFactory {
     companion object {
         fun parse(filters: Filters, extensions: List<AudioFilterExtension>): FilterChain {
@@ -86,8 +86,8 @@ class FilterChain(
 
     fun toFilters(): Filters {
         return Filters(
-            volume,
-            equalizer,
+            volume?.volume,
+            equalizer?.bands,
             karaoke,
             timescale,
             tremolo,
