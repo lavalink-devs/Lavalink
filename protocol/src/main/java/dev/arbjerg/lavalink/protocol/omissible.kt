@@ -45,16 +45,18 @@ inline fun <T> Omissible<T>.takeIfPresent(function: (T) -> Unit) {
 
 class OmissibleDeserializer<T>(private val deserializer: (JsonParser, DeserializationContext) -> T) :
     StdDeserializer<Omissible<T>>(Omissible::class.java) {
+
+    @Suppress("unused")
+    constructor() : this({ jp, _ -> jp.readValueAs(object : TypeReference<T>() {}) })
+
     override fun deserialize(jp: JsonParser, ctxt: DeserializationContext): Omissible<T> {
-        return if (jp.currentToken == null) {
+        return if (jp.currentToken() == null) {
             Omissible.omitted()
         } else {
             Omissible.of(deserializer(jp, ctxt))
         }
     }
 
-    @Suppress("unused")
-    constructor() : this({ jp, _ -> jp.readValueAs(object : TypeReference<T>() {}) })
 }
 
 class OmissibleSerializer<T>(private val serializer: (T, JsonGenerator, SerializerProvider) -> Unit) :

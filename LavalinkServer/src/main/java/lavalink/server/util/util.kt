@@ -91,5 +91,5 @@ fun existingPlayer(socketContext: SocketContext, guildId: Long) =
     socketContext.players[guildId] ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found")
 
 fun logRequest(log: Logger, request: HttpServletRequest) {
-    log.info("${request.method} ${request.servletPath} ${request.parameterMap}")
+    log.info("${request.method} ${request.servletPath}?${request.parameterMap.entries.joinToString("&") { "${it.key}=${it.value[0]}" }}")
 }

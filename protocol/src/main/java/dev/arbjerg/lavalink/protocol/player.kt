@@ -1,6 +1,7 @@
 package dev.arbjerg.lavalink.protocol
 
 import com.fasterxml.jackson.annotation.JsonValue
+import java.util.Optional
 
 data class Players(
     @JsonValue
@@ -56,6 +57,6 @@ data class PlayerUpdate(
     val endTime: Omissible<Long> = Omissible.omitted(),
     val volume: Omissible<Int> = Omissible.omitted(),
     val paused: Omissible<Boolean> = Omissible.omitted(),
-    val filters: Omissible<Filters> = Omissible.omitted(),
-    val voice: Omissible<VoiceState> = Omissible.omitted()
+    val filters: Optional<Filters> = Optional.empty(),
+    val voice: Optional<VoiceState> = Optional.empty()
 )

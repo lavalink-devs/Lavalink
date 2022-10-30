@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import java.util.concurrent.CompletableFuture
 import javax.servlet.http.HttpServletRequest
+import kotlin.jvm.optionals.getOrNull
 
 @RestController
 class PlayerRestHandler(
@@ -52,6 +53,7 @@ class PlayerRestHandler(
         return ResponseEntity.ok(player.toPlayer(context))
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     @PatchMapping(
         value = ["/v3/sessions/{sessionId}/players/{guildId}"],
         consumes = ["application/json"],
@@ -74,7 +76,7 @@ class PlayerRestHandler(
         val context = socketContext(socketServer, sessionId)
         val player = context.getPlayer(guildId)
 
-        playerUpdate.voice.takeIfPresent {
+        playerUpdate.voice.getOrNull()?.let {
             log.info("Received voice server update for guild {}", guildId)
             //discord sometimes send a partial server update missing the endpoint, which can be ignored.
             if (it.endpoint.isNotEmpty()) {
@@ -82,9 +84,10 @@ class PlayerRestHandler(
                 context.koe.destroyConnection(guildId)
 
                 val conn = context.getMediaConnection(player)
-                conn.connect(VoiceServerInfo(it.sessionId, it.token, it.endpoint)).whenComplete { _, _ ->
-                    player.provideTo(conn)
-                }
+                conn.connect(VoiceServerInfo(it.sessionId, it.endpoint, it.token)).exceptionally {
+                    throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to connect to voice server")
+                }.toCompletableFuture().join()
+                player.provideTo(conn)
             }
         }
 
@@ -108,7 +111,7 @@ class PlayerRestHandler(
                 SocketServer.sendPlayerUpdate(context, player)
             }
 
-        playerUpdate.filters.takeIfPresent {
+        playerUpdate.filters.getOrNull()?.let {
             log.info("Received filter request for guild {}", guildId)
             val filterChain = FilterChain.parse(it, filterExtensions)
             player.filters = filterChain
