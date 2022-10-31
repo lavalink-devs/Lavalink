@@ -61,10 +61,10 @@ fun LavalinkPlayer.toPlayer(context: SocketContext): Player {
     val voiceServerInfo = context.koe.getConnection(guildId)?.voiceServerInfo
 
     return Player(
-        this.guildId.toString(),
-        this.playingTrack?.toTrack(context.audioPlayerManager),
-        this.audioPlayer.volume,
-        this.isPaused,
+        guildId.toString(),
+        track?.toTrack(context.audioPlayerManager),
+        audioPlayer.volume,
+        audioPlayer.isPaused,
         VoiceState(
             voiceServerInfo?.token ?: "",
             voiceServerInfo?.endpoint ?: "",
@@ -72,7 +72,7 @@ fun LavalinkPlayer.toPlayer(context: SocketContext): Player {
             connection?.isOpen ?: false,
             connection?.ping ?: -1
         ),
-        this.filters?.toFilters()
+        filters?.toFilters()
     )
 }
 

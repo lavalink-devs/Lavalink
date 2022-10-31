@@ -65,12 +65,14 @@ class SocketServer(
         private val log = LoggerFactory.getLogger(SocketServer::class.java)
 
         fun sendPlayerUpdate(socketContext: SocketContext, player: LavalinkPlayer) {
+            if (socketContext.sessionPaused) return
+
             val connection = socketContext.getMediaConnection(player).gatewayConnection
             socketContext.send(
                 Message.PlayerUpdate(
                     PlayerState(
                         System.currentTimeMillis(),
-                        player.playingTrack?.position ?: 0,
+                        player.audioPlayer.playingTrack?.position ?: 0,
                         connection?.isOpen == true,
                         connection?.ping ?: -1L
                     ),

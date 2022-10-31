@@ -77,7 +77,7 @@ class WebSocketHandler(
         val player = context.getPlayer(json.getLong("guildId"))
         val noReplace = json.optBoolean("noReplace", false)
 
-        if (noReplace && player.playingTrack != null) {
+        if (noReplace && player.track != null) {
             log.info("Skipping play request because of noReplace")
             return
         }
@@ -131,21 +131,25 @@ class WebSocketHandler(
     }
 
     private fun equalizer(json: JSONObject) {
-        if (!loggedEqualizerDeprecationWarning) log.warn(
-            "The 'equalizer' op has been deprecated in favour of the " +
+        if (!loggedEqualizerDeprecationWarning) {
+            log.warn(
+                "The 'equalizer' op has been deprecated in favour of the " +
                     "'filters' op. Please switch to use that one, as this op will get removed in v4."
-        )
-        loggedEqualizerDeprecationWarning = true
+            )
+
+            loggedEqualizerDeprecationWarning = true
+        }
 
         val player = context.getPlayer(json.getLong("guildId"))
 
-        val list = mutableListOf<Band>()
-        json.getJSONArray("bands").forEach { b ->
-            val band = b as JSONObject
-            list.add(Band(band.getInt("band"), band.getFloat("gain")))
-        }
-        val filters = player.filters ?: FilterChain()
-        filters.equalizer = EqualizerConfig(list)
+        val bands = json.getJSONArray("bands")
+            .filterIsInstance<JSONObject>()
+            .map { b -> Band(b.getInt("band"), b.getFloat("gain")) }
+
+        val filters = player.filters
+            ?: FilterChain()
+
+        filters.equalizer = EqualizerConfig(bands)
         player.filters = filters
     }
 

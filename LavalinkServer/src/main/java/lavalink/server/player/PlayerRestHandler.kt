@@ -113,15 +113,14 @@ class PlayerRestHandler(
 
         playerUpdate.filters.getOrNull()?.let {
             log.info("Received filter request for guild {}", guildId)
-            val filterChain = FilterChain.parse(it, filterExtensions)
-            player.filters = filterChain
+            player.filters = FilterChain.parse(it, filterExtensions)
             SocketServer.sendPlayerUpdate(context, player)
         }
 
         if (playerUpdate.encodedTrack.isPresent || playerUpdate.identifier.isPresent) {
             log.info("Received encodedTrack or identifier request for guild {}", guildId)
 
-            if (noReplace && player.playingTrack != null) {
+            if (noReplace && player.track != null) {
                 log.info("Skipping play request because of noReplace")
                 return ResponseEntity.ok(player.toPlayer(context))
             }

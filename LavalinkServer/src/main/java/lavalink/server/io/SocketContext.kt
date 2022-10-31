@@ -113,7 +113,7 @@ class SocketContext(
     }
 
     override fun getPlayer(guildId: Long) = players.computeIfAbsent(guildId) {
-        val player = LavalinkPlayer(this, guildId, audioPlayerManager, serverConfig)
+        val player = LavalinkPlayer(this, guildId, serverConfig, audioPlayerManager)
         eventEmitter.onNewPlayer(player)
         player
     }
