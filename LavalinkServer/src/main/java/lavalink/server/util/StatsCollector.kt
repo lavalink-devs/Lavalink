@@ -21,7 +21,7 @@
  */
 package lavalink.server.util
 
-import dev.arbjerg.lavalink.protocol.Message
+import dev.arbjerg.lavalink.protocol.*
 import lavalink.server.Launcher
 import lavalink.server.io.SocketContext
 import lavalink.server.io.SocketServer
@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import oshi.SystemInfo
+import kotlin.Exception
 
 @RestController
 class StatsCollector(val socketServer: SocketServer) {
@@ -38,7 +39,7 @@ class StatsCollector(val socketServer: SocketServer) {
 
         private val si = SystemInfo()
         private val hal get() = si.hardware
-        private val os  get() = si.operatingSystem
+        private val os get() = si.operatingSystem
 
         private var prevTicks: LongArray? = null
     }
@@ -71,13 +72,13 @@ class StatsCollector(val socketServer: SocketServer) {
     fun createTask(context: SocketContext): Runnable = Runnable {
         try {
             val stats = retrieveStatistics(context)
-            context.send(stats)
+            context.send(Message.StatsEvent(stats))
         } catch (e: Exception) {
             log.error("Exception while sending stats", e)
         }
     }
 
-    fun retrieveStatistics(context: SocketContext? = null): Message.Stats {
+    fun retrieveStatistics(context: SocketContext? = null): Stats {
         val playersTotal = intArrayOf(0)
         val playersPlaying = intArrayOf(0)
         socketServer.contexts.forEach { socketContext ->
@@ -89,10 +90,10 @@ class StatsCollector(val socketServer: SocketServer) {
 
         // In bytes
         val runtime = Runtime.getRuntime()
-        val mem = Message.Memory(
-            free       = runtime.freeMemory(),
-            used       = runtime.totalMemory() - runtime.freeMemory(),
-            allocated  = runtime.totalMemory(),
+        val mem = Memory(
+            free = runtime.freeMemory(),
+            used = runtime.totalMemory() - runtime.freeMemory(),
+            allocated = runtime.totalMemory(),
             reservable = runtime.maxMemory()
         )
 
@@ -101,16 +102,16 @@ class StatsCollector(val socketServer: SocketServer) {
             prevTicks = hal.processor.systemCpuLoadTicks
         }
 
-        val cpu = Message.Cpu(
+        val cpu = Cpu(
             runtime.availableProcessors(),
-            systemLoad   = hal.processor.getSystemCpuLoadBetweenTicks(prevTicks),
+            systemLoad = hal.processor.getSystemCpuLoadBetweenTicks(prevTicks),
             lavalinkLoad = processRecentCpuUsage.takeIf { it.isFinite() } ?: 0.0
         )
 
         // Set new prevTicks to current value for more accurate baseline, and checks in the next schedule.
         prevTicks = hal.processor.systemCpuLoadTicks
 
-        var frameStats: Message.FrameStats? = null
+        var frameStats: FrameStats? = null
         if (context != null) {
             var playerCount = 0
             var totalSent = 0
@@ -126,10 +127,10 @@ class StatsCollector(val socketServer: SocketServer) {
             // We can't divide by 0
             if (playerCount != 0) {
                 val totalDeficit = playerCount *
-                    AudioLossCounter.EXPECTED_PACKET_COUNT_PER_MIN -
-                    (totalSent + totalNulled)
+                        AudioLossCounter.EXPECTED_PACKET_COUNT_PER_MIN -
+                        (totalSent + totalNulled)
 
-                frameStats = Message.FrameStats(
+                frameStats = FrameStats(
                     (totalSent / playerCount).toLong(),
                     (totalNulled / playerCount).toLong(),
                     (totalDeficit / playerCount).toLong()
@@ -137,7 +138,7 @@ class StatsCollector(val socketServer: SocketServer) {
             }
         }
 
-        return Message.Stats(
+        return Stats(
             frameStats,
             playersTotal[0],
             playersPlaying[0],

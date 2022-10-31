@@ -21,8 +21,11 @@
  */
 package lavalink.server.player
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import dev.arbjerg.lavalink.protocol.LoadResult
 import dev.arbjerg.lavalink.protocol.Track
 import dev.arbjerg.lavalink.protocol.decodeTrack
 import lavalink.server.util.logRequest
@@ -36,7 +39,10 @@ import java.util.concurrent.CompletionStage
 import javax.servlet.http.HttpServletRequest
 
 @RestController
-class AudioLoaderRestHandler(private val audioPlayerManager: AudioPlayerManager) {
+class AudioLoaderRestHandler(
+    private val audioPlayerManager: AudioPlayerManager,
+    private val objectMapper: ObjectMapper
+) {
 
     companion object {
         private val log = LoggerFactory.getLogger(AudioLoaderRestHandler::class.java)
@@ -46,9 +52,22 @@ class AudioLoaderRestHandler(private val audioPlayerManager: AudioPlayerManager)
     fun loadTracks(
         request: HttpServletRequest,
         @RequestParam identifier: String?
-    ): CompletionStage<ResponseEntity<LoadResult>> {
+    ): CompletionStage<ResponseEntity<JsonNode>> {
         log.info("Got request to load for identifier \"{}\"", identifier)
-        return AudioLoader(audioPlayerManager).load(identifier).thenApply { ResponseEntity.ok(it) }
+        return AudioLoader(audioPlayerManager).load(identifier).thenApply {
+            val tree: ObjectNode = objectMapper.valueToTree(it)
+            if (request.servletPath.startsWith("/loadtracks")) {
+                if (tree.get("playlistInfo").isNull) {
+                    tree.replace("playlistInfo", JsonNodeFactory.instance.objectNode())
+                }
+
+                if (tree.get("exception").isNull) {
+                    tree.remove("exception")
+                }
+            }
+
+            return@thenApply ResponseEntity.ok(tree)
+        }
     }
 
     @GetMapping(value = ["/decodetrack", "/v3/decodetrack"], produces = ["application/json"])

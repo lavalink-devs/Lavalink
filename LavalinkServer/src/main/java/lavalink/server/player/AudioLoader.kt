@@ -40,7 +40,7 @@ class AudioLoader(private val audioPlayerManager: AudioPlayerManager) : AudioLoa
 
     companion object {
         private val log = LoggerFactory.getLogger(AudioLoader::class.java)
-        private val NO_MATCHES = LoadResult(ResultStatus.NO_MATCHES, emptyList(), PlaylistInfo("", 0), null)
+        private val NO_MATCHES = LoadResult(ResultStatus.NO_MATCHES, emptyList(), null, null)
     }
 
     private val loadResult = CompletableFuture<LoadResult>()
@@ -57,20 +57,18 @@ class AudioLoader(private val audioPlayerManager: AudioPlayerManager) : AudioLoa
     override fun trackLoaded(audioTrack: AudioTrack) {
         log.info("Loaded track " + audioTrack.info.title)
         val tracks = listOf(audioTrack.toTrack(audioPlayerManager))
-        loadResult.complete(LoadResult(ResultStatus.TRACK_LOADED, tracks, PlaylistInfo("", 0)))
+        loadResult.complete(LoadResult(ResultStatus.TRACK_LOADED, tracks, null))
     }
 
     override fun playlistLoaded(audioPlaylist: AudioPlaylist) {
         log.info("Loaded playlist " + audioPlaylist.name)
-        var playlistName = ""
-        var selectedTrack = 0
+        var playlistInfo: PlaylistInfo? = null
         if (!audioPlaylist.isSearchResult) {
-            playlistName = audioPlaylist.name
-            selectedTrack = audioPlaylist.tracks.indexOf(audioPlaylist.selectedTrack)
+            playlistInfo = PlaylistInfo(audioPlaylist.name, audioPlaylist.tracks.indexOf(audioPlaylist.selectedTrack))
         }
         val status = if (audioPlaylist.isSearchResult) ResultStatus.SEARCH_RESULT else ResultStatus.PLAYLIST_LOADED
         val tracks = audioPlaylist.tracks.map { it.toTrack(audioPlayerManager) }
-        loadResult.complete(LoadResult(status, tracks, PlaylistInfo(playlistName, selectedTrack)))
+        loadResult.complete(LoadResult(status, tracks, playlistInfo))
     }
 
     override fun noMatches() {

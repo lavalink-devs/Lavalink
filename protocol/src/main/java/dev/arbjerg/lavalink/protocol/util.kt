@@ -7,7 +7,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import org.apache.commons.codec.binary.Base64
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.IOException
 
 
 fun decodeTrack(audioPlayerManager: AudioPlayerManager, message: String): AudioTrack {

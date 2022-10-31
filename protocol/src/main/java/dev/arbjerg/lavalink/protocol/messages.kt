@@ -1,11 +1,11 @@
 package dev.arbjerg.lavalink.protocol
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 
 class MessageDeserializer : StdDeserializer<Message>(Message::class.java) {
@@ -16,9 +16,9 @@ class MessageDeserializer : StdDeserializer<Message>(Message::class.java) {
         }
 
         return when (Message.Op.valueOfIgnoreCase(node.get("op").asText())) {
-            Message.Op.Ready -> jp.codec.treeToValue(node, Message.Ready::class.java)
-            Message.Op.Stats -> jp.codec.treeToValue(node, Message.Stats::class.java)
-            Message.Op.PlayerUpdate -> jp.codec.treeToValue(node, Message.PlayerUpdate::class.java)
+            Message.Op.Ready -> jp.codec.treeToValue(node, Message.ReadyEvent::class.java)
+            Message.Op.Stats -> jp.codec.treeToValue(node, Message.StatsEvent::class.java)
+            Message.Op.PlayerUpdate -> jp.codec.treeToValue(node, Message.PlayerUpdateEvent::class.java)
             Message.Op.Event -> jp.codec.treeToValue(node, Message.Event::class.java)
         }
     }
@@ -75,43 +75,20 @@ sealed class Message(var op: Op) {
         open val guildId: String
     ) : Message(Op.Event)
 
-    data class Ready(
+    data class ReadyEvent(
         val resumed: Boolean,
         val sessionId: String,
     ) : Message(Op.Ready)
 
-    data class PlayerUpdate(
+    data class PlayerUpdateEvent(
         val state: PlayerState,
         val guildId: String,
     ) : Message(Op.PlayerUpdate)
 
-    data class Stats(
-        val frameStats: FrameStats?,
-        val players: Int,
-        val playingPlayers: Int,
-        val uptime: Long,
-        val memory: Memory,
-        val cpu: Cpu,
+    data class StatsEvent(
+        @JsonUnwrapped
+        val stats: Stats
     ) : Message(Op.Stats)
-
-    data class FrameStats(
-        val sent: Long,
-        val nulled: Long,
-        val deficit: Long
-    )
-
-    data class Memory(
-        val free: Long,
-        val used: Long,
-        val allocated: Long,
-        val reservable: Long
-    )
-
-    data class Cpu(
-        val cores: Int,
-        val systemLoad: Double,
-        val lavalinkLoad: Double
-    )
 
     data class TrackStartEvent(
         val encodedTrack: String,

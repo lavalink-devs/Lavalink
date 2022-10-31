@@ -69,7 +69,7 @@ class SocketServer(
 
             val connection = socketContext.getMediaConnection(player).gatewayConnection
             socketContext.send(
-                Message.PlayerUpdate(
+                Message.PlayerUpdateEvent(
                     PlayerState(
                         System.currentTimeMillis(),
                         player.audioPlayer.playingTrack?.position ?: 0,
@@ -111,7 +111,7 @@ class SocketServer(
             resumable.resume(session)
             log.info("Resumed session with key $resumeKey")
             resumable.eventEmitter.onWebSocketOpen(true)
-            resumable.send(Message.Ready(true, resumable.sessionId))
+            resumable.send(Message.ReadyEvent(true, resumable.sessionId))
             return
         }
 
@@ -135,7 +135,7 @@ class SocketServer(
         )
         contextMap[sessionId] = socketContext
         socketContext.eventEmitter.onWebSocketOpen(false)
-        socketContext.send(Message.Ready(false, sessionId))
+        socketContext.send(Message.ReadyEvent(false, sessionId))
 
         if (clientName != null) {
             log.info("Connection successfully established from $clientName")

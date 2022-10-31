@@ -58,13 +58,14 @@ data class SessionUpdate(
 data class LoadResult(
     var loadType: ResultStatus,
     var tracks: List<Track>,
-    var playlistInfo: PlaylistInfo,
+    var playlistInfo: PlaylistInfo?,
     var exception: Exception?
 ) {
+
     constructor(
         loadResultType: ResultStatus,
         tracks: List<Track>,
-        playlistInfo: PlaylistInfo,
+        playlistInfo: PlaylistInfo?,
     ) : this(
         loadResultType,
         tracks,
@@ -72,7 +73,7 @@ data class LoadResult(
         null
     )
 
-    constructor(exception: Exception?) : this(ResultStatus.LOAD_FAILED, emptyList(), PlaylistInfo("", 0), exception)
+    constructor(exception: Exception?) : this(ResultStatus.LOAD_FAILED, emptyList(), null, exception)
 }
 
 data class PlaylistInfo(

@@ -2,7 +2,6 @@ package lavalink.server.io
 
 import dev.arbjerg.lavalink.protocol.Message
 import lavalink.server.util.logRequest
-import lavalink.server.util.socketContext
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -21,7 +20,7 @@ class StatsRestHandler {
     @GetMapping("/v3/stats", produces = ["application/json"])
     fun getStats(
         request: HttpServletRequest
-    ): ResponseEntity<Message.Stats> {
+    ): ResponseEntity<Message.StatsEvent> {
         logRequest(log, request)
 
         throw ResponseStatusException(HttpStatus.NOT_IMPLEMENTED, "Not implemented yet")
