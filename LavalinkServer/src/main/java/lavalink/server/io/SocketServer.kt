@@ -31,6 +31,7 @@ import dev.arbjerg.lavalink.protocol.PlayerState
 import dev.arbjerg.lavalink.protocol.newObjectMapper
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.LavalinkPlayer
+import lavalink.server.util.StatsCollector
 import moe.kyokobot.koe.Koe
 import moe.kyokobot.koe.KoeOptions
 import org.json.JSONObject
@@ -57,6 +58,7 @@ class SocketServer(
     private val resumableSessions = mutableMapOf<String, SocketContext>()
     private val objectMapper = newObjectMapper()
     private val koe = Koe.koe(koeOptions)
+    private val statsCollector = StatsCollector(this)
     private val charPool: List<Char> = ('a'..'z') + ('0'..'9')
 
     companion object {
@@ -120,6 +122,7 @@ class SocketServer(
             serverConfig,
             session,
             this,
+            statsCollector,
             userId,
             clientName,
             koe.newClient(userId.toLong()),

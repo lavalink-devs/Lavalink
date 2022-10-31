@@ -19,38 +19,65 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package lavalink.server.io
+package lavalink.server.util
 
 import dev.arbjerg.lavalink.protocol.Message
 import lavalink.server.Launcher
+import lavalink.server.io.SocketContext
+import lavalink.server.io.SocketServer
 import lavalink.server.player.AudioLossCounter
 import org.slf4j.LoggerFactory
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
 import oshi.SystemInfo
 
-class StatsTask(
-    private val context: SocketContext,
-    private val socketServer: SocketServer
-) : Runnable {
-
+@RestController
+class StatsCollector(val socketServer: SocketServer) {
     companion object {
-        private val log = LoggerFactory.getLogger(StatsTask::class.java)
+        private val log = LoggerFactory.getLogger(StatsCollector::class.java)
+
         private val si = SystemInfo()
         private val hal get() = si.hardware
         private val os  get() = si.operatingSystem
+
         private var prevTicks: LongArray? = null
     }
 
-    override fun run() {
+    private var uptime = 0.0
+    private var cpuTime = 0.0
+
+    // Record for next invocation
+    private val processRecentCpuUsage: Double
+        get() {
+            val p = os.getProcess(os.processId)
+
+            val output: Double = if (cpuTime != 0.0) {
+                val uptimeDiff = p.upTime - uptime
+                val cpuDiff = p.kernelTime + p.userTime - cpuTime
+                cpuDiff / uptimeDiff
+            } else {
+                (p.kernelTime + p.userTime).toDouble() / p.userTime.toDouble()
+            }
+
+            // Record for next invocation
+            uptime = p.upTime.toDouble()
+            cpuTime = (p.kernelTime + p.userTime).toDouble()
+            return output / hal.processor.logicalProcessorCount
+        }
+
+    @GetMapping("/v3/stats")
+    fun stats() = retrieveStatistics()
+
+    fun createTask(context: SocketContext): Runnable = Runnable {
         try {
-            sendStats()
+            val stats = retrieveStatistics(context)
+            context.send(stats)
         } catch (e: Exception) {
             log.error("Exception while sending stats", e)
         }
     }
 
-    private fun sendStats() {
-        if (context.sessionPaused) return
-
+    fun retrieveStatistics(context: SocketContext? = null): Message.Stats {
         val playersTotal = intArrayOf(0)
         val playersPlaying = intArrayOf(0)
         socketServer.contexts.forEach { socketContext ->
@@ -83,61 +110,40 @@ class StatsTask(
         // Set new prevTicks to current value for more accurate baseline, and checks in the next schedule.
         prevTicks = hal.processor.systemCpuLoadTicks
 
-        var playerCount = 0
-        var totalSent = 0
-        var totalNulled = 0
-        for (player in context.playingPlayers) {
-            val counter = player.audioLossCounter
-            if (!counter.isDataUsable) continue
-            playerCount++
-            totalSent += counter.lastMinuteSuccess
-            totalNulled += counter.lastMinuteLoss
-        }
-
-        // We can't divide by 0
-        val frameStats = if (playerCount != 0) {
-            val totalDeficit = playerCount * AudioLossCounter.EXPECTED_PACKET_COUNT_PER_MIN - (totalSent + totalNulled)
-            Message.FrameStats(
-                (totalSent / playerCount).toLong(),
-                (totalNulled / playerCount).toLong(),
-                (totalDeficit / playerCount).toLong()
-            )
-        } else {
-            null
-        }
-
-        context.send(
-            Message.Stats(
-                frameStats,
-                playerCount,
-                playersPlaying[0],
-                uptime,
-                mem,
-                cpu
-            )
-        )
-    }
-
-    private var uptime = 0.0
-    private var cpuTime = 0.0
-
-    // Record for next invocation
-    private val processRecentCpuUsage: Double
-        get() {
-            val p = os.getProcess(os.processId)
-
-            val output: Double = if (cpuTime != 0.0) {
-                val uptimeDiff = p.upTime - uptime
-                val cpuDiff = p.kernelTime + p.userTime - cpuTime
-                cpuDiff / uptimeDiff
-            } else {
-                (p.kernelTime + p.userTime).toDouble() / p.userTime.toDouble()
+        var frameStats: Message.FrameStats? = null
+        if (context != null) {
+            var playerCount = 0
+            var totalSent = 0
+            var totalNulled = 0
+            for (player in context.playingPlayers) {
+                val counter = player.audioLossCounter
+                if (!counter.isDataUsable) continue
+                playerCount++
+                totalSent += counter.lastMinuteSuccess
+                totalNulled += counter.lastMinuteLoss
             }
 
-            // Record for next invocation
-            uptime = p.upTime.toDouble()
-            cpuTime = (p.kernelTime + p.userTime).toDouble()
-            return output / hal.processor.logicalProcessorCount
+            // We can't divide by 0
+            if (playerCount != 0) {
+                val totalDeficit = playerCount *
+                    AudioLossCounter.EXPECTED_PACKET_COUNT_PER_MIN -
+                    (totalSent + totalNulled)
+
+                frameStats = Message.FrameStats(
+                    (totalSent / playerCount).toLong(),
+                    (totalNulled / playerCount).toLong(),
+                    (totalDeficit / playerCount).toLong()
+                )
+            }
         }
 
+        return Message.Stats(
+            frameStats,
+            playersTotal[0],
+            playersPlaying[0],
+            uptime,
+            mem,
+            cpu
+        )
+    }
 }

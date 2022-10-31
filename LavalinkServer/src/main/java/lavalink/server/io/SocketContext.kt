@@ -35,6 +35,7 @@ import io.undertow.websockets.core.WebSockets
 import io.undertow.websockets.jsr.UndertowSession
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.LavalinkPlayer
+import lavalink.server.util.StatsCollector
 import moe.kyokobot.koe.KoeClient
 import moe.kyokobot.koe.KoeEventAdapter
 import moe.kyokobot.koe.MediaConnection
@@ -53,6 +54,7 @@ class SocketContext(
     private val serverConfig: ServerConfig,
     private var session: WebSocketSession,
     private val socketServer: SocketServer,
+    statsCollector: StatsCollector,
     private val userId: String,
     private val clientName: String?,
     val koe: KoeClient,
@@ -92,7 +94,7 @@ class SocketContext(
 
 
     init {
-        executor.scheduleAtFixedRate(StatsTask(this, socketServer), 0, 1, TimeUnit.MINUTES)
+        executor.scheduleAtFixedRate(statsCollector.createTask(this), 0, 1, TimeUnit.MINUTES)
 
         playerUpdateService = Executors.newScheduledThreadPool(2) { r ->
             val thread = Thread(r)
