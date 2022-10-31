@@ -72,8 +72,8 @@ object Launcher {
             .withZone(ZoneId.of("UTC"))
         val buildTime = dtf.format(Instant.ofEpochMilli(appInfo.buildTime))
         val commitTime = dtf.format(Instant.ofEpochMilli(gitRepoState.commitTime * 1000))
-
-        val version = appInfo.version.takeUnless { it.startsWith("@") } ?: "Unknown"
+        val version = appInfo.versionBuild.takeUnless { it.startsWith("@") }
+            ?: "Unknown"
 
         return buildString {
             if (vanity) {

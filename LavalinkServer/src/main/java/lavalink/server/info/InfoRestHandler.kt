@@ -19,7 +19,7 @@ class InfoRestHandler(
 ) {
 
     private val info = Info(
-        Version.fromSemver(appInfo.version),
+        Version.fromSemver(appInfo.versionBuild),
         appInfo.buildTime,
         Git(gitRepoState.branch, gitRepoState.commitIdAbbrev, gitRepoState.commitTime * 1000),
         System.getProperty("java.version"),
