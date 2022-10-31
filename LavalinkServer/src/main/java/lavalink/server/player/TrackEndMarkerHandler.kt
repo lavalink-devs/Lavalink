@@ -1,4 +1,3 @@
-package lavalink.server.player;
 /*
  * Copyright (c) 2021 Freya Arbjerg and contributors
  *
@@ -20,23 +19,21 @@ package lavalink.server.player;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package lavalink.server.player
 
+import com.sedmelluq.discord.lavaplayer.track.TrackMarkerHandler
 
-import com.sedmelluq.discord.lavaplayer.track.TrackMarkerHandler;
-
-public class TrackEndMarkerHandler implements TrackMarkerHandler {
-
-    private final LavalinkPlayer player;
-
-    public TrackEndMarkerHandler(LavalinkPlayer player) {
-        this.player = player;
+class TrackEndMarkerHandler(private val player: LavalinkPlayer) : TrackMarkerHandler {
+    companion object {
+        val APPLICABLE_STATES = listOf(TrackMarkerHandler.MarkerState.REACHED, TrackMarkerHandler.MarkerState.BYPASSED)
     }
 
-    @Override
-    public void handle(MarkerState state) {
-        if (state.equals(MarkerState.REACHED) | state.equals(MarkerState.BYPASSED)) {
-            player.setEndMarkerHit(true);
-            player.stop();
+    override fun handle(state: TrackMarkerHandler.MarkerState) {
+        if (state !in APPLICABLE_STATES) {
+            return
         }
+
+        player.endMarkerHit = true
+        player.stop()
     }
 }
