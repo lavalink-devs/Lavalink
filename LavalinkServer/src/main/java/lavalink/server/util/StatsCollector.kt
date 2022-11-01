@@ -72,7 +72,7 @@ class StatsCollector(val socketServer: SocketServer) {
     fun createTask(context: SocketContext): Runnable = Runnable {
         try {
             val stats = retrieveStatistics(context)
-            context.send(Message.StatsEvent(stats))
+            context.sendMessage(Message.StatsEvent(stats))
         } catch (e: Exception) {
             log.error("Exception while sending stats", e)
         }

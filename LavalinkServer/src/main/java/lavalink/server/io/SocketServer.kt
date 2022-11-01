@@ -68,7 +68,7 @@ class SocketServer(
             if (socketContext.sessionPaused) return
 
             val connection = socketContext.getMediaConnection(player).gatewayConnection
-            socketContext.send(
+            socketContext.sendMessage(
                 Message.PlayerUpdateEvent(
                     PlayerState(
                         System.currentTimeMillis(),
@@ -111,7 +111,7 @@ class SocketServer(
             resumable.resume(session)
             log.info("Resumed session with key $resumeKey")
             resumable.eventEmitter.onWebSocketOpen(true)
-            resumable.send(Message.ReadyEvent(true, resumable.sessionId))
+            resumable.sendMessage(Message.ReadyEvent(true, resumable.sessionId))
             return
         }
 
@@ -135,7 +135,7 @@ class SocketServer(
         )
         contextMap[sessionId] = socketContext
         socketContext.eventEmitter.onWebSocketOpen(false)
-        socketContext.send(Message.ReadyEvent(false, sessionId))
+        socketContext.sendMessage(Message.ReadyEvent(false, sessionId))
 
         if (clientName != null) {
             log.info("Connection successfully established from $clientName")

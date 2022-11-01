@@ -40,8 +40,16 @@ public interface ISocketContext {
 
     /**
      * @param message a JSON message to send to the WebSocket client
+     *
+     * @deprecated As of v3.7 Jackson is the preferred way of JSON serialization,
+     * use {@link ISocketContext#sendMessage(Object)} instead.
      */
     void sendMessage(JSONObject message);
+
+    /**
+     * @param message a message to send to the WebSocket client, it should be compatible with Jackson.
+     */
+    void sendMessage(Object message);
 
     /**
      * @return the state of the context

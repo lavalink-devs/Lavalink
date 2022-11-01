@@ -156,7 +156,11 @@ class SocketContext(
     }
 
     override fun sendMessage(message: JSONObject) {
-        send(message)
+        send(message.toString())
+    }
+
+    override fun sendMessage(message: Any?) {
+        send(objectMapper.writeValueAsString(message))
     }
 
     override fun getState(): ISocketContext.State = when {
@@ -168,8 +172,6 @@ class SocketContext(
     /**
      * Either sends the payload now or queues it up
      */
-    fun send(payload: Any) = send(objectMapper.writeValueAsString(payload))
-
     private fun send(payload: String) {
         eventEmitter.onWebSocketMessageOut(payload)
 
@@ -236,15 +238,8 @@ class SocketContext(
 
     private inner class WsEventHandler(private val player: LavalinkPlayer) : KoeEventAdapter() {
         override fun gatewayClosed(code: Int, reason: String?, byRemote: Boolean) {
-            send(
-                Message.WebSocketClosedEvent(
-                    code,
-                    reason ?: "",
-                    byRemote,
-                    player.guildId.toString()
-                )
-            )
-
+            val event = Message.WebSocketClosedEvent(code, reason ?: "", byRemote, player.guildId.toString())
+            sendMessage(event)
             SocketServer.sendPlayerUpdate(this@SocketContext, player)
         }
 
