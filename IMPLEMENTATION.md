@@ -495,7 +495,7 @@ Routes are prefixed with `/v3` as of `v3.7.0`. Routes without an API prefix are 
 
 #### Error Responses
 
-When Lavalink encounters an error, it will respond with a JSON object containing more information about the error.
+When Lavalink encounters an error, it will respond with a JSON object containing more information about the error. Include the `trace=true` query param to also receive the full stack trace.
 
 | Field     | Type   | Description                                                                 |
 |-----------|--------|-----------------------------------------------------------------------------|
