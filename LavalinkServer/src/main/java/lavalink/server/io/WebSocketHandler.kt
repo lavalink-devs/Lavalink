@@ -152,7 +152,6 @@ class WebSocketHandler(
             .map { b -> Band(b.getInt("band"), b.getFloat("gain")) }
 
         val filters = player.filters
-            ?: FilterChain()
 
         filters.equalizer = EqualizerConfig(bands)
         player.filters = filters
