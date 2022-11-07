@@ -19,12 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package lavalink.server.util
+package lavalink.server.io
 
 import dev.arbjerg.lavalink.protocol.*
 import lavalink.server.Launcher
-import lavalink.server.io.SocketContext
-import lavalink.server.io.SocketServer
 import lavalink.server.player.AudioLossCounter
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
@@ -66,19 +64,19 @@ class StatsCollector(val socketServer: SocketServer) {
             return output / hal.processor.logicalProcessorCount
         }
 
-    @GetMapping("/v3/stats")
-    fun stats() = retrieveStatistics()
-
     fun createTask(context: SocketContext): Runnable = Runnable {
         try {
-            val stats = retrieveStatistics(context)
+            val stats = retrieveStats(context)
             context.sendMessage(Message.StatsEvent(stats))
         } catch (e: Exception) {
             log.error("Exception while sending stats", e)
         }
     }
 
-    fun retrieveStatistics(context: SocketContext? = null): Stats {
+    @GetMapping("/v3/stats", produces = ["application/json"])
+    fun getStats() = retrieveStats()
+
+    fun retrieveStats(context: SocketContext? = null): Stats {
         val playersTotal = intArrayOf(0)
         val playersPlaying = intArrayOf(0)
         socketServer.contexts.forEach { socketContext ->

@@ -22,8 +22,8 @@ class SessionRestHandler(
     ): ResponseEntity<Session> {
         val context = socketContext(socketServer, sessionId)
 
-        if (sessionUpdate.resumingKey == null || sessionUpdate.resumingKey!!.isPresent) {
-            context.resumeKey = sessionUpdate.resumingKey?.value
+        sessionUpdate.resumingKey.takeIfPresent {
+            context.resumeKey = it
         }
 
         sessionUpdate.timeout.takeIfPresent {

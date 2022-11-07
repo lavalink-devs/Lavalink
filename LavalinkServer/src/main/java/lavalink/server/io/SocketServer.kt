@@ -29,10 +29,8 @@ import dev.arbjerg.lavalink.api.PluginEventHandler
 import dev.arbjerg.lavalink.api.WebSocketExtension
 import dev.arbjerg.lavalink.protocol.Message
 import dev.arbjerg.lavalink.protocol.PlayerState
-import dev.arbjerg.lavalink.protocol.objectMapper
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.LavalinkPlayer
-import lavalink.server.util.StatsCollector
 import moe.kyokobot.koe.Koe
 import moe.kyokobot.koe.KoeOptions
 import org.json.JSONObject
@@ -43,6 +41,7 @@ import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.random.Random
 
 @Service
 class SocketServer(
@@ -87,7 +86,7 @@ class SocketServer(
         var sessionId: String
         do {
             sessionId = (1..16)
-                .map { kotlin.random.Random.nextInt(0, charPool.size) }
+                .map { Random.nextInt(0, charPool.size) }
                 .map(charPool::get)
                 .joinToString("")
         } while (contextMap[sessionId] != null)

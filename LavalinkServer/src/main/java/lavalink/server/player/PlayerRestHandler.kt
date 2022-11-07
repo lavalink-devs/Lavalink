@@ -55,9 +55,7 @@ class PlayerRestHandler(
         @PathVariable guildId: Long,
         @RequestParam noReplace: Boolean = false
     ): ResponseEntity<Player> {
-        val hasEncodedTrack = playerUpdate.encodedTrack == null || playerUpdate.encodedTrack!!.isPresent
-
-        if (hasEncodedTrack && playerUpdate.identifier.isPresent) {
+        if (playerUpdate.encodedTrack.isPresent && playerUpdate.identifier.isPresent) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot specify both encodedTrack and identifier")
         }
 
@@ -80,7 +78,7 @@ class PlayerRestHandler(
         }
 
         // we handle pause differently for playing new tracks
-        playerUpdate.paused.takeIf { it.isPresent && hasEncodedTrack && !playerUpdate.identifier.isPresent }
+        playerUpdate.paused.takeIf { it.isPresent && !playerUpdate.encodedTrack.isPresent && !playerUpdate.identifier.isPresent }
             ?.let {
                 log.info("Received pause request for guild {}", guildId)
                 player.setPause(it.value)
@@ -92,7 +90,7 @@ class PlayerRestHandler(
         }
 
         // we handle position differently for playing new tracks
-        playerUpdate.position.takeIf { it.isPresent && hasEncodedTrack && !playerUpdate.identifier.isPresent }
+        playerUpdate.position.takeIf { it.isPresent && !playerUpdate.encodedTrack.isPresent && !playerUpdate.identifier.isPresent }
             ?.let {
                 log.info("Received seek request for guild {}", guildId)
                 player.seekTo(it.value)
@@ -105,7 +103,7 @@ class PlayerRestHandler(
             SocketServer.sendPlayerUpdate(context, player)
         }
 
-        if (hasEncodedTrack || playerUpdate.identifier.isPresent) {
+        if (playerUpdate.encodedTrack.isPresent || playerUpdate.identifier.isPresent) {
             log.info("Received encodedTrack or identifier request for guild {}", guildId)
 
             if (noReplace && player.track != null) {
@@ -114,9 +112,9 @@ class PlayerRestHandler(
             }
             player.setPause(if (playerUpdate.paused.isPresent) playerUpdate.paused.value else false)
 
-            val track: AudioTrack? = if (hasEncodedTrack) {
-                playerUpdate.encodedTrack?.value.let { encodedTrack ->
-                    decodeTrack(context.audioPlayerManager, encodedTrack!!)
+            val track: AudioTrack? = if (playerUpdate.encodedTrack.isPresent) {
+                playerUpdate.encodedTrack.value?.let { encodedTrack ->
+                    decodeTrack(context.audioPlayerManager, encodedTrack)
                 }
             } else {
                 val trackFuture = CompletableFuture<AudioTrack>()

@@ -1,6 +1,11 @@
 package dev.arbjerg.lavalink.protocol
 
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
 data class Players(
     @JsonValue
@@ -49,8 +54,9 @@ data class PlayerState(
     val ping: Long
 )
 
+@JsonDeserialize(using = PlayerUpdateDeserializer::class)
 data class PlayerUpdate(
-    val encodedTrack: Omissible<String>? = Omissible.omitted(),
+    val encodedTrack: Omissible<String?> = Omissible.omitted(),
     val identifier: Omissible<String> = Omissible.omitted(),
     val position: Omissible<Long> = Omissible.omitted(),
     val endTime: Omissible<Long> = Omissible.omitted(),
@@ -59,3 +65,53 @@ data class PlayerUpdate(
     val filters: Omissible<Filters> = Omissible.omitted(),
     val voice: Omissible<VoiceState> = Omissible.omitted()
 )
+
+class PlayerUpdateDeserializer : JsonDeserializer<PlayerUpdate>() {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PlayerUpdate {
+        val node = p.codec.readTree<JsonNode>(p)
+
+        val encodedTrack = node.get("track")?.let {
+            if (it.isNull) Omissible.of<String?>(null) else Omissible.of(it.asText())
+        } ?: Omissible.omitted()
+
+        val identifier = node.get("identifier")?.let {
+            Omissible.of(it.asText())
+        } ?: Omissible.omitted()
+
+        val position = node.get("position")?.let {
+            Omissible.of(it.asLong())
+        } ?: Omissible.omitted()
+
+        val endTime = node.get("endTime")?.let {
+            Omissible.of(it.asLong())
+        } ?: Omissible.omitted()
+
+        val volume = node.get("volume")?.let {
+            Omissible.of(it.asInt())
+        } ?: Omissible.omitted()
+
+        val paused = node.get("paused")?.let {
+            Omissible.of(it.asBoolean())
+        } ?: Omissible.omitted()
+
+        val filters = node.get("filters")?.let {
+            Omissible.of(p.codec.treeToValue(it, Filters::class.java))
+        } ?: Omissible.omitted()
+
+        val voice = node.get("voice")?.let {
+            Omissible.of(p.codec.treeToValue(it, VoiceState::class.java))
+        } ?: Omissible.omitted()
+
+        return PlayerUpdate(
+            encodedTrack,
+            identifier,
+            position,
+            endTime,
+            volume,
+            paused,
+            filters,
+            voice
+        )
+    }
+
+}
