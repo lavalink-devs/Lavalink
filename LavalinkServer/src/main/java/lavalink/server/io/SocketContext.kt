@@ -159,7 +159,7 @@ class SocketContext(
         send(message.toString())
     }
 
-    override fun sendMessage(message: Any?) {
+    override fun sendMessage(message: Any) {
         send(objectMapper.writeValueAsString(message))
     }
 
