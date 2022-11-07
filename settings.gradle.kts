@@ -38,7 +38,7 @@ fun VersionCatalogBuilder.spring() {
 }
 
 fun VersionCatalogBuilder.voice() {
-    version("lavaplayer", "1.3.98.4")
+    version("lavaplayer", "1.3.99")
 
     //library("lavaplayer",            "com.github.walkyst.lavaplayer-fork", "lavaplayer").versionRef("lavaplayer")
     library("lavaplayer",            "com.github.Devoxin.lavaplayer", "lavaplayer").version("0c8b910")
