@@ -40,11 +40,11 @@ data class TrackInfo(
 )
 
 data class VoiceState(
-    val token: String,
-    val endpoint: String,
-    val sessionId: String,
-    val connected: Boolean,
-    val ping: Long
+    val token: String = "",
+    val endpoint: String = "",
+    val sessionId: String = "",
+    val connected: Boolean = false,
+    val ping: Long = -1
 )
 
 data class PlayerState(

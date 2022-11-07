@@ -65,16 +65,17 @@ class PlayerRestHandler(
         playerUpdate.voice.takeIfPresent {
             log.info("Received voice server update for guild {}", guildId)
             //discord sometimes send a partial server update missing the endpoint, which can be ignored.
-            if (it.endpoint.isNotEmpty()) {
-                //clear old connection
-                context.koe.destroyConnection(guildId)
-
-                val conn = context.getMediaConnection(player)
-                conn.connect(VoiceServerInfo(it.sessionId, it.endpoint, it.token)).exceptionally {
-                    throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to connect to voice server")
-                }.toCompletableFuture().join()
-                player.provideTo(conn)
+            if (it.endpoint.isEmpty() || it.token.isEmpty() || it.sessionId.isEmpty()) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Partial voice state update")
             }
+            //clear old connection
+            context.koe.destroyConnection(guildId)
+
+            val conn = context.getMediaConnection(player)
+            conn.connect(VoiceServerInfo(it.sessionId, it.endpoint, it.token)).exceptionally {
+                throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to connect to voice server")
+            }.toCompletableFuture().join()
+            player.provideTo(conn)
         }
 
         // we handle pause differently for playing new tracks

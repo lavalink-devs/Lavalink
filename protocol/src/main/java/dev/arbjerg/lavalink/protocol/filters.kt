@@ -6,26 +6,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.JsonNode
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class Filters(
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     var volume: Float? = null,
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     var equalizer: List<Band>? = null,
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val karaoke: Karaoke? = null,
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val timescale: Timescale? = null,
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val tremolo: Tremolo? = null,
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val vibrato: Vibrato? = null,
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val distortion: Distortion? = null,
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val rotation: Rotation? = null,
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val channelMix: ChannelMix? = null,
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val lowPass: LowPass? = null,
 
     @JsonAnyGetter
