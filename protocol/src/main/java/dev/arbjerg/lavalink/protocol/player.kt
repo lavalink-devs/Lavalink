@@ -70,7 +70,7 @@ class PlayerUpdateDeserializer : JsonDeserializer<PlayerUpdate>() {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PlayerUpdate {
         val node = p.codec.readTree<JsonNode>(p)
 
-        val encodedTrack = node.get("track")?.let {
+        val encodedTrack = node.get("encodedTrack")?.let {
             if (it.isNull) Omissible.of<String?>(null) else Omissible.of(it.asText())
         } ?: Omissible.omitted()
 
