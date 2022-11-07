@@ -190,14 +190,14 @@ A collection of stats sent every minute.
 
 ##### Stats Object
 
-| Field          | Type                                | Description                                                    |
-|----------------|-------------------------------------|----------------------------------------------------------------|
-| players        | int                                 | The amount of players connected to the node                    |
-| playingPlayers | int                                 | The amount of players playing a track                          |
-| uptime         | int                                 | The uptime of the node in milliseconds                         |
-| memory         | [Memory](#memory) object            | The memory stats of the node                                   |
-| cpu            | [CPU](#cpu) object                  | The cpu stats of the node                                      |
-| frameStats     | ?[Frame Stats](#frame-stats) object | The frame stats of the node. `null` if the node has no players |
+| Field          | Type                                | Description                                                                                      |
+|----------------|-------------------------------------|--------------------------------------------------------------------------------------------------|
+| players        | int                                 | The amount of players connected to the node                                                      |
+| playingPlayers | int                                 | The amount of players playing a track                                                            |
+| uptime         | int                                 | The uptime of the node in milliseconds                                                           |
+| memory         | [Memory](#memory) object            | The memory stats of the node                                                                     |
+| cpu            | [CPU](#cpu) object                  | The cpu stats of the node                                                                        |
+| frameStats     | ?[Frame Stats](#frame-stats) object | The frame stats of the node. `null` if the node has no players or when retrieved via `/v3/stats` |
 
 ##### Memory
 | Field      | Type | Description                              |
@@ -467,7 +467,7 @@ GET /v3/sessions/{sessionId}/players
 | volume  | int                                | The volume of the player, range 0-1000, in percentage |
 | paused  | bool                               | Whether the player is paused                          |
 | voice   | [Voice State](#voice-state) object | The voice state of the player                         |
-| filters | ?[Filters](#filters) object        | The filters used by the player                        |              
+| filters | [Filters](#filters) object         | The filters used by the player                        |              
 
 ##### Track
 | Field   | Type                             | Description                                                                          |
@@ -1248,7 +1248,32 @@ GET /v3/stats
 
 Response:
 
+`frameStats` is always `null` for this endpoint.
 [Stats Object](#stats-object)
+
+<details>
+<summary>Example Payload</summary>
+
+```json
+{
+  "players": 1,
+  "playingPlayers": 1,
+  "uptime": 123456789,
+  "memory": {
+    "free": 123456789,
+    "used": 123456789,
+    "allocated": 123456789,
+    "reservable": 123456789
+  },
+  "cpu": {
+    "cores": 4,
+    "systemLoad": 0.5,
+    "lavalinkLoad": 0.5
+  },
+  "frameStats": null
+}
+```
+</details>
 
 ---
 
