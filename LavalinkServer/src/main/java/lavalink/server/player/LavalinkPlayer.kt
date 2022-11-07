@@ -47,11 +47,10 @@ class LavalinkPlayer(
 ) : AudioEventAdapter(), IPlayer {
     val audioLossCounter = AudioLossCounter()
     var endMarkerHit = false
-    var filters: FilterChain? = null
+    var filters: FilterChain = FilterChain()
         set(value) {
-            val chain = value?.takeIf { it.isEnabled }
-            audioPlayer.setFilterFactory(chain)
-            field = chain
+            audioPlayer.setFilterFactory(value.takeIf { it.isEnabled })
+            field = value
         }
 
     private val audioPlayer: AudioPlayer = audioPlayerManager.createPlayer().also {

@@ -18,7 +18,7 @@ data class Player(
     val volume: Int,
     val paused: Boolean,
     val voice: VoiceState,
-    val filters: Filters?
+    val filters: Filters
 )
 
 data class Track(

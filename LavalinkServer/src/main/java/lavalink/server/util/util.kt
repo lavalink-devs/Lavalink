@@ -70,7 +70,7 @@ fun LavalinkPlayer.toPlayer(context: SocketContext): Player {
             connection?.isOpen ?: false,
             connection?.ping ?: -1
         ),
-        filters?.toFilters()
+        filters.toFilters(),
     )
 }
 
