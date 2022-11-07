@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 
@@ -24,6 +26,24 @@ class MessageDeserializer : StdDeserializer<Message>(Message::class.java) {
     }
 }
 
+class EventDeserializer : StdDeserializer<Message.Event>(Message.Event::class.java) {
+    override fun deserialize(jp: JsonParser, ctxt: DeserializationContext): Message.Event {
+        val node: JsonNode = jp.codec.readTree(jp)
+        if (!node.has("type")) {
+            throw IllegalArgumentException("Message is missing type field")
+        }
+
+        return when (Message.EventType.valueOfIgnoreCase(node.get("type").asText())) {
+            Message.EventType.TrackStart -> jp.codec.treeToValue(node, Message.TrackStartEvent::class.java)
+            Message.EventType.TrackEnd -> jp.codec.treeToValue(node, Message.TrackEndEvent::class.java)
+            Message.EventType.TrackException -> jp.codec.treeToValue(node, Message.TrackExceptionEvent::class.java)
+            Message.EventType.TrackStuck -> jp.codec.treeToValue(node, Message.TrackStuckEvent::class.java)
+            Message.EventType.WebSocketClosed -> jp.codec.treeToValue(node, Message.WebSocketClosedEvent::class.java)
+        }
+    }
+}
+
+@JsonDeserialize(using = MessageDeserializer::class)
 sealed class Message(var op: Op) {
 
     enum class Op(@JsonValue val value: String) {
@@ -53,23 +73,7 @@ sealed class Message(var op: Op) {
         }
     }
 
-    class EventDeserializer : StdDeserializer<Event>(Event::class.java) {
-        override fun deserialize(jp: JsonParser, ctxt: DeserializationContext): Event {
-            val node: JsonNode = jp.codec.readTree(jp)
-            if (!node.has("type")) {
-                throw IllegalArgumentException("Message is missing type field")
-            }
-
-            return when (EventType.valueOfIgnoreCase(node.get("type").asText())) {
-                EventType.TrackStart -> jp.codec.treeToValue(node, TrackStartEvent::class.java)
-                EventType.TrackEnd -> jp.codec.treeToValue(node, TrackEndEvent::class.java)
-                EventType.TrackException -> jp.codec.treeToValue(node, TrackExceptionEvent::class.java)
-                EventType.TrackStuck -> jp.codec.treeToValue(node, TrackStuckEvent::class.java)
-                EventType.WebSocketClosed -> jp.codec.treeToValue(node, WebSocketClosedEvent::class.java)
-            }
-        }
-    }
-
+    @JsonDeserialize(using = EventDeserializer::class)
     sealed class Event(
         val type: EventType,
         open val guildId: String

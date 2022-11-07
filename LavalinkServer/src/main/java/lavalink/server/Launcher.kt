@@ -22,9 +22,7 @@
 
 package lavalink.server
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary
-import dev.arbjerg.lavalink.protocol.newObjectMapper
 import lavalink.server.bootstrap.PluginManager
 import lavalink.server.info.AppInfo
 import lavalink.server.info.GitRepoState
@@ -39,10 +37,7 @@ import org.springframework.boot.context.event.ApplicationFailedEvent
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
 import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.FilterType
-import org.springframework.context.annotation.Primary
+import org.springframework.context.annotation.*
 import org.springframework.core.io.DefaultResourceLoader
 import java.time.Instant
 import java.time.ZoneId
@@ -161,10 +156,4 @@ object Launcher {
             ).parent(parent)
             .run(*args)
     }
-}
-
-@Bean
-@Primary
-fun objectMapper(): ObjectMapper {
-    return newObjectMapper()
 }

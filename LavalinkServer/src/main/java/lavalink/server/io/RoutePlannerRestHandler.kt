@@ -39,7 +39,10 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
      * Removes a single address from the addresses which are currently marked as failing
      */
     @PostMapping(value = ["/routeplanner/free/address", "/v3/routeplanner/free/address"])
-    fun freeSingleAddress(request: HttpServletRequest, @RequestBody body: RoutePlannerFreeAddress): ResponseEntity<Unit> {
+    fun freeSingleAddress(
+        request: HttpServletRequest,
+        @RequestBody body: RoutePlannerFreeAddress
+    ): ResponseEntity<Unit> {
         routePlanner ?: throw RoutePlannerDisabledException()
         try {
             val address = InetAddress.getByName(body.address)
@@ -98,6 +101,7 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
         }
     }
 
-    class RoutePlannerDisabledException : ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Can't access disabled route planner")
+    class RoutePlannerDisabledException :
+        ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Can't access disabled route planner")
 
 }

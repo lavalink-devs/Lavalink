@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     java
     `java-library`
@@ -21,7 +19,6 @@ java {
 
 dependencies {
     compileOnly(libs.lavaplayer)
-    implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.jackson.module.kotlin)
 }

@@ -17,12 +17,11 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import java.util.concurrent.CompletableFuture
-import javax.servlet.http.HttpServletRequest
-import kotlin.jvm.optionals.getOrNull
 
 @RestController
 class PlayerRestHandler(
-    private val socketServer: SocketServer, private val filterExtensions: List<AudioFilterExtension>
+    private val socketServer: SocketServer,
+    private val filterExtensions: List<AudioFilterExtension>,
 ) {
 
     companion object {
@@ -30,30 +29,20 @@ class PlayerRestHandler(
     }
 
     @GetMapping(value = ["/v3/sessions/{sessionId}/players"], produces = ["application/json"])
-    private fun getPlayers(
-        request: HttpServletRequest,
-        @PathVariable sessionId: String,
-    ): ResponseEntity<Players> {
-        logRequest(log, request)
+    private fun getPlayers(@PathVariable sessionId: String): ResponseEntity<Players> {
         val context = socketContext(socketServer, sessionId)
 
         return ResponseEntity.ok(Players(context.players.values.map { it.toPlayer(context) }))
     }
 
     @GetMapping(value = ["/v3/sessions/{sessionId}/players/{guildId}"], produces = ["application/json"])
-    private fun getPlayer(
-        request: HttpServletRequest,
-        @PathVariable sessionId: String,
-        @PathVariable guildId: Long
-    ): ResponseEntity<Player> {
-        logRequest(log, request)
+    private fun getPlayer(@PathVariable sessionId: String, @PathVariable guildId: Long): ResponseEntity<Player> {
         val context = socketContext(socketServer, sessionId)
         val player = existingPlayer(context, guildId)
 
         return ResponseEntity.ok(player.toPlayer(context))
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     @PatchMapping(
         value = ["/v3/sessions/{sessionId}/players/{guildId}"],
         consumes = ["application/json"],
@@ -61,22 +50,21 @@ class PlayerRestHandler(
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private fun patchPlayer(
-        request: HttpServletRequest,
         @RequestBody playerUpdate: PlayerUpdate,
         @PathVariable sessionId: String,
         @PathVariable guildId: Long,
         @RequestParam noReplace: Boolean = false
     ): ResponseEntity<Player> {
-        logRequest(log, request)
+        val hasEncodedTrack = playerUpdate.encodedTrack == null || playerUpdate.encodedTrack!!.isPresent
 
-        if (playerUpdate.encodedTrack.isPresent && playerUpdate.identifier.isPresent) {
+        if (hasEncodedTrack && playerUpdate.identifier.isPresent) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot specify both encodedTrack and identifier")
         }
 
         val context = socketContext(socketServer, sessionId)
         val player = context.getPlayer(guildId)
 
-        playerUpdate.voice.getOrNull()?.let {
+        playerUpdate.voice.takeIfPresent {
             log.info("Received voice server update for guild {}", guildId)
             //discord sometimes send a partial server update missing the endpoint, which can be ignored.
             if (it.endpoint.isNotEmpty()) {
@@ -92,7 +80,7 @@ class PlayerRestHandler(
         }
 
         // we handle pause differently for playing new tracks
-        playerUpdate.paused.takeIf { it.isPresent && !playerUpdate.encodedTrack.isPresent && !playerUpdate.identifier.isPresent }
+        playerUpdate.paused.takeIf { it.isPresent && hasEncodedTrack && !playerUpdate.identifier.isPresent }
             ?.let {
                 log.info("Received pause request for guild {}", guildId)
                 player.setPause(it.value)
@@ -104,20 +92,20 @@ class PlayerRestHandler(
         }
 
         // we handle position differently for playing new tracks
-        playerUpdate.position.takeIf { it.isPresent && !playerUpdate.encodedTrack.isPresent && !playerUpdate.identifier.isPresent }
+        playerUpdate.position.takeIf { it.isPresent && hasEncodedTrack && !playerUpdate.identifier.isPresent }
             ?.let {
                 log.info("Received seek request for guild {}", guildId)
                 player.seekTo(it.value)
                 SocketServer.sendPlayerUpdate(context, player)
             }
 
-        playerUpdate.filters.getOrNull()?.let {
+        playerUpdate.filters.takeIfPresent {
             log.info("Received filter request for guild {}", guildId)
             player.filters = FilterChain.parse(it, filterExtensions)
             SocketServer.sendPlayerUpdate(context, player)
         }
 
-        if (playerUpdate.encodedTrack.isPresent || playerUpdate.identifier.isPresent) {
+        if (hasEncodedTrack || playerUpdate.identifier.isPresent) {
             log.info("Received encodedTrack or identifier request for guild {}", guildId)
 
             if (noReplace && player.track != null) {
@@ -126,9 +114,9 @@ class PlayerRestHandler(
             }
             player.setPause(if (playerUpdate.paused.isPresent) playerUpdate.paused.value else false)
 
-            val track: AudioTrack? = if (playerUpdate.encodedTrack.isPresent) {
-                playerUpdate.encodedTrack.value?.let { encodedTrack ->
-                    decodeTrack(context.audioPlayerManager, encodedTrack)
+            val track: AudioTrack? = if (hasEncodedTrack) {
+                playerUpdate.encodedTrack?.value.let { encodedTrack ->
+                    decodeTrack(context.audioPlayerManager, encodedTrack!!)
                 }
             } else {
                 val trackFuture = CompletableFuture<AudioTrack>()
@@ -145,7 +133,7 @@ class PlayerRestHandler(
                         trackFuture.completeExceptionally(IllegalArgumentException("No track found for identifier ${playerUpdate.identifier.value}"))
                     }
 
-                    override fun loadFailed(exception: FriendlyException?) {
+                    override fun loadFailed(exception: FriendlyException) {
                         trackFuture.completeExceptionally(exception)
                     }
                 })
@@ -176,11 +164,7 @@ class PlayerRestHandler(
 
     @DeleteMapping("/v3/sessions/{sessionId}/players/{guildId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    private fun deletePlayer(
-        request: HttpServletRequest,
-        @PathVariable sessionId: String, @PathVariable guildId: Long
-    ) {
-        logRequest(log, request)
+    private fun deletePlayer(@PathVariable sessionId: String, @PathVariable guildId: Long) {
         socketContext(socketServer, sessionId).destroyPlayer(guildId)
     }
 }

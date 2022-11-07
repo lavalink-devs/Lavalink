@@ -25,11 +25,11 @@ class InfoRestHandler(
         System.getProperty("java.version"),
         PlayerLibrary.VERSION,
         audioPlayerManager.sourceManagers.map { it.sourceName },
-        pluginManager.pluginManifests.map {
+        Plugins(pluginManager.pluginManifests.map {
             Plugin(it.name, it.version)
-        },
+        }),
     )
-    private val version = appInfo.versionBuild!!
+    private val version = appInfo.versionBuild
 
     @GetMapping("/v3/info")
     fun info() = info

@@ -8,7 +8,6 @@ import org.apache.commons.codec.binary.Base64
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 
-
 fun decodeTrack(audioPlayerManager: AudioPlayerManager, message: String): AudioTrack {
     val bais = ByteArrayInputStream(Base64.decodeBase64(message))
     return audioPlayerManager.decodeTrack(MessageInput(bais)).decodedTrack

@@ -31,7 +31,7 @@ class SentryConfiguration(serverConfig: ServerConfig, sentryConfig: SentryConfig
             if (warnDeprecatedDsnConfig) {
                 log.warn(
                     "Please update the location of the sentry dsn in lavalinks config file / your environment "
-                        + "vars, it is now located under 'sentry.dsn' instead of 'lavalink.server.sentryDsn'."
+                            + "vars, it is now located under 'sentry.dsn' instead of 'lavalink.server.sentryDsn'."
                 )
             }
         } else {

@@ -22,13 +22,14 @@
 
 package lavalink.server.io
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.api.PluginEventHandler
 import dev.arbjerg.lavalink.api.WebSocketExtension
 import dev.arbjerg.lavalink.protocol.Message
 import dev.arbjerg.lavalink.protocol.PlayerState
-import dev.arbjerg.lavalink.protocol.newObjectMapper
+import dev.arbjerg.lavalink.protocol.objectMapper
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.LavalinkPlayer
 import lavalink.server.util.StatsCollector
@@ -50,13 +51,13 @@ class SocketServer(
     koeOptions: KoeOptions,
     private val eventHandlers: List<PluginEventHandler>,
     private val webSocketExtensions: List<WebSocketExtension>,
-    private val filterExtensions: List<AudioFilterExtension>
+    private val filterExtensions: List<AudioFilterExtension>,
+    private val objectMapper: ObjectMapper
 ) : TextWebSocketHandler() {
 
     // sessionID <-> Session
     val contextMap = ConcurrentHashMap<String, SocketContext>()
     private val resumableSessions = mutableMapOf<String, SocketContext>()
-    private val objectMapper = newObjectMapper()
     private val koe = Koe.koe(koeOptions)
     private val statsCollector = StatsCollector(this)
     private val charPool: List<Char> = ('a'..'z') + ('0'..'9')

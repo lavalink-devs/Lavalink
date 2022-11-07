@@ -27,10 +27,8 @@ import dev.arbjerg.lavalink.protocol.*
 import lavalink.server.io.SocketContext
 import lavalink.server.io.SocketServer
 import lavalink.server.player.LavalinkPlayer
-import org.slf4j.Logger
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
-import javax.servlet.http.HttpServletRequest
 
 
 fun AudioTrack.toTrack(audioPlayerManager: AudioPlayerManager): Track {
@@ -89,7 +87,3 @@ fun socketContext(socketServer: SocketServer, sessionId: String) =
 
 fun existingPlayer(socketContext: SocketContext, guildId: Long) =
     socketContext.players[guildId] ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found")
-
-fun logRequest(log: Logger, request: HttpServletRequest) {
-    log.info("${request.method} ${request.servletPath}?${request.parameterMap.entries.joinToString("&") { "${it.key}=${it.value[0]}" }}")
-}

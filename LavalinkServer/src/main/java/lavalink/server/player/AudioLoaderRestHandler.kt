@@ -28,7 +28,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.protocol.Track
 import dev.arbjerg.lavalink.protocol.decodeTrack
-import lavalink.server.util.logRequest
 import lavalink.server.util.toTrack
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -55,28 +54,23 @@ class AudioLoaderRestHandler(
     ): CompletionStage<ResponseEntity<JsonNode>> {
         log.info("Got request to load for identifier \"{}\"", identifier)
         return AudioLoader(audioPlayerManager).load(identifier).thenApply {
-            val tree: ObjectNode = objectMapper.valueToTree(it)
+            val node: ObjectNode = objectMapper.valueToTree(it)
             if (request.servletPath.startsWith("/loadtracks")) {
-                if (tree.get("playlistInfo").isNull) {
-                    tree.replace("playlistInfo", JsonNodeFactory.instance.objectNode())
+                if (node.get("playlistInfo").isNull) {
+                    node.replace("playlistInfo", JsonNodeFactory.instance.objectNode())
                 }
 
-                if (tree.get("exception").isNull) {
-                    tree.remove("exception")
+                if (node.get("exception").isNull) {
+                    node.remove("exception")
                 }
             }
 
-            return@thenApply ResponseEntity.ok(tree)
+            return@thenApply ResponseEntity.ok(node)
         }
     }
 
     @GetMapping(value = ["/decodetrack", "/v3/decodetrack"], produces = ["application/json"])
-    fun getDecodeTrack(
-        request: HttpServletRequest,
-        @RequestParam encodedTrack: String?,
-        @RequestParam track: String?
-    ): ResponseEntity<Track> {
-        logRequest(log, request)
+    fun getDecodeTrack(@RequestParam encodedTrack: String?, @RequestParam track: String?): ResponseEntity<Track> {
         val trackToDecode = encodedTrack ?: track ?: throw ResponseStatusException(
             HttpStatus.BAD_REQUEST,
             "No track to decode provided"
@@ -89,11 +83,7 @@ class AudioLoaderRestHandler(
         consumes = ["application/json"],
         produces = ["application/json"]
     )
-    fun decodeTracks(
-        request: HttpServletRequest,
-        @RequestBody encodedTracks: List<String>
-    ): ResponseEntity<List<Track>> {
-        logRequest(log, request)
+    fun decodeTracks(@RequestBody encodedTracks: List<String>): ResponseEntity<List<Track>> {
         return ResponseEntity.ok(encodedTracks.map {
             decodeTrack(audioPlayerManager, it).toTrack(it)
         })

@@ -161,6 +161,7 @@ class LowPassConfig(
 
 interface FilterConfig {
     fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter
+
     @get:JsonIgnore
     val isEnabled: Boolean
 }
