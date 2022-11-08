@@ -3,8 +3,11 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 3.6.2
+* update lavaplayer to `1.3.99.1`. For more info see [here](https://github.com/freyacodes/Lavalink/pull/773)
+
 ## 3.6.1
-* update lavaplayer to `1.3.99`. For me info see [here](https://github.com/freyacodes/Lavalink/pull/768)
+* update lavaplayer to `1.3.99`. For more info see [here](https://github.com/freyacodes/Lavalink/pull/768)
 
 ## 3.6.0
 * new userId & clientName getters in the plugin-api. For more info see [here](https://github.com/freyacodes/Lavalink/pull/743).
