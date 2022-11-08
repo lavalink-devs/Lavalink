@@ -35,7 +35,9 @@ configurations {
 
 dependencies {
     implementation(projects.protocol)
-    implementation(projects.pluginApi)
+    implementation(projects.pluginApi) {
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
+    }
 
     implementation(libs.bundles.metrics)
     implementation(libs.bundles.spring) {
