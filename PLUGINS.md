@@ -72,14 +72,13 @@ class MyMediaContainerProbe implements MediaContainerProbe {
 } 
 ```
 
-To intercept and modify existing REST endpoints, you can implement the `HandlerInterceptor` interface:
+To intercept and modify existing REST endpoints, you can implement the `RestInterceptor` interface:
 
 ```java
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.HandlerInterceptor;
 
 @Service
-class TestRequestInterceptor implements HandlerInterceptor {
+class TestRequestInterceptor implements RestInterceptor {
     // ...
 }
 ```
