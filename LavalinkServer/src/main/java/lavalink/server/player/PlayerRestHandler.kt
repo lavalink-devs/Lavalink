@@ -24,10 +24,6 @@ class PlayerRestHandler(
     private val filterExtensions: List<AudioFilterExtension>,
 ) {
 
-    companion object {
-        private val log = LoggerFactory.getLogger(PlayerRestHandler::class.java)
-    }
-
     @GetMapping(value = ["/v3/sessions/{sessionId}/players"], produces = ["application/json"])
     private fun getPlayers(@PathVariable sessionId: String): ResponseEntity<Players> {
         val context = socketContext(socketServer, sessionId)
@@ -63,7 +59,6 @@ class PlayerRestHandler(
         val player = context.getPlayer(guildId)
 
         playerUpdate.voice.takeIfPresent {
-            log.info("Received voice server update for guild {}", guildId)
             //discord sometimes send a partial server update missing the endpoint, which can be ignored.
             if (it.endpoint.isEmpty() || it.token.isEmpty() || it.sessionId.isEmpty()) {
                 throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Partial voice state update")
@@ -81,34 +76,28 @@ class PlayerRestHandler(
         // we handle pause differently for playing new tracks
         playerUpdate.paused.takeIf { it.isPresent && !playerUpdate.encodedTrack.isPresent && !playerUpdate.identifier.isPresent }
             ?.let {
-                log.info("Received pause request for guild {}", guildId)
                 player.setPause(it.value)
             }
 
         playerUpdate.volume.takeIfPresent {
-            log.info("Received volume request for guild {}", guildId)
             player.setVolume(it)
         }
 
         // we handle position differently for playing new tracks
         playerUpdate.position.takeIf { it.isPresent && !playerUpdate.encodedTrack.isPresent && !playerUpdate.identifier.isPresent }
             ?.let {
-                log.info("Received seek request for guild {}", guildId)
                 player.seekTo(it.value)
                 SocketServer.sendPlayerUpdate(context, player)
             }
 
         playerUpdate.filters.takeIfPresent {
-            log.info("Received filter request for guild {}", guildId)
             player.filters = FilterChain.parse(it, filterExtensions)
             SocketServer.sendPlayerUpdate(context, player)
         }
 
         if (playerUpdate.encodedTrack.isPresent || playerUpdate.identifier.isPresent) {
-            log.info("Received encodedTrack or identifier request for guild {}", guildId)
 
             if (noReplace && player.track != null) {
-                log.info("Skipping play request because of noReplace")
                 return ResponseEntity.ok(player.toPlayer(context))
             }
             player.setPause(if (playerUpdate.paused.isPresent) playerUpdate.paused.value else false)
