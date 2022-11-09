@@ -46,11 +46,7 @@ class EventEmitter(
     override fun onTrackStart(player: AudioPlayer, track: AudioTrack) {
         val encodedTrack = encodeTrack(audioPlayerManager, track)
         this.player.socket.sendMessage(
-            Message.TrackStartEvent(
-                encodedTrack,
-                encodedTrack,
-                this.player.guildId.toString()
-            )
+            Message.TrackStartEvent(encodedTrack, encodedTrack, this.player.guildId.toString())
         )
     }
 
@@ -64,12 +60,7 @@ class EventEmitter(
 
         val encodedTrack = encodeTrack(audioPlayerManager, track)
         this.player.socket.sendMessage(
-            Message.TrackEndEvent(
-                encodedTrack,
-                encodedTrack,
-                reason,
-                this.player.guildId.toString()
-            )
+            Message.TrackEndEvent(encodedTrack, encodedTrack, reason, this.player.guildId.toString())
         )
     }
 
@@ -80,11 +71,7 @@ class EventEmitter(
             Message.TrackExceptionEvent(
                 encodedTrack,
                 encodedTrack,
-                Exception(
-                    exception.message,
-                    exception.severity,
-                    getRootCause(exception).toString()
-                ),
+                Exception(exception.message, exception.severity, getRootCause(exception).toString()),
                 this.player.guildId.toString()
             )
         )
@@ -94,12 +81,7 @@ class EventEmitter(
         log.warn(track.info.title + " got stuck! Threshold surpassed: " + thresholdMs)
         val encodedTrack = encodeTrack(audioPlayerManager, track)
         this.player.socket.sendMessage(
-            Message.TrackStuckEvent(
-                encodedTrack,
-                encodedTrack,
-                thresholdMs,
-                this.player.guildId.toString()
-            )
+            Message.TrackStuckEvent(encodedTrack, encodedTrack, thresholdMs, this.player.guildId.toString())
         )
         sendPlayerUpdate(this.player.socket, this.player)
     }

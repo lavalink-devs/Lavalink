@@ -84,6 +84,9 @@ class AudioLoaderRestHandler(
         produces = ["application/json"]
     )
     fun decodeTracks(@RequestBody encodedTracks: List<String>): ResponseEntity<List<Track>> {
+        if (encodedTracks.isEmpty()) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "No tracks to decode provided")
+        }
         return ResponseEntity.ok(encodedTracks.map {
             decodeTrack(audioPlayerManager, it).toTrack(it)
         })
