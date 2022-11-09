@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class SessionRestHandler(
-    private val socketServer: SocketServer,
-) {
+class SessionRestHandler(private val socketServer: SocketServer) {
 
     @PatchMapping("/v3/sessions/{sessionId}", consumes = ["application/json"])
     private fun patchSession(

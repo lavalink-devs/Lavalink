@@ -2,6 +2,7 @@ package lavalink.server.config
 
 import dev.arbjerg.lavalink.api.RestInterceptor
 import dev.arbjerg.lavalink.protocol.objectMapper
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.HttpMessageConverter
 import org.springframework.http.converter.StringHttpMessageConverter
@@ -22,6 +23,13 @@ class WebConfiguration(private val interceptors: List<RestInterceptor>) : WebMvc
         builder.configure(objectMapper())
         converters.add(StringHttpMessageConverter())
         converters.add(MappingJackson2HttpMessageConverter(builder.build()))
+    }
+
+    @Bean
+    fun jackson2ObjectMapperBuilder(): Jackson2ObjectMapperBuilder {
+        val builder = Jackson2ObjectMapperBuilder()
+        builder.configure(objectMapper())
+        return builder
     }
 
     override fun addInterceptors(registry: InterceptorRegistry) {

@@ -36,17 +36,18 @@ constructor(private val serverConfig: ServerConfig, private val socketServer: So
             return false
         }
 
-        log.info("Incoming connection from " + request.remoteAddress)
-
-        val resumeKey = request.headers.getFirst("Resume-Key")
-        val resuming = resumeKey != null && socketServer.canResume(resumeKey)
-        response.headers.add("Session-Resumed", resuming.toString())
-
         if (request.headers.getFirst("User-Id") == null) {
             log.error("Missing User-Id header from " + request.remoteAddress)
             response.setStatusCode(HttpStatus.BAD_REQUEST)
             return false
         }
+
+        log.info("Incoming connection from " + request.remoteAddress)
+
+        val resumeKey = request.headers.getFirst("Resume-Key")
+        val resuming = resumeKey != null && socketServer.canResume(resumeKey)
+        response.headers.add("Session-Resumed", resuming.toString())
+        response.headers.add("Lavalink-Api-Version", "3")
 
         return true
     }
