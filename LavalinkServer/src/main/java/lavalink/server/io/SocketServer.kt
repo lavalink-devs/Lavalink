@@ -41,7 +41,6 @@ import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.random.Random
 
 @Service
 class SocketServer(
@@ -85,7 +84,7 @@ class SocketServer(
     private fun generateUniqueSessionId(): String {
         var sessionId: String
         do {
-            sessionId = List(16) { charPool[Random.nextInt(0, charPool.size)] }.joinToString("")
+            sessionId = List(16) { charPool.random() }.joinToString("")
         } while (contextMap[sessionId] != null)
         return sessionId
     }
