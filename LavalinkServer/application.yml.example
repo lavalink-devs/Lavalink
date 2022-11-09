@@ -58,6 +58,15 @@ logging:
     root: INFO
     lavalink: INFO
 
+  request:
+    enabled: true
+    includeClientInfo: true
+    includeHeaders: false
+    includeQueryString: true
+    includePayload: true
+    maxPayloadLength: 10000
+
+
   logback:
     rollingpolicy:
       max-file-size: 1GB
