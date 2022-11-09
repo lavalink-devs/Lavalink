@@ -20,6 +20,7 @@ class RequestLoggingFilter(
         isIncludePayload = requestLoggingConfig.includePayload
         maxPayloadLength = requestLoggingConfig.maxPayloadLength
         setAfterMessagePrefix("")
+        setAfterMessageSuffix("")
     }
 
     override fun beforeRequest(request: HttpServletRequest, message: String) {}
