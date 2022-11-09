@@ -145,12 +145,18 @@ object Launcher {
             .resourceLoader(DefaultResourceLoader(pluginManager.classLoader))
             .listeners(
                 ApplicationListener { event: Any ->
-                    if (event is ApplicationEnvironmentPreparedEvent) {
-                        log.info(getVersionInfo())
-                    } else if (event is ApplicationReadyEvent) {
-                        log.info("Lavalink is ready to accept connections.")
-                    } else if (event is ApplicationFailedEvent) {
-                        log.error("Application failed", event.exception)
+                    when (event) {
+                        is ApplicationEnvironmentPreparedEvent -> {
+                            log.info(getVersionInfo())
+                        }
+
+                        is ApplicationReadyEvent -> {
+                            log.info("Lavalink is ready to accept connections.")
+                        }
+
+                        is ApplicationFailedEvent -> {
+                            log.error("Application failed", event.exception)
+                        }
                     }
                 }
             ).parent(parent)
