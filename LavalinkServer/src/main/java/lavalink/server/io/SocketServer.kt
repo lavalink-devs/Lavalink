@@ -59,7 +59,7 @@ class SocketServer(
     private val resumableSessions = mutableMapOf<String, SocketContext>()
     private val koe = Koe.koe(koeOptions)
     private val statsCollector = StatsCollector(this)
-    private val charPool: List<Char> = ('a'..'z') + ('0'..'9')
+    private val charPool = ('a'..'z') + ('0'..'9')
 
     companion object {
         private val log = LoggerFactory.getLogger(SocketServer::class.java)
@@ -82,13 +82,10 @@ class SocketServer(
         }
     }
 
-    private fun generateSessionId(): String {
+    private fun generateUniqueSessionId(): String {
         var sessionId: String
         do {
-            sessionId = (1..16)
-                .map { Random.nextInt(0, charPool.size) }
-                .map(charPool::get)
-                .joinToString("")
+            sessionId = List(16) { charPool[Random.nextInt(0, charPool.size)] }.joinToString("")
         } while (contextMap[sessionId] != null)
         return sessionId
     }
@@ -115,7 +112,7 @@ class SocketServer(
             return
         }
 
-        val sessionId = generateSessionId()
+        val sessionId = generateUniqueSessionId()
         session.attributes["sessionId"] = sessionId
 
         val socketContext = SocketContext(

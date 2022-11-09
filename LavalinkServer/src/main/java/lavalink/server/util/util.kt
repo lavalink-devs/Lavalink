@@ -30,7 +30,6 @@ import lavalink.server.player.LavalinkPlayer
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 
-
 fun AudioTrack.toTrack(audioPlayerManager: AudioPlayerManager): Track {
     val encoded = encodeTrack(audioPlayerManager, this)
     return Track(encoded, encoded, this.toInfo())
