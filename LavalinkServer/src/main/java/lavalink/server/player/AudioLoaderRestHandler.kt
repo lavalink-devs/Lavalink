@@ -55,7 +55,7 @@ class AudioLoaderRestHandler(
         log.info("Got request to load for identifier \"{}\"", identifier)
         return AudioLoader(audioPlayerManager).load(identifier).thenApply {
             val node: ObjectNode = objectMapper.valueToTree(it)
-            if (request.servletPath.startsWith("/loadtracks")) {
+            if (request.servletPath.startsWith("/loadtracks") || request.servletPath.startsWith("/v3/loadtracks")) {
                 if (node.get("playlistInfo").isNull) {
                     node.replace("playlistInfo", JsonNodeFactory.instance.objectNode())
                 }
