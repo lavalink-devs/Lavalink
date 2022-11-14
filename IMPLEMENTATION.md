@@ -117,13 +117,26 @@ You can establish a WebSocket connection against the path `/v3/websocket`
 
 When opening a websocket connection, you must supply 3 required headers:
 
+| Header Name     | Description                                     |
+|-----------------|-------------------------------------------------|
+| `Authorization` | The password you set in your Lavalink config.   |
+| `User-Id`       | The user id of the bot.                         |
+| `Client-Name`   | The name of the client in `NAME/VERSION` format |
+| `Resume-Key`?*  | The configured key to resume a session          |
+
+**\*For more information on resuming see [Resuming](#resuming-lavalink-sessions)**
+
+<details>
+<summary>Example Headers</summary>
+
 ```
-Authorization: Password matching the server config
-User-Id: The user id of the bot you are playing music with
-Client-Name: The name of your client. Optionally in the format NAME/VERSION
+Authorization: youshallnotpass
+User-Id: 170939974227541168
+Client-Name: lavalink-client/2.0.0
 ```
 
-Optionally you can supply the `Resume-Key` header. For more information on resuming see [Resuming](#resuming-lavalink-sessions)
+</details>
+
 
 ### Websocket Messages
 
