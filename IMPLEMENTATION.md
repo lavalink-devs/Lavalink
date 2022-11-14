@@ -161,7 +161,7 @@ Dispatched by Lavalink upon successful connection and authorization. Contains fi
 
 | Field     | Type   | Description                                                                                    |
 |-----------|--------|------------------------------------------------------------------------------------------------|
-| resumed?  | bool   | If the session is resumed. (Only present if a session id was present when connecting)          |
+| resumed   | bool   | If a session was resumed                                                                       |
 | sessionId | string | The Lavalink session ID of this connection. Not to be confused with a Discord voice session id |
 
 <details>
