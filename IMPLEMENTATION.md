@@ -478,7 +478,7 @@ Emitted when a track gets stuck while playing.
 
 ##### WebSocketClosedEvent
 
-Emitted when an audio web socket (to Discord) is closed.
+Emitted when an audio WebSocket (to Discord) is closed.
 This can happen for various reasons (normal and abnormal), e.g. when using an expired voice server update.
 4xxx codes are usually bad.
 See the [Discord Docs](https://discordapp.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes).
@@ -1051,9 +1051,9 @@ Response:
 
 ##### Track Loading Result
 
-| Field        | Type                                   | Description                                               | Valid Types                                        |
+| Field        | Type                                   | Description                                               | Required Load Type                                    |
 |--------------|----------------------------------------|-----------------------------------------------------------|----------------------------------------------------|
-| loadType     | [LoadResultType](#load-result-type)    | The type of the result                                    | all                                                |
+| loadType     | [LoadResultType](#load-result-type)    | The type of the result                                    |                                                    |
 | playlistInfo | [Playlist Info](#playlist-info) object | Additional info if the the load type is `PLAYLIST_LOADED` | `PLAYLIST_LOADED`                                  |
 | tracks       | array of [Tracks](#track)              | All tracks which have been loaded                         | `TRACK_LOADED`, `PLAYLIST_LOADED`, `SEARCH_RESULT` |
 | exception?   | [Exception](#exception-object) object  | The [Exception](#exception-object) this load failed with  | `LOAD_FAILED`                                      |
@@ -1171,7 +1171,7 @@ Response:
 
 Lavalink supports searching via YouTube, YouTube Music, and Soundcloud. To search, you must prefix your identifier with `ytsearch:`, `ytmsearch:`, or `scsearch:`respectively.
 
-When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. Note that, disabling the respective source managers renders these search prefixes redundant. Plugins may also implement prefixes to allow for more search engines.
+When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. Note that, disabling the respective source managers renders these search prefixes useless. Plugins may also implement prefixes to allow for more search engines.
 
 ---
 
@@ -1292,7 +1292,7 @@ Response:
 
 | Field      | Type    | Description                                                                        |
 |------------|---------|------------------------------------------------------------------------------------|
-| semver     | string  | The full version of this Lavalink server                                           |
+| semver     | string  | The full version string of this Lavalink server                                    |
 | major      | int32   | The major version of this Lavalink server                                          |
 | minor      | int32   | The minor version of this Lavalink server                                          |
 | patch      | int32   | The patch version of this Lavalink server                                          |
@@ -1854,7 +1854,7 @@ and you can send the same VOICE_SERVER_UPDATE to a new node.
 
 Admittedly Lavalink isn't inherently the most intuitive thing ever, and people tend to run into the same mistakes over again. Please double-check the following if you run into problems developing your client, and you can't connect to a voice channel or play audio:
 
-1. Check that you are intercepting **VOICE_SERVER_UPDATE** and **VOICE_STATE_UPDATES**s to **Lavalink**. You only need the `endpoint`, `token` and `session_id`.
+1. Check that you are intercepting **VOICE_SERVER_UPDATE**s and **VOICE_STATE_UPDATE**s to **Lavalink**. You only need the `endpoint`, `token`, and `session_id`.
 2. Check that you aren't expecting to hear audio when you have forgotten to queue something up OR forgotten to join a voice channel.
 3. Check that you are not trying to create a voice connection with your Discord library.
 4. When in doubt, check the debug logfile at `/logs/debug.log`.
