@@ -100,17 +100,6 @@ the JDA client takes advantage of JDA's websocket write thread to send OP 4s for
 
 Fields marked with `?` are optional and types marked with `?` are nullable.
 
-#### Data Types
-
-| Type      | Description                         |
-|-----------|-------------------------------------|
-| `string`  | A string of UTF-8 characters        |
-| `int32`   | A 32-bit signed integer             |
-| `int64`   | A 64-bit signed integer             |
-| `float32` | A 32-bit floating point             |
-| `float64` | A 64-bit floating point             |
-| `bool`    | A boolean value (`true` or `false`) |
-
 ### Opening a connection
 
 You can establish a WebSocket connection against the path `/v3/websocket`
@@ -136,7 +125,6 @@ Client-Name: lavalink-client/2.0.0
 ```
 
 </details>
-
 
 ### Websocket Messages
 
@@ -203,12 +191,12 @@ Dispatched every x (configurable in `application.yml`) seconds with the current 
 
 ##### Player State
 
-| Field     | Type  | Description                                                                            |
-|-----------|-------|----------------------------------------------------------------------------------------|
-| time      | int64 | Unix timestamp in milliseconds                                                         |
-| position? | int64 | The position of the track in milliseconds                                              |
-| connected | bool  | If Lavalink is connected to the voice gateway                                          |
-| ping      | int64 | The ping of the node to the Discord voice server in milliseconds (-1 if not connected) |
+| Field     | Type | Description                                                                            |
+|-----------|------|----------------------------------------------------------------------------------------|
+| time      | int  | Unix timestamp in milliseconds                                                         |
+| position? | int  | The position of the track in milliseconds                                              |
+| connected | bool | If Lavalink is connected to the voice gateway                                          |
+| ping      | int  | The ping of the node to the Discord voice server in milliseconds (-1 if not connected) |
 
 <details>
 <summary>Example Payload</summary>
@@ -238,37 +226,37 @@ A collection of stats sent every minute.
 
 | Field          | Type                                | Description                                                                                      |
 |----------------|-------------------------------------|--------------------------------------------------------------------------------------------------|
-| players        | int32                               | The amount of players connected to the node                                                      |
-| playingPlayers | int32                               | The amount of players playing a track                                                            |
-| uptime         | int64                               | The uptime of the node in milliseconds                                                           |
+| players        | int                                 | The amount of players connected to the node                                                      |
+| playingPlayers | int                                 | The amount of players playing a track                                                            |
+| uptime         | int                                 | The uptime of the node in milliseconds                                                           |
 | memory         | [Memory](#memory) object            | The memory stats of the node                                                                     |
 | cpu            | [CPU](#cpu) object                  | The cpu stats of the node                                                                        |
 | frameStats     | ?[Frame Stats](#frame-stats) object | The frame stats of the node. `null` if the node has no players or when retrieved via `/v3/stats` |
 
 ##### Memory
 
-| Field      | Type  | Description                              |
-|------------|-------|------------------------------------------|
-| free       | int64 | The amount of free memory in bytes       |
-| used       | int64 | The amount of used memory in bytes       |
-| allocated  | int64 | The amount of allocated memory in bytes  |
-| reservable | int64 | The amount of reservable memory in bytes |
+| Field      | Type | Description                              |
+|------------|------|------------------------------------------|
+| free       | int  | The amount of free memory in bytes       |
+| used       | int  | The amount of used memory in bytes       |
+| allocated  | int  | The amount of allocated memory in bytes  |
+| reservable | int  | The amount of reservable memory in bytes |
 
 ##### CPU
 
-| Field        | Type    | Description                      |
-|--------------|---------|----------------------------------|
-| cores        | int32   | The amount of cores the node has |
-| systemLoad   | float64 | The system load of the node      |
-| lavalinkLoad | float64 | The load of Lavalink on the node |
+| Field        | Type  | Description                      |
+|--------------|-------|----------------------------------|
+| cores        | int   | The amount of cores the node has |
+| systemLoad   | float | The system load of the node      |
+| lavalinkLoad | float | The load of Lavalink on the node |
 
 ##### Frame Stats
 
-| Field   | Type  | Description                            |
-|---------|-------|----------------------------------------|
-| sent    | int64 | The amount of frames sent to Discord   |
-| nulled  | int64 | The amount of frames that were nulled  |
-| deficit | int64 | The amount of frames that were deficit |
+| Field   | Type | Description                            |
+|---------|------|----------------------------------------|
+| sent    | int  | The amount of frames sent to Discord   |
+| nulled  | int  | The amount of frames that were nulled  |
+| deficit | int  | The amount of frames that were deficit |
 
 <details>
 <summary>Example Payload</summary>
@@ -456,7 +444,7 @@ Emitted when a track gets stuck while playing.
 |--------------|--------|-------------------------------------------------------------------------------------------------|
 | encodedTrack | string | The base64 encoded track that got stuck                                                         |
 | track        | string | The base64 encoded track that got stuck  (DEPRECATED as of v3.7.0 and marked for removal in v4) |
-| thresholdMs  | int64  | The threshold in milliseconds that was exceeded                                                 |
+| thresholdMs  | int    | The threshold in milliseconds that was exceeded                                                 |
 
 <details>
 <summary>Example Payload</summary>
@@ -485,7 +473,7 @@ See the [Discord Docs](https://discordapp.com/developers/docs/topics/opcodes-and
 
 | Field    | Type   | Description                                                                                                                       |
 |----------|--------|-----------------------------------------------------------------------------------------------------------------------------------|
-| code     | int32  | The [Discord close event code](https://discord.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes) |
+| code     | int    | The [Discord close event code](https://discord.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes) |
 | reason   | string | The close reason                                                                                                                  |
 | byRemote | bool   | If the connection was closed by Discord                                                                                           |
 
@@ -524,8 +512,8 @@ When Lavalink encounters an error, it will respond with a JSON object containing
 
 | Field     | Type   | Description                                                                 |
 |-----------|--------|-----------------------------------------------------------------------------|
-| timestamp | int64  | The timestamp of the error in milliseconds since the epoch                  |
-| status    | int32  | The HTTP status code                                                        |
+| timestamp | int    | The timestamp of the error in milliseconds since the epoch                  |
+| status    | int    | The HTTP status code                                                        |
 | error     | string | The HTTP status code message                                                |
 | trace?    | string | The stack trace of the error when `trace=true` as query param has been sent |
 | message   | string | The error message                                                           |
@@ -561,7 +549,7 @@ GET /v3/sessions/{sessionId}/players
 |---------|------------------------------------|-------------------------------------------------------|
 | guildId | string                             | The guild id of the player                            |
 | track   | ?[Track](#track) object            | The current playing track                             |
-| volume  | int32                              | The volume of the player, range 0-1000, in percentage |
+| volume  | int                                | The volume of the player, range 0-1000, in percentage |
 | paused  | bool                               | Whether the player is paused                          |
 | voice   | [Voice State](#voice-state) object | The voice state of the player                         |
 | filters | [Filters](#filters) object         | The filters used by the player                        |              
@@ -576,17 +564,17 @@ GET /v3/sessions/{sessionId}/players
 
 ##### Track Info
 
-| Field      | Type    | Description                               |
-|------------|---------|-------------------------------------------|
-| identifier | string  | The track identifier                      |
-| isSeekable | bool    | Whether the track is seekable             |
-| author     | string  | The track author                          |
-| length     | int64   | The track length in milliseconds          |
-| isStream   | bool    | Whether the track is a stream             |
-| position   | int64   | The track position in milliseconds        |
-| title      | string  | The track title                           |
-| uri        | ?string | The track uri                             |
-| sourceName | string  | The track source name                     |
+| Field      | Type    | Description                        |
+|------------|---------|------------------------------------|
+| identifier | string  | The track identifier               |
+| isSeekable | bool    | Whether the track is seekable      |
+| author     | string  | The track author                   |
+| length     | int     | The track length in milliseconds   |
+| isStream   | bool    | Whether the track is a stream      |
+| position   | int     | The track position in milliseconds |
+| title      | string  | The track title                    |
+| uri        | ?string | The track uri                      |
+| sourceName | string  | The track source name              |
 
 ##### Voice State
 
@@ -596,7 +584,7 @@ GET /v3/sessions/{sessionId}/players
 | endpoint   | string | The Discord voice endpoint to connect to                                                    |
 | sessionId  | string | The Discord voice session id to authenticate with                                           |
 | connected? | bool   | Whether the player is connected. Response only                                              |
-| ping?      | int64  | Roundtrip latency in milliseconds to the voice gateway (-1 if not connected). Response only |
+| ping?      | int    | Roundtrip latency in milliseconds to the voice gateway (-1 if not connected). Response only |
 
 `token`, `endpoint`, and `sessionId` are the 3 required values for connecting to one of Discord's voice servers.
 `sessionId` is provided by the Voice State Update event sent by Discord, whereas the `endpoint` and `token` are provided
@@ -688,6 +676,7 @@ Response:
 #### Update Player
 
 Updates or creates the player for this guild if it doesn't already exist.
+
 ```
 PATCH /v3/sessions/{sessionId}/players/{guildId}?noReplace=true
 ```
@@ -704,9 +693,9 @@ Request:
 |-----------------|------------------------------------|-------------------------------------------------------------------------------|
 | encodedTrack? * | ?string                            | The encoded track base64 to play. `null` stops the current track              |
 | identifier? *   | string                             | The track identifier to play                                                  |
-| position?       | int64                              | The track position in milliseconds                                            |
-| endTime?        | int64                              | The track end time in milliseconds                                            |
-| volume?         | int32                              | The player volume from 0 to 1000                                              |
+| position?       | int                                | The track position in milliseconds                                            |
+| endTime?        | int                                | The track end time in milliseconds                                            |
+| volume?         | int                                | The player volume from 0 to 1000                                              |
 | paused?         | bool                               | Whether the player is paused                                                  |
 | filters?        | [Filters](#filters) object         | The new filters to apply. This will override all previously applied filters   |                   
 | voice?          | [Voice State](#voice-state) object | Information required for connecting to Discord, without `connected` or `ping` |
@@ -786,7 +775,7 @@ Filters are used in above requests and look like this
 
 | Field       | Type                               | Description                                                                                         |
 |-------------|------------------------------------|-----------------------------------------------------------------------------------------------------|
-| volume?     | float32                            | Lets you adjust the player volume from 0.0 to 5.0 where 1.0 is 100%. Values >1.0 may cause clipping |
+| volume?     | float                              | Lets you adjust the player volume from 0.0 to 5.0 where 1.0 is 100%. Values >1.0 may cause clipping |
 | equalizer?  | array of [Equalizers](#equalizer)  | Lets you adjust 15 different bands                                                                  |
 | karaoke?    | [Karaoke](#karaoke) object         | Lets you eliminate part of a band, usually targeting vocals                                         |
 | timescale?  | [Timescale](#timescale) object     | Lets you change the speed, pitch, and rate                                                          |
@@ -826,73 +815,73 @@ where -0.25 means the given band is completely muted, and 0.25 means it is doubl
 
 </details>
 
-| Field | Type    | Description             |
-|-------|---------|-------------------------|
-| bands | int32   | The band (0 to 14)      |
-| gain  | float32 | The gain (-0.25 to 1.0) |
+| Field | Type  | Description             |
+|-------|-------|-------------------------|
+| bands | int   | The band (0 to 14)      |
+| gain  | float | The gain (-0.25 to 1.0) |
 
 ##### Karaoke
 
 Uses equalization to eliminate part of a band, usually targeting vocals.
 
-| Field        | Type    | Description                                                             |
-|--------------|---------|-------------------------------------------------------------------------|
-| level?       | float32 | The level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect)      |
-| monoLevel?   | float32 | The mono level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect) |
-| filterBand?  | float32 | The filter band                                                         |
-| filterWidth? | float32 | The filter width                                                        |
+| Field        | Type  | Description                                                             |
+|--------------|-------|-------------------------------------------------------------------------|
+| level?       | float | The level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect)      |
+| monoLevel?   | float | The mono level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect) |
+| filterBand?  | float | The filter band                                                         |
+| filterWidth? | float | The filter width                                                        |
 
 ##### Timescale
 
 Changes the speed, pitch, and rate. All default to 1.0.
 
-| Field  | Type    | Description                |
-|--------|---------|----------------------------|
-| speed? | float64 | The playback speed 0.0 ≤ x |
-| pitch? | float64 | The pitch 0.0 ≤ x          |
-| rate?  | float64 | The rate 0.0 ≤ x           |
+| Field  | Type  | Description                |
+|--------|-------|----------------------------|
+| speed? | float | The playback speed 0.0 ≤ x |
+| pitch? | float | The pitch 0.0 ≤ x          |
+| rate?  | float | The rate 0.0 ≤ x           |
 
 ##### Tremolo
 
 Uses amplification to create a shuddering effect, where the volume quickly oscillates.
 https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
 
-| Field      | Type    | Description                      |
-|------------|---------|----------------------------------|
-| frequency? | float32 | The frequency 0.0 < x            |
-| depth?     | float32 | The tremolo depth 0.0 < x ≤ 1.0  |
+| Field      | Type  | Description                     |
+|------------|-------|---------------------------------|
+| frequency? | float | The frequency 0.0 < x           |
+| depth?     | float | The tremolo depth 0.0 < x ≤ 1.0 |
 
 ##### Vibrato
 
 Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
 
-| Field      | Type    | Description                     |
-|------------|---------|---------------------------------|
-| frequency? | float32 | The frequency 0.0 < x ≤ 14.0    |
-| depth?     | float32 | The vibrato depth 0.0 < x ≤ 1.0 |
+| Field      | Type  | Description                     |
+|------------|-------|---------------------------------|
+| frequency? | float | The frequency 0.0 < x ≤ 14.0    |
+| depth?     | float | The vibrato depth 0.0 < x ≤ 1.0 |
 
 ##### Rotation
 
 Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to https://youtu.be/QB9EB8mTKcc (without the reverb)
 
-| Field       | Type    | Description                                                                                              |
-|-------------|---------|----------------------------------------------------------------------------------------------------------|
-| rotationHz? | float64 | The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above |
+| Field       | Type  | Description                                                                                              |
+|-------------|-------|----------------------------------------------------------------------------------------------------------|
+| rotationHz? | float | The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above |
 
 ##### Distortion
 
 Distortion effect. It can generate some pretty unique audio effects.
 
-| Field      | Type    | Description    |
-|------------|---------|----------------|
-| sinOffset? | float32 | The sin offset |
-| sinScale?  | float32 | The sin scale  |
-| cosOffset? | float32 | The cos offset |
-| cosScale?  | float32 | The cos scale  |
-| tanOffset? | float32 | The tan offset |
-| tanScale?  | float32 | The tan scale  |
-| offset?    | float32 | The offset     |
-| scale?     | float32 | The scale      |
+| Field      | Type  | Description    |
+|------------|-------|----------------|
+| sinOffset? | float | The sin offset |
+| sinScale?  | float | The sin scale  |
+| cosOffset? | float | The cos offset |
+| cosScale?  | float | The cos scale  |
+| tanOffset? | float | The tan offset |
+| tanScale?  | float | The tan scale  |
+| offset?    | float | The offset     |
+| scale?     | float | The scale      |
 
 ##### Channel Mix
 
@@ -900,21 +889,21 @@ Mixes both channels (left and right), with a configurable factor on how much eac
 With the defaults, both channels are kept independent of each other.
 Setting all factors to 0.5 means both channels get the same audio.
 
-| Field         | Type    | Description                                           |
-|---------------|---------|-------------------------------------------------------|
-| leftToLeft?   | float32 | The left to left channel mix factor (0.0 ≤ x ≤ 1.0)   |
-| leftToRight?  | float32 | The left to right channel mix factor (0.0 ≤ x ≤ 1.0)  |
-| rightToLeft?  | float32 | The right to left channel mix factor (0.0 ≤ x ≤ 1.0)  |
-| rightToRight? | float32 | The right to right channel mix factor (0.0 ≤ x ≤ 1.0) |
+| Field         | Type  | Description                                           |
+|---------------|-------|-------------------------------------------------------|
+| leftToLeft?   | float | The left to left channel mix factor (0.0 ≤ x ≤ 1.0)   |
+| leftToRight?  | float | The left to right channel mix factor (0.0 ≤ x ≤ 1.0)  |
+| rightToLeft?  | float | The right to left channel mix factor (0.0 ≤ x ≤ 1.0)  |
+| rightToRight? | float | The right to right channel mix factor (0.0 ≤ x ≤ 1.0) |
 
 ##### Low Pass
 
 Higher frequencies get suppressed, while lower frequencies pass through this filter, thus the name low pass.
 Any smoothing values equal to, or less than 1.0 will disable the filter.
 
-| Field      | Type    | Description                    |
-|------------|---------|--------------------------------|
-| smoothing? | float32 | The smoothing factor (1.0 < x) |
+| Field      | Type  | Description                    |
+|------------|-------|--------------------------------|
+| smoothing? | float | The smoothing factor (1.0 < x) |
 
 <details>
 <summary>Example Payload</summary>
@@ -1003,7 +992,7 @@ Request:
 | Field        | Type    | Description                                              |
 |--------------|---------|----------------------------------------------------------|
 | resumingKey? | ?string | The resuming key to be able to resume this session later |
-| timeout?     | int64   | The timeout in seconds (default is 60s)                  |
+| timeout?     | int     | The timeout in seconds (default is 60s)                  |
 
 <details>
 <summary>Example Payload</summary>
@@ -1022,7 +1011,7 @@ Response:
 | Field       | Type    | Description                                              |
 |-------------|---------|----------------------------------------------------------|
 | resumingKey | ?string | The resuming key to be able to resume this session later |
-| timeout     | int64   | The timeout in seconds (default is 60s)                  |
+| timeout     | int     | The timeout in seconds (default is 60s)                  |
 
 <details>
 <summary>Example Payload</summary>
@@ -1051,7 +1040,7 @@ Response:
 
 ##### Track Loading Result
 
-| Field        | Type                                   | Description                                               | Required Load Type                                    |
+| Field        | Type                                   | Description                                               | Required Load Type                                 |
 |--------------|----------------------------------------|-----------------------------------------------------------|----------------------------------------------------|
 | loadType     | [LoadResultType](#load-result-type)    | The type of the result                                    |                                                    |
 | playlistInfo | [Playlist Info](#playlist-info) object | Additional info if the the load type is `PLAYLIST_LOADED` | `PLAYLIST_LOADED`                                  |
@@ -1073,7 +1062,7 @@ Response:
 | Field          | Type   | Description                                                      |
 |----------------|--------|------------------------------------------------------------------|
 | name?          | string | The name of the loaded playlist                                  |
-| selectedTrack? | int32  | The selected track in this Playlist (-1 if no track is selected) |
+| selectedTrack? | int    | The selected track in this Playlist (-1 if no track is selected) |
 
 <details>
 <summary>Track Loaded Example Payload</summary>
@@ -1281,7 +1270,7 @@ Response:
 | Field          | Type                               | Description                                                     |
 |----------------|------------------------------------|-----------------------------------------------------------------|
 | version        | [Version](#version-object) object  | The version of this Lavalink server                             |
-| buildTime      | int64                              | The millisecond unix timestamp when this Lavalink jar was built |
+| buildTime      | int                                | The millisecond unix timestamp when this Lavalink jar was built |
 | git            | [Git](#git-object) object          | The git information of this Lavalink server                     |
 | jvm            | string                             | The JVM version this Lavalink server runs on                    |
 | lavaplayer     | string                             | The Lavaplayer version being used by this server                |
@@ -1293,9 +1282,9 @@ Response:
 | Field      | Type    | Description                                                                        |
 |------------|---------|------------------------------------------------------------------------------------|
 | semver     | string  | The full version string of this Lavalink server                                    |
-| major      | int32   | The major version of this Lavalink server                                          |
-| minor      | int32   | The minor version of this Lavalink server                                          |
-| patch      | int32   | The patch version of this Lavalink server                                          |
+| major      | int     | The major version of this Lavalink server                                          |
+| minor      | int     | The minor version of this Lavalink server                                          |
+| patch      | int     | The patch version of this Lavalink server                                          |
 | preRelease | ?string | The pre-release version according to semver as a `.` separated list of identifiers |
 
 ##### Git Object
@@ -1304,7 +1293,7 @@ Response:
 |------------|--------|----------------------------------------------------------------|
 | branch     | string | The branch this Lavalink server was built                      |
 | commit     | string | The commit this Lavalink server was built                      |
-| commitTime | int64  | The millisecond unix timestamp for when the commit was created |
+| commitTime | int    | The millisecond unix timestamp for when the commit was created |
 
 ##### Plugin Object
 
@@ -1457,11 +1446,11 @@ Response:
 
 ##### Route Planner Types
 
-| Route Planner Type           | Description                                                                                                                  |
-|------------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| `RotatingIpRoutePlanner`     | IP address used is switched on ban. Recommended for IPv4 blocks or IPv6 blocks smaller than a /64.                            |
-| `NanoIpRoutePlanner`         | IP address used is switched on clock update. Use with at least 1 /64 IPv6 block.                                             |
-| `RotatingNanoIpRoutePlanner` | IP address used is switched on clock update, rotates to a different /64 block on ban. Use with at least 2x /64 IPv6 blocks.  |
+| Route Planner Type           | Description                                                                                                                 |
+|------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| `RotatingIpRoutePlanner`     | IP address used is switched on ban. Recommended for IPv4 blocks or IPv6 blocks smaller than a /64.                          |
+| `NanoIpRoutePlanner`         | IP address used is switched on clock update. Use with at least 1 /64 IPv6 block.                                            |
+| `RotatingNanoIpRoutePlanner` | IP address used is switched on clock update, rotates to a different /64 block on ban. Use with at least 2x /64 IPv6 blocks. |
 
 ##### Details Object
 
@@ -1494,7 +1483,7 @@ Response:
 | Field            | Type   | Description                                              |
 |------------------|--------|----------------------------------------------------------|
 | address          | string | The failing address                                      |
-| failingTimestamp | int64  | The timestamp when the address failed                    |
+| failingTimestamp | int    | The timestamp when the address failed                    |
 | failingTime      | string | The timestamp when the address failed as a pretty string |
 
 <details>
