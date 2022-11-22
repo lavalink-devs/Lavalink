@@ -33,10 +33,6 @@ class AppInfo {
         versionBuild = prop.getProperty("version")
         groupId = prop.getProperty("groupId")
         artifactId = prop.getProperty("artifactId")
-buildTime = prop.getProperty("buildTime").toLongOrNull() ?: -1
-            prop.getProperty("buildTime").toLong()
-        } catch (ignored: NumberFormatException) {
-            -1
-        }
+        buildTime = prop.getProperty("buildTime").toLongOrNull() ?: -1
     }
 }
