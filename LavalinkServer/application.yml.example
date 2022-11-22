@@ -12,6 +12,7 @@ lavalink:
       vimeo: true
       http: true
       local: false
+    jdaNASDisabled: false # Disables JDA Native Audio System
     bufferDurationMs: 400 # The duration of the NAS buffer. Higher values fare better against longer GC pauses. Minimum of 40ms, lower values may introduce pauses.
     frameBufferDurationMs: 5000 # How many milliseconds of audio to keep buffered
     opusEncodingQuality: 10 # Opus encoder quality. Valid values range from 0 to 10, where 10 is best quality but is the most expensive on the CPU.

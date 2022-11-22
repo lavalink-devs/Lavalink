@@ -36,6 +36,11 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
         }
         log.info("OS: ${systemType?.osType ?: "unknown"}, Arch: ${systemType?.architectureType ?: "unknown"}")
 
+        if (!serverConfig.jdaNASDisabled) {
+            log.info("JDA-NAS is disabled! GC pauses may cause your bot to stutter during playback.")
+            return@apply
+        }
+
         val nasSupported = supportedSystems.any { it.osType == systemType?.osType && it.architectureType == systemType?.architectureType }
 
         if (nasSupported) {
