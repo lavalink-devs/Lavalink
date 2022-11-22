@@ -40,6 +40,7 @@ import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.FilterType
 import org.springframework.core.io.DefaultResourceLoader
+import java.io.File
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -120,6 +121,23 @@ object Launcher {
             println(getVersionInfo(indentation = "", vanity = false))
             return
         }
+
+        val config = File("./application.yml")
+        if (!config.exists()) {
+            log.info("No application.yml found, creating one...")
+            Launcher::class.java.getResource("/application.yml.example")
+                ?.openStream()
+                ?.use {
+                    if (!config.createNewFile()) {
+                        log.error("Unable to create application.yml")
+                        return
+                    }
+                    config.outputStream().use { out ->
+                        it.copyTo(out)
+                    }
+                }
+        }
+
         val parent = launchPluginBootstrap()
         log.info("You can safely ignore the big red warning about illegal reflection. See https://github.com/freyacodes/Lavalink/issues/295")
         launchMain(parent, args)

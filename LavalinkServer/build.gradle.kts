@@ -82,6 +82,10 @@ tasks {
         )
 
         filter(ReplaceTokens::class, mapOf("tokens" to tokens))
+        copy {
+            from("application.yml.example")
+            into("$buildDir/resources/main")
+        }
     }
 
     // https://stackoverflow.com/questions/41444916/multiple-artifacts-issue-with-deploying-zip-to-nexus
