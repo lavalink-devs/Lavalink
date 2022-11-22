@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.track.TrackMarker
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.protocol.*
 import lavalink.server.io.SocketServer
+import lavalink.server.io.WebSocketHandler
 import lavalink.server.player.filters.FilterChain
 import lavalink.server.util.*
 import moe.kyokobot.koe.VoiceServerInfo
@@ -23,6 +24,10 @@ class PlayerRestHandler(
     private val socketServer: SocketServer,
     private val filterExtensions: List<AudioFilterExtension>,
 ) {
+
+    companion object {
+        private val log = LoggerFactory.getLogger(PlayerRestHandler::class.java)
+    }
 
     @GetMapping(value = ["/v3/sessions/{sessionId}/players"], produces = ["application/json"])
     private fun getPlayers(@PathVariable sessionId: String): ResponseEntity<Players> {
@@ -98,6 +103,7 @@ class PlayerRestHandler(
         if (playerUpdate.encodedTrack.isPresent || playerUpdate.identifier.isPresent) {
 
             if (noReplace && player.track != null) {
+                log.info("Skipping play request because of noReplace")
                 return ResponseEntity.ok(player.toPlayer(context))
             }
             player.setPause(if (playerUpdate.paused.isPresent) playerUpdate.paused.value else false)

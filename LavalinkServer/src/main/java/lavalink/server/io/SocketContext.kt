@@ -185,7 +185,7 @@ class SocketContext(
         WebSockets.sendText(payload, undertowSession.webSocketChannel,
             object : WebSocketCallback<Void> {
                 override fun complete(channel: WebSocketChannel, context: Void?) {
-                    log.trace("Sent {}", payload)
+                    log.trace("Sent $payload")
                 }
 
                 override fun onError(channel: WebSocketChannel, context: Void?, throwable: Throwable) {
@@ -213,7 +213,7 @@ class SocketContext(
     }
 
     internal fun shutdown() {
-        log.info("Shutting down " + playingPlayers.size + " playing players.")
+        log.info("Shutting down ${playingPlayers.size} playing players.")
         executor.shutdown()
         playerUpdateService.shutdown()
         players.values.forEach {

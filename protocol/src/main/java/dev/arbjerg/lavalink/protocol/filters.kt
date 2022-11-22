@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.JsonNode
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Filters(
-    var volume: Float? = null,
-    var equalizer: List<Band>? = null,
+    val volume: Float? = null,
+    val equalizer: List<Band>? = null,
     val karaoke: Karaoke? = null,
     val timescale: Timescale? = null,
     val tremolo: Tremolo? = null,

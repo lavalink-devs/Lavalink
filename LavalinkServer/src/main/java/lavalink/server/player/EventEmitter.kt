@@ -78,7 +78,7 @@ class EventEmitter(
     }
 
     override fun onTrackStuck(player: AudioPlayer, track: AudioTrack, thresholdMs: Long) {
-        log.warn(track.info.title + " got stuck! Threshold surpassed: " + thresholdMs)
+        log.warn("${track.info.title} got stuck! Threshold surpassed: ${thresholdMs}ms")
         val encodedTrack = encodeTrack(audioPlayerManager, track)
         this.player.socket.sendMessage(
             Message.TrackStuckEvent(encodedTrack, encodedTrack, thresholdMs, this.player.guildId.toString())

@@ -23,7 +23,7 @@ class GitRepoState {
     /**
      * Commit time in epoch seconds
      */
-    final var commitTime: Long = 0
+    final val commitTime: Long
     final val branch: String
     final val commitId: String
     final val commitIdAbbrev: String

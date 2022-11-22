@@ -4,7 +4,10 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 
 
 data class LoadResult(
-    var loadType: ResultStatus, var tracks: List<Track>, var playlistInfo: PlaylistInfo?, var exception: Exception?
+    val loadType: ResultStatus,
+    val tracks: List<Track>,
+    val playlistInfo: PlaylistInfo?,
+    val exception: Exception?
 ) {
 
     constructor(
@@ -19,15 +22,22 @@ data class LoadResult(
 }
 
 data class PlaylistInfo(
-    val name: String, val selectedTrack: Int
+    val name: String,
+    val selectedTrack: Int
 )
 
 data class Exception(
-    val message: String?, val severity: FriendlyException.Severity, val cause: String
+    val message: String?,
+    val severity: FriendlyException.Severity,
+    val cause: String
 ) {
     constructor(e: FriendlyException) : this(e.message, e.severity, e.toString())
 }
 
 enum class ResultStatus {
-    TRACK_LOADED, PLAYLIST_LOADED, SEARCH_RESULT, NO_MATCHES, LOAD_FAILED
+    TRACK_LOADED,
+    PLAYLIST_LOADED,
+    SEARCH_RESULT,
+    NO_MATCHES,
+    LOAD_FAILED
 }

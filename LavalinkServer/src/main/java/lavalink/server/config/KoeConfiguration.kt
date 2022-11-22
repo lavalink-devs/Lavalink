@@ -43,10 +43,7 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
             log.info("Enabling JDA-NAS")
             var bufferSize = serverConfig.bufferDurationMs ?: UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION
             if (bufferSize < 40) {
-                log.warn(
-                    "Buffer size of {}ms is illegal. Defaulting to {}",
-                    bufferSize, UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION
-                )
+                log.warn("Buffer size of ${bufferSize}ms is illegal. Defaulting to ${UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION}ms")
                 bufferSize = UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION
             }
             try {

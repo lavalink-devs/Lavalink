@@ -52,7 +52,7 @@ class AudioLoaderRestHandler(
         request: HttpServletRequest,
         @RequestParam identifier: String?
     ): CompletionStage<ResponseEntity<JsonNode>> {
-        log.info("Got request to load for identifier \"{}\"", identifier)
+        log.info("Got request to load for identifier \"${identifier}\"")
         return AudioLoader(audioPlayerManager).load(identifier).thenApply {
             val node: ObjectNode = objectMapper.valueToTree(it)
             if (request.servletPath.startsWith("/loadtracks") || request.servletPath.startsWith("/v3/loadtracks")) {

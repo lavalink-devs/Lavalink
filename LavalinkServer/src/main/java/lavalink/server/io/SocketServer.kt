@@ -160,17 +160,13 @@ class SocketServer(
             resumableSessions[context.resumeKey!!] = context
             context.pause()
             log.info(
-                "Connection closed from {} with status {} -- " +
-                        "Session can be resumed within the next {} seconds with key {}",
-                session.remoteAddress,
-                status,
-                context.resumeTimeout,
-                context.resumeKey
+                "Connection closed from ${session.remoteAddress} with status $status -- " +
+                        "Session can be resumed within the next ${context.resumeTimeout} seconds with key ${context.resumeKey}",
             )
             return
         }
 
-        log.info("Connection closed from {} -- {}", session.remoteAddress, status)
+        log.info("Connection closed from ${session.remoteAddress} -- $status")
         context.shutdown()
     }
 
@@ -180,7 +176,7 @@ class SocketServer(
         log.info(message.payload)
 
         if (!session.isOpen) {
-            log.error("Ignoring closing websocket: " + session.remoteAddress!!)
+            log.error("Ignoring closing websocket: ${session.remoteAddress!!}")
             return
         }
 

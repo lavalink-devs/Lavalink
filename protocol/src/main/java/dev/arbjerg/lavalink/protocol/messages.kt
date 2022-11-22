@@ -44,7 +44,7 @@ class EventDeserializer : StdDeserializer<Message.Event>(Message.Event::class.ja
 }
 
 @JsonDeserialize(using = MessageDeserializer::class)
-sealed class Message(var op: Op) {
+sealed class Message(val op: Op) {
 
     enum class Op(@JsonValue val value: String) {
         Ready("ready"),

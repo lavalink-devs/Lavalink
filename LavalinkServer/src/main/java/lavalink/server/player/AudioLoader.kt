@@ -49,19 +49,19 @@ class AudioLoader(private val audioPlayerManager: AudioPlayerManager) : AudioLoa
     fun load(identifier: String?): CompletionStage<LoadResult> {
         val isUsed = used.getAndSet(true)
         check(!isUsed) { "This loader can only be used once per instance" }
-        log.trace("Loading item with identifier {}", identifier)
+        log.trace("Loading item with identifier $identifier")
         audioPlayerManager.loadItem(identifier, this)
         return loadResult
     }
 
     override fun trackLoaded(audioTrack: AudioTrack) {
-        log.info("Loaded track " + audioTrack.info.title)
+        log.info("Loaded track ${audioTrack.info.title}")
         val tracks = listOf(audioTrack.toTrack(audioPlayerManager))
         loadResult.complete(LoadResult(ResultStatus.TRACK_LOADED, tracks, null))
     }
 
     override fun playlistLoaded(audioPlaylist: AudioPlaylist) {
-        log.info("Loaded playlist " + audioPlaylist.name)
+        log.info("Loaded playlist ${audioPlaylist.name}")
         var playlistInfo: PlaylistInfo? = null
         if (!audioPlaylist.isSearchResult) {
             playlistInfo = PlaylistInfo(audioPlaylist.name, audioPlaylist.tracks.indexOf(audioPlaylist.selectedTrack))

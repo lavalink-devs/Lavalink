@@ -14,8 +14,8 @@ data class Session(
 
 @JsonDeserialize(using = SessionUpdateDeserializer::class)
 data class SessionUpdate(
-    var resumingKey: Omissible<String?> = Omissible.omitted(),
-    var timeout: Omissible<Long> = Omissible.omitted(),
+    val resumingKey: Omissible<String?> = Omissible.omitted(),
+    val timeout: Omissible<Long> = Omissible.omitted(),
 )
 
 class SessionUpdateDeserializer : JsonDeserializer<SessionUpdate>() {
