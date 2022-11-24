@@ -132,7 +132,7 @@ class WebSocketHandler(
                 "'filters' op. Please switch to use that one, as this op will get removed in v4.")
         loggedEqualizerDeprecationWarning = true
 
-        if (!filterConfig["equalizer"]!!) return log.warn("Equalizer is disabled in the config, ignoring equalizer op")
+        if (filterConfig["equalizer"] == false) return log.warn("Equalizer is disabled in the config, ignoring equalizer op")
 
         val player = context.getPlayer(json.getString("guildId"))
 
