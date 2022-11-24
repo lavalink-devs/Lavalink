@@ -32,7 +32,6 @@ class ServerConfig {
     var password: String? = null
     @get:Deprecated("use {@link SentryConfigProperties} instead.")
     var sentryDsn = ""
-    var jdaNASDisabled: Boolean = false
     var bufferDurationMs: Int? = null
     var frameBufferDurationMs: Int? = null
     var opusEncodingQuality: Int? = null
