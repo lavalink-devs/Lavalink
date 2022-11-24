@@ -7,12 +7,13 @@ plugins {
 
 val archivesBaseName = "plugin-api"
 group = "dev.arbjerg.lavalink"
-version = "3.6.0"
+version = "3.6.1"
 
 dependencies {
-    compileOnly(libs.spring.boot)
-    compileOnly(libs.lavaplayer)
-    compileOnly(libs.json)
+    api(libs.spring.boot)
+    api(libs.spring.boot.web)
+    api(libs.lavaplayer)
+    api(libs.json)
 }
 
 java {
@@ -30,6 +31,8 @@ tasks.withType<Javadoc> {
         opts.addBooleanOption("html5", true)
     }
 }
+
+val isGpgKeyDefined = findProperty("signing.gnupg.keyName") != null
 
 publishing {
     publications {
@@ -65,20 +68,26 @@ publishing {
         }
     }
 
-    repositories {
-        val snapshots = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-        val releases = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+    if (isGpgKeyDefined) {
+        repositories {
+            val snapshots = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            val releases = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
 
-        maven(if ((version as String).endsWith("SNAPSHOT")) snapshots else releases) {
-            credentials {
-                password = findProperty("ossrhPassword") as? String
-                username = findProperty("ossrhUsername") as? String
+            maven(if ((version as String).endsWith("SNAPSHOT")) snapshots else releases) {
+                credentials {
+                    password = findProperty("ossrhPassword") as? String
+                    username = findProperty("ossrhUsername") as? String
+                }
             }
         }
+    } else {
+        println("Not capable of publishing to OSSRH because of missing GPG key")
     }
 }
 
-signing {
-    sign(publishing.publications["PluginApi"])
-    useGpgCmd()
+if (isGpgKeyDefined) {
+    signing {
+        sign(publishing.publications["PluginApi"])
+        useGpgCmd()
+    }
 }

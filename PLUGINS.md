@@ -75,3 +75,15 @@ class MyMediaContainerProbe implements MediaContainerProbe {
     // ...
 } 
 ```
+
+To intercept and modify existing REST endpoints, you can implement the `RestInterceptor` interface:
+
+```java
+import org.springframework.stereotype.Service;
+import dev.arbjerg.lavalink.api.RestInterceptor;
+
+@Service
+class TestRequestInterceptor implements RestInterceptor {
+    // ...
+}
+```
