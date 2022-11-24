@@ -126,7 +126,7 @@ object Launcher {
         if (!config.exists()) {
             log.info("No application.yml found, creating one...")
             Launcher::class.java.getResource("/application.yml.example")?.let {
-                it.openStream()?.use {
+                it.openStream().use {
                     if (!config.createNewFile()) {
                         log.error("Unable to create application.yml")
                         return
@@ -135,9 +135,7 @@ object Launcher {
                         it.copyTo(out)
                     }
                 }
-            } ?: run {
-                log.error("Unable to find application.yml.example in resources")
-            }
+            } ?: log.error("Unable to find application.yml.example in resources")
         }
 
         val parent = launchPluginBootstrap()
