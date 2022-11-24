@@ -16,7 +16,8 @@ import kotlin.reflect.KFunction1
 class WebSocketHandler(
     private val context: SocketContext,
     private val wsExtensions: List<WebSocketExtension>,
-    private val filterExtensions: List<AudioFilterExtension>
+    private val filterExtensions: List<AudioFilterExtension>,
+    private val filterConfig: Map<String, Boolean>
 ) {
 
     companion object {
@@ -131,6 +132,8 @@ class WebSocketHandler(
                 "'filters' op. Please switch to use that one, as this op will get removed in v4.")
         loggedEqualizerDeprecationWarning = true
 
+        if (filterConfig["equalizer"] == false) return log.warn("Equalizer is disabled in the config, ignoring equalizer op")
+
         val player = context.getPlayer(json.getString("guildId"))
 
         val list = mutableListOf<Band>()
@@ -145,7 +148,7 @@ class WebSocketHandler(
 
     private fun filters(json: JSONObject) {
         val player = context.getPlayer(json.getLong("guildId"))
-        player.filters = FilterChain.parse(json, filterExtensions)
+        player.filters = FilterChain.parse(json, filterExtensions, filterConfig)
     }
 
     private fun destroy(json: JSONObject) {
