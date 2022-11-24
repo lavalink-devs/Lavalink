@@ -36,11 +36,16 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
         }
         log.info("OS: ${systemType?.osType ?: "unknown"}, Arch: ${systemType?.architectureType ?: "unknown"}")
 
+        var bufferSize = serverConfig.bufferDurationMs ?: UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION
+        if (bufferSize <= 0) {
+            log.info("JDA-NAS is disabled! GC pauses may cause your bot to stutter during playback.")
+            return@apply
+        }
+
         val nasSupported = supportedSystems.any { it.osType == systemType?.osType && it.architectureType == systemType?.architectureType }
 
         if (nasSupported) {
             log.info("Enabling JDA-NAS")
-            var bufferSize = serverConfig.bufferDurationMs ?: UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION
             if (bufferSize < 40) {
                 log.warn("Buffer size of {}ms is illegal. Defaulting to {}",
                         bufferSize, UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION)
