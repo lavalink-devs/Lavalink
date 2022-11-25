@@ -7,6 +7,7 @@ data class Info(
     val jvm: String,
     val lavaplayer: String,
     val sourceManagers: List<String>,
+    val filters: List<String>,
     val plugins: Plugins
 )
 
