@@ -20,10 +20,14 @@ class FilterChain(
     private val distortion: DistortionConfig? = null,
     private val rotation: RotationConfig? = null,
     private val channelMix: ChannelMixConfig? = null,
-    private val lowPass: LowPassConfig? = null
+    private val lowPass: LowPassConfig? = null,
 ) : PcmFilterFactory {
     companion object {
-        fun parse(filters: Filters, extensions: List<AudioFilterExtension>): FilterChain {
+        fun parse(
+            filters: Filters,
+            extensions: List<AudioFilterExtension>,
+            options: Map<String, Boolean>
+        ): FilterChain {
             return FilterChain(
                 filters.volume?.let { VolumeConfig(it) },
                 filters.equalizer?.let { EqualizerConfig(it) },
@@ -35,13 +39,19 @@ class FilterChain(
                 filters.rotation?.let { RotationConfig(it) },
                 filters.channelMix?.let { ChannelMixConfig(it) },
                 filters.lowPass?.let { LowPassConfig(it) }
-            ).apply { parsePluginConfigs(filters.pluginFilters, extensions) }
+            ).apply {
+                this.options = options
+                parsePluginConfigs(filters.pluginFilters, extensions)
+            }
         }
     }
 
 
     @Transient
     private var pluginFilters: List<PluginConfig> = emptyList()
+
+    @Transient
+    private var options: Map<String, Boolean> = emptyMap()
 
     private fun parsePluginConfigs(dynamicValues: Map<String, JsonNode>, extensions: List<AudioFilterExtension>) {
         pluginFilters = extensions.mapNotNull {
@@ -62,7 +72,7 @@ class FilterChain(
         channelMix,
         lowPass,
         *pluginFilters.toTypedArray()
-    )
+    ).filter { it.name !in options || options[it.name] == true }
 
     val isEnabled get() = buildList().any { it.isEnabled }
 
@@ -105,6 +115,7 @@ class FilterChain(
             extension.build(json, format, output)
 
         override val isEnabled = extension.isEnabled(json)
+        override val name: String = extension.name
     }
 
 }

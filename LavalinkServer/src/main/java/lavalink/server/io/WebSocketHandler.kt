@@ -19,6 +19,7 @@ class WebSocketHandler(
     private val context: SocketContext,
     wsExtensions: List<WebSocketExtension>,
     private val filterExtensions: List<AudioFilterExtension>,
+    private val filterConfig: Map<String, Boolean>,
     private val objectMapper: ObjectMapper
 ) {
     companion object {
@@ -141,6 +142,7 @@ class WebSocketHandler(
 
             loggedEqualizerDeprecationWarning = true
         }
+        if (filterConfig["equalizer"] == false) return log.warn("Equalizer is disabled in the config, ignoring equalizer op")
 
         val player = context.getPlayer(json.getLong("guildId"))
 
@@ -157,7 +159,7 @@ class WebSocketHandler(
     private fun filters(json: JSONObject) {
         val player = context.getPlayer(json.getLong("guildId"))
         val filters = objectMapper.readValue(json.toString(), Filters::class.java)
-        player.filters = FilterChain.parse(filters, filterExtensions)
+        player.filters = FilterChain.parse(filters, filterExtensions, filterConfig)
     }
 
     private fun destroy(json: JSONObject) {

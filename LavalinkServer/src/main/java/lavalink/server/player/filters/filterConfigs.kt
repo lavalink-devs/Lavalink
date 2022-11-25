@@ -23,6 +23,7 @@ class VolumeConfig(val volume: Float) : FilterConfig {
     }
 
     override val isEnabled: Boolean get() = volume != 1.0f
+    override val name: String get() = "volume"
 }
 
 class EqualizerConfig(val bands: List<Band>) : FilterConfig {
@@ -36,6 +37,7 @@ class EqualizerConfig(val bands: List<Band>) : FilterConfig {
         LavaplayerEqualizer(format.channelCount, output, array)
 
     override val isEnabled: Boolean get() = array.any { it != 0.0f }
+    override val name: String get() = "equalizer"
 }
 
 class KaraokeConfig(
@@ -50,6 +52,7 @@ class KaraokeConfig(
     }
 
     override val isEnabled: Boolean get() = true
+    override val name: String get() = "karaoke"
 }
 
 class TimescaleConfig(
@@ -64,7 +67,7 @@ class TimescaleConfig(
     }
 
     override val isEnabled: Boolean get() = speed != 1.0 || pitch != 1.0 || rate != 1.0
-
+    override val name: String get() = "timescale"
 }
 
 class TremoloConfig(
@@ -77,6 +80,7 @@ class TremoloConfig(
     }
 
     override val isEnabled: Boolean get() = depth != 0.0f
+    override val name: String get() = "tremolo"
 }
 
 class VibratoConfig(
@@ -90,7 +94,7 @@ class VibratoConfig(
     }
 
     override val isEnabled: Boolean get() = depth != 0.0f
-
+    override val name: String get() = "vibrato"
 }
 
 class DistortionConfig(
@@ -119,7 +123,7 @@ class DistortionConfig(
     }
 
     override val isEnabled: Boolean get() = sinOffset != 0.0f || sinScale != 1.0f || cosOffset != 0.0f || cosScale != 1.0f || tanOffset != 0.0f || tanScale != 1.0f || offset != 0.0f || scale != 1.0f
-
+    override val name: String get() = "distortion"
 }
 
 class RotationConfig(
@@ -131,6 +135,7 @@ class RotationConfig(
     }
 
     override val isEnabled: Boolean get() = rotationHz != 0.0
+    override val name: String get() = "rotation"
 }
 
 class ChannelMixConfig(
@@ -146,6 +151,7 @@ class ChannelMixConfig(
     }
 
     override val isEnabled: Boolean get() = leftToLeft != 1f || leftToRight != 0f || rightToLeft != 0f || rightToRight != 1f
+    override val name: String get() = "channelMix"
 }
 
 class LowPassConfig(
@@ -157,6 +163,7 @@ class LowPassConfig(
     }
 
     override val isEnabled: Boolean get() = smoothing > 1.0f
+    override val name: String get() = "lowPass"
 }
 
 interface FilterConfig {
@@ -164,4 +171,7 @@ interface FilterConfig {
 
     @get:JsonIgnore
     val isEnabled: Boolean
+
+    @get:JsonIgnore
+    val name: String
 }
