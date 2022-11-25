@@ -1274,8 +1274,9 @@ Response:
 | git            | [Git](#git-object) object          | The git information of this Lavalink server                     |
 | jvm            | string                             | The JVM version this Lavalink server runs on                    |
 | lavaplayer     | string                             | The Lavaplayer version being used by this server                |
-| sourceManagers | array of strings                   | The source manager names being used by this server              |
-| plugins        | array of [Plugins](#plugin-object) | The plugin names being used by this server                      |
+| sourceManagers | array of strings                   | The enabled source managers for this server                     |
+| filters        | array of strings                   | The enabled filters for this server                             |
+| plugins        | array of [Plugins](#plugin-object) | The enabled plugins for this server                             |
 
 ##### Version Object
 
@@ -1325,6 +1326,12 @@ Response:
   "sourceManagers": [
     "youtube",
     "soundcloud"
+  ],
+  "filters": [
+    "equalizer",
+		"karaoke",
+		"timescale",
+		"channelMix"
   ],
   "plugins": [
     {
