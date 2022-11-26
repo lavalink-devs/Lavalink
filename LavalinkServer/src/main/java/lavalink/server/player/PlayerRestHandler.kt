@@ -9,7 +9,6 @@ import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.protocol.*
 import lavalink.server.config.ServerConfig
 import lavalink.server.io.SocketServer
-import lavalink.server.io.WebSocketHandler
 import lavalink.server.player.filters.FilterChain
 import lavalink.server.util.*
 import moe.kyokobot.koe.VoiceServerInfo
@@ -24,12 +23,14 @@ import java.util.concurrent.CompletableFuture
 class PlayerRestHandler(
     private val socketServer: SocketServer,
     private val filterExtensions: List<AudioFilterExtension>,
-    private val serverConfig: ServerConfig,
+    serverConfig: ServerConfig,
 ) {
 
     companion object {
         private val log = LoggerFactory.getLogger(PlayerRestHandler::class.java)
     }
+
+    val disabledFilters = serverConfig.filters.entries.filter { !it.value }.map { it.key }
 
     @GetMapping(value = ["/v3/sessions/{sessionId}/players"], produces = ["application/json"])
     private fun getPlayers(@PathVariable sessionId: String): ResponseEntity<Players> {
@@ -58,18 +59,33 @@ class PlayerRestHandler(
         @PathVariable guildId: Long,
         @RequestParam noReplace: Boolean = false
     ): ResponseEntity<Player> {
+        val context = socketContext(socketServer, sessionId)
+
         if (playerUpdate.encodedTrack.isPresent && playerUpdate.identifier.isPresent) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot specify both encodedTrack and identifier")
         }
 
-        val context = socketContext(socketServer, sessionId)
-        val player = context.getPlayer(guildId)
+        playerUpdate.filters.takeIfPresent { filters ->
+            val invalidFilters = filters.validate(disabledFilters)
+
+            if (invalidFilters.isNotEmpty()) {
+                throw ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Following filters are disabled in the config: ${invalidFilters.joinToString()}"
+                )
+            }
+        }
 
         playerUpdate.voice.takeIfPresent {
             //discord sometimes send a partial server update missing the endpoint, which can be ignored.
             if (it.endpoint.isEmpty() || it.token.isEmpty() || it.sessionId.isEmpty()) {
                 throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Partial voice state update")
             }
+        }
+
+        val player = context.getPlayer(guildId)
+
+        playerUpdate.voice.takeIfPresent {
             //clear old connection
             context.koe.destroyConnection(guildId)
 
@@ -98,7 +114,7 @@ class PlayerRestHandler(
             }
 
         playerUpdate.filters.takeIfPresent {
-            player.filters = FilterChain.parse(it, filterExtensions, serverConfig.filters)
+            player.filters = FilterChain.parse(it, filterExtensions)
             SocketServer.sendPlayerUpdate(context, player)
         }
 

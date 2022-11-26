@@ -26,7 +26,6 @@ class FilterChain(
         fun parse(
             filters: Filters,
             extensions: List<AudioFilterExtension>,
-            options: Map<String, Boolean>
         ): FilterChain {
             return FilterChain(
                 filters.volume?.let { VolumeConfig(it) },
@@ -40,7 +39,6 @@ class FilterChain(
                 filters.channelMix?.let { ChannelMixConfig(it) },
                 filters.lowPass?.let { LowPassConfig(it) }
             ).apply {
-                this.options = options
                 parsePluginConfigs(filters.pluginFilters, extensions)
             }
         }
@@ -49,9 +47,6 @@ class FilterChain(
 
     @Transient
     private var pluginFilters: List<PluginConfig> = emptyList()
-
-    @Transient
-    private var options: Map<String, Boolean> = emptyMap()
 
     private fun parsePluginConfigs(dynamicValues: Map<String, JsonNode>, extensions: List<AudioFilterExtension>) {
         pluginFilters = extensions.mapNotNull {
@@ -72,7 +67,7 @@ class FilterChain(
         channelMix,
         lowPass,
         *pluginFilters.toTypedArray()
-    ).filter { it.name !in options || options[it.name] == true }
+    )
 
     val isEnabled get() = buildList().any { it.isEnabled }
 

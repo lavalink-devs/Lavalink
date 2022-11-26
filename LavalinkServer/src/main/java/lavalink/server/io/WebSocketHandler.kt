@@ -7,6 +7,7 @@ import dev.arbjerg.lavalink.api.WebSocketExtension
 import dev.arbjerg.lavalink.protocol.Band
 import dev.arbjerg.lavalink.protocol.Filters
 import dev.arbjerg.lavalink.protocol.decodeTrack
+import lavalink.server.config.ServerConfig
 import lavalink.server.player.TrackEndMarkerHandler
 import lavalink.server.player.filters.EqualizerConfig
 import lavalink.server.player.filters.FilterChain
@@ -19,7 +20,7 @@ class WebSocketHandler(
     private val context: SocketContext,
     wsExtensions: List<WebSocketExtension>,
     private val filterExtensions: List<AudioFilterExtension>,
-    private val filterConfig: Map<String, Boolean>,
+    serverConfig: ServerConfig,
     private val objectMapper: ObjectMapper
 ) {
     companion object {
@@ -45,6 +46,8 @@ class WebSocketHandler(
         "destroy" to ::destroy,
         "configureResuming" to ::configureResuming
     ) + wsExtensions.associate { it.toHandler(context) }
+
+    private val disabledFilters = serverConfig.filters.entries.filter { !it.value }.map { it.key }
 
     fun handle(json: JSONObject) {
         if (!loggedWsCommandsDeprecationWarning) {
@@ -142,7 +145,7 @@ class WebSocketHandler(
 
             loggedEqualizerDeprecationWarning = true
         }
-        if (filterConfig["equalizer"] == false) return log.warn("Equalizer is disabled in the config, ignoring equalizer op")
+        if ("equalizer" in disabledFilters) return log.warn("Equalizer filter is disabled in the config, ignoring equalizer op")
 
         val player = context.getPlayer(json.getLong("guildId"))
 
@@ -159,7 +162,12 @@ class WebSocketHandler(
     private fun filters(json: JSONObject) {
         val player = context.getPlayer(json.getLong("guildId"))
         val filters = objectMapper.readValue(json.toString(), Filters::class.java)
-        player.filters = FilterChain.parse(filters, filterExtensions, filterConfig)
+        val invalidFilters = filters.validate(disabledFilters)
+        if (invalidFilters.isNotEmpty()) {
+            log.warn("Following filters are disabled in the config, ignoring filters op: $invalidFilters")
+            return
+        }
+        player.filters = FilterChain.parse(filters, filterExtensions)
     }
 
     private fun destroy(json: JSONObject) {

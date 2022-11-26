@@ -62,7 +62,7 @@ class AudioPlayerConfiguration {
             }
 
             val bufferDuration = it.takeIf { it >= 200 } ?: defaultFrameBufferDuration
-            log.debug("Setting frame buffer duration to ${bufferDuration}ms", )
+            log.debug("Setting frame buffer duration to ${bufferDuration}ms")
             audioPlayerManager.frameBufferDuration = bufferDuration
         }
 
@@ -161,7 +161,7 @@ class AudioPlayerConfiguration {
 
         audioSourceManagers.forEach {
             audioPlayerManager.registerSourceManager(it)
-            log.info("Registered $it provided from a plugin", )
+            log.info("Registered $it provided from a plugin")
         }
 
         audioPlayerManager.configuration.isFilterHotSwapEnabled = true
