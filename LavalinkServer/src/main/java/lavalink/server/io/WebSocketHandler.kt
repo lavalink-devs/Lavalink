@@ -51,7 +51,7 @@ class WebSocketHandler(
 
     fun handle(json: JSONObject) {
         if (!loggedWsCommandsDeprecationWarning) {
-            log.warn("Sending websocket commands to Lavalink has been deprecated and will be removed in v4. Please use the new REST endpoints instead.")
+            log.warn("Sending websocket commands to Lavalink has been deprecated and will be removed in API version 4. API version 3 will be removed in Lavalink 5. Please use the new REST endpoints instead.")
             loggedWsCommandsDeprecationWarning = true
         }
         val op = json.getString("op")
@@ -140,7 +140,7 @@ class WebSocketHandler(
         if (!loggedEqualizerDeprecationWarning) {
             log.warn(
                 "The 'equalizer' op has been deprecated in favour of the " +
-                        "'filters' op. Please switch to that one, as this op will be removed in v4."
+                        "'filters' op. Please switch to that one, as this op will be removed in API version 4."
             )
 
             loggedEqualizerDeprecationWarning = true
@@ -164,7 +164,7 @@ class WebSocketHandler(
         val filters = objectMapper.readValue(json.toString(), Filters::class.java)
         val invalidFilters = filters.validate(disabledFilters)
         if (invalidFilters.isNotEmpty()) {
-            log.warn("Following filters are disabled in the config, ignoring filters op: $invalidFilters")
+            log.warn("The following filters are disabled in the config and are being ignored: $invalidFilters")
             return
         }
         player.filters = FilterChain.parse(filters, filterExtensions)
