@@ -26,6 +26,7 @@ public interface AudioFilterExtension {
      * @deprecated As of v3.7 Jackson is the preferred way of JSON serialization,
      * use {@link AudioFilterExtension#build(JsonNode, AudioDataFormat, FloatPcmAudioFilter)} instead.
      */
+    @Deprecated
     default FloatPcmAudioFilter build(JSONObject data, AudioDataFormat format, FloatPcmAudioFilter output) {
         return null;
     }
@@ -50,6 +51,7 @@ public interface AudioFilterExtension {
      * @deprecated As of v3.7 Jackson is the preferred way of JSON serialization,
      * use {@link AudioFilterExtension#isEnabled(JsonNode)} instead.
      */
+    @Deprecated
     default boolean isEnabled(JSONObject data) {
         return false;
     }

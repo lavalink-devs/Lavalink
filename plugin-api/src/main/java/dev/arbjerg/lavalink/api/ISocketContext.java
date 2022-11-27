@@ -44,6 +44,7 @@ public interface ISocketContext {
      * @deprecated As of v3.7 Jackson is the preferred way of JSON serialization,
      * use {@link ISocketContext#sendMessage(Object)} instead.
      */
+    @Deprecated
     void sendMessage(JSONObject message);
 
     /**
