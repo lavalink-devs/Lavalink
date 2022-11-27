@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class SessionRestHandler(private val socketServer: SocketServer) {
 
-    @PatchMapping("/v3/sessions/{sessionId}", consumes = ["application/json"])
+    @PatchMapping("/v3/sessions/{sessionId}")
     private fun patchSession(
         @RequestBody sessionUpdate: SessionUpdate,
         @PathVariable sessionId: String

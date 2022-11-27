@@ -32,14 +32,14 @@ class PlayerRestHandler(
 
     val disabledFilters = serverConfig.filters.entries.filter { !it.value }.map { it.key }
 
-    @GetMapping(value = ["/v3/sessions/{sessionId}/players"], produces = ["application/json"])
+    @GetMapping(value = ["/v3/sessions/{sessionId}/players"])
     private fun getPlayers(@PathVariable sessionId: String): ResponseEntity<Players> {
         val context = socketContext(socketServer, sessionId)
 
         return ResponseEntity.ok(Players(context.players.values.map { it.toPlayer(context) }))
     }
 
-    @GetMapping(value = ["/v3/sessions/{sessionId}/players/{guildId}"], produces = ["application/json"])
+    @GetMapping(value = ["/v3/sessions/{sessionId}/players/{guildId}"])
     private fun getPlayer(@PathVariable sessionId: String, @PathVariable guildId: Long): ResponseEntity<Player> {
         val context = socketContext(socketServer, sessionId)
         val player = existingPlayer(context, guildId)
@@ -47,11 +47,7 @@ class PlayerRestHandler(
         return ResponseEntity.ok(player.toPlayer(context))
     }
 
-    @PatchMapping(
-        value = ["/v3/sessions/{sessionId}/players/{guildId}"],
-        consumes = ["application/json"],
-        produces = ["application/json"]
-    )
+    @PatchMapping(value = ["/v3/sessions/{sessionId}/players/{guildId}"])
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private fun patchPlayer(
         @RequestBody playerUpdate: PlayerUpdate,

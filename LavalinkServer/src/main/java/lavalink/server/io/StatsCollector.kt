@@ -73,7 +73,7 @@ class StatsCollector(val socketServer: SocketServer) {
         }
     }
 
-    @GetMapping("/v3/stats", produces = ["application/json"])
+    @GetMapping("/v3/stats")
     fun getStats() = retrieveStats()
 
     fun retrieveStats(context: SocketContext? = null): Stats {

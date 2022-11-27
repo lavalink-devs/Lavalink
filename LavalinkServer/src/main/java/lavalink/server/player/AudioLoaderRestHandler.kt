@@ -47,7 +47,7 @@ class AudioLoaderRestHandler(
         private val log = LoggerFactory.getLogger(AudioLoaderRestHandler::class.java)
     }
 
-    @GetMapping(value = ["/loadtracks", "/v3/loadtracks"], produces = ["application/json"])
+    @GetMapping(value = ["/loadtracks", "/v3/loadtracks"])
     fun loadTracks(
         request: HttpServletRequest,
         @RequestParam identifier: String?
@@ -69,7 +69,7 @@ class AudioLoaderRestHandler(
         }
     }
 
-    @GetMapping(value = ["/decodetrack", "/v3/decodetrack"], produces = ["application/json"])
+    @GetMapping(value = ["/decodetrack", "/v3/decodetrack"])
     fun getDecodeTrack(@RequestParam encodedTrack: String?, @RequestParam track: String?): ResponseEntity<Track> {
         val trackToDecode = encodedTrack ?: track ?: throw ResponseStatusException(
             HttpStatus.BAD_REQUEST,
@@ -78,11 +78,7 @@ class AudioLoaderRestHandler(
         return ResponseEntity.ok(decodeTrack(audioPlayerManager, trackToDecode).toTrack(trackToDecode))
     }
 
-    @PostMapping(
-        value = ["/decodetracks", "/v3/decodetracks"],
-        consumes = ["application/json"],
-        produces = ["application/json"]
-    )
+    @PostMapping(value = ["/decodetracks", "/v3/decodetracks"])
     fun decodeTracks(@RequestBody encodedTracks: List<String>): ResponseEntity<List<Track>> {
         if (encodedTracks.isEmpty()) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "No tracks to decode provided")
