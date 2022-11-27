@@ -72,7 +72,7 @@ class SocketContext(
     private val players = ConcurrentHashMap<Long, Player>()
 
     val eventEmitter = EventEmitter(this, eventHandlers)
-    val wsHandler = WebSocketHandler(this, webSocketExtensions, filterExtensions)
+    val wsHandler = WebSocketHandler(this, webSocketExtensions, filterExtensions, serverConfig.filters)
 
     @Volatile
     var sessionPaused = false

@@ -15,7 +15,8 @@ class FilterChain : PcmFilterFactory {
     companion object {
         private val gson = Gson()
 
-        fun parse(json: JSONObject, extensions: List<AudioFilterExtension>): FilterChain {
+        fun parse(json: JSONObject, extensions: List<AudioFilterExtension>, config: Map<String, Boolean>): FilterChain {
+            config.forEach { if (!it.value) json.remove(it.key) }
             return gson.fromJson(json.toString(), FilterChain::class.java)!!
                 .apply { parsePluginConfigs(json, extensions) }
         }
