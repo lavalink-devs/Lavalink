@@ -22,6 +22,7 @@
 package lavalink.server.util
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.protocol.*
 import lavalink.server.io.SocketContext
@@ -31,8 +32,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 
 fun AudioTrack.toTrack(audioPlayerManager: AudioPlayerManager): Track {
-    val encoded = encodeTrack(audioPlayerManager, this)
-    return Track(encoded, encoded, this.toInfo())
+    return this.toTrack(encodeTrack(audioPlayerManager, this))
 }
 
 fun AudioTrack.toTrack(encoded: String): Track {
@@ -51,6 +51,10 @@ fun AudioTrack.toInfo(): TrackInfo {
         this.info.uri,
         this.sourceManager.sourceName
     )
+}
+
+fun AudioPlaylist.toPlaylistInfo(): PlaylistInfo {
+    return PlaylistInfo(this.name, this.tracks.indexOf(this.selectedTrack))
 }
 
 fun LavalinkPlayer.toPlayer(context: SocketContext): Player {

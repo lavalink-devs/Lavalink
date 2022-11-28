@@ -9,16 +9,21 @@ data class LoadResult(
     val playlistInfo: PlaylistInfo?,
     val exception: Exception?
 ) {
+    companion object {
+        fun trackLoaded(track: Track) = LoadResult(ResultStatus.TRACK_LOADED, listOf(track), null, null)
+        fun playlistLoaded(playlistInfo: PlaylistInfo, tracks: List<Track>) = LoadResult(
+            ResultStatus.PLAYLIST_LOADED,
+            tracks,
+            playlistInfo,
+            null
+        )
 
-    constructor(
-        loadResultType: ResultStatus,
-        tracks: List<Track>,
-        playlistInfo: PlaylistInfo?,
-    ) : this(
-        loadResultType, tracks, playlistInfo, null
-    )
+        fun searchResult(tracks: List<Track>) = LoadResult(ResultStatus.SEARCH_RESULT, tracks, null, null)
+        val noMatches = LoadResult(ResultStatus.NO_MATCHES, emptyList(), null, null)
+        fun loadFailed(exception: FriendlyException) =
+            LoadResult(ResultStatus.LOAD_FAILED, emptyList(), null, Exception.fromFriendlyException(exception))
 
-    constructor(exception: Exception?) : this(ResultStatus.LOAD_FAILED, emptyList(), null, exception)
+    }
 }
 
 data class PlaylistInfo(
@@ -31,7 +36,13 @@ data class Exception(
     val severity: FriendlyException.Severity,
     val cause: String
 ) {
-    constructor(e: FriendlyException) : this(e.message, e.severity, e.toString())
+    companion object {
+        fun fromFriendlyException(e: FriendlyException) = Exception(
+            e.message,
+            e.severity,
+            e.toString()
+        )
+    }
 }
 
 enum class ResultStatus {

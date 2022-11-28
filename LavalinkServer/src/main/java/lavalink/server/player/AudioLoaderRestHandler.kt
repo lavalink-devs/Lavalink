@@ -50,7 +50,7 @@ class AudioLoaderRestHandler(
     @GetMapping(value = ["/loadtracks", "/v3/loadtracks"])
     fun loadTracks(
         request: HttpServletRequest,
-        @RequestParam identifier: String?
+        @RequestParam identifier: String
     ): CompletionStage<ResponseEntity<JsonNode>> {
         log.info("Got request to load for identifier \"${identifier}\"")
         return AudioLoader(audioPlayerManager).load(identifier).thenApply {

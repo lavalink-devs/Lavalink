@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
-
 data class Session(
     val resumingKey: String? = null,
     val timeout: Long,
