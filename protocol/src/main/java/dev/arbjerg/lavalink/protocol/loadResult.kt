@@ -17,8 +17,7 @@ data class LoadResult(
             playlistInfo,
             null
         )
-
-        fun searchResult(tracks: List<Track>) = LoadResult(ResultStatus.SEARCH_RESULT, tracks, null, null)
+        fun searchResultLoaded(tracks: List<Track>) = LoadResult(ResultStatus.SEARCH_RESULT, tracks, null, null)
         val noMatches = LoadResult(ResultStatus.NO_MATCHES, emptyList(), null, null)
         fun loadFailed(exception: FriendlyException) =
             LoadResult(ResultStatus.LOAD_FAILED, emptyList(), null, Exception.fromFriendlyException(exception))

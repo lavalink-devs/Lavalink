@@ -61,7 +61,7 @@ class AudioLoader(private val audioPlayerManager: AudioPlayerManager) : AudioLoa
         log.info("Loaded playlist ${audioPlaylist.name}")
         val tracks = audioPlaylist.tracks.map { it.toTrack(audioPlayerManager) }
         if (audioPlaylist.isSearchResult) {
-            loadResult.complete(LoadResult.searchResult(tracks))
+            loadResult.complete(LoadResult.searchResultLoaded(tracks))
             return
         }
         loadResult.complete(LoadResult.playlistLoaded(audioPlaylist.toPlaylistInfo(), tracks))
