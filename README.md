@@ -82,7 +82,7 @@ While major, minor and patch will do an optimum effort to adhere to [Semantic Ve
 Client | Platform | Compatible With | Additional Information
 -------|----------|-----------------|-----------------------
 [Lavalink-Client](https://github.com/freyacodes/lavalink-client) | Java | JDA/**Any**
-[LavaClient](https://github.com/HoneycombsTeam/LavaClient) | Java | JDA
+[LavaClient](https://github.com/HoneycombsTeam/LavaClient) | Java | JDA | Archived
 [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt) | Kotlin | JDA/Kord/**Any** | Kotlin Coroutines
 [Lavalink.py](https://github.com/Devoxin/Lavalink.py) | Python | **Any**
 [lavasnek_rs](https://github.com/vicky5124/lavasnek_rs) | Python | **Any\*** | *`asyncio`-based libraries only
