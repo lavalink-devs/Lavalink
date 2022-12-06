@@ -35,7 +35,7 @@ data class TrackInfo(
     val isStream: Boolean,
     val position: Long,
     val title: String,
-    val uri: String,
+    val uri: String?,
     val sourceName: String
 )
 
