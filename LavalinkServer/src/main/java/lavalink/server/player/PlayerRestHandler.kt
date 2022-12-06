@@ -6,9 +6,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker
 import dev.arbjerg.lavalink.api.AudioFilterExtension
-import dev.arbjerg.lavalink.protocol.*
 import dev.arbjerg.lavalink.protocol.v3.*
-import dev.arbjerg.lavalink.v3.protocol.*
 import lavalink.server.config.ServerConfig
 import lavalink.server.io.SocketServer
 import lavalink.server.player.filters.FilterChain

@@ -24,9 +24,7 @@ package lavalink.server.util
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import dev.arbjerg.lavalink.protocol.*
 import dev.arbjerg.lavalink.protocol.v3.*
-import dev.arbjerg.lavalink.v3.protocol.*
 import lavalink.server.io.SocketContext
 import lavalink.server.io.SocketServer
 import lavalink.server.player.LavalinkPlayer
