@@ -4,6 +4,8 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.protocol.*
+import dev.arbjerg.lavalink.protocol.v3.*
+import dev.arbjerg.lavalink.v3.protocol.*
 import lavalink.server.bootstrap.PluginManager
 import lavalink.server.config.ServerConfig
 import org.springframework.web.bind.annotation.GetMapping

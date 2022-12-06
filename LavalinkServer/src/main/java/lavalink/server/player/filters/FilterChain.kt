@@ -8,7 +8,7 @@ import com.sedmelluq.discord.lavaplayer.filter.UniversalPcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.api.AudioFilterExtension
-import dev.arbjerg.lavalink.protocol.Filters
+import dev.arbjerg.lavalink.protocol.v3.Filters
 
 class FilterChain(
     private var volume: VolumeConfig? = null,

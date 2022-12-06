@@ -1,4 +1,4 @@
-package dev.arbjerg.lavalink.protocol
+package dev.arbjerg.lavalink.protocol.v3
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.tools.io.MessageInput

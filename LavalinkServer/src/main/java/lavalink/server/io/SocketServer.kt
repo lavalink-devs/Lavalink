@@ -27,8 +27,8 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.api.PluginEventHandler
 import dev.arbjerg.lavalink.api.WebSocketExtension
-import dev.arbjerg.lavalink.protocol.Message
-import dev.arbjerg.lavalink.protocol.PlayerState
+import dev.arbjerg.lavalink.protocol.v3.Message
+import dev.arbjerg.lavalink.protocol.v3.PlayerState
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.LavalinkPlayer
 import moe.kyokobot.koe.Koe

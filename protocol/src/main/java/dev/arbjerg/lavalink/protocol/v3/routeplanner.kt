@@ -1,4 +1,4 @@
-package dev.arbjerg.lavalink.protocol
+package dev.arbjerg.lavalink.protocol.v3
 
 data class RoutePlannerFreeAddress(val address: String)
 

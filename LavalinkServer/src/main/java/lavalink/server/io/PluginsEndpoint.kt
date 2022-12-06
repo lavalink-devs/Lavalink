@@ -1,7 +1,7 @@
 package lavalink.server.io
 
-import dev.arbjerg.lavalink.protocol.Plugin
-import dev.arbjerg.lavalink.protocol.Plugins
+import dev.arbjerg.lavalink.protocol.v3.Plugin
+import dev.arbjerg.lavalink.protocol.v3.Plugins
 import lavalink.server.bootstrap.PluginManager
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController

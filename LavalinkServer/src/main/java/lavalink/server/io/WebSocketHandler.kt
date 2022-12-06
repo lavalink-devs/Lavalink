@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.api.WebSocketExtension
-import dev.arbjerg.lavalink.protocol.Band
-import dev.arbjerg.lavalink.protocol.Filters
-import dev.arbjerg.lavalink.protocol.decodeTrack
+import dev.arbjerg.lavalink.protocol.v3.Band
+import dev.arbjerg.lavalink.protocol.v3.Filters
+import dev.arbjerg.lavalink.protocol.v3.decodeTrack
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.TrackEndMarkerHandler
 import lavalink.server.player.filters.EqualizerConfig

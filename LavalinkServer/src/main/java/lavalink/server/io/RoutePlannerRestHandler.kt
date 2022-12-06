@@ -5,6 +5,8 @@ import com.sedmelluq.lava.extensions.youtuberotator.planner.NanoIpRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingIpRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner
 import dev.arbjerg.lavalink.protocol.*
+import dev.arbjerg.lavalink.protocol.v3.*
+import dev.arbjerg.lavalink.v3.protocol.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

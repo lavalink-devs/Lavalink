@@ -1,4 +1,4 @@
-package dev.arbjerg.lavalink.protocol
+package dev.arbjerg.lavalink.protocol.v3
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature

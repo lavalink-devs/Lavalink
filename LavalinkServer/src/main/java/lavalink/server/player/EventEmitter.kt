@@ -27,9 +27,9 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
-import dev.arbjerg.lavalink.protocol.Exception
-import dev.arbjerg.lavalink.protocol.Message
-import dev.arbjerg.lavalink.protocol.encodeTrack
+import dev.arbjerg.lavalink.protocol.v3.Exception
+import dev.arbjerg.lavalink.protocol.v3.Message
+import dev.arbjerg.lavalink.protocol.v3.encodeTrack
 import lavalink.server.io.SocketServer.Companion.sendPlayerUpdate
 import lavalink.server.util.getRootCause
 import org.slf4j.LoggerFactory

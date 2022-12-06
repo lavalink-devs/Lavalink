@@ -28,7 +28,7 @@ import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.api.ISocketContext
 import dev.arbjerg.lavalink.api.PluginEventHandler
 import dev.arbjerg.lavalink.api.WebSocketExtension
-import dev.arbjerg.lavalink.protocol.Message
+import dev.arbjerg.lavalink.protocol.v3.Message
 import io.undertow.websockets.core.WebSocketCallback
 import io.undertow.websockets.core.WebSocketChannel
 import io.undertow.websockets.core.WebSockets

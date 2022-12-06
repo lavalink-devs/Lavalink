@@ -26,8 +26,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import dev.arbjerg.lavalink.protocol.Track
-import dev.arbjerg.lavalink.protocol.decodeTrack
+import dev.arbjerg.lavalink.protocol.v3.Track
+import dev.arbjerg.lavalink.protocol.v3.decodeTrack
 import lavalink.server.util.toTrack
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus

@@ -22,6 +22,8 @@
 package lavalink.server.io
 
 import dev.arbjerg.lavalink.protocol.*
+import dev.arbjerg.lavalink.protocol.v3.*
+import dev.arbjerg.lavalink.v3.protocol.*
 import lavalink.server.Launcher
 import lavalink.server.player.AudioLossCounter
 import org.slf4j.LoggerFactory

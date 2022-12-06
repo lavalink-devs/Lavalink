@@ -13,6 +13,8 @@ import com.github.natanbc.lavadsp.volume.VolumePcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat
 import dev.arbjerg.lavalink.protocol.*
+import dev.arbjerg.lavalink.protocol.v3.*
+import dev.arbjerg.lavalink.v3.protocol.*
 import com.sedmelluq.discord.lavaplayer.filter.equalizer.Equalizer as LavaplayerEqualizer
 
 class VolumeConfig(val volume: Float) : FilterConfig {

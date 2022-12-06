@@ -26,7 +26,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import dev.arbjerg.lavalink.protocol.LoadResult
+import dev.arbjerg.lavalink.protocol.v3.LoadResult
 import lavalink.server.util.toPlaylistInfo
 import lavalink.server.util.toTrack
 import org.slf4j.LoggerFactory

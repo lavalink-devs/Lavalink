@@ -1,8 +1,8 @@
 package lavalink.server.io
 
-import dev.arbjerg.lavalink.protocol.Session
-import dev.arbjerg.lavalink.protocol.SessionUpdate
-import dev.arbjerg.lavalink.protocol.takeIfPresent
+import dev.arbjerg.lavalink.protocol.v3.Session
+import dev.arbjerg.lavalink.protocol.v3.SessionUpdate
+import dev.arbjerg.lavalink.protocol.v3.takeIfPresent
 import lavalink.server.util.socketContext
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
