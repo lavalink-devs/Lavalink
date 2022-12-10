@@ -1,5 +1,10 @@
 package dev.arbjerg.lavalink.protocol.v3
 
-data class Plugins(val plugins: List<Plugin>)
+import com.fasterxml.jackson.annotation.JsonValue
+
+data class Plugins(
+    @JsonValue
+    val plugins: List<Plugin>
+)
 
 data class Plugin(val name: String, val version: String)
