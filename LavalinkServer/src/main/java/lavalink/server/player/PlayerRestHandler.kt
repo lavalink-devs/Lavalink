@@ -84,6 +84,7 @@ class PlayerRestHandler(
         playerUpdate.voice.takeIfPresent {
             val oldConnection = context.koe.getConnection(guildId)
             if (oldConnection == null ||
+                oldConnection.gatewayConnection?.isOpen == false ||
                 oldConnection.voiceServerInfo == null ||
                 oldConnection.voiceServerInfo?.endpoint != it.endpoint ||
                 oldConnection.voiceServerInfo?.token != it.token ||
