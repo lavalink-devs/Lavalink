@@ -70,30 +70,30 @@ data class Band(
     val gain: Float = 1.0f
 )
 
-open class Karaoke(
+data class Karaoke(
     val level: Float = 1.0f,
     val monoLevel: Float = 1.0f,
     val filterBand: Float = 220.0f,
     val filterWidth: Float = 100.0f
 )
 
-open class Timescale(
+data class Timescale(
     val speed: Double = 1.0,
     val pitch: Double = 1.0,
     val rate: Double = 1.0
 )
 
-open class Tremolo(
+data class Tremolo(
     val frequency: Float = 2.0f,
     val depth: Float = 0.5f
 )
 
-open class Vibrato(
+data class Vibrato(
     val frequency: Float = 2.0f,
     val depth: Float = 0.5f
 )
 
-open class Distortion(
+data class Distortion(
     val sinOffset: Float = 0.0f,
     val sinScale: Float = 1.0f,
     val cosOffset: Float = 0.0f,
@@ -104,18 +104,17 @@ open class Distortion(
     val scale: Float = 1.0f
 )
 
-open class Rotation(
+data class Rotation(
     val rotationHz: Double = 0.0
 )
 
-open class ChannelMix(
+data class ChannelMix(
     val leftToLeft: Float = 1.0f,
     val leftToRight: Float = 0.0f,
     val rightToLeft: Float = 0.0f,
     val rightToRight: Float = 1.0f
-
 )
 
-open class LowPass(
+data class LowPass(
     val smoothing: Float = 20.0f
 )  

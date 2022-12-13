@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.api.WebSocketExtension
-import dev.arbjerg.lavalink.protocol.v3.Band
 import dev.arbjerg.lavalink.protocol.v3.Filters
 import dev.arbjerg.lavalink.protocol.v3.decodeTrack
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.TrackEndMarkerHandler
+import lavalink.server.player.filters.Band
 import lavalink.server.player.filters.EqualizerConfig
 import lavalink.server.player.filters.FilterChain
 import moe.kyokobot.koe.VoiceServerInfo
@@ -154,8 +154,7 @@ class WebSocketHandler(
             .map { b -> Band(b.getInt("band"), b.getFloat("gain")) }
 
         val filters = player.filters
-
-        filters.equalizer = EqualizerConfig(bands)
+        filters.setEqualizer(EqualizerConfig(bands))
         player.filters = filters
     }
 
