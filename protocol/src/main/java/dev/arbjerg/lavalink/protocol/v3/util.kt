@@ -10,7 +10,11 @@ import java.io.ByteArrayOutputStream
 
 fun decodeTrack(audioPlayerManager: AudioPlayerManager, message: String): AudioTrack {
     val bais = ByteArrayInputStream(Base64.decodeBase64(message))
-    return audioPlayerManager.decodeTrack(MessageInput(bais)).decodedTrack
+    val track = audioPlayerManager.decodeTrack(MessageInput(bais))
+    if (track.decodedTrack == null) {
+        throw IllegalStateException("Failed to decode track due to a mismatching version or missing source manager")
+    }
+    return track.decodedTrack
 }
 
 fun encodeTrack(audioPlayerManager: AudioPlayerManager, track: AudioTrack): String {
