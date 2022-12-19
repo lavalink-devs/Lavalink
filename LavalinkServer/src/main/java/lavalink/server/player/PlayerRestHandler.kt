@@ -142,21 +142,21 @@ class PlayerRestHandler(
                         trackFuture.complete(track)
                     }
 
-                    override fun playlistLoaded(playlist: AudioPlaylist?) {
-                        trackFuture.completeExceptionally(IllegalArgumentException("Cannot play a playlist"))
+                    override fun playlistLoaded(playlist: AudioPlaylist) {
+                        trackFuture.completeExceptionally(ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot play a playlist or search result"))
                     }
 
                     override fun noMatches() {
-                        trackFuture.completeExceptionally(IllegalArgumentException("No track found for identifier ${playerUpdate.identifier.value}"))
+                        trackFuture.completeExceptionally(ResponseStatusException(HttpStatus.BAD_REQUEST, "No matches found for identifier"))
                     }
 
                     override fun loadFailed(exception: FriendlyException) {
-                        trackFuture.completeExceptionally(exception)
+                        trackFuture.completeExceptionally(ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, exception.message, getRootCause(exception)))
                     }
                 })
 
                 trackFuture.exceptionally {
-                    throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, it.message, getRootCause(it))
+                    throw it
                 }.join()
             }
 
