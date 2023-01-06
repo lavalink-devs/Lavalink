@@ -48,7 +48,7 @@ import java.util.*
 import java.util.concurrent.*
 
 class SocketContext(
-    val sessionId: String,
+    private val sessionId: String,
     val audioPlayerManager: AudioPlayerManager,
     private val serverConfig: ServerConfig,
     private var session: WebSocketSession,
@@ -101,6 +101,10 @@ class SocketContext(
             thread.isDaemon = true
             thread
         }
+    }
+
+    override fun getSessionId(): String {
+        return sessionId
     }
 
     override fun getUserId(): Long {

@@ -1,6 +1,7 @@
 package dev.arbjerg.lavalink.api;
 
 import org.json.JSONObject;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.util.Map;
@@ -9,6 +10,13 @@ import java.util.Map;
  * Represents a WebSocket connection
  */
 public interface ISocketContext {
+
+    /**
+     * @return The session ID of the connection
+     */
+    @NonNull
+    String getSessionId();
+
     /**
      * @return the User ID of the Client.
      */
