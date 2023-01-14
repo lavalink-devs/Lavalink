@@ -1,6 +1,7 @@
 rootProject.name = "Lavalink-Parent"
 
 include(":Lavalink-Server")
+include(":protocol")
 include(":Testbot")
 include(":plugin-api")
 include("plugin-api")
@@ -31,12 +32,13 @@ fun VersionCatalogBuilder.spring() {
     library("spring-boot-web",      "org.springframework.boot", "spring-boot-starter-web").versionRef("spring-boot")
     library("spring-boot-undertow", "org.springframework.boot", "spring-boot-starter-undertow") .versionRef("spring-boot")
     library("spring-boot-test",     "org.springframework.boot", "spring-boot-starter-test") .versionRef("spring-boot")
+    library("jackson-module-kotlin", "com.fasterxml.jackson.module", "jackson-module-kotlin").version("2.13.2")
 
     bundle("spring", listOf("spring-websocket", "spring-boot-web", "spring-boot-undertow"))
 }
 
 fun VersionCatalogBuilder.voice() {
-    version("lavaplayer", "1.3.99.1")
+    version("lavaplayer", "1.3.99.2")
 
     library("lavaplayer",            "com.github.walkyst.lavaplayer-fork", "lavaplayer").versionRef("lavaplayer")
     library("lavaplayer-ip-rotator", "com.github.walkyst.lavaplayer-fork", "lavaplayer-ext-youtube-rotator").versionRef("lavaplayer")
@@ -45,7 +47,7 @@ fun VersionCatalogBuilder.voice() {
     library("koe",          "moe.kyokobot.koe", "core").version("2.0.0-rc1")
     library("koe-udpqueue", "moe.kyokobot.koe", "ext-udpqueue").version("2.0.0-rc1")
 
-    version("udpqueue", "0.2.5")
+    version("udpqueue", "0.2.6")
     val platforms = listOf("linux-x86-64", "linux-x86", "linux-aarch64", "linux-arm", "win-x86-64", "win-x86", "darwin")
     platforms.forEach {
         library("udpqueue-native-$it", "club.minnced", "udpqueue-native-$it").versionRef("udpqueue")
@@ -66,7 +68,7 @@ fun VersionCatalogBuilder.metrics() {
 }
 
 fun VersionCatalogBuilder.common() {
-    version("kotlin", "1.3.61")
+    version("kotlin", "1.7.20")
 
     library("kotlin-reflect",     "org.jetbrains.kotlin", "kotlin-reflect").versionRef("kotlin")
     library("kotlin-stdlib-jdk8", "org.jetbrains.kotlin", "kotlin-stdlib-jdk8").versionRef("kotlin")
@@ -75,7 +77,6 @@ fun VersionCatalogBuilder.common() {
     library("sentry-logback", "io.sentry",            "sentry-logback").version("1.7.2")
     library("oshi",           "com.github.oshi",      "oshi-core").version("5.7.4")
     library("json",           "org.json",             "json").version("20180813")
-    library("gson",           "com.google.code.gson", "gson").version("2.8.5")
 
     library("spotbugs", "com.github.spotbugs", "spotbugs-annotations").version("3.1.6")
 }

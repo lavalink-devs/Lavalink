@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component
 @Component
 class ServerConfig {
     var password: String? = null
+
     @get:Deprecated("use {@link SentryConfigProperties} instead.")
     var sentryDsn = ""
     var bufferDurationMs: Int? = null
@@ -46,4 +47,5 @@ class ServerConfig {
     var ratelimit: RateLimitConfig? = null
     var youtubeConfig: YoutubeConfig? = null
     var httpConfig: HttpConfig? = null
+    var filters: Map<String, Boolean> = mapOf()
 }

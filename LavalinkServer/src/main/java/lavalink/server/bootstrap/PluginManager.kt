@@ -55,7 +55,7 @@ class PluginManager(config: PluginsConfig) {
             Declaration(fragments[0], fragments[1], fragments[2], repository)
         }
 
-        declarations.forEach declarationLoop@ { declaration ->
+        declarations.forEach declarationLoop@{ declaration ->
             pluginJars.forEach { jar ->
                 if (declaration.name == jar.name) {
                     if (declaration.version == jar.version) {
@@ -102,7 +102,10 @@ class PluginManager(config: PluginsConfig) {
 
         if (jarsToLoad.isEmpty()) return emptyList()
 
-        val cl = URLClassLoader.newInstance(jarsToLoad.map { URL("jar:file:${it.absolutePath}!/") }.toTypedArray(), javaClass.classLoader)
+        val cl = URLClassLoader.newInstance(
+            jarsToLoad.map { URL("jar:file:${it.absolutePath}!/") }.toTypedArray(),
+            javaClass.classLoader
+        )
         classLoader = cl
 
         val manifests = mutableListOf<PluginManifest>()

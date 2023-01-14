@@ -34,7 +34,10 @@ configurations {
 }
 
 dependencies {
-    implementation(projects.pluginApi)
+    implementation(projects.protocol)
+    implementation(projects.pluginApi) {
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
+    }
 
     implementation(libs.bundles.metrics)
     implementation(libs.bundles.spring) {
@@ -59,7 +62,6 @@ dependencies {
     implementation(libs.sentry.logback)
     implementation(libs.oshi)
     implementation(libs.json)
-    implementation(libs.gson)
 
     compileOnly(libs.spotbugs)
 
@@ -82,6 +84,10 @@ tasks {
         )
 
         filter(ReplaceTokens::class, mapOf("tokens" to tokens))
+        copy {
+            from("application.yml.example")
+            into("$buildDir/resources/main")
+        }
     }
 
     // https://stackoverflow.com/questions/41444916/multiple-artifacts-issue-with-deploying-zip-to-nexus

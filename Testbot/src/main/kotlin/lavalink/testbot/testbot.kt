@@ -17,7 +17,6 @@ import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.cache.CacheFlag.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.lang.IllegalArgumentException
 import java.net.URI
 
 private val log: Logger = LoggerFactory.getLogger("Testbot")

@@ -37,15 +37,16 @@ import org.springframework.boot.context.event.ApplicationFailedEvent
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
 import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.FilterType
+import org.springframework.context.annotation.*
 import org.springframework.core.io.DefaultResourceLoader
+import java.io.File
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-@Suppress("SpringBootApplicationSetup", "SpringComponentScan")
+
+@Suppress("SpringComponentScan")
 @SpringBootApplication
 @ComponentScan(
     value = ["\${componentScan}"],
@@ -67,29 +68,29 @@ object Launcher {
             .withZone(ZoneId.of("UTC"))
         val buildTime = dtf.format(Instant.ofEpochMilli(appInfo.buildTime))
         val commitTime = dtf.format(Instant.ofEpochMilli(gitRepoState.commitTime * 1000))
-
-        val version = appInfo.version.takeUnless { it.startsWith("@") } ?: "Unknown"
+        val version = appInfo.versionBuild.takeUnless { it.startsWith("@") }
+            ?: "Unknown"
 
         return buildString {
             if (vanity) {
-                appendln()
-                appendln()
-                appendln(getVanity())
+                appendLine()
+                appendLine()
+                appendLine(getVanity())
             }
             if (!gitRepoState.isLoaded) {
-                appendln()
-                appendln("$indentation*** Unable to find or load Git metadata ***")
+                appendLine()
+                appendLine("$indentation*** Unable to find or load Git metadata ***")
             }
-            appendln()
-            append("${indentation}Version:        "); appendln(version)
+            appendLine()
+            append("${indentation}Version:        "); appendLine(version)
             if (gitRepoState.isLoaded) {
-                append("${indentation}Build time:     "); appendln(buildTime)
-                append("${indentation}Branch          "); appendln(gitRepoState.branch)
-                append("${indentation}Commit:         "); appendln(gitRepoState.commitIdAbbrev)
-                append("${indentation}Commit time:    "); appendln(commitTime)
+                append("${indentation}Build time:     "); appendLine(buildTime)
+                append("${indentation}Branch          "); appendLine(gitRepoState.branch)
+                append("${indentation}Commit:         "); appendLine(gitRepoState.commitIdAbbrev)
+                append("${indentation}Commit time:    "); appendLine(commitTime)
             }
-            append("${indentation}JVM:            "); appendln(System.getProperty("java.version"))
-            append("${indentation}Lavaplayer      "); appendln(PlayerLibrary.VERSION)
+            append("${indentation}JVM:            "); appendLine(System.getProperty("java.version"))
+            append("${indentation}Lavaplayer      "); appendLine(PlayerLibrary.VERSION)
         }
     }
 
@@ -120,6 +121,23 @@ object Launcher {
             println(getVersionInfo(indentation = "", vanity = false))
             return
         }
+
+        val config = File("./application.yml")
+        if (!config.exists()) {
+            log.info("No application.yml found, creating one...")
+            Launcher::class.java.getResource("/application.yml.example")?.let {
+                it.openStream().use {
+                    if (!config.createNewFile()) {
+                        log.error("Unable to create application.yml")
+                        return
+                    }
+                    config.outputStream().use { out ->
+                        it.copyTo(out)
+                    }
+                }
+            } ?: log.error("Unable to find application.yml.example in resources")
+        }
+
         val parent = launchPluginBootstrap()
         log.info("You can safely ignore the big red warning about illegal reflection. See https://github.com/freyacodes/Lavalink/issues/295")
         launchMain(parent, args)
@@ -145,12 +163,18 @@ object Launcher {
             .resourceLoader(DefaultResourceLoader(pluginManager.classLoader))
             .listeners(
                 ApplicationListener { event: Any ->
-                    if (event is ApplicationEnvironmentPreparedEvent) {
-                        log.info(getVersionInfo())
-                    } else if (event is ApplicationReadyEvent) {
-                        log.info("Lavalink is ready to accept connections.")
-                    } else if (event is ApplicationFailedEvent) {
-                        log.error("Application failed", event.exception)
+                    when (event) {
+                        is ApplicationEnvironmentPreparedEvent -> {
+                            log.info(getVersionInfo())
+                        }
+
+                        is ApplicationReadyEvent -> {
+                            log.info("Lavalink is ready to accept connections.")
+                        }
+
+                        is ApplicationFailedEvent -> {
+                            log.error("Application failed", event.exception)
+                        }
                     }
                 }
             ).parent(parent)

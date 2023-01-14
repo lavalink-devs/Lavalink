@@ -3,22 +3,33 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 3.7.0
+* New REST API for player control and deprecation of all websocket OPs. For more info see [here](https://github.com/freyacodes/Lavalink/blob/master/IMPLEMENTATION.md#significant-changes-v360---v370)
+* Autocreate default `application.yml` if none was found. https://github.com/freyacodes/Lavalink/pull/781
+* New config option to disable jda nas. https://github.com/freyacodes/Lavalink/pull/780
+* New config option to disable specific filters. https://github.com/freyacodes/Lavalink/pull/779
+* Update lavaplayer to `1.3.99.2`. https://github.com/freyacodes/Lavalink/pull/794
+* Update udpqueue.rs to `v0.2.6`. https://github.com/freyacodes/Lavalink/pull/802
+
+Contributors:
+[@TopiSenpai](https://github.com/TopiSenpai), [@Devoxin](https://github.com/Devoxin), [@melike2d](https://github.com/melike2d), [@freyacodes](https://github.com/freyacodes), [@aikaterna](https://github.com/aikaterna), [@ooliver1](https://github.com/ooliver1)
+
 ## 3.6.2
-* update lavaplayer to `1.3.99.1`. For more info see [here](https://github.com/freyacodes/Lavalink/pull/773)
+* Update lavaplayer to `1.3.99.1`. For more info see [here](https://github.com/freyacodes/Lavalink/pull/773)
 
 ## 3.6.1
-* update lavaplayer to `1.3.99`. For more info see [here](https://github.com/freyacodes/Lavalink/pull/768)
+* Update lavaplayer to `1.3.99`. For more info see [here](https://github.com/freyacodes/Lavalink/pull/768)
 
 ## 3.6.0
-* new userId & clientName getters in the plugin-api. For more info see [here](https://github.com/freyacodes/Lavalink/pull/743).
+* New userId & clientName getters in the plugin-api. For more info see [here](https://github.com/freyacodes/Lavalink/pull/743).
 
 Contributors: 
 [@melike2d](https://github.com/melike2d)
 
 ## 3.5.1
-* update udpqueue.rs to `0.2.5` which fixes crashes when ipv6 is disabled
-* fix null socketContext in `IPlayer` for plugins
-* new `ping` field in player update. see https://github.com/freyacodes/Lavalink/pull/738 for more info
+* Update udpqueue.rs to `0.2.5` which fixes crashes when ipv6 is disabled
+* Fix null socketContext in `IPlayer` for plugins
+* New `ping` field in player update. see https://github.com/freyacodes/Lavalink/pull/738 for more info
 
 Contributors: 
 [@TopiSenpai](https://github.com/TopiSenpai),

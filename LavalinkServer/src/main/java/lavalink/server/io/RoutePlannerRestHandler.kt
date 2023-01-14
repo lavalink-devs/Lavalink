@@ -4,7 +4,7 @@ import com.sedmelluq.lava.extensions.youtuberotator.planner.AbstractRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.planner.NanoIpRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingIpRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner
-import org.json.JSONObject
+import dev.arbjerg.lavalink.protocol.v3.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,13 +23,13 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
     /**
      * Returns current information about the active AbstractRoutePlanner
      */
-    @GetMapping("/routeplanner/status")
+    @GetMapping(value = ["/routeplanner/status", "/v3/routeplanner/status"])
     fun getStatus(request: HttpServletRequest): ResponseEntity<RoutePlannerStatus> {
         val status = when (routePlanner) {
             null -> RoutePlannerStatus(null, null)
             else -> RoutePlannerStatus(
-                    routePlanner.javaClass.simpleName,
-                    getDetailBlock(routePlanner)
+                routePlanner.javaClass.simpleName,
+                getDetailBlock(routePlanner)
             )
         }
         return ResponseEntity.ok(status)
@@ -38,12 +38,14 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
     /**
      * Removes a single address from the addresses which are currently marked as failing
      */
-    @PostMapping("/routeplanner/free/address")
-    fun freeSingleAddress(request: HttpServletRequest, @RequestBody requestBody: String): ResponseEntity<Void> {
+    @PostMapping(value = ["/routeplanner/free/address", "/v3/routeplanner/free/address"])
+    fun freeSingleAddress(
+        request: HttpServletRequest,
+        @RequestBody body: RoutePlannerFreeAddress
+    ): ResponseEntity<Unit> {
         routePlanner ?: throw RoutePlannerDisabledException()
         try {
-            val jsonObject = JSONObject(requestBody)
-            val address = InetAddress.getByName(jsonObject.getString("address"))
+            val address = InetAddress.getByName(body.address)
             routePlanner.freeAddress(address)
             return ResponseEntity.noContent().build()
         } catch (exception: UnknownHostException) {
@@ -54,8 +56,8 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
     /**
      * Removes all addresses from the list which holds the addresses which are marked failing
      */
-    @PostMapping("/routeplanner/free/all")
-    fun freeAllAddresses(request: HttpServletRequest): ResponseEntity<Void> {
+    @PostMapping(value = ["/routeplanner/free/all", "/v3/routeplanner/free/all"])
+    fun freeAllAddresses(request: HttpServletRequest): ResponseEntity<Unit> {
         routePlanner ?: throw RoutePlannerDisabledException()
         routePlanner.freeAllAddresses()
         return ResponseEntity.noContent().build()
@@ -75,58 +77,31 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
 
         return when (planner) {
             is RotatingIpRoutePlanner -> RotatingIpRoutePlannerStatus(
-                    ipBlockStatus,
-                    failingAddressesStatus,
-                    planner.rotateIndex.toString(),
-                    planner.index.toString(),
-                    planner.currentAddress.toString()
+                ipBlockStatus,
+                failingAddressesStatus,
+                planner.rotateIndex.toString(),
+                planner.index.toString(),
+                planner.currentAddress.toString()
             )
+
             is NanoIpRoutePlanner -> NanoIpRoutePlannerStatus(
-                    ipBlockStatus,
-                    failingAddressesStatus,
-                    planner.currentAddress.toString()
+                ipBlockStatus,
+                failingAddressesStatus,
+                planner.currentAddress.toString()
             )
+
             is RotatingNanoIpRoutePlanner -> RotatingNanoIpRoutePlannerStatus(
-                    ipBlockStatus,
-                    failingAddressesStatus,
-                    planner.currentBlock.toString(),
-                    planner.addressIndexInBlock.toString()
+                ipBlockStatus,
+                failingAddressesStatus,
+                planner.currentBlock.toString(),
+                planner.addressIndexInBlock.toString()
             )
+
             else -> GenericRoutePlannerStatus(ipBlockStatus, failingAddressesStatus)
         }
     }
 
-    data class RoutePlannerStatus(val `class`: String?, val details: IRoutePlannerStatus?)
+    class RoutePlannerDisabledException :
+        ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Can't access disabled route planner")
 
-    interface IRoutePlannerStatus
-    data class GenericRoutePlannerStatus(
-            val ipBlock: IpBlockStatus,
-            val failingAddresses: List<FailingAddress>
-    ) : IRoutePlannerStatus
-
-    data class RotatingIpRoutePlannerStatus(
-            val ipBlock: IpBlockStatus,
-            val failingAddresses: List<FailingAddress>,
-            val rotateIndex: String,
-            val ipIndex: String,
-            val currentAddress: String
-    ) : IRoutePlannerStatus
-
-    data class NanoIpRoutePlannerStatus(
-            val ipBlock: IpBlockStatus,
-            val failingAddresses: List<FailingAddress>,
-            val currentAddressIndex: String
-    ) : IRoutePlannerStatus
-
-    data class RotatingNanoIpRoutePlannerStatus(
-            val ipBlock: IpBlockStatus,
-            val failingAddresses: List<FailingAddress>,
-            val blockIndex: String,
-            val currentAddressIndex: String
-    ) : IRoutePlannerStatus
-
-    data class FailingAddress(val failingAddress: String, val failingTimestamp: Long, val failingTime: String)
-    data class IpBlockStatus(val type: String, val size: String)
-
-    class RoutePlannerDisabledException : ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Can't access disabled route planner")
 }
