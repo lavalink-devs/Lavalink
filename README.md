@@ -93,7 +93,7 @@ Additional labels for release candidates are available as extensions to the `MAJ
 | [Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET)                                            | .NET     | **Any**                 | ❌                | Unmaintained                    |
 | [SharpLink](https://github.com/Devoxin/SharpLink)                                                     | .NET     | Discord.Net             | ❌                | Unmaintained                    |
 | [DisCatSharp.Lavalink](https://github.com/Aiko-IT-Systems/DisCatSharp/tree/main/DisCatSharp.Lavalink) | .NET     | DisCatSharp             | ❌                |                                 |
-| [disgolink](https://github.com/DisgoOrg/disgolink)                                                    | Go       | Disgo/DiscordGo/**Any** | ❌                |                                 |
+| [DisGoLink](https://github.com/disgoorg/disgolink)                                                    | Go       | **Any**                 | ❌                |                                 |
 | [waterlink](https://github.com/lukasl-dev/waterlink)                                                  | Go       | **Any**                 | ❌                |                                 |
 | [gavalink](https://github.com/foxbot/gavalink)                                                        | Go       | **Any**                 | ❌                | Unmaintained                    |
 | [Lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)                                               | Rust     | **Any\***               | ❌                | *`tokio`-based libraries only   |
