@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component
 @Component
 class ServerConfig {
     var password: String? = null
+
     @get:Deprecated("use {@link SentryConfigProperties} instead.")
     var sentryDsn = ""
     var bufferDurationMs: Int? = null

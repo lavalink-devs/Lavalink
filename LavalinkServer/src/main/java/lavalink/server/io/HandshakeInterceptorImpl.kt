@@ -23,27 +23,38 @@ constructor(private val serverConfig: ServerConfig, private val socketServer: So
      *
      * @return true if authenticated
      */
-    override fun beforeHandshake(request: ServerHttpRequest, response: ServerHttpResponse, wsHandler: WebSocketHandler,
-                                 attributes: Map<String, Any>): Boolean {
+    @Suppress("UastIncorrectHttpHeaderInspection")
+    override fun beforeHandshake(
+        request: ServerHttpRequest, response: ServerHttpResponse, wsHandler: WebSocketHandler,
+        attributes: Map<String, Any>
+    ): Boolean {
         val password = request.headers.getFirst("Authorization")
-        val matches = password == serverConfig.password
 
-        if (matches) {
-            log.info("Incoming connection from " + request.remoteAddress)
-        } else {
-            log.error("Authentication failed from " + request.remoteAddress)
+        if (password != serverConfig.password) {
+            log.error("Authentication failed from ${request.remoteAddress}")
             response.setStatusCode(HttpStatus.UNAUTHORIZED)
+            return false
         }
+
+        if (request.headers.getFirst("User-Id") == null) {
+            log.error("Missing User-Id header from ${request.remoteAddress}")
+            response.setStatusCode(HttpStatus.BAD_REQUEST)
+            return false
+        }
+
+        log.info("Incoming connection from ${request.remoteAddress}")
 
         val resumeKey = request.headers.getFirst("Resume-Key")
         val resuming = resumeKey != null && socketServer.canResume(resumeKey)
         response.headers.add("Session-Resumed", resuming.toString())
 
-        return matches
+        return true
     }
 
     // No action required
-    override fun afterHandshake(request: ServerHttpRequest, response: ServerHttpResponse, wsHandler: WebSocketHandler,
-                                exception: Exception?) {
+    override fun afterHandshake(
+        request: ServerHttpRequest, response: ServerHttpResponse, wsHandler: WebSocketHandler,
+        exception: Exception?
+    ) {
     }
 }

@@ -19,42 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package lavalink.server.player
 
-package lavalink.server.util;
+import com.sedmelluq.discord.lavaplayer.track.TrackMarkerHandler
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
-@SuppressWarnings("unused")
-public class ResetableCountDownLatch {
-
-    private static final Logger log = LoggerFactory.getLogger(ResetableCountDownLatch.class);
-
-    private final int startCount;
-    private CountDownLatch latch;
-
-    public ResetableCountDownLatch(int startCount) {
-        this.startCount = startCount;
-        latch = new CountDownLatch(startCount);
+class TrackEndMarkerHandler(private val player: LavalinkPlayer) : TrackMarkerHandler {
+    companion object {
+        val APPLICABLE_STATES = listOf(TrackMarkerHandler.MarkerState.REACHED, TrackMarkerHandler.MarkerState.BYPASSED)
     }
 
-    public void countDown() {
-        latch.countDown();
-    }
+    override fun handle(state: TrackMarkerHandler.MarkerState) {
+        if (state !in APPLICABLE_STATES) {
+            return
+        }
 
-    public void await() throws InterruptedException {
-        latch.await();
-    }
-
-    public void await(long timeout, TimeUnit unit) throws InterruptedException {
-        latch.await(timeout, unit);
-    }
-
-    public void reset() {
-        while (latch.getCount() != 0) latch.countDown();
-        latch = new CountDownLatch(startCount);
+        player.endMarkerHit = true
+        player.stop()
     }
 }

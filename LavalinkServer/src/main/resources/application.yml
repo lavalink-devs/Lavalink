@@ -3,3 +3,9 @@ spring:
     version: "1.0"
     formatted-version: "(v1.0)"
     name: "Lavalink"
+server:
+  error:
+    include-message: ALWAYS
+    include-binding-errors: ALWAYS
+    include-stacktrace: ON_PARAM
+    include-exception: false

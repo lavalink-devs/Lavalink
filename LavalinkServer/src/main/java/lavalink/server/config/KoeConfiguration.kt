@@ -47,18 +47,24 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
         if (nasSupported) {
             log.info("Enabling JDA-NAS")
             if (bufferSize < 40) {
-                log.warn("Buffer size of {}ms is illegal. Defaulting to {}",
-                        bufferSize, UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION)
+                log.warn("Buffer size of ${bufferSize}ms is illegal. Defaulting to ${UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION}ms")
                 bufferSize = UdpQueueFramePollerFactory.DEFAULT_BUFFER_DURATION
             }
             try {
-                setFramePollerFactory(UdpQueueFramePollerFactory(bufferSize, Runtime.getRuntime().availableProcessors()))
+                setFramePollerFactory(
+                    UdpQueueFramePollerFactory(
+                        bufferSize,
+                        Runtime.getRuntime().availableProcessors()
+                    )
+                )
             } catch (e: Throwable) {
                 log.warn("Failed to enable JDA-NAS! GC pauses may cause your bot to stutter during playback.", e)
             }
         } else {
-            log.warn("This system and architecture appears to not support native audio sending! "
-                    + "GC pauses may cause your bot to stutter during playback.")
+            log.warn(
+                "This system and architecture appears to not support native audio sending! "
+                        + "GC pauses may cause your bot to stutter during playback."
+            )
         }
     }.create()
 }

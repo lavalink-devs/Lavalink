@@ -22,17 +22,19 @@
 
 package lavalink.server.io
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.api.ISocketContext
 import dev.arbjerg.lavalink.api.PluginEventHandler
 import dev.arbjerg.lavalink.api.WebSocketExtension
+import dev.arbjerg.lavalink.protocol.v3.Message
 import io.undertow.websockets.core.WebSocketCallback
 import io.undertow.websockets.core.WebSocketChannel
 import io.undertow.websockets.core.WebSockets
 import io.undertow.websockets.jsr.UndertowSession
 import lavalink.server.config.ServerConfig
-import lavalink.server.player.Player
+import lavalink.server.player.LavalinkPlayer
 import moe.kyokobot.koe.KoeClient
 import moe.kyokobot.koe.KoeEventAdapter
 import moe.kyokobot.koe.MediaConnection
@@ -43,36 +45,33 @@ import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
 import java.net.InetSocketAddress
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.ScheduledFuture
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.*
 
 class SocketContext(
+    private val sessionId: String,
     val audioPlayerManager: AudioPlayerManager,
-    val serverConfig: ServerConfig,
+    private val serverConfig: ServerConfig,
     private var session: WebSocketSession,
     private val socketServer: SocketServer,
+    statsCollector: StatsCollector,
     private val userId: String,
     private val clientName: String?,
     val koe: KoeClient,
     eventHandlers: Collection<PluginEventHandler>,
     webSocketExtensions: List<WebSocketExtension>,
-    filterExtensions: List<AudioFilterExtension>
-
+    filterExtensions: List<AudioFilterExtension>,
+    private val objectMapper: ObjectMapper
 ) : ISocketContext {
 
     companion object {
         private val log = LoggerFactory.getLogger(SocketContext::class.java)
     }
 
-    //guildId <-> Player
-    private val players = ConcurrentHashMap<Long, Player>()
+    //guildId <-> LavalinkPlayer
+    private val players = ConcurrentHashMap<Long, LavalinkPlayer>()
 
     val eventEmitter = EventEmitter(this, eventHandlers)
-    val wsHandler = WebSocketHandler(this, webSocketExtensions, filterExtensions, serverConfig.filters)
+    val wsHandler = WebSocketHandler(this, webSocketExtensions, filterExtensions, serverConfig, objectMapper)
 
     @Volatile
     var sessionPaused = false
@@ -85,16 +84,16 @@ class SocketContext(
     private val executor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
     val playerUpdateService: ScheduledExecutorService
 
-    val playingPlayers: List<Player>
+    val playingPlayers: List<LavalinkPlayer>
         get() {
-            val newList = LinkedList<Player>()
+            val newList = LinkedList<LavalinkPlayer>()
             players.values.forEach { player -> if (player.isPlaying) newList.add(player) }
             return newList
         }
 
 
     init {
-        executor.scheduleAtFixedRate(StatsTask(this, socketServer), 0, 1, TimeUnit.MINUTES)
+        executor.scheduleAtFixedRate(statsCollector.createTask(this), 0, 1, TimeUnit.MINUTES)
 
         playerUpdateService = Executors.newScheduledThreadPool(2) { r ->
             val thread = Thread(r)
@@ -104,7 +103,9 @@ class SocketContext(
         }
     }
 
-    fun getPlayer(guildId: String) = getPlayer(guildId.toLong())
+    override fun getSessionId(): String {
+        return sessionId
+    }
 
     override fun getUserId(): Long {
         return userId.toLong()
@@ -115,19 +116,19 @@ class SocketContext(
     }
 
     override fun getPlayer(guildId: Long) = players.computeIfAbsent(guildId) {
-        val player = Player(this, guildId, audioPlayerManager, serverConfig)
+        val player = LavalinkPlayer(this, guildId, serverConfig, audioPlayerManager)
         eventEmitter.onNewPlayer(player)
         player
     }
 
-    override fun getPlayers(): Map<Long, Player> {
+    override fun getPlayers(): Map<Long, LavalinkPlayer> {
         return players.toMap()
     }
 
     /**
      * Gets or creates a media connection
      */
-    fun getMediaConnection(player: Player): MediaConnection {
+    fun getMediaConnection(player: LavalinkPlayer): MediaConnection {
         val guildId = player.guildId
         var conn = koe.getConnection(guildId)
         if (conn == null) {
@@ -158,7 +159,11 @@ class SocketContext(
     }
 
     override fun sendMessage(message: JSONObject) {
-        send(message)
+        send(message.toString())
+    }
+
+    override fun sendMessage(message: Any) {
+        send(objectMapper.writeValueAsString(message))
     }
 
     override fun getState(): ISocketContext.State = when {
@@ -170,8 +175,6 @@ class SocketContext(
     /**
      * Either sends the payload now or queues it up
      */
-    fun send(payload: JSONObject) = send(payload.toString())
-
     private fun send(payload: String) {
         eventEmitter.onWebSocketMessageOut(payload)
 
@@ -186,7 +189,7 @@ class SocketContext(
         WebSockets.sendText(payload, undertowSession.webSocketChannel,
             object : WebSocketCallback<Void> {
                 override fun complete(channel: WebSocketChannel, context: Void?) {
-                    log.trace("Sent {}", payload)
+                    log.trace("Sent $payload")
                 }
 
                 override fun onError(channel: WebSocketChannel, context: Void?, throwable: Throwable) {
@@ -214,7 +217,7 @@ class SocketContext(
     }
 
     internal fun shutdown() {
-        log.info("Shutting down " + playingPlayers.size + " playing players.")
+        log.info("Shutting down ${playingPlayers.size} playing players.")
         executor.shutdown()
         playerUpdateService.shutdown()
         players.values.forEach {
@@ -236,18 +239,10 @@ class SocketContext(
         session.close()
     }
 
-    private inner class WsEventHandler(private val player: Player) : KoeEventAdapter() {
+    private inner class WsEventHandler(private val player: LavalinkPlayer) : KoeEventAdapter() {
         override fun gatewayClosed(code: Int, reason: String?, byRemote: Boolean) {
-            val out = JSONObject()
-            out.put("op", "event")
-            out.put("type", "WebSocketClosedEvent")
-            out.put("guildId", player.guildId.toString())
-            out.put("reason", reason ?: "")
-            out.put("code", code)
-            out.put("byRemote", byRemote)
-
-            send(out)
-
+            val event = Message.WebSocketClosedEvent(code, reason ?: "", byRemote, player.guildId.toString())
+            sendMessage(event)
             SocketServer.sendPlayerUpdate(this@SocketContext, player)
         }
 
