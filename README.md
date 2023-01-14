@@ -63,7 +63,7 @@ Additional labels for release candidates are available as extensions to the `MAJ
 Client | Platform | Compatible With | Additional Information
 -------|----------|-----------------|-----------------------
 [Lavalink-Client](https://github.com/freyacodes/lavalink-client) | Java | JDA/**Any**
-[LavaClient](https://github.com/HoneycombsTeam/LavaClient) | Java | JDA
+[LavaClient](https://github.com/HoneycombsTeam/LavaClient) | Java | JDA | Archived
 [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt) | Kotlin | JDA/Kord/**Any** | Kotlin Coroutines
 [Lavalink.py](https://github.com/Devoxin/Lavalink.py) | Python | **Any**
 [lavasnek_rs](https://github.com/vicky5124/lavasnek_rs) | Python | **Any\*** | *`asyncio`-based libraries only
@@ -98,6 +98,7 @@ Client | Platform | Compatible With | Additional Information
 [waterlink](https://github.com/lukasl-dev/waterlink) | Go | **Any**
 [gavalink](https://github.com/foxbot/gavalink) | Go | **Any** | Unmaintained
 [Lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs) | Rust | **Any\*** | *`tokio`-based libraries only
+[Coglink](https://github.com/ThePedroo/Coglink) | C | Concord
 
 Or alternatively, you can create your own client library, following the [implementation documentation](https://github.com/freyacodes/Lavalink/blob/master/IMPLEMENTATION.md).
 Any client libraries marked with `Unmaintained` have been marked as such as their repositories have not received any commits for at least 1 year since time of checking,
