@@ -24,7 +24,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 <details>
 <summary>v3.7.0 Migration Guide</summary>
 
-Following ops are deprecated as of `v3.7.0` and replaced with the following endpoints and json fields:
+All websocket ops are deprecated as of `v3.7.0` and replaced with the following endpoints and json fields:
 
 * `play` -> [Update Player Endpoint](#update-player) `track` or `identifier` field
 * `stop` -> [Update Player Endpoint](#update-player) `track` field with `null`
@@ -40,13 +40,9 @@ Following ops are deprecated as of `v3.7.0` and replaced with the following endp
 
 ## Future breaking changes for v4
 
-* HTTP endpoints not under a version path (`/v3`, `/v4`) will be removed in v4.
-* No WebSocket messages will be accepted by `/v4/websocket`.
-* `/v3` will still be available.
-
-## Future breaking changes for v5
-
-* Removal of `/v3`. `/v4` will still be available.
+* HTTP endpoints not under a version path (`/v3`, `/v4`) will be removed except `/version` in v4.
+* `/v4/websocket` will not accept any websocket messages. In `v4` the websocket is only used for server-to-client messages.
+* The `/v3` API will still be available to be used.
 
 <details>
 <summary>Older versions</summary>
