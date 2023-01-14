@@ -702,8 +702,7 @@ Request:
 
 **\* Note that `encodedTrack` and `identifier` are mutually exclusive.**
 
-When `identifier` is used, Lavalink will try to resolve the identifier as a single track. An error response is generated
-if no tracks or a playlist is resolved.
+When `identifier` is used, Lavalink will try to resolve the identifier as a single track. An HTTP `400` error is returned when resolving a playlist, search result, or no tracks.
 
 <details>
 <summary>Example Payload</summary>

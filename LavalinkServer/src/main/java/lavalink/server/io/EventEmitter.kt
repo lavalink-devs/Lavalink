@@ -16,10 +16,10 @@ class EventEmitter(private val context: SocketContext, private val listeners: Co
     fun onSocketContextDestroyed() = iterate { it.onSocketContextDestroyed(context) }
     fun onWebsocketMessageIn(message: String) = iterate { it.onWebsocketMessageIn(context, message) }
     fun onWebSocketMessageOut(message: String) = iterate { it.onWebSocketMessageOut(context, message) }
-    fun onNewPlayer(player: IPlayer)  = iterate { it.onNewPlayer(context, player) }
-    fun onDestroyPlayer(player: IPlayer)  = iterate { it.onDestroyPlayer(context, player) }
+    fun onNewPlayer(player: IPlayer) = iterate { it.onNewPlayer(context, player) }
+    fun onDestroyPlayer(player: IPlayer) = iterate { it.onDestroyPlayer(context, player) }
 
-    private fun iterate(func: (PluginEventHandler) -> Unit ) {
+    private fun iterate(func: (PluginEventHandler) -> Unit) {
         listeners.forEach {
             try {
                 func(it)

@@ -1,6 +1,7 @@
 package dev.arbjerg.lavalink.api;
 
 import org.json.JSONObject;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.util.Map;
@@ -9,6 +10,13 @@ import java.util.Map;
  * Represents a WebSocket connection
  */
 public interface ISocketContext {
+
+    /**
+     * @return The session ID of the connection
+     */
+    @NonNull
+    String getSessionId();
+
     /**
      * @return the User ID of the Client.
      */
@@ -40,8 +48,17 @@ public interface ISocketContext {
 
     /**
      * @param message a JSON message to send to the WebSocket client
+     *
+     * @deprecated As of v3.7 Jackson is the preferred way of JSON serialization,
+     * use {@link ISocketContext#sendMessage(Object)} instead.
      */
+    @Deprecated
     void sendMessage(JSONObject message);
+
+    /**
+     * @param message a message to send to the WebSocket client, it should be compatible with Jackson.
+     */
+    void sendMessage(Object message);
 
     /**
      * @return the state of the context

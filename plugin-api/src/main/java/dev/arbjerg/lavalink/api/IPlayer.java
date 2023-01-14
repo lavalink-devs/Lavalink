@@ -2,19 +2,21 @@ package dev.arbjerg.lavalink.api;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import org.springframework.lang.Nullable;
 
 /**
  * Represents an audio player for a specific guild. Contains track data and is used for controlling playback.
  */
 public interface IPlayer {
     /**
-     * @return the underlying Lavaplyer player
+     * @return the underlying Lavaplayer player
      */
     AudioPlayer getAudioPlayer();
 
     /**
      * @return the player's current track which is either playing or paused. May be null
      */
+    @Nullable
     AudioTrack getTrack();
 
     /**

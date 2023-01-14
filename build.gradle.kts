@@ -14,8 +14,8 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.6.6")
         classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2")
         classpath("com.adarshr:gradle-test-logger-plugin:1.6.0")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:1.3.61")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:1.7.20")
     }
 }
 
@@ -41,7 +41,7 @@ subprojects {
     }
 
     tasks.withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "11"
     }
 
     tasks.withType<JavaCompile> {
