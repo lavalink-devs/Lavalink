@@ -129,9 +129,9 @@ class StatsCollector(val socketServer: SocketServer) {
                         (totalSent + totalNulled)
 
                 frameStats = FrameStats(
-                    (totalSent / playerCount).toLong(),
-                    (totalNulled / playerCount).toLong(),
-                    (totalDeficit / playerCount).toLong()
+                    (totalSent / playerCount),
+                    (totalNulled / playerCount),
+                    (totalDeficit / playerCount)
                 )
             }
         }
