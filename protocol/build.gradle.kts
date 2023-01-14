@@ -29,8 +29,8 @@ publishing {
             from(project.components["java"])
 
             pom {
-                name.set("Lavalink Plugin API")
-                description.set("API for Lavalink plugin development")
+                name.set("Lavalink Protocol")
+                description.set("Protocol for Lavalink Client development")
                 url.set("https://github.com/freyacodes/lavalink")
 
                 licenses {
