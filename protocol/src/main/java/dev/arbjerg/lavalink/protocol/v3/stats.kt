@@ -10,9 +10,9 @@ data class Stats(
 )
 
 data class FrameStats(
-    val sent: Long,
-    val nulled: Long,
-    val deficit: Long
+    val sent: Int,
+    val nulled: Int,
+    val deficit: Int
 )
 
 data class Memory(
