@@ -3,6 +3,9 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 3.7.1
+* Revert of application.yml autocreate as it can cause issues with differently named configs
+
 ## 3.7.0
 * New REST API for player control and deprecation of all websocket OPs. For more info see [here](https://github.com/freyacodes/Lavalink/blob/master/IMPLEMENTATION.md#significant-changes-v360---v370)
 * Autocreate default `application.yml` if none was found. https://github.com/freyacodes/Lavalink/pull/781
