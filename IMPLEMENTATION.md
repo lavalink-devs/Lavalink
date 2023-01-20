@@ -1463,7 +1463,7 @@ Response:
 | rotateIndex         | string                                                | The number of rotations                                                               | `RotatingIpRoutePlanner`                           |
 | ipIndex             | string                                                | The current offset in the block                                                       | `RotatingIpRoutePlanner`                           |
 | currentAddress      | string                                                | The current address being used                                                        | `RotatingIpRoutePlanner`                           |
-| currentAddressIndex | string                                                | The current current offset in the ip block                                            | `NanoIpRoutePlanner`, `RotatingNanoIpRoutePlanner` |
+| currentAddressIndex | string                                                | The current offset in the ip block                                                    | `NanoIpRoutePlanner`, `RotatingNanoIpRoutePlanner` |
 | blockIndex          | string                                                | The information in which /64 block ips are chosen. This number increases on each ban. | `RotatingNanoIpRoutePlanner`                       |
 
 ##### IP Block Object
