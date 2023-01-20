@@ -1453,6 +1453,7 @@ Response:
 | `RotatingIpRoutePlanner`     | IP address used is switched on ban. Recommended for IPv4 blocks or IPv6 blocks smaller than a /64.                          |
 | `NanoIpRoutePlanner`         | IP address used is switched on clock update. Use with at least 1 /64 IPv6 block.                                            |
 | `RotatingNanoIpRoutePlanner` | IP address used is switched on clock update, rotates to a different /64 block on ban. Use with at least 2x /64 IPv6 blocks. |
+| `BalancingIpRoutePlanner`    | IP address used is selected at random per request. Recommended for larger IP blocks.                                        |
 
 ##### Details Object
 
@@ -1463,7 +1464,7 @@ Response:
 | rotateIndex         | string                                                | The number of rotations                                                               | `RotatingIpRoutePlanner`                           |
 | ipIndex             | string                                                | The current offset in the block                                                       | `RotatingIpRoutePlanner`                           |
 | currentAddress      | string                                                | The current address being used                                                        | `RotatingIpRoutePlanner`                           |
-| currentAddressIndex | string                                                | The current current offset in the ip block                                            | `NanoIpRoutePlanner`, `RotatingNanoIpRoutePlanner` |
+| currentAddressIndex | string                                                | The current offset in the ip block                                                    | `NanoIpRoutePlanner`, `RotatingNanoIpRoutePlanner` |
 | blockIndex          | string                                                | The information in which /64 block ips are chosen. This number increases on each ban. | `RotatingNanoIpRoutePlanner`                       |
 
 ##### IP Block Object
