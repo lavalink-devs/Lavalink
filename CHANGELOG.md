@@ -3,6 +3,9 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 3.7.2
+* Fix breaking change where frameStats would be null instead of omitted
+
 ## 3.7.1
 * Revert of application.yml autocreate as it can cause issues with differently named configs
 
