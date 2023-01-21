@@ -3,6 +3,9 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 3.7.3
+* Fix breaking change where `/decodetrack` would return a full track instead of the track info
+
 ## 3.7.2
 * Fix breaking change where frameStats would be null instead of omitted
 
