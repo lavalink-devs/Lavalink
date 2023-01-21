@@ -82,7 +82,7 @@ Additional labels for release candidates are available as extensions to the `MAJ
 | [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)                                              | Node.js  | **Any**                 | ❌                |
 | [@skyra/audio](https://github.com/skyra-project/audio)                                                | Node.js  | discord.js              | ❌                | Archived                        |
 | [Poru](https://github.com/parasop/poru)                                                               | Node.js  | **Any**                 | ❌                |                                 |
-| [Shoukaku](https://github.com/Deivu/Shoukaku)                                                         | Node.js  | **Any**                 | ❌                |                                 |                                |
+| [Shoukaku](https://github.com/Deivu/Shoukaku)                                                         | Node.js  | **Any**                 | ✅                |                                 |                                |
 | [Lavaudio](https://github.com/rilysh/lavaudio)                                                        | Node.js  | **Any**                 | ❌                |
 | [Gorilink](https://github.com/Gorillas-Team/Gorilink)                                                 | Node.js  | discord.js              | ❌                | Archived/Unmaintained           |
 | [SandySounds](https://github.com/MrJohnCoder/SandySounds)                                             | Node.js  | **Any**                 | ❌                | Unmaintained                    |
