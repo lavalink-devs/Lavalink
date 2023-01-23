@@ -347,17 +347,19 @@ Emitted when a track starts playing.
   "guildId": "...",
   "track": {
     "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-    "identifier": "dQw4w9WgXcQ",
-    "isSeekable": true,
-    "author": "RickAstleyVEVO",
-    "length": 212000,
-    "isStream": false,
-    "position": 0,
-    "title": "Rick Astley - Never Gonna Give You Up",
-    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-    "isrc": null,
-    "sourceName": "youtube"
+    "info": {
+      "identifier": "dQw4w9WgXcQ",
+      "isSeekable": true,
+      "author": "RickAstleyVEVO",
+      "length": 212000,
+      "isStream": false,
+      "position": 0,
+      "title": "Rick Astley - Never Gonna Give You Up",
+      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+      "isrc": null,
+      "sourceName": "youtube"
+    }
   }
 }
 ```
@@ -395,17 +397,19 @@ Emitted when a track ends.
   "guildId": "...",
   "track": {
     "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-    "identifier": "dQw4w9WgXcQ",
-    "isSeekable": true,
-    "author": "RickAstleyVEVO",
-    "length": 212000,
-    "isStream": false,
-    "position": 0,
-    "title": "Rick Astley - Never Gonna Give You Up",
-    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-    "isrc": null,
-    "sourceName": "youtube"
+    "info": {
+      "identifier": "dQw4w9WgXcQ",
+      "isSeekable": true,
+      "author": "RickAstleyVEVO",
+      "length": 212000,
+      "isStream": false,
+      "position": 0,
+      "title": "Rick Astley - Never Gonna Give You Up",
+      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+      "isrc": null,
+      "sourceName": "youtube"
+    }
   },
   "reason": "FINISHED"
 }
@@ -450,17 +454,19 @@ Emitted when a track throws an exception.
   "guildId": "...",
   "track": {
     "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-    "identifier": "dQw4w9WgXcQ",
-    "isSeekable": true,
-    "author": "RickAstleyVEVO",
-    "length": 212000,
-    "isStream": false,
-    "position": 0,
-    "title": "Rick Astley - Never Gonna Give You Up",
-    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-    "isrc": null,
-    "sourceName": "youtube"
+    "info": {
+      "identifier": "dQw4w9WgXcQ",
+      "isSeekable": true,
+      "author": "RickAstleyVEVO",
+      "length": 212000,
+      "isStream": false,
+      "position": 0,
+      "title": "Rick Astley - Never Gonna Give You Up",
+      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+      "isrc": null,
+      "sourceName": "youtube"
+    }
   },
   "exception": {
     "message": "...",
@@ -493,17 +499,19 @@ Emitted when a track gets stuck while playing.
   "guildId": "...",
   "track": {
     "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-    "identifier": "dQw4w9WgXcQ",
-    "isSeekable": true,
-    "author": "RickAstleyVEVO",
-    "length": 212000,
-    "isStream": false,
-    "position": 0,
-    "title": "Rick Astley - Never Gonna Give You Up",
-    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-    "isrc": null,
-    "sourceName": "youtube"
+    "info": {
+      "identifier": "dQw4w9WgXcQ",
+      "isSeekable": true,
+      "author": "RickAstleyVEVO",
+      "length": 212000,
+      "isStream": false,
+      "position": 0,
+      "title": "Rick Astley - Never Gonna Give You Up",
+      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+      "isrc": null,
+      "sourceName": "youtube"
+    }
   },
   "thresholdMs": 123456789
 }
@@ -605,10 +613,11 @@ GET /v4/sessions/{sessionId}/players
 
 ##### Track
 
-| Field   | Type                             | Description                                                                          |
-|---------|----------------------------------|--------------------------------------------------------------------------------------|
-| encoded | string                           | The base64 encoded track data                                                        |
-| info    | [Track Info](#track-info) object | Info about the track                                                                 |
+| Field      | Type                               | Description                                         |
+|------------|------------------------------------|-----------------------------------------------------|
+| encoded    | string                             | The base64 encoded track data                       |
+| info       | [Track Info](#track-info) object   | Info about the track                                |
+| pluginInfo | [Plugin Info](#plugin-info) object | Info about the plugin that loaded the track, if any |
 
 ##### Track Info
 
@@ -698,17 +707,19 @@ Response:
   "guildId": "...",
   "track": {
     "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-    "identifier": "dQw4w9WgXcQ",
-    "isSeekable": true,
-    "author": "RickAstleyVEVO",
-    "length": 212000,
-    "isStream": false,
-    "position": 0,
-    "title": "Rick Astley - Never Gonna Give You Up",
-    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-    "isrc": null,
-    "sourceName": "youtube"
+    "info": {
+      "identifier": "dQw4w9WgXcQ",
+      "isSeekable": true,
+      "author": "RickAstleyVEVO",
+      "length": 212000,
+      "isStream": false,
+      "position": 0,
+      "title": "Rick Astley - Never Gonna Give You Up",
+      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+      "isrc": null,
+      "sourceName": "youtube"         
+    }
   },
   "volume": 100,
   "paused": false,
