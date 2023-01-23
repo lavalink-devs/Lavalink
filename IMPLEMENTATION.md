@@ -658,17 +658,19 @@ with the Voice Server Update. Please refer to https://discord.com/developers/doc
     "guildId": "...",
     "track": {
       "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-      "identifier": "dQw4w9WgXcQ",
-      "isSeekable": true,
-      "author": "RickAstleyVEVO",
-      "length": 212000,
-      "isStream": false,
-      "position": 0,
-      "title": "Rick Astley - Never Gonna Give You Up",
-      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-      "isrc": null,
-      "sourceName": "youtube"
+      "info": {
+        "identifier": "dQw4w9WgXcQ",
+        "isSeekable": true,
+        "author": "RickAstleyVEVO",
+        "length": 212000,
+        "isStream": false,
+        "position": 0,
+        "title": "Rick Astley - Never Gonna Give You Up",
+        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+        "isrc": null,
+        "sourceName": "youtube"
+      }
     },
     "volume": 100,
     "paused": false,
