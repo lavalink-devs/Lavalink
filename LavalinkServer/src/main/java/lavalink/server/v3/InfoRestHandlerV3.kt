@@ -1,11 +1,13 @@
-package lavalink.server.info
+package lavalink.server.v3
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary
 import dev.arbjerg.lavalink.api.AudioFilterExtension
-import dev.arbjerg.lavalink.protocol.v4.*
+import dev.arbjerg.lavalink.protocol.v3.*
 import lavalink.server.bootstrap.PluginManager
 import lavalink.server.config.ServerConfig
+import lavalink.server.info.AppInfo
+import lavalink.server.info.GitRepoState
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
  * Created by napster on 08.03.19.
  */
 @RestController
-class InfoRestHandler(
+class InfoRestHandlerV3(
     appInfo: AppInfo,
     gitRepoState: GitRepoState,
     audioPlayerManager: AudioPlayerManager,
@@ -49,11 +51,8 @@ class InfoRestHandler(
             Plugin(it.name, it.version)
         })
     )
-    private val version = appInfo.versionBuild
 
-    @GetMapping("/v4/info")
+    @GetMapping("/v3/info")
     fun info() = info
 
-    @GetMapping("/version")
-    fun version() = version
 }

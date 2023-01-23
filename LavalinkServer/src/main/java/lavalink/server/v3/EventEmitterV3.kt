@@ -19,33 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package lavalink.server.player
+package lavalink.server.v3
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
-import dev.arbjerg.lavalink.protocol.v4.Exception
-import dev.arbjerg.lavalink.protocol.v4.Message
+import dev.arbjerg.lavalink.protocol.v3.Exception
+import dev.arbjerg.lavalink.protocol.v3.Message
+import dev.arbjerg.lavalink.protocol.v3.encodeTrack
 import lavalink.server.io.SocketServer.Companion.sendPlayerUpdate
+import lavalink.server.player.LavalinkPlayer
 import lavalink.server.util.getRootCause
-import lavalink.server.util.toTrack
 import org.slf4j.LoggerFactory
 
-class EventEmitter(
-    private val audioPlayerManager: AudioPlayerManager,
+class EventEmitterV3(
     private val player: LavalinkPlayer
 ) : AudioEventAdapter() {
 
     companion object {
-        private val log = LoggerFactory.getLogger(EventEmitter::class.java)
+        private val log = LoggerFactory.getLogger(EventEmitterV3::class.java)
     }
 
     override fun onTrackStart(player: AudioPlayer, track: AudioTrack) {
+        val encodedTrack = encodeTrack(track)
         this.player.socket.sendMessage(
-            Message.TrackStartEvent(track.toTrack(audioPlayerManager), this.player.guildId.toString())
+            Message.TrackStartEvent(encodedTrack, encodedTrack, this.player.guildId.toString())
         )
     }
 
@@ -57,16 +57,19 @@ class EventEmitter(
             endReason
         }
 
+        val encodedTrack = encodeTrack(track)
         this.player.socket.sendMessage(
-            Message.TrackEndEvent(track.toTrack(audioPlayerManager), reason, this.player.guildId.toString())
+            Message.TrackEndEvent(encodedTrack, encodedTrack, reason, this.player.guildId.toString())
         )
     }
 
     // These exceptions are already logged by Lavaplayer
     override fun onTrackException(player: AudioPlayer, track: AudioTrack, exception: FriendlyException) {
+        val encodedTrack = encodeTrack(track)
         this.player.socket.sendMessage(
             Message.TrackExceptionEvent(
-                track.toTrack(audioPlayerManager),
+                encodedTrack,
+                encodedTrack,
                 Exception(exception.message, exception.severity, getRootCause(exception).toString()),
                 this.player.guildId.toString()
             )
@@ -75,8 +78,9 @@ class EventEmitter(
 
     override fun onTrackStuck(player: AudioPlayer, track: AudioTrack, thresholdMs: Long) {
         log.warn("${track.info.title} got stuck! Threshold surpassed: ${thresholdMs}ms")
+        val encodedTrack = encodeTrack(track)
         this.player.socket.sendMessage(
-            Message.TrackStuckEvent(track.toTrack(audioPlayerManager), thresholdMs, this.player.guildId.toString())
+            Message.TrackStuckEvent(encodedTrack, encodedTrack, thresholdMs, this.player.guildId.toString())
         )
         sendPlayerUpdate(this.player.socket, this.player)
     }

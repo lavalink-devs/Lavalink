@@ -94,13 +94,20 @@ class SocketServer(
 
     @Suppress("UastIncorrectHttpHeaderInspection")
     override fun afterConnectionEstablished(session: WebSocketSession) {
+        val version = if (session.uri?.path!!.startsWith("/v3")) 3 else 4
         val userId = session.handshakeHeaders.getFirst("User-Id")!!
         val resumeKey = session.handshakeHeaders.getFirst("Resume-Key")
+        var sessionId = session.handshakeHeaders.getFirst("Session-Id")
         val clientName = session.handshakeHeaders.getFirst("Client-Name")
         val userAgent = session.handshakeHeaders.getFirst("User-Agent")
 
+        session.attributes["version"] = version
         var resumable: SocketContext? = null
-        if (resumeKey != null) resumable = resumableSessions.remove(resumeKey)
+        if (version == 3) {
+            if (resumeKey != null) resumable = resumableSessions.remove(resumeKey)
+        } else {
+            if (sessionId != null) resumable = resumableSessions.remove(sessionId)
+        }
 
         if (resumable != null) {
             contextMap[resumable.sessionId] = resumable
@@ -111,11 +118,12 @@ class SocketServer(
             return
         }
 
-        val sessionId = generateUniqueSessionId()
+        sessionId = generateUniqueSessionId()
         session.attributes["sessionId"] = sessionId
 
         val socketContext = SocketContext(
             sessionId,
+            version,
             audioPlayerManager,
             serverConfig,
             session,
@@ -148,29 +156,36 @@ class SocketServer(
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
         val context = contextMap.remove(session.id) ?: return
-        if (context.resumeKey != null) {
-            resumableSessions.remove(context.resumeKey!!)?.let { removed ->
-                log.warn(
-                    "Shutdown resumable session with key ${removed.resumeKey} because it has the same key as a " +
-                            "newly disconnected resumable session."
+        if (context.version == 3) {
+
+            if (context.resumeKey != null) {
+                resumableSessions.remove(context.resumeKey!!)?.let { removed ->
+                    log.warn(
+                        "Shutdown resumable session with key ${removed.resumeKey} because it has the same key as a " +
+                                "newly disconnected resumable session."
+                    )
+                    removed.shutdown()
+                }
+
+                resumableSessions[context.resumeKey!!] = context
+                context.pause()
+                log.info(
+                    "Connection closed from ${session.remoteAddress} with status $status -- " +
+                            "Session can be resumed within the next ${context.resumeTimeout} seconds with key ${context.resumeKey}",
                 )
-                removed.shutdown()
+                return
             }
 
-            resumableSessions[context.resumeKey!!] = context
-            context.pause()
-            log.info(
-                "Connection closed from ${session.remoteAddress} with status $status -- " +
-                        "Session can be resumed within the next ${context.resumeTimeout} seconds with key ${context.resumeKey}",
-            )
-            return
+            log.info("Connection closed from ${session.remoteAddress} -- $status")
+            context.shutdown()
         }
-
-        log.info("Connection closed from ${session.remoteAddress} -- $status")
-        context.shutdown()
     }
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
+        if (session.attributes["version"] == 4) {
+            log.warn("Lavalink v4 does not support websocket messages. Please use the REST api.")
+            return
+        }
         val json = JSONObject(message.payload)
 
         log.info(message.payload)
@@ -183,7 +198,7 @@ class SocketServer(
         val context = contextMap[session.attributes["sessionId"]]
             ?: throw IllegalStateException("No context for session ID ${session.id}. Broken websocket?")
         context.eventEmitter.onWebsocketMessageIn(message.payload)
-        context.wsHandler.handle(json)
+        context.wsHandler?.handle(json)
     }
 
     internal fun onSessionResumeTimeout(context: SocketContext) {
@@ -191,5 +206,5 @@ class SocketServer(
         context.shutdown()
     }
 
-    internal fun canResume(key: String) = resumableSessions[key]?.stopResumeTimeout() ?: false
+    internal fun canResume(id: String) = resumableSessions[id]?.stopResumeTimeout() ?: false
 }

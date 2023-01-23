@@ -34,6 +34,7 @@ import lavalink.server.config.ServerConfig
 import lavalink.server.io.SocketContext
 import lavalink.server.io.SocketServer.Companion.sendPlayerUpdate
 import lavalink.server.player.filters.FilterChain
+import lavalink.server.v3.EventEmitterV3
 import moe.kyokobot.koe.MediaConnection
 import moe.kyokobot.koe.media.OpusAudioFrameProvider
 import java.util.concurrent.ScheduledFuture
@@ -55,7 +56,11 @@ class LavalinkPlayer(
 
     private val audioPlayer: AudioPlayer = audioPlayerManager.createPlayer().also {
         it.addListener(this)
-        it.addListener(EventEmitter(audioPlayerManager, this))
+        if (socket.version == 3) {
+            it.addListener(EventEmitterV3(this))
+        } else {
+            it.addListener(EventEmitter(audioPlayerManager, this))
+        }
         it.addListener(audioLossCounter)
     }
 

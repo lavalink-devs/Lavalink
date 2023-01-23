@@ -8,24 +8,24 @@ import com.sedmelluq.discord.lavaplayer.filter.UniversalPcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.api.AudioFilterExtension
-import dev.arbjerg.lavalink.protocol.v3.*
-import dev.arbjerg.lavalink.protocol.v3.Band
+import dev.arbjerg.lavalink.protocol.v4.*
+import dev.arbjerg.lavalink.protocol.v4.Band as Bandv4
 
 class FilterChain(
-    private val volume: VolumeConfig? = null,
-    private var equalizer: EqualizerConfig? = null,
-    private val karaoke: KaraokeConfig? = null,
-    private val timescale: TimescaleConfig? = null,
-    private val tremolo: TremoloConfig? = null,
-    private val vibrato: VibratoConfig? = null,
-    private val distortion: DistortionConfig? = null,
-    private val rotation: RotationConfig? = null,
-    private val channelMix: ChannelMixConfig? = null,
-    private val lowPass: LowPassConfig? = null,
+    val volume: VolumeConfig? = null,
+    var equalizer: EqualizerConfig? = null,
+    val karaoke: KaraokeConfig? = null,
+    val timescale: TimescaleConfig? = null,
+    val tremolo: TremoloConfig? = null,
+    val vibrato: VibratoConfig? = null,
+    val distortion: DistortionConfig? = null,
+    val rotation: RotationConfig? = null,
+    val channelMix: ChannelMixConfig? = null,
+    val lowPass: LowPassConfig? = null,
 ) : PcmFilterFactory {
 
     @Volatile
-    private var pluginFilters: List<PluginConfig> = emptyList()
+    var pluginFilters: List<PluginConfig> = emptyList()
 
     companion object {
         fun parse(
@@ -35,12 +35,7 @@ class FilterChain(
             return FilterChain(
                 filters.volume?.let { VolumeConfig(it) },
                 filters.equalizer?.let {
-                    EqualizerConfig(it.map { band ->
-                        lavalink.server.player.filters.Band(
-                            band.band,
-                            band.gain
-                        )
-                    })
+                    EqualizerConfig(it.map { band -> Band(band.band, band.gain) })
                 },
                 filters.karaoke?.let { KaraokeConfig(it.level, it.monoLevel, it.filterBand, it.filterWidth) },
                 filters.timescale?.let { TimescaleConfig(it.speed, it.pitch, it.rate) },
@@ -74,15 +69,11 @@ class FilterChain(
         }
     }
 
-    private fun parsePluginConfigs(dynamicValues: Map<String, JsonNode>, extensions: List<AudioFilterExtension>) {
+    fun parsePluginConfigs(dynamicValues: Map<String, JsonNode>, extensions: List<AudioFilterExtension>) {
         pluginFilters = extensions.mapNotNull {
             val json = dynamicValues[it.name] ?: return@mapNotNull null
             PluginConfig(it, json)
         }
-    }
-
-    fun setEqualizer(equalizer: EqualizerConfig) {
-        this.equalizer = equalizer
     }
 
     private fun buildList() = listOfNotNull(
@@ -122,7 +113,7 @@ class FilterChain(
     fun toFilters(): Filters {
         return Filters(
             volume?.volume,
-            equalizer?.bands?.map { Band(it.band, it.gain) },
+            equalizer?.bands?.map { Bandv4(it.band, it.gain) },
             karaoke?.let { Karaoke(it.level, it.monoLevel, it.filterBand, it.filterWidth) },
             timescale?.let { Timescale(it.speed, it.pitch, it.rate) },
             tremolo?.let { Tremolo(it.frequency, it.depth) },
@@ -146,7 +137,7 @@ class FilterChain(
         )
     }
 
-    private class PluginConfig(val extension: AudioFilterExtension, val json: JsonNode) : FilterConfig() {
+    class PluginConfig(val extension: AudioFilterExtension, val json: JsonNode) : FilterConfig() {
         override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter =
             extension.build(json, format, output)
 

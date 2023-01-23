@@ -33,6 +33,7 @@ public abstract class PluginEventHandler {
      * @param context the websocket
      * @param message the message, presumably in JSON
      */
+    @Deprecated
     public void onWebsocketMessageIn(ISocketContext context, String message) {}
 
     /**

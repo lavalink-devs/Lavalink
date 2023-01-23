@@ -8,6 +8,15 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * You must be able to send messages via a shard's gateway connection.
 * You must be able to intercept voice server & voice state updates from the gateway on your shard connection.
 
+## Significant changes v3.7.0 -> v4.0.0
+
+* removed all non version `/v3` or `/v4` endpoints (except `/version`).
+* `/v4/websocket` does not accept any messages anymore.
+* `v4` uses the `sessionId` instead of the `resumeKey` for resuming.
+* `v4` now returns the tracks `artworkUrl` and `isrc` if the source supports it.
+* removal of deprecated json fields like `track`.
+* addition of `artworkUrl` and `isrc` fields to the [Track Info](#track-info) object.
+
 ## Significant changes v3.6.0 -> v3.7.0
 
 * Moved HTTP endpoints under the new `/v3` path with `/version` as the only exception.
@@ -98,7 +107,7 @@ Fields marked with `?` are optional and types marked with `?` are nullable.
 
 ### Opening a connection
 
-You can establish a WebSocket connection against the path `/v3/websocket`
+You can establish a WebSocket connection against the path `/v4/websocket`
 
 When opening a websocket connection, you must supply 3 required headers:
 
@@ -107,7 +116,7 @@ When opening a websocket connection, you must supply 3 required headers:
 | `Authorization` | The password you set in your Lavalink config.   |
 | `User-Id`       | The user id of the bot.                         |
 | `Client-Name`   | The name of the client in `NAME/VERSION` format |
-| `Resume-Key`?*  | The configured key to resume a session          |
+| `Session-Id`?*  | The id of the previous session to resume        |
 
 **\*For more information on resuming see [Resuming](#resuming-lavalink-sessions)**
 
@@ -227,7 +236,7 @@ A collection of stats sent every minute.
 | uptime         | int                                 | The uptime of the node in milliseconds                                                           |
 | memory         | [Memory](#memory) object            | The memory stats of the node                                                                     |
 | cpu            | [CPU](#cpu) object                  | The cpu stats of the node                                                                        |
-| frameStats     | ?[Frame Stats](#frame-stats) object | The frame stats of the node. `null` if the node has no players or when retrieved via `/v3/stats` |
+| frameStats     | ?[Frame Stats](#frame-stats) object | The frame stats of the node. `null` if the node has no players or when retrieved via `/v4/stats` |
 
 ##### Memory
 
@@ -288,7 +297,7 @@ A collection of stats sent every minute.
 
 #### Event OP
 
-Server emitted an event. See the client implementation below.
+Server emitted an event. See the [Event Types](#event-types) section for more information.
 
 | Field   | Type                      | Description                         |
 |---------|---------------------------|-------------------------------------|
@@ -324,10 +333,9 @@ Server emitted an event. See the client implementation below.
 
 Emitted when a track starts playing.
 
-| Field        | Type   | Description                                                                                          |
-|--------------|--------|------------------------------------------------------------------------------------------------------|
-| encodedTrack | string | The base64 encoded track that started playing                                                        |
-| track        | string | The base64 encoded track that started playing (DEPRECATED as of v3.7.0 and marked for removal in v4) |
+| Field | Type                   | Description                                                                                          |
+|-------|------------------------|------------------------------------------------------------------------------------------------------|
+| track | [Track](#track) object | The base64 encoded track that started playing                                                        |
 
 <details>
 <summary>Example Payload</summary>
@@ -337,8 +345,20 @@ Emitted when a track starts playing.
   "op": "event",
   "type": "TrackStartEvent",
   "guildId": "...",
-  "encodedTrack": "...",
-  "track": "..."
+  "track": {
+    "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "identifier": "dQw4w9WgXcQ",
+    "isSeekable": true,
+    "author": "RickAstleyVEVO",
+    "length": 212000,
+    "isStream": false,
+    "position": 0,
+    "title": "Rick Astley - Never Gonna Give You Up",
+    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+    "isrc": null,
+    "sourceName": "youtube"
+  }
 }
 ```
 
@@ -350,11 +370,10 @@ Emitted when a track starts playing.
 
 Emitted when a track ends.
 
-| Field        | Type                                | Description                                                                                        |
-|--------------|-------------------------------------|----------------------------------------------------------------------------------------------------|
-| encodedTrack | string                              | The base64 encoded track that ended playing                                                        |
-| track        | string                              | The base64 encoded track that ended playing (DEPRECATED as of v3.7.0 and marked for removal in v4) |
-| reason       | [TrackEndReason](#track-end-reason) | The reason the track ended                                                                         |
+| Field  | Type                                | Description                                                                                        |
+|--------|-------------------------------------|----------------------------------------------------------------------------------------------------|
+| track  | [Track](#track) object              | The base64 encoded track that ended playing                                                        |
+| reason | [TrackEndReason](#track-end-reason) | The reason the track ended                                                                         |
 
 ##### Track End Reason
 
@@ -374,8 +393,20 @@ Emitted when a track ends.
   "op": "event",
   "type": "TrackEndEvent",
   "guildId": "...",
-  "encodedTrack": "...",
-  "track": "...",
+  "track": {
+    "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "identifier": "dQw4w9WgXcQ",
+    "isSeekable": true,
+    "author": "RickAstleyVEVO",
+    "length": 212000,
+    "isStream": false,
+    "position": 0,
+    "title": "Rick Astley - Never Gonna Give You Up",
+    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+    "isrc": null,
+    "sourceName": "youtube"
+  },
   "reason": "FINISHED"
 }
 ```
@@ -388,11 +419,10 @@ Emitted when a track ends.
 
 Emitted when a track throws an exception.
 
-| Field        | Type                                  | Description                                                                                              |
-|--------------|---------------------------------------|----------------------------------------------------------------------------------------------------------|
-| encodedTrack | string                                | The base64 encoded track that threw the exception                                                        |
-| track        | string                                | The base64 encoded track that threw the exception (DEPRECATED as of v3.7.0 and marked for removal in v4) |
-| exception    | [Exception](#exception-object) object | The occurred exception                                                                                   |
+| Field     | Type                                  | Description                                                                                              |
+|-----------|---------------------------------------|----------------------------------------------------------------------------------------------------------|
+| track     | [Track](#track) object                | The base64 encoded track that threw the exception                                                        |
+| exception | [Exception](#exception-object) object | The occurred exception                                                                                   |
 
 ##### Exception Object
 
@@ -418,8 +448,20 @@ Emitted when a track throws an exception.
   "op": "event",
   "type": "TrackExceptionEvent",
   "guildId": "...",
-  "encodedTrack": "...",
-  "track": "...",
+  "track": {
+    "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "identifier": "dQw4w9WgXcQ",
+    "isSeekable": true,
+    "author": "RickAstleyVEVO",
+    "length": 212000,
+    "isStream": false,
+    "position": 0,
+    "title": "Rick Astley - Never Gonna Give You Up",
+    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+    "isrc": null,
+    "sourceName": "youtube"
+  },
   "exception": {
     "message": "...",
     "severity": "COMMON",
@@ -436,11 +478,10 @@ Emitted when a track throws an exception.
 
 Emitted when a track gets stuck while playing.
 
-| Field        | Type   | Description                                                                                     |
-|--------------|--------|-------------------------------------------------------------------------------------------------|
-| encodedTrack | string | The base64 encoded track that got stuck                                                         |
-| track        | string | The base64 encoded track that got stuck  (DEPRECATED as of v3.7.0 and marked for removal in v4) |
-| thresholdMs  | int    | The threshold in milliseconds that was exceeded                                                 |
+| Field       | Type           | Description                                                                                     |
+|-------------|----------------|-------------------------------------------------------------------------------------------------|
+| track       | [Track] object | The base64 encoded track that got stuck                                                         |
+| thresholdMs | int            | The threshold in milliseconds that was exceeded                                                 |
 
 <details>
 <summary>Example Payload</summary>
@@ -450,8 +491,20 @@ Emitted when a track gets stuck while playing.
   "op": "event",
   "type": "TrackStuckEvent",
   "guildId": "...",
-  "encodedTrack": "...",
-  "track": "...",
+  "track": {
+    "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "identifier": "dQw4w9WgXcQ",
+    "isSeekable": true,
+    "author": "RickAstleyVEVO",
+    "length": 212000,
+    "isStream": false,
+    "position": 0,
+    "title": "Rick Astley - Never Gonna Give You Up",
+    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+    "isrc": null,
+    "sourceName": "youtube"
+  },
   "thresholdMs": 123456789
 }
 ```
@@ -525,7 +578,7 @@ When Lavalink encounters an error, it will respond with a JSON object containing
   "error": "Not Found",
   "trace": "...",
   "message": "Session not found",
-  "path": "/v3/sessions/xtaug914v9k5032f/players/817327181659111454"
+  "path": "/v4/sessions/xtaug914v9k5032f/players/817327181659111454"
 }
 ```
 
@@ -536,7 +589,7 @@ When Lavalink encounters an error, it will respond with a JSON object containing
 Returns a list of players in this specific session.
 
 ```
-GET /v3/sessions/{sessionId}/players
+GET /v4/sessions/{sessionId}/players
 ```
 
 ##### Player
@@ -555,22 +608,23 @@ GET /v3/sessions/{sessionId}/players
 | Field   | Type                             | Description                                                                          |
 |---------|----------------------------------|--------------------------------------------------------------------------------------|
 | encoded | string                           | The base64 encoded track data                                                        |
-| track   | string                           | The base64 encoded track data (DEPRECATED as of v3.7.0 and marked for removal in v4) |
 | info    | [Track Info](#track-info) object | Info about the track                                                                 |
 
 ##### Track Info
 
-| Field      | Type    | Description                        |
-|------------|---------|------------------------------------|
-| identifier | string  | The track identifier               |
-| isSeekable | bool    | Whether the track is seekable      |
-| author     | string  | The track author                   |
-| length     | int     | The track length in milliseconds   |
-| isStream   | bool    | Whether the track is a stream      |
-| position   | int     | The track position in milliseconds |
-| title      | string  | The track title                    |
-| uri        | ?string | The track uri                      |
-| sourceName | string  | The track source name              |
+| Field      | Type    | Description                                                                           |
+|------------|---------|---------------------------------------------------------------------------------------|
+| identifier | string  | The track identifier                                                                  |
+| isSeekable | bool    | Whether the track is seekable                                                         |
+| author     | string  | The track author                                                                      |
+| length     | int     | The track length in milliseconds                                                      |
+| isStream   | bool    | Whether the track is a stream                                                         |
+| position   | int     | The track position in milliseconds                                                    |
+| title      | string  | The track title                                                                       |
+| uri        | ?string | The track uri                                                                         |
+| artworkUrl | ?string | The track artwork url                                                                 |
+| isrc       | ?string | The track [ISRC](https://en.wikipedia.org/wiki/International_Standard_Recording_Code) |
+| sourceName | string  | The track source name                                                                 |
 
 ##### Voice State
 
@@ -603,6 +657,8 @@ with the Voice Server Update. Please refer to https://discord.com/developers/doc
       "position": 0,
       "title": "Rick Astley - Never Gonna Give You Up",
       "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+      "isrc": null,
       "sourceName": "youtube"
     },
     "volume": 100,
@@ -628,7 +684,7 @@ with the Voice Server Update. Please refer to https://discord.com/developers/doc
 Returns the player for this guild in this session.
 
 ```
-GET /v3/sessions/{sessionId}/players/{guildId}
+GET /v4/sessions/{sessionId}/players/{guildId}
 ```
 
 Response:
@@ -650,6 +706,8 @@ Response:
     "position": 0,
     "title": "Rick Astley - Never Gonna Give You Up",
     "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+    "isrc": null,
     "sourceName": "youtube"
   },
   "volume": 100,
@@ -674,7 +732,7 @@ Response:
 Updates or creates the player for this guild if it doesn't already exist.
 
 ```
-PATCH /v3/sessions/{sessionId}/players/{guildId}?noReplace=true
+PATCH /v4/sessions/{sessionId}/players/{guildId}?noReplace=true
 ```
 
 Query Params:
@@ -744,6 +802,8 @@ Response:
       "position": 0,
       "title": "Rick Astley - Never Gonna Give You Up",
       "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+      "isrc": null,
       "sourceName": "youtube"
     }
   },
@@ -786,10 +846,7 @@ Filters are used in above requests and look like this
 There are 15 bands (0-14) that can be changed.
 "gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
 where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could also change the volume of the output.
-
-<details>
 <summary>Band Frequencies</summary>
-
 | Band | Frequency |
 |------|-----------|
 | 0    | 25 Hz     |
@@ -807,64 +864,44 @@ where -0.25 means the given band is completely muted, and 0.25 means it is doubl
 | 12   | 6300 Hz   |
 | 13   | 10000 Hz  |
 | 14   | 16000 Hz  |
-
-</details>
-
 | Field | Type  | Description             |
 |-------|-------|-------------------------|
 | bands | int   | The band (0 to 14)      |
 | gain  | float | The gain (-0.25 to 1.0) |
-
 ##### Karaoke
-
 Uses equalization to eliminate part of a band, usually targeting vocals.
-
 | Field        | Type  | Description                                                             |
 |--------------|-------|-------------------------------------------------------------------------|
 | level?       | float | The level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect)      |
 | monoLevel?   | float | The mono level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect) |
 | filterBand?  | float | The filter band                                                         |
 | filterWidth? | float | The filter width                                                        |
-
 ##### Timescale
-
 Changes the speed, pitch, and rate. All default to 1.0.
-
 | Field  | Type  | Description                |
 |--------|-------|----------------------------|
 | speed? | float | The playback speed 0.0 ≤ x |
 | pitch? | float | The pitch 0.0 ≤ x          |
 | rate?  | float | The rate 0.0 ≤ x           |
-
 ##### Tremolo
-
 Uses amplification to create a shuddering effect, where the volume quickly oscillates.
 https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
-
 | Field      | Type  | Description                     |
 |------------|-------|---------------------------------|
 | frequency? | float | The frequency 0.0 < x           |
 | depth?     | float | The tremolo depth 0.0 < x ≤ 1.0 |
-
 ##### Vibrato
-
 Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
-
 | Field      | Type  | Description                     |
 |------------|-------|---------------------------------|
 | frequency? | float | The frequency 0.0 < x ≤ 14.0    |
 | depth?     | float | The vibrato depth 0.0 < x ≤ 1.0 |
-
 ##### Rotation
-
 Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to https://youtu.be/QB9EB8mTKcc (without the reverb)
-
 | Field       | Type  | Description                                                                                              |
 |-------------|-------|----------------------------------------------------------------------------------------------------------|
 | rotationHz? | float | The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above |
-
 ##### Distortion
-
 Distortion effect. It can generate some pretty unique audio effects.
 
 | Field      | Type  | Description    |
@@ -965,7 +1002,7 @@ Any smoothing values equal to, or less than 1.0 will disable the filter.
 Destroys the player for this guild in this session.
 
 ```
-DELETE /v3/sessions/{sessionId}/players/{guildId}
+DELETE /v4/sessions/{sessionId}/players/{guildId}
 ```
 
 Response:
@@ -979,22 +1016,22 @@ Response:
 Updates the session with a resuming key and timeout.
 
 ```
-PATCH /v3/sessions/{sessionId}
+PATCH /v4/sessions/{sessionId}
 ```
 
 Request:
 
-| Field        | Type    | Description                                              |
-|--------------|---------|----------------------------------------------------------|
-| resumingKey? | ?string | The resuming key to be able to resume this session later |
-| timeout?     | int     | The timeout in seconds (default is 60s)                  |
+| Field     | Type | Description                                         |
+|-----------|------|-----------------------------------------------------|
+| resuming? | bool | Whether resuming is enabled for this session or not |
+| timeout?  | int  | The timeout in seconds (default is 60s)             |
 
 <details>
 <summary>Example Payload</summary>
 
 ```json
 {
-  "resumingKey": "...",
+  "resuming": false,
   "timeout": 0
 }
 ```
@@ -1003,17 +1040,17 @@ Request:
 
 Response:
 
-| Field       | Type    | Description                                              |
-|-------------|---------|----------------------------------------------------------|
-| resumingKey | ?string | The resuming key to be able to resume this session later |
-| timeout     | int     | The timeout in seconds (default is 60s)                  |
+| Field    | Type | Description                                         |
+|----------|------|-----------------------------------------------------|
+| resuming | bool | Whether resuming is enabled for this session or not |
+| timeout  | int  | The timeout in seconds (default is 60s)             |
 
 <details>
 <summary>Example Payload</summary>
 
 ```json
 {
-  "resumingKey": "...",
+  "resumingKey": true,
   "timeout": 60
 }
 ```
@@ -1025,22 +1062,20 @@ Response:
 #### Track Loading
 
 This endpoint is used to resolve audio tracks for use with the [Update Player](#update-player) endpoint.
-> `/loadtracks?identifier=dQw4w9WgXcQ` is deprecated and marked for removal in v4
-
 ```
-GET /v3/loadtracks?identifier=dQw4w9WgXcQ
+GET /v4/loadtracks?identifier=dQw4w9WgXcQ
 ```
 
 Response:
 
 ##### Track Loading Result
 
-| Field        | Type                                   | Description                                               | Required Load Type                                 |
-|--------------|----------------------------------------|-----------------------------------------------------------|----------------------------------------------------|
-| loadType     | [LoadResultType](#load-result-type)    | The type of the result                                    |                                                    |
-| playlistInfo | [Playlist Info](#playlist-info) object | Additional info if the the load type is `PLAYLIST_LOADED` | `PLAYLIST_LOADED`                                  |
-| tracks       | array of [Tracks](#track)              | All tracks which have been loaded                         | `TRACK_LOADED`, `PLAYLIST_LOADED`, `SEARCH_RESULT` |
-| exception?   | [Exception](#exception-object) object  | The [Exception](#exception-object) this load failed with  | `LOAD_FAILED`                                      |
+| Field        | Type                                    | Description                                               | Required Load Type                                 |
+|--------------|-----------------------------------------|-----------------------------------------------------------|----------------------------------------------------|
+| loadType     | [LoadResultType](#load-result-type)     | The type of the result                                    |                                                    |
+| playlistInfo | ?[Playlist Info](#playlist-info) object | Additional info if the the load type is `PLAYLIST_LOADED` | `PLAYLIST_LOADED`                                  |
+| tracks       | array of [Tracks](#track)               | All tracks which have been loaded                         | `TRACK_LOADED`, `PLAYLIST_LOADED`, `SEARCH_RESULT` |
+| exception    | ?[Exception](#exception-object) object  | The [Exception](#exception-object) this load failed with  | `LOAD_FAILED`                                      |
 
 ##### Load Result Type
 
@@ -1054,10 +1089,10 @@ Response:
 
 ##### Playlist Info
 
-| Field          | Type   | Description                                                      |
-|----------------|--------|------------------------------------------------------------------|
-| name?          | string | The name of the loaded playlist                                  |
-| selectedTrack? | int    | The selected track in this Playlist (-1 if no track is selected) |
+| Field         | Type   | Description                                                      |
+|---------------|--------|------------------------------------------------------------------|
+| name          | string | The name of the loaded playlist                                  |
+| selectedTrack | int    | The selected track in this Playlist (-1 if no track is selected) |
 
 <details>
 <summary>Track Loaded Example Payload</summary>
@@ -1065,11 +1100,10 @@ Response:
 ```yaml
 {
   "loadType": "TRACK_LOADED",
-  "playlistInfo": {},
+  "playlistInfo": null,
   "tracks": [
     {
       "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-      "track": "...", # Same as encoded, removed in /v4
       "info": {
         "identifier": "dQw4w9WgXcQ",
         "isSeekable": true,
@@ -1079,10 +1113,13 @@ Response:
         "position": 0,
         "title": "Rick Astley - Never Gonna Give You Up",
         "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+        "isrc": null,
         "sourceName": "youtube"
       }
     }
-  ]
+  ],
+  "exception": null
 }
 ```
 
@@ -1100,7 +1137,8 @@ Response:
   },
   "tracks": [
     ...
-  ]
+  ],
+  "exception": null
 }
 ```
 
@@ -1112,10 +1150,11 @@ Response:
 ```yaml
 {
   "loadType": "SEARCH_RESULT",
-  "playlistInfo": {},
+  "playlistInfo": null,
   "tracks": [
     ...
-  ]
+  ],
+  "exception": null
 }
 ```
 
@@ -1127,8 +1166,9 @@ Response:
 ```json
 {
   "loadType": "NO_MATCHES",
-  "playlistInfo": {},
-  "tracks": []
+  "playlistInfo": null,
+  "tracks": [],
+  "exception": null
 }
 ```
 
@@ -1140,7 +1180,7 @@ Response:
 ```json
 {
   "loadType": "LOAD_FAILED",
-  "playlistInfo": {},
+  "playlistInfo": null,
   "tracks": [],
   "exception": {
     "message": "The uploader has not made this video available in your country.",
@@ -1164,7 +1204,7 @@ When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. N
 Decode a single track into its info, where `BASE64` is the encoded base64 data.
 
 ```
-GET /v3/decodetrack?encodedTrack=BASE64
+GET /v4/decodetrack?encodedTrack=BASE64
 ```
 
 Response:
@@ -1186,6 +1226,8 @@ Response:
     "position": 0,
     "title": "Rick Astley - Never Gonna Give You Up",
     "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+    "isrc": null,
     "sourceName": "youtube"
   },
   "identifier": "dQw4w9WgXcQ", // Same as info.identifier, removed in /v4
@@ -1207,7 +1249,7 @@ Response:
 Decodes multiple tracks into their info
 
 ```
-POST /v3/decodetracks
+POST /v4/decodetracks
 ```
 
 Request:
@@ -1237,7 +1279,6 @@ Array of [Track Objects](#track)
 [
   {
     "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-    "track": "...", # Same as encoded, removed in /v4
     "info": {
       "identifier": "dQw4w9WgXcQ",
       "isSeekable": true,
@@ -1247,6 +1288,8 @@ Array of [Track Objects](#track)
       "position": 0,
       "title": "Rick Astley - Never Gonna Give You Up",
       "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+      "isrc": null,
       "sourceName": "youtube"
     }
   },
@@ -1263,7 +1306,7 @@ Array of [Track Objects](#track)
 Request Lavalink information.
 
 ```
-GET /v3/info
+GET /v4/info
 ```
 
 Response:
@@ -1332,9 +1375,9 @@ Response:
   ],
   "filters": [
     "equalizer",
-		"karaoke",
-		"timescale",
-		"channelMix"
+	"karaoke",
+	"timescale",
+	"channelMix"
   ],
   "plugins": [
     {
@@ -1358,7 +1401,7 @@ Response:
 Request Lavalink statistics.
 
 ```
-GET /v3/stats
+GET /v4/stats
 ```
 
 Response:
@@ -1393,32 +1436,6 @@ Response:
 
 ---
 
-#### Get Plugins (DEPRECATED)
-
-Request information about the plugins running on Lavalink, if any.
-> `/plugins` is deprecated and marked for removal in v4, use [`/info`](#get-lavalink-info) instead
-
-```
-GET /plugins
-```
-
-Response:
-
-```yaml
-[
-  {
-    "name": "some-plugin",
-    "version": "1.0.0"
-  },
-  {
-    "name": "foo-plugin",
-    "version": "1.2.3"
-  }
-]
-```
-
----
-
 #### Get Lavalink version
 
 Request Lavalink version.
@@ -1430,7 +1447,7 @@ GET /version
 Response:
 
 ```
-3.7.0
+4.0.0
 ```
 
 ---
@@ -1441,10 +1458,8 @@ Additionally, there are a few REST endpoints for the ip rotation extension.
 
 #### Get RoutePlanner status
 
-> `/routeplanner/status` is deprecated and marked for removal in v4
-
 ```
-GET /v3/routeplanner/status
+GET /v4/routeplanner/status
 ```
 
 Response:
@@ -1527,10 +1542,8 @@ Response:
 
 #### Unmark a failed address
 
-> `/routeplanner/free/address` is deprecated and marked for removal in v4
-
 ```
-POST /v3/routeplanner/free/address
+POST /v4/routeplanner/free/address
 ```
 
 Request:
@@ -1558,10 +1571,8 @@ Response:
 
 #### Unmark all failed address
 
-> `/routeplanner/free/all` is deprecated and marked for removal in v4
-
 ```
-POST /v3/routeplanner/free/all
+POST /v4/routeplanner/free/all
 ```
 
 Response:
@@ -1577,7 +1588,7 @@ What happens after your client disconnects is dependent on whether the session h
 * If resuming is disabled all voice connections are closed immediately.
 * If resuming is enabled all music will continue playing. You will then be able to resume your session, allowing you to control the players again.
 
-To enable resuming, you must call the [Update Session](#update-session) endpoint with the `resumingKey` and `timeout`.
+To enable resuming, you must call the [Update Session](#update-session) endpoint with the `resuming` and `timeout`.
 
 <details>
 <summary>Configure Resuming OP(DEPRECATED)</summary>

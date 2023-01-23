@@ -19,25 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package lavalink.server.player
+package lavalink.server.v3
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import dev.arbjerg.lavalink.protocol.v4.LoadResult
-import lavalink.server.util.toPlaylistInfo
-import lavalink.server.util.toTrack
+import dev.arbjerg.lavalink.protocol.v3.LoadResult
 import org.slf4j.LoggerFactory
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.CompletionStage
 import java.util.concurrent.atomic.AtomicBoolean
 
-class AudioLoader(private val audioPlayerManager: AudioPlayerManager) : AudioLoadResultHandler {
+class AudioLoaderV3(private val audioPlayerManager: AudioPlayerManager) : AudioLoadResultHandler {
 
     companion object {
-        private val log = LoggerFactory.getLogger(AudioLoader::class.java)
+        private val log = LoggerFactory.getLogger(AudioLoaderV3::class.java)
     }
 
     private val loadResult = CompletableFuture<LoadResult>()
@@ -53,18 +51,18 @@ class AudioLoader(private val audioPlayerManager: AudioPlayerManager) : AudioLoa
 
     override fun trackLoaded(audioTrack: AudioTrack) {
         log.info("Loaded track ${audioTrack.info.title}")
-        val track = audioTrack.toTrack(audioPlayerManager)
+        val track = audioTrack.toTrackV3()
         loadResult.complete(LoadResult.trackLoaded(track))
     }
 
     override fun playlistLoaded(audioPlaylist: AudioPlaylist) {
         log.info("Loaded playlist ${audioPlaylist.name}")
-        val tracks = audioPlaylist.tracks.map { it.toTrack(audioPlayerManager) }
+        val tracks = audioPlaylist.tracks.map { it.toTrackV3() }
         if (audioPlaylist.isSearchResult) {
             loadResult.complete(LoadResult.searchResultLoaded(tracks))
             return
         }
-        loadResult.complete(LoadResult.playlistLoaded(audioPlaylist.toPlaylistInfo(), tracks))
+        loadResult.complete(LoadResult.playlistLoaded(audioPlaylist.toPlaylistInfoV3(), tracks))
     }
 
     override fun noMatches() {

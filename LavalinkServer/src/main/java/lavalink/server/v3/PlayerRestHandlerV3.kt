@@ -1,4 +1,4 @@
-package lavalink.server.player
+package lavalink.server.v3
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
@@ -6,11 +6,14 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker
 import dev.arbjerg.lavalink.api.AudioFilterExtension
-import dev.arbjerg.lavalink.protocol.v4.*
+import dev.arbjerg.lavalink.protocol.v3.*
 import lavalink.server.config.ServerConfig
 import lavalink.server.io.SocketServer
+import lavalink.server.player.TrackEndMarkerHandler
 import lavalink.server.player.filters.FilterChain
-import lavalink.server.util.*
+import lavalink.server.util.existingPlayer
+import lavalink.server.util.getRootCause
+import lavalink.server.util.socketContext
 import moe.kyokobot.koe.VoiceServerInfo
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -20,34 +23,34 @@ import org.springframework.web.server.ResponseStatusException
 import java.util.concurrent.CompletableFuture
 
 @RestController
-class PlayerRestHandler(
+class PlayerRestHandlerV3(
     private val socketServer: SocketServer,
     private val filterExtensions: List<AudioFilterExtension>,
     serverConfig: ServerConfig,
 ) {
 
     companion object {
-        private val log = LoggerFactory.getLogger(PlayerRestHandler::class.java)
+        private val log = LoggerFactory.getLogger(PlayerRestHandlerV3::class.java)
     }
 
     val disabledFilters = serverConfig.filters.entries.filter { !it.value }.map { it.key }
 
-    @GetMapping("/v4/sessions/{sessionId}/players")
+    @GetMapping("/v3/sessions/{sessionId}/players")
     private fun getPlayers(@PathVariable sessionId: String): ResponseEntity<Players> {
         val context = socketContext(socketServer, sessionId)
 
-        return ResponseEntity.ok(Players(context.players.values.map { it.toPlayer(context) }))
+        return ResponseEntity.ok(Players(context.players.values.map { it.toPlayerV3(context) }))
     }
 
-    @GetMapping("/v4/sessions/{sessionId}/players/{guildId}")
+    @GetMapping("/v3/sessions/{sessionId}/players/{guildId}")
     private fun getPlayer(@PathVariable sessionId: String, @PathVariable guildId: Long): ResponseEntity<Player> {
         val context = socketContext(socketServer, sessionId)
         val player = existingPlayer(context, guildId)
 
-        return ResponseEntity.ok(player.toPlayer(context))
+        return ResponseEntity.ok(player.toPlayerV3(context))
     }
 
-    @PatchMapping("/v4/sessions/{sessionId}/players/{guildId}")
+    @PatchMapping("/v3/sessions/{sessionId}/players/{guildId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private fun patchPlayer(
         @RequestBody playerUpdate: PlayerUpdate,
@@ -82,23 +85,14 @@ class PlayerRestHandler(
         val player = context.getPlayer(guildId)
 
         playerUpdate.voice.takeIfPresent {
-            val oldConn = context.koe.getConnection(guildId)
-            if (oldConn == null ||
-                oldConn.gatewayConnection?.isOpen == false ||
-                oldConn.voiceServerInfo == null ||
-                oldConn.voiceServerInfo?.endpoint != it.endpoint ||
-                oldConn.voiceServerInfo?.token != it.token ||
-                oldConn.voiceServerInfo?.sessionId != it.sessionId
-            ) {
-                //clear old connection
-                context.koe.destroyConnection(guildId)
+            //clear old connection
+            context.koe.destroyConnection(guildId)
 
-                val conn = context.getMediaConnection(player)
-                conn.connect(VoiceServerInfo(it.sessionId, it.endpoint, it.token)).exceptionally {
-                    throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to connect to voice server")
-                }.toCompletableFuture().join()
-                player.provideTo(conn)
-            }
+            val conn = context.getMediaConnection(player)
+            conn.connect(VoiceServerInfo(it.sessionId, it.endpoint, it.token)).exceptionally {
+                throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to connect to voice server")
+            }.toCompletableFuture().join()
+            player.provideTo(conn)
         }
 
         // we handle pause differently for playing new tracks
@@ -119,7 +113,7 @@ class PlayerRestHandler(
             }
 
         playerUpdate.filters.takeIfPresent {
-            player.filters = FilterChain.parse(it, filterExtensions)
+            player.filters = FilterChain.parseV3(it, filterExtensions)
             SocketServer.sendPlayerUpdate(context, player)
         }
 
@@ -127,7 +121,7 @@ class PlayerRestHandler(
 
             if (noReplace && player.track != null) {
                 log.info("Skipping play request because of noReplace")
-                return ResponseEntity.ok(player.toPlayer(context))
+                return ResponseEntity.ok(player.toPlayerV3(context))
             }
             player.setPause(if (playerUpdate.paused.isPresent) playerUpdate.paused.value else false)
 
@@ -176,10 +170,10 @@ class PlayerRestHandler(
             } ?: player.stop()
         }
 
-        return ResponseEntity.ok(player.toPlayer(context))
+        return ResponseEntity.ok(player.toPlayerV3(context))
     }
 
-    @DeleteMapping("/v4/sessions/{sessionId}/players/{guildId}")
+    @DeleteMapping("/v3/sessions/{sessionId}/players/{guildId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private fun deletePlayer(@PathVariable sessionId: String, @PathVariable guildId: Long) {
         socketContext(socketServer, sessionId).destroyPlayer(guildId)
