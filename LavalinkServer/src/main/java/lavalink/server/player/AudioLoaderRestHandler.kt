@@ -26,7 +26,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import dev.arbjerg.lavalink.protocol.v3.DecodedTrack
 import dev.arbjerg.lavalink.protocol.v3.Track
+import dev.arbjerg.lavalink.protocol.v3.TrackInfo
 import dev.arbjerg.lavalink.protocol.v3.decodeTrack
 import lavalink.server.util.toTrack
 import org.slf4j.LoggerFactory
@@ -70,12 +72,13 @@ class AudioLoaderRestHandler(
     }
 
     @GetMapping(value = ["/decodetrack", "/v3/decodetrack"])
-    fun getDecodeTrack(@RequestParam encodedTrack: String?, @RequestParam track: String?): ResponseEntity<Track> {
+    fun getDecodeTrack(@RequestParam encodedTrack: String?, @RequestParam track: String?): ResponseEntity<DecodedTrack> {
         val trackToDecode = encodedTrack ?: track ?: throw ResponseStatusException(
             HttpStatus.BAD_REQUEST,
             "No track to decode provided"
         )
-        return ResponseEntity.ok(decodeTrack(audioPlayerManager, trackToDecode).toTrack(trackToDecode))
+        val decodedTrack = decodeTrack(audioPlayerManager, trackToDecode).toTrack(trackToDecode)
+        return ResponseEntity.ok(DecodedTrack(decodedTrack.encoded, decodedTrack.info, decodedTrack.info))
     }
 
     @PostMapping(value = ["/decodetracks", "/v3/decodetracks"])
