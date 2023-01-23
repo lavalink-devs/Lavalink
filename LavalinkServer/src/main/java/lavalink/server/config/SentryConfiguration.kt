@@ -16,24 +16,10 @@ import java.util.*
  * Created by napster on 25.04.18.
  */
 @Configuration
-class SentryConfiguration(serverConfig: ServerConfig, sentryConfig: SentryConfigProperties) {
+class SentryConfiguration(sentryConfig: SentryConfigProperties) {
     init {
-        var dsn = sentryConfig.dsn
-        var warnDeprecatedDsnConfig = false
-        if (dsn.isEmpty()) {
-            //try deprecated config location
-            dsn = serverConfig.sentryDsn
-            warnDeprecatedDsnConfig = true
-        }
-
-        if (dsn.isNotEmpty()) {
-            turnOn(dsn, sentryConfig.tags, sentryConfig.environment)
-            if (warnDeprecatedDsnConfig) {
-                log.warn(
-                    "Please update the location of the sentry dsn in lavalinks config file / your environment "
-                            + "vars, it is now located under 'sentry.dsn' instead of 'lavalink.server.sentryDsn'."
-                )
-            }
+        if (sentryConfig.dsn.isNotEmpty()) {
+            turnOn(sentryConfig.dsn, sentryConfig.tags, sentryConfig.environment)
         } else {
             turnOff()
         }

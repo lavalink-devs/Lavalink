@@ -19,12 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package lavalink.server.player
+package lavalink.server.v3
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import dev.arbjerg.lavalink.protocol.v4.LoadResult
-import dev.arbjerg.lavalink.protocol.v4.Track
-import dev.arbjerg.lavalink.protocol.v4.decodeTrack
+import dev.arbjerg.lavalink.protocol.v3.DecodedTrack
+import dev.arbjerg.lavalink.protocol.v3.Track
+import dev.arbjerg.lavalink.protocol.v3.decodeTrack
 import lavalink.server.util.toTrack
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -35,40 +39,52 @@ import java.util.concurrent.CompletionStage
 import javax.servlet.http.HttpServletRequest
 
 @RestController
-class AudioLoaderRestHandler(
+class AudioLoaderRestHandlerV3(
     private val audioPlayerManager: AudioPlayerManager,
+    private val objectMapper: ObjectMapper
 ) {
 
     companion object {
-        private val log = LoggerFactory.getLogger(AudioLoaderRestHandler::class.java)
+        private val log = LoggerFactory.getLogger(AudioLoaderRestHandlerV3::class.java)
     }
 
-    @GetMapping("/v4/loadtracks")
+    @GetMapping("/v3/loadtracks")
     fun loadTracks(
         request: HttpServletRequest,
         @RequestParam identifier: String
-    ): CompletionStage<ResponseEntity<LoadResult>> {
+    ): CompletionStage<ResponseEntity<JsonNode>> {
         log.info("Got request to load for identifier \"${identifier}\"")
-        return AudioLoader(audioPlayerManager).load(identifier)
-            .thenApply { ResponseEntity.ok(it) }
+        return AudioLoaderV3(audioPlayerManager).load(identifier).thenApply {
+            val node: ObjectNode = objectMapper.valueToTree(it)
+            if (node.get("playlistInfo").isNull) {
+                node.replace("playlistInfo", JsonNodeFactory.instance.objectNode())
+            }
+
+            if (node.get("exception").isNull) {
+                node.remove("exception")
+            }
+
+            return@thenApply ResponseEntity.ok(node)
+        }
     }
 
-    @GetMapping("/v4/decodetrack")
-    fun getDecodeTrack(@RequestParam encodedTrack: String?, @RequestParam track: String?): ResponseEntity<Track> {
+    @GetMapping("/v3/decodetrack")
+    fun getDecodeTrack(@RequestParam encodedTrack: String?, @RequestParam track: String?): ResponseEntity<DecodedTrack> {
         val trackToDecode = encodedTrack ?: track ?: throw ResponseStatusException(
             HttpStatus.BAD_REQUEST,
             "No track to decode provided"
         )
-        return ResponseEntity.ok(decodeTrack(audioPlayerManager, trackToDecode).toTrack(trackToDecode))
+        val decodedTrack = decodeTrack(audioPlayerManager, trackToDecode).toTrackV3(trackToDecode)
+        return ResponseEntity.ok(DecodedTrack(decodedTrack.encoded, decodedTrack.info, decodedTrack.info))
     }
 
-    @PostMapping("/v4/decodetracks")
+    @PostMapping("/v3/decodetracks")
     fun decodeTracks(@RequestBody encodedTracks: List<String>): ResponseEntity<List<Track>> {
         if (encodedTracks.isEmpty()) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "No tracks to decode provided")
         }
         return ResponseEntity.ok(encodedTracks.map {
-            decodeTrack(audioPlayerManager, it).toTrack(it)
+            decodeTrack(audioPlayerManager, it).toTrackV3(it)
         })
     }
 

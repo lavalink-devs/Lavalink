@@ -1,4 +1,4 @@
-package lavalink.server.io
+package lavalink.server.v3
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker
@@ -7,6 +7,8 @@ import dev.arbjerg.lavalink.api.WebSocketExtension
 import dev.arbjerg.lavalink.protocol.v3.Filters
 import dev.arbjerg.lavalink.protocol.v3.decodeTrack
 import lavalink.server.config.ServerConfig
+import lavalink.server.io.SocketContext
+import lavalink.server.io.SocketServer
 import lavalink.server.player.TrackEndMarkerHandler
 import lavalink.server.player.filters.Band
 import lavalink.server.player.filters.EqualizerConfig
@@ -16,7 +18,7 @@ import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class WebSocketHandler(
+class WebSocketHandlerV3(
     private val context: SocketContext,
     wsExtensions: List<WebSocketExtension>,
     private val filterExtensions: List<AudioFilterExtension>,
@@ -24,7 +26,7 @@ class WebSocketHandler(
     private val objectMapper: ObjectMapper
 ) {
     companion object {
-        private val log: Logger = LoggerFactory.getLogger(WebSocketHandler::class.java)
+        private val log: Logger = LoggerFactory.getLogger(WebSocketHandlerV3::class.java)
 
         fun WebSocketExtension.toHandler(ctx: SocketContext): Pair<String, (JSONObject) -> Unit> {
             return opName to { onInvocation(ctx, it) }
@@ -154,7 +156,7 @@ class WebSocketHandler(
             .map { b -> Band(b.getInt("band"), b.getFloat("gain")) }
 
         val filters = player.filters
-        filters.setEqualizer(EqualizerConfig(bands))
+        filters.equalizer = EqualizerConfig(bands)
         player.filters = filters
     }
 
@@ -166,7 +168,7 @@ class WebSocketHandler(
             log.warn("The following filters are disabled in the config and are being ignored: $invalidFilters")
             return
         }
-        player.filters = FilterChain.parse(filters, filterExtensions)
+        player.filters = FilterChain.parseV3(filters, filterExtensions)
     }
 
     private fun destroy(json: JSONObject) {

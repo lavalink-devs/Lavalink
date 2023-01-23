@@ -1,4 +1,4 @@
-package dev.arbjerg.lavalink.protocol.v3
+package dev.arbjerg.lavalink.protocol.v4
 
 import com.fasterxml.jackson.annotation.JsonValue
 

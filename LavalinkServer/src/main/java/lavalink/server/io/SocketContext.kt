@@ -35,6 +35,7 @@ import io.undertow.websockets.core.WebSockets
 import io.undertow.websockets.jsr.UndertowSession
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.LavalinkPlayer
+import lavalink.server.v3.WebSocketHandlerV3
 import moe.kyokobot.koe.KoeClient
 import moe.kyokobot.koe.KoeEventAdapter
 import moe.kyokobot.koe.MediaConnection
@@ -49,6 +50,7 @@ import java.util.concurrent.*
 
 class SocketContext(
     private val sessionId: String,
+    val version: Int,
     val audioPlayerManager: AudioPlayerManager,
     private val serverConfig: ServerConfig,
     private var session: WebSocketSession,
@@ -71,7 +73,7 @@ class SocketContext(
     private val players = ConcurrentHashMap<Long, LavalinkPlayer>()
 
     val eventEmitter = EventEmitter(this, eventHandlers)
-    val wsHandler = WebSocketHandler(this, webSocketExtensions, filterExtensions, serverConfig, objectMapper)
+    val wsHandler = if (version == 3) WebSocketHandlerV3(this, webSocketExtensions, filterExtensions, serverConfig, objectMapper) else null
 
     @Volatile
     var sessionPaused = false

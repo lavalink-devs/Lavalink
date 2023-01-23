@@ -5,6 +5,7 @@ import org.json.JSONObject;
 /**
  * When added as a bean, adds an operation to the WebSocket API that clients can invoke.
  */
+@Deprecated
 public interface WebSocketExtension {
     /**
      * @return the "op" value to be sent by clients

@@ -1,8 +1,9 @@
-package lavalink.server.io
+package lavalink.server.v3
 
-import dev.arbjerg.lavalink.protocol.v4.Session
-import dev.arbjerg.lavalink.protocol.v4.SessionUpdate
-import dev.arbjerg.lavalink.protocol.v4.takeIfPresent
+import dev.arbjerg.lavalink.protocol.v3.Session
+import dev.arbjerg.lavalink.protocol.v3.SessionUpdate
+import dev.arbjerg.lavalink.protocol.v3.takeIfPresent
+import lavalink.server.io.SocketServer
 import lavalink.server.util.socketContext
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
@@ -11,28 +12,24 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class SessionRestHandler(private val socketServer: SocketServer) {
+class SessionRestHandlerV3(private val socketServer: SocketServer) {
 
-    @PatchMapping("/v4/sessions/{sessionId}")
+    @PatchMapping("/v3/sessions/{sessionId}")
     private fun patchSession(
         @RequestBody sessionUpdate: SessionUpdate,
         @PathVariable sessionId: String
     ): ResponseEntity<Session> {
         val context = socketContext(socketServer, sessionId)
 
-        sessionUpdate.resuming.takeIfPresent {
-            if (it) {
-                context.resumeKey = context.sessionId
-            } else {
-                context.resumeKey = null
-            }
+        sessionUpdate.resumingKey.takeIfPresent {
+            context.resumeKey = it
         }
 
         sessionUpdate.timeout.takeIfPresent {
             context.resumeTimeout = it
         }
 
-        return ResponseEntity.ok(Session(context.resumeKey != null, context.resumeTimeout))
+        return ResponseEntity.ok(Session(context.resumeKey, context.resumeTimeout))
     }
 
 }

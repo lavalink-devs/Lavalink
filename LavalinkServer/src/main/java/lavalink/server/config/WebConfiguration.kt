@@ -1,7 +1,7 @@
 package lavalink.server.config
 
 import dev.arbjerg.lavalink.api.RestInterceptor
-import dev.arbjerg.lavalink.protocol.v3.objectMapper
+import dev.arbjerg.lavalink.protocol.v4.objectMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.HttpMessageConverter

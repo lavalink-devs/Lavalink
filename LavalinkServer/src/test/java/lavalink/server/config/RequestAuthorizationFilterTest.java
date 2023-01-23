@@ -35,13 +35,13 @@ public class RequestAuthorizationFilterTest {
 
     @Test
     public void unauthenticatedRequest_Fail() throws Exception {
-        this.mvc.perform(get("/loadtracks"))
+        this.mvc.perform(get("/v3/loadtracks"))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     public void wrongAuthenticatedRequest_Fail() throws Exception {
-        this.mvc.perform(get("/loadtracks")
+        this.mvc.perform(get("/v3/loadtracks")
                 .header("Authorization", serverConfig.getPassword() + "foo"))
                 .andExpect(status().isForbidden());
     }

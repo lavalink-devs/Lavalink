@@ -24,7 +24,7 @@ package lavalink.server.util
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import dev.arbjerg.lavalink.protocol.v3.*
+import dev.arbjerg.lavalink.protocol.v4.*
 import lavalink.server.io.SocketContext
 import lavalink.server.io.SocketServer
 import lavalink.server.player.LavalinkPlayer
@@ -36,7 +36,7 @@ fun AudioTrack.toTrack(audioPlayerManager: AudioPlayerManager): Track {
 }
 
 fun AudioTrack.toTrack(encoded: String): Track {
-    return Track(encoded, encoded, this.toInfo())
+    return Track(encoded, this.toInfo())
 }
 
 fun AudioTrack.toInfo(): TrackInfo {
@@ -49,7 +49,9 @@ fun AudioTrack.toInfo(): TrackInfo {
         this.position,
         this.info.title,
         this.info.uri,
-        this.sourceManager.sourceName
+        this.sourceManager.sourceName,
+        this.info.artworkUrl,
+        this.info.isrc
     )
 }
 
