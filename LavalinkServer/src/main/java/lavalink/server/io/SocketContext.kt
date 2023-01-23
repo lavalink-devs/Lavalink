@@ -25,6 +25,7 @@ package lavalink.server.io
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.api.AudioFilterExtension
+import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.api.ISocketContext
 import dev.arbjerg.lavalink.api.PluginEventHandler
 import dev.arbjerg.lavalink.api.WebSocketExtension
@@ -62,6 +63,7 @@ class SocketContext(
     eventHandlers: Collection<PluginEventHandler>,
     webSocketExtensions: List<WebSocketExtension>,
     filterExtensions: List<AudioFilterExtension>,
+    private val pluginInfoModifiers: List<AudioPluginInfoModifier>,
     private val objectMapper: ObjectMapper
 ) : ISocketContext {
 
@@ -118,7 +120,7 @@ class SocketContext(
     }
 
     override fun getPlayer(guildId: Long) = players.computeIfAbsent(guildId) {
-        val player = LavalinkPlayer(this, guildId, serverConfig, audioPlayerManager)
+        val player = LavalinkPlayer(this, guildId, serverConfig, audioPlayerManager, pluginInfoModifiers)
         eventEmitter.onNewPlayer(player)
         player
     }

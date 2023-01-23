@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.node.ObjectNode
 
 data class Players(
     @JsonValue
@@ -23,7 +24,8 @@ data class Player(
 
 data class Track(
     val encoded: String,
-    val info: TrackInfo
+    val info: TrackInfo,
+    val pluginInfo: ObjectNode
 )
 
 data class TrackInfo(

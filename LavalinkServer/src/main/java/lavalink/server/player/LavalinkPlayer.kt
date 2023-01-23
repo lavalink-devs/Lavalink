@@ -27,6 +27,7 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame
+import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.api.IPlayer
 import dev.arbjerg.lavalink.api.ISocketContext
 import io.netty.buffer.ByteBuf
@@ -45,6 +46,7 @@ class LavalinkPlayer(
     private val guildId: Long,
     private val serverConfig: ServerConfig,
     audioPlayerManager: AudioPlayerManager,
+    pluginInfoModifiers: List<AudioPluginInfoModifier>
 ) : AudioEventAdapter(), IPlayer {
     val audioLossCounter = AudioLossCounter()
     var endMarkerHit = false
@@ -59,7 +61,7 @@ class LavalinkPlayer(
         if (socket.version == 3) {
             it.addListener(EventEmitterV3(this))
         } else {
-            it.addListener(EventEmitter(audioPlayerManager, this))
+            it.addListener(EventEmitter(audioPlayerManager, this, pluginInfoModifiers))
         }
         it.addListener(audioLossCounter)
     }
