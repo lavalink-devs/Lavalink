@@ -26,6 +26,7 @@ jobs:
           name: Lavalink.jar
 
       - name: Upload Artifacts to GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         with:
-          files: Lavalink.jar
+          artifacts: Lavalink.jar
+          allowUpdates: true
