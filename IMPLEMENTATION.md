@@ -1169,22 +1169,34 @@ GET /v3/decodetrack?encodedTrack=BASE64
 
 Response:
 
-[Track Object](#track)
+[Track Object](#track) and [Track Info Object](#track-info) for pre v3.7 compatibility.
 
 <details>
 <summary>Example Payload</summary>
 
 ```yaml
 {
-  "identifier": "dQw4w9WgXcQ",
-  "isSeekable": true,
-  "author": "RickAstleyVEVO",
-  "length": 212000,
-  "isStream": false,
-  "position": 0,
-  "title": "Rick Astley - Never Gonna Give You Up",
-  "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  "sourceName": "youtube"
+  "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+  "info": {
+    "identifier": "dQw4w9WgXcQ",
+    "isSeekable": true,
+    "author": "RickAstleyVEVO",
+    "length": 212000,
+    "isStream": false,
+    "position": 0,
+    "title": "Rick Astley - Never Gonna Give You Up",
+    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "sourceName": "youtube"
+  },
+  "identifier": "dQw4w9WgXcQ", // Same as info.identifier, removed in /v4
+  "isSeekable": true, // Same as info.isSeekable, removed in /v4
+  "author": "RickAstleyVEVO", // Same as info.author, removed in /v4
+  "length": 212000, // Same as info.length, removed in /v4
+  "isStream": false, // Same as info.isStream, removed in /v4
+  "position": 0, // Same as info.position, removed in /v4
+  "title": "Rick Astley - Never Gonna Give You Up", // Same as info.title, removed in /v4
+  "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Same as info.uri, removed in /v4
+  "sourceName": "youtube" // Same as info.sourceName, removed in /v4
 }
 ```
 

@@ -1,5 +1,6 @@
 package dev.arbjerg.lavalink.protocol.v3
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
@@ -19,6 +20,13 @@ data class Player(
     val paused: Boolean,
     val voice: VoiceState,
     val filters: Filters
+)
+
+data class DecodedTrack(
+    val encoded: String,
+    val info: TrackInfo,
+    @JsonUnwrapped
+    val oldInfo: TrackInfo
 )
 
 data class Track(
