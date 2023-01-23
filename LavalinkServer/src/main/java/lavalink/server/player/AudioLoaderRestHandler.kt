@@ -22,6 +22,7 @@
 package lavalink.server.player
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.arbjerg.lavalink.protocol.v4.decodeTrack
@@ -37,6 +38,7 @@ import javax.servlet.http.HttpServletRequest
 @RestController
 class AudioLoaderRestHandler(
     private val audioPlayerManager: AudioPlayerManager,
+    private val pluginInfoModifiers: List<AudioPluginInfoModifier>
 ) {
 
     companion object {
@@ -49,7 +51,7 @@ class AudioLoaderRestHandler(
         @RequestParam identifier: String
     ): CompletionStage<ResponseEntity<LoadResult>> {
         log.info("Got request to load for identifier \"${identifier}\"")
-        return AudioLoader(audioPlayerManager).load(identifier)
+        return AudioLoader(audioPlayerManager, pluginInfoModifiers).load(identifier)
             .thenApply { ResponseEntity.ok(it) }
     }
 
@@ -59,7 +61,7 @@ class AudioLoaderRestHandler(
             HttpStatus.BAD_REQUEST,
             "No track to decode provided"
         )
-        return ResponseEntity.ok(decodeTrack(audioPlayerManager, trackToDecode).toTrack(trackToDecode))
+        return ResponseEntity.ok(decodeTrack(audioPlayerManager, trackToDecode).toTrack(trackToDecode, pluginInfoModifiers))
     }
 
     @PostMapping("/v4/decodetracks")
@@ -68,7 +70,7 @@ class AudioLoaderRestHandler(
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "No tracks to decode provided")
         }
         return ResponseEntity.ok(encodedTracks.map {
-            decodeTrack(audioPlayerManager, it).toTrack(it)
+            decodeTrack(audioPlayerManager, it).toTrack(it, pluginInfoModifiers)
         })
     }
 

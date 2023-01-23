@@ -605,10 +605,11 @@ GET /v4/sessions/{sessionId}/players
 
 ##### Track
 
-| Field   | Type                             | Description                                                                          |
-|---------|----------------------------------|--------------------------------------------------------------------------------------|
-| encoded | string                           | The base64 encoded track data                                                        |
-| info    | [Track Info](#track-info) object | Info about the track                                                                 |
+| Field      | Type                             | Description                                                                          |
+|------------|----------------------------------|--------------------------------------------------------------------------------------|
+| encoded    | string                           | The base64 encoded track data                                                        |
+| info       | [Track Info](#track-info) object | Info about the track                                                                 |
+| pluginInfo | object                           | Additional track info from plugins                                                   |
 
 ##### Track Info
 
@@ -822,31 +823,8 @@ Response:
 
 </details>
 
-
-
-<details>
-
-
-</details>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
+
 #### Filters
 
 Filters are used in above requests and look like this
@@ -869,7 +847,10 @@ Filters are used in above requests and look like this
 There are 15 bands (0-14) that can be changed.
 "gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
 where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could also change the volume of the output.
+
+<details>
 <summary>Band Frequencies</summary>
+
 | Band | Frequency |
 |------|-----------|
 | 0    | 25 Hz     |
@@ -887,44 +868,64 @@ where -0.25 means the given band is completely muted, and 0.25 means it is doubl
 | 12   | 6300 Hz   |
 | 13   | 10000 Hz  |
 | 14   | 16000 Hz  |
+
+</details>
+
 | Field | Type  | Description             |
 |-------|-------|-------------------------|
 | bands | int   | The band (0 to 14)      |
 | gain  | float | The gain (-0.25 to 1.0) |
+
 ##### Karaoke
+
 Uses equalization to eliminate part of a band, usually targeting vocals.
+
 | Field        | Type  | Description                                                             |
 |--------------|-------|-------------------------------------------------------------------------|
 | level?       | float | The level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect)      |
 | monoLevel?   | float | The mono level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect) |
 | filterBand?  | float | The filter band                                                         |
 | filterWidth? | float | The filter width                                                        |
+
 ##### Timescale
+
 Changes the speed, pitch, and rate. All default to 1.0.
+
 | Field  | Type  | Description                |
 |--------|-------|----------------------------|
 | speed? | float | The playback speed 0.0 ≤ x |
 | pitch? | float | The pitch 0.0 ≤ x          |
 | rate?  | float | The rate 0.0 ≤ x           |
+
 ##### Tremolo
+
 Uses amplification to create a shuddering effect, where the volume quickly oscillates.
 https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
+
 | Field      | Type  | Description                     |
 |------------|-------|---------------------------------|
 | frequency? | float | The frequency 0.0 < x           |
 | depth?     | float | The tremolo depth 0.0 < x ≤ 1.0 |
+
 ##### Vibrato
+
 Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
+
 | Field      | Type  | Description                     |
 |------------|-------|---------------------------------|
 | frequency? | float | The frequency 0.0 < x ≤ 14.0    |
 | depth?     | float | The vibrato depth 0.0 < x ≤ 1.0 |
+
 ##### Rotation
+
 Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to https://youtu.be/QB9EB8mTKcc (without the reverb)
+
 | Field       | Type  | Description                                                                                              |
 |-------------|-------|----------------------------------------------------------------------------------------------------------|
 | rotationHz? | float | The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above |
+
 ##### Distortion
+
 Distortion effect. It can generate some pretty unique audio effects.
 
 | Field      | Type  | Description    |
@@ -1097,6 +1098,7 @@ Response:
 |--------------|-----------------------------------------|-----------------------------------------------------------|----------------------------------------------------|
 | loadType     | [LoadResultType](#load-result-type)     | The type of the result                                    |                                                    |
 | playlistInfo | ?[Playlist Info](#playlist-info) object | Additional info if the the load type is `PLAYLIST_LOADED` | `PLAYLIST_LOADED`                                  |
+| pluginInfo   | ?object                                 | Additional playlist info from plugins                     | `PLAYLIST_LOADED`                                  |
 | tracks       | array of [Tracks](#track)               | All tracks which have been loaded                         | `TRACK_LOADED`, `PLAYLIST_LOADED`, `SEARCH_RESULT` |
 | exception    | ?[Exception](#exception-object) object  | The [Exception](#exception-object) this load failed with  | `LOAD_FAILED`                                      |
 
@@ -1124,6 +1126,7 @@ Response:
 {
   "loadType": "TRACK_LOADED",
   "playlistInfo": null,
+  "pluginInfo": null,
   "tracks": [
     {
       "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
@@ -1158,6 +1161,7 @@ Response:
     "name": "Example YouTube Playlist",
     "selectedTrack": 3
   },
+  "pluginInfo": {},
   "tracks": [
     ...
   ],
@@ -1174,6 +1178,7 @@ Response:
 {
   "loadType": "SEARCH_RESULT",
   "playlistInfo": null,
+  "pluginInfo": null,
   "tracks": [
     ...
   ],
@@ -1190,6 +1195,7 @@ Response:
 {
   "loadType": "NO_MATCHES",
   "playlistInfo": null,
+  "pluginInfo": null,
   "tracks": [],
   "exception": null
 }
@@ -1204,6 +1210,7 @@ Response:
 {
   "loadType": "LOAD_FAILED",
   "playlistInfo": null,
+  "pluginInfo": null,
   "tracks": [],
   "exception": {
     "message": "The uploader has not made this video available in your country.",

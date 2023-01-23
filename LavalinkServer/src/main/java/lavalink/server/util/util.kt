@@ -21,9 +21,12 @@
  */
 package lavalink.server.util
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
+import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.protocol.v4.*
 import lavalink.server.io.SocketContext
 import lavalink.server.io.SocketServer
@@ -31,12 +34,18 @@ import lavalink.server.player.LavalinkPlayer
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 
-fun AudioTrack.toTrack(audioPlayerManager: AudioPlayerManager): Track {
-    return this.toTrack(encodeTrack(audioPlayerManager, this))
+
+fun AudioTrack.toTrack(
+    audioPlayerManager: AudioPlayerManager,
+    pluginInfoModifiers: List<AudioPluginInfoModifier>
+): Track {
+    return this.toTrack(encodeTrack(audioPlayerManager, this), pluginInfoModifiers)
 }
 
-fun AudioTrack.toTrack(encoded: String): Track {
-    return Track(encoded, this.toInfo())
+fun AudioTrack.toTrack(encoded: String, pluginInfoModifiers: List<AudioPluginInfoModifier>): Track {
+    val pluginInfo = JsonNodeFactory.instance.objectNode()
+    pluginInfoModifiers.forEach { it.modifyAudioTrackPluginInfo(this, pluginInfo) }
+    return Track(encoded, this.toInfo(), pluginInfo)
 }
 
 fun AudioTrack.toInfo(): TrackInfo {
@@ -59,13 +68,20 @@ fun AudioPlaylist.toPlaylistInfo(): PlaylistInfo {
     return PlaylistInfo(this.name, this.tracks.indexOf(this.selectedTrack))
 }
 
-fun LavalinkPlayer.toPlayer(context: SocketContext): Player {
+
+fun AudioPlaylist.toPluginInfo(pluginInfoModifiers: List<AudioPluginInfoModifier>): ObjectNode {
+    val pluginInfo = JsonNodeFactory.instance.objectNode()
+    pluginInfoModifiers.forEach { it.modifyAudioPlaylistPluginInfo(this, pluginInfo) }
+    return pluginInfo
+}
+
+fun LavalinkPlayer.toPlayer(context: SocketContext, pluginInfoModifiers: List<AudioPluginInfoModifier>): Player {
     val connection = context.getMediaConnection(this).gatewayConnection
     val voiceServerInfo = context.koe.getConnection(guildId)?.voiceServerInfo
 
     return Player(
         guildId.toString(),
-        track?.toTrack(context.audioPlayerManager),
+        track?.toTrack(context.audioPlayerManager, pluginInfoModifiers),
         audioPlayer.volume,
         audioPlayer.isPaused,
         VoiceState(
@@ -78,6 +94,7 @@ fun LavalinkPlayer.toPlayer(context: SocketContext): Player {
         filters.toFilters(),
     )
 }
+
 
 fun getRootCause(throwable: Throwable?): Throwable {
     var rootCause = throwable
