@@ -16,7 +16,7 @@ jobs:
   publish:
     needs: build
     runs-on: ubuntu-latest
-    secrets:
+    env:
       signing.gnupg.keyName: ${{ secrets.SIGNING_GNUPG_KEYNAME }}
       OSSRH_GPG_SECRET_KEY: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
       ossrhUsername: ${{ secrets.OSSRH_USERNAME }}
