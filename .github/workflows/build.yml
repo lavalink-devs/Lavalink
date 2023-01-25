@@ -32,15 +32,38 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+        env:
+          CI: true
+        with:
+          arguments: build
 
-      - name: Execute Gradle build
-        run: ./gradlew build
+      - name: Cache Build Artifacts
+        id: cache-build-artifacts
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            LavalinkServer/build
+            plugin-api/build
+            protocol/build
+          key: cache-build-artifacts-${{ github.sha }}
 
-      - name: Upload Artifacts
+      - name: Upload Lavalink Artifact
         uses: actions/upload-artifact@v3
         with:
           name: Lavalink.jar
           path: LavalinkServer/build/libs/Lavalink.jar
+
+      - name: Upload Protocol Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Protocol.jar
+          path: protocol/build/libs/protocol-*.jar
+
+      - name: Upload PluginAPI Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: PluginAPI.jar
+          path: plugin-api/build/libs/plugin-api-*.jar
 
       - name: Docker Meta
         if: env.DOCKER_USERNAME && env.DOCKER_TOKEN && env.DOCKER_REGISTRY && env.DOCKER_IMAGE

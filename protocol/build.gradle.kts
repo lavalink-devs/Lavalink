@@ -1,5 +1,6 @@
 plugins {
     java
+    signing
     `java-library`
     `maven-publish`
     kotlin("jvm")
@@ -7,7 +8,6 @@ plugins {
 
 val archivesBaseName = "protocol"
 group = "dev.arbjerg.lavalink"
-version = "3.7.0"
 
 java {
     targetCompatibility = JavaVersion.VERSION_11
@@ -22,6 +22,8 @@ dependencies {
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.jackson.module.kotlin)
 }
+
+val isGpgKeyDefined = findProperty("signing.gnupg.keyName") != null
 
 publishing {
     publications {
@@ -55,5 +57,27 @@ publishing {
                 }
             }
         }
+    }
+    if (isGpgKeyDefined) {
+        repositories {
+            val snapshots = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            val releases = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+
+            maven(if ((version as String).endsWith("SNAPSHOT")) snapshots else releases) {
+                credentials {
+                    password = findProperty("ossrhPassword") as? String
+                    username = findProperty("ossrhUsername") as? String
+                }
+            }
+        }
+    } else {
+        println("Not capable of publishing to OSSRH because of missing GPG key")
+    }
+}
+
+if (isGpgKeyDefined) {
+    signing {
+        sign(publishing.publications["PluginApi"])
+        useGpgCmd()
     }
 }
