@@ -147,7 +147,7 @@ class SocketServer(
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
-        val context = contextMap.remove(session.id) ?: return
+        val context = contextMap.remove(session.attributes["sessionId"]) ?: return
         if (context.resumeKey != null) {
             resumableSessions.remove(context.resumeKey!!)?.let { removed ->
                 log.warn(
