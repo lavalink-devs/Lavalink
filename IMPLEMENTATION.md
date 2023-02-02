@@ -155,12 +155,12 @@ Websocket messages all follow the following standard format:
 
 #### OP Types
 
-| OP Type                           | Description                                                  |
-|-----------------------------------|--------------------------------------------------------------|
-| [ready](#ready-op)                | Emitted when you successfully connect to the Lavalink node   |
-| [playerUpdate](#player-update-op) | Emitted every x seconds with the latest player state         |
-| [stats](#stats-op)                | Emitted when the node sends stats once per minute            |
-| [event](#event-op)                | Emitted when a player or voice event is emitted              |
+| OP Type                           | Description                                                |
+|-----------------------------------|------------------------------------------------------------|
+| [ready](#ready-op)                | Emitted when you successfully connect to the Lavalink node |
+| [playerUpdate](#player-update-op) | Emitted every x seconds with the latest player state       |
+| [stats](#stats-op)                | Emitted when the node sends stats once per minute          |
+| [event](#event-op)                | Emitted when a player or voice event is emitted            |
 
 #### Ready OP
 
@@ -334,9 +334,9 @@ Server emitted an event. See the [Event Types](#event-types) section for more in
 
 Emitted when a track starts playing.
 
-| Field | Type                   | Description                                                                                          |
-|-------|------------------------|------------------------------------------------------------------------------------------------------|
-| track | [Track](#track) object | The base64 encoded track that started playing                                                        |
+| Field | Type                   | Description                                   |
+|-------|------------------------|-----------------------------------------------|
+| track | [Track](#track) object | The base64 encoded track that started playing |
 
 <details>
 <summary>Example Payload</summary>
@@ -373,10 +373,10 @@ Emitted when a track starts playing.
 
 Emitted when a track ends.
 
-| Field  | Type                                | Description                                                                                        |
-|--------|-------------------------------------|----------------------------------------------------------------------------------------------------|
-| track  | [Track](#track) object              | The base64 encoded track that ended playing                                                        |
-| reason | [TrackEndReason](#track-end-reason) | The reason the track ended                                                                         |
+| Field  | Type                                | Description                                 |
+|--------|-------------------------------------|---------------------------------------------|
+| track  | [Track](#track) object              | The base64 encoded track that ended playing |
+| reason | [TrackEndReason](#track-end-reason) | The reason the track ended                  |
 
 ##### Track End Reason
 
@@ -424,10 +424,10 @@ Emitted when a track ends.
 
 Emitted when a track throws an exception.
 
-| Field     | Type                                  | Description                                                                                              |
-|-----------|---------------------------------------|----------------------------------------------------------------------------------------------------------|
-| track     | [Track](#track) object                | The base64 encoded track that threw the exception                                                        |
-| exception | [Exception](#exception-object) object | The occurred exception                                                                                   |
+| Field     | Type                                  | Description                                       |
+|-----------|---------------------------------------|---------------------------------------------------|
+| track     | [Track](#track) object                | The base64 encoded track that threw the exception |
+| exception | [Exception](#exception-object) object | The occurred exception                            |
 
 ##### Exception Object
 
@@ -485,10 +485,10 @@ Emitted when a track throws an exception.
 
 Emitted when a track gets stuck while playing.
 
-| Field       | Type                   | Description                                                                                     |
-|-------------|------------------------|-------------------------------------------------------------------------------------------------|
-| track       | [Track](#track) object | The base64 encoded track that got stuck                                                         |
-| thresholdMs | int                    | The threshold in milliseconds that was exceeded                                                 |
+| Field       | Type                   | Description                                     |
+|-------------|------------------------|-------------------------------------------------|
+| track       | [Track](#track) object | The base64 encoded track that got stuck         |
+| thresholdMs | int                    | The threshold in milliseconds that was exceeded |
 
 <details>
 <summary>Example Payload</summary>
@@ -614,10 +614,10 @@ GET /v4/sessions/{sessionId}/players
 
 ##### Track
 
-| Field      | Type                               | Description                                         |
-|------------|------------------------------------|-----------------------------------------------------|
-| encoded    | string                             | The base64 encoded track data                       |
-| info       | [Track Info](#track-info) object   | Info about the track                                |
+| Field   | Type                             | Description                   |
+|---------|----------------------------------|-------------------------------|
+| encoded | string                           | The base64 encoded track data |
+| info    | [Track Info](#track-info) object | Info about the track          |
 
 ##### Track Info
 
@@ -720,7 +720,7 @@ Response:
       "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
       "isrc": null,
-      "sourceName": "youtube"         
+      "sourceName": "youtube"
     }
   },
   "volume": 100,
@@ -902,11 +902,11 @@ Uses equalization to eliminate part of a band, usually targeting vocals.
 ##### Timescale
 
 Changes the speed, pitch, and rate. All default to 1.0.
-| Field  | Type  | Description                |
+| Field | Type | Description |
 |--------|-------|----------------------------|
 | speed? | float | The playback speed 0.0 ≤ x |
-| pitch? | float | The pitch 0.0 ≤ x          |
-| rate?  | float | The rate 0.0 ≤ x           |
+| pitch? | float | The pitch 0.0 ≤ x |
+| rate? | float | The rate 0.0 ≤ x |
 
 ##### Tremolo
 
@@ -921,15 +921,15 @@ https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.og
 ##### Vibrato
 
 Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
-| Field      | Type  | Description                     |
+| Field | Type | Description |
 |------------|-------|---------------------------------|
-| frequency? | float | The frequency 0.0 < x ≤ 14.0    |
-| depth?     | float | The vibrato depth 0.0 < x ≤ 1.0 |
+| frequency? | float | The frequency 0.0 < x ≤ 14.0 |
+| depth? | float | The vibrato depth 0.0 < x ≤ 1.0 |
 
 ##### Rotation
 
 Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to https://youtu.be/QB9EB8mTKcc (without the reverb)
-| Field       | Type  | Description                                                                                              |
+| Field | Type | Description |
 |-------------|-------|----------------------------------------------------------------------------------------------------------|
 | rotationHz? | float | The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above |
 
@@ -1095,6 +1095,7 @@ Response:
 #### Track Loading
 
 This endpoint is used to resolve audio tracks for use with the [Update Player](#update-player) endpoint.
+
 ```
 GET /v4/loadtracks?identifier=dQw4w9WgXcQ
 ```
@@ -1400,9 +1401,9 @@ Response:
   ],
   "filters": [
     "equalizer",
-	"karaoke",
-	"timescale",
-	"channelMix"
+    "karaoke",
+    "timescale",
+    "channelMix"
   ],
   "plugins": [
     {
@@ -1652,219 +1653,6 @@ queue is then emptied and the events are then replayed.
   }
 }
 ```
-
----
-
-### Outgoing messages (DEPRECATED)
-
-<details>
-<summary>Show deprecated messages</summary>
-
-#### Provide a voice server update (DEPRECATED)
-
-> The `voiceUpdate` op is deprecated and marked for removal in v4, use [Update Player Endpoint](#update-player) with the `voice` json field instead.
-
-Provide an intercepted voice server update. This causes the server to connect to the voice channel.
-
-```yaml
-{
-  "op": "voiceUpdate",
-  "guildId": "...",
-  "sessionId": "...",
-  "event": { ... }
-}
-```
-
-#### Play a track (DEPRECATED)
-
-> The `play` op is deprecated and marked for removal in v4, use [Update Player Endpoint](#update-player) with the `track` or `identifier` json field instead.
-
-`startTime` is an optional setting that determines the number of milliseconds to offset the track by. Defaults to 0.
-
-`endTime` is an optional setting that determines at the number of milliseconds at which point the track should stop playing. Helpful if you only want to play a snippet of a bigger track. By default, the track plays until its end as per the encoded data.
-
-`volume` is an optional setting which changes the volume if provided.
-
-If `noReplace` is set to true, this operation will be ignored if a track is already playing or paused. This is an optional field.
-
-If `pause` is set to true, the playback will be paused. This is an optional field.
-
-```json
-{
-  "op": "play",
-  "guildId": "...",
-  "track": "...",
-  "startTime": "60000",
-  "endTime": "120000",
-  "volume": "100",
-  "noReplace": false,
-  "pause": false
-}
-```
-
-#### Stop a player (DEPRECATED)
-
-> The `stop` op is deprecated and marked for removal in v4, use [Update Player Endpoint](#update-player) with the `track` json field as `null` instead.
-
-```json
-{
-  "op": "stop",
-  "guildId": "..."
-}
-```
-
-#### Pause the playback (DEPRECATED)
-
-> The `pause` op is deprecated and marked for removal in v4, use [Update Player Endpoint](#update-player) with the `paused` json field instead.
-
-```json
-{
-  "op": "pause",
-  "guildId": "...",
-  "pause": true
-}
-```
-
-#### Seek a track (DEPRECATED)
-
-> The `seek` op is deprecated and marked for removal in v4, use [Update Player Endpoint](#update-player) with the `position` json field instead.
-
-The position is in milliseconds.
-
-```json
-{
-  "op": "seek",
-  "guildId": "...",
-  "position": 60000
-}
-```
-
-#### Set player volume (DEPRECATED)
-
-> The `volume` op is deprecated and marked for removal in v4, use [Update Player Endpoint](#update-player) with the `volume` json field instead.
-
-Volume may range from 0 to 1000. 100 is default.
-
-```json
-{
-  "op": "volume",
-  "guildId": "...",
-  "volume": 125
-}
-```
-
-#### Using filters (DEPRECATED)
-
-> The `filters` op is deprecated and marked for removal in v4, use [Update Player Endpoint](#update-player) with the `filters` json field instead.
-
-The `filters` op sets the filters. All the filters are optional, and leaving them out of this message will disable them.
-
-Adding a filter can have adverse effects on performance. These filters force Lavaplayer to decode all audio to PCM,
-even if the input was already in the Opus format that Discord uses. This means decoding and encoding audio that would
-normally require very little processing. This is often the case with YouTube videos.
-
-JSON comments are for illustration purposes only, and will not be accepted by the server.
-
-Note that filters may take a moment to apply.
-
-```yaml
-{
-  "op": "filters",
-  "guildId": "...",
-
-  // Float value where 1.0 is 100%. Values >1.0 may cause clipping
-  "volume": 1.0, // 0 ≤ x ≤ 5
-
-  // There are 15 bands (0-14) that can be changed.
-  // "gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
-  // where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could
-  // also change the volume of the output.
-  "equalizer": [
-    {
-      "band": 0,  // 0 ≤ x ≤ 14
-      "gain": 0.2 // -0.25 ≤ x ≤ 1
-    }
-  ],
-
-  // Uses equalization to eliminate part of a band, usually targeting vocals.
-  "karaoke": {
-    "level": 1.0,
-    "monoLevel": 1.0,
-    "filterBand": 220.0,
-    "filterWidth": 100.0
-  },
-
-  // Changes the speed, pitch, and rate. All default to 1.
-  "timescale": {
-    "speed": 1.0, // 0 ≤ x
-    "pitch": 1.0, // 0 ≤ x
-    "rate": 1.0   // 0 ≤ x
-  },
-
-  // Uses amplification to create a shuddering effect, where the volume quickly oscillates.
-  // Example https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
-  "tremolo": {
-    "frequency": 2.0, // 0 < x
-    "depth": 0.5      // 0 < x ≤ 1
-  },
-
-  // Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
-  "vibrato": {
-    "frequency": 2.0, // 0 < x ≤ 14
-    "depth": 0.5      // 0 < x ≤ 1
-  },
-
-  // Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to https://youtu.be/QB9EB8mTKcc (without the reverb)
-  "rotation": {
-    "rotationHz": 0 // The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above.
-  },
-
-  // Distortion effect. It can generate some pretty unique audio effects.
-  "distortion": {
-    "sinOffset": 0.0,
-    "sinScale": 1.0,
-    "cosOffset": 0.0,
-    "cosScale": 1.0,
-    "tanOffset": 0.0,
-    "tanScale": 1.0,
-    "offset": 0.0,
-    "scale": 1.0
-  }
-
-                  // Mixes both channels (left and right), with a configurable factor on how much each channel affects the other.
-  // With the defaults, both channels are kept independent from each other.
-  // Setting all factors to 0.5 means both channels get the same audio.
-  "channelMix": {
-    "leftToLeft": 1.0,
-    "leftToRight": 0.0,
-    "rightToLeft": 0.0,
-    "rightToRight": 1.0,
-  }
-
-                  // Higher frequencies get suppressed, while lower frequencies pass through this filter, thus the name low pass.
-  // Any smoothing values equal to, or less than 1.0 will disable the filter.
-  "lowPass": {
-    "smoothing": 20.0 // 1.0 < x
-  }
-}
-```
-
-#### Destroy a player (DEPRECATED)
-
-> The `destroy` op is deprecated and marked for removal in v4, use [Destroy Player Endpoint](#destroy-player) instead.
-
-Tell the server to potentially disconnect from the voice server and potentially remove the player with all its data.
-This is useful if you want to move to a new node for a voice connection. Calling this op does not affect voice state,
-and you can send the same VOICE_SERVER_UPDATE to a new node.
-
-```json
-{
-  "op": "destroy",
-  "guildId": "..."
-}
-```
-
-</details>
 
 ---
 
