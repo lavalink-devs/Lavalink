@@ -1046,7 +1046,7 @@ Response:
 
 #### Update Session
 
-Updates the session with a resuming key and timeout.
+Updates the session with the resuming state and timeout.
 
 ```
 PATCH /v4/sessions/{sessionId}
@@ -1083,7 +1083,7 @@ Response:
 
 ```json
 {
-  "resumingKey": true,
+  "resuming": true,
   "timeout": 60
 }
 ```
@@ -1615,28 +1615,10 @@ What happens after your client disconnects is dependent on whether the session h
 
 To enable resuming, you must call the [Update Session](#update-session) endpoint with the `resuming` and `timeout`.
 
-<details>
-<summary>Configure Resuming OP(DEPRECATED)</summary>
-
-To enable resuming, you must send a `configureResuming` message.
-
-* `key` is the string you will need to send when resuming the session. Set to null to disable resuming altogether. Defaults to null.
-* `timeout` is the number of seconds after disconnecting before the session is closed anyway. This is useful for avoiding accidental leaks. Defaults to `60` (seconds).
-
-```json
-{
-  "op": "configureResuming",
-  "key": "myResumeKey",
-  "timeout": 60
-}
-```
-
-</details>
-
-To resume a session, specify the resume key in your WebSocket handshake request headers:
+To resume a session, specify the session id in your WebSocket handshake request headers:
 
 ```
-Resume-Key: The resume key of the session you want to resume.
+Session-Id: The id of the session you want to resume.
 ```
 
 You can tell if your session was resumed by looking at the handshake response header `Session-Resumed` which is either `true` or `false`.
