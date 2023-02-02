@@ -16,6 +16,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * `v4` now returns the tracks `artworkUrl` and `isrc` if the source supports it.
 * removal of deprecated json fields like `track`.
 * addition of `artworkUrl` and `isrc` fields to the [Track Info](#track-info) object.
+* addition of the full [Track Object](#track) in [TrackStartEvent](#trackstartevent),  [TrackEndEvent](#trackendevent), [TrackExceptionEvent](#trackexceptionevent) and [TrackStuckEvent](#trackstuckevent).
 
 ## Significant changes v3.6.0 -> v3.7.0
 
@@ -484,10 +485,10 @@ Emitted when a track throws an exception.
 
 Emitted when a track gets stuck while playing.
 
-| Field       | Type           | Description                                                                                     |
-|-------------|----------------|-------------------------------------------------------------------------------------------------|
-| track       | [Track] object | The base64 encoded track that got stuck                                                         |
-| thresholdMs | int            | The threshold in milliseconds that was exceeded                                                 |
+| Field       | Type                   | Description                                                                                     |
+|-------------|------------------------|-------------------------------------------------------------------------------------------------|
+| track       | [Track](#track) object | The base64 encoded track that got stuck                                                         |
+| thresholdMs | int                    | The threshold in milliseconds that was exceeded                                                 |
 
 <details>
 <summary>Example Payload</summary>
@@ -1242,7 +1243,7 @@ GET /v4/decodetrack?encodedTrack=BASE64
 
 Response:
 
-[Track Object](#track) and [Track Info Object](#track-info) for pre v3.7 compatibility.
+[Track Object](#track)
 
 <details>
 <summary>Example Payload</summary>
@@ -1262,16 +1263,7 @@ Response:
     "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
     "isrc": null,
     "sourceName": "youtube"
-  },
-  "identifier": "dQw4w9WgXcQ", // Same as info.identifier, removed in /v4
-  "isSeekable": true, // Same as info.isSeekable, removed in /v4
-  "author": "RickAstleyVEVO", // Same as info.author, removed in /v4
-  "length": 212000, // Same as info.length, removed in /v4
-  "isStream": false, // Same as info.isStream, removed in /v4
-  "position": 0, // Same as info.position, removed in /v4
-  "title": "Rick Astley - Never Gonna Give You Up", // Same as info.title, removed in /v4
-  "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Same as info.uri, removed in /v4
-  "sourceName": "youtube" // Same as info.sourceName, removed in /v4
+  }
 }
 ```
 
