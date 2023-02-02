@@ -17,10 +17,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     env:
-      signing.gnupg.keyName: ${{ secrets.SIGNING_GNUPG_KEYNAME }}
-      OSSRH_GPG_SECRET_KEY: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-      ossrhUsername: ${{ secrets.OSSRH_USERNAME }}
-      ossrhPassword: ${{ secrets.OSSRH_PASSWORD }}
+      ORG_GRADLE_PROJECT_signing.gnupg.keyName: ${{ secrets.SIGNING_GNUPG_KEYNAME }}
+      ORG_GRADLE_PROJECT_OSSRH_GPG_SECRET_KEY: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
+      ORG_GRADLE_PROJECT_ossrhUsername: ${{ secrets.OSSRH_USERNAME }}
+      ORG_GRADLE_PROJECT_ossrhPassword: ${{ secrets.OSSRH_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
