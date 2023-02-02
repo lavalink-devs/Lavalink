@@ -3,6 +3,9 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 3.7.4
+* Fix an issue where Lavalink would not destroy a session when a client disconnects
+
 ## 3.7.3
 * Fix breaking change where `/decodetrack` would return a full track instead of the track info
 
