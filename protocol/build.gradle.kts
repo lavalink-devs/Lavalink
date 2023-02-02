@@ -77,7 +77,7 @@ publishing {
 
 if (isGpgKeyDefined) {
     signing {
-        sign(publishing.publications["PluginApi"])
+        sign(publishing.publications["Protocol"])
         useGpgCmd()
     }
 }
