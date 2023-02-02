@@ -1148,7 +1148,8 @@ Response:
   "tracks": [],
   "exception": {
     "message": "The uploader has not made this video available in your country.",
-    "severity": "COMMON"
+    "severity": "COMMON",
+    "cause": "com.sedmelluq.discord.lavaplayer.tools.FriendlyException: This video is not available in your country."
   }
 }
 ```
