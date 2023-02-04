@@ -227,7 +227,7 @@ A collection of stats sent every minute.
 | uptime         | int                                 | The uptime of the node in milliseconds                                                           |
 | memory         | [Memory](#memory) object            | The memory stats of the node                                                                     |
 | cpu            | [CPU](#cpu) object                  | The cpu stats of the node                                                                        |
-| frameStats     | ?[Frame Stats](#frame-stats) object | The frame stats of the node. `null` if the node has no players or when retrieved via `/v3/stats` |
+| frameStats?    | [Frame Stats](#frame-stats) object  | The frame stats of the node. `null` if the node has no players or when retrieved via `/v3/stats` |
 
 ##### Memory
 
@@ -1368,7 +1368,7 @@ GET /v3/stats
 
 Response:
 
-`frameStats` is always `null` for this endpoint.
+`frameStats` is always missing for this endpoint.
 [Stats Object](#stats-object)
 
 <details>
@@ -1389,8 +1389,7 @@ Response:
     "cores": 4,
     "systemLoad": 0.5,
     "lavalinkLoad": 0.5
-  },
-  "frameStats": null
+  }
 }
 ```
 
