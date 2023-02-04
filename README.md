@@ -110,6 +110,4 @@ Put an `application.yml` file in your working directory. ([Example here](https:/
 
 Run with `java -jar Lavalink.jar`
 
-Docker images are available on the [Docker Hub](https://hub.docker.com/r/fredboat/lavalink/).
-
-[![Docker Pulls](https://img.shields.io/docker/pulls/fredboat/lavalink.svg)](https://hub.docker.com/r/fredboat/lavalink/)
+Docker images can be found under [packages](https://github.com/freyacodes/Lavalink/pkgs/container/lavalink) with old builds prior to `v4` being available on [Docker Hub](https://hub.docker.com/r/fredboat/lavalink/).
