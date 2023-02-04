@@ -7,9 +7,13 @@ on:
   workflow_call:
     secrets:
       DOCKER_USERNAME:
+        required: false
       DOCKER_TOKEN:
+        required: false
       DOCKER_REGISTRY:
+        required: false
       DOCKER_IMAGE:
+        required: false
 
 jobs:
   build:
@@ -43,24 +47,32 @@ jobs:
           path: LavalinkServer/build/libs/Lavalink.jar
 
       - name: Docker Meta
-        if: env.DOCKER_USERNAME && env.DOCKER_TOKEN && env.DOCKER_REGISTRY && env.DOCKER_IMAGE
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.DOCKER_IMAGE }}
+          images: |
+            ghcr.io/${{ github.repository }}
+            ${{ env.DOCKER_IMAGE }}
           tags: |
             type=ref,event=branch
-            type=ref,event=tag
             type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
             type=sha,prefix=
 
       - name: Set up QEMU
-        if: env.DOCKER_USERNAME && env.DOCKER_TOKEN && env.DOCKER_REGISTRY && env.DOCKER_IMAGE
         uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
-        if: env.DOCKER_USERNAME && env.DOCKER_TOKEN && env.DOCKER_REGISTRY && env.DOCKER_IMAGE
         uses: docker/setup-buildx-action@v2
+        
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log in to docker registry
         if: env.DOCKER_USERNAME && env.DOCKER_TOKEN && env.DOCKER_REGISTRY && env.DOCKER_IMAGE
@@ -71,7 +83,6 @@ jobs:
           password: ${{ env.DOCKER_TOKEN }}
 
       - name: Build and Push
-        if: env.DOCKER_USERNAME && env.DOCKER_TOKEN && env.DOCKER_REGISTRY && env.DOCKER_IMAGE
         uses: docker/build-push-action@v3
         with:
           file: LavalinkServer/docker/Dockerfile
