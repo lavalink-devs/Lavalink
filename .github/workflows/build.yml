@@ -50,8 +50,10 @@ jobs:
           images: ${{ env.DOCKER_IMAGE }}
           tags: |
             type=ref,event=branch
-            type=ref,event=tag
             type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
             type=sha,prefix=
 
       - name: Set up QEMU
