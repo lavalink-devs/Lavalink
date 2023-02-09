@@ -159,29 +159,42 @@ class SocketServer(
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
         val context = contextMap.remove(session.attributes["sessionId"]) ?: return
-        if (context.version == 3) {
-
-            if (context.resumeKey != null) {
-                resumableSessions.remove(context.resumeKey!!)?.let { removed ->
+        if (context.resumeKey != null) {
+            resumableSessions.remove(context.resumeKey!!)?.let { removed ->
+                if (context.version == 3) {
                     log.warn(
                         "Shutdown resumable session with key ${removed.resumeKey} because it has the same key as a " +
                                 "newly disconnected resumable session."
                     )
-                    removed.shutdown()
+                } else {
+                    log.warn(
+                        "Shutdown resumable session with id ${removed.sessionId} because it has the same id as a " +
+                                "newly disconnected resumable session."
+                    )
                 }
 
-                resumableSessions[context.resumeKey!!] = context
-                context.pause()
+                removed.shutdown()
+            }
+
+            resumableSessions[context.resumeKey!!] = context
+            context.pause()
+            if (context.version == 3) {
                 log.info(
                     "Connection closed from ${session.remoteAddress} with status $status -- " +
                             "Session can be resumed within the next ${context.resumeTimeout} seconds with key ${context.resumeKey}",
                 )
-                return
+            } else {
+                log.info(
+                    "Connection closed from ${session.remoteAddress} with status $status -- " +
+                            "Session can be resumed within the next ${context.resumeTimeout} seconds with id ${context.sessionId}",
+                )
             }
 
-            log.info("Connection closed from ${session.remoteAddress} -- $status")
-            context.shutdown()
+            return
         }
+
+        log.info("Connection closed from ${session.remoteAddress} with id ${context.sessionId} -- $status")
+        context.shutdown()
     }
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
