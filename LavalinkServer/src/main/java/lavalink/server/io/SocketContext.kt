@@ -205,6 +205,7 @@ class SocketContext(
 
     fun resume(session: WebSocketSession) {
         sessionPaused = false
+        session.attributes["sessionId"] = sessionId
         this.session = session
         log.info("Replaying ${resumeEventQueue.size} events")
 
