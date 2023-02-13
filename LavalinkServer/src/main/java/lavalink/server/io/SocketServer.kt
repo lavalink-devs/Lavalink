@@ -112,7 +112,11 @@ class SocketServer(
         if (resumable != null) {
             contextMap[resumable.sessionId] = resumable
             resumable.resume(session)
-            log.info("Resumed session with key $resumeKey")
+            if (version == 3) {
+                log.info("Resumed session with key $resumeKey")
+            } else {
+                log.info("Resumed session with id $sessionId")
+            }
             resumable.eventEmitter.onWebSocketOpen(true)
             resumable.sendMessage(Message.ReadyEvent(true, resumable.sessionId))
             return
