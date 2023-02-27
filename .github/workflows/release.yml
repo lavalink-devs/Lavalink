@@ -13,43 +13,6 @@ jobs:
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
       DOCKER_IMAGE: ${{ secrets.DOCKER_IMAGE }}
 
-  publish:
-    needs: build
-    runs-on: ubuntu-latest
-    env:
-      SIGNING_GNUPG_KEYNAME: ${{ secrets.SIGNING_GNUPG_KEYNAME }}
-      OSSRH_GPG_SECRET_KEY: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-      OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-      OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: zulu
-          java-version: 13
-          cache: gradle
-
-      - name: Restore Build Artifacts
-        id: cache-build-artifacts
-        uses: actions/cache/restore@v3
-        with:
-          path: |
-            LavalinkServer/build
-            plugin-api/build
-            protocol/build
-          key: cache-build-artifacts-${{ github.sha }}
-
-      - name: Install GPG Secret Key
-        run: |
-          cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
-          gpg --list-secret-keys --keyid-format LONG
-
-      - name: Publish to Maven Repository
-        run: ./gradlew publish -Psigning.gnupg.keyName=${{ env.SIGNING_GNUPG_KEYNAME }} -PossrhUsername=${{ env.OSSRH_USERNAME }} -PossrhPassword=${{ env.OSSRH_PASSWORD }}
-
   release:
     needs: build
     runs-on: ubuntu-latest
