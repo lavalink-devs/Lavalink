@@ -227,7 +227,7 @@ A collection of stats sent every minute.
 | uptime         | int                                 | The uptime of the node in milliseconds                                                           |
 | memory         | [Memory](#memory) object            | The memory stats of the node                                                                     |
 | cpu            | [CPU](#cpu) object                  | The cpu stats of the node                                                                        |
-| frameStats     | ?[Frame Stats](#frame-stats) object | The frame stats of the node. `null` if the node has no players or when retrieved via `/v3/stats` |
+| frameStats?    | [Frame Stats](#frame-stats) object  | The frame stats of the node. `null` if the node has no players or when retrieved via `/v3/stats` |
 
 ##### Memory
 
@@ -408,7 +408,7 @@ Emitted when a track throws an exception.
 |--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `COMMON`     | The cause is known and expected, indicates that there is nothing wrong with the library itself                                                                                                                                         |
 | `SUSPICIOUS` | The cause might not be exactly known, but is possibly caused by outside factors. For example when an outside service responds in a format that we do not expect                                                                        |
-| `FATAL`      | If the probable cause is an issue with the library or when there is no way to tell what the cause might be. This is the default level and other levels are used in cases where the thrower has more in-depth knowledge about the error |
+| `FAULT`      | If the probable cause is an issue with the library or when there is no way to tell what the cause might be. This is the default level and other levels are used in cases where the thrower has more in-depth knowledge about the error |
 
 <details>
 <summary>Example Payload</summary>
@@ -1368,7 +1368,7 @@ GET /v3/stats
 
 Response:
 
-`frameStats` is always `null` for this endpoint.
+`frameStats` is always missing for this endpoint.
 [Stats Object](#stats-object)
 
 <details>
@@ -1389,8 +1389,7 @@ Response:
     "cores": 4,
     "systemLoad": 0.5,
     "lavalinkLoad": 0.5
-  },
-  "frameStats": null
+  }
 }
 ```
 
