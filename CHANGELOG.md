@@ -3,6 +3,14 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 3.7.5
+* Fix `endTime` in `Player Update` endpoint only applying when playing a new track
+* Fix errors when doing multiple session resumes
+* Update lavaplayer to `1.4.0` see [here](https://github.com/Walkyst/lavaplayer-fork/releases/tag/1.4.0) for more info
+
+> **Note**
+> Lavalink Docker images are now found in the GitHub Container Registry instead of DockerHub
+
 ## 3.7.4
 * Fix an issue where Lavalink would not destroy a session when a client disconnects
 

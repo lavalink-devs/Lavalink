@@ -67,7 +67,7 @@ data class PlayerUpdate(
     val encodedTrack: Omissible<String?> = Omissible.omitted(),
     val identifier: Omissible<String> = Omissible.omitted(),
     val position: Omissible<Long> = Omissible.omitted(),
-    val endTime: Omissible<Long> = Omissible.omitted(),
+    val endTime: Omissible<Long?> = Omissible.omitted(),
     val volume: Omissible<Int> = Omissible.omitted(),
     val paused: Omissible<Boolean> = Omissible.omitted(),
     val filters: Omissible<Filters> = Omissible.omitted(),
@@ -91,7 +91,7 @@ class PlayerUpdateDeserializer : JsonDeserializer<PlayerUpdate>() {
         } ?: Omissible.omitted()
 
         val endTime = node.get("endTime")?.let {
-            Omissible.of(it.asLong())
+            if (it.isNull) Omissible.of<Long?>(null) else Omissible.of<Long?>(it.asLong())
         } ?: Omissible.omitted()
 
         val volume = node.get("volume")?.let {
