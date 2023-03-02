@@ -79,6 +79,12 @@ class PlayerRestHandler(
             }
         }
 
+        playerUpdate.endTime.takeIfPresent {
+            if (it != null && it <= 0) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "End time must be greater than 0")
+            }
+        }
+
         val player = context.getPlayer(guildId)
 
         playerUpdate.voice.takeIfPresent {
@@ -116,6 +122,12 @@ class PlayerRestHandler(
             ?.let {
                 player.seekTo(it.value)
                 SocketServer.sendPlayerUpdate(context, player)
+            }
+
+        playerUpdate.endTime.takeIf { it.isPresent && !playerUpdate.encodedTrack.isPresent && !playerUpdate.identifier.isPresent }
+            ?.let {
+                val marker = it.value?.let { endTime -> TrackMarker(endTime, TrackEndMarkerHandler(player)) }
+                player.track?.setMarker(marker)
             }
 
         playerUpdate.filters.takeIfPresent {
@@ -166,7 +178,7 @@ class PlayerRestHandler(
                 }
 
                 playerUpdate.endTime.takeIfPresent { endTime ->
-                    if (endTime > 0) {
+                    if (endTime != null) {
                         track.setMarker(TrackMarker(endTime, TrackEndMarkerHandler(player)))
                     }
                 }

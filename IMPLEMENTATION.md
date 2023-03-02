@@ -443,7 +443,7 @@ Emitted when a track throws an exception.
 |--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `COMMON`     | The cause is known and expected, indicates that there is nothing wrong with the library itself                                                                                                                                         |
 | `SUSPICIOUS` | The cause might not be exactly known, but is possibly caused by outside factors. For example when an outside service responds in a format that we do not expect                                                                        |
-| `FATAL`      | If the probable cause is an issue with the library or when there is no way to tell what the cause might be. This is the default level and other levels are used in cases where the thrower has more in-depth knowledge about the error |
+| `FAULT`      | If the probable cause is an issue with the library or when there is no way to tell what the cause might be. This is the default level and other levels are used in cases where the thrower has more in-depth knowledge about the error |
 
 <details>
 <summary>Example Payload</summary>
@@ -761,7 +761,7 @@ Request:
 | encodedTrack? * | ?string                            | The encoded track base64 to play. `null` stops the current track              |
 | identifier? *   | string                             | The track identifier to play                                                  |
 | position?       | int                                | The track position in milliseconds                                            |
-| endTime?        | int                                | The track end time in milliseconds                                            |
+| endTime?        | ?int                               | The track end time in milliseconds (must be > 0)                              |
 | volume?         | int                                | The player volume from 0 to 1000                                              |
 | paused?         | bool                               | Whether the player is paused                                                  |
 | filters?        | [Filters](#filters) object         | The new filters to apply. This will override all previously applied filters   |                   
@@ -1432,7 +1432,7 @@ GET /v4/stats
 
 Response:
 
-`frameStats` is always `null` for this endpoint.
+`frameStats` is always missing for this endpoint.
 [Stats Object](#stats-object)
 
 <details>
@@ -1453,8 +1453,7 @@ Response:
     "cores": 4,
     "systemLoad": 0.5,
     "lavalinkLoad": 0.5
-  },
-  "frameStats": null
+  }
 }
 ```
 
