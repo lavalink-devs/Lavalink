@@ -103,11 +103,11 @@ class SocketServer(
         if (resumeKey != null) resumable = resumableSessions.remove(resumeKey)
 
         if (resumable != null) {
+            session.attributes["sessionId"] = resumable.sessionId
             contextMap[resumable.sessionId] = resumable
             resumable.resume(session)
             log.info("Resumed session with key $resumeKey")
             resumable.eventEmitter.onWebSocketOpen(true)
-            resumable.sendMessage(Message.ReadyEvent(true, resumable.sessionId))
             return
         }
 
@@ -130,9 +130,8 @@ class SocketServer(
             objectMapper
         )
         contextMap[sessionId] = socketContext
-        socketContext.eventEmitter.onWebSocketOpen(false)
         socketContext.sendMessage(Message.ReadyEvent(false, sessionId))
-
+        socketContext.eventEmitter.onWebSocketOpen(false)
         if (clientName != null) {
             log.info("Connection successfully established from $clientName")
             return
