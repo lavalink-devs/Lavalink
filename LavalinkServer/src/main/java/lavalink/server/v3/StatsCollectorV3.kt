@@ -19,10 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package lavalink.server.io
+package lavalink.server.v3
 
-import dev.arbjerg.lavalink.protocol.v4.*
+import dev.arbjerg.lavalink.protocol.v3.*
 import lavalink.server.Launcher
+import lavalink.server.io.SocketContext
+import lavalink.server.io.SocketServer
 import lavalink.server.player.AudioLossCounter
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
@@ -31,9 +33,9 @@ import oshi.SystemInfo
 import kotlin.Exception
 
 @RestController
-class StatsCollector(val socketServer: SocketServer) {
+class StatsCollectorV3(val socketServer: SocketServer) {
     companion object {
-        private val log = LoggerFactory.getLogger(StatsCollector::class.java)
+        private val log = LoggerFactory.getLogger(StatsCollectorV3::class.java)
 
         private val si = SystemInfo()
         private val hal get() = si.hardware
@@ -73,7 +75,7 @@ class StatsCollector(val socketServer: SocketServer) {
         }
     }
 
-    @GetMapping(value = ["/v4/stats"])
+    @GetMapping(value = ["/v3/stats"])
     fun getStats() = retrieveStats()
 
     fun retrieveStats(context: SocketContext? = null): Stats {

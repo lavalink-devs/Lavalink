@@ -32,6 +32,7 @@ import dev.arbjerg.lavalink.protocol.v3.Message
 import dev.arbjerg.lavalink.protocol.v3.PlayerState
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.LavalinkPlayer
+import lavalink.server.v3.StatsCollectorV3
 import moe.kyokobot.koe.Koe
 import moe.kyokobot.koe.KoeOptions
 import org.json.JSONObject
@@ -44,7 +45,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler
 import java.util.concurrent.ConcurrentHashMap
 
 @Service
-class SocketServer(
+final class SocketServer(
     private val serverConfig: ServerConfig,
     val audioPlayerManager: AudioPlayerManager,
     koeOptions: KoeOptions,
@@ -60,6 +61,7 @@ class SocketServer(
     private val resumableSessions = mutableMapOf<String, SocketContext>()
     private val koe = Koe.koe(koeOptions)
     private val statsCollector = StatsCollector(this)
+    private val statsCollectorV3 = StatsCollectorV3(this)
     private val charPool = ('a'..'z') + ('0'..'9')
 
     companion object {
@@ -135,6 +137,7 @@ class SocketServer(
             session,
             this,
             statsCollector,
+            statsCollectorV3,
             userId,
             clientName,
             koe.newClient(userId.toLong()),

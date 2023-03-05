@@ -18,6 +18,7 @@ data class Player(
     val track: Track?,
     val volume: Int,
     val paused: Boolean,
+    val state: PlayerState,
     val voice: VoiceState,
     val filters: Filters
 )
@@ -45,9 +46,7 @@ data class TrackInfo(
 data class VoiceState(
     val token: String = "",
     val endpoint: String = "",
-    val sessionId: String = "",
-    val connected: Boolean = false,
-    val ping: Long = -1
+    val sessionId: String = ""
 )
 
 data class PlayerState(
