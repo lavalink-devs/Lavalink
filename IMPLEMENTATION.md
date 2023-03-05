@@ -30,6 +30,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * Addition of `/v3/info`, replaces `/plugins`.
 * Deprecation of `Track.track` in existing endpoints. Use `Track.encoded` instead.
 * Deprecation of `TrackXEvent.track` in WebSocket dispatches. Use `TrackXEvent.encodedTrack` instead.
+* Player now has a `state` field which contains the same structure as returned by the `playerUpdate` OP.
 
 <details>
 <summary>v3.7.0 Migration Guide</summary>
@@ -609,6 +610,7 @@ GET /v4/sessions/{sessionId}/players
 | track   | ?[Track](#track) object            | The current playing track                             |
 | volume  | int                                | The volume of the player, range 0-1000, in percentage |
 | paused  | bool                               | Whether the player is paused                          |
+| state   | [Player State](#player-state) enum | The state of the player                               |
 | voice   | [Voice State](#voice-state) object | The voice state of the player                         |
 | filters | [Filters](#filters) object         | The filters used by the player                        |              
 
@@ -642,8 +644,6 @@ GET /v4/sessions/{sessionId}/players
 | token      | string | The Discord voice token to authenticate with                                                |
 | endpoint   | string | The Discord voice endpoint to connect to                                                    |
 | sessionId  | string | The Discord voice session id to authenticate with                                           |
-| connected? | bool   | Whether the player is connected. Response only                                              |
-| ping?      | int    | Roundtrip latency in milliseconds to the voice gateway (-1 if not connected). Response only |
 
 `token`, `endpoint`, and `sessionId` are the 3 required values for connecting to one of Discord's voice servers.
 `sessionId` is provided by the Voice State Update event sent by Discord, whereas the `endpoint` and `token` are provided
@@ -664,7 +664,7 @@ with the Voice Server Update. Please refer to https://discord.com/developers/doc
         "author": "RickAstleyVEVO",
         "length": 212000,
         "isStream": false,
-        "position": 0,
+        "position": 60000,
         "title": "Rick Astley - Never Gonna Give You Up",
         "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
@@ -674,12 +674,16 @@ with the Voice Server Update. Please refer to https://discord.com/developers/doc
     },
     "volume": 100,
     "paused": false,
+    "state": {
+      "time": 1500467109,
+      "position": 60000,
+      "connected": true,
+      "ping": 50
+    },
     "voice": {
       "token": "...",
       "endpoint": "...",
-      "sessionId": "...",
-      "connected": true,
-      "ping": 10
+      "sessionId": "..."
     },
     "filters": { ... }
   }
@@ -715,7 +719,7 @@ Response:
       "author": "RickAstleyVEVO",
       "length": 212000,
       "isStream": false,
-      "position": 0,
+      "position": 60000,
       "title": "Rick Astley - Never Gonna Give You Up",
       "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
@@ -725,12 +729,16 @@ Response:
   },
   "volume": 100,
   "paused": false,
+  "state": {
+    "time": 1500467109,
+    "position": 60000,
+    "connected": true,
+    "ping": 50
+  },
   "voice": {
     "token": "...",
     "endpoint": "...",
-    "sessionId": "...",
-    "connected": true,
-    "ping": 10
+    "sessionId": "..."
   },
   "filters": { ... }
 }
@@ -812,7 +820,7 @@ Response:
       "author": "RickAstleyVEVO",
       "length": 212000,
       "isStream": false,
-      "position": 0,
+      "position": 60000,
       "title": "Rick Astley - Never Gonna Give You Up",
       "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
@@ -822,12 +830,16 @@ Response:
   },
   "volume": 100,
   "paused": false,
+  "state": {
+    "time": 1500467109,
+    "position": 60000,
+    "connected": true,
+    "ping": 50         
+  },
   "voice": {
     "token": "...",
     "endpoint": "...",
-    "sessionId": "...",
-    "connected": true,
-    "ping": 10
+    "sessionId": "..."
   },
   "filters": { ... }
 }

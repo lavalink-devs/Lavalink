@@ -68,12 +68,16 @@ fun LavalinkPlayer.toPlayer(context: SocketContext): Player {
         track?.toTrack(context.audioPlayerManager),
         audioPlayer.volume,
         audioPlayer.isPaused,
+        PlayerState(
+            System.currentTimeMillis(),
+            track?.position ?: 0,
+            connection?.isOpen ?: false,
+            connection?.ping ?: -1
+        ),
         VoiceState(
             voiceServerInfo?.token ?: "",
             voiceServerInfo?.endpoint ?: "",
-            voiceServerInfo?.sessionId ?: "",
-            connection?.isOpen ?: false,
-            connection?.ping ?: -1
+            voiceServerInfo?.sessionId ?: ""
         ),
         filters.toFilters(),
     )
