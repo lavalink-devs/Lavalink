@@ -700,7 +700,9 @@ Request:
 | filters?        | [Filters](#filters) object         | The new filters to apply. This will override all previously applied filters   |                   
 | voice?          | [Voice State](#voice-state) object | Information required for connecting to Discord, without `connected` or `ping` |
 
-**\* Note that `encodedTrack` and `identifier` are mutually exclusive.**
+**Notes**:
+ - that `encodedTrack` and `identifier` are mutually exclusive.
+ - `sessionId` in the route should be value that you got from the [ready](#ready-op) op.
 
 When `identifier` is used, Lavalink will try to resolve the identifier as a single track. An HTTP `400` error is returned when resolving a playlist, search result, or no tracks.
 
