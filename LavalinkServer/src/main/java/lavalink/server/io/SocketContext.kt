@@ -168,6 +168,7 @@ class SocketContext(
         eventEmitter.onSocketContextPaused()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun sendMessage(message: JSONObject) {
         send(message.toString())
     }

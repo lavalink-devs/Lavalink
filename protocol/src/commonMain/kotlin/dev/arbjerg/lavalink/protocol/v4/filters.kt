@@ -1,12 +1,9 @@
 package dev.arbjerg.lavalink.protocol.v4
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.JsonNode
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class Filters(
     val volume: Float? = null,
     val equalizer: List<Band>? = null,
@@ -18,11 +15,7 @@ data class Filters(
     val rotation: Rotation? = null,
     val channelMix: ChannelMix? = null,
     val lowPass: LowPass? = null,
-
-    @JsonAnyGetter
-    @JsonAnySetter
-    @get:JsonIgnore
-    val pluginFilters: Map<String, JsonNode> = mutableMapOf()
+    val pluginFilters: Map<String, JsonElement> = mutableMapOf()
 ) {
     fun validate(disabledFilters: List<String>): List<String> {
         val filters = mutableListOf<String>()
@@ -65,35 +58,41 @@ data class Filters(
     }
 }
 
+@Serializable
 data class Band(
     val band: Int,
     val gain: Float = 1.0f
 )
 
-open class Karaoke(
+@Serializable
+data class Karaoke(
     val level: Float = 1.0f,
     val monoLevel: Float = 1.0f,
     val filterBand: Float = 220.0f,
     val filterWidth: Float = 100.0f
 )
 
-open class Timescale(
+@Serializable
+data class Timescale(
     val speed: Double = 1.0,
     val pitch: Double = 1.0,
     val rate: Double = 1.0
 )
 
-open class Tremolo(
+@Serializable
+data class Tremolo(
     val frequency: Float = 2.0f,
     val depth: Float = 0.5f
 )
 
-open class Vibrato(
+@Serializable
+data class Vibrato(
     val frequency: Float = 2.0f,
     val depth: Float = 0.5f
 )
 
-open class Distortion(
+@Serializable
+data class Distortion(
     val sinOffset: Float = 0.0f,
     val sinScale: Float = 1.0f,
     val cosOffset: Float = 0.0f,
@@ -104,11 +103,13 @@ open class Distortion(
     val scale: Float = 1.0f
 )
 
-open class Rotation(
+@Serializable
+data class Rotation(
     val rotationHz: Double = 0.0
 )
 
-open class ChannelMix(
+@Serializable
+data class ChannelMix(
     val leftToLeft: Float = 1.0f,
     val leftToRight: Float = 0.0f,
     val rightToLeft: Float = 0.0f,
@@ -116,6 +117,7 @@ open class ChannelMix(
 
 )
 
-open class LowPass(
+@Serializable
+data class LowPass(
     val smoothing: Float = 20.0f
-)  
+)
