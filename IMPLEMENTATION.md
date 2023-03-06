@@ -784,6 +784,7 @@ Filters are used in above requests and look like this
 | distortion? | [Distortion](#distortion) object   | Lets you distort the audio                                                                          |
 | channelMix? | [Channel Mix](#channel-mix) object | Lets you mix both channels (left and right)                                                         |
 | lowPass?    | [Low Pass](#low-pass) object       | Lets you filter higher frequencies                                                                  |
+| ...         | ...                                | Plugins may add different filters which can also be set here                                        |
 
 ##### Equalizer
 
