@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.ajoberstar.grgit.Grgit
 
 buildscript {
     repositories {
@@ -21,6 +22,7 @@ buildscript {
 
 allprojects {
     group = "lavalink"
+    version = versionFromTag()
 
     repositories {
         mavenCentral() // main maven repo
@@ -49,4 +51,18 @@ subprojects {
         options.compilerArgs.add("-Xlint:unchecked")
         options.compilerArgs.add("-Xlint:deprecation")
     }
+}
+
+@SuppressWarnings("GrMethodMayBeStatic")
+fun versionFromTag(): String = Grgit.open(mapOf("currentDir" to project.rootDir)).use { git ->
+    val headTag = git.tag
+        .list()
+        .find { it.commit.id == git.head().id }
+
+    val clean = git.status().isClean || System.getenv("CI") != null
+    if (!clean) {
+        println("Git state is dirty, setting version as snapshot.")
+    }
+
+    return if (headTag != null && clean) headTag.name else "${git.head().id}-SNAPSHOT"
 }
