@@ -6,7 +6,7 @@ Being used in production by FredBoat, Dyno, LewdBot, and more.
 
 A [basic example bot](Testbot) is available.
 
-[![JDA guild](https://discordapp.com/api/guilds/125227483518861312/embed.png?style=banner2)](https://discord.gg/jtAWrzU)
+[![Lavalink uild](https://discordapp.com/api/guilds/1082302532421943407/embed.png?style=banner2)](https://discord.gg/ZW4s47Ppw4)
 
 ## Features
 * Powered by Lavaplayer
