@@ -5,16 +5,16 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class Filters(
-    val volume: Float? = null,
-    val equalizer: List<Band>? = null,
-    val karaoke: Karaoke? = null,
-    val timescale: Timescale? = null,
-    val tremolo: Tremolo? = null,
-    val vibrato: Vibrato? = null,
-    val distortion: Distortion? = null,
-    val rotation: Rotation? = null,
-    val channelMix: ChannelMix? = null,
-    val lowPass: LowPass? = null,
+    val volume: Omissible<Float> = Omissible.Omitted(),
+    val equalizer: Omissible<List<Band>> = Omissible.Omitted(),
+    val karaoke: Omissible<Karaoke?> = Omissible.Omitted(),
+    val timescale: Omissible<Timescale?> = Omissible.Omitted(),
+    val tremolo: Omissible<Tremolo?> = Omissible.Omitted(),
+    val vibrato: Omissible<Vibrato?> = Omissible.Omitted(),
+    val distortion: Omissible<Distortion?> = Omissible.Omitted(),
+    val rotation: Omissible<Rotation?> = Omissible.Omitted(),
+    val channelMix: Omissible<ChannelMix?> = Omissible.Omitted(),
+    val lowPass: Omissible<LowPass?> = Omissible.Omitted(),
     val pluginFilters: Map<String, JsonElement> = mutableMapOf()
 ) {
     fun validate(disabledFilters: List<String>): List<String> {

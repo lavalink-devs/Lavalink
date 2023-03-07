@@ -1,7 +1,6 @@
 import dev.arbjerg.lavalink.protocol.v4.Omissible
 import dev.arbjerg.lavalink.protocol.v4.Player
 import dev.arbjerg.lavalink.protocol.v4.PlayerUpdate
-import dev.arbjerg.lavalink.protocol.v4.VoiceState
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlin.js.JsName
@@ -73,7 +72,7 @@ class PlayerSerializerTest {
     fun `test player serialization`() {
         test<List<Player>>(json) {
             onEach {
-                guildId shouldBe 123UL
+                guildId shouldBe "123"
                 track {
                     encoded shouldBe "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA=="
                     info {
@@ -96,8 +95,6 @@ class PlayerSerializerTest {
                     token shouldBe "..."
                     endpoint shouldBe "..."
                     sessionId shouldBe "..."
-                    connected shouldBe true
-                    ping shouldBe 10
                 }
                 state {
                     time shouldBe 1
@@ -146,7 +143,7 @@ class PlayerSerializerTest {
             position shouldBe 32400
             paused shouldBe false
             assertIs<Omissible.Present<*>>(voice)
-            (voice as Omissible.Present<VoiceState>).value {
+            voice.requirePresent {
                 token shouldBe "..."
                 endpoint shouldBe "..."
                 sessionId shouldBe "..."

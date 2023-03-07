@@ -10,7 +10,7 @@ value class Players(val players: List<Player>)
 
 @Serializable
 data class Player(
-    val guildId: ULong,
+    val guildId: String,
     val track: Track?,
     val volume: Int,
     val paused: Boolean,
@@ -45,9 +45,7 @@ data class TrackInfo(
 data class VoiceState(
     val token: String = "",
     val endpoint: String = "",
-    val sessionId: String = "",
-    val connected: Boolean = false,
-    val ping: Int? = null
+    val sessionId: String = ""
 )
 
 @Serializable

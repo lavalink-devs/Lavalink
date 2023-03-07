@@ -1,6 +1,8 @@
 import dev.arbjerg.lavalink.protocol.v4.Filters
+import dev.arbjerg.lavalink.protocol.v4.Omissible
 import kotlin.js.JsName
 import kotlin.test.Test
+import kotlin.test.assertIs
 
 //language=json
 const val filters = """
@@ -62,33 +64,35 @@ class FiltersTest {
     fun `test filters serialization`() {
         test<Filters>(filters) {
             volume shouldBe 1.0f
-            equalizer?.onEach {
-                band shouldBe 0
-                gain shouldBe 0.2f
+            equalizer.requirePresent {
+                onEach {
+                    band shouldBe 0
+                    gain shouldBe 0.2f
+                }
             }
-            karaoke {
+            karaoke.requirePresent {
                 level shouldBe 1.0f
                 monoLevel shouldBe 1.0f
                 filterBand shouldBe 220.0f
                 filterWidth shouldBe 100.0f
             }
-            timescale {
+            timescale.requirePresent {
                 speed shouldBe 1.0
                 pitch shouldBe 1.0
                 rate shouldBe 1.0
             }
-            tremolo {
+            tremolo.requirePresent {
                 frequency shouldBe 2.0f
                 depth shouldBe 0.5f
             }
-            vibrato {
+            vibrato.requirePresent {
                 frequency shouldBe 2.0f
                 depth shouldBe 0.5f
             }
-            rotation {
+            rotation.requirePresent {
                 rotationHz shouldBe 0.0
             }
-            distortion {
+            distortion.requirePresent {
                 sinOffset shouldBe 0.0f
                 sinScale shouldBe 1.0f
                 cosOffset shouldBe 0.0f
@@ -98,15 +102,36 @@ class FiltersTest {
                 offset shouldBe 0.0f
                 scale shouldBe 1.0f
             }
-            channelMix {
+            channelMix.requirePresent {
                 leftToLeft shouldBe 1.0f
                 leftToRight shouldBe 0.0f
                 rightToLeft shouldBe 0.0f
                 rightToRight shouldBe 1.0f
             }
-            lowPass {
+            lowPass.requirePresent {
                 smoothing shouldBe 20.0f
             }
+        }
+    }
+
+    @Test
+    @JsName("test2")
+    fun `test empty filters can be serialized`() {
+        //language=json
+        val json = """{}"""
+
+        test<Filters>(json) {
+            assertIs<Omissible.Omitted<*>>(volume)
+            assertIs<Omissible.Omitted<*>>(equalizer)
+            assertIs<Omissible.Omitted<*>>(karaoke)
+            assertIs<Omissible.Omitted<*>>(timescale)
+            assertIs<Omissible.Omitted<*>>(tremolo)
+            assertIs<Omissible.Omitted<*>>(vibrato)
+            assertIs<Omissible.Omitted<*>>(distortion)
+            assertIs<Omissible.Omitted<*>>(rotation)
+            assertIs<Omissible.Omitted<*>>(channelMix)
+            assertIs<Omissible.Omitted<*>>(lowPass)
+            pluginFilters shouldBe emptyMap()
         }
     }
 }

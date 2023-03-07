@@ -4,7 +4,6 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.nullable
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlin.jvm.JvmInline
@@ -21,12 +20,15 @@ sealed interface Omissible<out T> {
 
         companion object {
             private val constantOmitted = Omitted<Nothing>()
-            operator fun <T : Any> invoke(): Omitted<T> = constantOmitted
+            operator fun <T> invoke(): Omitted<T> = constantOmitted
         }
     }
 
     companion object {
         fun <T> of(element: T) = Present(element)
+        fun <T> omitted() = Omitted<T>()
+        operator fun <T> invoke(element: T) = of(element)
+        fun <T> omittedIfNull(element: T?) = if (element == null) omitted<T>() else of(element)
     }
 }
 
