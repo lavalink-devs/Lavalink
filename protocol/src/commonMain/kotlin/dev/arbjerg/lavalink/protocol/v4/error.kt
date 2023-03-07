@@ -1,11 +1,9 @@
 package dev.arbjerg.lavalink.protocol.v4
 
-import dev.arbjerg.lavalink.protocol.v4.serialization.SerializableHttpStatus
 import dev.arbjerg.lavalink.protocol.v4.serialization.Timestamp
 import dev.arbjerg.lavalink.protocol.v4.serialization.TimestampSerializer
-import kotlinx.serialization.Serializable
 import kotlinx.datetime.Instant
-import io.ktor.http.HttpStatusCode
+import kotlinx.serialization.Serializable
 
 /**
  * Representation of a REST error.
@@ -21,7 +19,7 @@ import io.ktor.http.HttpStatusCode
 data class Error(
     @Serializable(with = TimestampSerializer::class)
     val timestamp: Timestamp,
-    val status: SerializableHttpStatus,
+    val status: Int,
     val error: String,
     val trace: String? = null,
     val message: String,

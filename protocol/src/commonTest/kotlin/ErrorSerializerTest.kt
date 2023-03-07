@@ -1,5 +1,4 @@
 import dev.arbjerg.lavalink.protocol.v4.Error
-import io.ktor.http.*
 import kotlinx.datetime.Instant
 import kotlin.js.JsName
 import kotlin.test.Test
@@ -22,7 +21,7 @@ class ErrorSerializerTest {
     fun `test REST error serialization`() {
         test<Error>(exampleError) {
             timestamp shouldBe Instant.fromEpochMilliseconds(1667857581613)
-            status shouldBe HttpStatusCode.NotFound
+            status shouldBe 404
             error shouldBe "Not Found"
             trace shouldBe "..."
             message shouldBe "Session not found"
