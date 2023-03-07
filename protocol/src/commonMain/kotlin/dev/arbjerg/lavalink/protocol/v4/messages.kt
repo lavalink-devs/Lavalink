@@ -1,16 +1,19 @@
 package dev.arbjerg.lavalink.protocol.v4
 
 import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.*
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 
 @Suppress("DataClassPrivateConstructor")
-@JsonClassDiscriminator("op")
-@Serializable
+@Serializable(with = Message.Serializer::class)
 sealed interface Message {
     val op: Op
 
@@ -49,7 +52,7 @@ sealed interface Message {
 
     }
 
-    @SerialName("playerEvent")
+    @SerialName("playerUpdate")
     @Serializable
     data class PlayerUpdateEvent private constructor(
         override val op: Op,
@@ -90,7 +93,7 @@ sealed interface Message {
     @Serializable(with = EmittedEvent.Serializer::class)
     sealed interface EmittedEvent : Message {
         val type: Type
-        val guildId: ULong
+        val guildId: String
 
         @Serializable
         enum class Type(val value: String) {
@@ -118,37 +121,37 @@ sealed interface Message {
 
         companion object Serializer : JsonContentPolymorphicSerializer<EmittedEvent>(EmittedEvent::class) {
             override fun selectDeserializer(element: JsonElement): DeserializationStrategy<EmittedEvent> {
-                val typeRaw = element.jsonObject["type"] ?: error("Missing type")
-
-                return when(Json.decodeFromJsonElement<Type>(typeRaw)) {
-                    Type.TrackStart -> TrackStartEvent.serializer()
-                    Type.TrackEnd -> TrackEndEvent.serializer()
-                    Type.TrackException -> TrackExceptionEvent.serializer()
-                    Type.TrackStuck -> TrackStuckEvent.serializer()
-                    Type.WebSocketClosed -> WebSocketClosedEvent.serializer()
+                return element.asPolymorphicDeserializer<Type, EmittedEvent>(descriptor, "type") {
+                    when (it) {
+                        Type.TrackStart -> TrackStartEvent.serializer()
+                        Type.TrackEnd -> TrackEndEvent.serializer()
+                        Type.TrackException -> TrackExceptionEvent.serializer()
+                        Type.TrackStuck -> TrackStuckEvent.serializer()
+                        Type.WebSocketClosed -> WebSocketClosedEvent.serializer()
+                    }
                 }
             }
         }
 
         @Serializable
         data class TrackStartEvent private constructor(
-            override val op: Op, override val type: Type, override val guildId: ULong,
+            override val op: Op, override val type: Type, override val guildId: String,
             val track: Track
         ) : EmittedEvent {
             constructor(
-                guildId: ULong,
+                guildId: String,
                 track: Track
             ) : this(Op.Event, Type.TrackStart, guildId, track)
         }
 
         @Serializable
         data class TrackEndEvent private constructor(
-            override val op: Op, override val type: Type, override val guildId: ULong,
+            override val op: Op, override val type: Type, override val guildId: String,
             val track: Track,
             val reason: AudioTrackEndReason,
         ) : EmittedEvent {
             constructor(
-                guildId: ULong,
+                guildId: String,
                 track: Track,
                 reason: AudioTrackEndReason
             ) : this(Op.Event, Type.TrackEnd, guildId, track, reason)
@@ -196,12 +199,12 @@ sealed interface Message {
 
         @Serializable
         data class TrackExceptionEvent private constructor(
-            override val op: Op, override val type: Type, override val guildId: ULong,
+            override val op: Op, override val type: Type, override val guildId: String,
             val track: Track,
             val exception: Exception
         ) : EmittedEvent {
             constructor(
-                guildId: ULong,
+                guildId: String,
                 track: Track,
                 exception: Exception
             ) : this(Op.Event, Type.TrackException, guildId, track, exception)
@@ -209,12 +212,12 @@ sealed interface Message {
 
         @Serializable
         data class TrackStuckEvent private constructor(
-            override val op: Op, override val type: Type, override val guildId: ULong,
+            override val op: Op, override val type: Type, override val guildId: String,
             val track: Track,
             val thresholdMs: Long
         ) : EmittedEvent {
             constructor(
-                guildId: ULong,
+                guildId: String,
                 track: Track,
                 thresholdMs: Long
             ) : this(Op.Event, Type.TrackStuck, guildId, track, thresholdMs)
@@ -224,17 +227,52 @@ sealed interface Message {
 
         @Serializable
         data class WebSocketClosedEvent private constructor(
-            override val op: Op, override val type: Type, override val guildId: ULong,
+            override val op: Op, override val type: Type, override val guildId: String,
             val code: Int,
             val reason: String,
             val byRemote: Boolean
         ) : EmittedEvent {
             constructor(
-                guildId: ULong,
+                guildId: String,
                 code: Int,
                 reason: String,
                 byRemote: Boolean
             ) : this(Op.Event, Type.WebSocketClosed, guildId, code, reason, byRemote)
+        }
+    }
+
+    companion object Serializer : JsonContentPolymorphicSerializer<Message>(Message::class) {
+        override fun selectDeserializer(element: JsonElement): DeserializationStrategy<Message> {
+            return element.asPolymorphicDeserializer<Op, Message>(descriptor, "op") {
+                when (it) {
+                    Op.Ready -> ReadyEvent.serializer()
+                    Op.Stats -> StatsEvent.serializer()
+                    Op.PlayerUpdate -> PlayerUpdateEvent.serializer()
+                    Op.Event -> EmittedEvent.serializer()
+                }
+            }
+        }
+    }
+}
+
+private inline fun <reified Type : Any, T> JsonElement.asPolymorphicDeserializer(
+    descriptor: SerialDescriptor,
+    typeName: String,
+    crossinline deserialize: (Type) -> DeserializationStrategy<T>
+): DeserializationStrategy<T> {
+    val typeRaw = jsonObject[typeName] ?: error("Could not find $typeName")
+    return object : KSerializer<T> {
+        override val descriptor: SerialDescriptor
+            get() = descriptor
+
+        override fun deserialize(decoder: Decoder): T {
+            val jsonDecoder = (decoder as? JsonDecoder) ?: error("Deserializer only supports json, but got: $decoder")
+            return deserialize(jsonDecoder.json.decodeFromJsonElement(typeRaw))
+                .deserialize(decoder)
+        }
+
+        override fun serialize(encoder: Encoder, value: T) {
+            throw UnsupportedOperationException("this is only a deserializer")
         }
     }
 }
