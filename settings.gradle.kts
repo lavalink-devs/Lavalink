@@ -80,7 +80,6 @@ fun VersionCatalogBuilder.common() {
 
     library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.5.0")
     library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime").version("0.4.0")
-    library("ktor-http", "io.ktor", "ktor-http").version("2.2.4")
 
     library("spotbugs", "com.github.spotbugs", "spotbugs-annotations").version("3.1.6")
 }
