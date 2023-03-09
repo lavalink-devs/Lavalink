@@ -25,10 +25,13 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.protocol.v3.*
+import dev.arbjerg.lavalink.protocol.v4.json
+import kotlinx.serialization.decodeFromString
 import lavalink.server.io.SocketContext
 import lavalink.server.player.LavalinkPlayer
 import lavalink.server.player.filters.*
 import lavalink.server.player.filters.Band
+import lavalink.server.util.toJsonNode
 import dev.arbjerg.lavalink.protocol.v3.Band as BandV3
 
 fun AudioTrack.toTrackV3(): Track {
@@ -113,7 +116,9 @@ fun FilterChain.Companion.parseV3(
         },
         filters.lowPass?.let { LowPassConfig(it.smoothing) },
     ).apply {
-        parsePluginConfigs(filters.pluginFilters, extensions)
+        parsePluginConfigs(filters.pluginFilters.mapValues { (_, value) ->
+            json.decodeFromString(value.toString())
+        }, extensions)
     }
 }
 
@@ -140,6 +145,6 @@ fun FilterChain.toFiltersV3(): Filters {
         rotation?.let { Rotation(it.rotationHz) },
         channelMix?.let { ChannelMix(it.leftToLeft, it.leftToRight, it.rightToLeft, it.rightToRight) },
         lowPass?.let { LowPass(it.smoothing) },
-        pluginFilters.associate { it.extension.name to it.json }
+        pluginFilters.associate { it.extension.name to it.json.toJsonNode() }
     )
 }

@@ -28,6 +28,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
+import lavalink.server.util.loadFailed
 import lavalink.server.util.toPlaylistInfo
 import lavalink.server.util.toPluginInfo
 import lavalink.server.util.toTrack

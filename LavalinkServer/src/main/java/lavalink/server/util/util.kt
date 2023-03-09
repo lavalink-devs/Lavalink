@@ -21,14 +21,19 @@
  */
 package lavalink.server.util
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.tools.io.MessageInput
 import com.sedmelluq.discord.lavaplayer.tools.io.MessageOutput
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
+import dev.arbjerg.lavalink.protocol.v3.objectMapper
 import dev.arbjerg.lavalink.protocol.v4.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import lavalink.server.io.SocketContext
 import lavalink.server.io.SocketServer
@@ -48,10 +53,15 @@ fun AudioTrack.toTrack(
 }
 
 fun AudioTrack.toTrack(encoded: String, pluginInfoModifiers: List<AudioPluginInfoModifier>): Track {
-    val pluginInfo = JsonObject(mutableMapOf())
-    pluginInfoModifiers.forEach { it.modifyAudioTrackPluginInfo(this, pluginInfo) }
+    val pluginInfo = pluginInfoModifiers.fold(JsonObject(emptyMap())) { acc, it ->
+        val jsonObject = it.modifyAudioTrackPluginInfo(this) ?: JsonObject(emptyMap())
+        acc + jsonObject
+    }
+
     return Track(encoded, this.toInfo(), pluginInfo)
 }
+
+private operator fun JsonObject.plus(other: JsonObject) = JsonObject(toMap() + other.toMap())
 
 fun AudioTrack.toInfo(): TrackInfo {
     return TrackInfo(
@@ -75,8 +85,10 @@ fun AudioPlaylist.toPlaylistInfo(): PlaylistInfo {
 
 
 fun AudioPlaylist.toPluginInfo(pluginInfoModifiers: List<AudioPluginInfoModifier>): JsonObject {
-    val pluginInfo = JsonObject(mutableMapOf())
-    pluginInfoModifiers.forEach { it.modifyAudioPlaylistPluginInfo(this, pluginInfo) }
+    val pluginInfo = pluginInfoModifiers.fold(JsonObject(emptyMap())) { acc, it ->
+        val jsonObject = it.modifyAudioPlaylistPluginInfo(this) ?: JsonObject(emptyMap())
+        acc + jsonObject
+    }
     return pluginInfo
 }
 
@@ -137,11 +149,27 @@ fun Exception.Severity.Companion.fromFriendlyException(e: FriendlyException.Seve
     FriendlyException.Severity.FAULT -> Exception.Severity.FAULT
 }
 
+fun FriendlyException.Severity.toLavalink() = when (this) {
+    FriendlyException.Severity.COMMON -> Exception.Severity.COMMON
+    FriendlyException.Severity.SUSPICIOUS -> Exception.Severity.SUSPICIOUS
+    FriendlyException.Severity.FAULT -> Exception.Severity.FAULT
+}
+
 fun Exception.Companion.fromFriendlyException(e: FriendlyException) = Exception(
     e.message,
     Exception.Severity.fromFriendlyException(e.severity),
     e.toString()
 )
 
+fun AudioTrackEndReason.toLavalink() = when (this) {
+    AudioTrackEndReason.FINISHED -> Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.FINISHED
+    AudioTrackEndReason.LOAD_FAILED -> Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.LOAD_FAILED
+    AudioTrackEndReason.STOPPED -> Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.STOPPED
+    AudioTrackEndReason.REPLACED -> Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED
+    AudioTrackEndReason.CLEANUP -> Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.CLEANUP
+}
+
 fun LoadResult.Companion.loadFailed(exception: FriendlyException) =
     loadFailed(Exception.fromFriendlyException(exception))
+
+fun JsonElement.toJsonNode(): JsonNode = objectMapper().readTree(json.encodeToString(this))

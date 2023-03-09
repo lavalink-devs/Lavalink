@@ -59,11 +59,12 @@ class PlayerRestHandler(
     ): ResponseEntity<Player> {
         val context = socketContext(socketServer, sessionId)
 
-        if (playerUpdate.encodedTrack.isPresent && playerUpdate.identifier.isPresent) {
+        val encodedTrack = playerUpdate.encodedTrack
+        if (encodedTrack is Omissible.Present && playerUpdate.identifier is Omissible.Present) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot specify both encodedTrack and identifier")
         }
 
-        playerUpdate.filters.takeIfPresent { filters ->
+        playerUpdate.filters.ifPresent { filters ->
             val invalidFilters = filters.validate(disabledFilters)
 
             if (invalidFilters.isNotEmpty()) {
@@ -74,14 +75,14 @@ class PlayerRestHandler(
             }
         }
 
-        playerUpdate.voice.takeIfPresent {
+        playerUpdate.voice.ifPresent {
             //discord sometimes send a partial server update missing the endpoint, which can be ignored.
             if (it.endpoint.isEmpty() || it.token.isEmpty() || it.sessionId.isEmpty()) {
                 throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Partial voice state update: $it")
             }
         }
 
-        playerUpdate.endTime.takeIfPresent {
+        playerUpdate.endTime.ifPresent {
             if (it != null && it <= 0) {
                 throw ResponseStatusException(HttpStatus.BAD_REQUEST, "End time must be greater than 0")
             }
@@ -89,7 +90,7 @@ class PlayerRestHandler(
 
         val player = context.getPlayer(guildId)
 
-        playerUpdate.voice.takeIfPresent {
+        playerUpdate.voice.ifPresent {
             val oldConn = context.koe.getConnection(guildId)
             if (oldConn == null ||
                 oldConn.gatewayConnection?.isOpen == false ||
@@ -110,62 +111,80 @@ class PlayerRestHandler(
         }
 
         // we handle pause differently for playing new tracks
-        playerUpdate.paused.takeIf { it.isPresent && !playerUpdate.encodedTrack.isPresent && !playerUpdate.identifier.isPresent }
+        val paused = playerUpdate.paused
+        paused.takeIfPresent { encodedTrack is Omissible.Omitted && playerUpdate.identifier is Omissible.Omitted }
             ?.let {
-                player.setPause(it.value)
+                player.setPause(it)
             }
 
-        playerUpdate.volume.takeIfPresent {
+        playerUpdate.volume.ifPresent {
             player.setVolume(it)
         }
 
         // we handle position differently for playing new tracks
-        playerUpdate.position.takeIf { it.isPresent && !playerUpdate.encodedTrack.isPresent && !playerUpdate.identifier.isPresent }
+        playerUpdate.position.takeIfPresent { encodedTrack is Omissible.Omitted && playerUpdate.identifier is Omissible.Omitted }
             ?.let {
-                player.seekTo(it.value)
+                player.seekTo(it)
                 SocketServer.sendPlayerUpdate(context, player)
             }
 
-        playerUpdate.endTime.takeIf { it.isPresent && !playerUpdate.encodedTrack.isPresent && !playerUpdate.identifier.isPresent }
-            ?.let {
-                val marker = it.value?.let { endTime -> TrackMarker(endTime, TrackEndMarkerHandler(player)) }
+        playerUpdate.endTime.takeIfPresent { encodedTrack is Omissible.Omitted && playerUpdate.identifier is Omissible.Omitted }
+            ?.let { endTime ->
+                val marker = TrackMarker(endTime, TrackEndMarkerHandler(player))
                 player.track?.setMarker(marker)
             }
 
-        playerUpdate.filters.takeIfPresent {
+        playerUpdate.filters.ifPresent {
             player.filters = FilterChain.parse(it, filterExtensions)
             SocketServer.sendPlayerUpdate(context, player)
         }
 
-        if (playerUpdate.encodedTrack.isPresent || playerUpdate.identifier.isPresent) {
+        if (encodedTrack is Omissible.Present || playerUpdate.identifier is Omissible.Present) {
 
             if (noReplace && player.track != null) {
                 log.info("Skipping play request because of noReplace")
                 return ResponseEntity.ok(player.toPlayer(context, pluginInfoModifiers))
             }
-            player.setPause(if (playerUpdate.paused.isPresent) playerUpdate.paused.value else false)
+            player.setPause(if (paused is Omissible.Present) paused.value else false)
 
-            val track: AudioTrack? = if (playerUpdate.encodedTrack.isPresent) {
-                playerUpdate.encodedTrack.value?.let { encodedTrack ->
+            val track: AudioTrack? = if (encodedTrack is Omissible.Present) {
+                encodedTrack.value?.let { encodedTrack ->
                     decodeTrack(context.audioPlayerManager, encodedTrack)
                 }
             } else {
                 val trackFuture = CompletableFuture<AudioTrack>()
-                context.audioPlayerManager.loadItem(playerUpdate.identifier.value, object : AudioLoadResultHandler {
+                val identifier = playerUpdate.identifier as Omissible.Present
+                context.audioPlayerManager.loadItem(identifier.value, object : AudioLoadResultHandler {
                     override fun trackLoaded(track: AudioTrack) {
                         trackFuture.complete(track)
                     }
 
                     override fun playlistLoaded(playlist: AudioPlaylist) {
-                        trackFuture.completeExceptionally(ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot play a playlist or search result"))
+                        trackFuture.completeExceptionally(
+                            ResponseStatusException(
+                                HttpStatus.BAD_REQUEST,
+                                "Cannot play a playlist or search result"
+                            )
+                        )
                     }
 
                     override fun noMatches() {
-                        trackFuture.completeExceptionally(ResponseStatusException(HttpStatus.BAD_REQUEST, "No matches found for identifier"))
+                        trackFuture.completeExceptionally(
+                            ResponseStatusException(
+                                HttpStatus.BAD_REQUEST,
+                                "No matches found for identifier"
+                            )
+                        )
                     }
 
                     override fun loadFailed(exception: FriendlyException) {
-                        trackFuture.completeExceptionally(ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, exception.message, getRootCause(exception)))
+                        trackFuture.completeExceptionally(
+                            ResponseStatusException(
+                                HttpStatus.INTERNAL_SERVER_ERROR,
+                                exception.message,
+                                getRootCause(exception)
+                            )
+                        )
                     }
                 })
 
@@ -175,11 +194,11 @@ class PlayerRestHandler(
             }
 
             track?.let {
-                playerUpdate.position.takeIfPresent { position ->
+                playerUpdate.position.ifPresent { position ->
                     track.position = position
                 }
 
-                playerUpdate.endTime.takeIfPresent { endTime ->
+                playerUpdate.endTime.ifPresent { endTime ->
                     if (endTime != null) {
                         track.setMarker(TrackMarker(endTime, TrackEndMarkerHandler(player)))
                     }

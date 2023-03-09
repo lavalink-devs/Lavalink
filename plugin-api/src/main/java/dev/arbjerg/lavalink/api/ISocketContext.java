@@ -7,6 +7,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Represents a WebSocket connection
@@ -60,6 +61,9 @@ public interface ISocketContext {
     default void sendMessage(JsonElement message) {
         sendMessage(JsonElement.Companion.serializer(), message);
     }
+
+    @Deprecated
+    void sendV3Message(Object message);
 
     /**
      * @return the state of the context

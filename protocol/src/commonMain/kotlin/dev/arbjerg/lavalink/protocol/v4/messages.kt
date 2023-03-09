@@ -49,7 +49,6 @@ sealed interface Message {
             resumed: Boolean,
             sessionId: String
         ) : this(Op.Ready, resumed, sessionId)
-
     }
 
     @SerialName("playerUpdate")

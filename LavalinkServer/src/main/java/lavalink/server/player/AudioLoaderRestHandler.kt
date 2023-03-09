@@ -25,7 +25,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.arbjerg.lavalink.protocol.v4.Track
-import dev.arbjerg.lavalink.protocol.v4.decodeTrack
+import lavalink.server.util.decodeTrack
 import lavalink.server.util.toTrack
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus

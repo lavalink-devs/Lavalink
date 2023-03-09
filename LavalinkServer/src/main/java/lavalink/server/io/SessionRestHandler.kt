@@ -2,7 +2,7 @@ package lavalink.server.io
 
 import dev.arbjerg.lavalink.protocol.v4.Session
 import dev.arbjerg.lavalink.protocol.v4.SessionUpdate
-import dev.arbjerg.lavalink.protocol.v4.takeIfPresent
+import dev.arbjerg.lavalink.protocol.v4.ifPresent
 import lavalink.server.util.socketContext
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
@@ -20,7 +20,7 @@ class SessionRestHandler(private val socketServer: SocketServer) {
     ): ResponseEntity<Session> {
         val context = socketContext(socketServer, sessionId)
 
-        sessionUpdate.resuming.takeIfPresent {
+        sessionUpdate.resuming.ifPresent {
             if (it) {
                 context.resumeKey = context.sessionId
             } else {
@@ -28,8 +28,8 @@ class SessionRestHandler(private val socketServer: SocketServer) {
             }
         }
 
-        sessionUpdate.timeout.takeIfPresent {
-            context.resumeTimeout = it
+        sessionUpdate.timeout.ifPresent {
+            context.resumeTimeout = it.inWholeSeconds
         }
 
         return ResponseEntity.ok(Session(context.resumeKey != null, context.resumeTimeout))

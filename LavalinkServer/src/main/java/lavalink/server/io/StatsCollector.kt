@@ -21,6 +21,7 @@
  */
 package lavalink.server.io
 
+import dev.arbjerg.lavalink.api.sendMessage
 import dev.arbjerg.lavalink.protocol.v4.*
 import lavalink.server.Launcher
 import lavalink.server.player.AudioLossCounter
@@ -136,7 +137,7 @@ class StatsCollector(val socketServer: SocketServer) {
             }
         }
 
-        return Stats(
+        return StatsData(
             frameStats,
             playersTotal[0],
             playersPlaying[0],

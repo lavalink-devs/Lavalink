@@ -32,8 +32,12 @@ sealed interface Omissible<out T> {
     }
 }
 
-inline fun <T> Omissible<T>.takeIfPresent(function: (T) -> Unit) {
-    if (this is Omissible.Present) function(value)
+inline fun <T, R> Omissible<T>.ifPresent(function: (T) -> R): R? {
+    return if (this is Omissible.Present) function(value) else null
+}
+
+inline fun <T, R> Omissible<T?>.ifPresentAndNotNull(function: (T) -> R): R? {
+    return if (this is Omissible.Present && value != null) function(value) else null
 }
 
 inline fun <T, R> Omissible<T>.map(mapper: (T) -> R) = when (this) {
@@ -65,3 +69,8 @@ class OmissableSerializer<T>(private val childSerializer: KSerializer<T>) : KSer
         return Omissible.of(child)
     }
 }
+
+fun <T : Any?> Omissible<T>.takeIfPresent(predicate: (T) -> Boolean = { true }) =
+    if (this is Omissible.Present) value.takeIf(predicate) else null
+
+fun <T : Any> T?.toOmissible() = if (this == null) Omissible.Omitted() else Omissible.Present(this)

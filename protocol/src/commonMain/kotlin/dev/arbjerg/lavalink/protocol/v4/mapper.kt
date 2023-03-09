@@ -16,6 +16,7 @@ import kotlin.jvm.JvmName
  */
 val LavalinkSerializersModule = SerializersModule {
     contextual(TimestampSerializer)
+    contextual(Message.ReadyEvent::class, Message.ReadyEvent.serializer())
 } + RoutePlannerModule
 
 /**

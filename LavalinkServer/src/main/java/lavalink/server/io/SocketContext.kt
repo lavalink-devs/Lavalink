@@ -74,7 +74,13 @@ class SocketContext(
     private val players = ConcurrentHashMap<Long, LavalinkPlayer>()
 
     val eventEmitter = EventEmitter(this, eventHandlers)
-    val wsHandler = if (version == 3) WebSocketHandlerV3(this, webSocketExtensions, filterExtensions, serverConfig, objectMapper) else null
+    val wsHandler = if (version == 3) WebSocketHandlerV3(
+        this,
+        webSocketExtensions,
+        filterExtensions,
+        serverConfig,
+        objectMapper
+    ) else null
 
     @Volatile
     var sessionPaused = false
@@ -165,9 +171,11 @@ class SocketContext(
         eventEmitter.onSocketContextPaused()
     }
 
-    override fun <T : Any?> sendMessage(serializer: SerializationStrategy<T>, message: T) {
+    override fun <T : Any?> sendMessage(serializer: SerializationStrategy<T>, message: T) =
         send(json.encodeToString(serializer, message))
-    }
+
+    @Deprecated("the v3 api is deprecated")
+    override fun sendV3Message(message: Any?) = send(objectMapper.writeValueAsString(message))
 
     override fun getState(): ISocketContext.State = when {
         session.isOpen -> ISocketContext.State.OPEN
