@@ -29,7 +29,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.api.IPlayer
-import dev.arbjerg.lavalink.api.ISocketContext
 import io.netty.buffer.ByteBuf
 import lavalink.server.config.ServerConfig
 import lavalink.server.io.SocketContext
@@ -42,8 +41,8 @@ import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
 class LavalinkPlayer(
-    val socket: SocketContext,
-    private val guildId: Long,
+    override val socketContext: SocketContext,
+    override val guildId: Long,
     private val serverConfig: ServerConfig,
     audioPlayerManager: AudioPlayerManager,
     pluginInfoModifiers: List<AudioPluginInfoModifier>
@@ -56,9 +55,9 @@ class LavalinkPlayer(
             field = value
         }
 
-    private val audioPlayer: AudioPlayer = audioPlayerManager.createPlayer().also {
+    override val audioPlayer: AudioPlayer = audioPlayerManager.createPlayer().also {
         it.addListener(this)
-        if (socket.version == 3) {
+        if (socketContext.version == 3) {
             it.addListener(EventEmitterV3(this))
         } else {
             it.addListener(EventEmitter(audioPlayerManager, this, pluginInfoModifiers))
@@ -68,6 +67,12 @@ class LavalinkPlayer(
 
     private var updateFuture: ScheduledFuture<*>? = null
 
+    override val isPlaying: Boolean
+        get() = audioPlayer.playingTrack != null && !audioPlayer.isPaused
+
+    override val track: AudioTrack?
+        get() = audioPlayer.playingTrack
+
     fun destroy() {
         audioPlayer.destroy()
     }
@@ -76,19 +81,10 @@ class LavalinkPlayer(
         connection.audioSender = Provider(connection)
     }
 
-    override fun isPlaying(): Boolean = audioPlayer.playingTrack != null && !audioPlayer.isPaused
-
-    override fun getAudioPlayer(): AudioPlayer = audioPlayer
-
-    override fun getTrack(): AudioTrack? = audioPlayer.playingTrack
-
-    override fun getGuildId(): Long = guildId
-
-    override fun getSocketContext(): ISocketContext = socket
 
     override fun play(track: AudioTrack) {
         audioPlayer.playTrack(track)
-        sendPlayerUpdate(socket, this)
+        sendPlayerUpdate(socketContext, this)
     }
 
     override fun stop() {
@@ -117,8 +113,8 @@ class LavalinkPlayer(
             return
         }
 
-        updateFuture = socket.playerUpdateService.scheduleAtFixedRate(
-            { sendPlayerUpdate(socket, this) },
+        updateFuture = socketContext.playerUpdateService.scheduleAtFixedRate(
+            { sendPlayerUpdate(socketContext, this) },
             0,
             serverConfig.playerUpdateInterval.toLong(),
             TimeUnit.SECONDS

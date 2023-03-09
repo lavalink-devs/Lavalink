@@ -5,6 +5,7 @@ plugins {
     signing
     kotlin("multiplatform")
     kotlin("plugin.serialization") version "1.8.10"
+    id("org.jetbrains.dokka")
 }
 
 val archivesBaseName = "protocol"

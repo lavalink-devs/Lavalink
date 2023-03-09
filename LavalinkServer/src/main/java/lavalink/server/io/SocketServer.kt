@@ -112,7 +112,7 @@ final class SocketServer(
     @Suppress("UastIncorrectHttpHeaderInspection")
     override fun afterConnectionEstablished(session: WebSocketSession) {
         val version = if (session.uri?.path!!.startsWith("/v3")) 3 else 4
-        val userId = session.handshakeHeaders.getFirst("User-Id")!!
+        val userId = session.handshakeHeaders.getFirst("User-Id")!!.toLong()
         val resumeKey = session.handshakeHeaders.getFirst("Resume-Key")
         var sessionId = session.handshakeHeaders.getFirst("Session-Id")
         val clientName = session.handshakeHeaders.getFirst("Client-Name")

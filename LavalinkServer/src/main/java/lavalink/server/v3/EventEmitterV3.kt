@@ -44,7 +44,7 @@ class EventEmitterV3(
 
     override fun onTrackStart(player: AudioPlayer, track: AudioTrack) {
         val encodedTrack = encodeTrack(track)
-        this.player.socket.sendMessage(
+        this.player.socketContext.sendMessage(
             Message.TrackStartEvent(encodedTrack, encodedTrack, this.player.guildId.toString())
         )
     }
@@ -58,7 +58,7 @@ class EventEmitterV3(
         }
 
         val encodedTrack = encodeTrack(track)
-        this.player.socket.sendMessage(
+        this.player.socketContext.sendMessage(
             Message.TrackEndEvent(encodedTrack, encodedTrack, reason, this.player.guildId.toString())
         )
     }
@@ -66,7 +66,7 @@ class EventEmitterV3(
     // These exceptions are already logged by Lavaplayer
     override fun onTrackException(player: AudioPlayer, track: AudioTrack, exception: FriendlyException) {
         val encodedTrack = encodeTrack(track)
-        this.player.socket.sendMessage(
+        this.player.socketContext.sendMessage(
             Message.TrackExceptionEvent(
                 encodedTrack,
                 encodedTrack,
@@ -79,10 +79,10 @@ class EventEmitterV3(
     override fun onTrackStuck(player: AudioPlayer, track: AudioTrack, thresholdMs: Long) {
         log.warn("${track.info.title} got stuck! Threshold surpassed: ${thresholdMs}ms")
         val encodedTrack = encodeTrack(track)
-        this.player.socket.sendMessage(
+        this.player.socketContext.sendMessage(
             Message.TrackStuckEvent(encodedTrack, encodedTrack, thresholdMs, this.player.guildId.toString())
         )
-        sendPlayerUpdate(this.player.socket, this.player)
+        sendPlayerUpdate(this.player.socketContext, this.player)
     }
 
 }

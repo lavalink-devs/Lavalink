@@ -1,31 +1,30 @@
-package dev.arbjerg.lavalink.api;
+package dev.arbjerg.lavalink.api
 
 /**
  * Must be provided as a bean
  */
-public abstract class PluginEventHandler {
-
+abstract class PluginEventHandler {
     /**
      * Fired upon a new WebSocket being opened
      *
      * @param context the new websocket
      * @param resumed if the context was resumed and thus reused
      */
-    public void onWebSocketOpen(ISocketContext context, boolean resumed) {}
+    open fun onWebSocketOpen(context: ISocketContext?, resumed: Boolean) {}
 
     /**
      * Fired upon a WebSocket being closed while being configured for resuming
      *
      * @param context the socket context
      */
-    public void onSocketContextPaused(ISocketContext context) {}
+    open fun onSocketContextPaused(context: ISocketContext?) {}
 
     /**
      * Fired once the WebSocket is closed without being resumable or when a WebSocket can no longer be resumed
      *
      * @param context the socket context
      */
-    public void onSocketContextDestroyed(ISocketContext context) {}
+    open fun onSocketContextDestroyed(context: ISocketContext?) {}
 
     /**
      * Fired upon a WebSocket message being received
@@ -33,8 +32,9 @@ public abstract class PluginEventHandler {
      * @param context the websocket
      * @param message the message, presumably in JSON
      */
-    @Deprecated
-    public void onWebsocketMessageIn(ISocketContext context, String message) {}
+    @Deprecated("Usage of websocket commands is deprecated, use REST API instead")
+    open fun onWebsocketMessageIn(context: ISocketContext?, message: String?) {
+    }
 
     /**
      * Fired upon a WebSocket message being sent
@@ -42,7 +42,7 @@ public abstract class PluginEventHandler {
      * @param context the websocket
      * @param message the message, presumably in JSON
      */
-    public void onWebSocketMessageOut(ISocketContext context, String message) {}
+    open fun onWebSocketMessageOut(context: ISocketContext?, message: String?) {}
 
     /**
      * Fired upon a new player being created
@@ -50,7 +50,7 @@ public abstract class PluginEventHandler {
      * @param context the websocket
      * @param player  the new player
      */
-    public void onNewPlayer(ISocketContext context, IPlayer player) {}
+    open fun onNewPlayer(context: ISocketContext?, player: IPlayer?) {}
 
     /**
      * Fired upon a player being destroyed
@@ -58,5 +58,5 @@ public abstract class PluginEventHandler {
      * @param context the websocket
      * @param player  the player to be destroyed
      */
-    public void onDestroyPlayer(ISocketContext context, IPlayer player) {}
+    open fun onDestroyPlayer(context: ISocketContext?, player: IPlayer?) {}
 }

@@ -28,6 +28,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
+import dev.arbjerg.lavalink.api.sendMessage as sendV4Message
 import dev.arbjerg.lavalink.protocol.v4.Exception
 import dev.arbjerg.lavalink.protocol.v4.Message
 import lavalink.server.io.SocketServer.Companion.sendPlayerUpdate
@@ -47,7 +48,7 @@ class EventEmitter(
     }
 
     override fun onTrackStart(player: AudioPlayer, track: AudioTrack) {
-        this.player.socket.sendMessage(
+        this.player.socketContext.sendMessage(
             Message.EmittedEvent.TrackStartEvent(
                 this.player.guildId.toString(),
                 track.toTrack(audioPlayerManager, pluginInfoModifiers)
@@ -63,7 +64,7 @@ class EventEmitter(
             endReason
         }
 
-        this.player.socket.sendMessage(
+        this.player.socketContext.sendMessage(
             Message.EmittedEvent.TrackEndEvent(
                 this.player.guildId.toString(),
                 track.toTrack(audioPlayerManager, pluginInfoModifiers),
@@ -74,7 +75,7 @@ class EventEmitter(
 
     // These exceptions are already logged by Lavaplayer
     override fun onTrackException(player: AudioPlayer, track: AudioTrack, exception: FriendlyException) {
-        this.player.socket.sendMessage(
+        this.player.socketContext.sendMessage(
             Message.EmittedEvent.TrackExceptionEvent(
                 this.player.guildId.toString(),
                 track.toTrack(audioPlayerManager, pluginInfoModifiers),
@@ -85,14 +86,14 @@ class EventEmitter(
 
     override fun onTrackStuck(player: AudioPlayer, track: AudioTrack, thresholdMs: Long) {
         log.warn("${track.info.title} got stuck! Threshold surpassed: ${thresholdMs}ms")
-        this.player.socket.sendMessage(
+        this.player.socketContext.sendMessage(
             Message.EmittedEvent.TrackStuckEvent(
                 this.player.guildId.toString(),
                 track.toTrack(audioPlayerManager, pluginInfoModifiers),
                 thresholdMs
             )
         )
-        sendPlayerUpdate(this.player.socket, this.player)
+        sendPlayerUpdate(this.player.socketContext, this.player)
     }
 
 }
