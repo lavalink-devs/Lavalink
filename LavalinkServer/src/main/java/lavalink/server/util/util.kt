@@ -171,5 +171,3 @@ fun AudioTrackEndReason.toLavalink() = when (this) {
 
 fun LoadResult.Companion.loadFailed(exception: FriendlyException) =
     loadFailed(Exception.fromFriendlyException(exception))
-
-fun JsonElement.toJsonNode(): JsonNode = objectMapper().readTree(json.encodeToString(this))

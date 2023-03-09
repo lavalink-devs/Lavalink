@@ -51,7 +51,7 @@ public interface ISocketContext {
 
     /**
      * @param serializer a {@link SerializationStrategy} capable of serializing {@link  T}
-     * @param message    a message to send to the WebSocket client, it should be compatible with Jackson.
+     * @param message    a message to send to the WebSocket client, it should be compatible with kotlinx.serialization.
      */
     <T> void sendMessage(@NotNull SerializationStrategy<T> serializer, T message);
 
@@ -62,8 +62,14 @@ public interface ISocketContext {
         sendMessage(JsonElement.Companion.serializer(), message);
     }
 
+    /**
+     * @deprecated as of v4.0 Koltinx.serialization is used for serialization, please
+     * use {@link ISocketContext#sendMessage(SerializationStrategy, Object)} and
+     * {@link ISocketContext#sendMessage(JsonElement)}
+     * @param message a message to send to the WebSocket client, it should be compatible with Jackson
+     */
     @Deprecated
-    void sendV3Message(Object message);
+    void sendMessage(Object message);
 
     /**
      * @return the state of the context

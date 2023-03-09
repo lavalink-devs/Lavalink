@@ -175,7 +175,7 @@ class SocketContext(
         send(json.encodeToString(serializer, message))
 
     @Deprecated("the v3 api is deprecated")
-    override fun sendV3Message(message: Any?) = send(objectMapper.writeValueAsString(message))
+    override fun sendMessage(message: Any?) = send(objectMapper.writeValueAsString(message))
 
     override fun getState(): ISocketContext.State = when {
         session.isOpen -> ISocketContext.State.OPEN

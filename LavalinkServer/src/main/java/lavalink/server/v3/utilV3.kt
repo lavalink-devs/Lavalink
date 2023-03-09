@@ -24,6 +24,7 @@ package lavalink.server.v3
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.api.AudioFilterExtension
+import dev.arbjerg.lavalink.api.toJsonNode
 import dev.arbjerg.lavalink.protocol.v3.*
 import dev.arbjerg.lavalink.protocol.v4.json
 import kotlinx.serialization.decodeFromString
@@ -31,7 +32,6 @@ import lavalink.server.io.SocketContext
 import lavalink.server.player.LavalinkPlayer
 import lavalink.server.player.filters.*
 import lavalink.server.player.filters.Band
-import lavalink.server.util.toJsonNode
 import dev.arbjerg.lavalink.protocol.v3.Band as BandV3
 
 fun AudioTrack.toTrackV3(): Track {

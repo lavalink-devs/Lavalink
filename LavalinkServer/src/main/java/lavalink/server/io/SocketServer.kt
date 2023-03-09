@@ -25,6 +25,7 @@ package lavalink.server.io
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.api.*
+import dev.arbjerg.lavalink.api.sendMessage as sendV4Message
 import dev.arbjerg.lavalink.protocol.v4.Message
 import dev.arbjerg.lavalink.protocol.v4.PlayerState
 import lavalink.server.config.ServerConfig
@@ -71,7 +72,7 @@ final class SocketServer(
 
             val connection = socketContext.getMediaConnection(player).gatewayConnection
             if (socketContext.version == 3) {
-                socketContext.sendV3Message(
+                socketContext.sendMessage(
                     V3Message.PlayerUpdateEvent(
                         V3PlayerState(
                             System.currentTimeMillis(),
@@ -83,7 +84,7 @@ final class SocketServer(
                     )
                 )
             } else {
-                socketContext.sendMessage(
+                socketContext.sendV4Message(
                     Message.PlayerUpdateEvent(
                         PlayerState(
                             System.currentTimeMillis(),
@@ -162,9 +163,9 @@ final class SocketServer(
         )
         contextMap[sessionId] = socketContext
         if (version == 3) {
-            socketContext.sendV3Message(V3Message.ReadyEvent(false, sessionId))
+            socketContext.sendMessage(V3Message.ReadyEvent(false, sessionId))
         } else {
-            socketContext.sendMessage(Message.ReadyEvent(false, sessionId))
+            socketContext.sendV4Message(Message.ReadyEvent(false, sessionId))
         }
         socketContext.eventEmitter.onWebSocketOpen(false)
         if (clientName != null) {
