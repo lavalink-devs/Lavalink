@@ -22,6 +22,16 @@ kotlin {
     js(IR) {
         nodejs()
         browser()
+        compilations.all {
+            packageJson {
+                //language=RegExp
+                // npm doesn't support our versioning :(
+                val validVersion = """\d+\.\d+\.\d+""".toRegex()
+                if (!validVersion.matches(project.version.toString())) {
+                    version = "4.0.0"
+                }
+            }
+        }
     }
 
     sourceSets {

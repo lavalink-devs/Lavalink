@@ -52,13 +52,12 @@ subprojects {
 
 @SuppressWarnings("GrMethodMayBeStatic")
 fun versionFromTag(): String {
-    if (System.getenv("CI") == null) return "local-build"
     Grgit.open(mapOf("currentDir" to project.rootDir)).use { git ->
         val headTag = git.tag
             .list()
             .find { it.commit.id == git.head().id }
 
-        val clean = git.status().isClean
+        val clean = git.status().isClean || System.getenv("CI") == null
         if (!clean) {
             println("Git state is dirty, setting version as snapshot.")
         }
