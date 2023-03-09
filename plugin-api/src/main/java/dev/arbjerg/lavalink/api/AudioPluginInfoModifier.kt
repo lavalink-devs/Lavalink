@@ -11,9 +11,7 @@ interface AudioPluginInfoModifier {
      * @param track the track that was loaded.
      * @return an [JsonObject] containing customized info
      */
-    fun modifyAudioTrackPluginInfo(track: AudioTrack): JsonObject? {
-        return null
-    }
+    fun modifyAudioTrackPluginInfo(track: AudioTrack): JsonObject? = null
 
     /**
      * Adds custom fields to an [AudioPlaylist]'s JSON.
@@ -21,7 +19,5 @@ interface AudioPluginInfoModifier {
      * @param playlist the playlist that was loaded.
      * @return an [JsonObject] containing customized info
      */
-    fun modifyAudioPlaylistPluginInfo(playlist: AudioPlaylist): JsonObject? {
-        return null
-    }
+    fun modifyAudioPlaylistPluginInfo(playlist: AudioPlaylist): JsonObject? = null
 }

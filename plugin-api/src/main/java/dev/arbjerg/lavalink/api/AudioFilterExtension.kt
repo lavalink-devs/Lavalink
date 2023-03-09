@@ -29,9 +29,7 @@ interface AudioFilterExtension {
         """As of v3.7 Jackson is the preferred way of JSON serialization,
       use AudioFilterExtension#build(JsonElement, AudioDataFormat, FloatPcmAudioFilter) instead."""
     )
-    fun build(data: JSONObject?, format: AudioDataFormat?, output: FloatPcmAudioFilter?): FloatPcmAudioFilter? {
-        return null
-    }
+    fun build(data: JSONObject?, format: AudioDataFormat?, output: FloatPcmAudioFilter?): FloatPcmAudioFilter? = null
 
     /**
      * Builds a filter for a particular player.
@@ -45,9 +43,8 @@ interface AudioFilterExtension {
         """as of v4.0.0 Kotlinx.serialization is used, implement
       AudioFilterExtension#build(JsonElement, AudioDataFormat, FloatPcmAudioFilter) instead"""
     )
-    fun build(data: JsonNode, format: AudioDataFormat?, output: FloatPcmAudioFilter?): FloatPcmAudioFilter? {
-        return build(JSONObject(data.toString()), format, output)
-    }
+    fun build(data: JsonNode, format: AudioDataFormat?, output: FloatPcmAudioFilter?): FloatPcmAudioFilter? =
+        build(JSONObject(data.toString()), format, output)
 
     /**
      * Builds a filter for a particular player.
@@ -57,11 +54,12 @@ interface AudioFilterExtension {
      * @param output the output to be used by the produced filter.
      * @return a filter which produces the desired audio effect.
      */
-    fun build(data: JsonElement, format: AudioDataFormat?, output: FloatPcmAudioFilter?): FloatPcmAudioFilter? {
-        return build(data.toJsonNode(), format, output)
-    }
+    fun build(data: JsonElement, format: AudioDataFormat?, output: FloatPcmAudioFilter?): FloatPcmAudioFilter? =
+        build(data.toJsonNode(), format, output)
 
     /**
+     * Checks if this filter is enabled.
+     *
      * @param data JSON data received from the client under the extension name key.
      * @return whether to build a filter. Returning false makes this extension do nothing.
      */
@@ -69,11 +67,11 @@ interface AudioFilterExtension {
         """as of v4.0.0 Kotlinx.serialization is used, implement
       AudioFilterExtension#isEnabled(JsonElement) instead"""
     )
-    fun isEnabled(data: JSONObject?): Boolean {
-        return false
-    }
+    fun isEnabled(data: JSONObject?): Boolean = false
 
     /**
+     * Checks if this filter is enabled.
+     *
      * @param data JSON data received from the client under the extension name key.
      * @return whether to build a filter. Returning false makes this extension do nothing.
      */
@@ -81,15 +79,13 @@ interface AudioFilterExtension {
         """as of v4.0.0 Kotlinx.serialization is used, implement
       AudioFilterExtension#isEnabled(JsonElement) instead"""
     )
-    fun isEnabled(data: JsonNode): Boolean {
-        return isEnabled(JSONObject(data.toString()))
-    }
+    fun isEnabled(data: JsonNode): Boolean = isEnabled(JSONObject(data.toString()))
 
     /**
+     * Checks if this filter is enabled.
+     *
      * @param data JSON data received from the client under the extension name key.
      * @return whether to build a filter. Returning false makes this extension do nothing.
      */
-    fun isEnabled(data: JsonElement): Boolean {
-        return isEnabled(data.toJsonNode())
-    }
+    fun isEnabled(data: JsonElement): Boolean = isEnabled(data.toJsonNode())
 }
