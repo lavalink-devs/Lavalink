@@ -21,8 +21,6 @@
  */
 package lavalink.server.util
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory
-import com.fasterxml.jackson.databind.node.ObjectNode
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.tools.io.MessageInput
@@ -31,6 +29,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.protocol.v4.*
+import kotlinx.serialization.json.JsonObject
 import lavalink.server.io.SocketContext
 import lavalink.server.io.SocketServer
 import lavalink.server.player.LavalinkPlayer
@@ -49,7 +48,7 @@ fun AudioTrack.toTrack(
 }
 
 fun AudioTrack.toTrack(encoded: String, pluginInfoModifiers: List<AudioPluginInfoModifier>): Track {
-    val pluginInfo = JsonNodeFactory.instance.objectNode()
+    val pluginInfo = JsonObject(mutableMapOf())
     pluginInfoModifiers.forEach { it.modifyAudioTrackPluginInfo(this, pluginInfo) }
     return Track(encoded, this.toInfo(), pluginInfo)
 }
@@ -75,8 +74,8 @@ fun AudioPlaylist.toPlaylistInfo(): PlaylistInfo {
 }
 
 
-fun AudioPlaylist.toPluginInfo(pluginInfoModifiers: List<AudioPluginInfoModifier>): ObjectNode {
-    val pluginInfo = JsonNodeFactory.instance.objectNode()
+fun AudioPlaylist.toPluginInfo(pluginInfoModifiers: List<AudioPluginInfoModifier>): JsonObject {
+    val pluginInfo = JsonObject(mutableMapOf())
     pluginInfoModifiers.forEach { it.modifyAudioPlaylistPluginInfo(this, pluginInfo) }
     return pluginInfo
 }

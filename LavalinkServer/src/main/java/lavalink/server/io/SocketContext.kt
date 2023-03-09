@@ -24,16 +24,14 @@ package lavalink.server.io
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import dev.arbjerg.lavalink.api.AudioFilterExtension
-import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
-import dev.arbjerg.lavalink.api.ISocketContext
-import dev.arbjerg.lavalink.api.PluginEventHandler
-import dev.arbjerg.lavalink.api.WebSocketExtension
+import dev.arbjerg.lavalink.api.*
 import dev.arbjerg.lavalink.protocol.v3.Message
+import dev.arbjerg.lavalink.protocol.v4.json
 import io.undertow.websockets.core.WebSocketCallback
 import io.undertow.websockets.core.WebSocketChannel
 import io.undertow.websockets.core.WebSockets
 import io.undertow.websockets.jsr.UndertowSession
+import kotlinx.serialization.SerializationStrategy
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.LavalinkPlayer
 import lavalink.server.v3.StatsCollectorV3
@@ -41,7 +39,6 @@ import lavalink.server.v3.WebSocketHandlerV3
 import moe.kyokobot.koe.KoeClient
 import moe.kyokobot.koe.KoeEventAdapter
 import moe.kyokobot.koe.MediaConnection
-import org.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.WebSocketSession
@@ -168,13 +165,8 @@ class SocketContext(
         eventEmitter.onSocketContextPaused()
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun sendMessage(message: JSONObject) {
-        send(message.toString())
-    }
-
-    override fun sendMessage(message: Any) {
-        send(objectMapper.writeValueAsString(message))
+    override fun <T : Any?> sendMessage(serializer: SerializationStrategy<T>, message: T) {
+        send(json.encodeToString(serializer, message))
     }
 
     override fun getState(): ISocketContext.State = when {
