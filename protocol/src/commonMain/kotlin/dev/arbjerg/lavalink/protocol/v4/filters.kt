@@ -17,44 +17,42 @@ data class Filters(
     val lowPass: Omissible<LowPass?> = Omissible.Omitted(),
     val pluginFilters: Map<String, JsonElement> = mutableMapOf()
 ) {
-    fun validate(disabledFilters: List<String>): List<String> {
-        val filters = mutableListOf<String>()
-        if ("volume" in disabledFilters && volume != null) {
-            filters.add("volume")
+    fun validate(disabledFilters: List<String>): List<String> = buildList {
+        if ("volume" in disabledFilters && volume is Omissible.Present) {
+            add("volume")
         }
-        if ("equalizer" in disabledFilters && equalizer != null) {
-            filters.add("equalizer")
+        if ("equalizer" in disabledFilters && equalizer is Omissible.Present) {
+            add("equalizer")
         }
-        if ("karaoke" in disabledFilters && karaoke != null) {
-            filters.add("karaoke")
+        if ("karaoke" in disabledFilters && karaoke is Omissible.Present) {
+            add("karaoke")
         }
-        if ("timescale" in disabledFilters && timescale != null) {
-            filters.add("timescale")
+        if ("timescale" in disabledFilters && timescale is Omissible.Present) {
+            add("timescale")
         }
-        if ("tremolo" in disabledFilters && tremolo != null) {
-            filters.add("tremolo")
+        if ("tremolo" in disabledFilters && tremolo is Omissible.Present) {
+            add("tremolo")
         }
-        if ("vibrato" in disabledFilters && vibrato != null) {
-            filters.add("vibrato")
+        if ("vibrato" in disabledFilters && vibrato is Omissible.Present) {
+            add("vibrato")
         }
-        if ("distortion" in disabledFilters && distortion != null) {
-            filters.add("distortion")
+        if ("distortion" in disabledFilters && distortion is Omissible.Present) {
+            add("distortion")
         }
-        if ("rotation" in disabledFilters && rotation != null) {
-            filters.add("rotation")
+        if ("rotation" in disabledFilters && rotation is Omissible.Present) {
+            add("rotation")
         }
-        if ("channelMix" in disabledFilters && channelMix != null) {
-            filters.add("channelMix")
+        if ("channelMix" in disabledFilters && channelMix is Omissible.Present) {
+            add("channelMix")
         }
-        if ("lowPass" in disabledFilters && lowPass != null) {
-            filters.add("lowPass")
+        if ("lowPass" in disabledFilters && lowPass is Omissible.Present) {
+            add("lowPass")
         }
         for (filter in pluginFilters) {
             if (filter.key in disabledFilters) {
-                filters.add(filter.key)
+                add(filter.key)
             }
         }
-        return filters
     }
 }
 
