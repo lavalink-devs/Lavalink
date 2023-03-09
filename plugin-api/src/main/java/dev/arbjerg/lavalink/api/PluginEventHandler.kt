@@ -10,21 +10,21 @@ abstract class PluginEventHandler {
      * @param context the new websocket
      * @param resumed if the context was resumed and thus reused
      */
-    open fun onWebSocketOpen(context: ISocketContext?, resumed: Boolean) {}
+    open fun onWebSocketOpen(context: ISocketContext, resumed: Boolean) {}
 
     /**
      * Fired upon a WebSocket being closed while being configured for resuming
      *
      * @param context the socket context
      */
-    open fun onSocketContextPaused(context: ISocketContext?) {}
+    open fun onSocketContextPaused(context: ISocketContext) {}
 
     /**
      * Fired once the WebSocket is closed without being resumable or when a WebSocket can no longer be resumed
      *
      * @param context the socket context
      */
-    open fun onSocketContextDestroyed(context: ISocketContext?) {}
+    open fun onSocketContextDestroyed(context: ISocketContext) {}
 
     /**
      * Fired upon a WebSocket message being received
@@ -33,7 +33,7 @@ abstract class PluginEventHandler {
      * @param message the message, presumably in JSON
      */
     @Deprecated("Usage of websocket commands is deprecated, use REST API instead")
-    open fun onWebsocketMessageIn(context: ISocketContext?, message: String?) {
+    open fun onWebsocketMessageIn(context: ISocketContext, message: String) {
     }
 
     /**
@@ -42,7 +42,7 @@ abstract class PluginEventHandler {
      * @param context the websocket
      * @param message the message, presumably in JSON
      */
-    open fun onWebSocketMessageOut(context: ISocketContext?, message: String?) {}
+    open fun onWebSocketMessageOut(context: ISocketContext, message: String) {}
 
     /**
      * Fired upon a new player being created
@@ -50,7 +50,7 @@ abstract class PluginEventHandler {
      * @param context the websocket
      * @param player  the new player
      */
-    open fun onNewPlayer(context: ISocketContext?, player: IPlayer?) {}
+    open fun onNewPlayer(context: ISocketContext, player: IPlayer) {}
 
     /**
      * Fired upon a player being destroyed
@@ -58,5 +58,5 @@ abstract class PluginEventHandler {
      * @param context the websocket
      * @param player  the player to be destroyed
      */
-    open fun onDestroyPlayer(context: ISocketContext?, player: IPlayer?) {}
+    open fun onDestroyPlayer(context: ISocketContext, player: IPlayer) {}
 }

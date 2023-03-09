@@ -11,5 +11,8 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
  * Lavalink, in which case using this interface is redundant.
  */
 interface AudioPlayerManagerConfiguration {
+    /**
+     * Creates a new custom configured [AudioPlayerManager] based on [manager].
+     */
     fun configure(manager: AudioPlayerManager): AudioPlayerManager
 }

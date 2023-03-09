@@ -7,14 +7,25 @@ import kotlinx.serialization.json.JsonElement
  * Represents a WebSocket connection
  */
 interface ISocketContext {
+    /**
+     * The session id of this socket connection.
+     */
     val sessionId: String
 
     /**
-     * @return the User ID of the Client.
+     * The User ID of the Client.
      */
     val userId: Long
 
+    /**
+     * The name of this connections client if specified.
+     */
     val clientName: String?
+
+    /**
+     * A read-only map of all players associated by their guild.
+     */
+    val players: Map<Long, IPlayer>
 
     /**
      * Returns the player of a guild. Never returns null.
@@ -25,27 +36,22 @@ interface ISocketContext {
     fun getPlayer(guildId: Long): IPlayer
 
     /**
-     * @return a read-only map of all players associated by their guild
-     */
-    val players: Map<Long, IPlayer>
-
-    /**
-     * @param guildId guild for which to remove player state from
+     * Destroys the player for the Guild corresponding to [guildId].
      */
     fun destroyPlayer(guildId: Long)
 
     /**
-     * @param serializer a [SerializationStrategy] capable of serializing [T]
-     * @param message    a message to send to the WebSocket client, it should be compatible with kotlinx.serialization.
+     * Sends [message] to the WebSocket client
+     * @param serializer a [SerializationStrategy] capable of serializing [T].
      */
     fun <T> sendMessage(serializer: SerializationStrategy<T>, message: T)
 
     /**
-     * @param message    a message to send to the WebSocket client, it should be compatible with Jackson.
+     * Sends [message] to the WebSocket client
+     *
+     * @see JsonElement
      */
-    fun sendMessage(message: JsonElement) {
-        sendMessage(JsonElement.serializer(), message)
-    }
+    fun sendMessage(message: JsonElement) = sendMessage(JsonElement.serializer(), message)
 
     /**
      * @deprecated as of v4.0 Koltinx.serialization is used for serialization, please
@@ -56,7 +62,7 @@ interface ISocketContext {
     fun sendMessage(message: Any)
 
     /**
-     * @return the state of the context
+     * The state of the context.
      */
     val state: State
 
@@ -66,15 +72,18 @@ interface ISocketContext {
     fun closeWebSocket()
 
     /**
-     * @param closeCode the close code to send to the client
+     * Closes this connection with [closeCode].
      */
     fun closeWebSocket(closeCode: Int)
 
     /**
-     * @param closeCode the close code to send to the client
-     * @param reason    the close reason to send to the client
+     * Closes this connection with [closeCode] and [code].
      */
     fun closeWebSocket(closeCode: Int, reason: String?)
+
+    /**
+     * Possible states of a WebSocket connection.
+     */
     enum class State {
         /**
          * The context has an open WebSocket
