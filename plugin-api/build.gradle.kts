@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     signing
-    `java-library`
     `maven-publish`
     kotlin("jvm")
     id("org.jetbrains.dokka")
