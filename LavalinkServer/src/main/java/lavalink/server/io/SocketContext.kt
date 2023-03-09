@@ -52,7 +52,7 @@ import java.util.concurrent.*
 import kotlin.reflect.full.hasAnnotation
 
 class SocketContext(
-    private val sessionId: String,
+    override val sessionId: String,
     val version: Int,
     val audioPlayerManager: AudioPlayerManager,
     private val serverConfig: ServerConfig,
@@ -60,8 +60,8 @@ class SocketContext(
     private val socketServer: SocketServer,
     statsCollector: StatsCollector,
     statsCollectorV3: StatsCollectorV3,
-    private val userId: String,
-    private val clientName: String?,
+    override val userId: Long,
+    override val clientName: String?,
     val koe: KoeClient,
     eventHandlers: Collection<PluginEventHandler>,
     webSocketExtensions: List<WebSocketExtension>,
@@ -75,7 +75,7 @@ class SocketContext(
     }
 
     //guildId <-> LavalinkPlayer
-    private val players = ConcurrentHashMap<Long, LavalinkPlayer>()
+    override val players = ConcurrentHashMap<Long, LavalinkPlayer>()
 
     val eventEmitter = EventEmitter(this, eventHandlers)
     val wsHandler = if (version == 3) WebSocketHandlerV3(
@@ -96,6 +96,13 @@ class SocketContext(
     private var sessionTimeoutFuture: ScheduledFuture<Unit>? = null
     private val executor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
     val playerUpdateService: ScheduledExecutorService
+
+    override val state: ISocketContext.State
+        get() = when {
+            session.isOpen -> ISocketContext.State.OPEN
+            sessionPaused -> ISocketContext.State.RESUMABLE
+            else -> ISocketContext.State.DESTROYED
+        }
 
     val playingPlayers: List<LavalinkPlayer>
         get() {
@@ -120,26 +127,10 @@ class SocketContext(
         }
     }
 
-    override fun getSessionId(): String {
-        return sessionId
-    }
-
-    override fun getUserId(): Long {
-        return userId.toLong()
-    }
-
-    override fun getClientName(): String? {
-        return clientName
-    }
-
     override fun getPlayer(guildId: Long) = players.computeIfAbsent(guildId) {
         val player = LavalinkPlayer(this, guildId, serverConfig, audioPlayerManager, pluginInfoModifiers)
         eventEmitter.onNewPlayer(player)
         player
-    }
-
-    override fun getPlayers(): Map<Long, LavalinkPlayer> {
-        return players.toMap()
     }
 
     /**
@@ -190,12 +181,6 @@ class SocketContext(
         }
 
         return send(objectMapper.writeValueAsString(message))
-    }
-
-    override fun getState(): ISocketContext.State = when {
-        session.isOpen -> ISocketContext.State.OPEN
-        sessionPaused -> ISocketContext.State.RESUMABLE
-        else -> ISocketContext.State.DESTROYED
     }
 
     /**
