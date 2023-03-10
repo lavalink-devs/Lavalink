@@ -25,8 +25,10 @@ package lavalink.server.io
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.api.*
+import dev.arbjerg.lavalink.api.sendMessage
 import dev.arbjerg.lavalink.protocol.v3.Message
 import dev.arbjerg.lavalink.protocol.v4.json
+import dev.arbjerg.lavalink.api.sendMessage as sendV4Message
 import io.undertow.websockets.core.WebSocketCallback
 import io.undertow.websockets.core.WebSocketChannel
 import io.undertow.websockets.core.WebSockets
@@ -46,6 +48,7 @@ import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
 import java.net.InetSocketAddress
 import java.util.*
 import java.util.concurrent.*
+import dev.arbjerg.lavalink.protocol.v4.Message.ReadyEvent as V4ReadyEvent
 
 class SocketContext(
     private val sessionId: String,
@@ -217,7 +220,11 @@ class SocketContext(
     fun resume(session: WebSocketSession) {
         sessionPaused = false
         this.session = session
-        sendMessage(Message.ReadyEvent(true, sessionId))
+        if (version == 3) {
+            sendMessage(Message.ReadyEvent(true, sessionId))
+        } else {
+            sendV4Message(V4ReadyEvent(true, sessionId))
+        }
         log.info("Replaying ${resumeEventQueue.size} events")
 
         // Bulk actions are not guaranteed to be atomic, so we need to do this imperatively
@@ -253,8 +260,19 @@ class SocketContext(
 
     private inner class WsEventHandler(private val player: LavalinkPlayer) : KoeEventAdapter() {
         override fun gatewayClosed(code: Int, reason: String?, byRemote: Boolean) {
-            val event = Message.WebSocketClosedEvent(code, reason ?: "", byRemote, player.guildId.toString())
-            sendMessage(event)
+            if (version == 3) {
+                val event = Message.WebSocketClosedEvent(code, reason ?: "", byRemote, player.guildId.toString())
+                sendMessage(event)
+            } else {
+                val event = dev.arbjerg.lavalink.protocol.v4.Message.EmittedEvent.WebSocketClosedEvent(
+                    player.guildId.toString(),
+                    code,
+                    reason ?: "",
+                    byRemote
+                )
+
+                sendV4Message(event)
+            }
             SocketServer.sendPlayerUpdate(this@SocketContext, player)
         }
 
