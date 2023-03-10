@@ -25,8 +25,8 @@ package lavalink.server.io
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.api.*
-import dev.arbjerg.lavalink.api.sendMessage
-import dev.arbjerg.lavalink.protocol.v3.Message
+import dev.arbjerg.lavalink.protocol.v4.Message
+import dev.arbjerg.lavalink.protocol.v3.Message as V3Message
 import dev.arbjerg.lavalink.protocol.v4.json
 import dev.arbjerg.lavalink.api.sendMessage as sendV4Message
 import io.undertow.websockets.core.WebSocketCallback
@@ -48,7 +48,6 @@ import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
 import java.net.InetSocketAddress
 import java.util.*
 import java.util.concurrent.*
-import dev.arbjerg.lavalink.protocol.v4.Message.ReadyEvent as V4ReadyEvent
 
 class SocketContext(
     private val sessionId: String,
@@ -221,9 +220,9 @@ class SocketContext(
         sessionPaused = false
         this.session = session
         if (version == 3) {
-            sendMessage(Message.ReadyEvent(true, sessionId))
+            sendMessage(V3Message.ReadyEvent(true, sessionId))
         } else {
-            sendV4Message(V4ReadyEvent(true, sessionId))
+            sendV4Message(Message.ReadyEvent(true, sessionId))
         }
         log.info("Replaying ${resumeEventQueue.size} events")
 
@@ -261,10 +260,10 @@ class SocketContext(
     private inner class WsEventHandler(private val player: LavalinkPlayer) : KoeEventAdapter() {
         override fun gatewayClosed(code: Int, reason: String?, byRemote: Boolean) {
             if (version == 3) {
-                val event = Message.WebSocketClosedEvent(code, reason ?: "", byRemote, player.guildId.toString())
+                val event = V3Message.WebSocketClosedEvent(code, reason ?: "", byRemote, player.guildId.toString())
                 sendMessage(event)
             } else {
-                val event = dev.arbjerg.lavalink.protocol.v4.Message.EmittedEvent.WebSocketClosedEvent(
+                val event = Message.EmittedEvent.WebSocketClosedEvent(
                     player.guildId.toString(),
                     code,
                     reason ?: "",

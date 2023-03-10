@@ -21,7 +21,6 @@
  */
 package lavalink.server.util
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.tools.io.MessageInput
@@ -30,10 +29,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
-import dev.arbjerg.lavalink.protocol.v3.objectMapper
 import dev.arbjerg.lavalink.protocol.v4.*
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import lavalink.server.io.SocketContext
 import lavalink.server.io.SocketServer

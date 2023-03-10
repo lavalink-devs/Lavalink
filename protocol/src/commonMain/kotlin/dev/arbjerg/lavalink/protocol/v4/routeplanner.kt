@@ -129,7 +129,15 @@ sealed interface RoutePlannerStatus {
             INET_4_ADDRESS,
 
             @SerialName("Inet6Address")
-            INET_6_ADDRESS,
+            INET_6_ADDRESS;
+
+            companion object {
+                fun fromName(name: String) = when (name) {
+                    "Inet4Address" -> INET_4_ADDRESS
+                    "Inet6Address" -> INET_6_ADDRESS
+                    else -> error("Unexpected IpBlockType: $name")
+                }
+            }
         }
     }
 }
