@@ -185,7 +185,7 @@ class SocketContext(
         if (clazz.getDeclaredAnnotation(Metadata::class.java) != null) {
             val serializer = clazz.kotlin.serializerOrNull()
             if (serializer != null) {
-                sendMessage(serializer, message)
+                return sendMessage(serializer, message)
             }
         }
 
