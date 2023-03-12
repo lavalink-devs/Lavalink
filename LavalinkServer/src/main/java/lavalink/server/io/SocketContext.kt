@@ -181,6 +181,7 @@ class SocketContext(
     @OptIn(InternalSerializationApi::class)
     override fun sendMessage(message: Any) {
         val clazz = message.javaClass
+        // Check if class is Kotlin class
         if (clazz.getDeclaredAnnotation(Metadata::class.java) != null) {
             val serializer = clazz.kotlin.serializerOrNull()
             if (serializer != null) {
