@@ -21,7 +21,6 @@
  */
 package lavalink.server.io
 
-import dev.arbjerg.lavalink.api.sendMessage as sendV4Message
 import dev.arbjerg.lavalink.protocol.v4.*
 import lavalink.server.Launcher
 import lavalink.server.player.AudioLossCounter
@@ -68,7 +67,7 @@ class StatsCollector(val socketServer: SocketServer) {
     fun createTask(context: SocketContext): Runnable = Runnable {
         try {
             val stats = retrieveStats(context)
-            context.sendV4Message(Message.StatsEvent(stats))
+            context.sendMessage(Message.StatsEvent(stats))
         } catch (e: Exception) {
             log.error("Exception while sending stats", e)
         }

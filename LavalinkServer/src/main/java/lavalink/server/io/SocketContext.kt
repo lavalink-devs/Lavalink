@@ -28,12 +28,13 @@ import dev.arbjerg.lavalink.api.*
 import dev.arbjerg.lavalink.protocol.v4.Message
 import dev.arbjerg.lavalink.protocol.v3.Message as V3Message
 import dev.arbjerg.lavalink.protocol.v4.json
-import dev.arbjerg.lavalink.api.sendMessage as sendV4Message
 import io.undertow.websockets.core.WebSocketCallback
 import io.undertow.websockets.core.WebSocketChannel
 import io.undertow.websockets.core.WebSockets
 import io.undertow.websockets.jsr.UndertowSession
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.serializerOrNull
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.LavalinkPlayer
 import lavalink.server.v3.StatsCollectorV3
@@ -48,6 +49,7 @@ import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
 import java.net.InetSocketAddress
 import java.util.*
 import java.util.concurrent.*
+import kotlin.reflect.full.hasAnnotation
 
 class SocketContext(
     private val sessionId: String,
@@ -176,8 +178,18 @@ class SocketContext(
     override fun <T : Any?> sendMessage(serializer: SerializationStrategy<T>, message: T) =
         send(json.encodeToString(serializer, message))
 
-    @Deprecated("the v3 api is deprecated")
-    override fun sendMessage(message: Any?) = send(objectMapper.writeValueAsString(message))
+    @OptIn(InternalSerializationApi::class)
+    override fun sendMessage(message: Any) {
+        val clazz = message.javaClass.kotlin
+        if (clazz.hasAnnotation<Metadata>()) {
+            val serializer = clazz.serializerOrNull()
+            if (serializer != null) {
+                sendMessage(serializer, message)
+            }
+        }
+
+        return send(objectMapper.writeValueAsString(message))
+    }
 
     override fun getState(): ISocketContext.State = when {
         session.isOpen -> ISocketContext.State.OPEN
@@ -222,7 +234,7 @@ class SocketContext(
         if (version == 3) {
             sendMessage(V3Message.ReadyEvent(true, sessionId))
         } else {
-            sendV4Message(Message.ReadyEvent(true, sessionId))
+            sendMessage(Message.ReadyEvent(true, sessionId))
         }
         log.info("Replaying ${resumeEventQueue.size} events")
 
@@ -270,7 +282,7 @@ class SocketContext(
                     byRemote
                 )
 
-                sendV4Message(event)
+                sendMessage(event)
             }
             SocketServer.sendPlayerUpdate(this@SocketContext, player)
         }

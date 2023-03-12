@@ -7,7 +7,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Represents a WebSocket connection
@@ -63,12 +62,8 @@ public interface ISocketContext {
     }
 
     /**
-     * @deprecated as of v4.0 Koltinx.serialization is used for serialization, please
-     * use {@link ISocketContext#sendMessage(SerializationStrategy, Object)} and
-     * {@link ISocketContext#sendMessage(JsonElement)}
      * @param message a message to send to the WebSocket client, it should be compatible with Jackson
      */
-    @Deprecated
     void sendMessage(Object message);
 
     /**
