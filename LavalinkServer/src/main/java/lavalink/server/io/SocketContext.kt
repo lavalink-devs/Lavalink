@@ -180,9 +180,9 @@ class SocketContext(
 
     @OptIn(InternalSerializationApi::class)
     override fun sendMessage(message: Any) {
-        val clazz = message.javaClass.kotlin
-        if (clazz.hasAnnotation<Metadata>()) {
-            val serializer = clazz.serializerOrNull()
+        val clazz = message.javaClass
+        if (clazz.getDeclaredAnnotation(Metadata::class.java) != null) {
+            val serializer = clazz.kotlin.serializerOrNull()
             if (serializer != null) {
                 sendMessage(serializer, message)
             }
