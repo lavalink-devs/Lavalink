@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
 
 plugins {
@@ -110,6 +112,13 @@ kotlin {
 tasks {
     withType<KotlinJvmTest> {
         useJUnitPlatform()
+    }
+}
+
+// Use system Node.Js on NixOS
+if (System.getenv("NIX_PROFILES") != null) {
+    rootProject.plugins.withType<NodeJsRootPlugin> {
+        rootProject.the<NodeJsRootExtension>().download = false
     }
 }
 
