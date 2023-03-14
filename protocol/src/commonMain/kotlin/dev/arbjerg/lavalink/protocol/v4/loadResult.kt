@@ -1,31 +1,125 @@
+@file:Suppress("DataClassPrivateConstructor")
+
 package dev.arbjerg.lavalink.protocol.v4
 
+import dev.arbjerg.lavalink.protocol.v4.serialization.asPolymorphicDeserializer
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonContentPolymorphicSerializer
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 
-@Serializable
-data class LoadResult(
-    val loadType: ResultStatus,
-    val tracks: List<Track>,
-    val playlistInfo: PlaylistInfo?,
-    val pluginInfo: JsonObject?,
-    val exception: Exception?
-) {
+@Serializable(with = LoadResult.Serializer::class)
+sealed interface LoadResult {
+    val loadType: ResultStatus
+    val data: Data?
+
+    sealed interface Data
+
+    interface HasTracks {
+        val tracks: List<Track>
+    }
+
+    @Serializable
+    data class TrackLoaded private constructor(
+        override val loadType: ResultStatus,
+        override val data: Data
+    ) : LoadResult {
+        constructor(data: Data) : this(ResultStatus.TRACK, data)
+
+        @Serializable
+        data class Data(
+            val info: TrackInfo,
+            val pluginInfo: JsonObject?,
+            val encoded: String
+        ) : LoadResult.Data
+    }
+
+    @Serializable
+    data class PlaylistLoaded private constructor(
+        override val loadType: ResultStatus,
+        override val data: Data
+    ) : LoadResult {
+        constructor(data: Data) : this(ResultStatus.PLAYLIST, data)
+
+        @Serializable
+        data class Data(
+            val info: PlaylistInfo,
+            val pluginInfo: JsonObject?,
+            override val tracks: List<Track>
+        ) : LoadResult.Data, HasTracks
+    }
+
+    @Serializable
+    data class SearchResult private constructor(
+        override val loadType: ResultStatus,
+        override val data: Data
+    ) : LoadResult {
+        constructor(data: Data) : this(ResultStatus.SEARCH_RESULT, data)
+
+        @Serializable
+        data class Data(override val tracks: List<Track>) : HasTracks, LoadResult.Data
+    }
+
+    @Serializable
+    open class NoMatches private constructor(override val loadType: ResultStatus, override val data: Data?) :
+        LoadResult {
+        companion object {
+            private val instance: NoMatches = NoMatches(ResultStatus.NONE, null)
+            operator fun invoke() = instance
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is NoMatches) return false
+
+            if (loadType != other.loadType) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int = loadType.hashCode()
+
+        override fun toString(): String = "NoMatches"
+
+    }
+
+    @Serializable
+    data class LoadFailed private constructor(override val loadType: ResultStatus, override val data: Exception) :
+        LoadResult {
+        constructor(data: Exception) : this(ResultStatus.ERROR, data)
+    }
+
     companion object {
-        fun trackLoaded(track: Track) = LoadResult(ResultStatus.TRACK_LOADED, listOf(track), null, null, null)
-        fun playlistLoaded(playlistInfo: PlaylistInfo, pluginInfo: JsonObject, tracks: List<Track>) = LoadResult(
-            ResultStatus.PLAYLIST_LOADED,
-            tracks,
-            playlistInfo,
-            pluginInfo,
-            null
-        )
+        fun trackLoaded(track: Track) =
+            TrackLoaded(TrackLoaded.Data(track.info, track.pluginInfo, track.encoded))
 
-        fun searchResult(tracks: List<Track>) = LoadResult(ResultStatus.SEARCH_RESULT, tracks, null, null, null)
-        val noMatches = LoadResult(ResultStatus.NO_MATCHES, emptyList(), null, null, null)
-        fun loadFailed(exception: Exception) =
-            LoadResult(ResultStatus.LOAD_FAILED, emptyList(), null, null, exception)
+        fun playlistLoaded(playlistInfo: PlaylistInfo, pluginInfo: JsonObject, tracks: List<Track>) =
+            PlaylistLoaded(
+                PlaylistLoaded.Data(
+                    playlistInfo,
+                    pluginInfo,
+                    tracks
+                )
+            )
 
+        fun searchResult(tracks: List<Track>) = SearchResult(SearchResult.Data(tracks))
+        fun loadFailed(exception: Exception) = LoadFailed(exception)
+
+    }
+
+    object Serializer : JsonContentPolymorphicSerializer<LoadResult>(LoadResult::class) {
+        override fun selectDeserializer(element: JsonElement): DeserializationStrategy<LoadResult> =
+            element.asPolymorphicDeserializer<ResultStatus, _>(descriptor, "loadType") {
+                when (it) {
+                    ResultStatus.TRACK -> TrackLoaded.serializer()
+                    ResultStatus.PLAYLIST -> PlaylistLoaded.serializer()
+                    ResultStatus.SEARCH_RESULT -> SearchResult.serializer()
+                    ResultStatus.NONE -> NoMatches.serializer()
+                    ResultStatus.ERROR -> LoadFailed.serializer()
+                }
+            }
     }
 }
 
@@ -47,7 +141,7 @@ data class Exception(
     val message: String?,
     val severity: Severity,
     val cause: String
-) {
+) : LoadResult.Data {
 
     /**
      * Severity levels for FriendlyException
@@ -80,9 +174,18 @@ data class Exception(
 
 @Serializable
 enum class ResultStatus {
-    TRACK_LOADED,
-    PLAYLIST_LOADED,
+    @SerialName("track")
+    TRACK,
+
+    @SerialName("playlist")
+    PLAYLIST,
+
+    @SerialName("searchResult")
     SEARCH_RESULT,
-    NO_MATCHES,
-    LOAD_FAILED
+
+    @SerialName("none")
+    NONE,
+
+    @SerialName("error")
+    ERROR
 }

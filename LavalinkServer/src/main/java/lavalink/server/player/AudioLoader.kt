@@ -83,7 +83,7 @@ class AudioLoader(
 
     override fun noMatches() {
         log.info("No matches found")
-        loadResult.complete(LoadResult.noMatches)
+        loadResult.complete(LoadResult.NoMatches())
     }
 
     override fun loadFailed(e: FriendlyException) {
