@@ -24,31 +24,18 @@ sealed interface LoadResult {
     @Serializable
     data class TrackLoaded private constructor(
         override val loadType: ResultStatus,
-        override val data: Data
+        override val data: Track
     ) : LoadResult {
-        constructor(data: Data) : this(ResultStatus.TRACK, data)
-
-        @Serializable
-        data class Data(
-            val info: TrackInfo,
-            val pluginInfo: JsonObject?,
-            val encoded: String
-        ) : LoadResult.Data
+        constructor(data: Track) : this(ResultStatus.TRACK, data)
     }
 
     @Serializable
     data class PlaylistLoaded private constructor(
         override val loadType: ResultStatus,
-        override val data: Data
+        override val data: Playlist
     ) : LoadResult {
-        constructor(data: Data) : this(ResultStatus.PLAYLIST, data)
+        constructor(data: Playlist) : this(ResultStatus.PLAYLIST, data)
 
-        @Serializable
-        data class Data(
-            val info: PlaylistInfo,
-            val pluginInfo: JsonObject?,
-            override val tracks: List<Track>
-        ) : LoadResult.Data, HasTracks
     }
 
     @Serializable
@@ -92,12 +79,11 @@ sealed interface LoadResult {
     }
 
     companion object {
-        fun trackLoaded(track: Track) =
-            TrackLoaded(TrackLoaded.Data(track.info, track.pluginInfo, track.encoded))
+        fun trackLoaded(track: Track) = TrackLoaded(track)
 
         fun playlistLoaded(playlistInfo: PlaylistInfo, pluginInfo: JsonObject, tracks: List<Track>) =
             PlaylistLoaded(
-                PlaylistLoaded.Data(
+                Playlist(
                     playlistInfo,
                     pluginInfo,
                     tracks
@@ -134,7 +120,7 @@ data class Playlist(
     val info: PlaylistInfo,
     val pluginInfo: JsonObject,
     val tracks: List<Track>
-)
+) : LoadResult.Data
 
 @Serializable
 data class Exception(

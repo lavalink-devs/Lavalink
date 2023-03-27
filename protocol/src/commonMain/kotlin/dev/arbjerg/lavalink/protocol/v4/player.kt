@@ -24,7 +24,7 @@ data class Track(
     val encoded: String,
     val info: TrackInfo,
     val pluginInfo: JsonObject
-)
+) : LoadResult.Data
 
 @Serializable
 data class TrackInfo(
