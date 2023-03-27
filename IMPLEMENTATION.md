@@ -17,7 +17,7 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * removal of deprecated json fields like `track`.
 * addition of `artworkUrl` and `isrc` fields to the [Track Info](#track-info) object.
 * addition of the full [Track Object](#track) in [TrackStartEvent](#trackstartevent),  [TrackEndEvent](#trackendevent), [TrackExceptionEvent](#trackexceptionevent) and [TrackStuckEvent](#trackstuckevent).
-* updateed capitalization of [Track End Reason](#track-end-reason) and [Severity](#severity)
+* updated capitalization of [Track End Reason](#track-end-reason) and [Severity](#severity)
 * reworked [Load Result Object](#track-loading-result)
 
 ## Significant changes v3.6.0 -> v3.7.0
