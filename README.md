@@ -6,7 +6,7 @@ Being used in production by FredBoat, Dyno, LewdBot, and more.
 
 A [basic example bot](Testbot) is available.
 
-[![JDA guild](https://discordapp.com/api/guilds/125227483518861312/embed.png?style=banner2)](https://discord.gg/jtAWrzU)
+[![Lavalink uild](https://discordapp.com/api/guilds/1082302532421943407/embed.png?style=banner2)](https://discord.gg/ZW4s47Ppw4)
 
 ## Features
 * Powered by Lavaplayer
@@ -62,43 +62,44 @@ Additional labels for release candidates are available as extensions to the `MAJ
 ## Client libraries:
 | Client                                                                                                | Platform | Compatible With                            | REST API Support | Additional Information          |
 |-------------------------------------------------------------------------------------------------------|----------|--------------------------------------------|------------------|---------------------------------|
-| [LavaClient](https://github.com/HoneycombsTeam/LavaClient)                                            | Java     | JDA                                        | ❌               | Archived                        |
-| [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt)                                              | Kotlin   | JDA/Kord/**Any**                           | ❌               | Kotlin Coroutines               |
-| [Lavalink.py](https://github.com/Devoxin/Lavalink.py)                                                 | Python   | **Any**                                    | ❌               |                                 |
-| [lavasnek_rs](https://github.com/vicky5124/lavasnek_rs)                                               | Python   | **Any\***                                  | ❌               | *`asyncio`-based libraries only |
-| [lavaplayer-py](https://github.com/HazemMeqdad/lavaplayer)                                            | Python   | **Any\***                                  | ❌               | *`asyncio`-based libraries only |
-| [Mafic](https://github.com/ooliver1/mafic)                                                            | Python   | discord.py **V2**/nextcord/disnake/py-cord | ✅               |                                 |
-| [Wavelink](https://github.com/PythonistaGuild/Wavelink)                                               | Python   | discord.py **V2**                          | ❌               |                                 |
-| [Pomice](https://github.com/cloudwithax/pomice)                                                       | Python   | discord.py **V2**                          | ✅               |                                 |
-| [discord-ext-lava](https://github.com/Axelware/discord-ext-lava)                                      | Python   | discord.py                                 | ❌               |                                 |
-| [Lavapy](https://github.com/Aspect1103/Lavapy)                                                        | Python   | discord.py                                 | ❌               |                                 |
-| [Magma](https://github.com/initzx/magma)                                                              | Python   | discord.py                                 | ❌               |                                 |
-| [interactions-lavalink](https://github.com/interactions-py/lavalink)                                  | Python   | interactions.py                            | ❌               |                                 |
-| [Lavadeno](https://github.com/lavaclient/lavadeno)                                                    | Deno     | **Any**                                    | ❌               |                                 |
-| [LavaJS](https://github.com/OverleapTechnologies/LavaJS)                                              | Node.js  | **Any**                                    | ❌               |                                 |
-| [LavaClient](https://github.com/lavaclient/lavaclient)                                                | Node.js  | **Any**                                    | ❌               |                                 |
-| [Lavacoffee](https://github.com/XzFirzal/lavacoffee)                                                  | Node.js  | **Any**                                    | ❌               |                                 |
-| [Lavacord](https://github.com/lavacord/lavacord)                                                      | Node.js  | **Any**                                    | ❌               |                                 |
-| [FastLink](https://github.com/ThePedroo/FastLink)                                                     | Node.js  | **Any**                                    | ❌               |                                 |
-| [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)                                              | Node.js  | **Any**                                    | ❌               |                                 |
-| [@skyra/audio](https://github.com/skyra-project/audio)                                                | Node.js  | discord.js                                 | ❌               | Archived                        |
-| [Poru](https://github.com/parasop/poru)                                                               | Node.js  | **Any**                                    | ✅               |                                 |
-| [Shoukaku](https://github.com/Deivu/Shoukaku)                                                         | Node.js  | **Any**                                    | ✅               |                                 |
-| [Lavaudio](https://github.com/rilysh/lavaudio)                                                        | Node.js  | **Any**                                    | ❌               |                                 |
-| [Gorilink](https://github.com/Gorillas-Team/Gorilink)                                                 | Node.js  | discord.js                                 | ❌               | Archived/Unmaintained           |
-| [SandySounds](https://github.com/MrJohnCoder/SandySounds)                                             | Node.js  | **Any**                                    | ❌               | Unmaintained                    |
-| [eris-lavalink](https://github.com/briantanner/eris-lavalink)                                         | Node.js  | eris                                       | ❌               | Unmaintained                    |
-| [Victoria](https://github.com/Yucked/Victoria)                                                        | .NET     | Discord.Net                                | ❌               |                                 |
-| [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)                                          | .NET     | Discord\.Net/DSharpPlus                    | ❌               |                                 |
-| [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink)       | .NET     | DSharpPlus                                 | ❌               |                                 |
-| [Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET)                                            | .NET     | **Any**                                    | ❌               | Unmaintained                    |
-| [SharpLink](https://github.com/Devoxin/SharpLink)                                                     | .NET     | Discord.Net                                | ❌               | Unmaintained                    |
-| [DisCatSharp.Lavalink](https://github.com/Aiko-IT-Systems/DisCatSharp/tree/main/DisCatSharp.Lavalink) | .NET     | DisCatSharp                                | ❌               |                                 |
-| [DisGoLink](https://github.com/disgoorg/disgolink)                                                    | Go       | **Any**                                    | ❌               |                                 |
-| [waterlink](https://github.com/lukasl-dev/waterlink)                                                  | Go       | **Any**                                    | ❌               |                                 |
-| [gavalink](https://github.com/foxbot/gavalink)                                                        | Go       | **Any**                                    | ❌               | Unmaintained                    |
-| [Lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)                                               | Rust     | **Any\***                                  | ❌               | *`tokio`-based libraries only   |
-| [Coglink](https://github.com/ThePedroo/Coglink)                                                       | C        | Concord                                    | ❌               |                                 |
+| [Lavalink-Client](https://github.com/freyacodes/lavalink-client)                                      | Java     | JDA/**Any**                                | ❌                |                                 |
+| [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt)                                              | Kotlin   | JDA/Kord/**Any**                           | ❌                | Kotlin Coroutines               |
+| [Lavalink.py](https://github.com/Devoxin/Lavalink.py)                                                 | Python   | **Any**                                    | ❌                |                                 |
+| [lavasnek_rs](https://github.com/vicky5124/lavasnek_rs)                                               | Python   | **Any\***                                  | ❌                | *`asyncio`-based libraries only |
+| [lavaplayer-py](https://github.com/HazemMeqdad/lavaplayer)                                            | Python   | **Any\***                                  | ❌                | *`asyncio`-based libraries only |
+| [Mafic](https://github.com/ooliver1/mafic)                                                            | Python   | discord.py **V2**/nextcord/disnake/py-cord | ✅                |                                 |
+| [Wavelink](https://github.com/PythonistaGuild/Wavelink)                                               | Python   | discord.py **V2**                          | ✅                |                                 |
+| [Pomice](https://github.com/cloudwithax/pomice)                                                       | Python   | discord.py **V2**                          | ✅                |                                 |
+| [discord-ext-lava](https://github.com/Axelware/discord-ext-lava)                                      | Python   | discord.py                                 | ❌                |                                 |
+| [Lavapy](https://github.com/Aspect1103/Lavapy)                                                        | Python   | discord.py                                 | ❌                | Unmaintained                    |
+| [Magma](https://github.com/initzx/magma)                                                              | Python   | discord.py                                 | ❌                | Unmaintained                    |
+| [interactions-lavalink](https://github.com/interactions-py/lavalink)                                  | Python   | interactions.py                            | ❌                |                                 |
+| [Lavadeno](https://github.com/lavaclient/lavadeno)                                                    | Deno     | **Any**                                    | ❌                |                                 |
+| [LavaJS](https://github.com/OverleapTechnologies/LavaJS)                                              | Node.js  | **Any**                                    | ❌                | Unmaintained                    |
+| [LavaClient](https://github.com/lavaclient/lavaclient)                                                | Node.js  | **Any**                                    | ❌                |                                 |
+| [Lavacoffee](https://github.com/XzFirzal/lavacoffee)                                                  | Node.js  | **Any**                                    | ❌                | Unmaintained                    |
+| [Lavacord](https://github.com/lavacord/lavacord)                                                      | Node.js  | **Any**                                    | ✅                |                                 |
+| [FastLink](https://github.com/ThePedroo/FastLink)                                                     | Node.js  | **Any**                                    | ❌                |                                 |
+| [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)                                              | Node.js  | **Any**                                    | ❌                |                                 |
+| [@skyra/audio](https://github.com/skyra-project/audio)                                                | Node.js  | discord.js                                 | ❌                | Archived                        |
+| [Poru](https://github.com/parasop/poru)                                                               | Node.js  | **Any**                                    | ✅                |                                 |
+| [Shoukaku](https://github.com/Deivu/Shoukaku)                                                         | Node.js  | **Any**                                    | ✅                |                                 |
+| [Lavaudio](https://github.com/rilysh/lavaudio)                                                        | Node.js  | **Any**                                    | ❌                |                                 |
+| [Gorilink](https://github.com/Gorillas-Team/Gorilink)                                                 | Node.js  | discord.js                                 | ❌                | Archived/Unmaintained           |
+| [SandySounds](https://github.com/MrJohnCoder/SandySounds)                                             | Node.js  | **Any**                                    | ❌                | Unmaintained                    |
+| [eris-lavalink](https://github.com/briantanner/eris-lavalink)                                         | Node.js  | eris                                       | ❌                | Unmaintained                    |
+| [Victoria](https://github.com/Yucked/Victoria)                                                        | .NET     | Discord.Net                                | ❌                |                                 |
+| [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)                                          | .NET     | Discord\.Net/DSharpPlus                    | ❌                |                                 |
+| [DSharpPlus.Lavalink](https://github.com/DSharpPlus/DSharpPlus/tree/master/DSharpPlus.Lavalink)       | .NET     | DSharpPlus                                 | ❌                |                                 |
+| [Lavalink.NET](https://github.com/Dev-Yukine/Lavalink.NET)                                            | .NET     | **Any**                                    | ❌                | Unmaintained                    |
+| [SharpLink](https://github.com/Devoxin/SharpLink)                                                     | .NET     | Discord.Net                                | ❌                | Unmaintained                    |
+| [DisCatSharp.Lavalink](https://github.com/Aiko-IT-Systems/DisCatSharp/tree/main/DisCatSharp.Lavalink) | .NET     | DisCatSharp                                | ❌                |                                 |
+| [Nomia](https://github.com/DHCPCD9/Nomia)                                                             | .NET     | DSharpPlus                                 | ✅                |                                 |
+| [DisGoLink](https://github.com/disgoorg/disgolink)                                                    | Go       | **Any**                                    | ✅                |                                 |
+| [waterlink](https://github.com/lukasl-dev/waterlink)                                                  | Go       | **Any**                                    | ❌                |                                 |
+| [gavalink](https://github.com/foxbot/gavalink)                                                        | Go       | **Any**                                    | ❌                | Unmaintained                    |
+| [Lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)                                               | Rust     | **Any\***                                  | ❌                | *`tokio`-based libraries only   |
+| [Coglink](https://github.com/ThePedroo/Coglink)                                                       | C        | Concord                                    | ✅                |                                 |
 
 Or alternatively, you can create your own client library, following the [implementation documentation](https://github.com/freyacodes/Lavalink/blob/master/IMPLEMENTATION.md).
 Any client libraries marked with `Unmaintained` have been marked as such as their repositories have not received any commits for at least 1 year since time of checking,
