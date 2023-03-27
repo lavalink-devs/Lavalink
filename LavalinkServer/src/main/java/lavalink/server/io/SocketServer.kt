@@ -25,6 +25,7 @@ package lavalink.server.io
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.api.AudioFilterExtension
+import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.api.PluginEventHandler
 import dev.arbjerg.lavalink.api.WebSocketExtension
 import dev.arbjerg.lavalink.protocol.v3.Message
@@ -51,6 +52,7 @@ final class SocketServer(
     private val eventHandlers: List<PluginEventHandler>,
     private val webSocketExtensions: List<WebSocketExtension>,
     private val filterExtensions: List<AudioFilterExtension>,
+    private val pluginInfoModifiers: List<AudioPluginInfoModifier>,
     private val objectMapper: ObjectMapper
 ) : TextWebSocketHandler() {
 
@@ -142,6 +144,7 @@ final class SocketServer(
             eventHandlers,
             webSocketExtensions,
             filterExtensions,
+            pluginInfoModifiers,
             objectMapper
         )
         contextMap[sessionId] = socketContext

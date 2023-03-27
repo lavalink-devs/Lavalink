@@ -27,8 +27,10 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
+import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.protocol.v4.Exception
 import dev.arbjerg.lavalink.protocol.v4.Message
+import dev.arbjerg.lavalink.protocol.v4.encodeTrack
 import lavalink.server.io.SocketServer.Companion.sendPlayerUpdate
 import lavalink.server.util.getRootCause
 import lavalink.server.util.toTrack
@@ -36,7 +38,8 @@ import org.slf4j.LoggerFactory
 
 class EventEmitter(
     private val audioPlayerManager: AudioPlayerManager,
-    private val player: LavalinkPlayer
+    private val player: LavalinkPlayer,
+    private val pluginInfoModifiers: List<AudioPluginInfoModifier>
 ) : AudioEventAdapter() {
 
     companion object {
@@ -45,7 +48,7 @@ class EventEmitter(
 
     override fun onTrackStart(player: AudioPlayer, track: AudioTrack) {
         this.player.socket.sendMessage(
-            Message.TrackStartEvent(track.toTrack(audioPlayerManager), this.player.guildId.toString())
+            Message.TrackStartEvent(track.toTrack(audioPlayerManager, pluginInfoModifiers), this.player.guildId.toString())
         )
     }
 
@@ -58,7 +61,7 @@ class EventEmitter(
         }
 
         this.player.socket.sendMessage(
-            Message.TrackEndEvent(track.toTrack(audioPlayerManager), reason, this.player.guildId.toString())
+            Message.TrackEndEvent(track.toTrack(audioPlayerManager, pluginInfoModifiers), reason, this.player.guildId.toString())
         )
     }
 
@@ -66,7 +69,7 @@ class EventEmitter(
     override fun onTrackException(player: AudioPlayer, track: AudioTrack, exception: FriendlyException) {
         this.player.socket.sendMessage(
             Message.TrackExceptionEvent(
-                track.toTrack(audioPlayerManager),
+                track.toTrack(audioPlayerManager, pluginInfoModifiers),
                 Exception(exception.message, exception.severity, getRootCause(exception).toString()),
                 this.player.guildId.toString()
             )
@@ -76,7 +79,7 @@ class EventEmitter(
     override fun onTrackStuck(player: AudioPlayer, track: AudioTrack, thresholdMs: Long) {
         log.warn("${track.info.title} got stuck! Threshold surpassed: ${thresholdMs}ms")
         this.player.socket.sendMessage(
-            Message.TrackStuckEvent(track.toTrack(audioPlayerManager), thresholdMs, this.player.guildId.toString())
+            Message.TrackStuckEvent(track.toTrack(audioPlayerManager, pluginInfoModifiers), thresholdMs, this.player.guildId.toString())
         )
         sendPlayerUpdate(this.player.socket, this.player)
     }
