@@ -137,12 +137,14 @@ data class Exception(
         /**
          * The cause is known and expected, indicates that there is nothing wrong with the library itself.
          */
+        @SerialName("common")
         COMMON,
 
         /**
          * The cause might not be exactly known, but is possibly caused by outside factors. For example when an outside
          * service responds in a format that we do not expect.
          */
+        @SerialName("suspicious")
         SUSPICIOUS,
 
         /**
@@ -150,6 +152,7 @@ data class Exception(
          * This is the default level and other levels are used in cases where the thrower has more in-depth knowledge
          * about the error.
          */
+        @SerialName("fault")
         FAULT;
 
         companion object
@@ -166,10 +169,10 @@ enum class ResultStatus {
     @SerialName("playlist")
     PLAYLIST,
 
-    @SerialName("searchResult")
+    @SerialName("search")
     SEARCH_RESULT,
 
-    @SerialName("none")
+    @SerialName("empty")
     NONE,
 
     @SerialName("error")
