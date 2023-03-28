@@ -242,7 +242,7 @@ class MessageSerializerTest {
               },
               "exception": {
                 "message": "...",
-                "severity": "COMMON",
+                "severity": "common",
                 "cause": "..."
               }
             }

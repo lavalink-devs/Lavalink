@@ -68,7 +68,7 @@ class LoadResultSerializerTest {
               "loadType": "error",
               "data": {
                 "message": "The uploader has not made this video available in your country.",
-                "severity": "COMMON",
+                "severity": "common",
                 "cause": "com.sedmelluq.discord.lavaplayer.tools.FriendlyException: This video is not available in your country."
               }
             }
@@ -93,7 +93,7 @@ class LoadResultSerializerTest {
         //language=json
         val json = """
             {
-              "loadType": "none",
+              "loadType": "empty",
               "data": null
             }
         """.trimIndent()
@@ -113,7 +113,7 @@ class LoadResultSerializerTest {
         //language=json
         val json = """
             {
-              "loadType": "searchResult",
+              "loadType": "search",
               "data": {
                 "tracks": []
               }
@@ -141,7 +141,7 @@ class LoadResultSerializerTest {
                   "name": "Example YouTube Playlist",
                   "selectedTrack": 3
                 },
-                "pluginInfo": null,
+                "pluginInfo": {},
                 "tracks": []
               }
             }
@@ -152,7 +152,7 @@ class LoadResultSerializerTest {
             loadType shouldBe ResultStatus.PLAYLIST
             assertIs<LoadResult.PlaylistLoaded>(this)
             data {
-                pluginInfo shouldBe null
+                pluginInfo shouldBe emptyMap()
                 info {
                     name shouldBe "Example YouTube Playlist"
                     selectedTrack shouldBe 3
