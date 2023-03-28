@@ -17,6 +17,8 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * removal of deprecated json fields like `track`.
 * addition of `artworkUrl` and `isrc` fields to the [Track Info](#track-info) object.
 * addition of the full [Track Object](#track) in [TrackStartEvent](#trackstartevent),  [TrackEndEvent](#trackendevent), [TrackExceptionEvent](#trackexceptionevent) and [TrackStuckEvent](#trackstuckevent).
+* updated capitalization of [Track End Reason](#track-end-reason) and [Severity](#severity)
+* reworked [Load Result Object](#track-loading-result)
 
 ## Significant changes v3.6.0 -> v3.7.0
 
@@ -361,7 +363,8 @@ Emitted when a track starts playing.
       "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
       "isrc": null,
       "sourceName": "youtube"
-    }
+    },
+    "pluginInfo": {}
   }
 }
 ```
@@ -381,13 +384,13 @@ Emitted when a track ends.
 
 ##### Track End Reason
 
-| Reason        | Description                | May Start Next |
-|---------------|----------------------------|----------------|
-| `FINISHED`    | The track finished playing | true           |
-| `LOAD_FAILED` | The track failed to load   | true           |
-| `STOPPED`     | The track was stopped      | false          |
-| `REPLACED`    | The track was replaced     | false          |
-| `CLEANUP`     | The track was cleaned up   | false          |
+| Reason       | Description                | May Start Next |
+|--------------|----------------------------|----------------|
+| `finished`   | The track finished playing | true           |
+| `loadFailed` | The track failed to load   | true           |
+| `stopped`    | The track was stopped      | false          |
+| `replaced`   | The track was replaced     | false          |
+| `cleanup`    | The track was cleaned up   | false          |
 
 <details>
 <summary>Example Payload</summary>
@@ -411,9 +414,10 @@ Emitted when a track ends.
       "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
       "isrc": null,
       "sourceName": "youtube"
-    }
+    },
+    "pluginInfo": {}
   },
-  "reason": "FINISHED"
+  "reason": "finished"
 }
 ```
 
@@ -442,9 +446,9 @@ Emitted when a track throws an exception.
 
 | Severity     | Description                                                                                                                                                                                                                            |
 |--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `COMMON`     | The cause is known and expected, indicates that there is nothing wrong with the library itself                                                                                                                                         |
-| `SUSPICIOUS` | The cause might not be exactly known, but is possibly caused by outside factors. For example when an outside service responds in a format that we do not expect                                                                        |
-| `FAULT`      | If the probable cause is an issue with the library or when there is no way to tell what the cause might be. This is the default level and other levels are used in cases where the thrower has more in-depth knowledge about the error |
+| `common`     | The cause is known and expected, indicates that there is nothing wrong with the library itself                                                                                                                                         |
+| `suspicious` | The cause might not be exactly known, but is possibly caused by outside factors. For example when an outside service responds in a format that we do not expect                                                                        |
+| `fault`      | If the probable cause is an issue with the library or when there is no way to tell what the cause might be. This is the default level and other levels are used in cases where the thrower has more in-depth knowledge about the error |
 
 <details>
 <summary>Example Payload</summary>
@@ -468,11 +472,12 @@ Emitted when a track throws an exception.
       "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
       "isrc": null,
       "sourceName": "youtube"
-    }
+    },
+    "pluginInfo": {}
   },
   "exception": {
     "message": "...",
-    "severity": "COMMON",
+    "severity": "common",
     "cause": "..."
   }
 }
@@ -513,7 +518,8 @@ Emitted when a track gets stuck while playing.
       "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
       "isrc": null,
       "sourceName": "youtube"
-    }
+    },
+    "pluginInfo": {}
   },
   "thresholdMs": 123456789
 }
@@ -616,11 +622,11 @@ GET /v4/sessions/{sessionId}/players
 
 ##### Track
 
-| Field      | Type                             | Description                        |
-|------------|----------------------------------|------------------------------------|
-| encoded    | string                           | The base64 encoded track data      |
-| info       | [Track Info](#track-info) object | Info about the track               |
-| pluginInfo | object                           | Additional track info from plugins |
+| Field      | Type                             | Description                             |
+|------------|----------------------------------|-----------------------------------------|
+| encoded    | string                           | The base64 encoded track data           |
+| info       | [Track Info](#track-info) object | Info about the track                    |
+| pluginInfo | object                           | Addition track info provided by plugins |
 
 ##### Track Info
 
@@ -671,7 +677,8 @@ with the Voice Server Update. Please refer to https://discord.com/developers/doc
         "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
         "isrc": null,
         "sourceName": "youtube"
-      }
+      },
+      "pluginInfo": {}
     },
     "volume": 100,
     "paused": false,
@@ -1120,133 +1127,134 @@ Response:
 
 ##### Track Loading Result
 
-| Field        | Type                                    | Description                                               | Required Load Type                                 |
-|--------------|-----------------------------------------|-----------------------------------------------------------|----------------------------------------------------|
-| loadType     | [LoadResultType](#load-result-type)     | The type of the result                                    |                                                    |
-| playlistInfo | ?[Playlist Info](#playlist-info) object | Additional info if the the load type is `PLAYLIST_LOADED` | `PLAYLIST_LOADED`                                  |
-| pluginInfo   | ?object                                 | Additional playlist info from plugins                     | `PLAYLIST_LOADED`                                  |
-| tracks       | array of [Tracks](#track)               | All tracks which have been loaded                         | `TRACK_LOADED`, `PLAYLIST_LOADED`, `SEARCH_RESULT` |
-| exception    | ?[Exception](#exception-object) object  | The [Exception](#exception-object) this load failed with  | `LOAD_FAILED`                                      |
+| Field    | Type                                | Description            |       
+|----------|-------------------------------------|------------------------|
+| loadType | [LoadResultType](#load-result-type) | The type of the result | 
+| data     | [LoadResultData](#load-result-data) | The data of the result |
 
 ##### Load Result Type
 
-| Load Result Type  | Description                                  |
-|-------------------|----------------------------------------------|
-| `TRACK_LOADED`    | A track has been loaded                      |
-| `PLAYLIST_LOADED` | A playlist has been loaded                   |
-| `SEARCH_RESULT`   | A search result has been loaded              |
-| `NO_MATCHES`      | There has been no matches to your identifier |
-| `LOAD_FAILED`     | Loading has failed                           |
+| Load Result Type | Description                                   |
+|------------------|-----------------------------------------------|
+| `track`          | A track has been loaded                       |
+| `playlist`       | A playlist has been loaded                    |
+| `search`         | A search result has been loaded               |
+| `empty`          | There has been no matches for your identifier |
+| `error`          | Loading has failed with an error              |
 
-##### Playlist Info
+##### Load Result Data
 
-| Field         | Type   | Description                                                      |
-|---------------|--------|------------------------------------------------------------------|
-| name          | string | The name of the loaded playlist                                  |
-| selectedTrack | int    | The selected track in this Playlist (-1 if no track is selected) |
+###### Load Result Data - Track
+
+[Track](#track) object with the loaded track.
 
 <details>
-<summary>Track Loaded Example Payload</summary>
+<summary>Example Payload</summary>
 
 ```yaml
 {
-  "loadType": "TRACK_LOADED",
-  "playlistInfo": null,
-  "pluginInfo": null,
-  "tracks": [
-    {
-      "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-      "info": {
-        "identifier": "dQw4w9WgXcQ",
-        "isSeekable": true,
-        "author": "RickAstleyVEVO",
-        "length": 212000,
-        "isStream": false,
-        "position": 0,
-        "title": "Rick Astley - Never Gonna Give You Up",
-        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-        "isrc": null,
-        "sourceName": "youtube"
-      }
-    }
-  ],
-  "exception": null
-}
-```
-
-</details>
-
-<details>
-<summary>Playlist Loaded Example Payload</summary>
-
-```yaml
-{
-  "loadType": "PLAYLIST_LOADED",
-  "playlistInfo": {
-    "name": "Example YouTube Playlist",
-    "selectedTrack": 3
-  },
-  "pluginInfo": {},
-  "tracks": [
-    ...
-  ],
-  "exception": null
-}
-```
-
-</details>
-
-<details>
-<summary>Search Result Example Payload</summary>
-
-```yaml
-{
-  "loadType": "SEARCH_RESULT",
-  "playlistInfo": null,
-  "pluginInfo": null,
-  "tracks": [
-    ...
-  ],
-  "exception": null
-}
-```
-
-</details>
-
-<details>
-<summary>No Matches Example Payload</summary>
-
-```json
-{
-  "loadType": "NO_MATCHES",
-  "playlistInfo": null,
-  "pluginInfo": null,
-  "tracks": [],
-  "exception": null
-}
-```
-
-</details>
-
-<details>
-<summary>Load Failed Example Payload</summary>
-
-```json
-{
-  "loadType": "LOAD_FAILED",
-  "playlistInfo": null,
-  "pluginInfo": null,
-  "tracks": [],
-  "exception": {
-    "message": "The uploader has not made this video available in your country.",
-    "severity": "COMMON",
-    "cause": "com.sedmelluq.discord.lavaplayer.tools.FriendlyException: This video is not available in your country."
+  "loadType": "track",
+  "data": {
+    "encoded": "...",
+    "info": { ... },
+    "pluginInfo": { ... }
   }
 }
 ```
 
 </details>
+
+###### Load Result Data - Playlist
+
+| Field      | Type                           | Description                                 |
+|------------|--------------------------------|---------------------------------------------|
+| info       | [PlaylistInfo](#playlist-info) | The info of the playlist                    |
+| pluginInfo | Object                         | Addition playlist info provided by plugins  |
+| tracks     | Array of [Track](#track)       | The tracks of the playlist                  |
+
+###### Playlist Info
+
+| Field          | Type   | Description                                                     |
+|----------------|--------|-----------------------------------------------------------------|
+| name           | string | The name of the playlist                                        |
+| selectedTrack? | int    | The selected track of the playlist (-1 if no track is selected) |
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+{
+  "loadType": "playlist",
+  "data": {
+    "info": { ... },
+    "pluginInfo": { ... },
+    "tracks": [ ... ]
+  }
+}
+```
+
+</details>
+
+###### Load Result Data - Search
+
+Array of [Track Objects](#track) with the search results.
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+{
+  "loadType": "search",
+  "data": [
+    {
+      "encoded": "...",
+      "info": { ... },
+      "pluginInfo": { ... }
+    },
+    ...
+  ]
+}
+```
+
+</details>
+
+###### Load Result Data - Empty
+
+Empty object.
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+{
+  "loadType": "empty",
+  "data": {}
+}
+```
+
+</details>
+
+###### Load Result Data - Error
+
+[Exception Object](#exception-object) with the error.
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+{
+  "loadType": "error",
+  "data": { 
+    "message": "Something went wrong",
+    "severity": "fatal",
+    "cause": "..."
+  }
+}
+```
+
+</details>
+
+---
 
 #### Track Searching
 
@@ -1286,7 +1294,8 @@ Response:
     "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
     "isrc": null,
     "sourceName": "youtube"
-  }
+  },
+  "pluginInfo": {}
 }
 ```
 
@@ -1339,7 +1348,8 @@ Array of [Track Objects](#track)
       "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
       "isrc": null,
       "sourceName": "youtube"
-    }
+    },
+    "pluginInfo": {}
   },
   ...
 ]
