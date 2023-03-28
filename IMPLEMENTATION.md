@@ -1174,10 +1174,10 @@ Response:
 
 ###### Playlist Info
 
-| Field          | Type   | Description                                                     |
-|----------------|--------|-----------------------------------------------------------------|
-| name           | string | The name of the playlist                                        |
-| selectedTrack? | int    | The selected track of the playlist (-1 if no track is selected) |
+| Field         | Type   | Description                                                     |
+|---------------|--------|-----------------------------------------------------------------|
+| name          | string | The name of the playlist                                        |
+| selectedTrack | int    | The selected track of the playlist (-1 if no track is selected) |
 
 <details>
 <summary>Example Payload</summary>
