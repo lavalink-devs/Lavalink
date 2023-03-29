@@ -203,7 +203,7 @@ Dispatched every x (configurable in `application.yml`) seconds with the current 
 | Field     | Type | Description                                                                            |
 |-----------|------|----------------------------------------------------------------------------------------|
 | time      | int  | Unix timestamp in milliseconds                                                         |
-| position? | int  | The position of the track in milliseconds                                              |
+| position  | int  | The position of the track in milliseconds                                              |
 | connected | bool | If Lavalink is connected to the voice gateway                                          |
 | ping      | int  | The ping of the node to the Discord voice server in milliseconds (-1 if not connected) |
 
