@@ -185,7 +185,7 @@ class MessageSerializerTest {
                 },
                 "pluginInfo": {}
               },
-              "reason": "FINISHED"
+              "reason": "finished"
             }
         """.trimIndent()
 
