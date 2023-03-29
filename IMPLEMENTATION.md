@@ -772,16 +772,16 @@ Query Params:
 
 Request:
 
-| Field           | Type                               | Description                                                                   |
-|-----------------|------------------------------------|-------------------------------------------------------------------------------|
-| encodedTrack? * | ?string                            | The encoded track base64 to play. `null` stops the current track              |
-| identifier? *   | string                             | The track identifier to play                                                  |
-| position?       | int                                | The track position in milliseconds                                            |
-| endTime?        | ?int                               | The track end time in milliseconds (must be > 0)                              |
-| volume?         | int                                | The player volume from 0 to 1000                                              |
-| paused?         | bool                               | Whether the player is paused                                                  |
-| filters?        | [Filters](#filters) object         | The new filters to apply. This will override all previously applied filters   |                   
-| voice?          | [Voice State](#voice-state) object | Information required for connecting to Discord, without `connected` or `ping` |
+| Field           | Type                               | Description                                                                 |
+|-----------------|------------------------------------|-----------------------------------------------------------------------------|
+| encodedTrack? * | ?string                            | The encoded track base64 to play. `null` stops the current track            |
+| identifier? *   | string                             | The track identifier to play                                                |
+| position?       | int                                | The track position in milliseconds                                          |
+| endTime?        | ?int                               | The track end time in milliseconds (must be > 0)                            |
+| volume?         | int                                | The player volume from 0 to 1000                                            |
+| paused?         | bool                               | Whether the player is paused                                                |
+| filters?        | [Filters](#filters) object         | The new filters to apply. This will override all previously applied filters |                   
+| voice?          | [Voice State](#voice-state) object | Information required for connecting to Discord                              |
 
 > **Note**
 > - `encodedTrack` and `identifier` are mutually exclusive.
