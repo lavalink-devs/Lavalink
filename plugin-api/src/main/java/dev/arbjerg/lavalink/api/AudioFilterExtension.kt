@@ -39,6 +39,7 @@ interface AudioFilterExtension {
      * @param output the output to be used by the produced filter.
      * @return a filter which produces the desired audio effect.
      */
+    @Suppress("DEPRECATION")
     @Deprecated(
         """as of v4.0.0 Kotlinx.serialization is used, implement
       AudioFilterExtension#build(JsonElement, AudioDataFormat, FloatPcmAudioFilter) instead"""
@@ -54,6 +55,7 @@ interface AudioFilterExtension {
      * @param output the output to be used by the produced filter.
      * @return a filter which produces the desired audio effect.
      */
+    @Suppress("DEPRECATION")
     fun build(data: JsonElement, format: AudioDataFormat?, output: FloatPcmAudioFilter?): FloatPcmAudioFilter? =
         build(data.toJsonNode(), format, output)
 
@@ -75,6 +77,7 @@ interface AudioFilterExtension {
      * @param data JSON data received from the client under the extension name key.
      * @return whether to build a filter. Returning false makes this extension do nothing.
      */
+    @Suppress("DEPRECATION")
     @Deprecated(
         """as of v4.0.0 Kotlinx.serialization is used, implement
       AudioFilterExtension#isEnabled(JsonElement) instead"""
@@ -87,5 +90,6 @@ interface AudioFilterExtension {
      * @param data JSON data received from the client under the extension name key.
      * @return whether to build a filter. Returning false makes this extension do nothing.
      */
+    @Suppress("DEPRECATION")
     fun isEnabled(data: JsonElement): Boolean = isEnabled(data.toJsonNode())
 }
