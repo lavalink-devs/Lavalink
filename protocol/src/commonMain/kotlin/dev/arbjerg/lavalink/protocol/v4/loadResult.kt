@@ -43,7 +43,7 @@ sealed interface LoadResult {
         override val loadType: ResultStatus,
         override val data: Data
     ) : LoadResult {
-        constructor(data: Data) : this(ResultStatus.SEARCH_RESULT, data)
+        constructor(data: Data) : this(ResultStatus.SEARCH, data)
 
         @Serializable
         data class Data(override val tracks: List<Track>) : HasTracks, LoadResult.Data
@@ -101,7 +101,7 @@ sealed interface LoadResult {
                 when (it) {
                     ResultStatus.TRACK -> TrackLoaded.serializer()
                     ResultStatus.PLAYLIST -> PlaylistLoaded.serializer()
-                    ResultStatus.SEARCH_RESULT -> SearchResult.serializer()
+                    ResultStatus.SEARCH -> SearchResult.serializer()
                     ResultStatus.NONE -> NoMatches.serializer()
                     ResultStatus.ERROR -> LoadFailed.serializer()
                 }
@@ -170,7 +170,7 @@ enum class ResultStatus {
     PLAYLIST,
 
     @SerialName("search")
-    SEARCH_RESULT,
+    SEARCH,
 
     @SerialName("empty")
     NONE,
