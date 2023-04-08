@@ -822,7 +822,7 @@ where -0.25 means the given band is completely muted, and 0.25 means it is doubl
 
 | Field | Type  | Description             |
 |-------|-------|-------------------------|
-| bands | int   | The band (0 to 14)      |
+| band  | int   | The band (0 to 14)      |
 | gain  | float | The gain (-0.25 to 1.0) |
 
 ##### Karaoke
@@ -1503,7 +1503,7 @@ Response:
 
 | Field            | Type   | Description                                              |
 |------------------|--------|----------------------------------------------------------|
-| address          | string | The failing address                                      |
+| failingAddress   | string | The failing address                                      |
 | failingTimestamp | int    | The timestamp when the address failed                    |
 | failingTime      | string | The timestamp when the address failed as a pretty string |
 
@@ -1520,7 +1520,7 @@ Response:
     },
     "failingAddresses": [
       {
-        "address": "/1.0.0.0",
+        "failingAddress": "/1.0.0.0",
         "failingTimestamp": 1573520707545,
         "failingTime": "Mon Nov 11 20:05:07 EST 2019"
       }
