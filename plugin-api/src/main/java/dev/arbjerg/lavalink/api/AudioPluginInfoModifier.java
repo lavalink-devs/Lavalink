@@ -10,7 +10,7 @@ public interface AudioPluginInfoModifier {
 	 * Adds custom fields to an {@link AudioTrack}'s JSON.
 	 *
 	 * @param track the track that was loaded.
-	 * @param node the info node which can be altered.
+	 * @param node the JSON object which can be altered.
 	 */
 	default void modifyAudioTrackPluginInfo(AudioTrack track, ObjectNode node) {
 	}
