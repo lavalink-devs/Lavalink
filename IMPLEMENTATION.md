@@ -1303,7 +1303,7 @@ Parsed Semantic Versioning 2.0.0. See https://semver.org/ for more info
 | minor      | int     | The minor version of this Lavalink server                                          |
 | patch      | int     | The patch version of this Lavalink server                                          |
 | preRelease | ?string | The pre-release version according to semver as a `.` separated list of identifiers |
-| build      | ?string | The build version according to semver as a `.` separated list of identifiers       |
+| build      | ?string | The build metadata according to semver as a `.` separated list of identifiers      |
 
 ##### Git Object
 
