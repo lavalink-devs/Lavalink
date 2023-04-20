@@ -61,9 +61,9 @@ The version number is composed of the following parts:
 Version numbers can come in different combinations, depending on the release type:
 
     `MAJOR.MINOR.PATCH` - Stable release
-    `MAJOR.MINOR.PATCH+BUILDMETADATA` - Stable release with build metadata
+    `MAJOR.MINOR.PATCH+BUILD` - Stable release with additional build metadata
     `MAJOR.MINOR.PATCH-PRERELEASE` - Pre-release
-    `MAJOR.MINOR.PATCH-PRERELEASE+BUILDMETADATA` - Pre-release with build metadata
+    `MAJOR.MINOR.PATCH-PRERELEASE+BUILD` - Pre-release additional build metadata
 
 ---
 
