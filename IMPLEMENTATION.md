@@ -1294,6 +1294,8 @@ Response:
 
 ##### Version Object
 
+Parsed Semantic Versioning 2.0.0. See https://semver.org/ for more info
+
 | Field      | Type    | Description                                                                        |
 |------------|---------|------------------------------------------------------------------------------------|
 | semver     | string  | The full version string of this Lavalink server                                    |
@@ -1301,6 +1303,7 @@ Response:
 | minor      | int     | The minor version of this Lavalink server                                          |
 | patch      | int     | The patch version of this Lavalink server                                          |
 | preRelease | ?string | The pre-release version according to semver as a `.` separated list of identifiers |
+| build      | ?string | The build metadata according to semver as a `.` separated list of identifiers      |
 
 ##### Git Object
 
@@ -1323,11 +1326,12 @@ Response:
 ```json
 {
   "version": {
-    "string": "3.7.0-rc.1",
+    "string": "3.7.0-rc.1+test",
     "major": 3,
     "minor": 7,
     "patch": 0,
-    "preRelease": "rc.1"
+    "preRelease": "rc.1",
+    "build": "test"
   },
   "buildTime": 1664223916812,
   "git": {
@@ -1343,9 +1347,9 @@ Response:
   ],
   "filters": [
     "equalizer",
-		"karaoke",
-		"timescale",
-		"channelMix"
+    "karaoke",
+    "timescale",
+    "channelMix"
   ],
   "plugins": [
     {
