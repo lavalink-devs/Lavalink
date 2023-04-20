@@ -50,13 +50,22 @@ Please see [here](CHANGELOG.md)
 
 Lavalink follows [Semantic Versioning](https://semver.org/).
 
-Given a version number `MAJOR.MINOR.PATCH-PRERELEASE+BUILDMETADATA`, the following rules apply:
+The version number is composed of the following parts:
 
     MAJOR breaking API changes
     MINOR new backwards compatible features
     PATCH backwards compatible bug fixes
     PRERELEASE pre-release version
-    BUILDMETADATA build metadata
+    BUILD additional build metadata
+
+Version numbers can come in different combinations, depending on the release type:
+
+    `MAJOR.MINOR.PATCH` - Stable release
+    `MAJOR.MINOR.PATCH+BUILDMETADATA` - Stable release with build metadata
+    `MAJOR.MINOR.PATCH-PRERELEASE` - Pre-release
+    `MAJOR.MINOR.PATCH-PRERELEASE+BUILDMETADATA` - Pre-release with build metadata
+
+---
 
 ## Client libraries:
 | Client                                                                                                | Platform | Compatible With                            | REST API Support | Additional Information          |

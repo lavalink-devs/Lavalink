@@ -1296,14 +1296,14 @@ Response:
 
 Parsed Semantic Versioning 2.0.0. See https://semver.org/ for more info
 
-| Field         | Type    | Description                                                                           |
-|---------------|---------|---------------------------------------------------------------------------------------|
-| semver        | string  | The full version string of this Lavalink server                                       |
-| major         | int     | The major version of this Lavalink server                                             |
-| minor         | int     | The minor version of this Lavalink server                                             |
-| patch         | int     | The patch version of this Lavalink server                                             |
-| preRelease    | ?string | The pre-release version according to semver as a `.` separated list of identifiers    |
-| buildMetadata | ?string | The build-metadata version according to semver as a `.` separated list of identifiers |
+| Field      | Type    | Description                                                                        |
+|------------|---------|------------------------------------------------------------------------------------|
+| semver     | string  | The full version string of this Lavalink server                                    |
+| major      | int     | The major version of this Lavalink server                                          |
+| minor      | int     | The minor version of this Lavalink server                                          |
+| patch      | int     | The patch version of this Lavalink server                                          |
+| preRelease | ?string | The pre-release version according to semver as a `.` separated list of identifiers |
+| build      | ?string | The build version according to semver as a `.` separated list of identifiers       |
 
 ##### Git Object
 
@@ -1331,7 +1331,7 @@ Parsed Semantic Versioning 2.0.0. See https://semver.org/ for more info
     "minor": 7,
     "patch": 0,
     "preRelease": "rc.1",
-    "buildMetadata": "test"
+    "build": "test"
   },
   "buildTime": 1664223916812,
   "git": {
@@ -1347,9 +1347,9 @@ Parsed Semantic Versioning 2.0.0. See https://semver.org/ for more info
   ],
   "filters": [
     "equalizer",
-		"karaoke",
-		"timescale",
-		"channelMix"
+    "karaoke",
+    "timescale",
+    "channelMix"
   ],
   "plugins": [
     {

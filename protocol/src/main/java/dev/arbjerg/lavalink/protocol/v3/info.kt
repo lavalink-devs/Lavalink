@@ -19,19 +19,19 @@ data class Version(
     val minor: Int,
     val patch: Int,
     val preRelease: String?,
-    val buildMetadata: String?,
+    val build: String?,
 ) {
     companion object {
 
-        private val versionRegex = Regex("""^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$""")
+        private val versionRegex = Regex("""^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<build>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$""")
         fun fromSemver(semver: String): Version {
             val match = versionRegex.matchEntire(semver) ?: return Version(semver, 0, 0, 0, null, null)
             val major = match.groups["major"]!!.value.toInt()
             val minor = match.groups["minor"]!!.value.toInt()
             val patch = match.groups["patch"]!!.value.toInt()
             val preRelease = match.groups["prerelease"]?.value
-            val buildMetadata = match.groups["buildmetadata"]?.value
-            return Version(semver, major, minor, patch, preRelease, buildMetadata)
+            val build = match.groups["build"]?.value
+            return Version(semver, major, minor, patch, preRelease, build)
         }
     }
 }
