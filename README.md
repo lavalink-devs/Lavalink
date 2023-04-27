@@ -106,10 +106,50 @@ Any client libraries marked with `Unmaintained` have been marked as such as thei
 however they are listed as they may still support Lavalink, and/or have not needed maintenance, however keep in mind that compatibility and full feature support is not guaranteed.
 
 ## Server configuration
+
+### Binary
 Download binaries from [the GitHub actions](https://github.com/freyacodes/Lavalink/actions) or [the GitHub releases](https://github.com/freyacodes/Lavalink/releases)(specific versions prior to `v3.5` can be found in the [CI Server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1)). 
 
 Put an `application.yml` file in your working directory. ([Example here](https://github.com/freyacodes/Lavalink/blob/master/LavalinkServer/application.yml.example))
 
-Run with `java -jar Lavalink.jar`
+Run with `java -jar Lavalink.jar` from the same directory
+
+### Docker
 
 Docker images can be found under [packages](https://github.com/freyacodes/Lavalink/pkgs/container/lavalink) with old builds prior to `v3.7.4` being available on [Docker Hub](https://hub.docker.com/r/fredboat/lavalink/).
+
+---
+
+Install [Docker](https://docs.docker.com/engine/install/) & [Docker Compose](https://docs.docker.com/compose/install/)
+
+Create a `docker-compose.yml` with the following content:
+```yaml
+version: "3.8"
+
+services:
+    lavalink:
+        image: ghcr.io/freyacodes/lavalink:3 # pin the image version to Lavalink v3
+        container_name: lavalink
+        restart: unless-stopped
+        environment:
+            - _JAVA_OPTIONS=-Xmx6G # set Java options here
+            # you can configure all application.yml values via environment variables. Just join the yaml path with `_` & convert them to ALL CAPS
+            - SERVER_PORT=2333 # set lavalink server port (yaml path: server.port)
+            - LAVALINK_SERVER_PASSWORD=youshallnotpass # set password for lavalink (yaml path: lavalink.server.password)
+        volumes:
+            - ./application.yml:/opt/Lavalink/application.yml # mount application.yml from the same directory or use environment variables
+            - ./plugins/:/opt/Lavalink/plugins/ # persist plugins between restarts
+        networks:
+            - lavalink
+        expose:
+            - 2333 # lavalink exposes port 2333 to connect to
+        ports:
+            - 2333:2333 # you only need this if you want to make your lavalink accessable from outside of containers
+networks:
+    lavalink: # create a lavalink network you can add other containers to, to give them access to Lavalink
+        name: lavalink
+```
+
+If your bot also runs in a docker container you can make that container join the lavalink network and use `lavalink` (service name) as the hostname to connect.
+See [Docker Networking](https://docs.docker.com/network/) & [Docker Compose Networking](https://docs.docker.com/compose/networking/)
+
