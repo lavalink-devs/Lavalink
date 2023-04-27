@@ -142,7 +142,7 @@ services:
         networks:
             - lavalink
         expose:
-            - 2333 # lavalink exposes port 2333 to connect to
+            - 2333 # lavalink exposes port 2333 to connect to for other containers
         ports:
             - 2333:2333 # you only need this if you want to make your lavalink accessable from outside of containers
 networks:
