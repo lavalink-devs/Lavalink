@@ -107,10 +107,102 @@ however they are listed as they may still support Lavalink, and/or have not need
 
 ## Server configuration
 
+### Config
+
+The server configuration is done in `application.yml`. You can find an example configuration [here](LavalinkServer/application.yml.example).
+
+Alternatively, you can also use environment variables to configure the server. The environment variables are named the same as the keys in the `application.yml` file, but in uppercase and with `.` replaced with `_`. For example, `server.port` becomes `SERVER_PORT`.
+For arrays, the index is appended to the key, starting at 0. For example, `LAVALINK_PLUGINS_0_DEPENDENCY` refers to the `dependency` key of the first plugin.
+
+<details>
+<summary>List of all env keys</summary>
+
+```env
+SERVER_PORT
+SERVER_ADDRESS
+
+LAVALINK_PLUGINS_0_DEPENDENCY
+LAVALINK_PLUGINS_0_REPOSIOTRY
+
+LAVALINK_PLUGINS_1_DEPENDENCY
+LAVALINK_PLUGINS_1_REPOSIOTRY
+
+LAVALINK_SERVER_PASSWORD
+LAVALINK_SERVER_SOURCES_YOUTUBE
+LAVALINK_SERVER_SOURCES_BANDCAMP
+LAVALINK_SERVER_SOURCES_SOUNDCLOUD
+LAVALINK_SERVER_SOURCES_TWITCH
+LAVALINK_SERVER_SOURCES_VIMEO
+LAVALINK_SERVER_SOURCES_HTTP
+LAVALINK_SERVER_SOURCES_LOCAL
+
+LAVALINK_SERVER_FILTERS_VOLUME
+LAVALINK_SERVER_FILTERS_EQUALIZER
+LAVALINK_SERVER_FILTERS_KARAOKE
+LAVALINK_SERVER_FILTERS_TIMESCALE
+LAVALINK_SERVER_FILTERS_TREMOLO
+LAVALINK_SERVER_FILTERS_VIBRATO
+LAVALINK_SERVER_FILTERS_DISTORTION
+LAVALINK_SERVER_FILTERS_ROTATION
+LAVALINK_SERVER_FILTERS_CHANNEL_MIX
+LAVALINK_SERVER_FILTERS_LOW_PASS
+
+LAVALINK_SERVER_BUFFER_DURATION_MS
+LAVALINK_SERVER_FRAME_BUFFER_DURATION_MS
+LAVALINK_SERVER_OPUS_ENCODING_QUALITY
+LAVALINK_SERVER_RESAMPLING_QUALITY
+LAVALINK_SERVER_TRACK_STUCK_THRESHOLD_MS
+LAVALINK_SERVER_USE_SEEK_GHOSTING
+
+LAVALINK_SERVER_PLAYER_UPDATE_INTERVAL
+LAVALINK_SERVER_YOUTUBE_SEARCH_ENABLED
+LAVALINK_SERVER_SOUNDCLOUD_SEARCH_ENABLED
+
+LAVALINK_SERVER_GC_WARNINGS
+
+LAVALINK_SERVER_RATELIMIT_IP_BLOCKS
+LAVALINK_SERVER_RATELIMIT_EXCLUDE_IPS
+LAVALINK_SERVER_RATELIMIT_STRATEGY
+LAVALINK_SERVER_RATELIMIT_SEARCH_TRIGGERS_FAIK
+LAVALINK_SERVER_RATELIMIT_RETRY_LIMIT
+
+LAVALINK_SERVER_YOUTUBE_CONFIG_EMAIL
+LAVALINK_SERVER_YOUTUBE_CONFIG_PASSWORD
+
+LAVALINK_SERVER_HTTP_CONFIG_PROXY_HOST
+LAVALINK_SERVER_HTTP_CONFIG_PROXY_PORT
+LAVALINK_SERVER_HTTP_CONFIG_PROXY_USER
+LAVALINK_SERVER_HTTP_CONFIG_PROXY_PASSWORD
+
+METRICS_PROMETHEUS_ENABLED
+METRICS_PROMETHEUS_ENDPOINT
+
+SENTRY_DSN
+SENTRY_ENVIRONMENT
+SENTRY_TAGS_SOME_KEY
+SENTRY_TAGS_ANOTHER_KEY
+
+LOGGING_FILE_PATH
+LOGGING_LEVEL_ROOT
+LOGGING_LEVEL_LAVALINK
+
+LOGGING_REQUEST_ENABLED
+LOGGING_REQUEST_INCLUDE_CLIENT_INFO
+LOGGING_REQUEST_INCLUDE_HEADERS
+LOGGING_REQUEST_INCLUDE_QUERY_STRING
+LOGGING_REQUEST_INCLUDE_PAYLOAD
+LOGGING_REQUEST_MAX_PAYLOAD_LENGTH
+
+LOGGING_LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE
+LOGGING_LOGBACK_ROLLINGPOLICY_MAX_HISTORY
+```
+</details>
+
+
 ### Binary
 Download binaries from [the GitHub actions](https://github.com/freyacodes/Lavalink/actions) or [the GitHub releases](https://github.com/freyacodes/Lavalink/releases)(specific versions prior to `v3.5` can be found in the [CI Server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1)). 
 
-Put an `application.yml` file in your working directory. ([Example here](https://github.com/freyacodes/Lavalink/blob/master/LavalinkServer/application.yml.example))
+Put an `application.yml` file in your working directory. ([Example here](LavalinkServer/application.yml.example))
 
 Run with `java -jar Lavalink.jar` from the same directory
 
@@ -133,18 +225,17 @@ services:
         restart: unless-stopped
         environment:
             - _JAVA_OPTIONS=-Xmx6G # set Java options here
-            # you can configure all application.yml values via environment variables. Just join the yaml path with `_` & convert them to ALL CAPS
-            - SERVER_PORT=2333 # set lavalink server port (yaml path: server.port)
-            - LAVALINK_SERVER_PASSWORD=youshallnotpass # set password for lavalink (yaml path: lavalink.server.password)
+            - SERVER_PORT=2333 # set lavalink server port
+            - LAVALINK_SERVER_PASSWORD=youshallnotpass # set password for lavalink
         volumes:
             - ./application.yml:/opt/Lavalink/application.yml # mount application.yml from the same directory or use environment variables
-            - ./plugins/:/opt/Lavalink/plugins/ # persist plugins between restarts
+            - ./plugins/:/opt/Lavalink/plugins/ # persist plugins between restarts, make sure to set the correct permissions (user: 322, group: 322)
         networks:
             - lavalink
         expose:
-            - 2333 # lavalink exposes port 2333 to connect to for other containers
+            - 2333 # lavalink exposes port 2333 to connect to for other containers (this is for documentation purposes only)
         ports:
-            - 2333:2333 # you only need this if you want to make your lavalink accessable from outside of containers
+            - 2333:2333 # you only need this if you want to make your lavalink accessible from outside of containers
 networks:
     lavalink: # create a lavalink network you can add other containers to, to give them access to Lavalink
         name: lavalink
