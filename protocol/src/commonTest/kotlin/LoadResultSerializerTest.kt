@@ -114,9 +114,7 @@ class LoadResultSerializerTest {
         val json = """
             {
               "loadType": "search",
-              "data": {
-                "tracks": []
-              }
+              "data": []
             }
         """.trimIndent()
         //</editor-fold>
