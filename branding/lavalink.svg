@@ -5,40 +5,18 @@
    height="100%"
    version="1.1"
    id="svg13"
-   sodipodi:docname="lavalink.svg"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview15"
-     pagecolor="#505050"
-     bordercolor="#eeeeee"
-     borderopacity="1"
-     inkscape:showpageshadow="0"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#505050"
-     showgrid="false"
-     inkscape:zoom="7.82"
-     inkscape:cx="34.335038"
-     inkscape:cy="52.685422"
-     inkscape:window-width="1920"
-     inkscape:window-height="1011"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg13" />
   <defs
      id="defs7">
     <linearGradient
        id="grad"
        x1="0"
        y1="0"
-       x2="1"
-       y2="1"
-       spreadMethod="pad">
+       x2="100"
+       y2="100"
+       spreadMethod="pad"
+       gradientUnits="userSpaceOnUse">
       <stop
          offset="0"
          stop-color="#ff8c00"
@@ -55,18 +33,16 @@
      width="100%"
      height="100%"
      fill="url(#grad)"
-     id="rect9" />
-  <text
-     x="51.341564"
-     y="54.856861"
-     font-size="80"
-     font-family="Arial"
-     font-style="italic"
-     fill="#ffffff"
-     dominant-baseline="middle"
-     text-anchor="middle"
-     id="text11"
-     style="font-size:53.3333px;-inkscape-font-specification:'sans-serif, Bold Italic';font-family:sans-serif;font-weight:bold;font-style:italic;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;dominant-baseline:middle;text-anchor:middle;fill:#ffffff"><tspan
-       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';font-size:53.33330154px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-       id="tspan287">LL</tspan></text>
+     id="rect9"
+     x="0"
+     y="0"
+     style="fill:url(#grad)" />
+  <path
+     style="vector-effect:none;fill:#ffffff;fill-opacity:1;stroke-width:1.27808;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000"
+     d="m 57,25 h 13 l -7,27 h 12 l -2,8.5 H 48 Z"
+     id="path724-5" />
+  <path
+     style="opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke-width:1.33907;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
+     d="m 37.5,25 h 14 l -10,40 H 72 L 70,75 H 25 Z"
+     id="path724" />
 </svg>
