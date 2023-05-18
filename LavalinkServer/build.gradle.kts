@@ -134,7 +134,7 @@ publishing {
                 licenses {
                     license {
                         name.set("The MIT License")
-                        url.set("https://github.com/freyacodes/Lavalink/blob/master/LICENSE")
+                        url.set("https://github.com/lavalink-devs/Lavalink/blob/master/LICENSE")
                     }
                 }
 
