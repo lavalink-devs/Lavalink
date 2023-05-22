@@ -15,8 +15,8 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.6.6")
         classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2")
         classpath("com.adarshr:gradle-test-logger-plugin:1.6.0")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:1.7.20")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:1.8.20")
     }
 }
 
@@ -34,9 +34,6 @@ allprojects {
 }
 
 subprojects {
-    apply(plugin = "java")
-    apply(plugin = "idea")
-
     if (project.hasProperty("includeAnalysis")) {
         project.logger.lifecycle("applying analysis plugins")
         apply(from = "../analysis.gradle")
@@ -54,15 +51,17 @@ subprojects {
 }
 
 @SuppressWarnings("GrMethodMayBeStatic")
-fun versionFromTag(): String = Grgit.open(mapOf("currentDir" to project.rootDir)).use { git ->
-    val headTag = git.tag
-        .list()
-        .find { it.commit.id == git.head().id }
+fun versionFromTag(): String {
+    Grgit.open(mapOf("currentDir" to project.rootDir)).use { git ->
+        val headTag = git.tag
+            .list()
+            .find { it.commit.id == git.head().id }
 
-    val clean = git.status().isClean || System.getenv("CI") != null
-    if (!clean) {
-        println("Git state is dirty, setting version as snapshot.")
+        val clean = git.status().isClean || System.getenv("CI") != null
+        if (!clean) {
+            println("Git state is dirty, setting version as snapshot.")
+        }
+
+        return if (headTag != null && clean) headTag.name else "${git.head().id}-SNAPSHOT"
     }
-
-    return if (headTag != null && clean) headTag.name else "${git.head().id}-SNAPSHOT"
 }

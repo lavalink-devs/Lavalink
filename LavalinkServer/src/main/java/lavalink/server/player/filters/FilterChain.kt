@@ -9,6 +9,8 @@ import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.protocol.v4.*
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 import dev.arbjerg.lavalink.protocol.v4.Band as Bandv4
 
 class FilterChain(
@@ -33,15 +35,15 @@ class FilterChain(
             extensions: List<AudioFilterExtension>,
         ): FilterChain {
             return FilterChain(
-                filters.volume?.let { VolumeConfig(it) },
-                filters.equalizer?.let {
+                filters.volume.ifPresent(::VolumeConfig),
+                filters.equalizer.ifPresentAndNotNull {
                     EqualizerConfig(it.map { band -> Band(band.band, band.gain) })
                 },
-                filters.karaoke?.let { KaraokeConfig(it.level, it.monoLevel, it.filterBand, it.filterWidth) },
-                filters.timescale?.let { TimescaleConfig(it.speed, it.pitch, it.rate) },
-                filters.tremolo?.let { TremoloConfig(it.frequency, it.depth) },
-                filters.vibrato?.let { VibratoConfig(it.frequency, it.depth) },
-                filters.distortion?.let {
+                filters.karaoke.ifPresentAndNotNull { KaraokeConfig(it.level, it.monoLevel, it.filterBand, it.filterWidth) },
+                filters.timescale.ifPresentAndNotNull { TimescaleConfig(it.speed, it.pitch, it.rate) },
+                filters.tremolo.ifPresentAndNotNull { TremoloConfig(it.frequency, it.depth) },
+                filters.vibrato.ifPresentAndNotNull { VibratoConfig(it.frequency, it.depth) },
+                filters.distortion.ifPresentAndNotNull {
                     DistortionConfig(
                         it.sinOffset,
                         it.sinScale,
@@ -53,8 +55,8 @@ class FilterChain(
                         it.scale
                     )
                 },
-                filters.rotation?.let { RotationConfig(it.rotationHz) },
-                filters.channelMix?.let {
+                filters.rotation.ifPresentAndNotNull { RotationConfig(it.rotationHz) },
+                filters.channelMix.ifPresentAndNotNull {
                     ChannelMixConfig(
                         it.leftToLeft,
                         it.leftToRight,
@@ -62,14 +64,14 @@ class FilterChain(
                         it.rightToRight
                     )
                 },
-                filters.lowPass?.let { LowPassConfig(it.smoothing) },
+                filters.lowPass.ifPresentAndNotNull { LowPassConfig(it.smoothing) },
             ).apply {
                 parsePluginConfigs(filters.pluginFilters, extensions)
             }
         }
     }
 
-    fun parsePluginConfigs(dynamicValues: Map<String, JsonNode>, extensions: List<AudioFilterExtension>) {
+    fun parsePluginConfigs(dynamicValues: Map<String, JsonElement>, extensions: List<AudioFilterExtension>) {
         pluginFilters = extensions.mapNotNull {
             val json = dynamicValues[it.name] ?: return@mapNotNull null
             PluginConfig(it, json)
@@ -112,12 +114,12 @@ class FilterChain(
 
     fun toFilters(): Filters {
         return Filters(
-            volume?.volume,
-            equalizer?.bands?.map { Bandv4(it.band, it.gain) },
-            karaoke?.let { Karaoke(it.level, it.monoLevel, it.filterBand, it.filterWidth) },
-            timescale?.let { Timescale(it.speed, it.pitch, it.rate) },
-            tremolo?.let { Tremolo(it.frequency, it.depth) },
-            vibrato?.let { Vibrato(it.frequency, it.depth) },
+            volume?.volume.toOmissible(),
+            equalizer?.bands?.map { Bandv4(it.band, it.gain) }.toOmissible(),
+            karaoke?.let { Karaoke(it.level, it.monoLevel, it.filterBand, it.filterWidth) }.toOmissible(),
+            timescale?.let { Timescale(it.speed, it.pitch, it.rate) }.toOmissible(),
+            tremolo?.let { Tremolo(it.frequency, it.depth) }.toOmissible(),
+            vibrato?.let { Vibrato(it.frequency, it.depth) }.toOmissible(),
             distortion?.let {
                 Distortion(
                     it.sinOffset,
@@ -129,15 +131,16 @@ class FilterChain(
                     it.offset,
                     it.scale
                 )
-            },
-            rotation?.let { Rotation(it.rotationHz) },
-            channelMix?.let { ChannelMix(it.leftToLeft, it.leftToRight, it.rightToLeft, it.rightToRight) },
-            lowPass?.let { LowPass(it.smoothing) },
+            }.toOmissible(),
+            rotation?.let { Rotation(it.rotationHz) }.toOmissible(),
+            channelMix?.let { ChannelMix(it.leftToLeft, it.leftToRight, it.rightToLeft, it.rightToRight) }
+                .toOmissible(),
+            lowPass?.let { LowPass(it.smoothing) }.toOmissible(),
             pluginFilters.associate { it.extension.name to it.json }
         )
     }
 
-    class PluginConfig(val extension: AudioFilterExtension, val json: JsonNode) : FilterConfig() {
+    class PluginConfig(val extension: AudioFilterExtension, val json: JsonElement) : FilterConfig() {
         override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter =
             extension.build(json, format, output)
 

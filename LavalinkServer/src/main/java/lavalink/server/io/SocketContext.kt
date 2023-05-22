@@ -24,16 +24,17 @@ package lavalink.server.io
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import dev.arbjerg.lavalink.api.AudioFilterExtension
-import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
-import dev.arbjerg.lavalink.api.ISocketContext
-import dev.arbjerg.lavalink.api.PluginEventHandler
-import dev.arbjerg.lavalink.api.WebSocketExtension
-import dev.arbjerg.lavalink.protocol.v3.Message
+import dev.arbjerg.lavalink.api.*
+import dev.arbjerg.lavalink.protocol.v4.Message
+import dev.arbjerg.lavalink.protocol.v3.Message as V3Message
+import dev.arbjerg.lavalink.protocol.v4.json
 import io.undertow.websockets.core.WebSocketCallback
 import io.undertow.websockets.core.WebSocketChannel
 import io.undertow.websockets.core.WebSockets
 import io.undertow.websockets.jsr.UndertowSession
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.serializerOrNull
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.LavalinkPlayer
 import lavalink.server.v3.StatsCollectorV3
@@ -41,7 +42,6 @@ import lavalink.server.v3.WebSocketHandlerV3
 import moe.kyokobot.koe.KoeClient
 import moe.kyokobot.koe.KoeEventAdapter
 import moe.kyokobot.koe.MediaConnection
-import org.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.WebSocketSession
@@ -49,6 +49,7 @@ import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
 import java.net.InetSocketAddress
 import java.util.*
 import java.util.concurrent.*
+import kotlin.reflect.full.hasAnnotation
 
 class SocketContext(
     private val sessionId: String,
@@ -77,7 +78,13 @@ class SocketContext(
     private val players = ConcurrentHashMap<Long, LavalinkPlayer>()
 
     val eventEmitter = EventEmitter(this, eventHandlers)
-    val wsHandler = if (version == 3) WebSocketHandlerV3(this, webSocketExtensions, filterExtensions, serverConfig, objectMapper) else null
+    val wsHandler = if (version == 3) WebSocketHandlerV3(
+        this,
+        webSocketExtensions,
+        filterExtensions,
+        serverConfig,
+        objectMapper
+    ) else null
 
     @Volatile
     var sessionPaused = false
@@ -168,12 +175,21 @@ class SocketContext(
         eventEmitter.onSocketContextPaused()
     }
 
-    override fun sendMessage(message: JSONObject) {
-        send(message.toString())
-    }
+    override fun <T : Any?> sendMessage(serializer: SerializationStrategy<T>, message: T) =
+        send(json.encodeToString(serializer, message))
 
+    @OptIn(InternalSerializationApi::class)
     override fun sendMessage(message: Any) {
-        send(objectMapper.writeValueAsString(message))
+        val clazz = message.javaClass
+        // Check if class is Kotlin class
+        if (clazz.getDeclaredAnnotation(Metadata::class.java) != null) {
+            val serializer = clazz.kotlin.serializerOrNull()
+            if (serializer != null) {
+                return sendMessage(serializer, message)
+            }
+        }
+
+        return send(objectMapper.writeValueAsString(message))
     }
 
     override fun getState(): ISocketContext.State = when {
@@ -216,7 +232,11 @@ class SocketContext(
     fun resume(session: WebSocketSession) {
         sessionPaused = false
         this.session = session
-        sendMessage(Message.ReadyEvent(true, sessionId))
+        if (version == 3) {
+            sendMessage(V3Message.ReadyEvent(true, sessionId))
+        } else {
+            sendMessage(Message.ReadyEvent(true, sessionId))
+        }
         log.info("Replaying ${resumeEventQueue.size} events")
 
         // Bulk actions are not guaranteed to be atomic, so we need to do this imperatively
@@ -252,8 +272,19 @@ class SocketContext(
 
     private inner class WsEventHandler(private val player: LavalinkPlayer) : KoeEventAdapter() {
         override fun gatewayClosed(code: Int, reason: String?, byRemote: Boolean) {
-            val event = Message.WebSocketClosedEvent(code, reason ?: "", byRemote, player.guildId.toString())
-            sendMessage(event)
+            if (version == 3) {
+                val event = V3Message.WebSocketClosedEvent(code, reason ?: "", byRemote, player.guildId.toString())
+                sendMessage(event)
+            } else {
+                val event = Message.EmittedEvent.WebSocketClosedEvent(
+                    player.guildId.toString(),
+                    code,
+                    reason ?: "",
+                    byRemote
+                )
+
+                sendMessage(event)
+            }
             SocketServer.sendPlayerUpdate(this@SocketContext, player)
         }
 

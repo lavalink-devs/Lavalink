@@ -6,6 +6,8 @@ import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioTrack
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import org.springframework.stereotype.Component
 
 @Component
@@ -17,15 +19,19 @@ class DefaultAudioPluginInfoModifier : AudioPluginInfoModifier {
         }
     }
 
-    override fun modifyAudioTrackPluginInfo(track: AudioTrack, node: ObjectNode) {
-        when (track) {
+    override fun modifyAudioTrackPluginInfo(track: AudioTrack): JsonObject? {
+        val (key, value) = when (track) {
             is LocalAudioTrack -> {
-                node.put("probeInfo", track.containerTrackFactory.probeInfo())
+                "probeInfo" to track.containerTrackFactory.probeInfo()
             }
 
             is HttpAudioTrack -> {
-                node.put("probeInfo", track.containerTrackFactory.probeInfo())
+                "probeInfo" to track.containerTrackFactory.probeInfo()
             }
+
+            else -> return null
         }
+
+        return JsonObject(mapOf(key to JsonPrimitive(value)))
     }
 }

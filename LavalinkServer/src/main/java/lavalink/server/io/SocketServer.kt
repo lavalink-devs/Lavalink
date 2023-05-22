@@ -24,12 +24,9 @@ package lavalink.server.io
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import dev.arbjerg.lavalink.api.AudioFilterExtension
-import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
-import dev.arbjerg.lavalink.api.PluginEventHandler
-import dev.arbjerg.lavalink.api.WebSocketExtension
-import dev.arbjerg.lavalink.protocol.v3.Message
-import dev.arbjerg.lavalink.protocol.v3.PlayerState
+import dev.arbjerg.lavalink.api.*
+import dev.arbjerg.lavalink.protocol.v4.Message
+import dev.arbjerg.lavalink.protocol.v4.PlayerState
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.LavalinkPlayer
 import lavalink.server.v3.StatsCollectorV3
@@ -43,6 +40,8 @@ import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 import java.util.concurrent.ConcurrentHashMap
+import dev.arbjerg.lavalink.protocol.v3.Message as V3Message
+import dev.arbjerg.lavalink.protocol.v3.PlayerState as V3PlayerState
 
 @Service
 final class SocketServer(
@@ -71,17 +70,31 @@ final class SocketServer(
             if (socketContext.sessionPaused) return
 
             val connection = socketContext.getMediaConnection(player).gatewayConnection
-            socketContext.sendMessage(
-                Message.PlayerUpdateEvent(
-                    PlayerState(
-                        System.currentTimeMillis(),
-                        player.audioPlayer.playingTrack?.position ?: 0,
-                        connection?.isOpen == true,
-                        connection?.ping ?: -1L
-                    ),
-                    player.guildId.toString()
+            if (socketContext.version == 3) {
+                socketContext.sendMessage(
+                    V3Message.PlayerUpdateEvent(
+                        V3PlayerState(
+                            System.currentTimeMillis(),
+                            player.audioPlayer.playingTrack?.position ?: 0,
+                            connection?.isOpen == true,
+                            connection?.ping ?: -1L
+                        ),
+                        player.guildId.toString(),
+                    )
                 )
-            )
+            } else {
+                socketContext.sendMessage(
+                    Message.PlayerUpdateEvent(
+                        PlayerState(
+                            System.currentTimeMillis(),
+                            player.audioPlayer.playingTrack?.position ?: 0,
+                            connection?.isOpen == true,
+                            connection?.ping ?: -1L
+                        ),
+                        player.guildId.toString()
+                    )
+                )
+            }
         }
     }
 
@@ -148,7 +161,11 @@ final class SocketServer(
             objectMapper
         )
         contextMap[sessionId] = socketContext
-        socketContext.sendMessage(Message.ReadyEvent(false, sessionId))
+        if (version == 3) {
+            socketContext.sendMessage(V3Message.ReadyEvent(false, sessionId))
+        } else {
+            socketContext.sendMessage(Message.ReadyEvent(false, sessionId))
+        }
         socketContext.eventEmitter.onWebSocketOpen(false)
         if (clientName != null) {
             log.info("Connection successfully established from $clientName")

@@ -136,7 +136,7 @@ class StatsCollector(val socketServer: SocketServer) {
             }
         }
 
-        return Stats(
+        return StatsData(
             frameStats,
             playersTotal[0],
             playersPlaying[0],

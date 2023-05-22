@@ -3,16 +3,19 @@ plugins {
     signing
     `java-library`
     `maven-publish`
+    kotlin("jvm")
 }
 
 val archivesBaseName = "plugin-api"
 group = "dev.arbjerg.lavalink"
 
 dependencies {
+    api(projects.protocol)
     api(libs.spring.boot)
     api(libs.spring.boot.web)
     api(libs.lavaplayer)
     api(libs.json)
+    api(libs.kotlinx.serialization.json)
 }
 
 java {
