@@ -28,7 +28,6 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
-import dev.arbjerg.lavalink.api.sendMessage as sendV4Message
 import dev.arbjerg.lavalink.protocol.v4.Exception
 import dev.arbjerg.lavalink.protocol.v4.Message
 import lavalink.server.io.SocketServer.Companion.sendPlayerUpdate

@@ -117,7 +117,7 @@ sealed interface Message {
 
         companion object Serializer : JsonContentPolymorphicSerializer<EmittedEvent>(EmittedEvent::class) {
             override fun selectDeserializer(element: JsonElement): DeserializationStrategy<EmittedEvent> {
-                return element.asPolymorphicDeserializer<Type, _>(descriptor, "type") {
+                return element.asPolymorphicDeserializer<Type, EmittedEvent>(descriptor, "type") {
                     when (it) {
                         Type.TrackStart -> TrackStartEvent.serializer()
                         Type.TrackEnd -> TrackEndEvent.serializer()
@@ -244,7 +244,7 @@ sealed interface Message {
 
     companion object Serializer : JsonContentPolymorphicSerializer<Message>(Message::class) {
         override fun selectDeserializer(element: JsonElement): DeserializationStrategy<Message> {
-            return element.asPolymorphicDeserializer<Op, _>(descriptor, "op") {
+            return element.asPolymorphicDeserializer<Op, Message>(descriptor, "op") {
                 when (it) {
                     Op.Ready -> ReadyEvent.serializer()
                     Op.Stats -> StatsEvent.serializer()

@@ -1,6 +1,11 @@
 package dev.arbjerg.lavalink.protocol.v4
 
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlin.jvm.JvmInline
 
 /**
@@ -67,8 +72,22 @@ data class Git(
 )
 
 @JvmInline
-@Serializable
-value class Plugins(val plugins: List<Plugin>)
+@Serializable(with = Plugins.Serializer::class)
+value class Plugins(val plugins: List<Plugin>) {
+
+    // https://youtrack.jetbrains.com/issue/KT-57647/Exception-when-deserializing-a-sealed-family-value-class-member
+    companion object Serializer : KSerializer<Plugins> {
+        private val parent = ListSerializer(Plugin.serializer())
+        override val descriptor: SerialDescriptor
+            get() = parent.descriptor
+
+        override fun deserialize(decoder: Decoder): Plugins =
+            Plugins(decoder.decodeInline(descriptor).decodeSerializableValue(parent))
+
+        override fun serialize(encoder: Encoder, value: Plugins) =
+            encoder.encodeInline(descriptor).encodeSerializableValue(parent, value.plugins)
+    }
+}
 
 @Serializable
 data class Plugin(val name: String, val version: String)

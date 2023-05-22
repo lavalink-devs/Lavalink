@@ -114,15 +114,13 @@ class LoadResultSerializerTest {
         val json = """
             {
               "loadType": "search",
-              "data": {
-                "tracks": []
-              }
+              "data": []
             }
         """.trimIndent()
         //</editor-fold>
 
         test<LoadResult>(json) {
-            loadType shouldBe ResultStatus.SEARCH_RESULT
+            loadType shouldBe ResultStatus.SEARCH
             assertIs<LoadResult.SearchResult>(this)
             data.tracks shouldBe emptyList()
         }

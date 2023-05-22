@@ -64,7 +64,7 @@ fun AudioTrack.toInfo(): TrackInfo {
         this.identifier,
         this.isSeekable,
         this.info.author,
-        this.info.length,
+        this.duration,
         this.info.isStream,
         this.position,
         this.info.title,

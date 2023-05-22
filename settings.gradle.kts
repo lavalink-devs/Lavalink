@@ -8,7 +8,6 @@ include("plugin-api")
 
 project(":Lavalink-Server").projectDir = file("$rootDir/LavalinkServer")
 
-enableFeaturePreview("VERSION_CATALOGS")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 dependencyResolutionManagement {
@@ -38,7 +37,7 @@ fun VersionCatalogBuilder.spring() {
 }
 
 fun VersionCatalogBuilder.voice() {
-    version("lavaplayer", "ef07585")
+    version("lavaplayer", "ef075855da")
 
     library("lavaplayer",            "com.github.walkyst.lavaplayer-fork", "lavaplayer").versionRef("lavaplayer")
     library("lavaplayer-ip-rotator", "com.github.walkyst.lavaplayer-fork", "lavaplayer-ext-youtube-rotator").versionRef("lavaplayer")
@@ -76,14 +75,16 @@ fun VersionCatalogBuilder.common() {
     library("logback",        "ch.qos.logback",       "logback-classic").version("1.2.3")
     library("sentry-logback", "io.sentry",            "sentry-logback").version("1.7.2")
     library("oshi",           "com.github.oshi",      "oshi-core").version("5.7.4")
-    library("json",           "org.json",             "json").version("20180813")
+    library("json",           "org.json",             "json").version("20230227")
+
+    library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.5.0")
+    library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime").version("0.4.0")
 
     library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.5.0")
     library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime").version("0.4.0")
 
     library("spotbugs", "com.github.spotbugs", "spotbugs-annotations").version("3.1.6")
 }
-
 
 fun VersionCatalogBuilder.other() {
     library("jda",             "net.dv8tion",         "JDA").version("4.1.1_135")

@@ -4,8 +4,13 @@ package dev.arbjerg.lavalink.protocol.v4
 
 import dev.arbjerg.lavalink.protocol.v4.serialization.asPolymorphicDeserializer
 import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
@@ -43,10 +48,22 @@ sealed interface LoadResult {
         override val loadType: ResultStatus,
         override val data: Data
     ) : LoadResult {
-        constructor(data: Data) : this(ResultStatus.SEARCH_RESULT, data)
+        constructor(data: Data) : this(ResultStatus.SEARCH, data)
 
-        @Serializable
-        data class Data(override val tracks: List<Track>) : HasTracks, LoadResult.Data
+        @Serializable(with = Data.Serializer::class)
+        data class Data(override val tracks: List<Track>) : HasTracks, LoadResult.Data {
+            object Serializer : KSerializer<Data> {
+                private val delegate = ListSerializer(Track.serializer())
+                override val descriptor: SerialDescriptor = delegate.descriptor
+
+                override fun deserialize(decoder: Decoder): Data =
+                    Data(decoder.decodeInline(descriptor).decodeSerializableValue(delegate))
+
+                override fun serialize(encoder: Encoder, value: Data) {
+                    encoder.encodeInline(descriptor).encodeSerializableValue(delegate, value.tracks)
+                }
+            }
+        }
     }
 
     @Serializable
@@ -101,7 +118,7 @@ sealed interface LoadResult {
                 when (it) {
                     ResultStatus.TRACK -> TrackLoaded.serializer()
                     ResultStatus.PLAYLIST -> PlaylistLoaded.serializer()
-                    ResultStatus.SEARCH_RESULT -> SearchResult.serializer()
+                    ResultStatus.SEARCH -> SearchResult.serializer()
                     ResultStatus.NONE -> NoMatches.serializer()
                     ResultStatus.ERROR -> LoadFailed.serializer()
                 }
@@ -170,7 +187,7 @@ enum class ResultStatus {
     PLAYLIST,
 
     @SerialName("search")
-    SEARCH_RESULT,
+    SEARCH,
 
     @SerialName("empty")
     NONE,

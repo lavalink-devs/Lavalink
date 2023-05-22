@@ -9,6 +9,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.protocol.v4.*
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 import dev.arbjerg.lavalink.protocol.v4.Band as Bandv4
 
 class FilterChain(

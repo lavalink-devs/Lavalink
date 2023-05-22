@@ -16,9 +16,9 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * `v4` now returns the tracks `artworkUrl` and `isrc` if the source supports it.
 * removal of deprecated json fields like `track`.
 * addition of `artworkUrl` and `isrc` fields to the [Track Info](#track-info) object.
-* addition of the full [Track Object](#track) in [TrackStartEvent](#trackstartevent),  [TrackEndEvent](#trackendevent), [TrackExceptionEvent](#trackexceptionevent) and [TrackStuckEvent](#trackstuckevent).
+* addition of the full [Track](#track) object in [TrackStartEvent](#trackstartevent), [TrackEndEvent](#trackendevent), [TrackExceptionEvent](#trackexceptionevent) and [TrackStuckEvent](#trackstuckevent).
 * updated capitalization of [Track End Reason](#track-end-reason) and [Severity](#severity)
-* reworked [Load Result Object](#track-loading-result)
+* reworked [Load Result](#track-loading-result) object
 
 ## Significant changes v3.6.0 -> v3.7.0
 
@@ -53,6 +53,9 @@ All websocket ops are deprecated as of `v3.7.0` and replaced with the following 
 
 ## Future breaking changes for v4
 
+> **Warning**
+> We are currently reconsidering these decisions. See https://github.com/lavalink-devs/Lavalink/discussions/859 for more info
+
 * HTTP endpoints not under a version path (`/v3`, `/v4`) will be removed except `/version` in v4.
 * `/v4/websocket` will not accept any websocket messages. In `v4` the websocket is only used for server-to-client messages.
 * The `/v3` API will still be available to be used.
@@ -64,7 +67,7 @@ All websocket ops are deprecated as of `v3.7.0` and replaced with the following 
 
 * Added filters
 * The `error` string on the `TrackExceptionEvent` has been deprecated and replaced by
-  the [exception object](#exception-object) following the same structure as the `LOAD_FAILED` error on [`/loadtracks`](#track-loading).
+  the [Exception](#exception-object) object following the same structure as the `LOAD_FAILED` error on [`/loadtracks`](#track-loading).
 * Added the `connected` boolean to player updates.
 * Added source name to REST api track objects
 * Clients are now requested to make their name known during handshake
@@ -111,16 +114,16 @@ Fields marked with `?` are optional and types marked with `?` are nullable.
 
 ### Opening a connection
 
-You can establish a WebSocket connection against the path `/v4/websocket`
+You can establish a WebSocket connection against the path `/v4/websocket`.
 
 When opening a websocket connection, you must supply 3 required headers:
 
 | Header Name     | Description                                     |
 |-----------------|-------------------------------------------------|
-| `Authorization` | The password you set in your Lavalink config.   |
-| `User-Id`       | The user id of the bot.                         |
+| `Authorization` | The password you set in your Lavalink config    |
+| `User-Id`       | The user id of the bot                          |
 | `Client-Name`   | The name of the client in `NAME/VERSION` format |
-| `Session-Id`?*  | The id of the previous session to resume        |
+| `Session-Id`? * | The id of the previous session to resume        |
 
 **\*For more information on resuming see [Resuming](#resuming-lavalink-sessions)**
 
@@ -158,21 +161,21 @@ Websocket messages all follow the following standard format:
 
 #### OP Types
 
-| OP Type                           | Description                                                |
-|-----------------------------------|------------------------------------------------------------|
-| [ready](#ready-op)                | Emitted when you successfully connect to the Lavalink node |
-| [playerUpdate](#player-update-op) | Emitted every x seconds with the latest player state       |
-| [stats](#stats-op)                | Emitted when the node sends stats once per minute          |
-| [event](#event-op)                | Emitted when a player or voice event is emitted            |
+| OP Type                           | Description                                                   |
+|-----------------------------------|---------------------------------------------------------------|
+| [ready](#ready-op)                | Dispatched when you successfully connect to the Lavalink node |
+| [playerUpdate](#player-update-op) | Dispatched every x seconds with the latest player state       |
+| [stats](#stats-op)                | Dispatched when the node sends stats once per minute          |
+| [event](#event-op)                | Dispatched when player or voice events occur                  |
 
 #### Ready OP
 
-Dispatched by Lavalink upon successful connection and authorization. Contains fields determining if resuming was successful, as well as the session ID.
+Dispatched by Lavalink upon successful connection and authorization. Contains fields determining if resuming was successful, as well as the session id.
 
 | Field     | Type   | Description                                                                                    |
 |-----------|--------|------------------------------------------------------------------------------------------------|
-| resumed   | bool   | If a session was resumed                                                                       |
-| sessionId | string | The Lavalink session ID of this connection. Not to be confused with a Discord voice session id |
+| resumed   | bool   | Whether this session was resumed                                                               |
+| sessionId | string | The Lavalink session id of this connection. Not to be confused with a Discord voice session id |
 
 <details>
 <summary>Example Payload</summary>
@@ -191,7 +194,7 @@ Dispatched by Lavalink upon successful connection and authorization. Contains fi
 
 #### Player Update OP
 
-Dispatched every x (configurable in `application.yml`) seconds with the current state of the player.
+Dispatched every x seconds (configurable in `application.yml`) with the current state of the player.
 
 | Field   | Type                                 | Description                |
 |---------|--------------------------------------|----------------------------|
@@ -200,12 +203,12 @@ Dispatched every x (configurable in `application.yml`) seconds with the current 
 
 ##### Player State
 
-| Field     | Type | Description                                                                            |
-|-----------|------|----------------------------------------------------------------------------------------|
-| time      | int  | Unix timestamp in milliseconds                                                         |
-| position? | int  | The position of the track in milliseconds                                              |
-| connected | bool | If Lavalink is connected to the voice gateway                                          |
-| ping      | int  | The ping of the node to the Discord voice server in milliseconds (-1 if not connected) |
+| Field     | Type | Description                                                                              |
+|-----------|------|------------------------------------------------------------------------------------------|
+| time      | int  | Unix timestamp in milliseconds                                                           |
+| position  | int  | The position of the track in milliseconds                                                |
+| connected | bool | Whether Lavalink is connected to the voice gateway                                       |
+| ping      | int  | The ping of the node to the Discord voice server in milliseconds (`-1` if not connected) |
 
 <details>
 <summary>Example Payload</summary>
@@ -301,7 +304,7 @@ A collection of stats sent every minute.
 
 #### Event OP
 
-Server emitted an event. See the [Event Types](#event-types) section for more information.
+Server dispatched an event. See the [Event Types](#event-types) section for more information.
 
 | Field   | Type                      | Description                         |
 |---------|---------------------------|-------------------------------------|
@@ -325,21 +328,21 @@ Server emitted an event. See the [Event Types](#event-types) section for more in
 
 ##### Event Types
 
-| Event Type                                    | Description                                                              |
-|-----------------------------------------------|--------------------------------------------------------------------------|
-| [TrackStartEvent](#trackstartevent)           | Emitted when a track starts playing                                      |
-| [TrackEndEvent](#trackendevent)               | Emitted when a track ends                                                |
-| [TrackExceptionEvent](#trackexceptionevent)   | Emitted when a track throws an exception                                 |
-| [TrackStuckEvent](#trackstuckevent)           | Emitted when a track gets stuck while playing                            |
-| [WebSocketClosedEvent](#websocketclosedevent) | Emitted when the websocket connection to Discord voice servers is closed |
+| Event Type                                    | Description                                                                 |
+|-----------------------------------------------|-----------------------------------------------------------------------------|
+| [TrackStartEvent](#trackstartevent)           | Dispatched when a track starts playing                                      |
+| [TrackEndEvent](#trackendevent)               | Dispatched when a track ends                                                |
+| [TrackExceptionEvent](#trackexceptionevent)   | Dispatched when a track throws an exception                                 |
+| [TrackStuckEvent](#trackstuckevent)           | Dispatched when a track gets stuck while playing                            |
+| [WebSocketClosedEvent](#websocketclosedevent) | Dispatched when the websocket connection to Discord voice servers is closed |
 
 ##### TrackStartEvent
 
-Emitted when a track starts playing.
+Dispatched when a track starts playing.
 
-| Field | Type                   | Description                                   |
-|-------|------------------------|-----------------------------------------------|
-| track | [Track](#track) object | The base64 encoded track that started playing |
+| Field | Type                   | Description                    |
+|-------|------------------------|--------------------------------|
+| track | [Track](#track) object | The track that started playing |
 
 <details>
 <summary>Example Payload</summary>
@@ -375,12 +378,12 @@ Emitted when a track starts playing.
 
 ##### TrackEndEvent
 
-Emitted when a track ends.
+Dispatched when a track ends.
 
-| Field  | Type                                | Description                                 |
-|--------|-------------------------------------|---------------------------------------------|
-| track  | [Track](#track) object              | The base64 encoded track that ended playing |
-| reason | [TrackEndReason](#track-end-reason) | The reason the track ended                  |
+| Field  | Type                                | Description                  |
+|--------|-------------------------------------|------------------------------|
+| track  | [Track](#track) object              | The track that ended playing |
+| reason | [TrackEndReason](#track-end-reason) | The reason the track ended   |
 
 ##### Track End Reason
 
@@ -427,12 +430,12 @@ Emitted when a track ends.
 
 ##### TrackExceptionEvent
 
-Emitted when a track throws an exception.
+Dispatched when a track throws an exception.
 
-| Field     | Type                                  | Description                                       |
-|-----------|---------------------------------------|---------------------------------------------------|
-| track     | [Track](#track) object                | The base64 encoded track that threw the exception |
-| exception | [Exception](#exception-object) object | The occurred exception                            |
+| Field     | Type                                  | Description                        |
+|-----------|---------------------------------------|------------------------------------|
+| track     | [Track](#track) object                | The track that threw the exception |
+| exception | [Exception](#exception-object) object | The occurred exception             |
 
 ##### Exception Object
 
@@ -448,7 +451,7 @@ Emitted when a track throws an exception.
 |--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `common`     | The cause is known and expected, indicates that there is nothing wrong with the library itself                                                                                                                                         |
 | `suspicious` | The cause might not be exactly known, but is possibly caused by outside factors. For example when an outside service responds in a format that we do not expect                                                                        |
-| `fault`      | If the probable cause is an issue with the library or when there is no way to tell what the cause might be. This is the default level and other levels are used in cases where the thrower has more in-depth knowledge about the error |
+| `fault`      | The probable cause is an issue with the library or there is no way to tell what the cause might be. This is the default level and other levels are used in cases where the thrower has more in-depth knowledge about the error |
 
 <details>
 <summary>Example Payload</summary>
@@ -489,11 +492,11 @@ Emitted when a track throws an exception.
 
 ##### TrackStuckEvent
 
-Emitted when a track gets stuck while playing.
+Dispatched when a track gets stuck while playing.
 
 | Field       | Type                   | Description                                     |
 |-------------|------------------------|-------------------------------------------------|
-| track       | [Track](#track) object | The base64 encoded track that got stuck         |
+| track       | [Track](#track) object | The track that got stuck                        |
 | thresholdMs | int                    | The threshold in milliseconds that was exceeded |
 
 <details>
@@ -531,16 +534,16 @@ Emitted when a track gets stuck while playing.
 
 ##### WebSocketClosedEvent
 
-Emitted when an audio WebSocket (to Discord) is closed.
+Dispatched when an audio WebSocket (to Discord) is closed.
 This can happen for various reasons (normal and abnormal), e.g. when using an expired voice server update.
 4xxx codes are usually bad.
-See the [Discord Docs](https://discordapp.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes).
+See the [Discord Docs](https://discord.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes).
 
 | Field    | Type   | Description                                                                                                                       |
 |----------|--------|-----------------------------------------------------------------------------------------------------------------------------------|
 | code     | int    | The [Discord close event code](https://discord.com/developers/docs/topics/opcodes-and-status-codes#voice-voice-close-event-codes) |
 | reason   | string | The close reason                                                                                                                  |
-| byRemote | bool   | If the connection was closed by Discord                                                                                           |
+| byRemote | bool   | Whether the connection was closed by Discord                                                                                      |
 
 <details>
 <summary>Example Payload</summary>
@@ -563,13 +566,13 @@ See the [Discord Docs](https://discordapp.com/developers/docs/topics/opcodes-and
 ### REST API
 
 Lavalink exposes a REST API to allow for easy control of the players.
-Most routes require the Authorization header with the configured password.
+Most routes require the `Authorization` header with the configured password.
 
 ```
 Authorization: youshallnotpass
 ```
 
-Routes are prefixed with `/v3` as of `v3.7.0`. Routes without an API prefix are to be removed in v4.
+Routes are prefixed with `/v3` as of `v3.7.0` and `/v4` as of `v4.0.0`. Routes without an API prefix were removed in v4 (except `/version`).
 
 #### Error Responses
 
@@ -577,7 +580,7 @@ When Lavalink encounters an error, it will respond with a JSON object containing
 
 | Field     | Type   | Description                                                                 |
 |-----------|--------|-----------------------------------------------------------------------------|
-| timestamp | int    | The timestamp of the error in milliseconds since the epoch                  |
+| timestamp | int    | The timestamp of the error in milliseconds since the Unix epoch             |
 | status    | int    | The HTTP status code                                                        |
 | error     | string | The HTTP status code message                                                |
 | trace?    | string | The stack trace of the error when `trace=true` as query param has been sent |
@@ -613,7 +616,7 @@ GET /v4/sessions/{sessionId}/players
 | Field   | Type                                 | Description                                           |
 |---------|--------------------------------------|-------------------------------------------------------|
 | guildId | string                               | The guild id of the player                            |
-| track   | ?[Track](#track) object              | The current playing track                             |
+| track   | ?[Track](#track) object              | The currently playing track                           |
 | volume  | int                                  | The volume of the player, range 0-1000, in percentage |
 | paused  | bool                                 | Whether the player is paused                          |
 | state   | [Player State](#player-state) object | The state of the player                               |
@@ -694,7 +697,8 @@ with the Voice Server Update. Please refer to https://discord.com/developers/doc
       "sessionId": "..."
     },
     "filters": { ... }
-  }
+  },
+  ...
 ]
 ```
 
@@ -712,7 +716,8 @@ GET /v4/sessions/{sessionId}/players/{guildId}
 
 Response:
 
-[Player Object](#Player)
+[Player](#Player) object
+
 <details>
 <summary>Example Payload</summary>
 
@@ -766,25 +771,25 @@ PATCH /v4/sessions/{sessionId}/players/{guildId}?noReplace=true
 
 Query Params:
 
-| Field     | Type | Description                                                                  |
-|-----------|------|------------------------------------------------------------------------------|
-| noReplace | bool | Whether to replace the current track with the new track. Defaults to `false` |
+| Field      | Type | Description                                                                  |
+|------------|------|------------------------------------------------------------------------------|
+| noReplace? | bool | Whether to replace the current track with the new track. Defaults to `false` |
 
 Request:
 
-| Field           | Type                               | Description                                                                   |
-|-----------------|------------------------------------|-------------------------------------------------------------------------------|
-| encodedTrack? * | ?string                            | The encoded track base64 to play. `null` stops the current track              |
-| identifier? *   | string                             | The track identifier to play                                                  |
-| position?       | int                                | The track position in milliseconds                                            |
-| endTime?        | ?int                               | The track end time in milliseconds (must be > 0)                              |
-| volume?         | int                                | The player volume from 0 to 1000                                              |
-| paused?         | bool                               | Whether the player is paused                                                  |
-| filters?        | [Filters](#filters) object         | The new filters to apply. This will override all previously applied filters   |                   
-| voice?          | [Voice State](#voice-state) object | Information required for connecting to Discord, without `connected` or `ping` |
+| Field           | Type                               | Description                                                                                   |
+|-----------------|------------------------------------|-----------------------------------------------------------------------------------------------|
+| encodedTrack? * | ?string                            | The base64 encoded track to play. `null` stops the current track                              |
+| identifier? *   | string                             | The identifier of the track to play                                                           |
+| position?       | int                                | The track position in milliseconds                                                            |
+| endTime?        | ?int                               | The track end time in milliseconds (must be > 0). `null` resets this if it was set previously |
+| volume?         | int                                | The player volume, in percentage, from 0 to 1000                                              |
+| paused?         | bool                               | Whether the player is paused                                                                  |
+| filters?        | [Filters](#filters) object         | The new filters to apply. This will override all previously applied filters                   |                   
+| voice?          | [Voice State](#voice-state) object | Information required for connecting to Discord                                                |
 
 > **Note**
-> - `encodedTrack` and `identifier` are mutually exclusive.
+> - \* `encodedTrack` and `identifier` are mutually exclusive.
 > - `sessionId` in the path should be the value from the [ready op](#ready-op).
 
 When `identifier` is used, Lavalink will try to resolve the identifier as a single track. An HTTP `400` error is returned when resolving a playlist, search result, or no tracks.
@@ -814,7 +819,7 @@ When `identifier` is used, Lavalink will try to resolve the identifier as a sing
 
 Response:
 
-[Player Object](#Player)
+[Player](#Player) object
 
 <details>
 <summary>Example Payload</summary>
@@ -863,19 +868,19 @@ Response:
 
 Filters are used in above requests and look like this
 
-| Field       | Type                               | Description                                                                                         |
-|-------------|------------------------------------|-----------------------------------------------------------------------------------------------------|
-| volume?     | float                              | Lets you adjust the player volume from 0.0 to 5.0 where 1.0 is 100%. Values >1.0 may cause clipping |
-| equalizer?  | array of [Equalizers](#equalizer)  | Lets you adjust 15 different bands                                                                  |
-| karaoke?    | [Karaoke](#karaoke) object         | Lets you eliminate part of a band, usually targeting vocals                                         |
-| timescale?  | [Timescale](#timescale) object     | Lets you change the speed, pitch, and rate                                                          |
-| tremolo?    | [Tremolo](#tremolo) object         | Lets you create a shuddering effect, where the volume quickly oscillates                            |
-| vibrato?    | [Vibrato](#vibrato) object         | Lets you create a shuddering effect, where the pitch quickly oscillates                             |
-| rotation?   | [Rotation](#rotation) object       | Lets you rotate the sound around the stereo channels/user headphones aka Audio Panning              |
-| distortion? | [Distortion](#distortion) object   | Lets you distort the audio                                                                          |
-| channelMix? | [Channel Mix](#channel-mix) object | Lets you mix both channels (left and right)                                                         |
-| lowPass?    | [Low Pass](#low-pass) object       | Lets you filter higher frequencies                                                                  |
-| ...         | ...                                | Plugins may add different filters which can also be set here                                        |
+| Field       | Type                                      | Description                                                                                  |
+|-------------|-------------------------------------------|----------------------------------------------------------------------------------------------|
+| volume?     | float                                     | Adjusts the player volume from 0.0 to 5.0, where 1.0 is 100%. Values >1.0 may cause clipping |
+| equalizer?  | array of [Equalizer](#equalizer) objects  | Adjusts 15 different bands                                                                   |
+| karaoke?    | [Karaoke](#karaoke) object                | Eliminates part of a band, usually targeting vocals                                           |
+| timescale?  | [Timescale](#timescale) object            | Changes the speed, pitch, and rate                                                           |
+| tremolo?    | [Tremolo](#tremolo) object                | Creates a shuddering effect, where the volume quickly oscillates                             |
+| vibrato?    | [Vibrato](#vibrato) object                | Creates a shuddering effect, where the pitch quickly oscillates                              |
+| rotation?   | [Rotation](#rotation) object              | Rotates the audio around the stereo channels/user headphones (aka Audio Panning)             |
+| distortion? | [Distortion](#distortion) object          | Distorts the audio                                                                           |
+| channelMix? | [Channel Mix](#channel-mix) object        | Mixes both channels (left and right)                                                         |
+| lowPass?    | [Low Pass](#low-pass) object              | Filters higher frequencies                                                                   |
+| ...         | ...                                       | Plugins may add different filters which can also be set here                                 |
 
 ##### Equalizer
 
@@ -908,7 +913,7 @@ where -0.25 means the given band is completely muted, and 0.25 means it is doubl
 
 | Field | Type  | Description             |
 |-------|-------|-------------------------|
-| bands | int   | The band (0 to 14)      |
+| band  | int   | The band (0 to 14)      |
 | gain  | float | The gain (-0.25 to 1.0) |
 
 ##### Karaoke
@@ -919,22 +924,23 @@ Uses equalization to eliminate part of a band, usually targeting vocals.
 |--------------|-------|-------------------------------------------------------------------------|
 | level?       | float | The level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect)      |
 | monoLevel?   | float | The mono level (0 to 1.0 where 0.0 is no effect and 1.0 is full effect) |
-| filterBand?  | float | The filter band                                                         |
+| filterBand?  | float | The filter band (in Hz)                                                 |
 | filterWidth? | float | The filter width                                                        |
 
 ##### Timescale
 
 Changes the speed, pitch, and rate. All default to 1.0.
-| Field | Type | Description |
+
+| Field  | Type  | Description                |
 |--------|-------|----------------------------|
 | speed? | float | The playback speed 0.0 ≤ x |
-| pitch? | float | The pitch 0.0 ≤ x |
-| rate? | float | The rate 0.0 ≤ x |
+| pitch? | float | The pitch 0.0 ≤ x          |
+| rate?  | float | The rate 0.0 ≤ x           |
 
 ##### Tremolo
 
 Uses amplification to create a shuddering effect, where the volume quickly oscillates.
-https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
+Demo: https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.ogv
 
 | Field      | Type  | Description                     |
 |------------|-------|---------------------------------|
@@ -944,15 +950,17 @@ https://en.wikipedia.org/wiki/File:Fuse_Electronics_Tremolo_MK-III_Quick_Demo.og
 ##### Vibrato
 
 Similar to tremolo. While tremolo oscillates the volume, vibrato oscillates the pitch.
-| Field | Type | Description |
+
+| Field      | Type  | Description                     |
 |------------|-------|---------------------------------|
-| frequency? | float | The frequency 0.0 < x ≤ 14.0 |
-| depth? | float | The vibrato depth 0.0 < x ≤ 1.0 |
+| frequency? | float | The frequency 0.0 < x ≤ 14.0    |
+| depth?     | float | The vibrato depth 0.0 < x ≤ 1.0 |
 
 ##### Rotation
 
-Rotates the sound around the stereo channels/user headphones aka Audio Panning. It can produce an effect similar to https://youtu.be/QB9EB8mTKcc (without the reverb)
-| Field | Type | Description |
+Rotates the sound around the stereo channels/user headphones (aka Audio Panning). It can produce an effect similar to https://youtu.be/QB9EB8mTKcc (without the reverb).
+
+| Field       | Type  | Description                                                                                              |
 |-------------|-------|----------------------------------------------------------------------------------------------------------|
 | rotationHz? | float | The frequency of the audio rotating around the listener in Hz. 0.2 is similar to the example video above |
 
@@ -987,7 +995,7 @@ Setting all factors to 0.5 means both channels get the same audio.
 ##### Low Pass
 
 Higher frequencies get suppressed, while lower frequencies pass through this filter, thus the name low pass.
-Any smoothing values equal to, or less than 1.0 will disable the filter.
+Any smoothing values equal to or less than 1.0 will disable the filter.
 
 | Field      | Type  | Description                    |
 |------------|-------|--------------------------------|
@@ -1166,18 +1174,18 @@ Response:
 
 ###### Load Result Data - Playlist
 
-| Field      | Type                           | Description                                 |
-|------------|--------------------------------|---------------------------------------------|
-| info       | [PlaylistInfo](#playlist-info) | The info of the playlist                    |
-| pluginInfo | Object                         | Addition playlist info provided by plugins  |
-| tracks     | Array of [Track](#track)       | The tracks of the playlist                  |
+| Field      | Type                                  | Description                                 |
+|------------|---------------------------------------|---------------------------------------------|
+| info       | [PlaylistInfo](#playlist-info) object | The info of the playlist                    |
+| pluginInfo | Object                                | Addition playlist info provided by plugins  |
+| tracks     | array of [Track](#track) objects      | The tracks of the playlist                  |
 
 ###### Playlist Info
 
-| Field          | Type   | Description                                                     |
-|----------------|--------|-----------------------------------------------------------------|
-| name           | string | The name of the playlist                                        |
-| selectedTrack? | int    | The selected track of the playlist (-1 if no track is selected) |
+| Field         | Type   | Description                                                     |
+|---------------|--------|-----------------------------------------------------------------|
+| name          | string | The name of the playlist                                        |
+| selectedTrack | int    | The selected track of the playlist (-1 if no track is selected) |
 
 <details>
 <summary>Example Payload</summary>
@@ -1197,7 +1205,7 @@ Response:
 
 ###### Load Result Data - Search
 
-Array of [Track Objects](#track) with the search results.
+Array of [Track](#track) objects from the search result.
 
 <details>
 <summary>Example Payload</summary>
@@ -1236,7 +1244,7 @@ Empty object.
 
 ###### Load Result Data - Error
 
-[Exception Object](#exception-object) with the error.
+[Exception](#exception-object) object with the error.
 
 <details>
 <summary>Example Payload</summary>
@@ -1258,9 +1266,9 @@ Empty object.
 
 #### Track Searching
 
-Lavalink supports searching via YouTube, YouTube Music, and Soundcloud. To search, you must prefix your identifier with `ytsearch:`, `ytmsearch:`, or `scsearch:`respectively.
+Lavalink supports searching via YouTube, YouTube Music, and Soundcloud. To search, you must prefix your identifier with `ytsearch:`, `ytmsearch:` or `scsearch:` respectively.
 
-When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. Note that, disabling the respective source managers renders these search prefixes useless. Plugins may also implement prefixes to allow for more search engines.
+When a search prefix is used, the returned `loadType` will be `search`. Note that disabling the respective source managers renders these search prefixes useless. Plugins may also implement prefixes to allow for more search engines to be utilised.
 
 ---
 
@@ -1274,7 +1282,7 @@ GET /v4/decodetrack?encodedTrack=BASE64
 
 Response:
 
-[Track Object](#track)
+[Track](#track) object
 
 <details>
 <summary>Example Payload</summary>
@@ -1327,7 +1335,7 @@ Array of track data strings
 
 Response:
 
-Array of [Track Objects](#track)
+Array of [Track](#track) objects
 
 <details>
 <summary>Example Payload</summary>
@@ -1371,18 +1379,20 @@ Response:
 
 ##### Info Response
 
-| Field          | Type                               | Description                                                     |
-|----------------|------------------------------------|-----------------------------------------------------------------|
-| version        | [Version](#version-object) object  | The version of this Lavalink server                             |
-| buildTime      | int                                | The millisecond unix timestamp when this Lavalink jar was built |
-| git            | [Git](#git-object) object          | The git information of this Lavalink server                     |
-| jvm            | string                             | The JVM version this Lavalink server runs on                    |
-| lavaplayer     | string                             | The Lavaplayer version being used by this server                |
-| sourceManagers | array of strings                   | The enabled source managers for this server                     |
-| filters        | array of strings                   | The enabled filters for this server                             |
-| plugins        | array of [Plugins](#plugin-object) | The enabled plugins for this server                             |
+| Field          | Type                                      | Description                                                     |
+|----------------|-------------------------------------------|-----------------------------------------------------------------|
+| version        | [Version](#version-object) object         | The version of this Lavalink server                             |
+| buildTime      | int                                       | The millisecond unix timestamp when this Lavalink jar was built |
+| git            | [Git](#git-object) object                 | The git information of this Lavalink server                     |
+| jvm            | string                                    | The JVM version this Lavalink server runs on                    |
+| lavaplayer     | string                                    | The Lavaplayer version being used by this server                |
+| sourceManagers | array of strings                          | The enabled source managers for this server                     |
+| filters        | array of strings                          | The enabled filters for this server                             |
+| plugins        | array of [Plugin](#plugin-object) objects | The enabled plugins for this server                             |
 
 ##### Version Object
+
+Parsed Semantic Versioning 2.0.0. See https://semver.org/ for more info
 
 | Field      | Type    | Description                                                                        |
 |------------|---------|------------------------------------------------------------------------------------|
@@ -1391,6 +1401,7 @@ Response:
 | minor      | int     | The minor version of this Lavalink server                                          |
 | patch      | int     | The patch version of this Lavalink server                                          |
 | preRelease | ?string | The pre-release version according to semver as a `.` separated list of identifiers |
+| build      | ?string | The build metadata according to semver as a `.` separated list of identifiers      |
 
 ##### Git Object
 
@@ -1413,11 +1424,12 @@ Response:
 ```json
 {
   "version": {
-    "string": "3.7.0-rc.1",
+    "string": "3.7.0-rc.1+test",
     "major": 3,
     "minor": 7,
     "patch": 0,
-    "preRelease": "rc.1"
+    "preRelease": "rc.1",
+    "build": "test"
   },
   "buildTime": 1664223916812,
   "git": {
@@ -1465,7 +1477,7 @@ GET /v4/stats
 Response:
 
 `frameStats` is always missing for this endpoint.
-[Stats Object](#stats-object)
+[Stats](#stats-object) object
 
 <details>
 <summary>Example Payload</summary>
@@ -1565,7 +1577,7 @@ Response:
 
 | Field            | Type   | Description                                              |
 |------------------|--------|----------------------------------------------------------|
-| address          | string | The failing address                                      |
+| failingAddress   | string | The failing address                                      |
 | failingTimestamp | int    | The timestamp when the address failed                    |
 | failingTime      | string | The timestamp when the address failed as a pretty string |
 
@@ -1582,7 +1594,7 @@ Response:
     },
     "failingAddresses": [
       {
-        "address": "/1.0.0.0",
+        "failingAddress": "/1.0.0.0",
         "failingTimestamp": 1573520707545,
         "failingTime": "Mon Nov 11 20:05:07 EST 2019"
       }
@@ -1661,17 +1673,17 @@ Session-Resumed: true
 
 In case your websocket library doesn't support reading headers you can listen for the [ready op](#ready-op) and check the `resumed` field.
 
-When a session is paused, any events that would normally have been sent is queued up. When the session is resumed, this
-queue is then emptied and the events are then replayed.
+When a session is paused, any events that would normally have been sent are queued up. When the session is resumed, this
+queue is then emptied and the events are replayed.
 
 ---
 
 ### Special notes
 
-* When your shard's main WS connection dies, so does all your Lavalink audio connections.
-    * This also includes resumes
+* When your shard's main WS connection dies, so does all your Lavalink audio connections
+  * This also includes resumes
 
-* If Lavalink-Server suddenly dies (think SIGKILL) the client will have to terminate any audio connections by sending this event:
+* If Lavalink-Server suddenly dies (think SIGKILL) the client will have to terminate any audio connections by sending this event to Discord:
 
 ```json
 {

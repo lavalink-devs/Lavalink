@@ -123,7 +123,7 @@ object Launcher {
         }
 
         val parent = launchPluginBootstrap()
-        log.info("You can safely ignore the big red warning about illegal reflection. See https://github.com/freyacodes/Lavalink/issues/295")
+        log.info("You can safely ignore the big red warning about illegal reflection. See https://github.com/lavalink-devs/Lavalink/issues/295")
         launchMain(parent, args)
     }
 

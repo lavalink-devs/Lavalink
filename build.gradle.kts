@@ -15,8 +15,8 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.6.6")
         classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2")
         classpath("com.adarshr:gradle-test-logger-plugin:1.6.0")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:1.8.10")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:1.8.20")
     }
 }
 
@@ -61,7 +61,7 @@ fun versionFromTag(): String {
             .list()
             .find { it.commit.id == git.head().id }
 
-        val clean = git.status().isClean || System.getenv("CI") == null
+        val clean = git.status().isClean || System.getenv("CI") != null
         if (!clean) {
             println("Git state is dirty, setting version as snapshot.")
         }

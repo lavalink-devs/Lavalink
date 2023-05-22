@@ -17,7 +17,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Error(
-    @Serializable(with = TimestampSerializer::class)
     val timestamp: Timestamp,
     val status: Int,
     val error: String,
