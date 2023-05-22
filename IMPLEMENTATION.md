@@ -1268,7 +1268,7 @@ Empty object.
 
 Lavalink supports searching via YouTube, YouTube Music, and Soundcloud. To search, you must prefix your identifier with `ytsearch:`, `ytmsearch:` or `scsearch:` respectively.
 
-When a search prefix is used, the returned `loadType` will be `SEARCH_RESULT`. Note that disabling the respective source managers renders these search prefixes useless. Plugins may also implement prefixes to allow for more search engines to be utilised.
+When a search prefix is used, the returned `loadType` will be `search`. Note that disabling the respective source managers renders these search prefixes useless. Plugins may also implement prefixes to allow for more search engines to be utilised.
 
 ---
 
