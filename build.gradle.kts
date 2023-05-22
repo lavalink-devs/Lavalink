@@ -57,7 +57,7 @@ fun versionFromTag(): String {
             .list()
             .find { it.commit.id == git.head().id }
 
-        val clean = git.status().isClean || System.getenv("CI") == null
+        val clean = git.status().isClean || System.getenv("CI") != null
         if (!clean) {
             println("Git state is dirty, setting version as snapshot.")
         }
