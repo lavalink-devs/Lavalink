@@ -54,7 +54,7 @@ All websocket ops are deprecated as of `v3.7.0` and replaced with the following 
 ## Future breaking changes for v4
 
 > **Warning**
-> We are currently reconsidering these desicions. See https://github.com/lavalink-devs/Lavalink/discussions/859 for more info
+> We are currently reconsidering these decisions. See https://github.com/lavalink-devs/Lavalink/discussions/859 for more info
 
 * HTTP endpoints not under a version path (`/v3`, `/v4`) will be removed except `/version` in v4.
 * `/v4/websocket` will not accept any websocket messages. In `v4` the websocket is only used for server-to-client messages.
