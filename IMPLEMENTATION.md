@@ -54,7 +54,7 @@ All websocket ops are deprecated as of `v3.7.0` and replaced with the following 
 ## Future breaking changes for v4
 
 > **Warning**
-> We are currently reconsidering these decisions. See https://github.com/lavalink-devs/Lavalink/discussions/859 for more info
+> We are currently reconsidering these desicions. See https://github.com/lavalink-devs/Lavalink/discussions/859 for more info
 
 * HTTP endpoints not under a version path (`/v3`, `/v4`) will be removed except `/version` in v4.
 * `/v4/websocket` will not accept any websocket messages. In `v4` the websocket is only used for server-to-client messages.
@@ -1392,6 +1392,8 @@ Response:
 
 ##### Version Object
 
+Parsed Semantic Versioning 2.0.0. See https://semver.org/ for more info
+
 | Field      | Type    | Description                                                                        |
 |------------|---------|------------------------------------------------------------------------------------|
 | semver     | string  | The full version string of this Lavalink server                                    |
@@ -1399,6 +1401,7 @@ Response:
 | minor      | int     | The minor version of this Lavalink server                                          |
 | patch      | int     | The patch version of this Lavalink server                                          |
 | preRelease | ?string | The pre-release version according to semver as a `.` separated list of identifiers |
+| build      | ?string | The build metadata according to semver as a `.` separated list of identifiers      |
 
 ##### Git Object
 
@@ -1421,11 +1424,12 @@ Response:
 ```json
 {
   "version": {
-    "string": "3.7.0-rc.1",
+    "string": "3.7.0-rc.1+test",
     "major": 3,
     "minor": 7,
     "patch": 0,
-    "preRelease": "rc.1"
+    "preRelease": "rc.1",
+    "build": "test"
   },
   "buildTime": 1664223916812,
   "git": {
