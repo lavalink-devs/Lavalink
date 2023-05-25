@@ -868,19 +868,19 @@ Response:
 
 Filters are used in above requests and look like this
 
-| Field       | Type                                      | Description                                                                                  |
-|-------------|-------------------------------------------|----------------------------------------------------------------------------------------------|
-| volume?     | float                                     | Adjusts the player volume from 0.0 to 5.0, where 1.0 is 100%. Values >1.0 may cause clipping |
-| equalizer?  | array of [Equalizer](#equalizer) objects  | Adjusts 15 different bands                                                                   |
-| karaoke?    | [Karaoke](#karaoke) object                | Eliminates part of a band, usually targeting vocals                                           |
-| timescale?  | [Timescale](#timescale) object            | Changes the speed, pitch, and rate                                                           |
-| tremolo?    | [Tremolo](#tremolo) object                | Creates a shuddering effect, where the volume quickly oscillates                             |
-| vibrato?    | [Vibrato](#vibrato) object                | Creates a shuddering effect, where the pitch quickly oscillates                              |
-| rotation?   | [Rotation](#rotation) object              | Rotates the audio around the stereo channels/user headphones (aka Audio Panning)             |
-| distortion? | [Distortion](#distortion) object          | Distorts the audio                                                                           |
-| channelMix? | [Channel Mix](#channel-mix) object        | Mixes both channels (left and right)                                                         |
-| lowPass?    | [Low Pass](#low-pass) object              | Filters higher frequencies                                                                   |
-| ...         | ...                                       | Plugins may add different filters which can also be set here                                 |
+| Field          | Type                                           | Description                                                                                  |
+|----------------|------------------------------------------------|----------------------------------------------------------------------------------------------|
+| volume?        | float                                          | Adjusts the player volume from 0.0 to 5.0, where 1.0 is 100%. Values >1.0 may cause clipping |
+| equalizer?     | array of [Equalizer](#equalizer) objects       | Adjusts 15 different bands                                                                   |
+| karaoke?       | [Karaoke](#karaoke) object                     | Eliminates part of a band, usually targeting vocals                                          |
+| timescale?     | [Timescale](#timescale) object                 | Changes the speed, pitch, and rate                                                           |
+| tremolo?       | [Tremolo](#tremolo) object                     | Creates a shuddering effect, where the volume quickly oscillates                             |
+| vibrato?       | [Vibrato](#vibrato) object                     | Creates a shuddering effect, where the pitch quickly oscillates                              |
+| rotation?      | [Rotation](#rotation) object                   | Rotates the audio around the stereo channels/user headphones (aka Audio Panning)             |
+| distortion?    | [Distortion](#distortion) object               | Distorts the audio                                                                           |
+| channelMix?    | [Channel Mix](#channel-mix) object             | Mixes both channels (left and right)                                                         |
+| lowPass?       | [Low Pass](#low-pass) object                   | Filters higher frequencies                                                                   |
+| pluginFilters? | map of [Plugin Filter](#plugin-filter) objects | Filter plugin configurations                                                                 |
 
 ##### Equalizer
 
@@ -1001,6 +1001,10 @@ Any smoothing values equal to or less than 1.0 will disable the filter.
 |------------|-------|--------------------------------|
 | smoothing? | float | The smoothing factor (1.0 < x) |
 
+##### Plugin Filter
+
+Plugins can add their own filters. The key is the name of the plugin, and the value is the configuration for that plugin. The configuration is plugin specific. See [Plugins](PLUGINS.md) for more plugin information.
+
 <details>
 <summary>Example Payload</summary>
 
@@ -1053,6 +1057,11 @@ Any smoothing values equal to or less than 1.0 will disable the filter.
   },
   "lowPass": {
     "smoothing": 20.0
+  },
+  "pluginFilters": {
+    "myPlugin": {
+      "myPluginKey": "myPluginValue"
+    }
   }
 }
 ```
