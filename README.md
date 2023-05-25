@@ -78,17 +78,19 @@ Version numbers can come in different combinations, depending on the release typ
 <details>
 <summary>v3.7 supporting Client Libraries</summary>
 
-| Client                                                  | Platform | Compatible With                            | Additional Information |
-|---------------------------------------------------------|----------|--------------------------------------------|------------------------|
-| [Mafic](https://github.com/ooliver1/mafic)              | Python   | discord.py **V2**/nextcord/disnake/py-cord |                        |
-| [Wavelink](https://github.com/PythonistaGuild/Wavelink) | Python   | discord.py **V2**                          |                        |
-| [Pomice](https://github.com/cloudwithax/pomice)         | Python   | discord.py **V2**                          |                        |
-| [Lavacord](https://github.com/lavacord/lavacord)        | Node.js  | **Any**                                    |                        |
-| [Poru](https://github.com/parasop/poru)                 | Node.js  | **Any**                                    |                        |
-| [Shoukaku](https://github.com/Deivu/Shoukaku)           | Node.js  | **Any**                                    |                        |
-| [Nomia](https://github.com/DHCPCD9/Nomia)               | .NET     | DSharpPlus                                 |                        |
-| [DisGoLink](https://github.com/disgoorg/disgolink)      | Go       | **Any**                                    |                        |
-| [Coglink](https://github.com/ThePedroo/Coglink)         | C        | Concord                                    |                        |
+| Client                                                   | Platform | Compatible With                            | Additional Information |
+|----------------------------------------------------------|----------|--------------------------------------------|------------------------|
+| [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt) | Kotlin   | JDA/Kord/**Any**                           | Kotlin Coroutines      |
+| [Mafic](https://github.com/ooliver1/mafic)               | Python   | discord.py **V2**/nextcord/disnake/py-cord |                        |
+| [Wavelink](https://github.com/PythonistaGuild/Wavelink)  | Python   | discord.py **V2**                          |                        |
+| [Pomice](https://github.com/cloudwithax/pomice)          | Python   | discord.py **V2**                          |                        |
+| [Lavacord](https://github.com/lavacord/lavacord)         | Node.js  | **Any**                                    |                        |
+| [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js) | Node.js  | **Any**                                    |                        |
+| [Poru](https://github.com/parasop/poru)                  | Node.js  | **Any**                                    |                        |
+| [Shoukaku](https://github.com/Deivu/Shoukaku)            | Node.js  | **Any**                                    |                        |
+| [Nomia](https://github.com/DHCPCD9/Nomia)                | .NET     | DSharpPlus                                 |                        |
+| [DisGoLink](https://github.com/disgoorg/disgolink)       | Go       | **Any**                                    |                        |
+| [Coglink](https://github.com/ThePedroo/Coglink)          | C        | Concord                                    |                        |
 
 </details>
 
@@ -211,7 +213,7 @@ version: "3.8"
 
 services:
     lavalink:
-        image: ghcr.io/freyacodes/lavalink:3 # pin the image version to Lavalink v3
+        image: ghcr.io/freyacodes/lavalink:4 # pin the image version to Lavalink v4
         container_name: lavalink
         restart: unless-stopped
         environment:

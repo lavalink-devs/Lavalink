@@ -78,9 +78,7 @@ sealed interface LoadResult {
             if (this === other) return true
             if (other !is NoMatches) return false
 
-            if (loadType != other.loadType) return false
-
-            return true
+            return loadType == other.loadType
         }
 
         override fun hashCode(): Int = loadType.hashCode()

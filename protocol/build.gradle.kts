@@ -66,13 +66,6 @@ kotlin {
                 implementation(kotlin("test-junit5"))
             }
         }
-
-        getByName("jvmMain") {
-            dependencies {
-                compileOnly(libs.lavaplayer)
-                implementation(libs.jackson.module.kotlin)
-            }
-        }
     }
 
     targets {

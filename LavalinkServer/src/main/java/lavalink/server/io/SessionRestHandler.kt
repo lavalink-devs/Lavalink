@@ -21,18 +21,14 @@ class SessionRestHandler(private val socketServer: SocketServer) {
         val context = socketContext(socketServer, sessionId)
 
         sessionUpdate.resuming.ifPresent {
-            if (it) {
-                context.resumeKey = context.sessionId
-            } else {
-                context.resumeKey = null
-            }
+            context.resumable = it
         }
 
         sessionUpdate.timeout.ifPresent {
             context.resumeTimeout = it.inWholeSeconds
         }
 
-        return ResponseEntity.ok(Session(context.resumeKey != null, context.resumeTimeout))
+        return ResponseEntity.ok(Session(context.resumable, context.resumeTimeout))
     }
 
 }

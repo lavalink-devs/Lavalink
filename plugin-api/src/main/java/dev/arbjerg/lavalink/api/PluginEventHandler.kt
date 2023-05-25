@@ -27,16 +27,6 @@ abstract class PluginEventHandler {
     open fun onSocketContextDestroyed(context: ISocketContext) = Unit
 
     /**
-     * Fired upon a WebSocket message being received
-     *
-     * @param context the websocket
-     * @param message the message, presumably in JSON
-     */
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("Usage of websocket commands is deprecated, use REST API instead")
-    open fun onWebsocketMessageIn(context: ISocketContext, message: String) = Unit
-
-    /**
      * Fired upon a WebSocket message being sent
      *
      * @param context the websocket

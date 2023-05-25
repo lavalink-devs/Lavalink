@@ -14,6 +14,6 @@ class WebsocketConfig(
     private val handshakeInterceptor: HandshakeInterceptorImpl,
 ) : WebSocketConfigurer {
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
-        registry.addHandler(server, "/v3/websocket", "/v4/websocket").addInterceptors(handshakeInterceptor)
+        registry.addHandler(server, "/v4/websocket").addInterceptors(handshakeInterceptor)
     }
 }

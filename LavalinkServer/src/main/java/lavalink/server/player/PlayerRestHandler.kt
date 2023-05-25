@@ -148,8 +148,8 @@ class PlayerRestHandler(
             player.setPause(if (paused is Omissible.Present) paused.value else false)
 
             val track: AudioTrack? = if (encodedTrack is Omissible.Present) {
-                encodedTrack.value?.let { encodedTrack ->
-                    decodeTrack(context.audioPlayerManager, encodedTrack)
+                encodedTrack.value?.let {
+                    decodeTrack(context.audioPlayerManager, it)
                 }
             } else {
                 val trackFuture = CompletableFuture<AudioTrack>()

@@ -13,11 +13,7 @@ class ResponseHeaderFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        if (request.requestURI.startsWith("/v3")) {
-            response.addHeader("Lavalink-Api-Version", "3")
-        } else {
-            response.addHeader("Lavalink-Api-Version", "4")
-        }
+        response.addHeader("Lavalink-Api-Version", "4")
         filterChain.doFilter(request, response)
     }
 }

@@ -26,7 +26,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.api.*
 import dev.arbjerg.lavalink.protocol.v4.Message
-import dev.arbjerg.lavalink.protocol.v3.Message as V3Message
 import dev.arbjerg.lavalink.protocol.v4.json
 import io.undertow.websockets.core.WebSocketCallback
 import io.undertow.websockets.core.WebSocketChannel
@@ -37,8 +36,6 @@ import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.serializerOrNull
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.LavalinkPlayer
-import lavalink.server.v3.StatsCollectorV3
-import lavalink.server.v3.WebSocketHandlerV3
 import moe.kyokobot.koe.KoeClient
 import moe.kyokobot.koe.KoeEventAdapter
 import moe.kyokobot.koe.MediaConnection
@@ -49,23 +46,18 @@ import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
 import java.net.InetSocketAddress
 import java.util.*
 import java.util.concurrent.*
-import kotlin.reflect.full.hasAnnotation
 
 class SocketContext(
     override val sessionId: String,
-    val version: Int,
     val audioPlayerManager: AudioPlayerManager,
     private val serverConfig: ServerConfig,
     private var session: WebSocketSession,
     private val socketServer: SocketServer,
     statsCollector: StatsCollector,
-    statsCollectorV3: StatsCollectorV3,
     override val userId: Long,
     override val clientName: String?,
     val koe: KoeClient,
     eventHandlers: Collection<PluginEventHandler>,
-    webSocketExtensions: List<WebSocketExtension>,
-    filterExtensions: List<AudioFilterExtension>,
     private val pluginInfoModifiers: List<AudioPluginInfoModifier>,
     private val objectMapper: ObjectMapper
 ) : ISocketContext {
@@ -78,20 +70,13 @@ class SocketContext(
     override val players = ConcurrentHashMap<Long, LavalinkPlayer>()
 
     val eventEmitter = EventEmitter(this, eventHandlers)
-    val wsHandler = if (version == 3) WebSocketHandlerV3(
-        this,
-        webSocketExtensions,
-        filterExtensions,
-        serverConfig,
-        objectMapper
-    ) else null
 
     @Volatile
     var sessionPaused = false
     private val resumeEventQueue = ConcurrentLinkedQueue<String>()
 
     /** Null means disabled. See implementation notes */
-    var resumeKey: String? = null
+    var resumable: Boolean = false
     var resumeTimeout = 60L // Seconds
     private var sessionTimeoutFuture: ScheduledFuture<Unit>? = null
     private val executor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
@@ -113,11 +98,7 @@ class SocketContext(
 
 
     init {
-        val task = if (version == 3) {
-            statsCollectorV3.createTask(this)
-        } else {
-            statsCollector.createTask(this)
-        }
+        val task = statsCollector.createTask(this)
         executor.scheduleAtFixedRate(task, 0, 1, TimeUnit.MINUTES)
         playerUpdateService = Executors.newScheduledThreadPool(2) { r ->
             val thread = Thread(r)
@@ -217,11 +198,7 @@ class SocketContext(
     fun resume(session: WebSocketSession) {
         sessionPaused = false
         this.session = session
-        if (version == 3) {
-            sendMessage(V3Message.ReadyEvent(true, sessionId))
-        } else {
-            sendMessage(Message.ReadyEvent(true, sessionId))
-        }
+        sendMessage(Message.ReadyEvent(true, sessionId))
         log.info("Replaying ${resumeEventQueue.size} events")
 
         // Bulk actions are not guaranteed to be atomic, so we need to do this imperatively
@@ -257,19 +234,14 @@ class SocketContext(
 
     private inner class WsEventHandler(private val player: LavalinkPlayer) : KoeEventAdapter() {
         override fun gatewayClosed(code: Int, reason: String?, byRemote: Boolean) {
-            if (version == 3) {
-                val event = V3Message.WebSocketClosedEvent(code, reason ?: "", byRemote, player.guildId.toString())
-                sendMessage(event)
-            } else {
-                val event = Message.EmittedEvent.WebSocketClosedEvent(
-                    player.guildId.toString(),
-                    code,
-                    reason ?: "",
-                    byRemote
-                )
+            val event = Message.EmittedEvent.WebSocketClosedEvent(
+                player.guildId.toString(),
+                code,
+                reason ?: "",
+                byRemote
+            )
 
-                sendMessage(event)
-            }
+            sendMessage(event)
             SocketServer.sendPlayerUpdate(this@SocketContext, player)
         }
 

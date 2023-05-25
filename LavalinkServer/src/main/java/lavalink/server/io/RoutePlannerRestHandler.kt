@@ -24,7 +24,7 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
     /**
      * Returns current information about the active AbstractRoutePlanner
      */
-    @GetMapping(value = ["/v3/routeplanner/status", "/v4/routeplanner/status"])
+    @GetMapping(value = ["/v4/routeplanner/status"])
     fun getStatus(request: HttpServletRequest): ResponseEntity<RoutePlannerStatus> {
         val status = when (routePlanner) {
             null -> return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
@@ -36,7 +36,7 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
     /**
      * Removes a single address from the addresses which are currently marked as failing
      */
-    @PostMapping(value = ["/v3/routeplanner/free/address", "/v4/routeplanner/free/address"])
+    @PostMapping(value = ["/v4/routeplanner/free/address"])
     fun freeSingleAddress(
         request: HttpServletRequest,
         @RequestBody body: RoutePlannerFreeAddress
@@ -54,7 +54,7 @@ class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {
     /**
      * Removes all addresses from the list which holds the addresses which are marked failing
      */
-    @PostMapping(value = ["/v3/routeplanner/free/all", "/v4/routeplanner/free/all"])
+    @PostMapping(value = ["/v4/routeplanner/free/all"])
     fun freeAllAddresses(request: HttpServletRequest): ResponseEntity<Unit> {
         routePlanner ?: throw RoutePlannerDisabledException()
         routePlanner.freeAllAddresses()
