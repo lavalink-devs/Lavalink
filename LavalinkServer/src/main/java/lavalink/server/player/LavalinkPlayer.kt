@@ -86,8 +86,8 @@ class LavalinkPlayer(
         audioPlayer.stopTrack()
     }
 
-    override fun setPause(b: Boolean) {
-        audioPlayer.isPaused = b
+    override fun setPause(pause: Boolean) {
+        audioPlayer.isPaused = pause
     }
 
     override fun seekTo(position: Long) {

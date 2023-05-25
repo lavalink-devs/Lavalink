@@ -14,6 +14,7 @@ apply(plugin = "com.adarshr.test-logger")
 apply(plugin = "kotlin")
 apply(plugin = "kotlin-spring")
 
+val archivesBaseName = "Lavalink-Server"
 description = "Play audio to discord voice channels"
 group = "dev.arbjerg.lavalink"
 
