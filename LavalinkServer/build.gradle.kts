@@ -15,6 +15,7 @@ apply(plugin = "kotlin")
 apply(plugin = "kotlin-spring")
 
 description = "Play audio to discord voice channels"
+group = "dev.arbjerg.lavalink"
 
 application {
     mainClass.set("lavalink.server.Launcher")
