@@ -6,8 +6,7 @@ plugins {
     `maven-publish`
     signing
     kotlin("multiplatform")
-    kotlin("plugin.serialization") version "1.8.10"
-    id("org.jetbrains.dokka")
+    kotlin("plugin.serialization") version "1.8.21"
 }
 
 val archivesBaseName = "protocol"

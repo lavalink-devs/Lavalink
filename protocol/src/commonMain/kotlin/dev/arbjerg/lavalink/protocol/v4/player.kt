@@ -4,9 +4,11 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import kotlin.jvm.JvmInline
 
-@Serializable
+@Serializable()
 @JvmInline
-value class Players(val players: List<Player>)
+value class Players(val players: List<Player>) {
+
+}
 
 @Serializable
 data class Player(
