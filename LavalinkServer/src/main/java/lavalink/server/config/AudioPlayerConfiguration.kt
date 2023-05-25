@@ -165,11 +165,11 @@ class AudioPlayerConfiguration {
 
         audioPlayerManager.configuration.isFilterHotSwapEnabled = true
 
-        var am: AudioPlayerManager = audioPlayerManager
 
-        audioPlayerManagerConfigurations.forEach {
-            am = it.configure(am)
-        }
+        val am = audioPlayerManagerConfigurations
+            .fold(audioPlayerManager as AudioPlayerManager) { player, plugin ->
+                plugin.configure(player)
+            }
 
         // This must be loaded last
         if (sources.isHttp) {

@@ -33,6 +33,10 @@ allprojects {
     }
 }
 
+plugins {
+    id("org.jetbrains.dokka") version "1.8.10"
+}
+
 subprojects {
     if (project.hasProperty("includeAnalysis")) {
         project.logger.lifecycle("applying analysis plugins")

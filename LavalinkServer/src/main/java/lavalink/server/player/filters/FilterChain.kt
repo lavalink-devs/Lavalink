@@ -1,6 +1,5 @@
 package lavalink.server.player.filters
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.sedmelluq.discord.lavaplayer.filter.AudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter
 import com.sedmelluq.discord.lavaplayer.filter.PcmFilterFactory
@@ -106,7 +105,10 @@ class FilterChain(
 
         for (filter in enabledFilters) {
             val outputTo = pipeline.lastOrNull() ?: output
-            pipeline.add(filter.build(format, outputTo))
+            val builtFilter = filter.build(format, outputTo)
+            if (builtFilter != null) {
+                pipeline.add(builtFilter)
+            }
         }
 
         return pipeline.reversed().toMutableList() // Output last
@@ -141,7 +143,7 @@ class FilterChain(
     }
 
     class PluginConfig(val extension: AudioFilterExtension, val json: JsonElement) : FilterConfig() {
-        override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter =
+        override fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter? =
             extension.build(json, format, output)
 
         override val isEnabled = extension.isEnabled(json)

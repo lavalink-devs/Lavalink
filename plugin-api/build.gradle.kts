@@ -1,9 +1,11 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-    java
     signing
-    `java-library`
     `maven-publish`
     kotlin("jvm")
+    id("org.jetbrains.dokka")
 }
 
 val archivesBaseName = "plugin-api"
@@ -19,19 +21,21 @@ dependencies {
 }
 
 java {
-    targetCompatibility = JavaVersion.VERSION_1_8
-    sourceCompatibility = JavaVersion.VERSION_1_8
-
-    withJavadocJar()
-    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_11
 }
 
-tasks.withType<Javadoc> {
-    if (JavaVersion.current().isJava9Compatible) {
-        /* https://stackoverflow.com/a/52850306 */
-        val opts = options as StandardJavadocDocletOptions
-        opts.addBooleanOption("html5", true)
+tasks.withType<KotlinCompile> {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
+        freeCompilerArgs.add("-Xjvm-default=all")
     }
+}
+
+val dokkaJar by tasks.registering(Jar::class) {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    description = "Assembles Javadoc with Dokka"
+    archiveClassifier.set("javadoc")
+    from(tasks.dokkaJavadoc)
 }
 
 val isGpgKeyDefined = findProperty("signing.gnupg.keyName") != null
@@ -40,6 +44,8 @@ publishing {
     publications {
         create<MavenPublication>("PluginApi") {
             from(project.components["java"])
+            artifact(tasks.kotlinSourcesJar)
+            artifact(dokkaJar)
 
             pom {
                 name.set("Lavalink Plugin API")
