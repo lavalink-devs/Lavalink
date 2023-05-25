@@ -98,6 +98,10 @@ tasks {
         archiveClassifier.set("bootZip")
     }
 
+    named<Jar>("jar") {
+        archiveClassifier.set("")
+    }
+
     named<Test>("test") {
         useJUnitPlatform()
     }
