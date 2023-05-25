@@ -16,7 +16,6 @@ dependencies {
     api(libs.spring.boot)
     api(libs.spring.boot.web)
     api(libs.lavaplayer)
-    api(libs.json)
     api(libs.kotlinx.serialization.json)
 }
 

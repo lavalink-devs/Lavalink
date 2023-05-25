@@ -22,9 +22,9 @@
 
 package lavalink.server.io
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import dev.arbjerg.lavalink.api.*
+import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
+import dev.arbjerg.lavalink.api.PluginEventHandler
 import dev.arbjerg.lavalink.protocol.v4.Message
 import dev.arbjerg.lavalink.protocol.v4.PlayerState
 import lavalink.server.config.ServerConfig
@@ -45,8 +45,7 @@ final class SocketServer(
     val audioPlayerManager: AudioPlayerManager,
     koeOptions: KoeOptions,
     private val eventHandlers: List<PluginEventHandler>,
-    private val pluginInfoModifiers: List<AudioPluginInfoModifier>,
-    private val objectMapper: ObjectMapper
+    private val pluginInfoModifiers: List<AudioPluginInfoModifier>
 ) : TextWebSocketHandler() {
 
     // sessionID <-> Session
@@ -64,7 +63,8 @@ final class SocketServer(
 
             val connection = socketContext.getMediaConnection(player).gatewayConnection
             socketContext.sendMessage(
-                Message.PlayerUpdateEvent(
+                    Message.Serializer,
+                    Message.PlayerUpdateEvent(
                     PlayerState(
                         System.currentTimeMillis(),
                         player.audioPlayer.playingTrack?.position ?: 0,
@@ -119,13 +119,12 @@ final class SocketServer(
             statsCollector,
             userId,
             clientName,
-            koe.newClient(userId.toLong()),
+            koe.newClient(userId),
             eventHandlers,
-            pluginInfoModifiers,
-            objectMapper
+            pluginInfoModifiers
         )
         contextMap[sessionId] = socketContext
-        socketContext.sendMessage(Message.ReadyEvent(false, sessionId))
+        socketContext.sendMessage(Message.Serializer, Message.ReadyEvent(false, sessionId))
         socketContext.eventEmitter.onWebSocketOpen(false)
         if (clientName != null) {
             log.info("Connection successfully established from $clientName")

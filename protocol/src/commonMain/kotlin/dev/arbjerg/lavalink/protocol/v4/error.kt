@@ -1,7 +1,6 @@
 package dev.arbjerg.lavalink.protocol.v4
 
 import dev.arbjerg.lavalink.protocol.v4.serialization.Timestamp
-import dev.arbjerg.lavalink.protocol.v4.serialization.TimestampSerializer
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 

@@ -48,6 +48,7 @@ class EventEmitter(
 
     override fun onTrackStart(player: AudioPlayer, track: AudioTrack) {
         this.player.socketContext.sendMessage(
+            Message.Serializer,
             Message.EmittedEvent.TrackStartEvent(
                 this.player.guildId.toString(),
                 track.toTrack(audioPlayerManager, pluginInfoModifiers)
@@ -64,6 +65,7 @@ class EventEmitter(
         }
 
         this.player.socketContext.sendMessage(
+            Message.Serializer,
             Message.EmittedEvent.TrackEndEvent(
                 this.player.guildId.toString(),
                 track.toTrack(audioPlayerManager, pluginInfoModifiers),
@@ -75,6 +77,7 @@ class EventEmitter(
     // These exceptions are already logged by Lavaplayer
     override fun onTrackException(player: AudioPlayer, track: AudioTrack, exception: FriendlyException) {
         this.player.socketContext.sendMessage(
+            Message.Serializer,
             Message.EmittedEvent.TrackExceptionEvent(
                 this.player.guildId.toString(),
                 track.toTrack(audioPlayerManager, pluginInfoModifiers),
@@ -86,6 +89,7 @@ class EventEmitter(
     override fun onTrackStuck(player: AudioPlayer, track: AudioTrack, thresholdMs: Long) {
         log.warn("${track.info.title} got stuck! Threshold surpassed: ${thresholdMs}ms")
         this.player.socketContext.sendMessage(
+            Message.Serializer,
             Message.EmittedEvent.TrackStuckEvent(
                 this.player.guildId.toString(),
                 track.toTrack(audioPlayerManager, pluginInfoModifiers),

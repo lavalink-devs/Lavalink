@@ -54,14 +54,6 @@ interface ISocketContext {
     fun sendMessage(message: JsonElement) = sendMessage(JsonElement.serializer(), message)
 
     /**
-     * @deprecated as of v4.0 Koltinx.serialization is used for serialization, please
-     * use {@link ISocketContext#sendMessage(SerializationStrategy, Object)} and
-     * {@link ISocketContext#sendMessage(JsonElement)}
-     * @param message a message to send to the WebSocket client, it should be compatible with Jackson
-     */
-    fun sendMessage(message: Any)
-
-    /**
      * The state of the context.
      */
     val state: State

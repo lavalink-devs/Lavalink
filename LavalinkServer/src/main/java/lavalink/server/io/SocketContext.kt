@@ -22,18 +22,17 @@
 
 package lavalink.server.io
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import dev.arbjerg.lavalink.api.*
+import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
+import dev.arbjerg.lavalink.api.ISocketContext
+import dev.arbjerg.lavalink.api.PluginEventHandler
 import dev.arbjerg.lavalink.protocol.v4.Message
 import dev.arbjerg.lavalink.protocol.v4.json
 import io.undertow.websockets.core.WebSocketCallback
 import io.undertow.websockets.core.WebSocketChannel
 import io.undertow.websockets.core.WebSockets
 import io.undertow.websockets.jsr.UndertowSession
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerializationStrategy
-import kotlinx.serialization.serializerOrNull
 import lavalink.server.config.ServerConfig
 import lavalink.server.player.LavalinkPlayer
 import moe.kyokobot.koe.KoeClient
@@ -59,7 +58,6 @@ class SocketContext(
     val koe: KoeClient,
     eventHandlers: Collection<PluginEventHandler>,
     private val pluginInfoModifiers: List<AudioPluginInfoModifier>,
-    private val objectMapper: ObjectMapper
 ) : ISocketContext {
 
     companion object {
@@ -130,13 +128,13 @@ class SocketContext(
     /**
      * Disposes of a voice connection
      */
-    override fun destroyPlayer(guild: Long) {
-        val player = players.remove(guild)
+    override fun destroyPlayer(guildId: Long) {
+        val player = players.remove(guildId)
         if (player != null) {
             eventEmitter.onDestroyPlayer(player)
             player.destroy()
         }
-        koe.destroyConnection(guild)
+        koe.destroyConnection(guildId)
     }
 
     fun pause() {
@@ -149,20 +147,6 @@ class SocketContext(
 
     override fun <T : Any?> sendMessage(serializer: SerializationStrategy<T>, message: T) =
         send(json.encodeToString(serializer, message))
-
-    @OptIn(InternalSerializationApi::class)
-    override fun sendMessage(message: Any) {
-        val clazz = message.javaClass
-        // Check if class is Kotlin class
-        if (clazz.getDeclaredAnnotation(Metadata::class.java) != null) {
-            val serializer = clazz.kotlin.serializerOrNull()
-            if (serializer != null) {
-                return sendMessage(serializer, message)
-            }
-        }
-
-        return send(objectMapper.writeValueAsString(message))
-    }
 
     /**
      * Either sends the payload now or queues it up
@@ -198,7 +182,7 @@ class SocketContext(
     fun resume(session: WebSocketSession) {
         sessionPaused = false
         this.session = session
-        sendMessage(Message.ReadyEvent(true, sessionId))
+        sendMessage(Message.Serializer, Message.ReadyEvent(true, sessionId))
         log.info("Replaying ${resumeEventQueue.size} events")
 
         // Bulk actions are not guaranteed to be atomic, so we need to do this imperatively
@@ -241,7 +225,7 @@ class SocketContext(
                 byRemote
             )
 
-            sendMessage(event)
+            sendMessage(Message.Serializer, event)
             SocketServer.sendPlayerUpdate(this@SocketContext, player)
         }
 

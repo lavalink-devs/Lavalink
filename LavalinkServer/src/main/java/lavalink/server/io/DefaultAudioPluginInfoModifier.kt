@@ -1,6 +1,5 @@
 package lavalink.server.io
 
-import com.fasterxml.jackson.databind.node.ObjectNode
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerDescriptor
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioTrack
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioTrack

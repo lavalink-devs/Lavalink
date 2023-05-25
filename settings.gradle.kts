@@ -31,7 +31,6 @@ fun VersionCatalogBuilder.spring() {
     library("spring-boot-web",      "org.springframework.boot", "spring-boot-starter-web").versionRef("spring-boot")
     library("spring-boot-undertow", "org.springframework.boot", "spring-boot-starter-undertow") .versionRef("spring-boot")
     library("spring-boot-test",     "org.springframework.boot", "spring-boot-starter-test") .versionRef("spring-boot")
-    library("jackson-module-kotlin", "com.fasterxml.jackson.module", "jackson-module-kotlin").version("2.13.2")
 
     bundle("spring", listOf("spring-websocket", "spring-boot-web", "spring-boot-undertow"))
 }
@@ -75,10 +74,6 @@ fun VersionCatalogBuilder.common() {
     library("logback",        "ch.qos.logback",       "logback-classic").version("1.2.3")
     library("sentry-logback", "io.sentry",            "sentry-logback").version("1.7.2")
     library("oshi",           "com.github.oshi",      "oshi-core").version("5.7.4")
-    library("json",           "org.json",             "json").version("20230227")
-
-    library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.5.0")
-    library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime").version("0.4.0")
 
     library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.5.0")
     library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime").version("0.4.0")

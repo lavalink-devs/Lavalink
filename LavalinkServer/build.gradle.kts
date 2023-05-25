@@ -59,7 +59,6 @@ dependencies {
     implementation(libs.logback)
     implementation(libs.sentry.logback)
     implementation(libs.oshi)
-    implementation(libs.json)
 
     compileOnly(libs.spotbugs)
 

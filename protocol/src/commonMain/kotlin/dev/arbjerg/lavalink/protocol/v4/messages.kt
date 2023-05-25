@@ -4,7 +4,8 @@ import dev.arbjerg.lavalink.protocol.v4.serialization.asPolymorphicDeserializer
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.JsonContentPolymorphicSerializer
+import kotlinx.serialization.json.JsonElement
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 

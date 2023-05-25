@@ -9,20 +9,19 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.protocol.v4.*
 import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
 import dev.arbjerg.lavalink.protocol.v4.Band as Bandv4
 
 class FilterChain(
-    val volume: VolumeConfig? = null,
-    var equalizer: EqualizerConfig? = null,
-    val karaoke: KaraokeConfig? = null,
-    val timescale: TimescaleConfig? = null,
-    val tremolo: TremoloConfig? = null,
-    val vibrato: VibratoConfig? = null,
-    val distortion: DistortionConfig? = null,
-    val rotation: RotationConfig? = null,
-    val channelMix: ChannelMixConfig? = null,
-    val lowPass: LowPassConfig? = null,
+    private val volume: VolumeConfig? = null,
+    private var equalizer: EqualizerConfig? = null,
+    private val karaoke: KaraokeConfig? = null,
+    private val timescale: TimescaleConfig? = null,
+    private val tremolo: TremoloConfig? = null,
+    private val vibrato: VibratoConfig? = null,
+    private val distortion: DistortionConfig? = null,
+    private val rotation: RotationConfig? = null,
+    private val channelMix: ChannelMixConfig? = null,
+    private val lowPass: LowPassConfig? = null,
 ) : PcmFilterFactory {
 
     @Volatile
