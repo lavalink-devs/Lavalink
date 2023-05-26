@@ -23,8 +23,10 @@ package lavalink.server.player
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
+import dev.arbjerg.lavalink.protocol.v4.EncodedTracks
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.arbjerg.lavalink.protocol.v4.Track
+import dev.arbjerg.lavalink.protocol.v4.Tracks
 import lavalink.server.util.decodeTrack
 import lavalink.server.util.toTrack
 import org.slf4j.LoggerFactory
@@ -65,13 +67,12 @@ class AudioLoaderRestHandler(
     }
 
     @PostMapping("/v4/decodetracks")
-    fun decodeTracks(@RequestBody encodedTracks: List<String>): ResponseEntity<List<Track>> {
-        if (encodedTracks.isEmpty()) {
+    fun decodeTracks(@RequestBody encodedTracks: EncodedTracks): ResponseEntity<Tracks> {
+        if (encodedTracks.tracks.isEmpty()) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "No tracks to decode provided")
         }
-        return ResponseEntity.ok(encodedTracks.map {
+        return ResponseEntity.ok(Tracks(encodedTracks.tracks.map {
             decodeTrack(audioPlayerManager, it).toTrack(it, pluginInfoModifiers)
-        })
+        }))
     }
-
 }

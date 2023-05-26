@@ -6,9 +6,7 @@ import kotlin.jvm.JvmInline
 
 @Serializable()
 @JvmInline
-value class Players(val players: List<Player>) {
-
-}
+value class Players(val players: List<Player>)
 
 @Serializable
 data class Player(
@@ -27,6 +25,14 @@ data class Track(
     val info: TrackInfo,
     val pluginInfo: JsonObject
 ) : LoadResult.Data
+
+@Serializable
+@JvmInline
+value class Tracks(val tracks: List<Track>)
+
+@Serializable
+@JvmInline
+value class EncodedTracks(val tracks: ArrayList<String>)
 
 @Serializable
 data class TrackInfo(
@@ -68,8 +74,4 @@ data class PlayerUpdate(
     val paused: Omissible<Boolean> = Omissible.Omitted(),
     val filters: Omissible<Filters> = Omissible.Omitted(),
     val voice: Omissible<VoiceState> = Omissible.Omitted()
-) {
-    init {
-        require(identifier is Omissible.Omitted || encodedTrack is Omissible.Omitted) { "identifier and encodedTrack are mutually exclusive" }
-    }
-}
+)
