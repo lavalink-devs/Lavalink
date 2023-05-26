@@ -11,6 +11,21 @@ A [basic example bot](Testbot) is available.
 
 [![Lavalink Guild](https://discordapp.com/api/guilds/1082302532421943407/embed.png?style=banner2)](https://discord.gg/ZW4s47Ppw4)
 
+<details>
+<summary>Table of Contents</summary>
+
+- [Features](#features)
+- [Requirements](#requirements)
+- [Changelog](#changelog)
+- [Versioning policy](#versioning-policy)
+- [Client libraries](#client-libraries)
+- [Server configuration](#server-configuration)
+  - [Config](#config)
+  - [Binary](#binary)
+  - [Docker](#docker)
+
+</details>
+
 ## Features
 * Powered by Lavaplayer
 * Minimal CPU/memory footprint
