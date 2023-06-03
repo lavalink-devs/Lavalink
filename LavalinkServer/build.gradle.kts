@@ -129,7 +129,7 @@ publishing {
             pom {
                 name.set("Lavalink Server")
                 description.set("Lavalink Server")
-                url.set("https://github.com/freyacodes/lavalink")
+                url.set("https://github.com/lavalink-devs/lavalink")
 
                 licenses {
                     license {
@@ -147,9 +147,9 @@ publishing {
                 }
 
                 scm {
-                    connection.set("scm:git:ssh://github.com/freyacodes/lavalink.git")
-                    developerConnection.set("scm:git:ssh://github.com/freyacodes/lavalink.git")
-                    url.set("https://github.com/freyacodes/lavalink")
+                    connection.set("scm:git:ssh://github.com/lavalink-devs/lavalink.git")
+                    developerConnection.set("scm:git:ssh://github.com/lavalink-devs/lavalink.git")
+                    url.set("https://github.com/lavalink-devs/lavalink")
                 }
             }
         }
