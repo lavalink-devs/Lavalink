@@ -25,6 +25,8 @@ application {
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
+    withJavadocJar()
+    withSourcesJar()
 }
 
 configurations {
@@ -126,8 +128,6 @@ publishing {
     publications {
         create<MavenPublication>("LavalinkServer") {
             from(project.components["java"])
-
-            artifact(tasks.named<BootJar>("bootJar"))
 
             pom {
                 name.set("Lavalink Server")
