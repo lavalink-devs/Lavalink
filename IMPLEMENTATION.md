@@ -1263,7 +1263,7 @@ Empty object.
   "loadType": "error",
   "data": { 
     "message": "Something went wrong",
-    "severity": "fatal",
+    "severity": "fault",
     "cause": "..."
   }
 }
