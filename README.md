@@ -226,8 +226,8 @@ Run with `java -jar Lavalink.jar` from the same directory
 
 ### Persistence (Unix example)
 
-If you want your Lavalink server to run even when the console is closed, you will need to create a `.service` file inside of your system's directory (commonly located at `/usr/lib/systemd/system`).  Create the file, then add the following components (replacing text inside "<>" with your values):
- ```toml
+If you want your Lavalink server to run even when the console is closed, you will need to create a `.service` file inside of your system's directory (commonly located at `/usr/lib/systemd/system`).  Create the file, then add the following components (replacing the text inside "<>" with your values):
+ ```
 [Unit]
 Description=Lavalink Service
 After=syslog.target network.target
