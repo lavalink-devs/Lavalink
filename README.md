@@ -227,7 +227,7 @@ Run with `java -jar Lavalink.jar` from the same directory
 
 #### Systemd Service
 
-If you want your Lavalink server to run even when the console is closed, you will need to create a `.service` file inside of your system's directory (commonly located at `/usr/lib/systemd/system`).  Create the file, then add the following components (replacing the text inside "<>" with your values):
+If you want your Lavalink server to run even when the console is closed, you will need to create a `lavalink.service` file inside of your system's directory (commonly located at `/usr/lib/systemd/system`).  Create the file, then add the following components (replacing the text inside "<>" with your values):
  ```ini
 [Unit]
 # Describe the service
@@ -237,36 +237,35 @@ Description=Lavalink Service
 After=syslog.target network.target
 
 [Service]
-# The user as which Lavalink should run
+# The user whick will run Lavalink
 User=<cen>
 
+
 # Type of serivce
-#   Simple:  creates a thread that will close on service execution
-#   Forking: creates a thread that will continue past service execution
-Type=forking
+#   Simple:  Proceed with other jobs once systemd has `fork()`ed it
+#   Forking: The service daemonizes itself and there is no need for systemd for to `fork()` it
+Type=simple
 
 # Where the program should start
-WorkingDirectory=</home/user/lavalink>
+WorkingDirectory=</home/cen/lavalink>
 
 # The command to start Lavalink
-ExecStart=java -jar <home/user/lavalink>/Lavalink.jar
+ExecStart=java -jar </home/cen/lavalink>/Lavalink.jar
 
-# Restart the service if it closes
+# Restart the service if it crashes
 Restart=on-failure
 
 [Install]
-# Start this service ss part of normal system start-up
+# Start this service as part of normal system start-up
 WantedBy=multi-user.target
 ```
 
-To initiate the service, type 
+To initiate the service, run 
 ```shell
 sudo systemctl daemon-reload
 sudo systemctl enable lavalink.service
 sudo systemctl start lavalink.service
 ```
-
-into the console.
 
 ### Docker
 
