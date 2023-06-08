@@ -224,23 +224,37 @@ Put an `application.yml` file in your working directory. ([Example here](Lavalin
 
 Run with `java -jar Lavalink.jar` from the same directory
 
-### Persistence (Unix example)
+#### Systemd Service
 
 If you want your Lavalink server to run even when the console is closed, you will need to create a `.service` file inside of your system's directory (commonly located at `/usr/lib/systemd/system`).  Create the file, then add the following components (replacing the text inside "<>" with your values):
  ```
 [Unit]
+# Describe the service
 Description=Lavalink Service
+
+# Configure service order
 After=syslog.target network.target
 
 [Service]
+# Who is using the program
 User=<user_to_start_program>
+
+# Type of serivce
+#   Simple:  creates a thread that will close on service execution
+#   Forking: creates a thread that will continue past service execution
 Type=forking
 
+# Where the program should start
 WorkingDirectory=<path_to_lavalink_install>
+
+# The command to start Lavalink
 ExecStart=<path_to_java_install> -jar <path_to_lavalink_install>/Lavalink.jar
+
+# Restart the service if it closes
 Restart=on-failure
 
 [Install]
+# Start this service ss part of normal system start-up
 WantedBy=multi-user.target
 ```
 
