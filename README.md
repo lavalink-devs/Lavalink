@@ -237,7 +237,7 @@ Description=Lavalink Service
 After=syslog.target network.target
 
 [Service]
-# Who is using the program
+# The user as which Lavalink should run
 User=<cen>
 
 # Type of serivce
@@ -246,10 +246,10 @@ User=<cen>
 Type=forking
 
 # Where the program should start
-WorkingDirectory=</home/cen/lavalink>
+WorkingDirectory=</home/user/lavalink>
 
 # The command to start Lavalink
-ExecStart=java -jar <home/cen/lavalink>/Lavalink.jar
+ExecStart=java -jar <home/user/lavalink>/Lavalink.jar
 
 # Restart the service if it closes
 Restart=on-failure
