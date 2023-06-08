@@ -22,6 +22,7 @@ A [basic example bot](Testbot) is available.
 - [Server configuration](#server-configuration)
   - [Config](#config)
   - [Binary](#binary)
+    - [Systemd Serivce](#systemd-service)
   - [Docker](#docker)
 
 </details>
@@ -237,7 +238,7 @@ After=syslog.target network.target
 
 [Service]
 # Who is using the program
-User=<user_to_start_program>
+User=<cen>
 
 # Type of serivce
 #   Simple:  creates a thread that will close on service execution
@@ -245,10 +246,10 @@ User=<user_to_start_program>
 Type=forking
 
 # Where the program should start
-WorkingDirectory=<path_to_lavalink_install>
+WorkingDirectory=</home/cen/lavalink>
 
 # The command to start Lavalink
-ExecStart=<path_to_java_install> -jar <path_to_lavalink_install>/Lavalink.jar
+ExecStart=Java -jar <home/cen/lavalink>/Lavalink.jar
 
 # Restart the service if it closes
 Restart=on-failure
