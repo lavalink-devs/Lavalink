@@ -249,7 +249,7 @@ Type=forking
 WorkingDirectory=</home/cen/lavalink>
 
 # The command to start Lavalink
-ExecStart=Java -jar <home/cen/lavalink>/Lavalink.jar
+ExecStart=java -jar <home/cen/lavalink>/Lavalink.jar
 
 # Restart the service if it closes
 Restart=on-failure
