@@ -224,6 +224,35 @@ Put an `application.yml` file in your working directory. ([Example here](Lavalin
 
 Run with `java -jar Lavalink.jar` from the same directory
 
+### Persistence (Unix example)
+
+If you want your Lavalink server to run even when the console is closed, you will need to create a `.service` file inside of your system's directory (commonly located at `/usr/lib/systemd/system`).  Create the file, then add the following components (replacing text inside "<>" with your values):
+ ```toml
+[Unit]
+Description=Lavalink Service
+After=syslog.target network.target
+
+[Service]
+User=<user_to_start_program>
+Type=forking
+
+WorkingDirectory=<path_to_lavalink_install>
+ExecStart=<path_to_java_install> -jar <path_to_lavalink_install>/Lavalink.jar
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+To initiate the service, type 
+```shell
+sudo systemctl daemon-reload
+sudo systemctl enable lavalink.service
+sudo systemctl start lavalink.service
+```
+
+into the console.
+
 ### Docker
 
 Docker images can be found under [packages](https://github.com/lavalink-devs/Lavalink/pkgs/container/lavalink) with old builds prior to `v3.7.4` being available on [Docker Hub](https://hub.docker.com/r/fredboat/lavalink/).
@@ -263,4 +292,3 @@ Run `docker compose up -d`. See [Docker Compose Up](https://docs.docker.com/engi
 
 If your bot also runs in a docker container you can make that container join the lavalink network and use `lavalink` (service name) as the hostname to connect.
 See [Docker Networking](https://docs.docker.com/network/) & [Docker Compose Networking](https://docs.docker.com/compose/networking/)
-
