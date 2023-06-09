@@ -73,7 +73,7 @@ fun VersionCatalogBuilder.common() {
 
     library("logback",        "ch.qos.logback",       "logback-classic").version("1.2.3")
     library("sentry-logback", "io.sentry",            "sentry-logback").version("1.7.2")
-    library("oshi",           "com.github.oshi",      "oshi-core").version("5.7.4")
+    library("oshi",           "com.github.oshi",      "oshi-core").version("6.4.3")
 
     library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.5.0")
     library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime").version("0.4.0")
