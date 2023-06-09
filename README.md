@@ -237,13 +237,11 @@ Description=Lavalink Service
 After=syslog.target network.target
 
 [Service]
-# The user whick will run Lavalink
+# The user which will run Lavalink
 User=<cen>
 
 
-# Type of serivce
-#   Simple:  Proceed with other jobs once systemd has `fork()`ed it
-#   Forking: The service daemonizes itself and there is no need for systemd for to `fork()` it
+# Type of serivce (either simple or forking). DO NOT CHANGE THIS PARAMETER
 Type=simple
 
 # Where the program should start
@@ -263,8 +261,8 @@ WantedBy=multi-user.target
 To initiate the service, run 
 ```shell
 sudo systemctl daemon-reload
-sudo systemctl enable lavalink.service
-sudo systemctl start lavalink.service
+sudo systemctl enable lavalink
+sudo systemctl start lavalink
 ```
 
 ### Docker
