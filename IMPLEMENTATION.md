@@ -1416,8 +1416,8 @@ Parsed Semantic Versioning 2.0.0. See https://semver.org/ for more info
 
 | Field      | Type   | Description                                                    |
 |------------|--------|----------------------------------------------------------------|
-| branch     | string | The branch this Lavalink server was built                      |
-| commit     | string | The commit this Lavalink server was built                      |
+| branch     | string | The branch this Lavalink server was built on                   |
+| commit     | string | The commit this Lavalink server was built on                   |
 | commitTime | int    | The millisecond unix timestamp for when the commit was created |
 
 ##### Plugin Object
