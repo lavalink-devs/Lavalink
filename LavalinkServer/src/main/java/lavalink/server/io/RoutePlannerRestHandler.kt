@@ -3,6 +3,7 @@ package lavalink.server.io
 import com.sedmelluq.lava.extensions.youtuberotator.planner.*
 import dev.arbjerg.lavalink.protocol.v4.RoutePlannerFreeAddress
 import dev.arbjerg.lavalink.protocol.v4.RoutePlannerStatus
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,7 +14,6 @@ import org.springframework.web.server.ResponseStatusException
 import java.net.InetAddress
 import java.net.UnknownHostException
 import java.util.*
-import javax.servlet.http.HttpServletRequest
 
 @RestController
 class RoutePlannerRestHandler(private val routePlanner: AbstractRoutePlanner?) {

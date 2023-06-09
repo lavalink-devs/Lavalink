@@ -23,8 +23,8 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
     withJavadocJar()
     withSourcesJar()
 }
@@ -66,8 +66,6 @@ dependencies {
         // This version of SLF4J does not recognise Logback 1.2.3
         exclude(group = "org.slf4j", module = "slf4j-api")
     }
-
-    compileOnly(libs.spotbugs)
 
     testImplementation(libs.spring.boot.test)
 }

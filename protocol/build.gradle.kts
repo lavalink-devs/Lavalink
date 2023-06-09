@@ -6,7 +6,7 @@ plugins {
     `maven-publish`
     signing
     kotlin("multiplatform")
-    kotlin("plugin.serialization") version "1.8.21"
+    kotlin("plugin.serialization") version "1.8.22"
 }
 
 val archivesBaseName = "protocol"
@@ -16,7 +16,7 @@ kotlin {
     jvm {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "11"
+                jvmTarget = "17"
             }
         }
     }

@@ -1,7 +1,6 @@
 import dev.arbjerg.lavalink.protocol.v4.Omissible
 import dev.arbjerg.lavalink.protocol.v4.Player
 import dev.arbjerg.lavalink.protocol.v4.PlayerUpdate
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlin.js.JsName
 import kotlin.test.Test

@@ -28,11 +28,6 @@ class SentryConfiguration(sentryConfig: SentryConfigProperties) {
     private final fun turnOn(dsn: String, tags: Map<String, String>, environment: String) {
         log.info("Turning on sentry")
 
-        val sentryClient = Sentry.init(dsn)
-        if (environment.isNotBlank()) sentryClient.environment = environment
-
-        tags.forEach { (name, value) -> sentryClient.addTag(name, value) }
-
         // set the git commit hash this was build on as the release
         val gitProps = Properties()
         try {
@@ -42,13 +37,19 @@ class SentryConfiguration(sentryConfig: SentryConfigProperties) {
         } catch (e: IOException) {
             log.error("Failed to load git repo information", e)
         }
-
         val commitHash = gitProps.getProperty("git.commit.id")
-        if (commitHash != null && commitHash.isNotEmpty()) {
-            log.info("Setting sentry release to commit hash $commitHash")
-            sentryClient.release = commitHash
-        } else {
-            log.warn("No git commit hash found to set up sentry release")
+
+        Sentry.init {options ->
+            options.dsn = dsn
+            if (environment.isNotBlank()) options.environment = environment
+            tags.forEach { (name, value) -> options.tags[name] = value }
+
+            if (commitHash != null && commitHash.isNotEmpty()) {
+                log.info("Setting sentry release to commit hash $commitHash")
+                options.release = commitHash
+            } else {
+                log.warn("No git commit hash found to set up sentry release")
+            }
         }
 
         sentryLogbackAppender.start()

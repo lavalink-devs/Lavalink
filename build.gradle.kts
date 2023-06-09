@@ -11,12 +11,12 @@ buildscript {
     }
 
     dependencies {
-        classpath("gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.5.2")
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.6.6")
-        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2")
-        classpath("com.adarshr:gradle-test-logger-plugin:1.6.0")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.21")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:1.8.21")
+        classpath("gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:2.4.1 ")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:3.1.0")
+        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.2.0.3129")
+        classpath("com.adarshr:gradle-test-logger-plugin:3.2.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:1.8.22")
     }
 }
 
@@ -34,7 +34,7 @@ allprojects {
 }
 
 plugins {
-    id("org.jetbrains.dokka") version "1.8.10"
+    id("org.jetbrains.dokka") version "1.8.20"
 }
 
 subprojects {
@@ -44,7 +44,7 @@ subprojects {
     }
 
     tasks.withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "11"
+        kotlinOptions.jvmTarget = "17"
     }
 
     tasks.withType<JavaCompile> {
