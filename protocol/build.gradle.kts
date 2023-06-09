@@ -3,10 +3,10 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
 
 plugins {
-    `maven-publish`
     signing
+    `maven-publish`
     kotlin("multiplatform")
-    kotlin("plugin.serialization") version "1.8.22"
+    kotlin("plugin.serialization")
 }
 
 val archivesBaseName = "protocol"

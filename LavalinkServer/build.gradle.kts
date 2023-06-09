@@ -5,14 +5,13 @@ import org.springframework.boot.gradle.tasks.run.BootRun
 plugins {
     application
     `maven-publish`
+    id("org.springframework.boot")
+    id("com.gorylenko.gradle-git-properties")
+    id("org.ajoberstar.grgit")
+    id("com.adarshr.test-logger")
+    id("kotlin")
+    id("kotlin-spring")
 }
-
-apply(plugin = "org.springframework.boot")
-apply(plugin = "com.gorylenko.gradle-git-properties")
-apply(plugin = "org.ajoberstar.grgit")
-apply(plugin = "com.adarshr.test-logger")
-apply(plugin = "kotlin")
-apply(plugin = "kotlin-spring")
 
 val archivesBaseName = "Lavalink-Server"
 description = "Play audio to discord voice channels"
