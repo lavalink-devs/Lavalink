@@ -248,7 +248,7 @@ Type=simple
 WorkingDirectory=</home/cen/lavalink>
 
 # The command to start Lavalink
-ExecStart=java -jar </home/cen/lavalink>/Lavalink.jar
+ExecStart=java -Xmx6G -jar </home/cen/lavalink>/Lavalink.jar
 
 # Restart the service if it crashes
 Restart=on-failure
