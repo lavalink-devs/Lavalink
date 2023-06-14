@@ -238,17 +238,17 @@ After=syslog.target network.target
 
 [Service]
 # The user which will run Lavalink
-User=<cen>
+User=<usr>
 
 
 # Type of serivce (either simple or forking). DO NOT CHANGE THIS PARAMETER
 Type=simple
 
 # Where the program should start
-WorkingDirectory=</home/cen/lavalink>
+WorkingDirectory=</home/usr/lavalink>
 
 # The command to start Lavalink
-ExecStart=java -Xmx6G -jar </home/cen/lavalink>/Lavalink.jar
+ExecStart=java -Xmx4G -jar </home/usr/lavalink>/Lavalink.jar
 
 # Restart the service if it crashes
 Restart=on-failure
