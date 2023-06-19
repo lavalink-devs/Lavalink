@@ -7,11 +7,6 @@ plugins {
 group = "dev.arbjerg.lavalink"
 version = "1.0"
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
-
 application {
     mainClass.set("lavalink.testbot.TestbotKt")
 }
