@@ -42,7 +42,7 @@ A [basic example bot](Testbot) is available.
 
 ## Requirements
 
-* Java 11 LTS or newer required. (we recommend running the latest LTS version or newer)
+* Java 17 LTS or newer required. (we recommend running the latest LTS version or newer)
 * OpenJDK or Zulu running on Linux AMD64 is officially supported.
 
 Support for Darwin (Mac), Windows AMD64, and Linux ARM (Raspberry Pi) is provided on a best-effort basis. This is dependent on Lavaplayer's native libraries.
@@ -57,8 +57,6 @@ JDA-NAS(Native Audio Buffer) & the Timescale filter are currently not supported 
 
 
 Support for other JVMs is also best-effort. Periodic CPU utilization stats are prone not to work everywhere.
-
-**\*Java 11 appears to have some issues with Discord's TLS 1.3. Java 14 has other undiagnosed HTTPS problems. Use Java 13. Docker images have been updated.** See [#258](https://github.com/lavalink-devs/Lavalink/issues/258), [#260](https://github.com/lavalink-devs/Lavalink/issues/260)
 
 ## Changelog
 

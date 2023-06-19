@@ -1,6 +1,5 @@
 import dev.arbjerg.lavalink.protocol.v4.Omissible
 import dev.arbjerg.lavalink.protocol.v4.json
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlin.test.assertEquals
 import kotlin.test.assertIs

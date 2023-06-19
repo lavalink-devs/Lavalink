@@ -23,9 +23,9 @@ dependencyResolutionManagement {
 }
 
 fun VersionCatalogBuilder.spring() {
-    version("spring-boot", "2.6.6")
+    version("spring-boot", "3.1.0")
 
-    library("spring-websocket", "org.springframework", "spring-websocket").version("5.3.17")
+    library("spring-websocket", "org.springframework", "spring-websocket").version("6.0.9")
 
     library("spring-boot",          "org.springframework.boot", "spring-boot").versionRef("spring-boot")
     library("spring-boot-web",      "org.springframework.boot", "spring-boot-starter-web").versionRef("spring-boot")
@@ -36,7 +36,7 @@ fun VersionCatalogBuilder.spring() {
 }
 
 fun VersionCatalogBuilder.voice() {
-    version("lavaplayer", "ef075855da")
+    version("lavaplayer", "17c75f5")
 
     library("lavaplayer",            "com.github.walkyst.lavaplayer-fork", "lavaplayer").versionRef("lavaplayer")
     library("lavaplayer-ip-rotator", "com.github.walkyst.lavaplayer-fork", "lavaplayer-ext-youtube-rotator").versionRef("lavaplayer")
@@ -55,7 +55,7 @@ fun VersionCatalogBuilder.voice() {
 }
 
 fun VersionCatalogBuilder.metrics() {
-    version("prometheus", "0.5.0")
+    version("prometheus", "0.16.0")
 
     library("metrics",         "io.prometheus", "simpleclient").versionRef("prometheus")
     library("metrics-hotspot", "io.prometheus", "simpleclient_hotspot").versionRef("prometheus")
@@ -66,19 +66,17 @@ fun VersionCatalogBuilder.metrics() {
 }
 
 fun VersionCatalogBuilder.common() {
-    version("kotlin", "1.7.20")
+    version("kotlin", "1.8.22")
 
     library("kotlin-reflect",     "org.jetbrains.kotlin", "kotlin-reflect").versionRef("kotlin")
     library("kotlin-stdlib-jdk8", "org.jetbrains.kotlin", "kotlin-stdlib-jdk8").versionRef("kotlin")
 
-    library("logback",        "ch.qos.logback",       "logback-classic").version("1.2.3")
-    library("sentry-logback", "io.sentry",            "sentry-logback").version("1.7.2")
-    library("oshi",           "com.github.oshi",      "oshi-core").version("5.7.4")
-
-    library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.5.0")
+    library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.5.1")
     library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime").version("0.4.0")
 
-    library("spotbugs", "com.github.spotbugs", "spotbugs-annotations").version("3.1.6")
+    library("logback",        "ch.qos.logback",       "logback-classic").version("1.4.7")
+    library("sentry-logback", "io.sentry",            "sentry-logback").version("6.22.0")
+    library("oshi",           "com.github.oshi",      "oshi-core").version("6.4.3")
 }
 
 fun VersionCatalogBuilder.other() {

@@ -27,6 +27,7 @@ import dev.arbjerg.lavalink.protocol.v4.EncodedTracks
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.arbjerg.lavalink.protocol.v4.Tracks
+import jakarta.servlet.http.HttpServletRequest
 import lavalink.server.util.decodeTrack
 import lavalink.server.util.toTrack
 import org.slf4j.LoggerFactory
@@ -35,7 +36,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import java.util.concurrent.CompletionStage
-import javax.servlet.http.HttpServletRequest
 
 @RestController
 class AudioLoaderRestHandler(
