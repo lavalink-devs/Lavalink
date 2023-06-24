@@ -56,7 +56,9 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Lavalink.jar
-          path: LavalinkServer/build/libs/Lavalink.jar
+          path: |
+            LavalinkServer/build/libs/Lavalink.jar
+            LavalinkServer/build/libs/Lavalink-musl.jar
 
       - name: Docker Meta
         id: meta

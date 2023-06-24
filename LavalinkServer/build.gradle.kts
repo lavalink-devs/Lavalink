@@ -126,8 +126,7 @@ tasks {
             archiveFileName.set("Lavalink-musl.jar")
             // Exclude base dependency jar
             exclude {
-                it.name.contains("lavaplayer-natives-fork")
-                it.name.contains("udpqueue-native-")
+                it.name.contains("lavaplayer-natives-fork") || it.name.contains("udpqueue-native-")
             }
 
             // Add custom jar
