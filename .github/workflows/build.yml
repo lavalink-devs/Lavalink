@@ -14,6 +14,10 @@ on:
         required: false
       DOCKER_IMAGE:
         required: false
+      MAVEN_USERNAME:
+        required: false
+      MAVEN_PASSWORD:
+        required: false
 
 jobs:
   build:
@@ -23,6 +27,8 @@ jobs:
       DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
       DOCKER_IMAGE: ${{ secrets.DOCKER_IMAGE }}
+      MAVEN_USERNAME: ${{ vars.MAVEN_USERNAME }}
+      MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -38,7 +44,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Execute Gradle build
-        run: ./gradlew build
+        run: ./gradlew publish -PMAVEN_USERNAME=$MAVEN_USERNAME -PMAVEN_PASSWORD=$MAVEN_PASSWORD
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3

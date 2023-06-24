@@ -154,4 +154,20 @@ publishing {
             }
         }
     }
+    if (findProperty("MAVEN_USERNAME") != null && findProperty("MAVEN_PASSWORD") != null) {
+        println("Publishing to Maven Repo")
+        repositories {
+            val snapshots = "https://maven.arbjerg.dev/snapshots"
+            val releases = "https://maven.arbjerg.dev/releases"
+
+            maven(if ((version as String).endsWith("SNAPSHOT")) snapshots else releases) {
+                credentials {
+                    password = findProperty("MAVEN_USERNAME") as? String
+                    username = findProperty("MAVEN_PASSWORD") as? String
+                }
+            }
+        }
+    } else {
+        println("Maven credentials not found, not publishing to Maven Repo")
+    }
 }
