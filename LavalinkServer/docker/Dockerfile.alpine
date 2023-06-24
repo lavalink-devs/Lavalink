@@ -1,10 +1,8 @@
-FROM alpine
+FROM azul/zulu-openjdk-alpine:17-jre-headless-latest
 
 # Run as non-root user
 RUN addgroup -g 322 -S lavalink && \
     adduser -u 322 -S lavalink lavalink
-
-RUN apk add --no-cache openjdk17-jre-headless
 
 WORKDIR /opt/Lavalink
 
