@@ -82,8 +82,8 @@ publishing {
 
             maven(if ((version as String).endsWith("SNAPSHOT")) snapshots else releases) {
                 credentials {
-                    password = findProperty("MAVEN_USERNAME") as? String
-                    username = findProperty("MAVEN_PASSWORD") as? String
+                    password = findProperty("MAVEN_PASSWORD") as? String
+                    username = findProperty("MAVEN_USERNAME") as? String
                 }
             }
         }
