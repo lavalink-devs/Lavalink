@@ -127,6 +127,7 @@ tasks {
             // Exclude base dependency jar
             exclude {
                 it.name.contains("lavaplayer-natives-fork")
+                it.name.contains("udpqueue-native-")
             }
 
             // Add custom jar
