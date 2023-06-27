@@ -253,6 +253,8 @@ ExecStart=java -Xmx4G -jar </home/usr/lavalink>/Lavalink.jar
 
 # Restart the service if it crashes
 Restart=on-failure
+# Delay each restart by 5s
+RestartSec=5s
 
 [Install]
 # Start this service as part of normal system start-up
