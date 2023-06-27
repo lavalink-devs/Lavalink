@@ -240,7 +240,8 @@ After=syslog.target network.target
 [Service]
 # The user which will run Lavalink
 User=<usr>
-
+# The group which will run Lavalink
+Group=<usr>
 
 # Type of serivce (either simple or forking). DO NOT CHANGE THIS PARAMETER
 Type=simple
