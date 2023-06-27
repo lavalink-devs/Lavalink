@@ -267,7 +267,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable lavalink
 sudo systemctl start lavalink
 ```
-
+To see lavalink logs just run `sudo journalctl -u lavalink` or `tail -f </home/usr/lavalink>/logs/spring.log`
 ### Docker
 
 Docker images can be found under [packages](https://github.com/lavalink-devs/Lavalink/pkgs/container/lavalink) with old builds prior to `v3.7.4` being available on [Docker Hub](https://hub.docker.com/r/fredboat/lavalink/).
