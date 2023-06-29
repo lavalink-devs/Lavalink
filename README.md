@@ -45,20 +45,29 @@ A [basic example bot](Testbot) is available.
 * Java 11* LTS or newer required.
 * OpenJDK or Zulu running on Linux AMD64 is officially supported.
 
-Support for Darwin (Mac), Windows AMD64, and Linux ARM (Raspberry Pi) is provided on a best-effort basis. This is dependent on Lavaplayer's native libraries.
-
-Lavaplayer currently supports following architectures: 
-
-`Darwin (M1 & Intel)`, `Linux aarch32`, `Linux aarch64`, `Linux ARMv7+ 32/64`, `Linux ARMHF(v6) 32`, `Linux i386 32`, `Linux x86 64`, `Windows i386 32` and `Windows x86 64`
-
-JDA-NAS(Native Audio Buffer) & the Timescale filter are currently not supported on following architectures: 
-
-`Linux ARMHF(v6) 32` and `Linux aarch32`
-
-
 Support for other JVMs is also best-effort. Periodic CPU utilization stats are prone not to work everywhere.
 
 **\*Java 11 appears to have some issues with Discord's TLS 1.3. Java 14 has other undiagnosed HTTPS problems. Use Java 13. Docker images have been updated.** See [#258](https://github.com/lavalink-devs/Lavalink/issues/258), [#260](https://github.com/lavalink-devs/Lavalink/issues/260)
+
+## Hardware Support
+
+Lavalink also runs on other hardware, but support is best-effort.
+Here is a list of known working hardware:
+
+| Operating System | Architecture | Lavaplayer | JDA-NAS | Timescale | AVX2 |
+|------------------|--------------|------------|---------|-----------|------|
+| linux            | x86-64       | ✅          | ✅       | ✅         | ✅    |
+| linux            | x86          | ✅          | ✅       | ✅         | ✅    |
+| linux            | arm          | ✅          | ✅       | ✅         | ❌    |
+| linux            | armhf        | ✅          | ❌       | ❌         | ❌    |
+| linux            | aarch32      | ✅          | ❌       | ❌         | ❌    |
+| linux            | aarch64      | ✅          | ✅       | ✅         | ❌    |
+| linux-musl       | x86-64       | ✅          | ❌       | ✅         | ✅    |
+| linux-musl       | aarch64      | ✅          | ❌       | ✅         | ❌    |
+| windows          | x86-64       | ✅          | ✅       | ✅         | ✅    |
+| Windows          | x86          | ✅          | ✅       | ✅         | ✅    |
+| darwin           | x86-64       | ✅          | ✅       | ✅         | ✅    |
+| darwin           | aarch64e     | ✅          | ✅       | ✅         | ❌    |
 
 ## Changelog
 
@@ -235,6 +244,7 @@ Run with `java -jar Lavalink.jar` from the same directory
 ### Docker
 
 Docker images can be found under [packages](https://github.com/lavalink-devs/Lavalink/pkgs/container/lavalink) with old builds prior to `v3.7.4` being available on [Docker Hub](https://hub.docker.com/r/fredboat/lavalink/).
+There are 2 image variants `Ubuntu` and `Alpine`, the `Alpine` variant is smaller and can be used with the `-alpine` suffix, for example `ghcr.io/freyacodes/lavalink:3-alpine`.
 
 ---
 
