@@ -126,7 +126,7 @@ jobs:
       - name: Build Alpine and Push
         uses: docker/build-push-action@v3
         with:
-          file: LavalinkServer/docker/Dockerfile.alpine
+          file: LavalinkServer/docker/alpine.Dockerfile
           context: .
           platforms: linux/amd64,linux/arm64/v8
           push: true
