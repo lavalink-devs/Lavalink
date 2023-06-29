@@ -5,6 +5,8 @@ plugins {
     `maven-publish`
 }
 
+apply(from = "../repositories.gradle")
+
 val archivesBaseName = "plugin-api"
 group = "dev.arbjerg.lavalink"
 
@@ -65,22 +67,6 @@ publishing {
                 }
             }
         }
-    }
-
-    if (isGpgKeyDefined) {
-        repositories {
-            val snapshots = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-            val releases = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-
-            maven(if ((version as String).endsWith("SNAPSHOT")) snapshots else releases) {
-                credentials {
-                    password = findProperty("ossrhPassword") as? String
-                    username = findProperty("ossrhUsername") as? String
-                }
-            }
-        }
-    } else {
-        println("Not capable of publishing to OSSRH because of missing GPG key")
     }
 }
 

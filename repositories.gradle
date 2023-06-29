@@ -1,0 +1,41 @@
+// Usage: apply from: 'repositories.gradle'
+
+publishing {
+    boolean isOssrhDefined = findProperty("signing.gnupg.keyName") != null && findProperty("ossrhPassword") != null && findProperty("ossrhUsername") != null
+    boolean isMavenDefined = findProperty('MAVEN_USERNAME') != null && findProperty("MAVEN_PASSWORD") != null
+
+    if (isOssrhDefined) {
+        repositories {
+            def snapshots = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            def releases = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+
+            maven {
+                url = version.endsWith("SNAPSHOT") ? snapshots : releases
+                credentials {
+                    password = findProperty("ossrhPassword")
+                    username = findProperty("ossrhUsername")
+                }
+            }
+        }
+    } else {
+        println("Not capable of publishing to OSSRH because of missing GPG key or OSSRH credentials")
+    }
+
+    if (findProperty("MAVEN_USERNAME") != null && findProperty("MAVEN_PASSWORD") != null) {
+        println("Publishing to Maven Repo")
+        repositories {
+            def snapshots = "https://maven.arbjerg.dev/snapshots"
+            def releases = "https://maven.arbjerg.dev/releases"
+
+            maven {
+                url = version.endsWith("SNAPSHOT") ? snapshots : releases
+                credentials {
+                    password = findProperty("MAVEN_PASSWORD")
+                    username = findProperty("MAVEN_USERNAME")
+                }
+            }
+        }
+    } else {
+        println("Maven credentials not found, not publishing to Maven Repo")
+    }
+}
