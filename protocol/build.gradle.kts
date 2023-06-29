@@ -9,6 +9,8 @@ plugins {
     kotlin("plugin.serialization")
 }
 
+apply(from = "../repositories.gradle")
+
 val archivesBaseName = "protocol"
 group = "dev.arbjerg.lavalink"
 
@@ -112,30 +114,5 @@ tasks {
 if (System.getenv("NIX_PROFILES") != null) {
     rootProject.plugins.withType<NodeJsRootPlugin> {
         rootProject.the<NodeJsRootExtension>().download = false
-    }
-}
-
-publishing {
-    if (findProperty("signing.gnupg.keyName") != null) {
-        repositories {
-            val snapshots = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-            val releases = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-
-            maven(if ((version as String).endsWith("SNAPSHOT")) snapshots else releases) {
-                credentials {
-                    password = findProperty("ossrhPassword") as? String
-                    username = findProperty("ossrhUsername") as? String
-                }
-            }
-        }
-
-        signing {
-            publications.withType<MavenPublication> {
-                sign(this)
-            }
-            useGpgCmd()
-        }
-    } else {
-        println("Not capable of publishing to OSSRH because of missing GPG key")
     }
 }
