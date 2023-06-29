@@ -228,7 +228,7 @@ Run with `java -jar Lavalink.jar` from the same directory
 
 #### Systemd Service
 
-If you want your Lavalink server to run even when the console is closed, you will need to create a `lavalink.service` file inside of your system's directory (commonly located at `/usr/lib/systemd/system`).  Create the file, then add the following components (replacing the text inside "<>" with your values):
+If you're using a Systemd-based Linux distribution you may want to install Lavalink as a background service. You will need to create a `lavalink.service` file inside `/usr/lib/systemd/system`. Create the file with the following template (replacing the values inside the `<>` brackets):
  ```ini
 [Unit]
 # Describe the service
