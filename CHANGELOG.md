@@ -6,7 +6,7 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 ## 3.7.6
 * Update Lavaplayer to [`1.4.1`](https://github.com/Walkyst/lavaplayer-fork/releases/tag/1.4.1) & [`1.4.2`](https://github.com/Walkyst/lavaplayer-fork/releases/tag/1.4.2)
 * New support for `MUSL` based systems (most notably `alpine`)
-* New `alpine` docker image (use `-alpine` suffix)
+* New `alpine` docker image variant (use `-alpine` suffix)
 
 ## 3.7.5
 * Fix `endTime` in `Player Update` endpoint only applying when playing a new track
