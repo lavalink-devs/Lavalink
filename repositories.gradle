@@ -4,21 +4,23 @@ publishing {
     boolean isOssrhDefined = findProperty("signing.gnupg.keyName") != null && findProperty("ossrhPassword") != null && findProperty("ossrhUsername") != null
     boolean isMavenDefined = findProperty('MAVEN_USERNAME') != null && findProperty("MAVEN_PASSWORD") != null
 
-    if (isOssrhDefined) {
-        repositories {
-            def snapshots = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-            def releases = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+    if (!project.name.equals("Lavalink-Server")) {
+        if (isOssrhDefined) {
+            repositories {
+                def snapshots = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                def releases = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
 
-            maven {
-                url = version.endsWith("SNAPSHOT") ? snapshots : releases
-                credentials {
-                    password = findProperty("ossrhPassword")
-                    username = findProperty("ossrhUsername")
+                maven {
+                    url = version.endsWith("SNAPSHOT") ? snapshots : releases
+                    credentials {
+                        password = findProperty("ossrhPassword")
+                        username = findProperty("ossrhUsername")
+                    }
                 }
             }
+        } else {
+            println("Not capable of publishing to OSSRH because of missing GPG key or OSSRH credentials")
         }
-    } else {
-        println("Not capable of publishing to OSSRH because of missing GPG key or OSSRH credentials")
     }
 
     if (findProperty("MAVEN_USERNAME") != null && findProperty("MAVEN_PASSWORD") != null) {
