@@ -5,13 +5,13 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 
 ## 4.0.0-beta.1
 * New Lavalink now requires Java 17 or higher to run
-* Update to [Lavaplayer custom branch](https://github.com/Walkyst/lavaplayer-fork/tree/custom), which includes native support for artwork urls and ISRCs in the track info.
+* **Removal of all websocket messages sent by the client. Everything is now done via [REST](IMPLEMENTATION.md#rest-api)**
+* Update to [Lavaplayer custom branch](https://github.com/Walkyst/lavaplayer-fork/tree/custom), which includes native support for artwork urls and ISRCs in the track info
 * Addition of full `Track` objects in following events: `TrackStartEvent`, `TrackEndEvent`, `TrackExceptionEvent`, `TrackStuckEvent`
 * Resuming a session now requires the `Session-Id` header instead of `Resume-Key` header
 * Reworked track loading result. For more info see [here](IMPLEMENTATION.md#track-loading-result)
 * Update to the [Protocol Module](protocol) to support Kotlin/JS
-* Removal of all `/v3` endpoints except `/version`. All endpoints are now under `/v4`
-* Removal of all websocket OPs sent by the client. All player control is now done via [REST](IMPLEMENTATION.md#rest-api)
+* Removal of all `/v3` endpoints except `/version`. All other endpoints are now under `/v4`
 
 > **Warning**
 > This is a beta release, and as such, may contain bugs. Please report any bugs you find to the [issue tracker](https://github.com/lavalink-devs/Lavalink/issues/new/choose).
