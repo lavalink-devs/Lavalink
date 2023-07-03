@@ -5,6 +5,8 @@ import org.springframework.boot.gradle.tasks.run.BootRun
 plugins {
     application
     `maven-publish`
+    kotlin("jvm")
+    id("org.jetbrains.dokka")
 }
 
 apply(plugin = "org.springframework.boot")
@@ -28,6 +30,13 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
     withJavadocJar()
     withSourcesJar()
+}
+
+val dokkaJar by tasks.registering(Jar::class) {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    description = "Assembles Javadoc with Dokka"
+    archiveClassifier.set("javadoc")
+    from(tasks.dokkaJavadoc)
 }
 
 configurations {
@@ -156,7 +165,9 @@ tasks {
 publishing {
     publications {
         create<MavenPublication>("LavalinkServer") {
-            from(project.components["java"])
+            artifact(tasks.named("bootJar"))
+            artifact(tasks.kotlinSourcesJar)
+            artifact(dokkaJar)
 
             pom {
                 name.set("Lavalink Server")
