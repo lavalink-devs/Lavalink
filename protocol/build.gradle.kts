@@ -7,12 +7,21 @@ plugins {
     `maven-publish`
     kotlin("multiplatform")
     kotlin("plugin.serialization")
+    id("org.jetbrains.dokka")
 }
 
 apply(from = "../repositories.gradle")
 
 val archivesBaseName = "protocol"
 group = "dev.arbjerg.lavalink"
+
+fun MavenPublication.registerDokkaJar() =
+    tasks.register<Jar>("${name}DokkaJar") {
+        archiveClassifier = "javadoc"
+        destinationDirectory = destinationDirectory.get().dir(name)
+        from(tasks.named("dokkaHtml"))
+    }
+
 
 kotlin {
     jvm {
@@ -69,35 +78,36 @@ kotlin {
             }
         }
     }
+}
 
-    targets {
-        all {
-            mavenPublication {
-                pom {
-                    name.set("Lavalink Protocol")
-                    description.set("Protocol for Lavalink Client development")
+publishing {
+    publications {
+        withType<MavenPublication> {
+            artifact(registerDokkaJar())
+            pom {
+                name.set("Lavalink Protocol")
+                description.set("Protocol for Lavalink Client development")
+                url.set("https://github.com/lavalink-devs/lavalink")
+
+                licenses {
+                    license {
+                        name.set("The MIT License")
+                        url.set("https://github.com/lavalink-devs/Lavalink/blob/master/LICENSE")
+                    }
+                }
+
+                developers {
+                    developer {
+                        id.set("freyacodes")
+                        name.set("Freya Arbjerg")
+                        url.set("https://www.arbjerg.dev")
+                    }
+                }
+
+                scm {
+                    connection.set("scm:git:ssh://github.com/lavalink-devs/lavalink.git")
+                    developerConnection.set("scm:git:ssh://github.com/lavalink-devs/lavalink.git")
                     url.set("https://github.com/lavalink-devs/lavalink")
-
-                    licenses {
-                        license {
-                            name.set("The MIT License")
-                            url.set("https://github.com/lavalink-devs/Lavalink/blob/master/LICENSE")
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id.set("freyacodes")
-                            name.set("Freya Arbjerg")
-                            url.set("https://www.arbjerg.dev")
-                        }
-                    }
-
-                    scm {
-                        connection.set("scm:git:ssh://github.com/lavalink-devs/lavalink.git")
-                        developerConnection.set("scm:git:ssh://github.com/lavalink-devs/lavalink.git")
-                        url.set("https://github.com/lavalink-devs/lavalink")
-                    }
                 }
             }
         }
