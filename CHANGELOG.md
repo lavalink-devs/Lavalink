@@ -55,7 +55,7 @@ Contributors:
 * Update udpqueue.rs to `v0.2.6`. https://github.com/lavalink-devs/Lavalink/pull/802
 
 Contributors:
-[@TopiSenpai](https://github.com/TopiSenpai), [@Devoxin](https://github.com/Devoxin), [@melike2d](https://github.com/melike2d), [@freyacodes](https://github.com/freyacodes), [@aikaterna](https://github.com/aikaterna), [@ooliver1](https://github.com/ooliver1)
+[@topi314](https://github.com/topi314), [@Devoxin](https://github.com/Devoxin), [@melike2d](https://github.com/melike2d), [@freyacodes](https://github.com/freyacodes), [@aikaterna](https://github.com/aikaterna), [@ooliver1](https://github.com/ooliver1)
 
 ## 3.6.2
 * Update lavaplayer to `1.3.99.1`. For more info see [here](https://github.com/lavalink-devs/Lavalink/pull/773)
@@ -75,9 +75,7 @@ Contributors:
 * New `ping` field in player update. see https://github.com/lavalink-devs/Lavalink/pull/738 for more info
 
 Contributors: 
-[@TopiSenpai](https://github.com/TopiSenpai),
-[@Devoxin](https://github.com/Devoxin), and 
-[@freyacodes](https://github.com/freyacodes) 
+[@topi314](https://github.com/topi314), [@Devoxin](https://github.com/Devoxin), and [@freyacodes](https://github.com/freyacodes)
 
 ## 3.5
 * New plugin system. For more info see [here](https://github.com/lavalink-devs/Lavalink/blob/master/PLUGINS.md).
@@ -98,7 +96,7 @@ Contributors:
 [@freyacodes](https://github.com/freyacodes), 
 [@davidffa](https://github.com/davidffa), 
 [@Walkyst](https://github.com/Walkyst), 
-[@TopiSenpai](https://github.com/TopiSenpai), 
+[@topi314](https://github.com/topi314), 
 [@duncte123](https://github.com/duncte123), 
 [@Kodehawa](https://github.com/Kodehawa), 
 [@Devoxin](https://github.com/Devoxin), 
@@ -125,7 +123,7 @@ Contributors:
 [@DaliborTrampota](https://github.com/DaliborTrampota),
 [@Mandruyd](https://github.com/Mandruyd),
 [@Allvaa](https://github.com/@Allvaa), and
-[@TopiSenpai](https://github.com/TopiSenpai)
+[@topi314](https://github.com/topi314)
 
 ## 3.3.2.5
 * Update Lavaplayer to 1.3.76
