@@ -3,6 +3,24 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 4.0.0-beta.1
+* New Lavalink now requires Java 17 or higher to run
+* Update to [Lavaplayer custom branch](https://github.com/Walkyst/lavaplayer-fork/tree/custom), which includes native support for artwork urls and ISRCs in the track info.
+* Addition of full `Track` objects in following events: `TrackStartEvent`, `TrackEndEvent`, `TrackExceptionEvent`, `TrackStuckEvent`
+* Resuming a session now requires the `Session-Id` header instead of `Resume-Key` header
+* Reworked track loading result. For more info see [here](IMPLEMENTATION.md#track-loading-result)
+* Update to the [Protocol Module](protocol) to support Kotlin/JS
+* Removal of all `/v3` endpoints except `/version`. All endpoints are now under `/v4`
+* Removal of all websocket OPs sent by the client. All player control is now done via [REST](IMPLEMENTATION.md#rest-api)
+
+> **Warning**
+> This is a beta release, and as such, may contain bugs. Please report any bugs you find to the [issue tracker](https://github.com/lavalink-devs/Lavalink/issues/new/choose).
+> For more info on the changes in this release, see [here](IMPLEMENTATION.md#significant-changes-v370---v400)
+> If you have any question regarding the changes in this release, please ask in the [support server](https://discord.gg/ZW4s47Ppw4) or [GitHub discussions](https://github.com/lavalink-devs/Lavalink/discussions/categories/q-a)
+
+Contributors:
+[@topi314](https://github.com/topi314), [@freyacodes](https://github.com/freyacodes), [@DRSchlaubi](https://github.com/DRSchlaubi) and [@melike2d](https://github.com/melike2d)
+
 ## 3.7.6
 * Update Lavaplayer to [`1.4.1`](https://github.com/Walkyst/lavaplayer-fork/releases/tag/1.4.1) & [`1.4.2`](https://github.com/Walkyst/lavaplayer-fork/releases/tag/1.4.2)
 * New support for `MUSL` based systems (most notably `alpine`)
