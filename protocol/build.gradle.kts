@@ -104,6 +104,14 @@ kotlin {
     }
 }
 
+if (findProperty("signing.gnupg.keyName") != null) {
+    signing {
+        sign(publishing.publications["protocol"], publishing.publications["protocol-js"], publishing.publications["protocol-jvm"])
+        useGpgCmd()
+    }
+}
+
+
 tasks {
     withType<KotlinJvmTest> {
         useJUnitPlatform()
