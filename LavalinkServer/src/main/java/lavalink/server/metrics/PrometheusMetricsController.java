@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -36,12 +35,12 @@ public class PrometheusMetricsController {
     }
 
     @GetMapping(produces = TextFormat.CONTENT_TYPE_004)
-    public ResponseEntity<String> getMetrics(@Nullable @RequestParam(name = "name[]", required = false) String[] includedParam)
+    public ResponseEntity<String> getMetrics(@RequestParam(name = "name[]", required = false) String[] includedParam)
             throws IOException {
         return buildAnswer(includedParam);
     }
 
-    private ResponseEntity<String> buildAnswer(@Nullable String[] includedParam) throws IOException {
+    private ResponseEntity<String> buildAnswer(String[] includedParam) throws IOException {
         Set<String> params;
         if (includedParam == null) {
             params = Collections.emptySet();
@@ -50,11 +49,9 @@ public class PrometheusMetricsController {
         }
 
         Writer writer = new StringWriter();
-        try {
+        try (writer) {
             TextFormat.write004(writer, this.registry.filteredMetricFamilySamples(params));
             writer.flush();
-        } finally {
-            writer.close();
         }
 
         return new ResponseEntity<>(writer.toString(), HttpStatus.OK);

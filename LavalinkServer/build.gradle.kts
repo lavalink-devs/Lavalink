@@ -17,7 +17,6 @@ apply(from = "../repositories.gradle")
 
 val archivesBaseName = "Lavalink"
 group = "dev.arbjerg.lavalink"
-
 description = "Play audio to discord voice channels"
 
 application {
@@ -25,8 +24,10 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    withJavadocJar()
+    withSourcesJar()
 }
 
 configurations {
@@ -62,10 +63,10 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.logback)
     implementation(libs.sentry.logback)
-    implementation(libs.oshi)
-    implementation(libs.json)
-
-    compileOnly(libs.spotbugs)
+    implementation(libs.oshi) {
+        // This version of SLF4J does not recognise Logback 1.2.3
+        exclude(group = "org.slf4j", module = "slf4j-api")
+    }
 
     testImplementation(libs.spring.boot.test)
 }

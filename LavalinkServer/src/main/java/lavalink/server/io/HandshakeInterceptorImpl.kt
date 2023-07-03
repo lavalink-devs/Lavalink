@@ -44,8 +44,9 @@ constructor(private val serverConfig: ServerConfig, private val socketServer: So
 
         log.info("Incoming connection from ${request.remoteAddress}")
 
-        val resumeKey = request.headers.getFirst("Resume-Key")
-        val resuming = resumeKey != null && socketServer.canResume(resumeKey)
+        val sessionId = request.headers.getFirst("Session-Id")
+        val resuming = sessionId != null && socketServer.canResume(sessionId)
+
         response.headers.add("Session-Resumed", resuming.toString())
 
         return true
