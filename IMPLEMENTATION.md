@@ -1,7 +1,6 @@
 # Implementation guidelines
 
-How to write your own client. The Java [Lavalink-Client](https://github.com/freyacodes/lavalink-client) will serve as an example implementation.
-The Java client has support for JDA, but can also be adapted to work with other JVM libraries.
+How to write your own client.
 
 ## Requirements
 
@@ -19,6 +18,25 @@ The Java client has support for JDA, but can also be adapted to work with other 
 * addition of the full [Track](#track) object in [TrackStartEvent](#trackstartevent), [TrackEndEvent](#trackendevent), [TrackExceptionEvent](#trackexceptionevent) and [TrackStuckEvent](#trackstuckevent).
 * updated capitalization of [Track End Reason](#track-end-reason) and [Severity](#severity)
 * reworked [Load Result](#track-loading-result) object
+
+<details>
+<summary>v4.0.0 Migration Guide</summary>
+
+All websocket ops are removed as of `v4.0.0` and replaced with the following endpoints and json fields:
+* `play` -> [Update Player Endpoint](#update-player) `track` or `identifier` field
+* `stop` -> [Update Player Endpoint](#update-player) `track` field with `null`
+* `pause` -> [Update Player Endpoint](#update-player) `pause` field
+* `seek` -> [Update Player Endpoint](#update-player) `position` field
+* `volume` -> [Update Player Endpoint](#update-player) `volume` field
+* `filters` -> [Update Player Endpoint](#update-player) `filters` field
+* `destroy` -> [Destroy Player Endpoint](#destroy-player)
+* `voiceUpdate` -> [Update Player Endpoint](#update-player) `voice` field
+* `configureResuming` -> [Update Session Endpoint](#update-session)
+
+</details>
+
+<details>
+<summary>Older versions</summary>
 
 ## Significant changes v3.6.0 -> v3.7.0
 
@@ -50,14 +68,6 @@ All websocket ops are deprecated as of `v3.7.0` and replaced with the following 
 * `configureResuming` -> [Update Session Endpoint](#update-session)
 
 </details>
-
-## Future breaking changes for v4
-
-* HTTP endpoints not under a version path (`/v3`, `/v4`) will be removed except `/version` in v4.
-* `/v4/websocket` will not accept any websocket messages. In `v4` the websocket is only used for server-to-client messages.
-
-<details>
-<summary>Older versions</summary>
 
 ## Significant changes v3.3 -> v3.4
 
