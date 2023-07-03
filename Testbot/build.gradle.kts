@@ -4,7 +4,7 @@ plugins {
     kotlin("jvm")
 }
 
-group = "lavalink"
+group = "dev.arbjerg.lavalink"
 version = "1.0"
 
 application {

@@ -3,7 +3,7 @@ package lavalink.server.info
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary
 import dev.arbjerg.lavalink.api.AudioFilterExtension
-import dev.arbjerg.lavalink.protocol.v3.*
+import dev.arbjerg.lavalink.protocol.v4.*
 import lavalink.server.bootstrap.PluginManager
 import lavalink.server.config.ServerConfig
 import org.springframework.web.bind.annotation.GetMapping
@@ -51,7 +51,7 @@ class InfoRestHandler(
     )
     private val version = appInfo.versionBuild
 
-    @GetMapping("/v3/info")
+    @GetMapping("/v4/info")
     fun info() = info
 
     @GetMapping("/version")

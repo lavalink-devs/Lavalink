@@ -1,6 +1,5 @@
 package lavalink.server.player.filters
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.natanbc.lavadsp.channelmix.ChannelMixPcmAudioFilter
 import com.github.natanbc.lavadsp.distortion.DistortionPcmAudioFilter
 import com.github.natanbc.lavadsp.karaoke.KaraokePcmAudioFilter
@@ -175,11 +174,9 @@ class LowPassConfig(
 }
 
 abstract class FilterConfig {
-    abstract fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter
+    abstract fun build(format: AudioDataFormat, output: FloatPcmAudioFilter): FloatPcmAudioFilter?
 
-    @get:JsonIgnore
     abstract val isEnabled: Boolean
 
-    @get:JsonIgnore
     abstract val name: String
 }

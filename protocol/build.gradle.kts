@@ -1,9 +1,12 @@
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
+import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
+
 plugins {
-    java
     signing
-    `java-library`
     `maven-publish`
-    kotlin("jvm")
+    kotlin("multiplatform")
+    kotlin("plugin.serialization")
 }
 
 apply(from = "../repositories.gradle")
@@ -11,60 +14,105 @@ apply(from = "../repositories.gradle")
 val archivesBaseName = "protocol"
 group = "dev.arbjerg.lavalink"
 
-java {
-    targetCompatibility = JavaVersion.VERSION_11
-    sourceCompatibility = JavaVersion.VERSION_11
+kotlin {
+    jvm {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
+        }
+    }
 
-    withJavadocJar()
-    withSourcesJar()
-}
-
-dependencies {
-    compileOnly(libs.lavaplayer)
-    implementation(libs.kotlin.stdlib.jdk8)
-    implementation(libs.jackson.module.kotlin)
-}
-
-val isGpgKeyDefined = findProperty("signing.gnupg.keyName") != null
-
-publishing {
-    publications {
-        create<MavenPublication>("Protocol") {
-            from(project.components["java"])
-
-            pom {
-                name.set("Lavalink Protocol")
-                description.set("Protocol for Lavalink Client development")
-                url.set("https://github.com/lavalink-devs/lavalink")
-
-                licenses {
-                    license {
-                        name.set("The MIT License")
-                        url.set("https://github.com/lavalink-devs/Lavalink/blob/master/LICENSE")
-                    }
+    js(IR) {
+        nodejs()
+        browser()
+        compilations.all {
+            packageJson {
+                //language=RegExp
+                // npm doesn't support our versioning :(
+                val validVersion = """\d+\.\d+\.\d+""".toRegex()
+                if (!validVersion.matches(project.version.toString())) {
+                    version = "4.0.0"
                 }
+            }
+        }
+    }
 
-                developers {
-                    developer {
-                        id.set("freyacodes")
-                        name.set("Freya Arbjerg")
-                        url.set("https://www.arbjerg.dev")
-                    }
-                }
+    sourceSets {
+        all {
+            languageSettings.optIn("kotlinx.serialization.ExperimentalSerializationApi")
+        }
 
-                scm {
-                    connection.set("scm:git:ssh://github.com/lavalink-devs/lavalink.git")
-                    developerConnection.set("scm:git:ssh://github.com/lavalink-devs/lavalink.git")
+        commonMain {
+            dependencies {
+                api(libs.kotlinx.serialization.json)
+                api(libs.kotlinx.datetime)
+            }
+        }
+
+        commonTest {
+            dependencies {
+                api(kotlin("test-common"))
+                api(kotlin("test-annotations-common"))
+            }
+        }
+
+        getByName("jsTest") {
+            dependencies {
+                implementation(kotlin("test-js"))
+            }
+        }
+
+        getByName("jvmTest") {
+            dependencies {
+                implementation(kotlin("test-junit5"))
+            }
+        }
+    }
+
+    targets {
+        all {
+            mavenPublication {
+                pom {
+                    name.set("Lavalink Protocol")
+                    description.set("Protocol for Lavalink Client development")
                     url.set("https://github.com/lavalink-devs/lavalink")
+
+                    licenses {
+                        license {
+                            name.set("The MIT License")
+                            url.set("https://github.com/lavalink-devs/Lavalink/blob/master/LICENSE")
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id.set("freyacodes")
+                            name.set("Freya Arbjerg")
+                            url.set("https://www.arbjerg.dev")
+                        }
+                    }
+
+                    scm {
+                        connection.set("scm:git:ssh://github.com/lavalink-devs/lavalink.git")
+                        developerConnection.set("scm:git:ssh://github.com/lavalink-devs/lavalink.git")
+                        url.set("https://github.com/lavalink-devs/lavalink")
+                    }
                 }
             }
         }
     }
 }
 
-if (isGpgKeyDefined) {
-    signing {
-        sign(publishing.publications["Protocol"])
-        useGpgCmd()
+tasks {
+    withType<KotlinJvmTest> {
+        useJUnitPlatform()
+    }
+}
+
+// Use system Node.Js on NixOS
+if (System.getenv("NIX_PROFILES") != null) {
+    rootProject.plugins.withType<NodeJsRootPlugin> {
+        rootProject.the<NodeJsRootExtension>().download = false
     }
 }
