@@ -23,8 +23,8 @@ How to write your own client.
 <summary>v4.0.0 Migration Guide</summary>
 
 All websocket ops are removed as of `v4.0.0` and replaced with the following endpoints and json fields:
-* `play` -> [Update Player Endpoint](#update-player) `track` or `identifier` field
-* `stop` -> [Update Player Endpoint](#update-player) `track` field with `null`
+* `play` -> [Update Player Endpoint](#update-player) `encodedTrack` or `identifier` field
+* `stop` -> [Update Player Endpoint](#update-player) `encodedTrack` field with `null`
 * `pause` -> [Update Player Endpoint](#update-player) `pause` field
 * `seek` -> [Update Player Endpoint](#update-player) `position` field
 * `volume` -> [Update Player Endpoint](#update-player) `volume` field
