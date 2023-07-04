@@ -1,0 +1,90 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+
+site_name: Lavalink Docs
+site_description: Lavalink Documentation
+site_author: Lavalink Contributors
+site_url: https://lavalink.dev
+
+repo_name: Lavalink
+repo_url: https://github.com/lavalink-devs/Lavalink
+edit_uri: edit/master/docs/
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Configuration: configuration.md
+  - Clients: clients.md
+  - Changelog: changelog.md
+
+extra_css:
+  - 'stylesheets/style.css'
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/lavalink-devs
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/BTHvsc7WsT
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep orange
+      accent: red
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep orange
+      accent: red
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.top
+    - navigation.tabs.sticky
+    - toc.follow
+    - content.code.annotate
+  font:
+    text: Roboto
+    code: Roboto Mono
+  favicon: assets/favicon.png
+  logo: logo.svg
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - admonition
+  - meta
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - footnotes
+  - def_list
+  - attr_list
+  - md_in_html
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - toc:
+      permalink: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+plugins:
+  - info:
+  - offline:
+  - search:
+      lang: en
+  - social:
+  - git-revision-date-localized:

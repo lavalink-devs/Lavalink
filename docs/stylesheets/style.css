@@ -1,0 +1,23 @@
+.container {
+    margin-top: 1rem;
+}
+.container .logo {
+    text-align: center;
+}
+
+#home__title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: unset;
+}
+
+#home__logo {
+    width: 10rem;
+}
+
+@media only screen and (max-width: 479px) {
+    .home__logo {
+        width: 6rem;
+    }
+}

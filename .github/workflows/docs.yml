@@ -1,0 +1,49 @@
+name: docs
+
+on:
+  push:
+    branches:
+      - master
+      - docs # for testing
+    paths:
+      - 'docs/**'
+      - '.github/workflows/docs.yml'
+      - 'mkdocs.yml'
+      - 'requirements.txt'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+    group: pages
+    cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+      - uses: actions/cache@v3
+        with:
+          key: mkdocs-material-${{ env.cache_id }}
+          path: .cache
+          restore-keys: |
+            mkdocs-material-
+      - run: pip install -r requirements.txt
+      - run: mkdocs build
+      - uses: actions/upload-pages-artifact@v1
+        with:
+          path: 'site'
+      - id: deployment
+        uses: actions/deploy-pages@v1

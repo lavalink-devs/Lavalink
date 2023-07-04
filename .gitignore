@@ -20,3 +20,4 @@ build/*
 gradle.properties
 application.yml
 LavalinkServer/plugins
+.cache/

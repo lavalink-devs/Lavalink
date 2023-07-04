@@ -1,0 +1,21 @@
+<style>
+    /* We want the logo imagine to consume the full height, so remove the default applied margin and padding */
+    .md-header__button.md-logo {
+        padding: 0;
+        margin: 0;
+    }
+
+    .header__logo {
+        height: 46px !important;
+        /* !important to override strong theme specificity */
+    }
+</style>
+
+<!-- Logo -->
+
+{% if config.theme.logo %}
+<img class="header__logo" src="{{ config.theme.logo | url }}" alt="logo" />
+{% else %}
+{% set icon = config.theme.icon.logo or "material/library" %}
+{% include ".icons/" ~ icon ~ ".svg" %}
+{% endif %}
