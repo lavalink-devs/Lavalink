@@ -87,8 +87,9 @@ Version numbers can come in different combinations, depending on the release typ
 ---
 
 ## Client libraries:
-| Client                                                                                                | Platform | Compatible With                            | Additional Information          |
-|-------------------------------------------------------------------------------------------------------|----------|--------------------------------------------|---------------------------------|
+| Client                                             | Platform | Compatible With | Additional Information |
+|----------------------------------------------------|----------|-----------------|------------------------|
+| [DisGoLink](https://github.com/disgoorg/disgolink) | Go       | **Any**         |                        |
 
 
 <details>
