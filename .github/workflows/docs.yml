@@ -41,7 +41,7 @@ jobs:
           restore-keys: |
             mkdocs-material-
       - run: pip install -r requirements.txt
-      - run: mkdocs build
+      - run: mkdocs build --verbose --strict --theme material --site-dir site
       - uses: actions/upload-pages-artifact@v1
         with:
           path: 'site'
