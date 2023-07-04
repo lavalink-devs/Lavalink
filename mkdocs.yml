@@ -82,7 +82,6 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
 
 plugins:
-  - info:
   - offline:
   - search:
       lang: en
