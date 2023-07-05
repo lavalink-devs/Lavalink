@@ -9,17 +9,20 @@ repo_name: Lavalink
 repo_url: https://github.com/lavalink-devs/Lavalink
 edit_uri: edit/master/docs/
 
+copyright: Copyright &copy; 2017-2021 Lavalink Contributors
+
 nav:
-  - Home: index.md
+  - Home: /
   - Getting Started: getting-started.md
   - Configuration: configuration.md
   - Clients: clients.md
   - Changelog: changelog.md
 
 extra_css:
-  - 'stylesheets/style.css'
+  - "stylesheets/style.css"
 
 extra:
+  homepage: /
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/lavalink-devs
@@ -32,16 +35,16 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: deep orange
-      accent: red
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
 
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: deep orange
-      accent: red
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
@@ -51,8 +54,12 @@ theme:
     - navigation.tabs
     - navigation.top
     - navigation.tabs.sticky
+    - navigation.footer
+    - navigation.path
+    - navigation.indexes
     - toc.follow
     - content.code.annotate
+    - announce.dismiss
   font:
     text: Roboto
     code: Roboto Mono
