@@ -87,9 +87,10 @@ Version numbers can come in different combinations, depending on the release typ
 ---
 
 ## Client libraries:
-| Client                                             | Platform | Compatible With | Additional Information |
-|----------------------------------------------------|----------|-----------------|------------------------|
-| [DisGoLink](https://github.com/disgoorg/disgolink) | Go       | **Any**         |                        |
+| Client                                                      | Platform | Compatible With | Additional Information |
+|-------------------------------------------------------------|----------|-----------------|------------------------|
+| [DisGoLink](https://github.com/disgoorg/disgolink)          | Go       | **Any**         |                        |
+| [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)    | Node.js  | **Any**         |                        |
 
 
 <details>
@@ -103,7 +104,6 @@ Version numbers can come in different combinations, depending on the release typ
 | [Wavelink](https://github.com/PythonistaGuild/Wavelink)     | Python   | discord.py **V2**                          |                                 |
 | [Pomice](https://github.com/cloudwithax/pomice)             | Python   | discord.py **V2**                          |                                 |
 | [Lavacord](https://github.com/lavacord/lavacord)            | Node.js  | **Any**                                    |                                 |
-| [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)    | Node.js  | **Any**                                    |                                 |
 | [Poru](https://github.com/parasop/poru)                     | Node.js  | **Any**                                    |                                 |
 | [Shoukaku](https://github.com/Deivu/Shoukaku)               | Node.js  | **Any**                                    |                                 |
 | [Cosmicord.js](https://github.com/SudhanPlayz/Cosmicord.js) | Node.js  | **Any**                                    |                                 |
