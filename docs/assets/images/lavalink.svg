@@ -36,6 +36,8 @@
      id="rect9"
      x="0"
      y="0"
+     rx="14"
+     ry="14"
      style="fill:url(#grad)" />
   <path
      style="vector-effect:none;fill:#ffffff;fill-opacity:1;stroke-width:1.27808;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000"
