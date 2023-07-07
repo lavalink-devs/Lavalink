@@ -240,11 +240,9 @@ After=syslog.target network.target
 [Service]
 # The user which will run Lavalink
 User=<usr>
+
 # The group which will run Lavalink
 Group=<usr>
-
-# Type of serivce (either simple or forking). DO NOT CHANGE THIS PARAMETER
-Type=simple
 
 # Where the program should start
 WorkingDirectory=</home/usr/lavalink>
@@ -254,6 +252,7 @@ ExecStart=java -Xmx4G -jar </home/usr/lavalink>/Lavalink.jar
 
 # Restart the service if it crashes
 Restart=on-failure
+
 # Delay each restart by 5s
 RestartSec=5s
 
