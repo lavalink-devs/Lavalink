@@ -20,6 +20,9 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
         SystemType(DefaultArchitectureTypes.X86_32, DefaultOperatingSystemTypes.LINUX),
         SystemType(DefaultArchitectureTypes.ARMv8_64, DefaultOperatingSystemTypes.LINUX),
 
+        SystemType(DefaultArchitectureTypes.X86_64, DefaultOperatingSystemTypes.LINUX_MUSL),
+        SystemType(DefaultArchitectureTypes.ARMv8_64, DefaultOperatingSystemTypes.LINUX_MUSL),
+
         SystemType(DefaultArchitectureTypes.X86_64, DefaultOperatingSystemTypes.WINDOWS),
         SystemType(DefaultArchitectureTypes.X86_32, DefaultOperatingSystemTypes.WINDOWS),
 
