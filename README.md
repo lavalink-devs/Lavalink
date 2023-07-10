@@ -87,10 +87,11 @@ Version numbers can come in different combinations, depending on the release typ
 ---
 
 ## Client libraries:
-| Client                                                      | Platform | Compatible With | Additional Information |
-|-------------------------------------------------------------|----------|-----------------|------------------------|
-| [DisGoLink](https://github.com/disgoorg/disgolink)          | Go       | **Any**         |                        |
-| [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)    | Node.js  | **Any**         |                        |
+| Client                                                      | Platform | Compatible With                            | Additional Information |
+|-------------------------------------------------------------|----------|--------------------------------------------|------------------------|
+| [DisGoLink](https://github.com/disgoorg/disgolink)          | Go       | **Any**                                    |                        |
+| [Mafic](https://github.com/ooliver1/mafic)                  | Python   | discord.py **V2**/nextcord/disnake/py-cord |                        |
+| [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)    | Node.js  | **Any**                                    |                        |
 
 
 <details>
