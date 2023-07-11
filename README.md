@@ -22,7 +22,7 @@ A [basic example bot](Testbot) is available.
 - [Server configuration](#server-configuration)
   - [Config](#config)
   - [Binary](#binary)
-    - [Systemd Serivce](#systemd-service)
+  - [Systemd Serivce](#systemd-service)
   - [Docker](#docker)
 
 </details>
