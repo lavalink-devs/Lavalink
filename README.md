@@ -226,7 +226,7 @@ Put an `application.yml` file in your working directory. ([Example here](Lavalin
 
 Run with `java -jar Lavalink.jar` from the same directory
 
-#### Systemd Service
+### Systemd Service
 
 If you're using a Systemd-based Linux distribution you may want to install Lavalink as a background service. You will need to create a `lavalink.service` file inside `/usr/lib/systemd/system`. Create the file with the following template (replacing the values inside the `<>` brackets):
  ```ini
