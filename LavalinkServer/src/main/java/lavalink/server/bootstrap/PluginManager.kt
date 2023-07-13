@@ -17,22 +17,22 @@ import java.util.regex.Pattern
 
 
 @SpringBootApplication
-class PluginManager(config: PluginsConfig) {
+class PluginManager(val config: PluginsConfig) {
 
     final val pluginManifests: MutableList<PluginManifest> = mutableListOf()
     var classLoader: ClassLoader = PluginManager::class.java.classLoader
 
     init {
-        manageDownloads(config)
+        manageDownloads()
         pluginManifests.apply {
             addAll(readClasspathManifests())
             addAll(loadJars())
         }
     }
 
-    private fun manageDownloads(config: PluginsConfig) {
+    private fun manageDownloads() {
         if (config.plugins.isEmpty()) return
-        val directory = File("./plugins")
+        val directory = File(config.pluginsDir)
         directory.mkdir()
 
         data class PluginJar(val name: String, val version: String, val file: File)
@@ -89,11 +89,11 @@ class PluginManager(config: PluginsConfig) {
     }
 
     private fun loadJars(): List<PluginManifest> {
-        val directory = File("./plugins")
+        val directory = File(config.pluginsDir)
         if (!directory.isDirectory) return emptyList()
         val jarsToLoad = mutableListOf<File>()
 
-        Files.list(File("./plugins").toPath()).forEach { path ->
+        Files.list(File(config.pluginsDir).toPath()).forEach { path ->
             val file = path.toFile()
             if (!file.isFile) return@forEach
             if (file.extension != "jar") return@forEach

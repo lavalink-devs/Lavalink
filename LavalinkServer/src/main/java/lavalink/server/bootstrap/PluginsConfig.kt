@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component
 @Component
 class PluginsConfig {
     var plugins: List<PluginDeclaration> = emptyList()
+    var pluginsDir: String = "./plugins"
 }
 
 data class PluginDeclaration(

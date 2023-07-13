@@ -8,7 +8,6 @@ include("plugin-api")
 
 project(":Lavalink-Server").projectDir = file("$rootDir/LavalinkServer")
 
-enableFeaturePreview("VERSION_CATALOGS")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 dependencyResolutionManagement {
@@ -24,25 +23,24 @@ dependencyResolutionManagement {
 }
 
 fun VersionCatalogBuilder.spring() {
-    version("spring-boot", "2.6.6")
+    version("spring-boot", "3.1.0")
 
-    library("spring-websocket", "org.springframework", "spring-websocket").version("5.3.17")
+    library("spring-websocket", "org.springframework", "spring-websocket").version("6.0.9")
 
     library("spring-boot",          "org.springframework.boot", "spring-boot").versionRef("spring-boot")
     library("spring-boot-web",      "org.springframework.boot", "spring-boot-starter-web").versionRef("spring-boot")
     library("spring-boot-undertow", "org.springframework.boot", "spring-boot-starter-undertow") .versionRef("spring-boot")
     library("spring-boot-test",     "org.springframework.boot", "spring-boot-starter-test") .versionRef("spring-boot")
-    library("jackson-module-kotlin", "com.fasterxml.jackson.module", "jackson-module-kotlin").version("2.13.2")
 
     bundle("spring", listOf("spring-websocket", "spring-boot-web", "spring-boot-undertow"))
 }
 
 fun VersionCatalogBuilder.voice() {
-    version("lavaplayer", "1.4.0")
+    version("lavaplayer", "17c75f5")
 
     library("lavaplayer",            "com.github.walkyst.lavaplayer-fork", "lavaplayer").versionRef("lavaplayer")
     library("lavaplayer-ip-rotator", "com.github.walkyst.lavaplayer-fork", "lavaplayer-ext-youtube-rotator").versionRef("lavaplayer")
-    library("lavadsp",               "com.github.natanbc", "lavadsp").version("0.7.7")
+    library("lavadsp",               "dev.arbjerg", "lavadsp").version("0.7.8")
 
     library("koe",          "moe.kyokobot.koe", "core").version("2.0.0-rc1")
     library("koe-udpqueue", "moe.kyokobot.koe", "ext-udpqueue").version("2.0.0-rc1")
@@ -57,7 +55,7 @@ fun VersionCatalogBuilder.voice() {
 }
 
 fun VersionCatalogBuilder.metrics() {
-    version("prometheus", "0.5.0")
+    version("prometheus", "0.16.0")
 
     library("metrics",         "io.prometheus", "simpleclient").versionRef("prometheus")
     library("metrics-hotspot", "io.prometheus", "simpleclient_hotspot").versionRef("prometheus")
@@ -68,19 +66,18 @@ fun VersionCatalogBuilder.metrics() {
 }
 
 fun VersionCatalogBuilder.common() {
-    version("kotlin", "1.7.20")
+    version("kotlin", "1.8.22")
 
     library("kotlin-reflect",     "org.jetbrains.kotlin", "kotlin-reflect").versionRef("kotlin")
     library("kotlin-stdlib-jdk8", "org.jetbrains.kotlin", "kotlin-stdlib-jdk8").versionRef("kotlin")
 
-    library("logback",        "ch.qos.logback",       "logback-classic").version("1.2.3")
-    library("sentry-logback", "io.sentry",            "sentry-logback").version("1.7.2")
-    library("oshi",           "com.github.oshi",      "oshi-core").version("5.7.4")
-    library("json",           "org.json",             "json").version("20180813")
+    library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.5.1")
+    library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime").version("0.4.0")
 
-    library("spotbugs", "com.github.spotbugs", "spotbugs-annotations").version("3.1.6")
+    library("logback",        "ch.qos.logback",       "logback-classic").version("1.4.7")
+    library("sentry-logback", "io.sentry",            "sentry-logback").version("6.22.0")
+    library("oshi",           "com.github.oshi",      "oshi-core").version("6.4.3")
 }
-
 
 fun VersionCatalogBuilder.other() {
     library("jda",             "net.dv8tion",         "JDA").version("4.1.1_135")

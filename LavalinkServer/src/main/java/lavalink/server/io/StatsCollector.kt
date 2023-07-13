@@ -21,7 +21,7 @@
  */
 package lavalink.server.io
 
-import dev.arbjerg.lavalink.protocol.v3.*
+import dev.arbjerg.lavalink.protocol.v4.*
 import lavalink.server.Launcher
 import lavalink.server.player.AudioLossCounter
 import org.slf4j.LoggerFactory
@@ -67,13 +67,13 @@ class StatsCollector(val socketServer: SocketServer) {
     fun createTask(context: SocketContext): Runnable = Runnable {
         try {
             val stats = retrieveStats(context)
-            context.sendMessage(Message.StatsEvent(stats))
+            context.sendMessage(Message.Serializer, Message.StatsEvent(stats))
         } catch (e: Exception) {
             log.error("Exception while sending stats", e)
         }
     }
 
-    @GetMapping("/v3/stats")
+    @GetMapping(value = ["/v4/stats"])
     fun getStats() = retrieveStats()
 
     fun retrieveStats(context: SocketContext? = null): Stats {
@@ -129,14 +129,14 @@ class StatsCollector(val socketServer: SocketServer) {
                         (totalSent + totalNulled)
 
                 frameStats = FrameStats(
-                    (totalSent / playerCount),
-                    (totalNulled / playerCount),
-                    (totalDeficit / playerCount)
+                    totalSent / playerCount,
+                    totalNulled / playerCount,
+                    totalDeficit / playerCount
                 )
             }
         }
 
-        return Stats(
+        return StatsData(
             frameStats,
             playersTotal[0],
             playersPlaying[0],

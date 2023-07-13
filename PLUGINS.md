@@ -87,3 +87,15 @@ class TestRequestInterceptor implements RestInterceptor {
     // ...
 }
 ```
+
+To add custom info to track and playlist JSON, you can implement the `AudioPluginInfoModifier` interface:
+
+```java
+import org.springframework.stereotype.Service;
+import dev.arbjerg.lavalink.api.AudioPluginInfoModifier;
+
+@Service
+class TestAudioPluginInfoModifier implements AudioPluginInfoModifier {
+	// ...
+}
+```

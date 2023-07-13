@@ -36,7 +36,8 @@ constructor(private val serverConfig: ServerConfig, private val socketServer: So
             return false
         }
 
-        if (request.headers.getFirst("User-Id") == null) {
+        val userId = request.headers.getFirst("User-Id")
+        if (userId.isNullOrEmpty() || userId.toLongOrNull() == 0L) {
             log.error("Missing User-Id header from ${request.remoteAddress}")
             response.setStatusCode(HttpStatus.BAD_REQUEST)
             return false
@@ -44,8 +45,9 @@ constructor(private val serverConfig: ServerConfig, private val socketServer: So
 
         log.info("Incoming connection from ${request.remoteAddress}")
 
-        val resumeKey = request.headers.getFirst("Resume-Key")
-        val resuming = resumeKey != null && socketServer.canResume(resumeKey)
+        val sessionId = request.headers.getFirst("Session-Id")
+        val resuming = sessionId != null && socketServer.canResume(sessionId)
+
         response.headers.add("Session-Resumed", resuming.toString())
 
         return true

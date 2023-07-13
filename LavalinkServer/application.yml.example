@@ -9,6 +9,7 @@ lavalink:
   plugins:
 #    - dependency: "group:artifact:version"
 #      repository: "repository"
+  pluginsDir: "./plugins"
   server:
     password: "youshallnotpass"
     sources:

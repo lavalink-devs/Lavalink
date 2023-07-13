@@ -26,15 +26,21 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import dev.arbjerg.lavalink.protocol.v3.LoadResult
+import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
+import dev.arbjerg.lavalink.protocol.v4.LoadResult
+import lavalink.server.util.loadFailed
 import lavalink.server.util.toPlaylistInfo
+import lavalink.server.util.toPluginInfo
 import lavalink.server.util.toTrack
 import org.slf4j.LoggerFactory
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.CompletionStage
 import java.util.concurrent.atomic.AtomicBoolean
 
-class AudioLoader(private val audioPlayerManager: AudioPlayerManager) : AudioLoadResultHandler {
+class AudioLoader(
+    private val audioPlayerManager: AudioPlayerManager,
+    private val pluginInfoModifiers: List<AudioPluginInfoModifier>
+) : AudioLoadResultHandler {
 
     companion object {
         private val log = LoggerFactory.getLogger(AudioLoader::class.java)
@@ -53,27 +59,36 @@ class AudioLoader(private val audioPlayerManager: AudioPlayerManager) : AudioLoa
 
     override fun trackLoaded(audioTrack: AudioTrack) {
         log.info("Loaded track ${audioTrack.info.title}")
-        val track = audioTrack.toTrack(audioPlayerManager)
+
+        val track = audioTrack.toTrack(audioPlayerManager, pluginInfoModifiers)
         loadResult.complete(LoadResult.trackLoaded(track))
     }
 
     override fun playlistLoaded(audioPlaylist: AudioPlaylist) {
         log.info("Loaded playlist ${audioPlaylist.name}")
-        val tracks = audioPlaylist.tracks.map { it.toTrack(audioPlayerManager) }
+
+        val tracks = audioPlaylist.tracks.map { it.toTrack(audioPlayerManager, pluginInfoModifiers) }
         if (audioPlaylist.isSearchResult) {
-            loadResult.complete(LoadResult.searchResultLoaded(tracks))
+            loadResult.complete(LoadResult.searchResult(tracks))
             return
         }
-        loadResult.complete(LoadResult.playlistLoaded(audioPlaylist.toPlaylistInfo(), tracks))
+        loadResult.complete(
+            LoadResult.playlistLoaded(
+                audioPlaylist.toPlaylistInfo(),
+                audioPlaylist.toPluginInfo(pluginInfoModifiers),
+                tracks
+            )
+        )
     }
 
     override fun noMatches() {
         log.info("No matches found")
-        loadResult.complete(LoadResult.noMatches)
+        loadResult.complete(LoadResult.NoMatches())
     }
 
     override fun loadFailed(e: FriendlyException) {
         log.error("Load failed", e)
+
         loadResult.complete(LoadResult.loadFailed(e))
     }
 

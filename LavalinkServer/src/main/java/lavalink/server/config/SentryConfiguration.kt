@@ -16,24 +16,10 @@ import java.util.*
  * Created by napster on 25.04.18.
  */
 @Configuration
-class SentryConfiguration(serverConfig: ServerConfig, sentryConfig: SentryConfigProperties) {
+class SentryConfiguration(sentryConfig: SentryConfigProperties) {
     init {
-        var dsn = sentryConfig.dsn
-        var warnDeprecatedDsnConfig = false
-        if (dsn.isEmpty()) {
-            //try deprecated config location
-            dsn = serverConfig.sentryDsn
-            warnDeprecatedDsnConfig = true
-        }
-
-        if (dsn.isNotEmpty()) {
-            turnOn(dsn, sentryConfig.tags, sentryConfig.environment)
-            if (warnDeprecatedDsnConfig) {
-                log.warn(
-                    "Please update the location of the sentry dsn in lavalinks config file / your environment "
-                            + "vars, it is now located under 'sentry.dsn' instead of 'lavalink.server.sentryDsn'."
-                )
-            }
+        if (sentryConfig.dsn.isNotEmpty()) {
+            turnOn(sentryConfig.dsn, sentryConfig.tags, sentryConfig.environment)
         } else {
             turnOff()
         }
@@ -41,11 +27,6 @@ class SentryConfiguration(serverConfig: ServerConfig, sentryConfig: SentryConfig
 
     private final fun turnOn(dsn: String, tags: Map<String, String>, environment: String) {
         log.info("Turning on sentry")
-
-        val sentryClient = Sentry.init(dsn)
-        if (environment.isNotBlank()) sentryClient.environment = environment
-
-        tags.forEach { (name, value) -> sentryClient.addTag(name, value) }
 
         // set the git commit hash this was build on as the release
         val gitProps = Properties()
@@ -56,13 +37,19 @@ class SentryConfiguration(serverConfig: ServerConfig, sentryConfig: SentryConfig
         } catch (e: IOException) {
             log.error("Failed to load git repo information", e)
         }
-
         val commitHash = gitProps.getProperty("git.commit.id")
-        if (commitHash != null && commitHash.isNotEmpty()) {
-            log.info("Setting sentry release to commit hash $commitHash")
-            sentryClient.release = commitHash
-        } else {
-            log.warn("No git commit hash found to set up sentry release")
+
+        Sentry.init {options ->
+            options.dsn = dsn
+            if (environment.isNotBlank()) options.environment = environment
+            tags.forEach { (name, value) -> options.tags[name] = value }
+
+            if (commitHash != null && commitHash.isNotEmpty()) {
+                log.info("Setting sentry release to commit hash $commitHash")
+                options.release = commitHash
+            } else {
+                log.warn("No git commit hash found to set up sentry release")
+            }
         }
 
         sentryLogbackAppender.start()
