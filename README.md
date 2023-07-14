@@ -95,6 +95,7 @@ Version numbers can come in different combinations, depending on the release typ
 | [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)           | Node.js  | **Any**                                    |                        |
 | [Magmastream](https://github.com/Blackfort-Hosting/magmastream)    | Node.js  | **Any**                                    |                        |
 | [Lavacord](https://github.com/lavacord/Lavacord)                   | Node.js  | **Any**                                    |                        |
+| [Shoukaku](https://github.com/Deivu/Shoukaku)                      | Node.js  | **Any**                                    |                        |
 | [Coglink](https://github.com/PerformanC/Coglink)                   | C        | Concord                                    |                        |
 
 <details>
