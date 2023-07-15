@@ -88,15 +88,16 @@ Version numbers can come in different combinations, depending on the release typ
 ---
 
 ## Client libraries:
-| Client                                                             | Platform | Compatible With                            | Additional Information |
-|--------------------------------------------------------------------|----------|--------------------------------------------|------------------------|
-| [DisGoLink](https://github.com/disgoorg/disgolink)                 | Go       | **Any**                                    |                        |
-| [Mafic](https://github.com/ooliver1/mafic)                         | Python   | discord.py **V2**/nextcord/disnake/py-cord |                        |
-| [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)           | Node.js  | **Any**                                    |                        |
-| [Magmastream](https://github.com/Blackfort-Hosting/magmastream)    | Node.js  | **Any**                                    |                        |
-| [Lavacord](https://github.com/lavacord/Lavacord)                   | Node.js  | **Any**                                    |                        |
-| [Shoukaku](https://github.com/Deivu/Shoukaku)                      | Node.js  | **Any**                                    |                        |
-| [Coglink](https://github.com/PerformanC/Coglink)                   | C        | Concord                                    |                        |
+| Client                                                          | Platform | Compatible With                            | Additional Information |
+|-----------------------------------------------------------------|----------|--------------------------------------------|------------------------|
+| [Lavalink.kt](https://github.com/DRSchlaubi/Lavalink.kt)        | Kotlin   | Kord/JDA/**Any**                           | Kotlin Coroutines      |
+| [DisGoLink](https://github.com/disgoorg/disgolink)              | Go       | **Any**                                    |                        |
+| [Mafic](https://github.com/ooliver1/mafic)                      | Python   | discord.py **V2**/nextcord/disnake/py-cord |                        |
+| [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)        | Node.js  | **Any**                                    |                        |
+| [Magmastream](https://github.com/Blackfort-Hosting/magmastream) | Node.js  | **Any**                                    |                        |
+| [Lavacord](https://github.com/lavacord/Lavacord)                | Node.js  | **Any**                                    |                        |
+| [Shoukaku](https://github.com/Deivu/Shoukaku)                   | Node.js  | **Any**                                    |                        |
+| [Coglink](https://github.com/PerformanC/Coglink)                | C        | Concord                                    |                        |
 
 <details>
 <summary>v3.7 supporting Client Libraries</summary>
