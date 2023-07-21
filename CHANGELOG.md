@@ -3,6 +3,11 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 4.0.0-beta.2
+* Update lavaplayer to [`08cfbc0`](https://github.com/Walkyst/lavaplayer-fork/commit/08cfbc05953128f3cf727ea3bcbe41dabcd1c7db) -  Fixed ogg streaming
+* Add JDA-NAS support for musl (`x86-64`, `aarch64`) based systems (most notably `alpine`)
+* New config option to specify the directory to load plugins from. `lavalink.pluginsDir` (defaults to `./plugins`)
+
 ## 4.0.0-beta.1
 * New Lavalink now requires Java 17 or higher to run
 * **Removal of all websocket messages sent by the client. Everything is now done via [REST](IMPLEMENTATION.md#rest-api)**
