@@ -19,6 +19,7 @@ A [basic example bot](Testbot) is available.
 
 - [Features](#features)
 - [Requirements](#requirements)
+- [Hardware Support](#hardware-support)
 - [Changelog](#changelog)
 - [Versioning policy](#versioning-policy)
 - [Client libraries](#client-libraries)
@@ -49,18 +50,27 @@ A [basic example bot](Testbot) is available.
 * Java 17 LTS or newer required. (we recommend running the latest LTS version or newer)
 * OpenJDK or Zulu running on Linux AMD64 is officially supported.
 
-Support for Darwin (Mac), Windows AMD64, and Linux ARM (Raspberry Pi) is provided on a best-effort basis. This is dependent on Lavaplayer's native libraries.
-
-Lavaplayer currently supports following architectures: 
-
-`Darwin (M1 & Intel)`, `Linux aarch32`, `Linux aarch64`, `Linux ARMv7+ 32/64`, `Linux ARMHF(v6) 32`, `Linux i386 32`, `Linux x86 64`, `Windows i386 32` and `Windows x86 64`
-
-JDA-NAS(Native Audio Buffer) & the Timescale filter are currently not supported on following architectures: 
-
-`Linux ARMHF(v6) 32` and `Linux aarch32`
-
-
 Support for other JVMs is also best-effort. Periodic CPU utilization stats are prone not to work everywhere.
+
+## Hardware Support
+
+Lavalink also runs on other hardware, but support is best-effort.
+Here is a list of known working hardware:
+
+| Operating System | Architecture | Lavaplayer | JDA-NAS | Timescale | AVX2 |
+|------------------|--------------|------------|---------|-----------|------|
+| linux            | x86-64       | ✅          | ✅       | ✅         | ✅    |
+| linux            | x86          | ✅          | ✅       | ✅         | ✅    |
+| linux            | arm          | ✅          | ✅       | ✅         | ❌    |
+| linux            | armhf        | ✅          | ❌       | ❌         | ❌    |
+| linux            | aarch32      | ✅          | ❌       | ❌         | ❌    |
+| linux            | aarch64      | ✅          | ✅       | ✅         | ❌    |
+| linux-musl       | x86-64       | ✅          | ✅       | ✅         | ✅    |
+| linux-musl       | aarch64      | ✅          | ✅       | ✅         | ❌    |
+| windows          | x86-64       | ✅          | ✅       | ✅         | ✅    |
+| Windows          | x86          | ✅          | ✅       | ✅         | ✅    |
+| darwin           | x86-64       | ✅          | ✅       | ✅         | ✅    |
+| darwin           | aarch64e     | ✅          | ✅       | ✅         | ❌    |
 
 ## Changelog
 
