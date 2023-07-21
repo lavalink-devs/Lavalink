@@ -263,18 +263,19 @@ WantedBy=multi-user.target
 ```
 
 To initiate the service, run 
+
 ```shell
 sudo systemctl daemon-reload
 sudo systemctl enable lavalink
 sudo systemctl start lavalink
 ```
+
 In addition to the usual log files, you can also view the log with `sudo journalctl -u lavalink`.
+
 ### Docker
 
 Docker images can be found under [packages](https://github.com/lavalink-devs/Lavalink/pkgs/container/lavalink) with old builds prior to `v3.7.4` being available on [Docker Hub](https://hub.docker.com/r/fredboat/lavalink/).
 There are 2 image variants `Ubuntu` and `Alpine`, the `Alpine` variant is smaller and can be used with the `-alpine` suffix, for example `ghcr.io/lavalink-devs/lavalink:3-alpine`.
-
----
 
 Install [Docker](https://docs.docker.com/engine/install/) & [Docker Compose](https://docs.docker.com/compose/install/)
 
