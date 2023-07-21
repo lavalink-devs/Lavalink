@@ -51,8 +51,10 @@ fun VersionCatalogBuilder.voice() {
         library("udpqueue-native-$it", "club.minnced", "udpqueue-native-$it").versionRef("udpqueue")
     }
     platforms.add("linux-musl-x86-64")
+    platforms.add("linux-musl-aarch64")
 
     library("udpqueue-native-linux-musl-x86-64", "club.minnced", "udpqueue-native-linux-musl-x86-64").version("0.2.7-rc.1")
+    library("udpqueue-native-linux-musl-aarch64", "club.minnced", "udpqueue-native-linux-musl-aarch64").version("0.2.7-rc.2")
 
     bundle("udpqueue-natives", platforms.map { "udpqueue-native-$it" })
 }
