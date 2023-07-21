@@ -19,12 +19,14 @@ A [basic example bot](Testbot) is available.
 
 - [Features](#features)
 - [Requirements](#requirements)
+- [Hardware Support](#hardware-support)
 - [Changelog](#changelog)
 - [Versioning policy](#versioning-policy)
 - [Client libraries](#client-libraries)
 - [Server configuration](#server-configuration)
   - [Config](#config)
   - [Binary](#binary)
+  - [Systemd Serivce](#systemd-service)
   - [Docker](#docker)
 
 </details>
@@ -48,18 +50,27 @@ A [basic example bot](Testbot) is available.
 * Java 17 LTS or newer required. (we recommend running the latest LTS version or newer)
 * OpenJDK or Zulu running on Linux AMD64 is officially supported.
 
-Support for Darwin (Mac), Windows AMD64, and Linux ARM (Raspberry Pi) is provided on a best-effort basis. This is dependent on Lavaplayer's native libraries.
-
-Lavaplayer currently supports following architectures: 
-
-`Darwin (M1 & Intel)`, `Linux aarch32`, `Linux aarch64`, `Linux ARMv7+ 32/64`, `Linux ARMHF(v6) 32`, `Linux i386 32`, `Linux x86 64`, `Windows i386 32` and `Windows x86 64`
-
-JDA-NAS(Native Audio Buffer) & the Timescale filter are currently not supported on following architectures: 
-
-`Linux ARMHF(v6) 32` and `Linux aarch32`
-
-
 Support for other JVMs is also best-effort. Periodic CPU utilization stats are prone not to work everywhere.
+
+## Hardware Support
+
+Lavalink also runs on other hardware, but support is best-effort.
+Here is a list of known working hardware:
+
+| Operating System | Architecture | Lavaplayer | JDA-NAS | Timescale | AVX2 |
+|------------------|--------------|------------|---------|-----------|------|
+| linux            | x86-64       | ✅          | ✅       | ✅         | ✅    |
+| linux            | x86          | ✅          | ✅       | ✅         | ✅    |
+| linux            | arm          | ✅          | ✅       | ✅         | ❌    |
+| linux            | armhf        | ✅          | ❌       | ❌         | ❌    |
+| linux            | aarch32      | ✅          | ❌       | ❌         | ❌    |
+| linux            | aarch64      | ✅          | ✅       | ✅         | ❌    |
+| linux-musl       | x86-64       | ✅          | ✅       | ✅         | ✅    |
+| linux-musl       | aarch64      | ✅          | ✅       | ✅         | ❌    |
+| windows          | x86-64       | ✅          | ✅       | ✅         | ✅    |
+| Windows          | x86          | ✅          | ✅       | ✅         | ✅    |
+| darwin           | x86-64       | ✅          | ✅       | ✅         | ✅    |
+| darwin           | aarch64e     | ✅          | ✅       | ✅         | ❌    |
 
 ## Changelog
 
@@ -87,29 +98,35 @@ Version numbers can come in different combinations, depending on the release typ
 ---
 
 ## Client libraries:
-| Client                                             | Platform | Compatible With | Additional Information |
-|----------------------------------------------------|----------|-----------------|------------------------|
-| [DisGoLink](https://github.com/disgoorg/disgolink) | Go       | **Any**         |                        |
-
+| Client                                                          | Platform | Compatible With                            | Additional Information |
+|-----------------------------------------------------------------|----------|--------------------------------------------|------------------------|
+| [Lavalink.kt](https://github.com/DRSchlaubi/Lavalink.kt)        | Kotlin   | Kord/JDA/**Any**                           | Kotlin Coroutines      |
+| [DisGoLink](https://github.com/disgoorg/disgolink)              | Go       | **Any**                                    |                        |
+| [Mafic](https://github.com/ooliver1/mafic)                      | Python   | discord.py **V2**/nextcord/disnake/py-cord |                        |
+| [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)        | Node.js  | **Any**                                    |                        |
+| [Magmastream](https://github.com/Blackfort-Hosting/magmastream) | Node.js  | **Any**                                    |                        |
+| [Lavacord](https://github.com/lavacord/Lavacord)                | Node.js  | **Any**                                    |                        |
+| [Shoukaku](https://github.com/Deivu/Shoukaku)                   | Node.js  | **Any**                                    |                        |
+| [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp)   | .NET     | DisCatSharp                                | v10.4.2+               |
+| [Coglink](https://github.com/PerformanC/Coglink)                | C        | Concord                                    |                        |
 
 <details>
 <summary>v3.7 supporting Client Libraries</summary>
 
-| Client                                                      | Platform | Compatible With                            | Additional Information          |
-|-------------------------------------------------------------|----------|--------------------------------------------|---------------------------------|
-| [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt)    | Kotlin   | JDA/Kord/**Any**                           | Kotlin Coroutines               |
-| [lavaplay.py](https://github.com/HazemMeqdad/lavaplay.py)   | Python   | **Any\***                                  | *`asyncio`-based libraries only |
-| [Mafic](https://github.com/ooliver1/mafic)                  | Python   | discord.py **V2**/nextcord/disnake/py-cord |                                 |
-| [Wavelink](https://github.com/PythonistaGuild/Wavelink)     | Python   | discord.py **V2**                          |                                 |
-| [Pomice](https://github.com/cloudwithax/pomice)             | Python   | discord.py **V2**                          |                                 |
-| [Lavacord](https://github.com/lavacord/lavacord)            | Node.js  | **Any**                                    |                                 |
-| [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)    | Node.js  | **Any**                                    |                                 |
-| [Poru](https://github.com/parasop/poru)                     | Node.js  | **Any**                                    |                                 |
-| [Shoukaku](https://github.com/Deivu/Shoukaku)               | Node.js  | **Any**                                    |                                 |
-| [Cosmicord.js](https://github.com/SudhanPlayz/Cosmicord.js) | Node.js  | **Any**                                    |                                 |
-| [Nomia](https://github.com/DHCPCD9/Nomia)                   | .NET     | DSharpPlus                                 |                                 |
-| [DisGoLink](https://github.com/disgoorg/disgolink)          | Go       | **Any**                                    |                                 |
-| [Coglink](https://github.com/ThePedroo/Coglink)             | C        | Concord                                    |                                 |
+| Client                                                        | Platform | Compatible With                            | Additional Information          |
+|---------------------------------------------------------------|----------|--------------------------------------------|---------------------------------|
+| [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt)      | Kotlin   | JDA/Kord/**Any**                           | Kotlin Coroutines               |
+| [lavaplay.py](https://github.com/HazemMeqdad/lavaplay.py)     | Python   | **Any\***                                  | *`asyncio`-based libraries only |
+| [Mafic](https://github.com/ooliver1/mafic)                    | Python   | discord.py **V2**/nextcord/disnake/py-cord |                                 |
+| [Wavelink](https://github.com/PythonistaGuild/Wavelink)       | Python   | discord.py **V2**                          |                                 |
+| [Pomice](https://github.com/cloudwithax/pomice)               | Python   | discord.py **V2**                          |                                 |
+| [Lavacord](https://github.com/lavacord/lavacord)              | Node.js  | **Any**                                    |                                 |
+| [Poru](https://github.com/parasop/poru)                       | Node.js  | **Any**                                    |                                 |
+| [Shoukaku](https://github.com/Deivu/Shoukaku)                 | Node.js  | **Any**                                    |                                 |
+| [Cosmicord.js](https://github.com/SudhanPlayz/Cosmicord.js)   | Node.js  | **Any**                                    |                                 |
+| [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp) | .NET     | DisCatSharp                                | Only prior v10.4.1              |
+| [Nomia](https://github.com/DHCPCD9/Nomia)                     | .NET     | DSharpPlus                                 |                                 |
+| [DisGoLink](https://github.com/disgoorg/disgolink)            | Go       | **Any**                                    |                                 |
 
 </details>
 
@@ -138,6 +155,8 @@ LAVALINK_PLUGINS_0_REPOSITORY
 
 LAVALINK_PLUGINS_1_DEPENDENCY
 LAVALINK_PLUGINS_1_REPOSITORY
+
+LAVALINK_PLUGINS_DIR
 
 LAVALINK_SERVER_PASSWORD
 LAVALINK_SERVER_SOURCES_YOUTUBE
@@ -218,12 +237,55 @@ Put an `application.yml` file in your working directory. ([Example here](Lavalin
 
 Run with `java -jar Lavalink.jar` from the same directory
 
+### Systemd Service
+
+If you're using a Systemd-based Linux distribution you may want to install Lavalink as a background service. You will need to create a `lavalink.service` file inside `/usr/lib/systemd/system`. Create the file with the following template (replacing the values inside the `<>` brackets):
+ ```ini
+[Unit]
+# Describe the service
+Description=Lavalink Service
+
+# Configure service order
+After=syslog.target network.target
+
+[Service]
+# The user which will run Lavalink
+User=<usr>
+
+# The group which will run Lavalink
+Group=<usr>
+
+# Where the program should start
+WorkingDirectory=</home/usr/lavalink>
+
+# The command to start Lavalink
+ExecStart=java -Xmx4G -jar </home/usr/lavalink>/Lavalink.jar
+
+# Restart the service if it crashes
+Restart=on-failure
+
+# Delay each restart by 5s
+RestartSec=5s
+
+[Install]
+# Start this service as part of normal system start-up
+WantedBy=multi-user.target
+```
+
+To initiate the service, run 
+
+```shell
+sudo systemctl daemon-reload
+sudo systemctl enable lavalink
+sudo systemctl start lavalink
+```
+
+In addition to the usual log files, you can also view the log with `sudo journalctl -u lavalink`.
+
 ### Docker
 
 Docker images can be found under [packages](https://github.com/lavalink-devs/Lavalink/pkgs/container/lavalink) with old builds prior to `v3.7.4` being available on [Docker Hub](https://hub.docker.com/r/fredboat/lavalink/).
-There are 2 image variants `Ubuntu` and `Alpine`, the `Alpine` variant is smaller and can be used with the `-alpine` suffix, for example `ghcr.io/freyacodes/lavalink:3-alpine`.
-
----
+There are 2 image variants `Ubuntu` and `Alpine`, the `Alpine` variant is smaller and can be used with the `-alpine` suffix, for example `ghcr.io/lavalink-devs/lavalink:3-alpine`.
 
 Install [Docker](https://docs.docker.com/engine/install/) & [Docker Compose](https://docs.docker.com/compose/install/)
 
@@ -258,4 +320,3 @@ Run `docker compose up -d`. See [Docker Compose Up](https://docs.docker.com/engi
 
 If your bot also runs in a docker container you can make that container join the lavalink network and use `lavalink` (service name) as the hostname to connect.
 See [Docker Networking](https://docs.docker.com/network/) & [Docker Compose Networking](https://docs.docker.com/compose/networking/)
-

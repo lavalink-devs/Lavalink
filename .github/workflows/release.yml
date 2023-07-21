@@ -32,3 +32,7 @@ jobs:
         with:
           artifacts: Lavalink.jar
           allowUpdates: true
+          omitBodyDuringUpdate: true
+          omitDraftDuringUpdate: true
+          omitNameDuringUpdate: true
+          omitPrereleaseDuringUpdate: true

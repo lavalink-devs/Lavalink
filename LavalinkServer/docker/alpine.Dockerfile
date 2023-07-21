@@ -1,5 +1,7 @@
 FROM azul/zulu-openjdk-alpine:17-jre-headless-latest
 
+RUN apk add --no-cache libgcc
+
 # Run as non-root user
 RUN addgroup -g 322 -S lavalink && \
     adduser -u 322 -S lavalink lavalink

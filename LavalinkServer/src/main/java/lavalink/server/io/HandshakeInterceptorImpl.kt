@@ -36,7 +36,8 @@ constructor(private val serverConfig: ServerConfig, private val socketServer: So
             return false
         }
 
-        if (request.headers.getFirst("User-Id") == null) {
+        val userId = request.headers.getFirst("User-Id")
+        if (userId.isNullOrEmpty() || userId.toLongOrNull() == 0L) {
             log.error("Missing User-Id header from ${request.remoteAddress}")
             response.setStatusCode(HttpStatus.BAD_REQUEST)
             return false
