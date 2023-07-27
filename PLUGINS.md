@@ -21,7 +21,7 @@ You can add your own plugin by submitting a pull-request to this file.
 ## Developing your own plugin
 
 > **Note:**  
-> If your plugin is developed in Kotlin make sure you are using **Kotlin v1.7.20**
+> If your plugin is developed in Kotlin make sure you are using **Kotlin v1.8.22**
 
 Follow [these steps](https://github.com/lavalink-devs/lavalink-plugin-template#how-to-use-this-template) to setup a new Lavalink plugin
 
@@ -32,17 +32,9 @@ Lavalink has a [plugin API](https://javadoc.io/doc/dev.arbjerg.lavalink/plugin-a
 provided [as an artifact](https://central.sonatype.com/artifact/dev.arbjerg.lavalink/plugin-api) and is used by the template. It is also possible to integrate with internal parts og Lavalink,
 but this is not recommended. Instead, open an issue or pull-request to change the API.
 
-Lavalink is configured by plugins using the Spring Boot framework using Spring annotations. For instance, you could define
-an extension to the WebSocket API by exposing a Spring bean like this:
+Lavalink is configured by plugins using the Spring Boot framework using Spring annotations.
 
-```java
-@Service
-class MyExtension implements WebSocketExtension {
-    // ...
-} 
-```
-
-You can also define custom REST endpoints and configuration file properties. See the Spring Boot documentation for
+You can define custom REST endpoints and configuration file properties. See the Spring Boot documentation for
 [Spring Web MVC](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#web.servlet) and
 [type-safe configuration](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#features.external-config.typesafe-configuration-properties).
 
