@@ -2,6 +2,13 @@
 
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
+## 3.7.7
+* Add JDA-NAS support for musl (`x86-64`, `aarch64`) based systems (most notably `alpine`)
+
+## 3.7.6
+* Update Lavaplayer to [`1.4.1`](https://github.com/Walkyst/lavaplayer-fork/releases/tag/1.4.1) & [`1.4.2`](https://github.com/Walkyst/lavaplayer-fork/releases/tag/1.4.2)
+* New support for `MUSL` based systems (most notably `alpine`)
+* New `alpine` docker image variant (use `-alpine` suffix)
 
 ## 3.7.5
 * Fix `endTime` in `Player Update` endpoint only applying when playing a new track
