@@ -1,12 +1,14 @@
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
     application
-    `maven-publish`
     kotlin("jvm")
     id("org.jetbrains.dokka")
+    alias(libs.plugins.maven.publish.base)
 }
 
 apply(plugin = "org.springframework.boot")
@@ -15,28 +17,17 @@ apply(plugin = "org.ajoberstar.grgit")
 apply(plugin = "com.adarshr.test-logger")
 apply(plugin = "kotlin")
 apply(plugin = "kotlin-spring")
-apply(from = "../repositories.gradle")
 
 val archivesBaseName = "Lavalink"
 group = "dev.arbjerg.lavalink"
 description = "Play audio to discord voice channels"
 
 application {
-    mainClass.set("lavalink.server.Launcher")
+    mainClass = "lavalink.server.Launcher"
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-    withJavadocJar()
-    withSourcesJar()
-}
-
-val dokkaJar by tasks.registering(Jar::class) {
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
-    description = "Assembles Javadoc with Dokka"
-    archiveClassifier.set("javadoc")
-    from(tasks.dokkaJavadoc)
 }
 
 configurations {
@@ -104,11 +95,11 @@ tasks {
 
     // https://stackoverflow.com/questions/41444916/multiple-artifacts-issue-with-deploying-zip-to-nexus
     named<AbstractArchiveTask>("bootDistTar") {
-        archiveClassifier.set("bootTar")
+        archiveClassifier = "bootTar"
     }
 
     named<AbstractArchiveTask>("bootDistZip") {
-        archiveClassifier.set("bootZip")
+        archiveClassifier = "bootZip"
     }
 
     named<Test>("test") {
@@ -125,16 +116,16 @@ tasks {
             }
         })
 
-        archiveBaseName.set("lavaplayer-natives")
-        archiveClassifier.set("musl")
+        archiveBaseName = "lavaplayer-natives"
+        archiveClassifier = "musl"
     }
 
 
     withType<BootJar> {
-        archiveFileName.set("Lavalink.jar")
+        archiveFileName = "Lavalink.jar"
 
         if (findProperty("targetPlatform") == "musl") {
-            archiveFileName.set("Lavalink-musl.jar")
+            archiveFileName = "Lavalink-musl.jar"
             // Exclude base dependency jar
             exclude {
                 it.name.contains("lavaplayer-natives-fork") || (it.name.contains("udpqueue-native-") && !it.name.contains("musl"))
@@ -162,39 +153,18 @@ tasks {
     }
 }
 
+mavenPublishing {
+    configure(KotlinJvm(JavadocJar.Dokka("dokkaHtml")))
+    pom {
+        name = "Lavalink Server"
+        description = "Lavalink Server"
+    }
+}
+
 publishing {
     publications {
-        create<MavenPublication>("LavalinkServer") {
+        named<MavenPublication>("maven") {
             artifact(tasks.named("bootJar"))
-            artifact(tasks.kotlinSourcesJar)
-            artifact(dokkaJar)
-
-            pom {
-                name.set("Lavalink Server")
-                description.set("Lavalink Server")
-                url.set("https://github.com/lavalink-devs/lavalink")
-
-                licenses {
-                    license {
-                        name.set("The MIT License")
-                        url.set("https://github.com/lavalink-devs/Lavalink/blob/master/LICENSE")
-                    }
-                }
-
-                developers {
-                    developer {
-                        id.set("freyacodes")
-                        name.set("Freya Arbjerg")
-                        url.set("https://www.arbjerg.dev")
-                    }
-                }
-
-                scm {
-                    connection.set("scm:git:ssh://github.com/lavalink-devs/lavalink.git")
-                    developerConnection.set("scm:git:ssh://github.com/lavalink-devs/lavalink.git")
-                    url.set("https://github.com/lavalink-devs/lavalink")
-                }
-            }
         }
     }
 }

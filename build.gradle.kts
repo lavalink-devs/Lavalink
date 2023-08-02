@@ -1,3 +1,5 @@
+import com.vanniktech.maven.publish.MavenPublishBaseExtension
+import com.vanniktech.maven.publish.SonatypeHost
 import org.ajoberstar.grgit.Grgit
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -11,6 +13,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.8.22"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.8.22"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.22" apply false
+    alias(libs.plugins.maven.publish.base) apply false
 }
 
 allprojects {
@@ -41,6 +44,65 @@ subprojects {
         options.encoding = "UTF-8"
         options.compilerArgs.add("-Xlint:unchecked")
         options.compilerArgs.add("-Xlint:deprecation")
+    }
+
+    afterEvaluate {
+        plugins.withId(libs.plugins.maven.publish.base.get().pluginId) {
+            configure<PublishingExtension> {
+                if (findProperty("MAVEN_PASSWORD") != null && findProperty("MAVEN_USERNAME") != null) {
+                    repositories {
+                        val snapshots = "https://maven.arbjerg.dev/snapshots"
+                        val releases = "https://maven.arbjerg.dev/releases"
+
+                        maven(if ((version as String).endsWith("-SNAPSHOT")) releases else snapshots) {
+                            credentials {
+                                password = findProperty("MAVEN_PASSWORD") as String?
+                                username = findProperty("MAVEN_USERNAME") as String?
+                            }
+                        }
+                    }
+                } else {
+                    logger.lifecycle("Not publishing to maven.arbjerg.dev because credentials are not set")
+                }
+            }
+            configure<MavenPublishBaseExtension> {
+                coordinates(group.toString(), project.the<BasePluginExtension>().archivesName.get(), version.toString())
+
+                if (findProperty("mavenCentralUsername") != null && findProperty("mavenCentralPassword") != null) {
+                    publishToMavenCentral(SonatypeHost.S01, false)
+                    if (!(version as String).endsWith("-SNAPSHOT")) {
+                        signAllPublications()
+                    }
+                } else {
+                    logger.lifecycle("Not publishing to OSSRH due to missing credentials")
+                }
+
+                pom {
+                    url = "https://github.com/lavalink-devs/Lavalink"
+
+                    licenses {
+                        license {
+                            name = "MIT License"
+                            url = "https://github.com/lavalink-devs/Lavalink/blob/main/LICENSE"
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = "freyacodes"
+                            name = "Freya Arbjerg"
+                            url = "https://www.arbjerg.dev"
+                        }
+                    }
+
+                    scm {
+                        url = "https://github.com/lavalink-devs/Lavalink/"
+                        connection = "scm:git:git://github.com/lavalink-devs/Lavalink.git"
+                        developerConnection = "scm:git:ssh://git@github.com/lavalink-devs/Lavalink.git"
+                    }
+                }
+            }
+        }
     }
 }
 
