@@ -78,13 +78,12 @@ subprojects {
                 }
 
                 pom {
-                    name = "lavaplayer"
-                    url = "https://github.com/lavalink-devs/lavaplayer"
+                    url = "https://github.com/lavalink-devs/Lavalink"
 
                     licenses {
                         license {
-                            name = "The Apache License, Version 2.0"
-                            url = "https://github.com/lavalink-devs/lavaplayer/blob/main/LICENSE"
+                            name = "MIT License"
+                            url = "https://github.com/lavalink-devs/Lavalink/blob/main/LICENSE"
                         }
                     }
 
@@ -97,9 +96,9 @@ subprojects {
                     }
 
                     scm {
-                        url = "https://github.com/lavalink-devs/lavaplayer/"
-                        connection = "scm:git:git://github.com/lavalink-devs/lavaplayer.git"
-                        developerConnection = "scm:git:ssh://git@github.com/lavalink-devs/lavaplayer.git"
+                        url = "https://github.com/lavalink-devs/Lavalink/"
+                        connection = "scm:git:git://github.com/lavalink-devs/Lavalink.git"
+                        developerConnection = "scm:git:ssh://git@github.com/lavalink-devs/Lavalink.git"
                     }
                 }
             }
