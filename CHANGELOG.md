@@ -2,6 +2,11 @@
 
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
+
+## 3.7.8
+* Fix YouTube 403 errors
+* Fix YouTube access token errors
+
 ## 3.7.7
 * Add JDA-NAS support for musl (`x86-64`, `aarch64`) based systems (most notably `alpine`)
 
