@@ -51,10 +51,9 @@ class AudioLoaderRestHandler(
     fun loadTracks(
         request: HttpServletRequest,
         @RequestParam identifier: String
-    ): CompletionStage<ResponseEntity<LoadResult>> {
+    ): ResponseEntity<LoadResult> {
         log.info("Got request to load for identifier \"${identifier}\"")
-        return AudioLoader(audioPlayerManager, pluginInfoModifiers).load(identifier)
-            .thenApply { ResponseEntity.ok(it) }
+        return ResponseEntity.ok(AudioLoader(audioPlayerManager, pluginInfoModifiers).load(identifier))
     }
 
     @GetMapping("/v4/decodetrack")
