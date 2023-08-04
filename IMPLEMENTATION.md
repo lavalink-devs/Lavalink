@@ -238,7 +238,7 @@ Dispatched every x seconds (configurable in `application.yml`) with the current 
 
 #### Stats OP
 
-A collection of stats sent every minute.
+A collection of statistics sent every minute.
 
 ##### Stats Object
 
@@ -270,11 +270,13 @@ A collection of stats sent every minute.
 
 ##### Frame Stats
 
-| Field   | Type | Description                            |
-|---------|------|----------------------------------------|
-| sent    | int  | The amount of frames sent to Discord   |
-| nulled  | int  | The amount of frames that were nulled  |
-| deficit | int  | The amount of frames that were deficit |
+| Field   | Type | Description                                                          |
+|---------|------|----------------------------------------------------------------------|
+| sent    | int  | The amount of frames sent to Discord                                 |
+| nulled  | int  | The amount of frames that were nulled                                |
+| deficit | int  | The difference between sent frames and the expected amount of frames |
+
+The expected amount of frames is 3000 (1 every 20 ms) per player. If the deficit is negative, too many frames were sent, and if it's positive, not enough frames got sent.
 
 <details>
 <summary>Example Payload</summary>
@@ -297,9 +299,9 @@ A collection of stats sent every minute.
     "lavalinkLoad": 0.5
   },
   "frameStats": {
-    "sent": 123456789,
-    "nulled": 123456789,
-    "deficit": 123456789
+    "sent": 6000,
+    "nulled": 10,
+    "deficit": -3010, 
   }
 }
 ```
