@@ -301,7 +301,7 @@ The expected amount of frames is 3000 (1 every 20 ms) per player. If the deficit
   "frameStats": {
     "sent": 6000,
     "nulled": 10,
-    "deficit": -3010, 
+    "deficit": -3010
   }
 }
 ```
