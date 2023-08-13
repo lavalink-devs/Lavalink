@@ -76,7 +76,7 @@ fun AudioTrack.toInfo(): TrackInfo {
 }
 
 fun AudioPlaylist.toPlaylistInfo(): PlaylistInfo {
-    return PlaylistInfo(this.name, this.tracks.indexOf(this.selectedTrack))
+    return PlaylistInfo(this.name, if (this.selectedTrack == null) -1 else this.tracks.indexOf(this.selectedTrack))
 }
 
 
