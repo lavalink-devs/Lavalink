@@ -5,6 +5,9 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 
 ## v4
 
+### v4.0.0-beta.3
+* Update lavaplayer to [`2.0.0`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.0.0) - Fixed YouTube 403 errors & YouTube access token errors
+
 ### v4.0.0-beta.2
 
 * Update lavaplayer to [`08cfbc0`](https://github.com/Walkyst/lavaplayer-fork/commit/08cfbc05953128f3cf727ea3bcbe41dabcd1c7db) - Fixed ogg streaming
