@@ -1,27 +1,18 @@
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinMultiplatform
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
 
 plugins {
-    signing
-    `maven-publish`
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     id("org.jetbrains.dokka")
+    alias(libs.plugins.maven.publish.base)
 }
-
-apply(from = "../repositories.gradle")
 
 val archivesBaseName = "protocol"
 group = "dev.arbjerg.lavalink"
-
-fun MavenPublication.registerDokkaJar() =
-    tasks.register<Jar>("${name}DokkaJar") {
-        archiveClassifier = "javadoc"
-        destinationDirectory = destinationDirectory.get().dir(name)
-        from(tasks.named("dokkaHtml"))
-    }
-
 
 kotlin {
     jvm {
@@ -66,13 +57,13 @@ kotlin {
             }
         }
 
-        getByName("jsTest") {
+        named("jsTest") {
             dependencies {
                 implementation(kotlin("test-js"))
             }
         }
 
-        getByName("jvmTest") {
+        named("jvmTest") {
             dependencies {
                 implementation(kotlin("test-junit5"))
             }
@@ -80,51 +71,13 @@ kotlin {
     }
 }
 
-publishing {
-    publications {
-        withType<MavenPublication> {
-            artifact(registerDokkaJar())
-            pom {
-                name.set("Lavalink Protocol")
-                description.set("Protocol for Lavalink Client development")
-                url.set("https://github.com/lavalink-devs/lavalink")
-
-                licenses {
-                    license {
-                        name.set("The MIT License")
-                        url.set("https://github.com/lavalink-devs/Lavalink/blob/master/LICENSE")
-                    }
-                }
-
-                developers {
-                    developer {
-                        id.set("freyacodes")
-                        name.set("Freya Arbjerg")
-                        url.set("https://www.arbjerg.dev")
-                    }
-                }
-
-                scm {
-                    connection.set("scm:git:ssh://github.com/lavalink-devs/lavalink.git")
-                    developerConnection.set("scm:git:ssh://github.com/lavalink-devs/lavalink.git")
-                    url.set("https://github.com/lavalink-devs/lavalink")
-                }
-            }
-        }
+mavenPublishing {
+    configure(KotlinMultiplatform(JavadocJar.Dokka("dokkaHtml")))
+    pom {
+        name = "Lavalink Protocol"
+        description = "Protocol for Lavalink Client development"
     }
 }
-
-if (findProperty("signing.gnupg.keyName") != null) {
-    signing {
-        sign(
-            publishing.publications["js"],
-            publishing.publications["jvm"],
-            publishing.publications["kotlinMultiplatform"]
-        )
-        useGpgCmd()
-    }
-}
-
 
 tasks {
     withType<KotlinJvmTest> {

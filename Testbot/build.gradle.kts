@@ -1,6 +1,5 @@
 plugins {
     application
-
     kotlin("jvm")
 }
 
@@ -8,7 +7,7 @@ group = "dev.arbjerg.lavalink"
 version = "1.0"
 
 application {
-    mainClass.set("lavalink.testbot.TestbotKt")
+    mainClass = "lavalink.testbot.TestbotKt"
 }
 
 repositories {

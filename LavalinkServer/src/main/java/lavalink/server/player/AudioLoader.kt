@@ -49,12 +49,12 @@ class AudioLoader(
     private val loadResult = CompletableFuture<LoadResult>()
     private val used = AtomicBoolean(false)
 
-    fun load(identifier: String?): CompletionStage<LoadResult> {
+    fun load(identifier: String?): LoadResult {
         val isUsed = used.getAndSet(true)
         check(!isUsed) { "This loader can only be used once per instance" }
         log.trace("Loading item with identifier $identifier")
-        audioPlayerManager.loadItem(identifier, this)
-        return loadResult
+        audioPlayerManager.loadItemSync(identifier, this)
+        return loadResult.get()
     }
 
     override fun trackLoaded(audioTrack: AudioTrack) {

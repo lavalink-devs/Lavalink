@@ -36,10 +36,10 @@ fun VersionCatalogBuilder.spring() {
 }
 
 fun VersionCatalogBuilder.voice() {
-    version("lavaplayer", "08cfbc0595")
+    version("lavaplayer", "2.0.0")
 
-    library("lavaplayer",            "com.github.walkyst.lavaplayer-fork", "lavaplayer").versionRef("lavaplayer")
-    library("lavaplayer-ip-rotator", "com.github.walkyst.lavaplayer-fork", "lavaplayer-ext-youtube-rotator").versionRef("lavaplayer")
+    library("lavaplayer",            "dev.arbjerg", "lavaplayer").versionRef("lavaplayer")
+    library("lavaplayer-ip-rotator", "dev.arbjerg", "lavaplayer-ext-youtube-rotator").versionRef("lavaplayer")
     library("lavadsp",               "dev.arbjerg", "lavadsp").version("0.7.8")
 
     library("koe",          "moe.kyokobot.koe", "core").version("2.0.0-rc1")
@@ -82,4 +82,9 @@ fun VersionCatalogBuilder.common() {
 fun VersionCatalogBuilder.other() {
     library("jda",             "net.dv8tion",         "JDA").version("4.1.1_135")
     library("lavalink-client", "com.github.FredBoat", "Lavalink-Client").version("8d9b660")
+
+    val mavenPublishPlugin = version("maven-publish-plugin", "0.25.3")
+
+    plugin("maven-publish", "com.vanniktech.maven.publish").versionRef(mavenPublishPlugin)
+    plugin("maven-publish-base", "com.vanniktech.maven.publish.base").versionRef(mavenPublishPlugin)
 }
