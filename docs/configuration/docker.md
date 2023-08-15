@@ -32,6 +32,8 @@ networks:
     name: lavalink
 ```
 
+Create an `application.yml` file in the same directory as the `docker-compose.yml` file. ([Example here](index.md#example-applicationyml)) or use environment variables ([Example here](index.md#example-environment-variables))
+
 Run `docker compose up -d`. See [Docker Compose Up](https://docs.docker.com/engine/reference/commandline/compose_up/)
 
 If your bot also runs in a docker container you can make that container join the lavalink network and use `lavalink` (service name) as the hostname to connect.

@@ -2,18 +2,23 @@
 
 The server configuration is done in `application.yml`. You can find an example below.
 
-## Example configuration
+## Example application.yml
+<details>
+<summary>application.yml</summary>
+
 ```yaml title="application.yml"
 --8<-- "LavalinkServer/application.yml.example"
 ```
+</details>
 
 Alternatively, you can also use environment variables to configure the server. The environment variables are named the same as the keys in the `application.yml` file, but in uppercase and with `.` replaced with `_`. For example, `server.port` becomes `SERVER_PORT`.
 For arrays, the index is appended to the key, starting at 0. For example, `LAVALINK_PLUGINS_0_DEPENDENCY` refers to the `dependency` key of the first plugin.
 
+## Example environment variables
 <details>
-<summary>List of all env keys</summary>
+<summary>environment variables</summary>
 
-```env
+```env title="enviroment variables"
 SERVER_PORT
 SERVER_ADDRESS
 

@@ -19,7 +19,7 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 * Addition of full `Track` objects in following events: `TrackStartEvent`, `TrackEndEvent`, `TrackExceptionEvent`, `TrackStuckEvent`
 * Resuming a session now requires the `Session-Id` header instead of `Resume-Key` header
 * Reworked track loading result. For more info see [here](api/rest.md#track-loading-result)
-* Update to the [Protocol Module](protocol) to support Kotlin/JS
+* Update to the [Protocol Module](https://github.com/lavalink-devs/Lavalink/tree/master/protocol) to support Kotlin/JS
 * Removal of all `/v3` endpoints except `/version`. All other endpoints are now under `/v4`
 
 > **Warning**
