@@ -8,7 +8,7 @@ Welcome to the Lavalink Getting Started guide. If you're new to Lavalink, follow
 
 1. Install Java 17 or higher. You can download it [here](https://www.azul.com/downloads/?package=jdk#zulu).
 2. Download the latest `Lavalink.jar` from [here](https://github.com/lavalink-devs/Lavalink/releases/latest).
-3. Check out the [configuration](configuration) page to learn how to configure Lavalink.
+3. Check out the [configuration](configuration/index.md) page to learn how to configure Lavalink.
 4. Run Lavalink with `java -jar Lavalink.jar`.
 
 Now you can connect to Lavalink with your Lavalink Client. You can find a list of clients [here](clients.md).

@@ -12,17 +12,17 @@ edit_uri: edit/master/docs/
 copyright: Copyright &copy; 2017-2021 Lavalink Contributors
 
 nav:
-  - Home: /
+  - Home: index.md
   - Getting Started: getting-started.md
   - Configuration:
-      - configuration
+      - configuration/index.md
       - Binary: configuration/binary.md
       - Systemd: configuration/systemd.md
       - Docker: configuration/docker.md
   - Clients: clients.md
   - Plugins: plugins.md
   - API:
-      - api
+      - api/index.md
       - Websocket: api/websocket.md
       - Rest: api/rest.md
       - Plugins: api/plugins.md
