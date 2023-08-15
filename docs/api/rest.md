@@ -1,3 +1,8 @@
+---
+description: Lavalink REST API documentation.
+---
+
+# REST API
 
 Lavalink exposes a REST API to allow for easy control of the players.
 Most routes require the `Authorization` header with the configured password.

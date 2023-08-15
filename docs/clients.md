@@ -1,3 +1,9 @@
+---
+description: A list of Lavalink client libraries.
+---
+
+# Client Libraries
+
 | Client                                                          | Platform | Compatible With                            | Additional Information |
 |-----------------------------------------------------------------|----------|--------------------------------------------|------------------------|
 | [Lavalink.kt](https://github.com/DRSchlaubi/Lavalink.kt)        | Kotlin   | Kord/JDA/**Any**                           | Kotlin Coroutines      |

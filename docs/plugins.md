@@ -1,3 +1,7 @@
+---
+description: A list of plugins for Lavalink.
+---
+
 # Plugins
 
 Lavalink supports third-party plugins to add additional functionality such as custom audio sources, custom filters,

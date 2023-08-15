@@ -1,3 +1,7 @@
+---
+description: Lavalink API Implementation guidelines
+---
+
 # API Implementation guidelines
 
 How to write your own client.

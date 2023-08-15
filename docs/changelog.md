@@ -1,3 +1,7 @@
+---
+description: Lavalink changelog.
+---
+
 # Changelog
 
 Each release usually includes various fixes and improvements.

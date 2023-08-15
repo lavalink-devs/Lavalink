@@ -1,3 +1,7 @@
+---
+description: Lavalink WebSocket API documentation.
+---
+
 # Opening a connection
 
 You can establish a WebSocket connection against the path `/v4/websocket`.

@@ -1,3 +1,7 @@
+---
+description: Make your own plugin for Lavalink.
+---
+
 # Make your own plugin
 
 > **Note:**  

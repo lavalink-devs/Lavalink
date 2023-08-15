@@ -104,4 +104,7 @@ plugins:
   - search:
       lang: en
   - social:
+      cards_layout_options:
+        background_color: "#ff624a"
+        color: "#FFFFFF"
   - git-revision-date-localized:
