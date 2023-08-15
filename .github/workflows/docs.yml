@@ -2,9 +2,7 @@ name: docs
 
 on:
   push:
-    branches:
-      - master
-      - docs # for testing
+    branches: [ '**' ]
     paths:
       - 'docs/**'
       - '.github/workflows/docs.yml'
@@ -22,6 +20,7 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.ref == 'refs/heads/docs'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -47,3 +46,36 @@ jobs:
           path: 'site'
       - id: deployment
         uses: actions/deploy-pages@v1
+
+  deploy-preview:
+    if: github.ref != 'refs/heads/docs'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+      - uses: actions/cache@v3
+        with:
+          key: mkdocs-material-${{ env.cache_id }}
+          path: .cache
+          restore-keys: |
+            mkdocs-material-
+      - run: pip install -r requirements.txt
+      - run: mkdocs build --verbose --strict
+      - uses: actions/upload-pages-artifact@v1
+        with:
+          path: 'site'
+      - uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ github.repository }}
+          directory: site
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
