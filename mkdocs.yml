@@ -14,8 +14,18 @@ copyright: Copyright &copy; 2017-2021 Lavalink Contributors
 nav:
   - Home: /
   - Getting Started: getting-started.md
-  - Configuration: configuration.md
+  - Configuration:
+      - configuration/index.md
+      - Binary: configuration/binary.md
+      - Systemd: configuration/systemd.md
+      - Docker: configuration/docker.md
   - Clients: clients.md
+  - Plugins: plugins.md
+  - API:
+      - api/index.md
+      - Websocket: api/websocket.md
+      - Rest: api/rest.md
+      - Plugins: api/plugins.md
   - Changelog: changelog.md
 
 extra_css:
@@ -87,6 +97,7 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.snippets
 
 plugins:
   - offline:

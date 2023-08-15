@@ -1,24 +1,4 @@
-# Lavalink Plugins
-**Warning:** The plugin system is still in beta. Breaking changes may still be made to the plugin API if deemed necessary.
-
-Lavalink supports third-party plugins to add additional functionality such as custom audio sources, custom filters,
-WebSocket handling, REST endpoints, and much more. 
-
-List of plugins:
-- [Google Cloud TTS plugin](https://github.com/DuncteBot/tts-plugin) A text to speech plugin using the [google cloud tts api](https://cloud.google.com/text-to-speech/docs)
-- [SponsorBlock plugin](https://github.com/TopiSenpai/Sponsorblock-Plugin) for skipping sponsor segments in YouTube videos
-- [LavaSrc plugin](https://github.com/TopiSenpai/LavaSrc) adds Spotify, Apple Music & Deezer(native play) support
-- [DuncteBot plugin](https://github.com/DuncteBot/skybot-lavalink-plugin) adds additional source managers that are not widely used
-- [Extra Filter plugin](https://github.com/rohank05/lavalink-filter-plugin) adds additional audio filters to lavalink
-- [XM plugin](https://github.com/esmBot/lava-xm-plugin) adds support for various [music tracker module](https://en.wikipedia.org/wiki/Module_file) formats
-
-Lavalink loads all .jar files placed in the `plugins` directory, which you may need to create yourself. Lavalink can
-also download plugin .jar files automatically by editing the configuration file. See the respective plugin repository
-for instructions.
-
-You can add your own plugin by submitting a pull-request to this file.
-
-## Developing your own plugin
+# Make your own plugin
 
 > **Note:**  
 > If your plugin is developed in Kotlin make sure you are using **Kotlin v1.8.22**
