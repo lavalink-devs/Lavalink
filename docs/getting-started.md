@@ -1,22 +1,26 @@
-# Getting Started with Lavalink
+# Getting Started
 
 Welcome to the Lavalink Getting Started guide. If you're new to Lavalink, follow these steps to get started:
 
-1. **Installation**: Download and install Lavalink on your server.
-2. **Configuration**: Configure Lavalink settings, including host, port, and authentication.
-3. **Integration**: Integrate Lavalink with your Discord bot using your preferred programming language.
-4. **Audio Playback**: Connect your bot to Lavalink and start playing audio in voice channels.
+1. Install Java 17 or higher. You can download it [here](https://www.azul.com/downloads/?package=jdk#zulu).
+2. Download the latest `Lavalink.jar` from [here](https://github.com/lavalink-devs/Lavalink/releases/latest).
+3. Check out the [configuration](configuration) page to learn how to configure Lavalink.
+4. Run Lavalink with `java -jar Lavalink.jar`.
 
-## 🚀 Useful Links
+Now you can connect to Lavalink with your Lavalink Client. You can find a list of clients [here](clients.md).
 
-- **Features**: Explore the rich feature set of Lavalink [here](https://github.com/lavalink-devs/Lavalink#features).
-- **Documentation**: Access the comprehensive [documentation](https://lavalink.dev/clients.html) for detailed information.
-- **Supported Clients**: Discover the supported clients and platforms [here](https://lavalink.dev/clients.html).
-- **Changelog**: Stay updated with the latest changes and improvements [here](https://lavalink.dev/changelog.html).
-- **API Implementation Guidelines**: Learn about implementing the Lavalink API [here](https://lavalink.dev/api/index.html).
-- **Server Configuration**: Configure your Lavalink server [here](https://lavalink.dev/configuration/index.html).
-- **Plugins**: Explore available plugins [here](https://lavalink.dev/plugins.html).
+If you want to run the Lavalink server without it closing when you close the terminal, you can use see the [Docker](configuration/docker.md) & [Systemd](configuration/systemd.md) pages.
 
-## 📢 Need Help?
+## Useful Links
 
-Join the [Lavalink support server on Discord](https://discord.gg/Pzuj2xkacy) for assistance and community interaction.
+- [Features](https://github.com/lavalink-devs/Lavalink#features): Explore the rich feature set of Lavalink.
+- [Clients](clients.md): Discover the supported clients and platforms [here](https://lavalink.dev/clients.html).
+- [Changelog](https://lavalink.dev/changelog.html): Stay updated with the latest changes and improvements.
+- [API Implementation Guidelines](https://lavalink.dev/api/index.html): Learn about implementing the Lavalink API.
+- [Server Configuration](https://lavalink.dev/configuration/index.html): Configure your Lavalink server.
+- [Plugins](https://lavalink.dev/plugins.html): Explore available plugins.
+
+## Need Help?
+
+Join the [Lavalink support Discord](https://discord.gg/ZW4s47Ppw4) for help or questions.
+
