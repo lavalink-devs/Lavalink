@@ -1,0 +1,33 @@
+name: Change Request
+description: Request a feature or change
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: request
+    attributes:
+      label: Change request
+      description: What are you requesting?
+    validations:
+      required: true
+  - type: textarea
+    id: relevance
+    attributes:
+      label: Relevance
+      description: Is this change relevant to the greater community?
+    validations:
+      required: true
+  - type: textarea
+    id: plugin
+    attributes:
+      label: Could this be a plugin instead?
+      description: Make your case as to whether this needs to be part of Lavalink itself.
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      options:
+      - label: I have checked for duplicate issues
+        required: true
+      - label: I have checked for existing plugins
+        required: true

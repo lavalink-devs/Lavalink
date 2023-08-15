@@ -235,7 +235,6 @@ When `identifier` is used, Lavalink will try to resolve the identifier as a sing
 {
   "encodedTrack": "...",
   "identifier": "...",
-  "startTime": 0,
   "endTime": 0,
   "volume": 100,
   "position": 32400,
