@@ -1,9 +1,9 @@
 :root {
     --md-primary-fg-color: #ff624a;
-    --md-primary-fg-color--light: #e5a886;
-    --md-primary-fg-color--dark: #904903;
+    --md-primary-fg-color--light: #d39674;
+    --md-primary-fg-color--dark: #b25d09;
 
-    --md-accent-fg-color: #ff015d;
+    --md-accent-fg-color: #ce3720;
 }
 
 .container {
