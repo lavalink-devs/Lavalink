@@ -10,6 +10,7 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 ## v4
 
 ### v4.0.0-beta.3
+
 * Update lavaplayer to [`2.0.0`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.0.0) - Fixed YouTube 403 errors & YouTube access token errors
 
 ### v4.0.0-beta.2

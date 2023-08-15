@@ -129,7 +129,6 @@ the JDA client takes advantage of JDA's websocket write thread to send OP 4s for
 
 Fields marked with `?` are optional and types marked with `?` are nullable.
 
-
 ## Resuming
 
 What happens after your client disconnects is dependent on whether the session has been configured for resuming.

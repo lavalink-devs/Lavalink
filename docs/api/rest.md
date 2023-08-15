@@ -88,11 +88,11 @@ GET /v4/sessions/{sessionId}/players
 
 ##### Voice State
 
-| Field      | Type   | Description                                                                                 |
-|------------|--------|---------------------------------------------------------------------------------------------|
-| token      | string | The Discord voice token to authenticate with                                                |
-| endpoint   | string | The Discord voice endpoint to connect to                                                    |
-| sessionId  | string | The Discord voice session id to authenticate with                                           |
+| Field     | Type   | Description                                       |
+|-----------|--------|---------------------------------------------------|
+| token     | string | The Discord voice token to authenticate with      |
+| endpoint  | string | The Discord voice endpoint to connect to          |
+| sessionId | string | The Discord voice session id to authenticate with |
 
 `token`, `endpoint`, and `sessionId` are the 3 required values for connecting to one of Discord's voice servers.
 `sessionId` is provided by the Voice State Update event sent by Discord, whereas the `endpoint` and `token` are provided
@@ -621,11 +621,11 @@ Response:
 
 ###### Load Result Data - Playlist
 
-| Field      | Type                                  | Description                                 |
-|------------|---------------------------------------|---------------------------------------------|
-| info       | [PlaylistInfo](#playlist-info) object | The info of the playlist                    |
-| pluginInfo | Object                                | Addition playlist info provided by plugins  |
-| tracks     | array of [Track](#track) objects      | The tracks of the playlist                  |
+| Field      | Type                                  | Description                                |
+|------------|---------------------------------------|--------------------------------------------|
+| info       | [PlaylistInfo](#playlist-info) object | The info of the playlist                   |
+| pluginInfo | Object                                | Addition playlist info provided by plugins |
+| tracks     | array of [Track](#track) objects      | The tracks of the playlist                 |
 
 ###### Playlist Info
 
