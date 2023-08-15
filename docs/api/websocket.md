@@ -337,10 +337,10 @@ Dispatched when a track throws an exception.
 
 ##### Severity
 
-| Severity     | Description                                                                                                                                                                                                                            |
-|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `common`     | The cause is known and expected, indicates that there is nothing wrong with the library itself                                                                                                                                         |
-| `suspicious` | The cause might not be exactly known, but is possibly caused by outside factors. For example when an outside service responds in a format that we do not expect                                                                        |
+| Severity     | Description                                                                                                                                                                                                                    |
+|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `common`     | The cause is known and expected, indicates that there is nothing wrong with the library itself                                                                                                                                 |
+| `suspicious` | The cause might not be exactly known, but is possibly caused by outside factors. For example when an outside service responds in a format that we do not expect                                                                |
 | `fault`      | The probable cause is an issue with the library or there is no way to tell what the cause might be. This is the default level and other levels are used in cases where the thrower has more in-depth knowledge about the error |
 
 <details>

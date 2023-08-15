@@ -27,4 +27,3 @@ If you want to run the Lavalink server without it closing when you close the ter
 ## Need Help?
 
 Join the [Lavalink support Discord](https://discord.gg/ZW4s47Ppw4) for help or questions.
-
