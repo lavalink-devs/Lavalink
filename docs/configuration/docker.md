@@ -11,7 +11,7 @@ Install [Docker](https://docs.docker.com/engine/install/) & [Docker Compose](htt
 
 Create a `docker-compose.yml` with the following content:
 
-```yaml
+```yaml title="docker-compose.yml"
 version: "3.8"
 
 services:

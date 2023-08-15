@@ -52,15 +52,15 @@ GET /v4/sessions/{sessionId}/players
 
 ##### Player
 
-| Field   | Type                                 | Description                                           |
-|---------|--------------------------------------|-------------------------------------------------------|
-| guildId | string                               | The guild id of the player                            |
-| track   | ?[Track](#track) object              | The currently playing track                           |
-| volume  | int                                  | The volume of the player, range 0-1000, in percentage |
-| paused  | bool                                 | Whether the player is paused                          |
-| state   | [Player State](#player-state) object | The state of the player                               |
-| voice   | [Voice State](#voice-state) object   | The voice state of the player                         |
-| filters | [Filters](#filters) object           | The filters used by the player                        |              
+| Field   | Type                                             | Description                                           |
+|---------|--------------------------------------------------|-------------------------------------------------------|
+| guildId | string                                           | The guild id of the player                            |
+| track   | ?[Track](#track) object                          | The currently playing track                           |
+| volume  | int                                              | The volume of the player, range 0-1000, in percentage |
+| paused  | bool                                             | Whether the player is paused                          |
+| state   | [Player State](websocket.md#player-state) object | The state of the player                               |
+| voice   | [Voice State](#voice-state) object               | The voice state of the player                         |
+| filters | [Filters](#filters) object                       | The filters used by the player                        |              
 
 ##### Track
 
@@ -229,7 +229,7 @@ Request:
 
 > **Note**
 > - \* `encodedTrack` and `identifier` are mutually exclusive.
-> - `sessionId` in the path should be the value from the [ready op](#ready-op).
+> - `sessionId` in the path should be the value from the [ready op](websocket.md#ready-op).
 
 When `identifier` is used, Lavalink will try to resolve the identifier as a single track. An HTTP `400` error is returned when resolving a playlist, search result, or no tracks.
 
@@ -691,7 +691,7 @@ Empty object.
 
 ###### Load Result Data - Error
 
-[Exception](#exception-object) object with the error.
+[Exception](websocket.md#exception-object) object with the error.
 
 <details>
 <summary>Example Payload</summary>
@@ -924,7 +924,7 @@ GET /v4/stats
 Response:
 
 `frameStats` is always missing for this endpoint.
-[Stats](#stats-object) object
+[Stats](websocket.md#stats-object) object
 
 <details>
 <summary>Example Payload</summary>

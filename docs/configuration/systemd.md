@@ -6,7 +6,7 @@ description: How to run Lavalink as a Systemd service
 
 If you're using a Systemd-based Linux distribution you may want to install Lavalink as a background service. You will need to create a `lavalink.service` file inside `/usr/lib/systemd/system`. Create the file with the following template (replacing the values inside the `<>` brackets):
 
-```ini
+```ini title="lavalink.service"
 [Unit]
 # Describe the service
 Description=Lavalink Service
@@ -41,9 +41,12 @@ WantedBy=multi-user.target
 To initiate the service, run
 
 ```shell
-sudo systemctl daemon-reload
-sudo systemctl enable lavalink
-sudo systemctl start lavalink
+$ sudo systemctl daemon-reload
+$ sudo systemctl enable lavalink
+$ sudo systemctl start lavalink
 ```
 
-In addition to the usual log files, you can also view the log with `sudo journalctl -u lavalink`.
+In addition to the usual log files, you can also view the log with
+```shell 
+$ sudo journalctl -u lavalink
+```

@@ -15,7 +15,7 @@ When opening a websocket connection, you must supply 3 required headers:
 | `Client-Name`   | The name of the client in `NAME/VERSION` format |
 | `Session-Id`? * | The id of the previous session to resume        |
 
-**\*For more information on resuming see [Resuming](#resuming-lavalink-sessions)**
+**\*For more information on resuming see [Resuming](index.md#resuming)**
 
 <details>
 <summary>Example Headers</summary>
@@ -230,9 +230,9 @@ Server dispatched an event. See the [Event Types](#event-types) section for more
 
 Dispatched when a track starts playing.
 
-| Field | Type                   | Description                    |
-|-------|------------------------|--------------------------------|
-| track | [Track](#track) object | The track that started playing |
+| Field | Type                          | Description                    |
+|-------|-------------------------------|--------------------------------|
+| track | [Track](rest.md#track) object | The track that started playing |
 
 <details>
 <summary>Example Payload</summary>
@@ -272,7 +272,7 @@ Dispatched when a track ends.
 
 | Field  | Type                                | Description                  |
 |--------|-------------------------------------|------------------------------|
-| track  | [Track](#track) object              | The track that ended playing |
+| track  | [Track](rest.md#track) object       | The track that ended playing |
 | reason | [TrackEndReason](#track-end-reason) | The reason the track ended   |
 
 ##### Track End Reason
@@ -324,7 +324,7 @@ Dispatched when a track throws an exception.
 
 | Field     | Type                                  | Description                        |
 |-----------|---------------------------------------|------------------------------------|
-| track     | [Track](#track) object                | The track that threw the exception |
+| track     | [Track](rest.md#track) object         | The track that threw the exception |
 | exception | [Exception](#exception-object) object | The occurred exception             |
 
 ##### Exception Object
@@ -384,10 +384,10 @@ Dispatched when a track throws an exception.
 
 Dispatched when a track gets stuck while playing.
 
-| Field       | Type                   | Description                                     |
-|-------------|------------------------|-------------------------------------------------|
-| track       | [Track](#track) object | The track that got stuck                        |
-| thresholdMs | int                    | The threshold in milliseconds that was exceeded |
+| Field       | Type                          | Description                                     |
+|-------------|-------------------------------|-------------------------------------------------|
+| track       | [Track](rest.md#track) object | The track that got stuck                        |
+| thresholdMs | int                           | The threshold in milliseconds that was exceeded |
 
 <details>
 <summary>Example Payload</summary>
