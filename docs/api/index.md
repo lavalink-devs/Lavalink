@@ -7,6 +7,10 @@ How to write your own client.
 * You must be able to send messages via a shard's gateway connection.
 * You must be able to intercept voice server & voice state updates from the gateway on your shard connection.
 
+## Insomnia Collection
+
+You can find an [Insomnia](https://insomnia.rest/) collection in the [here](Insomnia.json) which contains all the endpoints and their respective payloads.
+
 ## Significant changes
 
 ### v3.7.0 -> v4.0.0
@@ -25,6 +29,7 @@ How to write your own client.
 <summary>v4.0.0 Migration Guide</summary>
 
 All websocket ops are removed as of `v4.0.0` and replaced with the following endpoints and json fields:
+
 * `play` -> [Update Player Endpoint](#update-player) `encodedTrack` or `identifier` field
 * `stop` -> [Update Player Endpoint](#update-player) `encodedTrack` field with `null`
 * `pause` -> [Update Player Endpoint](#update-player) `pause` field
