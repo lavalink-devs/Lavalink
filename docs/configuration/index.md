@@ -2,7 +2,7 @@
 description: How to configure Lavalink
 ---
 
-# Config
+# Configuration
 
 The server configuration is done in `application.yml`. You can find an example below.
 
