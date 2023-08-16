@@ -15,6 +15,7 @@ description: A list of Lavalink client libraries.
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                   | Node.js  | **Any**                                    |                        |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp)   | .NET     | DisCatSharp                                | v10.4.2+               |
 | [Coglink](https://github.com/PerformanC/Coglink)                | C        | Concord                                    |                        |
+| [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)         | Rust     | **Any**                                    | `tokio`-based          |
 
 <details markdown="1">
 <summary>v3.7 supporting Client Libraries</summary>
