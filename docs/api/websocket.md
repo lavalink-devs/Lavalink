@@ -2,7 +2,9 @@
 description: Lavalink WebSocket API documentation.
 ---
 
-# Opening a connection
+# WebSocket API
+
+## Opening a connection
 
 You can establish a WebSocket connection against the path `/v4/websocket`.
 
@@ -47,7 +49,7 @@ Websocket messages all follow the following standard format:
 
 </details>
 
-# OP Types
+## OP Types
 
 | OP Type                           | Description                                                   |
 |-----------------------------------|---------------------------------------------------------------|
@@ -56,7 +58,7 @@ Websocket messages all follow the following standard format:
 | [stats](#stats-op)                | Dispatched when the node sends stats once per minute          |
 | [event](#event-op)                | Dispatched when player or voice events occur                  |
 
-## Ready OP
+### Ready OP
 
 Dispatched by Lavalink upon successful connection and authorization. Contains fields determining if resuming was successful, as well as the session id.
 
@@ -80,7 +82,7 @@ Dispatched by Lavalink upon successful connection and authorization. Contains fi
 
 ---
 
-## Player Update OP
+### Player Update OP
 
 Dispatched every x seconds (configurable in `application.yml`) with the current state of the player.
 
@@ -118,11 +120,11 @@ Dispatched every x seconds (configurable in `application.yml`) with the current 
 
 ---
 
-#### Stats OP
+### Stats OP
 
 A collection of statistics sent every minute.
 
-##### Stats Object
+#### Stats Object
 
 | Field          | Type                                | Description                                                                                      |
 |----------------|-------------------------------------|--------------------------------------------------------------------------------------------------|
@@ -192,7 +194,7 @@ A collection of statistics sent every minute.
 
 ---
 
-#### Event OP
+### Event OP
 
 Server dispatched an event. See the [Event Types](#event-types) section for more information.
 
@@ -226,7 +228,7 @@ Server dispatched an event. See the [Event Types](#event-types) section for more
 | [TrackStuckEvent](#trackstuckevent)           | Dispatched when a track gets stuck while playing                            |
 | [WebSocketClosedEvent](#websocketclosedevent) | Dispatched when the websocket connection to Discord voice servers is closed |
 
-##### TrackStartEvent
+#### TrackStartEvent
 
 Dispatched when a track starts playing.
 
@@ -266,7 +268,7 @@ Dispatched when a track starts playing.
 
 ---
 
-##### TrackEndEvent
+#### TrackEndEvent
 
 Dispatched when a track ends.
 
@@ -318,7 +320,7 @@ Dispatched when a track ends.
 
 ---
 
-##### TrackExceptionEvent
+#### TrackExceptionEvent
 
 Dispatched when a track throws an exception.
 
@@ -380,7 +382,7 @@ Dispatched when a track throws an exception.
 
 ---
 
-##### TrackStuckEvent
+#### TrackStuckEvent
 
 Dispatched when a track gets stuck while playing.
 
@@ -422,7 +424,7 @@ Dispatched when a track gets stuck while playing.
 
 ---
 
-##### WebSocketClosedEvent
+#### WebSocketClosedEvent
 
 Dispatched when an audio WebSocket (to Discord) is closed.
 This can happen for various reasons (normal and abnormal), e.g. when using an expired voice server update.

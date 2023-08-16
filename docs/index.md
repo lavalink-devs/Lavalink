@@ -19,7 +19,7 @@ hide:
 - title: Twitch/YouTube stream support
   icon: ':material-youtube:'
 - title: Event system
-  icon: ':material-firework:'
+  icon: ':fontawesome-solid-right-left:'
 - title: Seeking
   icon: ':material-fast-forward-10:'
 - title: Volume control
@@ -29,7 +29,7 @@ hide:
 - title: Statistics
   icon: ':octicons-graph-16:'
 - title: Basic authentication
-  icon: ':material-form-textbox-password:'
+  icon: ':material-lock:'
 - title: Prometheus metrics
   icon: ':simple-prometheus:'
 - title: Docker images
