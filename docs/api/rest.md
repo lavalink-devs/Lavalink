@@ -839,7 +839,7 @@ Response:
 
 ##### Version Object
 
-Parsed Semantic Versioning 2.0.0. See https://semver.org/ for more info
+Parsed [Semantic Versioning 2.0.0](https://semver.org/)
 
 | Field      | Type    | Description                                                                        |
 |------------|---------|------------------------------------------------------------------------------------|
