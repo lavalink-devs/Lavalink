@@ -1,0 +1,66 @@
+.nt-cards.nt-grid {
+    display: grid;
+    grid-auto-columns: 1fr;
+    gap: 0.5rem;
+    max-width: 100vw;
+    overflow-x: auto;
+    padding: 1rem;
+}
+
+.nt-cards.nt-grid.cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.nt-cards.nt-grid.cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+@media only screen and (max-width: 900px) {
+    .nt-cards.nt-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .nt-cards.nt-grid {
+        grid-template-columns: repeat(1, 1fr) !important;
+    }
+}
+
+.nt-card {
+    border-radius: 8px;
+    padding: 0.8rem 0.8rem 0.8rem 0.8rem;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    color: var(--md-primary-bg-color);
+    background-color: var(--md-primary-fg-color);
+}
+
+.nt-card:hover {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.24), 0 3px 1px -2px rgba(0, 0, 0, 0.3), 0 1px 5px 0 rgba(0, 0, 0, 0.22);
+    background-color: var(--md-accent-fg-color);
+}
+
+.nt-card-wrap div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nt-card-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 4px 0 8px 0;
+    line-height: 22px;
+}
+
+.nt-card-icon {
+    width: 36px;
+    height: 36px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.nt-card-icon .icon {
+    transform: scale(2.0) translateX(4px);
+}

@@ -29,7 +29,8 @@ nav:
   - Changelog: changelog.md
 
 extra_css:
-  - "stylesheets/style.css"
+  - stylesheets/style.css
+  - stylesheets/neoteroi-cards.css
 
 extra:
   homepage: /
@@ -98,6 +99,7 @@ markdown_extensions:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.snippets
+  - neoteroi.cards:
 
 plugins:
   - offline:
