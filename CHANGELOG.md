@@ -29,6 +29,13 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 Contributors:
 [@topi314](https://github.com/topi314), [@freyacodes](https://github.com/freyacodes), [@DRSchlaubi](https://github.com/DRSchlaubi) and [@melike2d](https://github.com/melike2d)
 
+## 3.7.8
+* Fix YouTube 403 errors
+* Fix YouTube access token errors
+
+## 3.7.7
+* Add JDA-NAS support for musl (`x86-64`, `aarch64`) based systems (most notably `alpine`)
+
 ## 3.7.6
 * Update Lavaplayer to [`1.4.1`](https://github.com/Walkyst/lavaplayer-fork/releases/tag/1.4.1) & [`1.4.2`](https://github.com/Walkyst/lavaplayer-fork/releases/tag/1.4.2)
 * New support for `MUSL` based systems (most notably `alpine`)

@@ -40,6 +40,15 @@ Contributors:
 
 ## v3
 
+### v3.7.8
+
+* Fix YouTube 403 errors
+* Fix YouTube access token errors
+
+### v3.7.7
+
+* Add JDA-NAS support for musl (`x86-64`, `aarch64`) based systems (most notably `alpine`)
+
 ### v3.7.6
 
 * Update Lavaplayer to [`1.4.1`](https://github.com/Walkyst/lavaplayer-fork/releases/tag/1.4.1) & [`1.4.2`](https://github.com/Walkyst/lavaplayer-fork/releases/tag/1.4.2)
