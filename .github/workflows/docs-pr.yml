@@ -1,11 +1,10 @@
 name: docs
 
 on:
-  push:
+  pull_request:
     branches: [ '**' ]
     paths:
       - 'docs/**'
-      - '.github/workflows/docs.yml'
       - 'mkdocs.yml'
       - 'requirements.txt'
 
@@ -44,4 +43,5 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME }}
           directory: site
+          branch: pr-${{ github.event.pull_request.number }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
