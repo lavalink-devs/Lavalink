@@ -10,8 +10,6 @@ hide:
   - path
 ---
 
-Test
-
 ::cards::
 
 - title: Powered by Lavaplayer
