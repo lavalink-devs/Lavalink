@@ -31,9 +31,10 @@ jobs:
           path: .cache
           restore-keys: |
             mkdocs-material-
-      - run: cd docs
       - run: pip install -r requirements.txt
+        working-directory: docs
       - run: mkdocs build --verbose --strict
+        working-directory: docs
       - uses: actions/upload-pages-artifact@v1
         with:
           path: 'site'
