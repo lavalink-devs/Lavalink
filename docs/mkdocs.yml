@@ -77,7 +77,7 @@ theme:
     text: Roboto
     code: Roboto Mono
   favicon: assets/favicon.png
-  logo: logo.svg
+  logo: assets/logo.svg
   icon:
     repo: fontawesome/brands/github
 
