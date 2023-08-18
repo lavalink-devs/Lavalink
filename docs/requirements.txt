@@ -5,3 +5,4 @@ mkdocs-git-revision-date-localized-plugin
 pillow
 cairosvg
 neoteroi-mkdocs
+mkdocs-same-dir

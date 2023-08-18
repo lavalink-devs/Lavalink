@@ -1,12 +1,10 @@
-name: docs
+name: Docs PR
 
 on:
   pull_request:
     branches: [ '**' ]
     paths:
       - 'docs/**'
-      - 'mkdocs.yml'
-      - 'requirements.txt'
 
 concurrency:
     group: pages
@@ -32,6 +30,7 @@ jobs:
           path: .cache
           restore-keys: |
             mkdocs-material-
+      - run: cd docs
       - run: pip install -r requirements.txt
       - run: mkdocs build --verbose --strict
       - uses: actions/upload-pages-artifact@v1

@@ -4,6 +4,8 @@ site_name: Lavalink Docs
 site_description: Lavalink Documentation
 site_author: Lavalink Contributors
 site_url: https://lavalink.dev
+site_dir: ../site
+docs_dir: .
 
 repo_name: Lavalink
 repo_url: https://github.com/lavalink-devs/Lavalink
@@ -42,7 +44,7 @@ extra:
 
 theme:
   name: material
-  custom_dir: docs/overrides
+  custom_dir: overrides
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -102,11 +104,12 @@ markdown_extensions:
   - neoteroi.cards:
 
 plugins:
-  - offline:
+  - offline
   - search:
       lang: en
+  - same-dir
   - social:
       cards_layout_options:
         background_color: "#ff624a"
         color: "#FFFFFF"
-  - git-revision-date-localized:
+  - git-revision-date-localized

@@ -1,4 +1,4 @@
-name: docs
+name: Docs Push
 
 on:
   push:
@@ -6,8 +6,6 @@ on:
     paths:
       - 'docs/**'
       - '.github/workflows/docs.yml'
-      - 'mkdocs.yml'
-      - 'requirements.txt'
 
 concurrency:
     group: pages
@@ -33,6 +31,7 @@ jobs:
           path: .cache
           restore-keys: |
             mkdocs-material-
+      - run: cd docs
       - run: pip install -r requirements.txt
       - run: mkdocs build --verbose --strict
       - uses: actions/upload-pages-artifact@v1
