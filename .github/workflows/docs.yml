@@ -8,7 +8,7 @@ on:
       - '.github/workflows/docs.yml'
 
 concurrency:
-    group: pages
+    group: pages-${{ github.ref }}
     cancel-in-progress: true
 
 jobs:
