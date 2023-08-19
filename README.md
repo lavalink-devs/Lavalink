@@ -108,6 +108,7 @@ Version numbers can come in different combinations, depending on the release typ
 | [Lavacord](https://github.com/lavacord/Lavacord)                 | Node.js  | **Any**                                    |                        |
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                    | Node.js  | **Any**                                    |                        |
 | [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client) | Node.js  | **Any**                                    |                        |
+| [FastLink](https://github.com/PerformanC/FastLink)               | Node.js  | **Any**                                    |                        |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp)    | .NET     | DisCatSharp                                | v10.4.2+               |
 | [Coglink](https://github.com/PerformanC/Coglink)                 | C        | Concord                                    |                        |
 | [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)          | Rust     | **Any**                                    | `tokio`-based          |
