@@ -70,6 +70,10 @@ class OmissableSerializer<T>(private val childSerializer: KSerializer<T>) : KSer
     }
 }
 
+fun <T : Any> Omissible<T>.isPresent() = this is Omissible.Present
+
+fun <T : Any> Omissible<T>.isOmitted() = this is Omissible.Omitted
+
 fun <T : Any?> Omissible<T>.takeIfPresent(predicate: (T) -> Boolean = { true }) =
     if (this is Omissible.Present) value.takeIf(predicate) else null
 
