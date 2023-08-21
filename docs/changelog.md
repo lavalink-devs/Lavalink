@@ -33,7 +33,7 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 > **Warning**
 > This is a beta release, and as such, may contain bugs. Please report any bugs you find to the [issue tracker](https://github.com/lavalink-devs/Lavalink/issues/new/choose).
 > For more info on the changes in this release, see [here](api/index.md#v370---v400)
-> If you have any question regarding the changes in this release, please ask in the [support server](https://discord.gg/ZW4s47Ppw4) or [GitHub discussions](https://github.com/lavalink-devs/Lavalink/discussions/categories/q-a)
+> If you have any question regarding the changes in this release, please ask in the [support server]({{ discord_help }}) or [GitHub discussions](https://github.com/lavalink-devs/Lavalink/discussions/categories/q-a)
 
 Contributors:
 [@topi314](https://github.com/topi314), [@freyacodes](https://github.com/freyacodes), [@DRSchlaubi](https://github.com/DRSchlaubi) and [@melike2d](https://github.com/melike2d)
