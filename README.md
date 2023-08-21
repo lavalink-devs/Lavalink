@@ -110,6 +110,7 @@ Version numbers can come in different combinations, depending on the release typ
 | [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client) | Node.js  | **Any**                                    |                        |
 | [FastLink](https://github.com/PerformanC/FastLink)               | Node.js  | **Any**                                    |                        |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp)    | .NET     | DisCatSharp                                | v10.4.2+               |
+| [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)     | .NET     | Discord.Net/DSharpPlus/Remora              | v4+                    |
 | [Coglink](https://github.com/PerformanC/Coglink)                 | C        | Concord                                    |                        |
 | [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)          | Rust     | **Any**                                    | `tokio`-based          |
 
@@ -129,6 +130,7 @@ Version numbers can come in different combinations, depending on the release typ
 | [Cosmicord.js](https://github.com/SudhanPlayz/Cosmicord.js)   | Node.js  | **Any**                                    |                                 |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp) | .NET     | DisCatSharp                                | Only prior v10.4.1              |
 | [Nomia](https://github.com/DHCPCD9/Nomia)                     | .NET     | DSharpPlus                                 |                                 |
+| [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)  | .NET     | Discord.Net/DSharpPlus                     | < v4                            |
 | [DisGoLink](https://github.com/disgoorg/disgolink)            | Go       | **Any**                                    |                                 |
 
 </details>
