@@ -6,3 +6,4 @@ pillow
 cairosvg
 neoteroi-mkdocs
 mkdocs-same-dir
+mkdocs-markdownextradata-plugin

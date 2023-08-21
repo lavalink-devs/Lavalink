@@ -15,7 +15,9 @@ copyright: Copyright &copy; 2017-2021 Lavalink Contributors
 
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
+  - Getting Started:
+      - getting-started/index.md
+      - FAQ: getting-started/faq.md
   - Configuration:
       - configuration/index.md
       - Binary: configuration/binary.md
@@ -36,6 +38,8 @@ extra_css:
 
 extra:
   homepage: /
+  discord: https://discord.gg/BTHvsc7WsT
+  discord_help: https://discord.gg/ZW4s47Ppw4
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/lavalink-devs
@@ -113,3 +117,4 @@ plugins:
         background_color: "#ff624a"
         color: "#FFFFFF"
   - git-revision-date-localized
+  - markdownextradata
