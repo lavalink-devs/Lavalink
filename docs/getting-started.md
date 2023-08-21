@@ -2,7 +2,7 @@
 description: Lavalink getting started guide.
 ---
 
-# Getting Started Test
+# Getting Started Test2
 
 Welcome to the Lavalink Getting Started guide. If you're new to Lavalink, follow these steps to get started:
 
