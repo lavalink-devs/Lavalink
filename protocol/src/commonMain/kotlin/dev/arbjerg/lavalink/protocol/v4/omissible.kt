@@ -83,7 +83,7 @@ fun <T : Any> Omissible<T>.isPresent(): Boolean {
 @OptIn(ExperimentalContracts::class)
 fun <T : Any> Omissible<T>.isOmitted(): Boolean {
     contract {
-        returns(true) implies (this@isOmitted is Omissible.Present<T>)
+        returns(true) implies (this@isOmitted is Omissible.Omitted<T>)
     }
     return this is Omissible.Omitted
 }
