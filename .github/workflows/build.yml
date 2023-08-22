@@ -8,8 +8,6 @@ on:
       - 'docs/**'
       - '.github/workflows/docs.yml'
       - '.github/workflows/docs-pr.yml'
-      - 'mkdocs.yml'
-      - 'requirements.txt'
   workflow_call:
     secrets:
       DOCKER_USERNAME:
