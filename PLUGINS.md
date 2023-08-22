@@ -6,8 +6,9 @@ WebSocket handling, REST endpoints, and much more.
 
 List of plugins:
 - [Google Cloud TTS plugin](https://github.com/DuncteBot/tts-plugin) A text to speech plugin using the [google cloud tts api](https://cloud.google.com/text-to-speech/docs)
-- [SponsorBlock plugin](https://github.com/TopiSenpai/Sponsorblock-Plugin) for skipping sponsor segments in YouTube videos
-- [LavaSrc plugin](https://github.com/TopiSenpai/LavaSrc) adds Spotify, Apple Music & Deezer(native play) support
+- [SponsorBlock plugin](https://github.com/topi314/Sponsorblock-Plugin) for skipping sponsor segments in YouTube videos
+- [LavaSrc plugin](https://github.com/topi314/LavaSrc) adds Spotify, Apple Music & Deezer(native play) support
+- [LavaSearch plugin](https://github.com/topi314/LavaSearch) adds advanced search functionality including playlists, albums, artists, tracks & terms
 - [DuncteBot plugin](https://github.com/DuncteBot/skybot-lavalink-plugin) adds additional source managers that are not widely used
 - [Extra Filter plugin](https://github.com/rohank05/lavalink-filter-plugin) adds additional audio filters to lavalink
 - [XM plugin](https://github.com/esmBot/lava-xm-plugin) adds support for various [music tracker module](https://en.wikipedia.org/wiki/Module_file) formats
