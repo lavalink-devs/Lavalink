@@ -95,17 +95,19 @@ markdown_extensions:
   - def_list
   - attr_list
   - md_in_html
-  - pymdownx.tasklist:
-      custom_checkbox: true
   - toc:
       permalink: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
-  - pymdownx.snippets
-  - neoteroi.cards:
+  - pymdownx.snippets:
+      check_paths: true
+      base_path: ../
+  - neoteroi.cards
 
 plugins:
   - offline
