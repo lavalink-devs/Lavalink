@@ -14,6 +14,7 @@ description: A list of Lavalink client libraries.
 | [Lavacord](https://github.com/lavacord/Lavacord)                | Node.js  | **Any**                                    |                        |
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                   | Node.js  | **Any**                                    |                        |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp)   | .NET     | DisCatSharp                                | v10.4.2+               |
+| [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)    | .NET     | Discord.Net/DSharpPlus/Remora              | v4+                    |
 | [Coglink](https://github.com/PerformanC/Coglink)                | C        | Concord                                    |                        |
 | [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)         | Rust     | **Any**                                    | `tokio`-based          |
 
@@ -33,6 +34,7 @@ description: A list of Lavalink client libraries.
 | [Cosmicord.js](https://github.com/SudhanPlayz/Cosmicord.js)   | Node.js  | **Any**                                    |                                 |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp) | .NET     | DisCatSharp                                | Only prior v10.4.1              |
 | [Nomia](https://github.com/DHCPCD9/Nomia)                     | .NET     | DSharpPlus                                 |                                 |
+| [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)  | .NET     | Discord.Net/DSharpPlus                     | < v4                            |
 | [DisGoLink](https://github.com/disgoorg/disgolink)            | Go       | **Any**                                    |                                 |
 
 </details>
