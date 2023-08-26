@@ -264,7 +264,7 @@ Group=<usr>
 WorkingDirectory=</home/usr/lavalink>
 
 # The command to start Lavalink
-ExecStart=java -Xmx4G -jar </home/usr/lavalink>/Lavalink.jar
+ExecStart=java -Xmx1G -jar </home/usr/lavalink>/Lavalink.jar
 
 # Restart the service if it crashes
 Restart=on-failure
@@ -304,7 +304,7 @@ services:
         container_name: lavalink
         restart: unless-stopped
         environment:
-            - _JAVA_OPTIONS=-Xmx6G # set Java options here
+            - _JAVA_OPTIONS=-Xmx1G # set Java options here
             - SERVER_PORT=2333 # set lavalink server port
             - LAVALINK_SERVER_PASSWORD=youshallnotpass # set password for lavalink
         volumes:
