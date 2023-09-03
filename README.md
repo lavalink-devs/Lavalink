@@ -105,7 +105,7 @@ Version numbers can come in different combinations, depending on the release typ
 | [Mafic](https://github.com/ooliver1/mafic)                       | Python   | discord.py **V2**/nextcord/disnake/py-cord |                        |
 | [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)         | Node.js  | **Any**                                    |                        |
 | [Magmastream](https://github.com/Blackfort-Hosting/magmastream)  | Node.js  | **Any**                                    |                        |
-| [Riffy](https://github.com/riffy-team/riffy)  | Node.js  | **Any**                                    |                        |
+| [Riffy](https://github.com/riffy-team/riffy)                     | Node.js  | **Any**                                    |                        |
 | [Lavacord](https://github.com/lavacord/Lavacord)                 | Node.js  | **Any**                                    |                        |
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                    | Node.js  | **Any**                                    |                        |
 | [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client) | Node.js  | **Any**                                    |                        |
