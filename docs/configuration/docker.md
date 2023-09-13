@@ -16,24 +16,33 @@ version: "3.8"
 
 services:
   lavalink:
-    image: ghcr.io/lavalink-devs/lavalink:4 # pin the image version to Lavalink v4
+    # pin the image version to Lavalink v4
+    image: ghcr.io/lavalink-devs/lavalink:4
     container_name: lavalink
     restart: unless-stopped
     environment:
-      - _JAVA_OPTIONS=-Xmx6G # set Java options here
-      - SERVER_PORT=2333 # set lavalink server port
-      - LAVALINK_SERVER_PASSWORD=youshallnotpass # set password for lavalink
+      # set Java options here
+      - _JAVA_OPTIONS=-Xmx6G
+      # set lavalink server port
+      - SERVER_PORT=2333
+      # set password for lavalink
+      - LAVALINK_SERVER_PASSWORD=youshallnotpass
     volumes:
-      - ./application.yml:/opt/Lavalink/application.yml # mount application.yml from the same directory or use environment variables
-      - ./plugins/:/opt/Lavalink/plugins/ # persist plugins between restarts, make sure to set the correct permissions (user: 322, group: 322)
+      # mount application.yml from the same directory or use environment variables
+      - ./application.yml:/opt/Lavalink/application.yml
+      # persist plugins between restarts, make sure to set the correct permissions (user: 322, group: 322)
+      - ./plugins/:/opt/Lavalink/plugins/
     networks:
       - lavalink
     expose:
-      - 2333 # lavalink exposes port 2333 to connect to for other containers (this is for documentation purposes only)
+      # lavalink exposes port 2333 to connect to for other containers (this is for documentation purposes only)
+      - 2333
     ports:
-      - "2333:2333" # you only need this if you want to make your lavalink accessible from outside of containers
+      # you only need this if you want to make your lavalink accessible from outside of containers
+      - "2333:2333"
 networks:
-  lavalink: # create a lavalink network you can add other containers to, to give them access to Lavalink
+  # create a lavalink network you can add other containers to, to give them access to Lavalink
+  lavalink:
     name: lavalink
 ```
 
