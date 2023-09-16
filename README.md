@@ -98,22 +98,22 @@ Version numbers can come in different combinations, depending on the release typ
 ---
 
 ## Client libraries:
-| Client                                                           | Platform | Compatible With                            | Additional Information |
-|------------------------------------------------------------------|----------|--------------------------------------------|------------------------|
-| [Lavalink.kt](https://github.com/DRSchlaubi/Lavalink.kt)         | Kotlin   | Kord/JDA/**Any**                           | Kotlin Coroutines      |
-| [DisGoLink](https://github.com/disgoorg/disgolink)               | Go       | **Any**                                    |                        |
-| [Mafic](https://github.com/ooliver1/mafic)                       | Python   | discord.py **V2**/nextcord/disnake/py-cord |                        |
-| [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)         | Node.js  | **Any**                                    |                        |
-| [Magmastream](https://github.com/Blackfort-Hosting/magmastream)  | Node.js  | **Any**                                    |                        |
-| [Lavacord](https://github.com/lavacord/Lavacord)                 | Node.js  | **Any**                                    |                        |
-| [Shoukaku](https://github.com/Deivu/Shoukaku)                    | Node.js  | **Any**                                    |                        |
-| [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client) | Node.js  | **Any**                                    |                        |
-| [FastLink](https://github.com/PerformanC/FastLink)               | Node.js  | **Any**                                    |                        |
-| [Riffy](https://github.com/riffy-team/riffy)                     | Node.js  | **Any**                                    |                        |
-| [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp)    | .NET     | DisCatSharp                                | v10.4.2+               |
-| [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)     | .NET     | Discord.Net/DSharpPlus/Remora              | v4+                    |
-| [Coglink](https://github.com/PerformanC/Coglink)                 | C        | Concord                                    |                        |
-| [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)          | Rust     | **Any**                                    | `tokio`-based          |
+| Client                                                           | Platform     | Compatible With                            | Additional Information         |
+|------------------------------------------------------------------|--------------|--------------------------------------------|--------------------------------|
+| [Lavalink.kt](https://github.com/DRSchlaubi/Lavalink.kt)         | Kotlin       | Kord/JDA/**Any**                           | Kotlin Coroutines              |
+| [DisGoLink](https://github.com/disgoorg/disgolink)               | Go           | **Any**                                    |                                |
+| [Mafic](https://github.com/ooliver1/mafic)                       | Python       | discord.py **V2**/nextcord/disnake/py-cord |                                |
+| [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)         | Node.js      | **Any**                                    |                                |
+| [Magmastream](https://github.com/Blackfort-Hosting/magmastream)  | Node.js      | **Any**                                    |                                |
+| [Lavacord](https://github.com/lavacord/Lavacord)                 | Node.js      | **Any**                                    |                                |
+| [Shoukaku](https://github.com/Deivu/Shoukaku)                    | Node.js      | **Any**                                    |                                |
+| [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client) | Node.js      | **Any**                                    |                                |
+| [FastLink](https://github.com/PerformanC/FastLink)               | Node.js      | **Any**                                    |                                |
+| [Riffy](https://github.com/riffy-team/riffy)                     | Node.js      | **Any**                                    |                                |
+| [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp)    | .NET         | DisCatSharp                                | v10.4.2+                       |
+| [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)     | .NET         | Discord.Net/DSharpPlus/Remora              | v4+                            |
+| [Coglink](https://github.com/PerformanC/Coglink)                 | C            | Concord                                    |                                |
+| [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)          | Rust, Python | **Any**                                    | `tokio`-based, `asyncio`-based |
 
 <details>
 <summary>v3.7 supporting Client Libraries</summary>
