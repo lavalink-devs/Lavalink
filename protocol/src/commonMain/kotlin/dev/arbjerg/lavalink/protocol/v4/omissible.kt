@@ -6,6 +6,8 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.jvm.JvmInline
 
 @Serializable(with = OmissableSerializer::class)
@@ -68,6 +70,22 @@ class OmissableSerializer<T>(private val childSerializer: KSerializer<T>) : KSer
 
         return Omissible.of(child)
     }
+}
+
+@OptIn(ExperimentalContracts::class)
+fun <T : Any> Omissible<T>.isPresent(): Boolean {
+    contract {
+        returns(true) implies (this@isPresent is Omissible.Present<T>)
+    }
+    return this is Omissible.Present
+}
+
+@OptIn(ExperimentalContracts::class)
+fun <T : Any> Omissible<T>.isOmitted(): Boolean {
+    contract {
+        returns(true) implies (this@isOmitted is Omissible.Omitted<T>)
+    }
+    return this is Omissible.Omitted
 }
 
 fun <T : Any?> Omissible<T>.takeIfPresent(predicate: (T) -> Boolean = { true }) =
