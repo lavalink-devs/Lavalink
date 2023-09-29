@@ -6,7 +6,7 @@ description: Lavalink API Implementation guidelines
 
 How to write your own client.
 
-## Requirements
+## Required capabilities of your Discord library
 
 * You must be able to send messages via a shard's gateway connection.
 * You must be able to intercept voice server & voice state updates from the gateway on your shard connection.
