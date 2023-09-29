@@ -44,7 +44,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 0.8rem 0.8rem 0.8rem 0.8rem;
-    border-radius: 8px;
+    border-radius: 4px;
 }
 
 .nt-card > a > div:hover {
