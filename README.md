@@ -14,9 +14,12 @@ A [basic example bot](Testbot) is available.
 > [!Warning]
 > Lavalink v4 is now in beta! See [here](CHANGELOG.md#400-beta1) for more information.
 
-> [!Note]
-> Lavalink docs are now available at [lavalink.dev](https://lavalink.dev)
-
+## Getting started
+* Pick one of the [up-to-date clients](https://lavalink.dev/clients). Advanced users can create their own using the [API documentation
+](https://lavalink.dev/api/)
+* See the [server configuration documentation](https://lavalink.dev/configuration/) for configuring your Lavalink server
+* Explore [available plugins](https://lavalink.dev/plugins) for extra features
+* See also our [FAQ](https://lavalink.dev/getting-started/faq)
 <details>
 <summary>Table of Contents</summary>
 
