@@ -9,6 +9,12 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 
 ## v4
 
+### 4.0.0-beta.4
+
+* Update lavaplayer to [`2.0.2`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.0.2) - Support MPEG 2.5 and fixed some requests not timing out
+* Add `Omissible#isPresent` & `Omissible#isOmitted` to the `protocol` module
+* Fix null pointer when a playlist has no selected track
+
 ### v4.0.0-beta.3
 
 * Update lavaplayer to [`2.0.0`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.0.0) - Fixed YouTube 403 errors & YouTube access token errors
