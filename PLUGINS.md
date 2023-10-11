@@ -19,6 +19,36 @@ for instructions.
 
 You can add your own plugin by submitting a pull-request to this file.
 
+## Official plugin repository
+
+The official plugin repository is hosted on https://maven.lavalink.dev. If you want to publish your plugin there, please reach out to us via [Discord](https://discord.gg/ZW4s47Ppw4) for credentials.
+The repository has a release (https://maven.lavalink.dev/releases) and snapshot (https://maven.lavalink.dev/snapshots) repository which you can use to publish your plugin.
+By default, Lavalink will look for the plugin in the Lavalink repository, but you can also specify a custom repository for each plugin in your `application.yml` file.
+
+```yaml
+
+lavalink:
+  plugins:
+    - dependency: "com.github.example:example-plugin:1.0.0" # required, the dependency to your plugin
+      repository: "https://maven.example.com/releases" # optional, defaults to the Lavalink release repository
+      snapshot: false # optional, defaults to false, used to tell Lavalink to use the snapshot repository instead of the release repository
+```
+
+The default repository can also be overwritten in your `application.yml` file.
+
+```yaml
+lavalink:
+  defaultPluginRepository: "https://maven.example.com/releases" # optional, defaults to the Lavalink release repository
+  defaultPluginSnapshotRepository: "https://maven.example.com/snapshots" # optional, defaults to the Lavalink snapshot repository
+```
+
+Additionally, you can overwrite the default plugin folder where Lavalink saves the downloaded plugins, or loads them from.
+
+```yaml
+lavalink:
+  pluginsDir: "./lavalink-plugins" # optional, defaults to "./plugins"
+```
+
 ## Developing your own plugin
 
 > **Note:**  
