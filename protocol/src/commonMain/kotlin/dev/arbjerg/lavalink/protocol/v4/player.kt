@@ -6,12 +6,11 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.serializer
 import kotlin.jvm.JvmInline
 
-@Serializable
-@JvmInline
-value class PluginData(private val obj: JsonObject){
-    inline fun <reified T> deserialize(): T = deserialize(json.serializersModule.serializer<T>())
-    fun <T> deserialize(deserializer: DeserializationStrategy<T>): T = json.decodeFromJsonElement(deserializer, obj)
-}
+inline fun <reified T> JsonObject.deserialize(): T =
+    deserialize(json.serializersModule.serializer<T>())
+
+fun <T> JsonObject.deserialize(deserializer: DeserializationStrategy<T>): T =
+    json.decodeFromJsonElement(deserializer, this)
 
 @Serializable
 @JvmInline
@@ -32,8 +31,10 @@ data class Player(
 data class Track(
     val encoded: String,
     val info: TrackInfo,
-    val pluginInfo: PluginData
-) : LoadResult.Data
+    val pluginInfo: JsonObject
+) : LoadResult.Data {
+    fun <T> deserialize(deserializer: DeserializationStrategy<T>): T = pluginInfo.deserialize(deserializer)
+}
 
 @Serializable
 @JvmInline

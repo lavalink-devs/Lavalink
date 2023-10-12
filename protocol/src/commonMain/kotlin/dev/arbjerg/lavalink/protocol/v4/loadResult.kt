@@ -96,7 +96,7 @@ sealed interface LoadResult {
     companion object {
         fun trackLoaded(track: Track) = TrackLoaded(track)
 
-        fun playlistLoaded(playlistInfo: PlaylistInfo, pluginInfo: PluginData, tracks: List<Track>) =
+        fun playlistLoaded(playlistInfo: PlaylistInfo, pluginInfo: JsonObject, tracks: List<Track>) =
             PlaylistLoaded(
                 Playlist(
                     playlistInfo,
@@ -133,9 +133,11 @@ data class PlaylistInfo(
 @Serializable
 data class Playlist(
     val info: PlaylistInfo,
-    val pluginInfo: PluginData,
+    val pluginInfo: JsonObject,
     val tracks: List<Track>
-) : LoadResult.Data
+) : LoadResult.Data {
+    fun <T> deserialize(deserializer: DeserializationStrategy<T>): T = pluginInfo.deserialize(deserializer)
+}
 
 @Serializable
 data class Exception(

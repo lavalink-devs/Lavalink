@@ -54,7 +54,7 @@ fun AudioTrack.toTrack(encoded: String, pluginInfoModifiers: List<AudioPluginInf
         acc + jsonObject
     }
 
-    return Track(encoded, this.toInfo(), PluginData(pluginInfo))
+    return Track(encoded, this.toInfo(), pluginInfo)
 }
 
 private operator fun JsonObject.plus(other: JsonObject) = JsonObject(toMap() + other.toMap())
@@ -80,12 +80,12 @@ fun AudioPlaylist.toPlaylistInfo(): PlaylistInfo {
 }
 
 
-fun AudioPlaylist.toPluginInfo(pluginInfoModifiers: List<AudioPluginInfoModifier>): PluginData {
+fun AudioPlaylist.toPluginInfo(pluginInfoModifiers: List<AudioPluginInfoModifier>): JsonObject {
     val pluginInfo = pluginInfoModifiers.fold(JsonObject(emptyMap())) { acc, it ->
         val jsonObject = it.modifyAudioPlaylistPluginInfo(this) ?: JsonObject(emptyMap())
         acc + jsonObject
     }
-    return PluginData(pluginInfo)
+    return pluginInfo
 }
 
 fun LavalinkPlayer.toPlayer(context: SocketContext, pluginInfoModifiers: List<AudioPluginInfoModifier>): Player {

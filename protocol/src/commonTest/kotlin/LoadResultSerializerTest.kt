@@ -151,7 +151,7 @@ class LoadResultSerializerTest {
             loadType shouldBe ResultStatus.PLAYLIST
             assertIs<LoadResult.PlaylistLoaded>(this)
             data {
-                pluginInfo shouldBe JsonObject(emptyMap())
+                pluginInfo shouldBe emptyMap()
                 info {
                     name shouldBe "Example YouTube Playlist"
                     selectedTrack shouldBe 3
