@@ -1,10 +1,19 @@
 package dev.arbjerg.lavalink.protocol.v4
 
+import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.serializer
 import kotlin.jvm.JvmInline
 
-@Serializable()
+@Serializable
+@JvmInline
+value class PluginData(private val obj: JsonObject){
+    inline fun <reified T> deserialize(): T = deserialize(json.serializersModule.serializer<T>())
+    fun <T> deserialize(deserializer: DeserializationStrategy<T>): T = json.decodeFromJsonElement(deserializer, obj)
+}
+
+@Serializable
 @JvmInline
 value class Players(val players: List<Player>)
 
@@ -23,7 +32,7 @@ data class Player(
 data class Track(
     val encoded: String,
     val info: TrackInfo,
-    val pluginInfo: JsonObject
+    val pluginInfo: PluginData
 ) : LoadResult.Data
 
 @Serializable
