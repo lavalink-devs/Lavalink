@@ -48,12 +48,12 @@ class PluginManager(val config: PluginsConfig) {
 
         val declarations = config.plugins.map { declaration ->
             if (declaration.dependency == null) throw RuntimeException("Illegal dependency declaration: null")
-            if (declaration.repository == null) {
-                declaration.repository = if (declaration.snapshot) config.defaultPluginSnapshotRepository else config.defaultPluginRepository
-            }
             val fragments = declaration.dependency!!.split(":")
             if (fragments.size != 3) throw RuntimeException("Invalid dependency \"${declaration.dependency}\"")
-            val repository =
+
+            var repository = declaration.repository
+                ?: if (declaration.snapshot) config.defaultPluginSnapshotRepository else config.defaultPluginRepository
+            repository =
                 if (declaration.repository!!.endsWith("/")) declaration.repository!! else declaration.repository!! + "/"
             Declaration(fragments[0], fragments[1], fragments[2], repository)
         }

@@ -10,7 +10,7 @@ plugins:
 lavalink:
   plugins:
 #    - dependency: "com.github.example:example-plugin:1.0.0" # required, the coordinates of your plugin
-#      repository: "https://maven.example.com/releases" # optional, defaults to the Lavalink release repository
+#      repository: "https://maven.example.com/releases" # optional, defaults to the Lavalink releases repository by default
 #      snapshot: false # optional, defaults to false, used to tell Lavalink to use the snapshot repository instead of the release repository
 #  pluginsDir: "./plugins" # optional, defaults to "./plugins"
 #  defaultPluginRepository: "https://maven.lavalink.dev/releases" # optional, defaults to the Lavalink release repository
