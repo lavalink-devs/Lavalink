@@ -7,7 +7,7 @@ description: Make your own plugin for Lavalink.
 > **Note:**  
 > If your plugin is developed in Kotlin make sure you are using **Kotlin v1.8.22**
 
-Follow [these steps](https://github.com/lavalink-devs/lavalink-plugin-template#how-to-use-this-template) to setup a new Lavalink plugin
+Follow [these steps](https://github.com/lavalink-devs/lavalink-plugin-template#how-to-use-this-template) to set up a new Lavalink plugin
 
 Now you can start writing your plugin. You can test your plugin against Lavalink by running Gradle with the
 `:runLavalink` Gradle task. The [Gradle plugin documentation](https://github.com/lavalink-devs/lavalink-gradle-plugin#running-the-plugin) might be helpful.
@@ -67,4 +67,34 @@ import dev.arbjerg.lavalink.api.AudioPluginInfoModifier;
 class TestAudioPluginInfoModifier implements AudioPluginInfoModifier {
 	// ...
 }
+```
+
+# Distributing your plugin
+
+The official plugin repository is hosted on https://maven.lavalink.dev. If you want to publish your plugin there, please reach out to us via [Discord](https://discord.gg/ZW4s47Ppw4) for credentials.
+The Lavalink team has release (https://maven.lavalink.dev/releases) and snapshot (https://maven.lavalink.dev/snapshots) repositories which you can use to publish your plugin.
+By default, Lavalink will look for the plugin in the Lavalink repository, but you can also specify a custom repository for each plugin in your `application.yml` file.
+
+```yaml
+
+lavalink:
+  plugins:
+    - dependency: "com.github.example:example-plugin:x.y.z" # required, the dependency to your plugin
+      repository: "https://maven.example.com/releases" # optional, defaults to https://maven.lavalink.dev/releases for releases
+      snapshot: false # optional, defaults to false, used to tell Lavalink to use the snapshot repository instead of the release repository
+```
+
+The default repositories can also be overridden in your `application.yml` file.
+
+```yaml
+lavalink:
+  defaultPluginRepository: "https://maven.example.com/releases" # optional, defaults to https://maven.lavalink.dev/releases
+  defaultPluginSnapshotRepository: "https://maven.example.com/snapshots" # optional, defaults to https://maven.lavalink.dev/snapshots
+```
+
+Additionally, you can override the default plugin path where Lavalink saves and loads the downloaded plugins.
+
+```yaml
+lavalink:
+  pluginsDir: "./lavalink-plugins" # optional, defaults to "./plugins"
 ```
