@@ -121,7 +121,7 @@ class PlayerRestHandler(
         playerUpdate.position.takeIf { it.isPresent && !playerUpdate.encodedTrack.isPresent && !playerUpdate.identifier.isPresent }
             ?.let {
                 if (player.isPlaying) {
-                    player.seekTo(it)
+                    player.seekTo(it.value)
                     SocketServer.sendPlayerUpdate(context, player)
                 }
             }
