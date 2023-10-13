@@ -120,8 +120,10 @@ class PlayerRestHandler(
         // we handle position differently for playing new tracks
         playerUpdate.position.takeIf { it.isPresent && !playerUpdate.encodedTrack.isPresent && !playerUpdate.identifier.isPresent }
             ?.let {
-                player.seekTo(it.value)
-                SocketServer.sendPlayerUpdate(context, player)
+                if (player.isPlaying) {
+                    player.seekTo(it)
+                    SocketServer.sendPlayerUpdate(context, player)
+                }
             }
 
         playerUpdate.endTime.takeIf { it.isPresent && !playerUpdate.encodedTrack.isPresent && !playerUpdate.identifier.isPresent }
