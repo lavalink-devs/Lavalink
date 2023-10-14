@@ -1,7 +1,6 @@
 import dev.arbjerg.lavalink.protocol.v4.Exception
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.arbjerg.lavalink.protocol.v4.ResultStatus
-import kotlinx.serialization.json.JsonObject
 import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertIs
