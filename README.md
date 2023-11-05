@@ -103,7 +103,7 @@ Version numbers can come in different combinations, depending on the release typ
 | [Lavalink-Client](https://github.com/lavalink-devs/Lavalink-Client)       | Java/Kotlin/JVM | JDA/Discord4J/**Any**                      | Uses reactor                    |
 | [Lavalink.kt](https://github.com/DRSchlaubi/Lavalink.kt)                  | Kotlin          | Kord/JDA/**Any**                           | Kotlin Coroutines               |
 | [DisGoLink](https://github.com/disgoorg/disgolink)                        | Go              | **Any**                                    |                                 |
-| [Wavelink 3](https://github.com/PythonistaGuild/Wavelink/tree/feature/v3) | Python          | discord.py **V2**                          | `pip install -U wavelink --pre` |
+| [Wavelink 3](https://github.com/PythonistaGuild/Wavelink/tree/feature/v3) | Python          | discord.py **V2**                          | Pre-Release                     |
 | [Mafic](https://github.com/ooliver1/mafic)                                | Python          | discord.py **V2**/nextcord/disnake/py-cord |                                 |
 | [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)                  | Node.js         | **Any**                                    |                                 |
 | [Magmastream](https://github.com/Blackfort-Hosting/magmastream)           | Node.js         | **Any**                                    |                                 |
