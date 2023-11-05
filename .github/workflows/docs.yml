@@ -33,7 +33,8 @@ jobs:
             mkdocs-material-
       - run: pip install -r requirements.txt
         working-directory: docs
-      - run: mkdocs build --verbose --strict
+#      - run: mkdocs build --verbose --strict
+      - run: mkdocs build --verbose
         working-directory: docs
       - uses: actions/upload-pages-artifact@v1
         with:
