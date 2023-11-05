@@ -5,6 +5,8 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 
 ## 3.7.9
 * Update lavaplayer to [`1.5.1`](https://github.com/lavalink-devs/lavaplayer/releases/tag/1.5.1) - Fixed YouTube access token errors
+* Fixed websocket crash when seeking and nothing is playing
+* Fixed error when seeking and player is not playing anything
 
 ## 3.7.8
 * Fix YouTube 403 errors
