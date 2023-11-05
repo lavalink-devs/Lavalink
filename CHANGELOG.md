@@ -3,6 +3,9 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 3.7.9
+* Update lavaplayer to [`1.5.1`](https://github.com/lavalink-devs/lavaplayer/releases/tag/1.5.1) - Fixed YouTube access token errors
+
 ## 3.7.8
 * Fix YouTube 403 errors
 * Fix YouTube access token errors
