@@ -5,6 +5,8 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 
 ## 4.0.0-beta.5
 * Update lavaplayer to [`2.0.3`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.0.2) - Fixed YouTube access token errors
+* Added default plugin repository. Plugin devs can now request their plugin to be added to the default repository. For more info see [here](https://github.com/lavalink-devs/Lavalink/blob/master/PLUGINS.md#distributing-your-plugin)
+* Fixed error when seeking and player is not playing anything in 
 
 ## 4.0.0-beta.4
 * Update lavaplayer to [`2.0.2`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.0.2) - Support MPEG 2.5 and fixed some requests not timing out
