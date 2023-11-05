@@ -1,15 +1,20 @@
 server: # REST and WS server
   port: 2333
   address: 0.0.0.0
+  http2:
+    enabled: false # Whether to enable HTTP/2 support
 plugins:
 #  name: # Name of the plugin
 #    some_key: some_value # Some key-value pair for the plugin
 #    another_key: another_value
 lavalink:
   plugins:
-#    - dependency: "group:artifact:version"
-#      repository: "repository"
-  pluginsDir: "./plugins"
+#    - dependency: "com.github.example:example-plugin:1.0.0" # required, the coordinates of your plugin
+#      repository: "https://maven.example.com/releases" # optional, defaults to the Lavalink releases repository by default
+#      snapshot: false # optional, defaults to false, used to tell Lavalink to use the snapshot repository instead of the release repository
+#  pluginsDir: "./plugins" # optional, defaults to "./plugins"
+#  defaultPluginRepository: "https://maven.lavalink.dev/releases" # optional, defaults to the Lavalink release repository
+#  defaultPluginSnapshotRepository: "https://maven.lavalink.dev/snapshots" # optional, defaults to the Lavalink snapshot repository
   server:
     password: "youshallnotpass"
     sources:
