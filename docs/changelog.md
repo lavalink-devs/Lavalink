@@ -9,7 +9,7 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 
 ## v4
 
-## 4.0.0-beta.5
+### 4.0.0-beta.5
 * Update lavaplayer to [`2.0.3`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.0.2) - Fixed YouTube access token errors
 * Added default plugin repository. Plugin devs can now request their plugin to be added to the default repository. For more info see [here](api/plugins.md#distributing-your-plugin)
 * Fixed error when seeking and player is not playing anything in
@@ -50,6 +50,11 @@ Contributors:
 [@topi314](https://github.com/topi314), [@freyacodes](https://github.com/freyacodes), [@DRSchlaubi](https://github.com/DRSchlaubi) and [@melike2d](https://github.com/melike2d)
 
 ## v3
+
+### 3.7.9
+* Update lavaplayer to [`1.5.1`](https://github.com/lavalink-devs/lavaplayer/releases/tag/1.5.1) - Fixed YouTube access token errors
+* Fixed websocket crash when seeking and nothing is playing
+* Fixed error when seeking and player is not playing anything
 
 ### v3.7.8
 
