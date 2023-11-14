@@ -76,9 +76,9 @@ class PlayerRestHandler(
         }
 
         playerUpdate.voice.ifPresent {
-            //discord sometimes send a partial server update missing the endpoint, which can be ignored.
+            // Discord sometimes sends a partial voice server update missing the endpoint, which can be ignored.
             if (it.endpoint.isEmpty() || it.token.isEmpty() || it.sessionId.isEmpty()) {
-                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Partial voice state update: $it")
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Partial voice server update: $it")
             }
         }
 
