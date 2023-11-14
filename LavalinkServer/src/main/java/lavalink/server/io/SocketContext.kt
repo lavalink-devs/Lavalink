@@ -232,5 +232,9 @@ class SocketContext(
         override fun gatewayReady(target: InetSocketAddress?, ssrc: Int) {
             SocketServer.sendPlayerUpdate(this@SocketContext, player)
         }
+
+        override fun gatewayError(cause: Throwable) {
+            log.error("Koe encountered a voice gateway exception for guild ${player.guildId}", cause)
+        }
     }
 }
