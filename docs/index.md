@@ -10,6 +10,8 @@ hide:
   - path
 ---
 
+## Features
+
 ::cards::
 
 - title: Powered by Lavaplayer
@@ -33,12 +35,13 @@ hide:
   url: api/rest.md
 - title: Statistics
   icon: ':octicons-graph-16:'
-  url: api/websocket.md#stats-op
+  url: api/rest.html#get-lavalink-stats
 - title: Basic authentication
   icon: ':material-lock:'
-  url: api/websocket.md#opening-a-connection
+  url: api/rest.html
 - title: Prometheus metrics
   icon: ':simple-prometheus:'
+  url: https://prometheus.io/
 - title: Docker images
   icon: ':simple-docker:'
   url: configuration/docker.md
@@ -47,3 +50,11 @@ hide:
   url: plugins.md
 
 ::/cards::
+
+## Found a Bug?
+
+If you found a bug, please report it on the [issue tracker](https://github.com/lavalink-devs/Lavalink/issues/new?labels=bug&template=bug_report.md).
+
+## Need Help?
+
+Join the [Lavalink support Discord]({{ discord_help }}) or open a [GitHub discussion](https://github.com/lavalink-devs/Lavalink/discussions/new?category=q-a) for help or questions.

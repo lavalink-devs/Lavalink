@@ -23,7 +23,7 @@ description: A list of Lavalink client libraries.
 | [Coglink](https://github.com/PerformanC/Coglink)                        | C               | Concord                                    |                                |
 | [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)                 | Rust, Python    | **Any**                                    | `tokio`-based, `asyncio`-based |
 
-<details>
+<details markdown="1">
 <summary>v3.7 supporting Client Libraries</summary>
 
 | Client                                                        | Platform | Compatible With                            | Additional Information          |

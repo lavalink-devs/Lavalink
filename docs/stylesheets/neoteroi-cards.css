@@ -30,7 +30,7 @@
 .nt-card {
     border-radius: 4px;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    background-color: var(--md-primary-fg-color);
+    background-color: var(--md-typeset-kbd-color);
 }
 
 .nt-card:hover {
@@ -42,26 +42,28 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    padding: 0.8rem 0.8rem 0.8rem 0.8rem;
+    justify-content: flex-start;
+    padding: .625em;
     border-radius: 4px;
 }
 
 .nt-card > a > div:hover {
-    background-color: var(--md-accent-fg-color);
+    background-color: var(--md-typeset-kbd-color);
+}
+
+.nt-card-content {
+    width: 100%;
 }
 
 .nt-card-title {
-    font-size: 1rem;
     font-weight: bold;
     margin: 4px 0 8px 0;
-    line-height: 22px;
-    text-align: right;
-    color: var(--md-primary-bg-color);
+    text-align: center;
+    color: var(--md-default-fg-color);
 }
 
 .nt-card-icon {
-    color: var(--md-primary-bg-color);
+    color: var(--md-default-fg-color);
 }
 
 .nt-card-icon svg,

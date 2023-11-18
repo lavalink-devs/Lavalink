@@ -13,7 +13,11 @@ Authorization: youshallnotpass
 
 Routes are prefixed with `/v3` as of `v3.7.0` and `/v4` as of `v4.0.0`. Routes without an API prefix were removed in v4 (except `/version`).
 
-#### Error Responses
+## Insomnia Collection
+
+You can find an [Insomnia](https://insomnia.rest/) collection in the [here](Insomnia.json) which contains all the endpoints and their respective payloads.
+
+## Error Responses
 
 When Lavalink encounters an error, it will respond with a JSON object containing more information about the error. Include the `trace=true` query param to also receive the full stack trace.
 
@@ -42,27 +46,12 @@ When Lavalink encounters an error, it will respond with a JSON object containing
 
 </details>
 
-#### Get Players
 
-Returns a list of players in this specific session.
+## Track API
 
-```
-GET /v4/sessions/{sessionId}/players
-```
+### Common Types  ### {: #track-api-types }
 
-##### Player
-
-| Field   | Type                                             | Description                                           |
-|---------|--------------------------------------------------|-------------------------------------------------------|
-| guildId | string                                           | The guild id of the player                            |
-| track   | ?[Track](#track) object                          | The currently playing track                           |
-| volume  | int                                              | The volume of the player, range 0-1000, in percentage |
-| paused  | bool                                             | Whether the player is paused                          |
-| state   | [Player State](websocket.md#player-state) object | The state of the player                               |
-| voice   | [Voice State](#voice-state) object               | The voice state of the player                         |
-| filters | [Filters](#filters) object                       | The filters used by the player                        |              
-
-##### Track
+#### Track
 
 | Field      | Type                             | Description                             |
 |------------|----------------------------------|-----------------------------------------|
@@ -70,7 +59,7 @@ GET /v4/sessions/{sessionId}/players
 | info       | [Track Info](#track-info) object | Info about the track                    |
 | pluginInfo | object                           | Addition track info provided by plugins |
 
-##### Track Info
+#### Track Info
 
 | Field      | Type    | Description                                                                           |
 |------------|---------|---------------------------------------------------------------------------------------|
@@ -86,7 +75,271 @@ GET /v4/sessions/{sessionId}/players
 | isrc       | ?string | The track [ISRC](https://en.wikipedia.org/wiki/International_Standard_Recording_Code) |
 | sourceName | string  | The track source name                                                                 |
 
-##### Voice State
+#### Playlist Info
+
+| Field         | Type   | Description                                                     |
+|---------------|--------|-----------------------------------------------------------------|
+| name          | string | The name of the playlist                                        |
+| selectedTrack | int    | The selected track of the playlist (-1 if no track is selected) |
+
+---
+
+### Track Loading
+
+This endpoint is used to resolve audio tracks for use with the [Update Player](#update-player) endpoint.
+
+
+!!! note
+    
+    Lavalink supports searching via YouTube, YouTube Music, and Soundcloud. To search, you must prefix your identifier with `ytsearch:`, `ytmsearch:` or `scsearch:` respectively.
+    
+    When a search prefix is used, the returned `loadType` will be `search`. Note that disabling the respective source managers renders these search prefixes useless.
+
+    Plugins may also implement prefixes to allow for more search engines to be utilised.
+
+
+```
+GET /v4/loadtracks?identifier=dQw4w9WgXcQ
+```
+
+Response:
+
+#### Track Loading Result
+
+| Field    | Type                                | Description            |       
+|----------|-------------------------------------|------------------------|
+| loadType | [LoadResultType](#load-result-type) | The type of the result | 
+| data     | [LoadResultData](#load-result-data) | The data of the result |
+
+#### Load Result Type
+
+| Load Result Type | Description                                   |
+|------------------|-----------------------------------------------|
+| `track`          | A track has been loaded                       |
+| `playlist`       | A playlist has been loaded                    |
+| `search`         | A search result has been loaded               |
+| `empty`          | There has been no matches for your identifier |
+| `error`          | Loading has failed with an error              |
+
+#### Load Result Data
+
+##### Track Result Data
+
+[Track](#track) object with the loaded track.
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+{
+  "loadType": "track",
+  "data": {
+    "encoded": "...",
+    "info": { ... },
+    "pluginInfo": { ... }
+  }
+}
+```
+
+</details>
+
+##### Playlist Result Data
+
+| Field      | Type                                  | Description                                |
+|------------|---------------------------------------|--------------------------------------------|
+| info       | [PlaylistInfo](#playlist-info) object | The info of the playlist                   |
+| pluginInfo | Object                                | Addition playlist info provided by plugins |
+| tracks     | array of [Track](#track) objects      | The tracks of the playlist                 |
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+{
+  "loadType": "playlist",
+  "data": {
+    "info": { ... },
+    "pluginInfo": { ... },
+    "tracks": [ ... ]
+  }
+}
+```
+
+</details>
+
+##### Search Result Data
+
+Array of [Track](#track) objects from the search result.
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+{
+  "loadType": "search",
+  "data": [
+    {
+      "encoded": "...",
+      "info": { ... },
+      "pluginInfo": { ... }
+    },
+    ...
+  ]
+}
+```
+
+</details>
+
+##### Empty Result Data
+
+Empty object.
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+{
+  "loadType": "empty",
+  "data": {}
+}
+```
+
+</details>
+
+##### Error Result Data
+
+[Exception](websocket.md#exception-object) object with the error.
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+{
+  "loadType": "error",
+  "data": { 
+    "message": "Something went wrong",
+    "severity": "fault",
+    "cause": "..."
+  }
+}
+```
+
+</details>
+
+---
+
+### Track Decoding
+
+Decode a single track into its info, where `BASE64` is the encoded base64 data.
+
+```
+GET /v4/decodetrack?encodedTrack=BASE64
+```
+
+Response:
+
+[Track](#track) object
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+{
+  "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+  "info": {
+    "identifier": "dQw4w9WgXcQ",
+    "isSeekable": true,
+    "author": "RickAstleyVEVO",
+    "length": 212000,
+    "isStream": false,
+    "position": 0,
+    "title": "Rick Astley - Never Gonna Give You Up",
+    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+    "isrc": null,
+    "sourceName": "youtube"
+  },
+  "pluginInfo": {}
+}
+```
+
+</details>
+
+---
+
+Decodes multiple tracks into their info
+
+```
+POST /v4/decodetracks
+```
+
+Request:
+
+Array of track data strings
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+[
+  "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+  ...
+]
+```
+
+</details>
+
+Response:
+
+Array of [Track](#track) objects
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+[
+  {
+    "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "info": {
+      "identifier": "dQw4w9WgXcQ",
+      "isSeekable": true,
+      "author": "RickAstleyVEVO",
+      "length": 212000,
+      "isStream": false,
+      "position": 0,
+      "title": "Rick Astley - Never Gonna Give You Up",
+      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+      "isrc": null,
+      "sourceName": "youtube"
+    },
+    "pluginInfo": {}
+  },
+  ...
+]
+```
+
+</details>
+
+---
+
+## Player API
+
+### Common Types  ### {: #player-api-types }
+
+#### Player
+
+| Field   | Type                                             | Description                                           |
+|---------|--------------------------------------------------|-------------------------------------------------------|
+| guildId | string                                           | The guild id of the player                            |
+| track   | ?[Track](#track) object                          | The currently playing track                           |
+| volume  | int                                              | The volume of the player, range 0-1000, in percentage |
+| paused  | bool                                             | Whether the player is paused                          |
+| state   | [Player State](websocket.md#player-state) object | The state of the player                               |
+| voice   | [Voice State](#voice-state) object               | The voice state of the player                         |
+| filters | [Filters](#filters) object                       | The filters used by the player                        |
+
+#### Voice State
 
 | Field     | Type   | Description                                       |
 |-----------|--------|---------------------------------------------------|
@@ -98,209 +351,6 @@ GET /v4/sessions/{sessionId}/players
 `sessionId` is provided by the Voice State Update event sent by Discord, whereas the `endpoint` and `token` are provided
 with the Voice Server Update. Please refer to https://discord.com/developers/docs/topics/gateway-events#voice
 
-<details>
-<summary>Example Payload</summary>
-
-```yaml
-[
-  {
-    "guildId": "...",
-    "track": {
-      "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-      "info": {
-        "identifier": "dQw4w9WgXcQ",
-        "isSeekable": true,
-        "author": "RickAstleyVEVO",
-        "length": 212000,
-        "isStream": false,
-        "position": 60000,
-        "title": "Rick Astley - Never Gonna Give You Up",
-        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-        "isrc": null,
-        "sourceName": "youtube"
-      },
-      "pluginInfo": {}
-    },
-    "volume": 100,
-    "paused": false,
-    "state": {
-      "time": 1500467109,
-      "position": 60000,
-      "connected": true,
-      "ping": 50
-    },
-    "voice": {
-      "token": "...",
-      "endpoint": "...",
-      "sessionId": "..."
-    },
-    "filters": { ... }
-  },
-  ...
-]
-```
-
-</details>
-
----
-
-#### Get Player
-
-Returns the player for this guild in this session.
-
-```
-GET /v4/sessions/{sessionId}/players/{guildId}
-```
-
-Response:
-
-[Player](#Player) object
-
-<details>
-<summary>Example Payload</summary>
-
-```yaml
-{
-  "guildId": "...",
-  "track": {
-    "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-    "info": {
-      "identifier": "dQw4w9WgXcQ",
-      "isSeekable": true,
-      "author": "RickAstleyVEVO",
-      "length": 212000,
-      "isStream": false,
-      "position": 60000,
-      "title": "Rick Astley - Never Gonna Give You Up",
-      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-      "isrc": null,
-      "sourceName": "youtube"
-    }
-  },
-  "volume": 100,
-  "paused": false,
-  "state": {
-    "time": 1500467109,
-    "position": 60000,
-    "connected": true,
-    "ping": 50
-  },
-  "voice": {
-    "token": "...",
-    "endpoint": "...",
-    "sessionId": "..."
-  },
-  "filters": { ... }
-}
-```
-
-</details>
-
----
-
-#### Update Player
-
-Updates or creates the player for this guild if it doesn't already exist.
-
-```
-PATCH /v4/sessions/{sessionId}/players/{guildId}?noReplace=true
-```
-
-Query Params:
-
-| Field      | Type | Description                                                                  |
-|------------|------|------------------------------------------------------------------------------|
-| noReplace? | bool | Whether to replace the current track with the new track. Defaults to `false` |
-
-Request:
-
-| Field           | Type                               | Description                                                                                   |
-|-----------------|------------------------------------|-----------------------------------------------------------------------------------------------|
-| encodedTrack? * | ?string                            | The base64 encoded track to play. `null` stops the current track                              |
-| identifier? *   | string                             | The identifier of the track to play                                                           |
-| position?       | int                                | The track position in milliseconds                                                            |
-| endTime?        | ?int                               | The track end time in milliseconds (must be > 0). `null` resets this if it was set previously |
-| volume?         | int                                | The player volume, in percentage, from 0 to 1000                                              |
-| paused?         | bool                               | Whether the player is paused                                                                  |
-| filters?        | [Filters](#filters) object         | The new filters to apply. This will override all previously applied filters                   |                   
-| voice?          | [Voice State](#voice-state) object | Information required for connecting to Discord                                                |
-
-> **Note**
-> - \* `encodedTrack` and `identifier` are mutually exclusive.
-> - `sessionId` in the path should be the value from the [ready op](websocket.md#ready-op).
-
-When `identifier` is used, Lavalink will try to resolve the identifier as a single track. An HTTP `400` error is returned when resolving a playlist, search result, or no tracks.
-
-<details>
-<summary>Example Payload</summary>
-
-```yaml
-{
-  "encodedTrack": "...",
-  "identifier": "...",
-  "endTime": 0,
-  "volume": 100,
-  "position": 32400,
-  "paused": false,
-  "filters": { ... },
-  "voice": {
-    "token": "...",
-    "endpoint": "...",
-    "sessionId": "..."
-  }
-}
-```
-
-</details>
-
-Response:
-
-[Player](#Player) object
-
-<details>
-<summary>Example Payload</summary>
-
-```yaml
-{
-  "guildId": "...",
-  "track": {
-    "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-    "info": {
-      "identifier": "dQw4w9WgXcQ",
-      "isSeekable": true,
-      "author": "RickAstleyVEVO",
-      "length": 212000,
-      "isStream": false,
-      "position": 60000,
-      "title": "Rick Astley - Never Gonna Give You Up",
-      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-      "isrc": null,
-      "sourceName": "youtube"
-    }
-  },
-  "volume": 100,
-  "paused": false,
-  "state": {
-    "time": 1500467109,
-    "position": 60000,
-    "connected": true,
-    "ping": 50         
-  },
-  "voice": {
-    "token": "...",
-    "endpoint": "...",
-    "sessionId": "..."
-  },
-  "filters": { ... }
-}
-```
-
-</details>
-
----
 
 #### Filters
 
@@ -439,7 +489,7 @@ Any smoothing values equal to or less than 1.0 will disable the filter.
 |------------|-------|--------------------------------|
 | smoothing? | float | The smoothing factor (1.0 < x) |
 
-##### Plugin Filter
+##### Plugin Filters
 
 Plugins can add their own filters. The key is the name of the plugin, and the value is the configuration for that plugin. The configuration is plugin specific. See [Plugins](plugins.md) for more plugin information.
 
@@ -508,7 +558,219 @@ Plugins can add their own filters. The key is the name of the plugin, and the va
 
 ---
 
-#### Destroy Player
+### Get Players
+
+Returns a list of players in this specific session.
+
+```
+GET /v4/sessions/{sessionId}/players
+```
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+[
+  {
+    "guildId": "...",
+    "track": {
+      "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+      "info": {
+        "identifier": "dQw4w9WgXcQ",
+        "isSeekable": true,
+        "author": "RickAstleyVEVO",
+        "length": 212000,
+        "isStream": false,
+        "position": 60000,
+        "title": "Rick Astley - Never Gonna Give You Up",
+        "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+        "isrc": null,
+        "sourceName": "youtube"
+      },
+      "pluginInfo": {}
+    },
+    "volume": 100,
+    "paused": false,
+    "state": {
+      "time": 1500467109,
+      "position": 60000,
+      "connected": true,
+      "ping": 50
+    },
+    "voice": {
+      "token": "...",
+      "endpoint": "...",
+      "sessionId": "..."
+    },
+    "filters": { ... }
+  },
+  ...
+]
+```
+
+</details>
+
+---
+
+### Get Player
+
+Returns the player for this guild in this session.
+
+```
+GET /v4/sessions/{sessionId}/players/{guildId}
+```
+
+Response:
+
+[Player](#Player) object
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+{
+  "guildId": "...",
+  "track": {
+    "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "info": {
+      "identifier": "dQw4w9WgXcQ",
+      "isSeekable": true,
+      "author": "RickAstleyVEVO",
+      "length": 212000,
+      "isStream": false,
+      "position": 60000,
+      "title": "Rick Astley - Never Gonna Give You Up",
+      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+      "isrc": null,
+      "sourceName": "youtube"
+    }
+  },
+  "volume": 100,
+  "paused": false,
+  "state": {
+    "time": 1500467109,
+    "position": 60000,
+    "connected": true,
+    "ping": 50
+  },
+  "voice": {
+    "token": "...",
+    "endpoint": "...",
+    "sessionId": "..."
+  },
+  "filters": { ... }
+}
+```
+
+</details>
+
+---
+
+### Update Player
+
+Updates or creates the player for this guild if it doesn't already exist.
+
+```
+PATCH /v4/sessions/{sessionId}/players/{guildId}?noReplace=true
+```
+
+Query Params:
+
+| Field      | Type | Description                                                                  |
+|------------|------|------------------------------------------------------------------------------|
+| noReplace? | bool | Whether to replace the current track with the new track. Defaults to `false` |
+
+Request:
+
+| Field           | Type                               | Description                                                                                   |
+|-----------------|------------------------------------|-----------------------------------------------------------------------------------------------|
+| encodedTrack? * | ?string                            | The base64 encoded track to play. `null` stops the current track                              |
+| identifier? *   | string                             | The identifier of the track to play                                                           |
+| position?       | int                                | The track position in milliseconds                                                            |
+| endTime?        | ?int                               | The track end time in milliseconds (must be > 0). `null` resets this if it was set previously |
+| volume?         | int                                | The player volume, in percentage, from 0 to 1000                                              |
+| paused?         | bool                               | Whether the player is paused                                                                  |
+| filters?        | [Filters](#filters) object         | The new filters to apply. This will override all previously applied filters                   |                   
+| voice?          | [Voice State](#voice-state) object | Information required for connecting to Discord                                                |
+
+> **Note**
+> - \* `encodedTrack` and `identifier` are mutually exclusive.
+> - `sessionId` in the path should be the value from the [ready op](websocket.md#ready-op).
+
+When `identifier` is used, Lavalink will try to resolve the identifier as a single track. An HTTP `400` error is returned when resolving a playlist, search result, or no tracks.
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+{
+  "encodedTrack": "...",
+  "identifier": "...",
+  "endTime": 0,
+  "volume": 100,
+  "position": 32400,
+  "paused": false,
+  "filters": { ... },
+  "voice": {
+    "token": "...",
+    "endpoint": "...",
+    "sessionId": "..."
+  }
+}
+```
+
+</details>
+
+Response:
+
+[Player](#Player) object
+
+<details>
+<summary>Example Payload</summary>
+
+```yaml
+{
+  "guildId": "...",
+  "track": {
+    "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
+    "info": {
+      "identifier": "dQw4w9WgXcQ",
+      "isSeekable": true,
+      "author": "RickAstleyVEVO",
+      "length": 212000,
+      "isStream": false,
+      "position": 60000,
+      "title": "Rick Astley - Never Gonna Give You Up",
+      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+      "isrc": null,
+      "sourceName": "youtube"
+    }
+  },
+  "volume": 100,
+  "paused": false,
+  "state": {
+    "time": 1500467109,
+    "position": 60000,
+    "connected": true,
+    "ping": 50         
+  },
+  "voice": {
+    "token": "...",
+    "endpoint": "...",
+    "sessionId": "..."
+  },
+  "filters": { ... }
+}
+```
+
+</details>
+
+---
+
+### Destroy Player
 
 Destroys the player for this guild in this session.
 
@@ -522,7 +784,9 @@ Response:
 
 ---
 
-#### Update Session
+## Session API
+
+### Update Session
 
 Updates the session with the resuming state and timeout.
 
@@ -570,251 +834,7 @@ Response:
 
 ---
 
-#### Track Loading
-
-This endpoint is used to resolve audio tracks for use with the [Update Player](#update-player) endpoint.
-
-```
-GET /v4/loadtracks?identifier=dQw4w9WgXcQ
-```
-
-Response:
-
-##### Track Loading Result
-
-| Field    | Type                                | Description            |       
-|----------|-------------------------------------|------------------------|
-| loadType | [LoadResultType](#load-result-type) | The type of the result | 
-| data     | [LoadResultData](#load-result-data) | The data of the result |
-
-##### Load Result Type
-
-| Load Result Type | Description                                   |
-|------------------|-----------------------------------------------|
-| `track`          | A track has been loaded                       |
-| `playlist`       | A playlist has been loaded                    |
-| `search`         | A search result has been loaded               |
-| `empty`          | There has been no matches for your identifier |
-| `error`          | Loading has failed with an error              |
-
-##### Load Result Data
-
-###### Load Result Data - Track
-
-[Track](#track) object with the loaded track.
-
-<details>
-<summary>Example Payload</summary>
-
-```yaml
-{
-  "loadType": "track",
-  "data": {
-    "encoded": "...",
-    "info": { ... },
-    "pluginInfo": { ... }
-  }
-}
-```
-
-</details>
-
-###### Load Result Data - Playlist
-
-| Field      | Type                                  | Description                                |
-|------------|---------------------------------------|--------------------------------------------|
-| info       | [PlaylistInfo](#playlist-info) object | The info of the playlist                   |
-| pluginInfo | Object                                | Addition playlist info provided by plugins |
-| tracks     | array of [Track](#track) objects      | The tracks of the playlist                 |
-
-###### Playlist Info
-
-| Field         | Type   | Description                                                     |
-|---------------|--------|-----------------------------------------------------------------|
-| name          | string | The name of the playlist                                        |
-| selectedTrack | int    | The selected track of the playlist (-1 if no track is selected) |
-
-<details>
-<summary>Example Payload</summary>
-
-```yaml
-{
-  "loadType": "playlist",
-  "data": {
-    "info": { ... },
-    "pluginInfo": { ... },
-    "tracks": [ ... ]
-  }
-}
-```
-
-</details>
-
-###### Load Result Data - Search
-
-Array of [Track](#track) objects from the search result.
-
-<details>
-<summary>Example Payload</summary>
-
-```yaml
-{
-  "loadType": "search",
-  "data": [
-    {
-      "encoded": "...",
-      "info": { ... },
-      "pluginInfo": { ... }
-    },
-    ...
-  ]
-}
-```
-
-</details>
-
-###### Load Result Data - Empty
-
-Empty object.
-
-<details>
-<summary>Example Payload</summary>
-
-```yaml
-{
-  "loadType": "empty",
-  "data": {}
-}
-```
-
-</details>
-
-###### Load Result Data - Error
-
-[Exception](websocket.md#exception-object) object with the error.
-
-<details>
-<summary>Example Payload</summary>
-
-```yaml
-{
-  "loadType": "error",
-  "data": { 
-    "message": "Something went wrong",
-    "severity": "fault",
-    "cause": "..."
-  }
-}
-```
-
-</details>
-
----
-
-#### Track Searching
-
-Lavalink supports searching via YouTube, YouTube Music, and Soundcloud. To search, you must prefix your identifier with `ytsearch:`, `ytmsearch:` or `scsearch:` respectively.
-
-When a search prefix is used, the returned `loadType` will be `search`. Note that disabling the respective source managers renders these search prefixes useless. Plugins may also implement prefixes to allow for more search engines to be utilised.
-
----
-
-#### Track Decoding
-
-Decode a single track into its info, where `BASE64` is the encoded base64 data.
-
-```
-GET /v4/decodetrack?encodedTrack=BASE64
-```
-
-Response:
-
-[Track](#track) object
-
-<details>
-<summary>Example Payload</summary>
-
-```yaml
-{
-  "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-  "info": {
-    "identifier": "dQw4w9WgXcQ",
-    "isSeekable": true,
-    "author": "RickAstleyVEVO",
-    "length": 212000,
-    "isStream": false,
-    "position": 0,
-    "title": "Rick Astley - Never Gonna Give You Up",
-    "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-    "isrc": null,
-    "sourceName": "youtube"
-  },
-  "pluginInfo": {}
-}
-```
-
-</details>
-
----
-
-Decodes multiple tracks into their info
-
-```
-POST /v4/decodetracks
-```
-
-Request:
-
-Array of track data strings
-
-<details>
-<summary>Example Payload</summary>
-
-```yaml
-[
-  "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-  ...
-]
-```
-
-</details>
-
-Response:
-
-Array of [Track](#track) objects
-
-<details>
-<summary>Example Payload</summary>
-
-```yaml
-[
-  {
-    "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
-    "info": {
-      "identifier": "dQw4w9WgXcQ",
-      "isSeekable": true,
-      "author": "RickAstleyVEVO",
-      "length": 212000,
-      "isStream": false,
-      "position": 0,
-      "title": "Rick Astley - Never Gonna Give You Up",
-      "uri": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "artworkUrl": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-      "isrc": null,
-      "sourceName": "youtube"
-    },
-    "pluginInfo": {}
-  },
-  ...
-]
-```
-
-</details>
-
----
-
-#### Get Lavalink info
+## Get Lavalink info
 
 Request Lavalink information.
 
@@ -824,7 +844,7 @@ GET /v4/info
 
 Response:
 
-##### Info Response
+### Info Response
 
 | Field          | Type                                      | Description                                                     |
 |----------------|-------------------------------------------|-----------------------------------------------------------------|
@@ -837,7 +857,7 @@ Response:
 | filters        | array of strings                          | The enabled filters for this server                             |
 | plugins        | array of [Plugin](#plugin-object) objects | The enabled plugins for this server                             |
 
-##### Version Object
+#### Version Object
 
 Parsed [Semantic Versioning 2.0.0](https://semver.org/)
 
@@ -850,7 +870,7 @@ Parsed [Semantic Versioning 2.0.0](https://semver.org/)
 | preRelease | ?string | The pre-release version according to semver as a `.` separated list of identifiers |
 | build      | ?string | The build metadata according to semver as a `.` separated list of identifiers      |
 
-##### Git Object
+#### Git Object
 
 | Field      | Type   | Description                                                    |
 |------------|--------|----------------------------------------------------------------|
@@ -858,7 +878,7 @@ Parsed [Semantic Versioning 2.0.0](https://semver.org/)
 | commit     | string | The commit this Lavalink server was built on                   |
 | commitTime | int    | The millisecond unix timestamp for when the commit was created |
 
-##### Plugin Object
+#### Plugin Object
 
 | Field   | Type   | Description               |
 |---------|--------|---------------------------|
@@ -913,7 +933,23 @@ Parsed [Semantic Versioning 2.0.0](https://semver.org/)
 
 ---
 
-#### Get Lavalink stats
+## Get Lavalink version
+
+Request Lavalink version.
+
+```
+GET /version
+```
+
+Response:
+
+```
+4.0.0
+```
+
+---
+
+## Get Lavalink stats
 
 Request Lavalink statistics.
 
@@ -952,40 +988,14 @@ Response:
 
 ---
 
-#### Get Lavalink version
-
-Request Lavalink version.
-
-```
-GET /version
-```
-
-Response:
-
-```
-4.0.0
-```
-
----
-
-### RoutePlanner API
+## RoutePlanner API
 
 Additionally, there are a few REST endpoints for the ip rotation extension.
 
-#### Get RoutePlanner status
 
-```
-GET /v4/routeplanner/status
-```
+### Common Types ### {: #route-planner-api-types }
 
-Response:
-
-| Field   | Type                                        | Description                                                           |
-|---------|---------------------------------------------|-----------------------------------------------------------------------|
-| class   | ?[Route Planner Type](#route-planner-types) | The name of the RoutePlanner implementation being used by this server |
-| details | ?[Details](#details-object) object          | The status details of the RoutePlanner                                |
-
-##### Route Planner Types
+#### Route Planner Types
 
 | Route Planner Type           | Description                                                                                                                 |
 |------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
@@ -994,7 +1004,7 @@ Response:
 | `RotatingNanoIpRoutePlanner` | IP address used is switched on clock update, rotates to a different /64 block on ban. Use with at least 2x /64 IPv6 blocks. |
 | `BalancingIpRoutePlanner`    | IP address used is selected at random per request. Recommended for larger IP blocks.                                        |
 
-##### Details Object
+#### Details Object
 
 | Field               | Type                                                  | Description                                                                           | Valid Types                                        |
 |---------------------|-------------------------------------------------------|---------------------------------------------------------------------------------------|----------------------------------------------------|
@@ -1006,27 +1016,42 @@ Response:
 | currentAddressIndex | string                                                | The current offset in the ip block                                                    | `NanoIpRoutePlanner`, `RotatingNanoIpRoutePlanner` |
 | blockIndex          | string                                                | The information in which /64 block ips are chosen. This number increases on each ban. | `RotatingNanoIpRoutePlanner`                       |
 
-##### IP Block Object
+#### IP Block Object
 
 | Field | Type                            | Description              |
 |-------|---------------------------------|--------------------------|
 | type  | [IP Block Type](#ip-block-type) | The type of the ip block |
 | size  | string                          | The size of the ip block |
 
-##### IP Block Type
+#### IP Block Type
 
 | IP Block Type  | Description         |
 |----------------|---------------------|
 | `Inet4Address` | The ipv4 block type |
 | `Inet6Address` | The ipv6 block type |
 
-##### Failing Address Object
+#### Failing Address Object
 
 | Field            | Type   | Description                                              |
 |------------------|--------|----------------------------------------------------------|
 | failingAddress   | string | The failing address                                      |
 | failingTimestamp | int    | The timestamp when the address failed                    |
 | failingTime      | string | The timestamp when the address failed as a pretty string |
+
+---
+
+### Get RoutePlanner status
+
+```
+GET /v4/routeplanner/status
+```
+
+Response:
+
+| Field   | Type                                        | Description                                                           |
+|---------|---------------------------------------------|-----------------------------------------------------------------------|
+| class   | ?[Route Planner Type](#route-planner-types) | The name of the RoutePlanner implementation being used by this server |
+| details | ?[Details](#details-object) object          | The status details of the RoutePlanner                                |
 
 <details>
 <summary>Example Payload</summary>
@@ -1056,7 +1081,7 @@ Response:
 
 ---
 
-#### Unmark a failed address
+### Unmark a failed address
 
 ```
 POST /v4/routeplanner/free/address
@@ -1085,7 +1110,7 @@ Response:
 
 ---
 
-#### Unmark all failed address
+### Unmark all failed address
 
 ```
 POST /v4/routeplanner/free/all

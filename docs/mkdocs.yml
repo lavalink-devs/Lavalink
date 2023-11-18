@@ -17,6 +17,7 @@ nav:
   - Home: index.md
   - Getting Started:
       - getting-started/index.md
+      - Troubleshooting: getting-started/troubleshooting.md
       - FAQ: getting-started/faq.md
   - Configuration:
       - configuration/index.md
@@ -30,7 +31,11 @@ nav:
       - Websocket: api/websocket.md
       - Rest: api/rest.md
       - Plugins: api/plugins.md
-  - Changelog: changelog.md
+  - Changelog:
+      - changelog/index.md
+      - v4: changelog/v4.md
+      - v3: changelog/v3.md
+      - v2: changelog/v2.md
 
 extra_css:
   - stylesheets/style.css
