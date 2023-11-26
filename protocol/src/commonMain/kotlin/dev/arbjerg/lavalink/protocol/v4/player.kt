@@ -23,7 +23,8 @@ data class Player(
 data class Track(
     val encoded: String,
     val info: TrackInfo,
-    val pluginInfo: JsonObject
+    val pluginInfo: JsonObject,
+    val userData: JsonObject
 ) : LoadResult.Data
 
 @Serializable
@@ -65,9 +66,19 @@ data class PlayerState(
 )
 
 @Serializable
-data class PlayerUpdate(
-    val encodedTrack: Omissible<String?> = Omissible.Omitted(),
+data class PlayerUpdateTrack(
+    val encoded: Omissible<String?> = Omissible.Omitted(),
     val identifier: Omissible<String> = Omissible.Omitted(),
+    val userData: Omissible<JsonObject> = Omissible.Omitted()
+)
+
+@Serializable
+data class PlayerUpdate(
+    @Deprecated("Use PlayerUpdateTrack#encoded instead", ReplaceWith("encoded"))
+    val encodedTrack: Omissible<String?> = Omissible.Omitted(),
+    @Deprecated("Use PlayerUpdateTrack#identifier instead")
+    val identifier: Omissible<String> = Omissible.Omitted(),
+    val track: Omissible<PlayerUpdateTrack> = Omissible.Omitted(),
     val position: Omissible<Long> = Omissible.Omitted(),
     val endTime: Omissible<Long?> = Omissible.Omitted(),
     val volume: Omissible<Int> = Omissible.Omitted(),
