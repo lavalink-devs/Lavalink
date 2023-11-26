@@ -177,7 +177,7 @@ class PlayerRestHandler(
                 }
             } else {
                 val trackFuture = CompletableFuture<AudioTrack>()
-                context.audioPlayerManager.loadItem(
+                context.audioPlayerManager.loadItemSync(
                     (identifier as Omissible.Present).value,
                     object : AudioLoadResultHandler {
                         override fun trackLoaded(track: AudioTrack) {
