@@ -130,7 +130,8 @@ class MessageSerializerTest {
                   "isrc": null,
                   "sourceName": "youtube"
                 },
-                "pluginInfo": {}
+                "pluginInfo": {},
+                "userData": {}
               }
             }
         """.trimIndent()
@@ -183,7 +184,8 @@ class MessageSerializerTest {
                   "isrc": null,
                   "sourceName": "youtube"
                 },
-                "pluginInfo": {}
+                "pluginInfo": {},
+                "userData": {}
               },
               "reason": "finished"
             }
@@ -238,7 +240,8 @@ class MessageSerializerTest {
                   "isrc": null,
                   "sourceName": "youtube"
                 },
-                "pluginInfo": {}
+                "pluginInfo": {},
+                "userData": {}
               },
               "exception": {
                 "message": "...",
@@ -301,7 +304,8 @@ class MessageSerializerTest {
                   "isrc": null,
                   "sourceName": "youtube"
                 },
-                "pluginInfo": {}
+                "pluginInfo": {},
+                "userData": {}
               },
               "thresholdMs": 123456789
             }

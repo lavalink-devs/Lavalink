@@ -25,7 +25,11 @@ data class Track(
     val info: TrackInfo,
     val pluginInfo: JsonObject,
     val userData: JsonObject
-) : LoadResult.Data
+) : LoadResult.Data {
+    fun copyWithUserData(userData: JsonObject): Track {
+        return copy(userData = userData)
+    }
+}
 
 @Serializable
 @JvmInline
