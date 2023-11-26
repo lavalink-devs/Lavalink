@@ -213,9 +213,7 @@ class PlayerRestHandler(
                         }
                     })
 
-                trackFuture.exceptionally {
-                    throw it
-                }.join()
+                trackFuture.join()
             }
 
             newTrack?.let {
