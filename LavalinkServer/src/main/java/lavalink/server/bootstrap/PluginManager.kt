@@ -53,8 +53,7 @@ class PluginManager(val config: PluginsConfig) {
 
             var repository = declaration.repository
                 ?: if (declaration.snapshot) config.defaultPluginSnapshotRepository else config.defaultPluginRepository
-            repository =
-                if (declaration.repository!!.endsWith("/")) declaration.repository!! else declaration.repository!! + "/"
+            repository = if (repository.endsWith("/")) repository else "$repository/"
             Declaration(fragments[0], fragments[1], fragments[2], repository)
         }
 
