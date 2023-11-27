@@ -129,7 +129,7 @@ class PlayerSerializerTest {
     @JsName("test3")
     fun `test encodedTrack and identifier exclusivity`() {
         //language=json
-        val json = """{"track": {"encodedTrack":  "", "identifier":  ""}}"""
+        val json = """{"track": {"encoded":  "", "identifier":  ""}}"""
 
         assertFailsWith<IllegalArgumentException> { Json.decodeFromString(json) }
     }
