@@ -4,6 +4,21 @@
     --md-primary-fg-color--dark: #b25d09;
 
     --md-accent-fg-color: #c24734;
+
+    @media screen {
+        [data-md-color-scheme="slate"] {
+            --md-default-fg-color: hsla(var(--md-hue), 15%, 90%, 1);
+        }
+    }
+}
+
+.md-tabs__link {
+    opacity: 1;
+    font-weight: bold;
+}
+
+.md-tabs__item.md-tabs__item--active {
+    border-bottom: 4px solid var(--md-default-fg-color);
 }
 
 .container {
