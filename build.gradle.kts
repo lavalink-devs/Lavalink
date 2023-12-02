@@ -24,7 +24,7 @@ allprojects {
         mavenCentral() // main maven repo
         mavenLocal()   // useful for developing
         maven("https://m2.dv8tion.net/releases")
-        maven("https://maven.arbjerg.dev/releases")
+        maven("https://maven.lavalink.dev/releases")
         jcenter()
         maven("https://jitpack.io") // build projects directly from GitHub
     }
@@ -51,8 +51,8 @@ subprojects {
             configure<PublishingExtension> {
                 if (findProperty("MAVEN_PASSWORD") != null && findProperty("MAVEN_USERNAME") != null) {
                     repositories {
-                        val snapshots = "https://maven.arbjerg.dev/snapshots"
-                        val releases = "https://maven.arbjerg.dev/releases"
+                        val snapshots = "https://maven.lavalink.dev/snapshots"
+                        val releases = "https://maven.lavalink.dev/releases"
 
                         maven(if ((version as String).endsWith("-SNAPSHOT")) releases else snapshots) {
                             credentials {
@@ -62,7 +62,7 @@ subprojects {
                         }
                     }
                 } else {
-                    logger.lifecycle("Not publishing to maven.arbjerg.dev because credentials are not set")
+                    logger.lifecycle("Not publishing to maven.lavalink.dev because credentials are not set")
                 }
             }
             configure<MavenPublishBaseExtension> {
