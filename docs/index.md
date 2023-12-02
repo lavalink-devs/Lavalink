@@ -35,10 +35,10 @@ hide:
   url: api/rest.md
 - title: Statistics
   icon: ':octicons-graph-16:'
-  url: api/rest.html#get-lavalink-stats
+  url: api/rest.md#get-lavalink-stats
 - title: Basic authentication
   icon: ':material-lock:'
-  url: api/rest.html
+  url: api/rest.md
 - title: Prometheus metrics
   icon: ':simple-prometheus:'
   url: https://prometheus.io/
