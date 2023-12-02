@@ -1,10 +1,18 @@
 package dev.arbjerg.lavalink.protocol.v4
 
+import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.serializer
 import kotlin.jvm.JvmInline
 
-@Serializable()
+inline fun <reified T> JsonObject.deserialize(): T =
+    deserialize(json.serializersModule.serializer<T>())
+
+fun <T> JsonObject.deserialize(deserializer: DeserializationStrategy<T>): T =
+    json.decodeFromJsonElement(deserializer, this)
+
+@Serializable
 @JvmInline
 value class Players(val players: List<Player>)
 
@@ -26,6 +34,18 @@ data class Track(
     val pluginInfo: JsonObject,
     val userData: JsonObject
 ) : LoadResult.Data {
+
+    /**
+     * Deserialize the plugin info into a specific type.
+     * This method is a convenience method meant to be used in Java,
+     * since Kotlin extension methods are painful to use in Java.
+     *
+     * @param deserializer The deserializer to use. (e.g. `T.Companion.serializer()`)
+     *
+     * @return the deserialized plugin info as type T
+     */
+    fun <T> deserializePluginInfo(deserializer: DeserializationStrategy<T>): T = pluginInfo.deserialize(deserializer)
+    
     fun copyWithUserData(userData: JsonObject): Track {
         return copy(userData = userData)
     }
