@@ -53,11 +53,12 @@ When Lavalink encounters an error, it will respond with a JSON object containing
 
 #### Track
 
-| Field      | Type                             | Description                             |
-|------------|----------------------------------|-----------------------------------------|
-| encoded    | string                           | The base64 encoded track data           |
-| info       | [Track Info](#track-info) object | Info about the track                    |
-| pluginInfo | object                           | Addition track info provided by plugins |
+| Field      | Type                             | Description                                                                   |
+|------------|----------------------------------|-------------------------------------------------------------------------------|
+| encoded    | string                           | The base64 encoded track data                                                 |
+| info       | [Track Info](#track-info) object | Info about the track                                                          |
+| pluginInfo | object                           | Addition track info provided by plugins                                       |
+| userData   | object                           | Addition track data provided via the [Update Player](#update-player) endpoint |
 
 #### Track Info
 
@@ -136,7 +137,8 @@ Response:
   "data": {
     "encoded": "...",
     "info": { ... },
-    "pluginInfo": { ... }
+    "pluginInfo": { ... },
+    "userData": { ... }
   }
 }
 ```
@@ -181,7 +183,8 @@ Array of [Track](#track) objects from the search result.
     {
       "encoded": "...",
       "info": { ... },
-      "pluginInfo": { ... }
+      "pluginInfo": { ... },
+      "userData": { ... }
     },
     ...
   ]
@@ -259,7 +262,8 @@ Response:
     "isrc": null,
     "sourceName": "youtube"
   },
-  "pluginInfo": {}
+  "pluginInfo": { ... },
+  "userData": { ... }
 }
 ```
 
@@ -313,7 +317,8 @@ Array of [Track](#track) objects
       "isrc": null,
       "sourceName": "youtube"
     },
-    "pluginInfo": {}
+    "pluginInfo": { ... },
+    "userData": { ... }
   },
   ...
 ]
@@ -588,7 +593,8 @@ GET /v4/sessions/{sessionId}/players
         "isrc": null,
         "sourceName": "youtube"
       },
-      "pluginInfo": {}
+      "pluginInfo": { ... },
+      "userData": { ... }
     },
     "volume": 100,
     "paused": false,
@@ -676,6 +682,9 @@ Updates or creates the player for this guild if it doesn't already exist.
 PATCH /v4/sessions/{sessionId}/players/{guildId}?noReplace=true
 ```
 
+> **Note**
+> - `sessionId` in the path should be the value from the [ready op](websocket.md#ready-op).
+
 Query Params:
 
 | Field      | Type | Description                                                                  |
@@ -684,20 +693,26 @@ Query Params:
 
 Request:
 
-| Field           | Type                               | Description                                                                                   |
-|-----------------|------------------------------------|-----------------------------------------------------------------------------------------------|
-| encodedTrack? * | ?string                            | The base64 encoded track to play. `null` stops the current track                              |
-| identifier? *   | string                             | The identifier of the track to play                                                           |
-| position?       | int                                | The track position in milliseconds                                                            |
-| endTime?        | ?int                               | The track end time in milliseconds (must be > 0). `null` resets this if it was set previously |
-| volume?         | int                                | The player volume, in percentage, from 0 to 1000                                              |
-| paused?         | bool                               | Whether the player is paused                                                                  |
-| filters?        | [Filters](#filters) object         | The new filters to apply. This will override all previously applied filters                   |                   
-| voice?          | [Voice State](#voice-state) object | Information required for connecting to Discord                                                |
+| Field         | Type                                        | Description                                                                                   |
+|---------------|---------------------------------------------|-----------------------------------------------------------------------------------------------|
+| track?        | [Update Player Track](#update-player-track) | The `encoded` track, `identifier` and `userData` of the track to play                         |
+| position?     | int                                         | The track position in milliseconds                                                            |
+| endTime?      | ?int                                        | The track end time in milliseconds (must be > 0). `null` resets this if it was set previously |
+| volume?       | int                                         | The player volume, in percentage, from 0 to 1000                                              |
+| paused?       | bool                                        | Whether the player is paused                                                                  |
+| filters?      | [Filters](#filters) object                  | The new filters to apply. This will override all previously applied filters                   |                   
+| voice?        | [Voice State](#voice-state) object          | Information required for connecting to Discord                                                |
+
+#### Update Player Track
+
+| Field         | Type    | Description                                                         |
+|---------------|---------|---------------------------------------------------------------------|
+| encoded? *    | ?string | The base64 encoded track to play. `null` stops the current track    |
+| identifier? * | string  | The identifier of the track to play                                 |
+| userData?     | object  | Additional track data to be sent back in the [Track Object](#track) |
 
 > **Note**
-> - \* `encodedTrack` and `identifier` are mutually exclusive.
-> - `sessionId` in the path should be the value from the [ready op](websocket.md#ready-op).
+> - \* `encoded` and `identifier` are mutually exclusive.
 
 When `identifier` is used, Lavalink will try to resolve the identifier as a single track. An HTTP `400` error is returned when resolving a playlist, search result, or no tracks.
 
@@ -706,8 +721,11 @@ When `identifier` is used, Lavalink will try to resolve the identifier as a sing
 
 ```yaml
 {
-  "encodedTrack": "...",
-  "identifier": "...",
+  "track": {
+    "encoded": "...",
+    "identifier": "...",       
+    "userData": { ... }
+  },
   "endTime": 0,
   "volume": 100,
   "position": 32400,
