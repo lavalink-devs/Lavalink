@@ -27,7 +27,8 @@ private const val json = """
         "artworkUrl": null,
         "isrc": null
       },
-      "pluginInfo": {}
+      "pluginInfo": {},
+      "userData": {}
     },
     "volume": 100,
     "paused": false,
@@ -52,7 +53,9 @@ private const val json = """
 //language=json
 const val updateJson = """
 {
-  "identifier": "...",
+  "track": {
+    "identifier": "..."
+  },
   "endTime": 0,
   "volume": 100,
   "position": 32400,
@@ -112,8 +115,7 @@ class PlayerSerializerTest {
         val json = """{}"""
 
         test<PlayerUpdate>(json) {
-            assertIs<Omissible.Omitted<*>>(encodedTrack)
-            assertIs<Omissible.Omitted<*>>(identifier)
+            assertIs<Omissible.Omitted<*>>(track)
             assertIs<Omissible.Omitted<*>>(position)
             assertIs<Omissible.Omitted<*>>(endTime)
             assertIs<Omissible.Omitted<*>>(volume)
@@ -127,7 +129,7 @@ class PlayerSerializerTest {
     @JsName("test3")
     fun `test encodedTrack and identifier exclusivity`() {
         //language=json
-        val json = """{"encodedTrack":  "", "identifier":  ""}"""
+        val json = """{"track": {"encoded":  "", "identifier":  ""}}"""
 
         assertFailsWith<IllegalArgumentException> { Json.decodeFromString(json) }
     }
@@ -136,7 +138,9 @@ class PlayerSerializerTest {
     @JsName("test4")
     fun `test update player serialization`() {
         test<PlayerUpdate>(updateJson) {
-            identifier shouldBe "..."
+            track.requirePresent {
+                identifier shouldBe "..."
+            }
             endTime shouldBe 0
             volume shouldBe 100
             position shouldBe 32400
