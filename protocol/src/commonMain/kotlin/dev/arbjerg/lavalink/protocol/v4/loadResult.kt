@@ -135,7 +135,19 @@ data class Playlist(
     val info: PlaylistInfo,
     val pluginInfo: JsonObject,
     val tracks: List<Track>
-) : LoadResult.Data
+) : LoadResult.Data {
+
+    /**
+     * Deserialize the plugin info into a specific type.
+     * This method is a convenience method meant to be used in Java,
+     * since Kotlin extension methods are painful to use in Java.
+     *
+     * @param deserializer The deserializer to use. (e.g. `T.Companion.serializer()`)
+     *
+     * @return the deserialized plugin info as type T
+     */
+    fun <T> deserializePluginInfo(deserializer: DeserializationStrategy<T>): T = pluginInfo.deserialize(deserializer)
+}
 
 @Serializable
 data class Exception(
