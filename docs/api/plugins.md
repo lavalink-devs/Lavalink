@@ -4,8 +4,9 @@ description: Make your own plugin for Lavalink.
 
 # Make your own plugin
 
-> **Note:**  
-> If your plugin is developed in Kotlin make sure you are using **Kotlin v1.8.22**
+!!! info
+
+    If your plugin is developed in Kotlin make sure you are using **Kotlin v1.8.22**
 
 Follow [these steps](https://github.com/lavalink-devs/lavalink-plugin-template#how-to-use-this-template) to set up a new Lavalink plugin
 

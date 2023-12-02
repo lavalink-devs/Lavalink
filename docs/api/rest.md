@@ -90,7 +90,7 @@ When Lavalink encounters an error, it will respond with a JSON object containing
 This endpoint is used to resolve audio tracks for use with the [Update Player](#update-player) endpoint.
 
 
-!!! note
+!!! tip
     
     Lavalink supports searching via YouTube, YouTube Music, and Soundcloud. To search, you must prefix your identifier with `ytsearch:`, `ytmsearch:` or `scsearch:` respectively.
     
@@ -682,8 +682,9 @@ Updates or creates the player for this guild if it doesn't already exist.
 PATCH /v4/sessions/{sessionId}/players/{guildId}?noReplace=true
 ```
 
-> **Note**
-> - `sessionId` in the path should be the value from the [ready op](websocket.md#ready-op).
+!!! info
+
+    `sessionId` in the path should be the value from the [ready op](websocket.md#ready-op).
 
 Query Params:
 
@@ -693,26 +694,33 @@ Query Params:
 
 Request:
 
-| Field         | Type                                        | Description                                                                                   |
-|---------------|---------------------------------------------|-----------------------------------------------------------------------------------------------|
-| track?        | [Update Player Track](#update-player-track) | Specification for a new track to load, as well as user data to set                       |
-| position?     | int                                         | The track position in milliseconds                                                            |
-| endTime?      | ?int                                        | The track end time in milliseconds (must be > 0). `null` resets this if it was set previously |
-| volume?       | int                                         | The player volume, in percentage, from 0 to 1000                                              |
-| paused?       | bool                                        | Whether the player is paused                                                                  |
-| filters?      | [Filters](#filters) object                  | The new filters to apply. This will override all previously applied filters                   |                   
-| voice?        | [Voice State](#voice-state) object          | Information required for connecting to Discord                                                |
+| Field              | Type                                        | Description                                                                                   |
+|--------------------|---------------------------------------------|-----------------------------------------------------------------------------------------------|
+| track?             | [Update Player Track](#update-player-track) | Specification for a new track to load, as well as user data to set                            |
+| ~~encodedTrack?~~* | ?string                                     | The base64 encoded track to play. `null` stops the current track                              |
+| ~~identifier?~~*   | string                                      | The identifier of the track to play                                                           |
+| *position*?        | int                                         | The track position in milliseconds                                                            |
+| endTime?           | ?int                                        | The track end time in milliseconds (must be > 0). `null` resets this if it was set previously |
+| volume?            | int                                         | The player volume, in percentage, from 0 to 1000                                              |
+| paused?            | bool                                        | Whether the player is paused                                                                  |
+| filters?           | [Filters](#filters) object                  | The new filters to apply. This will override all previously applied filters                   |                   
+| voice?             | [Voice State](#voice-state) object          | Information required for connecting to Discord                                                |
+
+!!! info
+
+    \* `encoded` and `identifier` are mutually exclusive and `DEPRECATED`. Use `track` instead.
 
 #### Update Player Track
 
-| Field         | Type    | Description                                                         |
-|---------------|---------|---------------------------------------------------------------------|
-| encoded? *    | ?string | The base64 encoded track to play. `null` stops the current track    |
-| identifier? * | string  | The identifier of the track to play                                 |
-| userData?     | object  | Additional track data to be sent back in the [Track Object](#track) |
+| Field        | Type    | Description                                                         |
+|--------------|---------|---------------------------------------------------------------------|
+| encoded?*    | ?string | The base64 encoded track to play. `null` stops the current track    |
+| identifier?* | string  | The identifier of the track to play                                 |
+| userData?    | object  | Additional track data to be sent back in the [Track Object](#track) |
 
-> **Note**
-> - \* `encoded` and `identifier` are mutually exclusive.
+!!! info
+
+    \* `encoded` and `identifier` are mutually exclusive.
 
 When `identifier` is used, Lavalink will try to resolve the identifier as a single track. An HTTP `400` error is returned when resolving a playlist, search result, or no tracks.
 
