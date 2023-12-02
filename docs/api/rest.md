@@ -708,7 +708,7 @@ Request:
 
 !!! info
 
-    \* `encoded` and `identifier` are mutually exclusive and `DEPRECATED`. Use `track` instead.
+    \* `encodedTrack` and `identifier` are mutually exclusive and deprecated. Use `track` instead.
 
 #### Update Player Track
 
