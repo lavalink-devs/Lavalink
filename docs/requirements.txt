@@ -1,0 +1,9 @@
+mkdocs
+mkdocs-material
+mkdocs-material-extensions
+mkdocs-git-revision-date-localized-plugin
+pillow
+cairosvg
+neoteroi-mkdocs
+mkdocs-same-dir
+mkdocs-markdownextradata-plugin

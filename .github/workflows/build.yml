@@ -3,7 +3,11 @@ name: Build
 on:
   push:
     branches: [ '**' ]
-    paths-ignore: [ '**.md' ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.github/workflows/docs.yml'
+      - '.github/workflows/docs-pr.yml'
   workflow_call:
     secrets:
       DOCKER_USERNAME:

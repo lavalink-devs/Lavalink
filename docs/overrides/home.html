@@ -1,0 +1,32 @@
+{% extends "main.html" %}
+{% block tabs %}
+{{ super() }}
+
+<main class="md-main" data-md-component="main">
+    <div class="md-main_inner md-grid">
+        <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+                <section class="container">
+                    <div class="md-grid md-typeset">
+                        <div class="logo">
+                            <img alt="Lavalink Logo" draggable="false" id="home__logo" src="assets/images/lavalink.svg">
+                            <h1 id="home__title">Lavalink</h1>
+                            <p class="description">
+                                Standalone audio sending node based on Lavaplayer.
+                            </p>
+                            <p>
+                        </div>
+                    </div>
+                </section>
+                {{ page.content }}
+            </article>
+        </div>
+    </div>
+</main>
+{% endblock %}
+{% block content %}
+{% endblock %}
+{% block footer %}
+{{ super() }}
+{% endblock %}
+
