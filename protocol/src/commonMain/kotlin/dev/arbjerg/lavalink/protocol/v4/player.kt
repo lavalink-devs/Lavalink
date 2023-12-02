@@ -45,7 +45,25 @@ data class Track(
      * @return the deserialized plugin info as type T
      */
     fun <T> deserializePluginInfo(deserializer: DeserializationStrategy<T>): T = pluginInfo.deserialize(deserializer)
-    
+
+    /**
+     * Deserialize the user data into a specific type.
+     * This method is a convenience method meant to be used in Java,
+     * since Kotlin extension methods are painful to use in Java.
+     *
+     * @param deserializer The deserializer to use. (e.g. `T.Companion.serializer()`)
+     *
+     * @return the deserialized user data as type T
+     */
+    fun <T> deserializeUserData(deserializer: DeserializationStrategy<T>): T = userData.deserialize(deserializer)
+
+    /**
+     * Copy this track with a new user data json.
+     *
+     * @param userData The new user data json.
+     *
+     * @return A copy of this track with the new user data json.
+     */
     fun copyWithUserData(userData: JsonObject): Track {
         return copy(userData = userData)
     }
