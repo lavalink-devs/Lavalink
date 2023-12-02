@@ -57,8 +57,8 @@ When Lavalink encounters an error, it will respond with a JSON object containing
 |------------|----------------------------------|-------------------------------------------------------------------------------|
 | encoded    | string                           | The base64 encoded track data                                                 |
 | info       | [Track Info](#track-info) object | Info about the track                                                          |
-| pluginInfo | object                           | Addition track info provided by plugins                                       |
-| userData   | object                           | Addition track data provided via the [Update Player](#update-player) endpoint |
+| pluginInfo | object                           | Additional track info provided by plugins                                       |
+| userData   | object                           | Additional track data provided via the [Update Player](#update-player) endpoint |
 
 #### Track Info
 
@@ -695,7 +695,7 @@ Request:
 
 | Field         | Type                                        | Description                                                                                   |
 |---------------|---------------------------------------------|-----------------------------------------------------------------------------------------------|
-| track?        | [Update Player Track](#update-player-track) | The `encoded` track, `identifier` and `userData` of the track to play                         |
+| track?        | [Update Player Track](#update-player-track) | Specification for a new track to load, as well as user data to set                       |
 | position?     | int                                         | The track position in milliseconds                                                            |
 | endTime?      | ?int                                        | The track end time in milliseconds (must be > 0). `null` resets this if it was set previously |
 | volume?       | int                                         | The player volume, in percentage, from 0 to 1000                                              |
