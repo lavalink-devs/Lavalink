@@ -25,7 +25,7 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 * Fixed null pointer when a playlist has no selected track
 
 > [!WARNING]
-> Lavalink previously set the `-Xmx` flag to `4G` in docker. This caused issues with some systems which had less than 4GB of RAM. We have now removed this flag and let the JVM decide the max heap allocation.
+> Lavalink previously set the `-Xmx` flag to `4G` in docker. This caused issues with some systems which had less than 4GB of RAM. We have now removed this flag and let the JVM decide the max heap allocation. The default is 1GB or 25% of total memory, whichever is lower.
 > On how to increase the max heap allocation, see [here](https://lavalink.dev/configuration/docker.html#docker).
 
 <details>
