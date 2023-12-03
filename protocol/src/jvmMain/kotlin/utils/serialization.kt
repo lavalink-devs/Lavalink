@@ -1,11 +1,14 @@
 @file:JvmName("Serialization")
 package dev.arbjerg.lavalink.protocol.v4.utils
 
+import dev.arbjerg.lavalink.protocol.v4.LavalinkSerializersModule
 import dev.arbjerg.lavalink.protocol.v4.json
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.serializer
+import java.lang.reflect.Type
 import kotlin.jvm.JvmName
 
 /**
