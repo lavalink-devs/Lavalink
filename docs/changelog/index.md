@@ -21,6 +21,8 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 * addition of the full [Track](#track) object in [TrackStartEvent](#trackstartevent), [TrackEndEvent](#trackendevent), [TrackExceptionEvent](#trackexceptionevent) and [TrackStuckEvent](#trackstuckevent).
 * updated capitalization of [Track End Reason](#track-end-reason) and [Severity](#severity)
 * reworked [Load Result](#track-loading-result) object
+* allow setting user data on tracks in the REST API. For more info see [here](https://lavalink.dev/api/rest.html#update-player-track)
+
 
 All websocket ops are removed as of `v4.0.0` and replaced with the following endpoints and json fields:
 
