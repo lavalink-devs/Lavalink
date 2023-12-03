@@ -28,7 +28,7 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 > Lavalink previously set the `-Xmx` flag to `4G` in docker. This caused issues with some systems which had less than 4GB of RAM. We have now removed this flag and let the JVM decide the max heap allocation.
 > On how to increase the max heap allocation, see [here](https://lavalink.dev/configuration/docker.html#docker).
 
-<details>
+<details markdown="1">
 <summary>v4.0.0 - Betas</summary>
 
 ## 4.0.0-beta.5
