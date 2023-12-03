@@ -11,7 +11,7 @@ A [basic example bot](Testbot) is available.
 
 [![Lavalink Guild](https://discordapp.com/api/guilds/1082302532421943407/embed.png?style=banner2)](https://discord.gg/ZW4s47Ppw4)
 
-> [!Warning]
+> [!NOTE]
 > Lavalink v4 is now **out** of beta! See [the changelog](CHANGELOG.md) for more information.
 
 ## Getting started
