@@ -29,7 +29,8 @@ class LoadResultSerializerTest {
                     "isrc": null,
                     "sourceName": "youtube"
                   },
-                  "pluginInfo": {}
+                  "pluginInfo": {},
+                  "userData": {}
               },
               "exception": null
             }

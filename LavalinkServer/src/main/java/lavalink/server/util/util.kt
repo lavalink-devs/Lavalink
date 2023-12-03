@@ -54,7 +54,7 @@ fun AudioTrack.toTrack(encoded: String, pluginInfoModifiers: List<AudioPluginInf
         acc + jsonObject
     }
 
-    return Track(encoded, this.toInfo(), pluginInfo)
+    return Track(encoded, this.toInfo(), pluginInfo, this.userData as? JsonObject ?: JsonObject(emptyMap()))
 }
 
 private operator fun JsonObject.plus(other: JsonObject) = JsonObject(toMap() + other.toMap())

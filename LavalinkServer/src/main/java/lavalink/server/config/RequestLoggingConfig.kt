@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @ConfigurationProperties(prefix = "logging.request")
-@ConditionalOnProperty("logging.request.enabled")
+@ConditionalOnProperty("logging.request.enabled", matchIfMissing = true)
 data class RequestLoggingConfig(
-    var includeClientInfo: Boolean = true,
+    var includeClientInfo: Boolean = false,
     var includeHeaders: Boolean = false,
     var includeQueryString: Boolean = true,
     var includePayload: Boolean = true,

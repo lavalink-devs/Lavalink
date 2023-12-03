@@ -1,4 +1,4 @@
-FROM eclipse-temurin:18-jre-focal
+FROM eclipse-temurin:18-jre-jammy
 
 # Run as non-root user
 RUN groupadd -g 322 lavalink && \
@@ -12,4 +12,4 @@ USER lavalink
 
 COPY LavalinkServer/build/libs/Lavalink.jar Lavalink.jar
 
-ENTRYPOINT ["java", "-Djdk.tls.client.protocols=TLSv1.1,TLSv1.2", "-Xmx4G", "-jar", "Lavalink.jar"]
+ENTRYPOINT ["java", "-Djdk.tls.client.protocols=TLSv1.1,TLSv1.2", "-jar", "Lavalink.jar"]

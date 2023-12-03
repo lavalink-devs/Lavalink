@@ -1,0 +1,130 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+
+site_name: Lavalink Docs
+site_description: Lavalink Documentation
+site_author: Lavalink Contributors
+site_url: https://lavalink.dev
+site_dir: ../site
+docs_dir: .
+
+repo_name: Lavalink
+repo_url: https://github.com/lavalink-devs/Lavalink
+edit_uri: edit/master/docs/
+
+copyright: Licensed under the MIT license
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - getting-started/index.md
+      - Troubleshooting: getting-started/troubleshooting.md
+      - FAQ: getting-started/faq.md
+  - Configuration:
+      - configuration/index.md
+      - Binary: configuration/binary.md
+      - Systemd: configuration/systemd.md
+      - Docker: configuration/docker.md
+  - Clients: clients.md
+  - Plugins: plugins.md
+  - API:
+      - api/index.md
+      - Websocket: api/websocket.md
+      - Rest: api/rest.md
+      - Plugins: api/plugins.md
+  - Changelog:
+      - changelog/index.md
+      - v4: changelog/v4.md
+      - v3: changelog/v3.md
+      - v2: changelog/v2.md
+
+extra_css:
+  - stylesheets/style.css
+  - stylesheets/neoteroi-cards.css
+
+extra:
+  homepage: /
+  discord: https://discord.gg/BTHvsc7WsT
+  discord_help: https://discord.gg/ZW4s47Ppw4
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/lavalink-devs
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/BTHvsc7WsT
+
+theme:
+  name: material
+  custom_dir: overrides
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.top
+    - navigation.tabs.sticky
+    - navigation.footer
+    - navigation.path
+    - navigation.indexes
+    - toc.follow
+    - content.code.annotate
+    - announce.dismiss
+  font:
+    text: Roboto
+    code: Roboto Mono
+  favicon: assets/favicon.png
+  logo: assets/logo.svg
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - admonition
+  - meta
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - footnotes
+  - def_list
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.snippets:
+      check_paths: true
+      base_path: ../
+  - neoteroi.cards
+
+plugins:
+  - offline
+  - search:
+      lang: en
+  - same-dir
+  - social:
+      cards_layout_options:
+        background_color: "#ff624a"
+        color: "#FFFFFF"
+  - git-revision-date-localized
+  - markdownextradata

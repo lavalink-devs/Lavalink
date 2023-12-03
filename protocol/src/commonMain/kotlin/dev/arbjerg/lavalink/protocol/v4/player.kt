@@ -1,10 +1,18 @@
 package dev.arbjerg.lavalink.protocol.v4
 
+import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.serializer
 import kotlin.jvm.JvmInline
 
-@Serializable()
+inline fun <reified T> JsonObject.deserialize(): T =
+    deserialize(json.serializersModule.serializer<T>())
+
+fun <T> JsonObject.deserialize(deserializer: DeserializationStrategy<T>): T =
+    json.decodeFromJsonElement(deserializer, this)
+
+@Serializable
 @JvmInline
 value class Players(val players: List<Player>)
 
@@ -23,8 +31,43 @@ data class Player(
 data class Track(
     val encoded: String,
     val info: TrackInfo,
-    val pluginInfo: JsonObject
-) : LoadResult.Data
+    val pluginInfo: JsonObject,
+    val userData: JsonObject
+) : LoadResult.Data {
+
+    /**
+     * Deserialize the plugin info into a specific type.
+     * This method is a convenience method meant to be used in Java,
+     * since Kotlin extension methods are painful to use in Java.
+     *
+     * @param deserializer The deserializer to use. (e.g. `T.Companion.serializer()`)
+     *
+     * @return the deserialized plugin info as type T
+     */
+    fun <T> deserializePluginInfo(deserializer: DeserializationStrategy<T>): T = pluginInfo.deserialize(deserializer)
+
+    /**
+     * Deserialize the user data into a specific type.
+     * This method is a convenience method meant to be used in Java,
+     * since Kotlin extension methods are painful to use in Java.
+     *
+     * @param deserializer The deserializer to use. (e.g. `T.Companion.serializer()`)
+     *
+     * @return the deserialized user data as type T
+     */
+    fun <T> deserializeUserData(deserializer: DeserializationStrategy<T>): T = userData.deserialize(deserializer)
+
+    /**
+     * Copy this track with a new user data json.
+     *
+     * @param userData The new user data json.
+     *
+     * @return A copy of this track with the new user data json.
+     */
+    fun copyWithUserData(userData: JsonObject): Track {
+        return copy(userData = userData)
+    }
+}
 
 @Serializable
 @JvmInline
@@ -65,9 +108,19 @@ data class PlayerState(
 )
 
 @Serializable
-data class PlayerUpdate(
-    val encodedTrack: Omissible<String?> = Omissible.Omitted(),
+data class PlayerUpdateTrack(
+    val encoded: Omissible<String?> = Omissible.Omitted(),
     val identifier: Omissible<String> = Omissible.Omitted(),
+    val userData: Omissible<JsonObject> = Omissible.Omitted()
+)
+
+@Serializable
+data class PlayerUpdate(
+    @Deprecated("Use PlayerUpdateTrack#encoded instead", ReplaceWith("encoded"))
+    val encodedTrack: Omissible<String?> = Omissible.Omitted(),
+    @Deprecated("Use PlayerUpdateTrack#identifier instead")
+    val identifier: Omissible<String> = Omissible.Omitted(),
+    val track: Omissible<PlayerUpdateTrack> = Omissible.Omitted(),
     val position: Omissible<Long> = Omissible.Omitted(),
     val endTime: Omissible<Long?> = Omissible.Omitted(),
     val volume: Omissible<Int> = Omissible.Omitted(),
