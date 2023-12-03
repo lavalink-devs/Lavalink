@@ -73,7 +73,7 @@ class OmissableSerializer<T>(private val childSerializer: KSerializer<T>) : KSer
 }
 
 @OptIn(ExperimentalContracts::class)
-fun <T : Any> Omissible<T>.isPresent(): Boolean {
+fun <T : Any?> Omissible<T>.isPresent(): Boolean {
     contract {
         returns(true) implies (this@isPresent is Omissible.Present<T>)
     }
@@ -81,7 +81,7 @@ fun <T : Any> Omissible<T>.isPresent(): Boolean {
 }
 
 @OptIn(ExperimentalContracts::class)
-fun <T : Any> Omissible<T>.isOmitted(): Boolean {
+fun <T : Any?> Omissible<T>.isOmitted(): Boolean {
     contract {
         returns(true) implies (this@isOmitted is Omissible.Omitted<T>)
     }
