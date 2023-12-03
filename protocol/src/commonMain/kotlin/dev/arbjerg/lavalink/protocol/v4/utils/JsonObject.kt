@@ -36,6 +36,10 @@ class JavaJsonObjectBuilder(private val contents: MutableMap<String, JsonElement
      */
     fun put(key: String, value: Number) = apply { contents[key] = JsonPrimitive(value) }
     /**
+     * Puts [key] to [value].
+     */
+    fun put(key: String, value: Boolean) = apply { contents[key] = JsonPrimitive(value) }
+    /**
      * Puts [key] to `null`.`
      */
     fun putNull(key: String) = apply { contents[key] = JsonNull }
@@ -64,6 +68,10 @@ class ChildJavaJsonObjectBuilder(
      * Puts [key] to [value].
      */
     fun put(key: String, value: Number) = apply { contents[key] = JsonPrimitive(value) }
+    /**
+     * Puts [key] to [value].
+     */
+    fun put(key: String, value: Boolean) = apply { contents[key] = JsonPrimitive(value) }
     /**
      * Puts [key] to `null`.
      */

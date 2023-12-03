@@ -14,9 +14,14 @@ fun jsonNull() = JsonNull
 /**
  * Returns the [JsonPrimitive] representing [string].
  */
-fun fromString(string: String) = JsonPrimitive(string)
+fun from(string: String) = JsonPrimitive(string)
 
 /**
  * Returns the [JsonPrimitive] representing [number].
  */
-fun fromNumber(number: Number) = JsonPrimitive(number)
+fun from(number: Number) = JsonPrimitive(number)
+
+/**
+ * Returns the [JsonPrimitive] representing [boolean].
+ */
+fun from(boolean: Boolean) = JsonPrimitive(boolean)

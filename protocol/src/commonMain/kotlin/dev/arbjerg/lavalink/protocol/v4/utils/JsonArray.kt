@@ -34,6 +34,11 @@ class JavaJsonArrayBuilder internal constructor(private val contents: MutableLis
      * Adds [value].
      */
     fun add(value: Number) = apply { contents.add(JsonPrimitive(value)) }
+
+    /**
+     * Adds [value].
+     */
+    fun add(value: Boolean) = apply { contents.add(JsonPrimitive(value)) }
     /**
      * Adds `null`.
      */
@@ -60,6 +65,10 @@ class ChildJavaJsonArrayBuilder(
      * Adds [value].
      */
     fun add(value: Number) = apply { contents.add(JsonPrimitive(value)) }
+    /**
+     * Adds [value].
+     */
+    fun add(value: Boolean) = apply { contents.add(JsonPrimitive(value)) }
     /**
      * Adds `null`.
      */

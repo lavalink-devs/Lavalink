@@ -10,6 +10,11 @@ public class JsonPrimitiveTest {
     }
 
     @Test
+    public void testBoolean() {
+        Assertions.assertEquals("true", JsonPrimitives.from(true).toString());
+    }
+
+    @Test
     public void testNumber() {
         testNumber(Byte.MAX_VALUE);
         testNumber(Short.MAX_VALUE);
@@ -21,10 +26,10 @@ public class JsonPrimitiveTest {
 
     @Test
     public void testString() {
-        Assertions.assertEquals("\"test123\"", JsonPrimitives.fromString("test123").toString());
+        Assertions.assertEquals("\"test123\"", JsonPrimitives.from("test123").toString());
     }
 
     private void testNumber(Number number) {
-        Assertions.assertEquals(String.valueOf(number), JsonPrimitives.fromNumber(number).toString());
+        Assertions.assertEquals(String.valueOf(number), JsonPrimitives.from(number).toString());
     }
 }
