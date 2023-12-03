@@ -3,6 +3,19 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 4.0.0
+* Fix NPE when omitting plugin repository
+* Allow setting user data on tracks in the REST API. For more info see [here](https://lavalink.dev/api/rest.html#update-player-track)
+* Update to Koe [`2.0.0-rc2`](https://github.com/KyokoBot/koe/releases/tag/2.0.0-rc2)
+* Update lavaplayer to [`2.0.4`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.0.4)
+* Enable request logging by default
+* Update docker ubuntu base image from focal(`20`) to jammy(`22`)
+* Remove default 4GB max heap allocation from docker image
+
+> [!WARNING]
+> Lavalink previously set the `-Xmx` flag to `4G` in docker. This caused issues with some systems which had less than 4GB of RAM. We have now removed this flag and let the JVM decide the max heap allocation.
+> On how to increase the max heap allocation, see [here](https://lavalink.dev/configuration/docker.html#docker).
+
 ## 4.0.0-beta.5
 * Update lavaplayer to [`2.0.3`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.0.2) - Fixed YouTube access token errors
 * Added default plugin repository. Plugin devs can now request their plugin to be added to the default repository. For more info see [here](https://github.com/lavalink-devs/Lavalink/blob/master/PLUGINS.md#distributing-your-plugin)
@@ -38,6 +51,14 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 
 Contributors:
 [@topi314](https://github.com/topi314), [@freyacodes](https://github.com/freyacodes), [@DRSchlaubi](https://github.com/DRSchlaubi) and [@melike2d](https://github.com/melike2d)
+
+## v3.7.10
+* Update lavaplayer to [`1.5.2`](https://github.com/lavalink-devs/lavaplayer/releases/tag/1.5.2) - Fixed NPE on missing author in playlist tracks in YouTube
+
+## 3.7.9
+* Update lavaplayer to [`1.5.1`](https://github.com/lavalink-devs/lavaplayer/releases/tag/1.5.1) - Fixed YouTube access token errors
+* Fixed websocket crash when seeking and nothing is playing
+* Fixed error when seeking and player is not playing anything
 
 ## 3.7.8
 * Fix YouTube 403 errors
