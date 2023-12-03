@@ -16,6 +16,7 @@ group = "dev.arbjerg.lavalink"
 
 kotlin {
     jvm {
+        withJava()
         compilations.all {
             kotlinOptions {
                 jvmTarget = "17"
