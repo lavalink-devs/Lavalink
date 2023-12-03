@@ -24,8 +24,8 @@ publishing {
     if (findProperty("MAVEN_USERNAME") != null && findProperty("MAVEN_PASSWORD") != null) {
         println("Publishing to Maven Repo")
         repositories {
-            def snapshots = "https://maven.arbjerg.dev/snapshots"
-            def releases = "https://maven.arbjerg.dev/releases"
+            def snapshots = "https://maven.lavalink.dev/snapshots"
+            def releases = "https://maven.lavalink.dev/releases"
 
             maven {
                 url = version.endsWith("SNAPSHOT") ? snapshots : releases
