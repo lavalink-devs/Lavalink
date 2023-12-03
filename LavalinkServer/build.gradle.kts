@@ -54,7 +54,9 @@ dependencies {
     implementation(libs.koe.udpqueue) {
         exclude(module="udp-queue")
     }
-    implementation(libs.bundles.udpqueue.natives)
+    implementation(libs.bundles.udpqueue.natives) {
+        exclude(group = "com.sedmelluq", module = "lava-common")
+    }
 
     implementation(libs.lavaplayer)
     implementation(libs.lavaplayer.ip.rotator)
