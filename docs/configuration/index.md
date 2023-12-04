@@ -8,7 +8,7 @@ The server configuration is done in `application.yml`. You can find an example b
 
 ## Example application.yml
 
-<details>
+<details markdown="1">
 <summary>application.yml</summary>
 
 ```yaml title="application.yml"
@@ -22,7 +22,7 @@ For arrays, the index is appended to the key, starting at 0. For example, `LAVAL
 
 ## Example environment variables
 
-<details>
+<details markdown="1">
 <summary>environment variables</summary>
 
 ```env title="enviroment variables"
