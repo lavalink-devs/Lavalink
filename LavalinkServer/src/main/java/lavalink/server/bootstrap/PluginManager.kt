@@ -10,14 +10,15 @@ import java.io.InputStream
 import java.net.URL
 import java.net.URLClassLoader
 import java.nio.channels.Channels
-import java.nio.file.Files
 import java.util.*
 import java.util.jar.JarFile
-import java.util.regex.Pattern
-
 
 @SpringBootApplication
 class PluginManager(val config: PluginsConfig) {
+
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(PluginManager::class.java)
+    }
 
     final val pluginManifests: MutableList<PluginManifest> = mutableListOf()
     var classLoader: ClassLoader = PluginManager::class.java.classLoader
@@ -35,14 +36,11 @@ class PluginManager(val config: PluginsConfig) {
         val directory = File(config.pluginsDir)
         directory.mkdir()
 
-        data class PluginJar(val name: String, val version: String, val file: File)
+        data class PluginJar(val manifest: PluginManifest, val file: File)
 
-        val pattern = Pattern.compile("(.+)-(.+)\\.jar$")
-        val pluginJars = directory.listFiles()!!.mapNotNull { f ->
-            val matcher = pattern.matcher(f.name)
-            if (!matcher.find()) return@mapNotNull null
-            PluginJar(matcher.group(1), matcher.group(2), f)
-        }
+        val pluginJars = directory.listFiles()!!.filter { it.extension == "jar" }.map {
+            loadPluginManifests(JarFile(it)).map { manifest -> PluginJar(manifest, it) }
+        }.flatten()
 
         data class Declaration(val group: String, val name: String, val version: String, val repository: String)
 
@@ -55,21 +53,22 @@ class PluginManager(val config: PluginsConfig) {
                 ?: if (declaration.snapshot) config.defaultPluginSnapshotRepository else config.defaultPluginRepository
             repository = if (repository.endsWith("/")) repository else "$repository/"
             Declaration(fragments[0], fragments[1], fragments[2], repository)
-        }
+        }.distinctBy { "${it.group}:${it.name}" }
 
         declarations.forEach declarationLoop@{ declaration ->
-            pluginJars.forEach { jar ->
-                if (declaration.name == jar.name) {
-                    if (declaration.version == jar.version) {
-                        // We already have this jar so don't redownload it
-                        return@declarationLoop
-                    }
-
-                    // Delete jar of different versions
-                    if (!jar.file.delete()) throw RuntimeException("Failed to delete ${jar.file.path}")
-                    log.info("Deleted ${jar.file.path}")
+            var hasVersion = false
+            pluginJars.forEach pluginLoop@{ jar ->
+                if (declaration.version == jar.manifest.version && !hasVersion) {
+                    hasVersion = true
+                    // We already have this jar so don't redownload it
+                    return@pluginLoop
                 }
+
+                // Delete jar of different versions
+                if (!jar.file.delete()) throw RuntimeException("Failed to delete ${jar.file.path}")
+                log.info("Deleted ${jar.file.path}")
             }
+            if (hasVersion) return@declarationLoop
 
             val url = declaration.run { "$repository${group.replace(".", "/")}/$name/$version/$name-$version.jar" }
             val file = File(directory, declaration.run { "$name-$version.jar" })
@@ -87,7 +86,11 @@ class PluginManager(val config: PluginsConfig) {
     private fun readClasspathManifests(): List<PluginManifest> {
         return PathMatchingResourcePatternResolver()
             .getResources("classpath*:lavalink-plugins/*.properties")
-            .map { r -> parsePluginManifest(r.inputStream) }
+            .map map@{ r ->
+                val manifest = parsePluginManifest(r.inputStream)
+                log.info("Found plugin '${manifest.name}' version ${manifest.version}")
+                return@map manifest
+            }
     }
 
     private fun loadJars(): List<PluginManifest> {
@@ -95,8 +98,7 @@ class PluginManager(val config: PluginsConfig) {
         if (!directory.isDirectory) return emptyList()
         val jarsToLoad = mutableListOf<File>()
 
-        Files.list(File(config.pluginsDir).toPath()).forEach { path ->
-            val file = path.toFile()
+        directory.listFiles()?.forEach { file ->
             if (!file.isFile) return@forEach
             if (file.extension != "jar") return@forEach
             jarsToLoad.add(file)
@@ -124,18 +126,11 @@ class PluginManager(val config: PluginsConfig) {
         return manifests
     }
 
-    private fun loadJar(file: File, cl: URLClassLoader): MutableList<PluginManifest> {
+    private fun loadJar(file: File, cl: URLClassLoader): List<PluginManifest> {
         var classCount = 0
         val jar = JarFile(file)
-        val manifests = mutableListOf<PluginManifest>()
 
-        jar.entries().asIterator().forEach { entry ->
-            if (entry.isDirectory) return@forEach
-            if (!entry.name.startsWith("lavalink-plugins/")) return@forEach
-            if (!entry.name.endsWith(".properties")) return@forEach
-            manifests.add(parsePluginManifest(jar.getInputStream(entry)))
-        }
-
+        val manifests = loadPluginManifests(jar)
         if (manifests.isEmpty()) {
             throw RuntimeException("No plugin manifest found in ${file.path}")
         }
@@ -152,6 +147,21 @@ class PluginManager(val config: PluginsConfig) {
         return manifests
     }
 
+    private fun loadPluginManifests(jar: JarFile): List<PluginManifest> {
+        val manifests = mutableListOf<PluginManifest>()
+
+        jar.entries().asIterator().forEach { entry ->
+            if (entry.isDirectory) return@forEach
+            if (!entry.name.startsWith("lavalink-plugins/")) return@forEach
+            if (!entry.name.endsWith(".properties")) return@forEach
+
+            val manifest = parsePluginManifest(jar.getInputStream(entry))
+            log.info("Found plugin '${manifest.name}' version ${manifest.version}")
+            manifests.add(manifest)
+        }
+        return manifests
+    }
+
     private fun parsePluginManifest(stream: InputStream): PluginManifest {
         val props = stream.use {
             Properties().apply { load(it) }
@@ -160,11 +170,6 @@ class PluginManager(val config: PluginsConfig) {
         val name = props.getProperty("name") ?: throw RuntimeException("Manifest is missing 'name'")
         val path = props.getProperty("path") ?: throw RuntimeException("Manifest is missing 'path'")
         val version = props.getProperty("version") ?: throw RuntimeException("Manifest is missing 'version'")
-        log.info("Found plugin '$name' version $version")
         return PluginManifest(name, path, version)
-    }
-
-    companion object {
-        private val log: Logger = LoggerFactory.getLogger(PluginManager::class.java)
     }
 }
