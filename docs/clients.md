@@ -9,6 +9,7 @@ description: A list of Lavalink client libraries.
 | [Lavalink-Client](https://github.com/lavalink-devs/Lavalink-Client) | Java/Kotlin/JVM | JDA/Discord4J/**Any**                      | Uses reactor                   |
 | [Lavalink.kt](https://github.com/DRSchlaubi/Lavalink.kt)            | Kotlin          | Kord/JDA/**Any**                           | Kotlin Coroutines              |
 | [DisGoLink](https://github.com/disgoorg/disgolink)                  | Go              | **Any**                                    |                                |
+| [lavalink.py](https://github.com/devoxin/lavalink.py)               | Python          | **Any**                                    |                                |
 | [Mafic](https://github.com/ooliver1/mafic)                          | Python          | discord.py **V2**/nextcord/disnake/py-cord |                                |
 | [Wavelink](https://github.com/PythonistaGuild/Wavelink)             | Python          | discord.py **V2**                          |                                |
 | [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)            | Node.js         | **Any**                                    |                                |
