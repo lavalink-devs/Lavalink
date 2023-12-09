@@ -361,19 +361,19 @@ with the Voice Server Update. Please refer to https://discord.com/developers/doc
 
 Filters are used in above requests and look like this
 
-| Field          | Type                                           | Description                                                                                  |
-|----------------|------------------------------------------------|----------------------------------------------------------------------------------------------|
-| volume?        | float                                          | Adjusts the player volume from 0.0 to 5.0, where 1.0 is 100%. Values >1.0 may cause clipping |
-| equalizer?     | array of [Equalizer](#equalizer) objects       | Adjusts 15 different bands                                                                   |
-| karaoke?       | [Karaoke](#karaoke) object                     | Eliminates part of a band, usually targeting vocals                                          |
-| timescale?     | [Timescale](#timescale) object                 | Changes the speed, pitch, and rate                                                           |
-| tremolo?       | [Tremolo](#tremolo) object                     | Creates a shuddering effect, where the volume quickly oscillates                             |
-| vibrato?       | [Vibrato](#vibrato) object                     | Creates a shuddering effect, where the pitch quickly oscillates                              |
-| rotation?      | [Rotation](#rotation) object                   | Rotates the audio around the stereo channels/user headphones (aka Audio Panning)             |
-| distortion?    | [Distortion](#distortion) object               | Distorts the audio                                                                           |
-| channelMix?    | [Channel Mix](#channel-mix) object             | Mixes both channels (left and right)                                                         |
-| lowPass?       | [Low Pass](#low-pass) object                   | Filters higher frequencies                                                                   |
-| pluginFilters? | map of [Plugin Filter](#plugin-filter) objects | Filter plugin configurations                                                                 |
+| Field          | Type                                             | Description                                                                                  |
+|----------------|--------------------------------------------------|----------------------------------------------------------------------------------------------|
+| volume?        | float                                            | Adjusts the player volume from 0.0 to 5.0, where 1.0 is 100%. Values >1.0 may cause clipping |
+| equalizer?     | array of [Equalizer](#equalizer) objects         | Adjusts 15 different bands                                                                   |
+| karaoke?       | [Karaoke](#karaoke) object                       | Eliminates part of a band, usually targeting vocals                                          |
+| timescale?     | [Timescale](#timescale) object                   | Changes the speed, pitch, and rate                                                           |
+| tremolo?       | [Tremolo](#tremolo) object                       | Creates a shuddering effect, where the volume quickly oscillates                             |
+| vibrato?       | [Vibrato](#vibrato) object                       | Creates a shuddering effect, where the pitch quickly oscillates                              |
+| rotation?      | [Rotation](#rotation) object                     | Rotates the audio around the stereo channels/user headphones (aka Audio Panning)             |
+| distortion?    | [Distortion](#distortion) object                 | Distorts the audio                                                                           |
+| channelMix?    | [Channel Mix](#channel-mix) object               | Mixes both channels (left and right)                                                         |
+| lowPass?       | [Low Pass](#low-pass) object                     | Filters higher frequencies                                                                   |
+| pluginFilters? | map of [Plugin Filters](#plugin-filters) objects | Filter plugin configurations                                                                 |
 
 ##### Equalizer
 

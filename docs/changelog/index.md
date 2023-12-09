@@ -26,7 +26,7 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 
 All websocket ops are removed as of `v4.0.0` and replaced with the following endpoints and json fields:
 
-* `play` -> [Update Player Endpoint](#update-player) `encodedTrack` or `identifier` field
+* `play` -> [Update Player Endpoint](#update-player) `track`->`encoded` or `track`->`identifier` field
 * `stop` -> [Update Player Endpoint](#update-player) `encodedTrack` field with `null`
 * `pause` -> [Update Player Endpoint](#update-player) `pause` field
 * `seek` -> [Update Player Endpoint](#update-player) `position` field
