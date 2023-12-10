@@ -76,7 +76,7 @@ fun VersionCatalogBuilder.common() {
 
     library("logback",        "ch.qos.logback",       "logback-classic").version("1.4.7")
     library("sentry-logback", "io.sentry",            "sentry-logback").version("6.22.0")
-    library("oshi",           "com.github.oshi",      "oshi-core").version("6.4.3")
+    library("oshi",           "com.github.oshi",      "oshi-core").version("6.4.8")
 }
 
 fun VersionCatalogBuilder.other() {
