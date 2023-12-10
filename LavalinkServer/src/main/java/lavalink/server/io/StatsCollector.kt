@@ -50,6 +50,11 @@ class StatsCollector(val socketServer: SocketServer) {
         get() {
             val p = os.getProcess(os.processId)
 
+            if (p == null) {
+                log.warn("Could not get process stats, process null")
+                return 0.0
+            }
+
             val output: Double = if (cpuTime != 0.0) {
                 val uptimeDiff = p.upTime - uptime
                 val cpuDiff = p.kernelTime + p.userTime - cpuTime
