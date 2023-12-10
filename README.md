@@ -2,7 +2,7 @@
 
 <img align="right" src="/branding/lavalink.svg" width=200 alt="Lavalink logo">
 
-A standalone audio sending node based on [Lavaplayer](https://github.com/sedmelluq/lavaplayer) and [Koe](https://github.com/KyokoBot/koe).
+A standalone audio sending node based on [Lavaplayer](https://github.com/lavalink-devs/lavaplayer) and [Koe](https://github.com/KyokoBot/koe).
 Allows for sending audio without it ever reaching any of your shards.
 
 Being used in production by FredBoat, Dyno, LewdBot, and more.
@@ -236,7 +236,7 @@ LOGGING_LOGBACK_ROLLINGPOLICY_MAX_HISTORY
 
 
 ### Binary
-Download binaries from the [Download Server](https://repo.arbjerg.dev/artifacts/lavalink/), [GitHub releases](https://github.com/lavalink-devs/Lavalink/releases) (specific versions prior to `v3.5` can be found in the [CI Server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1)) or [GitHub actions](https://github.com/lavalink-devs/Lavalink/actions).
+Download binaries from the [Download Server](https://repo.lavalink.dev/artifacts/lavalink/), [GitHub releases](https://github.com/lavalink-devs/Lavalink/releases) (specific versions prior to `v3.5` can be found in the [CI Server](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1)) or [GitHub actions](https://github.com/lavalink-devs/Lavalink/actions).
 
 Put an `application.yml` file in your working directory. ([Example here](LavalinkServer/application.yml.example))
 
