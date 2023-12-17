@@ -24,6 +24,7 @@ nav:
       - Binary: configuration/binary.md
       - Systemd: configuration/systemd.md
       - Docker: configuration/docker.md
+      - RoutePlanner: configuration/routeplanner.md
   - Clients: clients.md
   - Plugins: plugins.md
   - API:

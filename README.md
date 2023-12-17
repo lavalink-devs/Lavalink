@@ -43,7 +43,7 @@ A [basic example bot](Testbot) is available.
 * Basic authentication
 * Prometheus metrics
 * Docker images
-* [Plugin support](PLUGINS.md)
+* [Plugin support](https://lavalink.dev/plugins.html)
 
 ## Requirements
 

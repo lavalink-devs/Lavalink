@@ -1,4 +1,6 @@
-# RoutePlanner Strategies
+---
+description: Lavalink RoutePlanner Strategies
+---
 
 ## Terminology
 
