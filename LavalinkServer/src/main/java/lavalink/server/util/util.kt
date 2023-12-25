@@ -122,7 +122,7 @@ fun getRootCause(throwable: Throwable?): Throwable {
 }
 
 fun socketContext(socketServer: SocketServer, sessionId: String) =
-    socketServer.contextMap[sessionId] ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Session not found")
+    socketServer.sessions[sessionId] ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Session not found")
 
 fun existingPlayer(socketContext: SocketContext, guildId: Long) =
     socketContext.players[guildId] ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found")
