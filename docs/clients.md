@@ -23,6 +23,8 @@ description: A list of Lavalink client libraries.
 | [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)        | .NET            | Discord.Net/DSharpPlus/Remora              | v4+                            |
 | [Coglink](https://github.com/PerformanC/Coglink)                    | C               | Concord                                    |                                |
 | [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)             | Rust, Python    | **Any**                                    | `tokio`-based, `asyncio`-based |
+| [lavalink](https://github.com/nyxx-discord/nyxx_lavalink)           | Dart            | **Any**                                    |                                |
+| [nyxx_lavalink](https://github.com/nyxx-discord/nyxx_lavalink)      | Dart            | nyxx                                       |                                |
 
 <details markdown="1">
 <summary>v3.7 supporting Client Libraries</summary>
