@@ -127,7 +127,7 @@ class WebSocketHandler(
 
     private fun seek(json: JSONObject) {
         val player = context.getPlayer(json.getLong("guildId"))
-        if (!player.isPlaying) {
+        if (player.track == null) {
             log.warn("Can't seek when player is not playing anything")
             return
         }
