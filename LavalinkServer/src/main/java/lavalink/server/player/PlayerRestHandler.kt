@@ -150,7 +150,7 @@ class PlayerRestHandler(
         // we handle position differently for playing new tracks
         playerUpdate.position.takeIfPresent { encodedTrack is Omissible.Omitted && identifier is Omissible.Omitted }
             ?.let {
-                if (player.isPlaying) {
+                if (player.track != null) {
                     player.seekTo(it)
                     SocketServer.sendPlayerUpdate(context, player)
                 }
