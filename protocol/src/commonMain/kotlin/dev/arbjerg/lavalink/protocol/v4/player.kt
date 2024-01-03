@@ -31,8 +31,8 @@ data class Player(
 data class Track(
     val encoded: String,
     val info: TrackInfo,
-    val pluginInfo: JsonObject,
-    val userData: JsonObject
+    val pluginInfo: JsonObject = JsonObject(emptyMap()),
+    val userData: JsonObject = JsonObject(emptyMap())
 ) : LoadResult.Data {
 
     /**

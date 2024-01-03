@@ -133,7 +133,7 @@ data class PlaylistInfo(
 @Serializable
 data class Playlist(
     val info: PlaylistInfo,
-    val pluginInfo: JsonObject,
+    val pluginInfo: JsonObject = JsonObject(emptyMap()),
     val tracks: List<Track>
 ) : LoadResult.Data {
 
