@@ -39,7 +39,9 @@ class PluginManager(val config: PluginsConfig) {
         data class PluginJar(val manifest: PluginManifest, val file: File)
 
         val pluginJars = directory.listFiles()!!.filter { it.extension == "jar" }.map {
-            loadPluginManifests(JarFile(it)).map { manifest -> PluginJar(manifest, it) }
+            JarFile(it).use {jar ->
+                loadPluginManifests(jar).map { manifest -> PluginJar(manifest, it) }
+            }
         }.flatten()
 
         data class Declaration(val group: String, val name: String, val version: String, val repository: String)
@@ -113,7 +115,6 @@ class PluginManager(val config: PluginsConfig) {
         classLoader = cl
 
         val manifests = mutableListOf<PluginManifest>()
-
         jarsToLoad.forEach { file ->
             try {
                 manifests.addAll(loadJar(file, cl))
@@ -129,20 +130,24 @@ class PluginManager(val config: PluginsConfig) {
     private fun loadJar(file: File, cl: URLClassLoader): List<PluginManifest> {
         var classCount = 0
         val jar = JarFile(file)
+        var manifests:  List<PluginManifest>
 
-        val manifests = loadPluginManifests(jar)
-        if (manifests.isEmpty()) {
-            throw RuntimeException("No plugin manifest found in ${file.path}")
-        }
-        val allowedPaths = manifests.map { it.path.replace(".", "/") }
+        jar.use {
+            manifests = loadPluginManifests(jar)
+            if (manifests.isEmpty()) {
+                throw RuntimeException("No plugin manifest found in ${file.path}")
+            }
+            val allowedPaths = manifests.map { it.path.replace(".", "/") }
 
-        jar.entries().asIterator().forEach { entry ->
-            if (entry.isDirectory) return@forEach
-            if (!entry.name.endsWith(".class")) return@forEach
-            if (!allowedPaths.any { entry.name.startsWith(it) }) return@forEach
-            cl.loadClass(entry.name.dropLast(6).replace("/", "."))
-            classCount++
+            jar.entries().asIterator().forEach { entry ->
+                if (entry.isDirectory) return@forEach
+                if (!entry.name.endsWith(".class")) return@forEach
+                if (!allowedPaths.any { entry.name.startsWith(it) }) return@forEach
+                cl.loadClass(entry.name.dropLast(6).replace("/", "."))
+                classCount++
+            }
         }
+
         log.info("Loaded ${file.name} ($classCount classes)")
         return manifests
     }
