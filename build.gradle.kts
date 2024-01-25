@@ -54,7 +54,7 @@ subprojects {
                         val snapshots = "https://maven.lavalink.dev/snapshots"
                         val releases = "https://maven.lavalink.dev/releases"
 
-                        maven(if ((version as String).endsWith("-SNAPSHOT")) releases else snapshots) {
+                        maven(if ((version as String).endsWith("-SNAPSHOT")) snapshots else releases) {
                             credentials {
                                 password = findProperty("MAVEN_PASSWORD") as String?
                                 username = findProperty("MAVEN_USERNAME") as String?
