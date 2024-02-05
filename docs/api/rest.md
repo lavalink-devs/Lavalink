@@ -30,7 +30,7 @@ When Lavalink encounters an error, it will respond with a JSON object containing
 | message   | string | The error message                                                           |
 | path      | string | The request path                                                            |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
@@ -128,7 +128,7 @@ Response:
 
 [Track](#track) object with the loaded track.
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```yaml
@@ -153,7 +153,7 @@ Response:
 | pluginInfo | Object                                | Addition playlist info provided by plugins |
 | tracks     | array of [Track](#track) objects      | The tracks of the playlist                 |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```yaml
@@ -173,7 +173,7 @@ Response:
 
 Array of [Track](#track) objects from the search result.
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```yaml
@@ -197,7 +197,7 @@ Array of [Track](#track) objects from the search result.
 
 Empty object.
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```yaml
@@ -213,7 +213,7 @@ Empty object.
 
 [Exception](websocket.md#exception-object) object with the error.
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```yaml
@@ -243,7 +243,7 @@ Response:
 
 [Track](#track) object
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```yaml
@@ -281,7 +281,7 @@ Request:
 
 Array of track data strings
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```yaml
@@ -297,7 +297,7 @@ Response:
 
 Array of [Track](#track) objects
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```yaml
@@ -361,19 +361,19 @@ with the Voice Server Update. Please refer to https://discord.com/developers/doc
 
 Filters are used in above requests and look like this
 
-| Field          | Type                                           | Description                                                                                  |
-|----------------|------------------------------------------------|----------------------------------------------------------------------------------------------|
-| volume?        | float                                          | Adjusts the player volume from 0.0 to 5.0, where 1.0 is 100%. Values >1.0 may cause clipping |
-| equalizer?     | array of [Equalizer](#equalizer) objects       | Adjusts 15 different bands                                                                   |
-| karaoke?       | [Karaoke](#karaoke) object                     | Eliminates part of a band, usually targeting vocals                                          |
-| timescale?     | [Timescale](#timescale) object                 | Changes the speed, pitch, and rate                                                           |
-| tremolo?       | [Tremolo](#tremolo) object                     | Creates a shuddering effect, where the volume quickly oscillates                             |
-| vibrato?       | [Vibrato](#vibrato) object                     | Creates a shuddering effect, where the pitch quickly oscillates                              |
-| rotation?      | [Rotation](#rotation) object                   | Rotates the audio around the stereo channels/user headphones (aka Audio Panning)             |
-| distortion?    | [Distortion](#distortion) object               | Distorts the audio                                                                           |
-| channelMix?    | [Channel Mix](#channel-mix) object             | Mixes both channels (left and right)                                                         |
-| lowPass?       | [Low Pass](#low-pass) object                   | Filters higher frequencies                                                                   |
-| pluginFilters? | map of [Plugin Filter](#plugin-filter) objects | Filter plugin configurations                                                                 |
+| Field          | Type                                             | Description                                                                                  |
+|----------------|--------------------------------------------------|----------------------------------------------------------------------------------------------|
+| volume?        | float                                            | Adjusts the player volume from 0.0 to 5.0, where 1.0 is 100%. Values >1.0 may cause clipping |
+| equalizer?     | array of [Equalizer](#equalizer) objects         | Adjusts 15 different bands                                                                   |
+| karaoke?       | [Karaoke](#karaoke) object                       | Eliminates part of a band, usually targeting vocals                                          |
+| timescale?     | [Timescale](#timescale) object                   | Changes the speed, pitch, and rate                                                           |
+| tremolo?       | [Tremolo](#tremolo) object                       | Creates a shuddering effect, where the volume quickly oscillates                             |
+| vibrato?       | [Vibrato](#vibrato) object                       | Creates a shuddering effect, where the pitch quickly oscillates                              |
+| rotation?      | [Rotation](#rotation) object                     | Rotates the audio around the stereo channels/user headphones (aka Audio Panning)             |
+| distortion?    | [Distortion](#distortion) object                 | Distorts the audio                                                                           |
+| channelMix?    | [Channel Mix](#channel-mix) object               | Mixes both channels (left and right)                                                         |
+| lowPass?       | [Low Pass](#low-pass) object                     | Filters higher frequencies                                                                   |
+| pluginFilters? | map of [Plugin Filters](#plugin-filters) objects | Filter plugin configurations                                                                 |
 
 ##### Equalizer
 
@@ -381,7 +381,7 @@ There are 15 bands (0-14) that can be changed.
 "gain" is the multiplier for the given band. The default value is 0. Valid values range from -0.25 to 1.0,
 where -0.25 means the given band is completely muted, and 0.25 means it is doubled. Modifying the gain could also change the volume of the output.
 
-<details>
+<details markdown="1">
 <summary>Band Frequencies</summary>
 
 | Band | Frequency |
@@ -498,7 +498,7 @@ Any smoothing values equal to or less than 1.0 will disable the filter.
 
 Plugins can add their own filters. The key is the name of the plugin, and the value is the configuration for that plugin. The configuration is plugin specific. See [Plugins](plugins.md) for more plugin information.
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
@@ -571,7 +571,7 @@ Returns a list of players in this specific session.
 GET /v4/sessions/{sessionId}/players
 ```
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```yaml
@@ -631,7 +631,7 @@ Response:
 
 [Player](#Player) object
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```yaml
@@ -724,7 +724,7 @@ Request:
 
 When `identifier` is used, Lavalink will try to resolve the identifier as a single track. An HTTP `400` error is returned when resolving a playlist, search result, or no tracks.
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```yaml
@@ -753,7 +753,7 @@ Response:
 
 [Player](#Player) object
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```yaml
@@ -827,7 +827,7 @@ Request:
 | resuming? | bool | Whether resuming is enabled for this session or not |
 | timeout?  | int  | The timeout in seconds (default is 60s)             |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
@@ -846,7 +846,7 @@ Response:
 | resuming | bool | Whether resuming is enabled for this session or not |
 | timeout  | int  | The timeout in seconds (default is 60s)             |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
@@ -911,7 +911,7 @@ Parsed [Semantic Versioning 2.0.0](https://semver.org/)
 | name    | string | The name of the plugin    |
 | version | string | The version of the plugin |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
@@ -988,7 +988,7 @@ Response:
 `frameStats` is always missing for this endpoint.
 [Stats](websocket.md#stats-object) object
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
@@ -1079,7 +1079,7 @@ Response:
 | class   | ?[Route Planner Type](#route-planner-types) | The name of the RoutePlanner implementation being used by this server |
 | details | ?[Details](#details-object) object          | The status details of the RoutePlanner                                |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
@@ -1119,7 +1119,7 @@ Request:
 |---------|--------|-----------------------------------------------------------------------------|
 | address | string | The address to unmark as failed. This address must be in the same ip block. |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json

@@ -20,5 +20,7 @@ for instructions.
 | [DuncteBot plugin](https://github.com/DuncteBot/skybot-lavalink-plugin)   | Additional source managers that are not widely used                                                    |
 | [Extra Filter plugin](https://github.com/rohank05/lavalink-filter-plugin) | Additional audio filters for lavalink                                                                  |
 | [XM plugin](https://github.com/esmBot/lava-xm-plugin)                     | Support for various [music tracker module](https://en.wikipedia.org/wiki/Module_file) formats          |
+| [Lyrics.kt plugin](https://github.com/DRSchlaubi/lyrics.kt)               | Plugin that fetches timestamped lyrics from YouTube                                                    |
+| [Java Timed Lyrics](https://github.com/DuncteBot/java-timed-lyrics)       | Timestamped lyrics from YouTube with Genius fallback, supports IP-rotation                             |
 
 If you want to make your own plugin see [here](api/plugins.md)

@@ -19,7 +19,7 @@ When opening a websocket connection, you must supply 3 required headers:
 
 **\*For more information on resuming see [Resuming](index.md#resuming)**
 
-<details>
+<details markdown="1">
 <summary>Example Headers</summary>
 
 ```
@@ -37,7 +37,7 @@ Websocket messages all follow the following standard format:
 | op    | [OP Type](#op-types) | The op type                           |
 | ...   | ...                  | Extra fields depending on the op type |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```yaml
@@ -67,7 +67,7 @@ Dispatched by Lavalink upon successful connection and authorization. Contains fi
 | resumed   | bool   | Whether this session was resumed                                                               |
 | sessionId | string | The Lavalink session id of this connection. Not to be confused with a Discord voice session id |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
@@ -100,7 +100,7 @@ Dispatched every x seconds (configurable in `application.yml`) with the current 
 | connected | bool | Whether Lavalink is connected to the voice gateway                                       |
 | ping      | int  | The ping of the node to the Discord voice server in milliseconds (`-1` if not connected) |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
@@ -162,7 +162,7 @@ A collection of statistics sent every minute.
 
 \* The expected amount of frames is 3000 (1 every 20 ms) per player. If the `deficit` is negative, too many frames were sent, and if it's positive, not enough frames got sent.
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
@@ -204,7 +204,7 @@ Server dispatched an event. See the [Event Types](#event-types) section for more
 | guildId | string                    | The guild id                        |
 | ...     | ...                       | Extra fields depending on the event |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```yaml
@@ -236,7 +236,7 @@ Dispatched when a track starts playing.
 |-------|-------------------------------|--------------------------------|
 | track | [Track](rest.md#track) object | The track that started playing |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
@@ -287,7 +287,7 @@ Dispatched when a track ends.
 | `replaced`   | The track was replaced     | false          |
 | `cleanup`    | The track was cleaned up   | false          |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
@@ -345,7 +345,7 @@ Dispatched when a track throws an exception.
 | `suspicious` | The cause might not be exactly known, but is possibly caused by outside factors. For example when an outside service responds in a format that we do not expect                                                                |
 | `fault`      | The probable cause is an issue with the library or there is no way to tell what the cause might be. This is the default level and other levels are used in cases where the thrower has more in-depth knowledge about the error |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
@@ -391,7 +391,7 @@ Dispatched when a track gets stuck while playing.
 | track       | [Track](rest.md#track) object | The track that got stuck                        |
 | thresholdMs | int                           | The threshold in milliseconds that was exceeded |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
@@ -437,7 +437,7 @@ See the [Discord Docs](https://discord.com/developers/docs/topics/opcodes-and-st
 | reason   | string | The close reason                                                                                                                  |
 | byRemote | bool   | Whether the connection was closed by Discord                                                                                      |
 
-<details>
+<details markdown="1">
 <summary>Example Payload</summary>
 
 ```json
