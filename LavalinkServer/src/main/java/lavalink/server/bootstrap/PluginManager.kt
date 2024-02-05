@@ -39,8 +39,11 @@ class PluginManager(val config: PluginsConfig) {
         data class PluginJar(val manifest: PluginManifest, val file: File)
 
         val pluginJars = directory.listFiles()!!.filter { it.extension == "jar" }.map {
-            JarFile(it).use {jar ->
-                loadPluginManifests(jar).map { manifest -> PluginJar(manifest, it) }
+            JarFile(it).use { jar ->
+                loadPluginManifests(jar).map { manifest ->
+                    log.info("Found plugin '${manifest.name}' version ${manifest.version}")
+                    PluginJar(manifest, it)
+                }
             }
         }.flatten()
 
@@ -59,17 +62,18 @@ class PluginManager(val config: PluginsConfig) {
 
         declarations.forEach declarationLoop@{ declaration ->
             var hasVersion = false
-            pluginJars.forEach pluginLoop@{ jar ->
-                if (declaration.version == jar.manifest.version && !hasVersion) {
-                    hasVersion = true
-                    // We already have this jar so don't redownload it
-                    return@pluginLoop
-                }
+            pluginJars.filter { jar -> declaration.name == jar.manifest.name }
+                .forEach pluginLoop@{ jar ->
+                    if (declaration.version == jar.manifest.version && !hasVersion) {
+                        hasVersion = true
+                        // We already have this jar so don't redownload it
+                        return@pluginLoop
+                    }
 
-                // Delete jar of different versions
-                if (!jar.file.delete()) throw RuntimeException("Failed to delete ${jar.file.path}")
-                log.info("Deleted ${jar.file.path}")
-            }
+                    // Delete jar of different versions
+                    if (!jar.file.delete()) throw RuntimeException("Failed to delete ${jar.file.path}")
+                    log.info("Deleted ${jar.file.path}")
+                }
             if (hasVersion) return@declarationLoop
 
             val url = declaration.run { "$repository${group.replace(".", "/")}/$name/$version/$name-$version.jar" }
@@ -130,7 +134,7 @@ class PluginManager(val config: PluginsConfig) {
     private fun loadJar(file: File, cl: URLClassLoader): List<PluginManifest> {
         var classCount = 0
         val jar = JarFile(file)
-        var manifests:  List<PluginManifest>
+        var manifests: List<PluginManifest>
 
         jar.use {
             manifests = loadPluginManifests(jar)
@@ -160,9 +164,7 @@ class PluginManager(val config: PluginsConfig) {
             if (!entry.name.startsWith("lavalink-plugins/")) return@forEach
             if (!entry.name.endsWith(".properties")) return@forEach
 
-            val manifest = parsePluginManifest(jar.getInputStream(entry))
-            log.info("Found plugin '${manifest.name}' version ${manifest.version}")
-            manifests.add(manifest)
+            manifests.add(parsePluginManifest(jar.getInputStream(entry)))
         }
         return manifests
     }
