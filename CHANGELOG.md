@@ -3,6 +3,14 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## 4.0.1
+* Updated Lavaplayer to 2.10
+* Updated OSHI to 6.4.8
+* Fix/user data missing field exception in protocol
+* Fix plugin manager not deleting old plugin version
+* Fix not being able to seek when player is paused
+* Removed illegal reflection notice
+
 ## 4.0.0
 * Lavalink now requires Java 17 or higher to run
 * **Removal of all websocket messages sent by the client. Everything is now done via [REST](../api/rest.md)**
