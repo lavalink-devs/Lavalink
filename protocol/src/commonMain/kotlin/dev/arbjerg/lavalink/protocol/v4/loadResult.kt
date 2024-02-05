@@ -3,10 +3,7 @@
 package dev.arbjerg.lavalink.protocol.v4
 
 import dev.arbjerg.lavalink.protocol.v4.serialization.asPolymorphicDeserializer
-import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
@@ -133,6 +130,7 @@ data class PlaylistInfo(
 @Serializable
 data class Playlist(
     val info: PlaylistInfo,
+    @EncodeDefault
     val pluginInfo: JsonObject = JsonObject(emptyMap()),
     val tracks: List<Track>
 ) : LoadResult.Data {
