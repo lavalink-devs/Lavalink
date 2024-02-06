@@ -143,7 +143,7 @@ object Launcher {
             .properties(properties)
             .web(WebApplicationType.SERVLET)
             .bannerMode(Banner.Mode.OFF)
-            .resourceLoader(DefaultResourceLoader(pluginManager::class.java.classLoader))
+            .resourceLoader(DefaultResourceLoader(pluginManager.classLoader))
             .listeners(
                 ApplicationListener { event: Any ->
                     when (event) {

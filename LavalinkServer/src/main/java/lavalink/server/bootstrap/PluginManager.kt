@@ -21,8 +21,11 @@ class PluginManager(val config: PluginsConfig) {
 
     final val pluginManifests: MutableList<PluginManifest> = mutableListOf()
 
+    var classLoader = javaClass.classLoader
+
     init {
         manageDownloads()
+
         pluginManifests.apply {
             addAll(readClasspathManifests())
             addAll(loadJars())
@@ -104,12 +107,12 @@ class PluginManager(val config: PluginsConfig) {
             ?.takeIf { it.isNotEmpty() }
             ?: return emptyList()
 
-        val classLoader = URLClassLoader.newInstance(
+        classLoader = URLClassLoader.newInstance(
             jarsToLoad.map { URL("jar:file:${it.absolutePath}!/") }.toTypedArray(),
             javaClass.classLoader
         )
 
-        return jarsToLoad.flatMap { loadJar(it, classLoader) }
+        return jarsToLoad.flatMap { loadJar(it, classLoader as URLClassLoader) }
     }
 
     private fun loadJar(file: File, cl: URLClassLoader): List<PluginManifest> {
