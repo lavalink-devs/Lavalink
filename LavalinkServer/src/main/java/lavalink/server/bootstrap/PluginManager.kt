@@ -69,7 +69,8 @@ class PluginManager(val config: PluginsConfig) {
 
                 // Delete versions of the plugin that aren't the same as declared version.
                 if (!jar.file.delete()) throw RuntimeException("Failed to delete ${jar.file.path}")
-                log.info("Deleted ${jar.file.path} (old version: ${jar.manifest.version})")
+                log.info("Deleted ${jar.file.path} (new version: ${declaration.version})")
+")
             }
 
             if (!hasCurrentVersion) {
