@@ -3,9 +3,14 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v4.0.2
+* Fixed issue where all plugins get deleted when already present (introduced in [`v4.0.1`](https://github.com/lavalink-devs/Lavalink/releases/tag/4.0.1))
+* Always include plugin info & user data when serializing (introduced in [`v4.0.1`](https://github.com/lavalink-devs/Lavalink/releases/tag/4.0.1))
+* Updated oshi to `6.4.11`
+
 ## 4.0.1
-* Updated Lavaplayer to 2.10
-* Updated OSHI to 6.4.8
+* Updated Lavaplayer to `2.1.0`
+* Updated oshi to `6.4.8`
 * Fix/user data missing field exception in protocol
 * Fix plugin manager not deleting old plugin version
 * Fix not being able to seek when player is paused
@@ -13,7 +18,7 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 
 ## 4.0.0
 * Lavalink now requires Java 17 or higher to run
-* **Removal of all websocket messages sent by the client. Everything is now done via [REST](../api/rest.md)**
+* **Removal of all websocket messages sent by the client. Everything is now done via [REST](https://lavalink.dev/api/rest.html)**
 * Remove default 4GB max heap allocation from docker image
 * Removal of all `/v3` endpoints except `/version`. All other endpoints are now under `/v4`
 * Reworked track loading result. For more info see [here](https://lavalink.dev/api/rest.md#track-loading-result)
@@ -59,17 +64,17 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 
 ## 4.0.0-beta.1
 * New Lavalink now requires Java 17 or higher to run
-* **Removal of all websocket messages sent by the client. Everything is now done via [REST](IMPLEMENTATION.md#rest-api)**
+* **Removal of all websocket messages sent by the client. Everything is now done via [REST](https://lavalink.dev/api/rest.html)**
 * Update to [Lavaplayer custom branch](https://github.com/Walkyst/lavaplayer-fork/tree/custom), which includes native support for artwork urls and ISRCs in the track info
 * Addition of full `Track` objects in following events: `TrackStartEvent`, `TrackEndEvent`, `TrackExceptionEvent`, `TrackStuckEvent`
 * Resuming a session now requires the `Session-Id` header instead of `Resume-Key` header
-* Reworked track loading result. For more info see [here](IMPLEMENTATION.md#track-loading-result)
+* Reworked track loading result. For more info see [here](https://lavalink.dev/api/rest.html#track-loading-result)
 * Update to the [Protocol Module](protocol) to support Kotlin/JS
 * Removal of all `/v3` endpoints except `/version`. All other endpoints are now under `/v4`
 
 > **Warning**
 > This is a beta release, and as such, may contain bugs. Please report any bugs you find to the [issue tracker](https://github.com/lavalink-devs/Lavalink/issues/new/choose).
-> For more info on the changes in this release, see [here](IMPLEMENTATION.md#significant-changes-v370---v400)
+> For more info on the changes in this release, see [here](https://lavalink.dev/changelog/index.html#significant-changes)
 > If you have any question regarding the changes in this release, please ask in the [support server](https://discord.gg/ZW4s47Ppw4) or [GitHub discussions](https://github.com/lavalink-devs/Lavalink/discussions/categories/q-a)
 
 Contributors:
