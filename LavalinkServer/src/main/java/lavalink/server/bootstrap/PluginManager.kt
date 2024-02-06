@@ -41,6 +41,7 @@ class PluginManager(val config: PluginsConfig) {
                     loadPluginManifests(jar).map { manifest -> PluginJar(manifest, file) }
                 }
             }
+            ?.onEach { log.info("Found plugin '${it.manifest.name}' version ${it.manifest.version}") }
             ?: return
 
         val declarations = config.plugins.map { declaration ->
@@ -57,19 +58,17 @@ class PluginManager(val config: PluginsConfig) {
 
         for (declaration in declarations) {
             val jars = pluginJars.filter { it.manifest.name == declaration.name }
-            var hasCurrentVersion = false
+            val hasCurrentVersion = jars.any { it.manifest.version == declaration.version }
 
             for (jar in jars) {
                 if (jar.manifest.version == declaration.version) {
-                    hasCurrentVersion = true
-                    // Short-circuit to avoid cleaning up the jar for the current version.
-                    // The loop continues, to clean up any other possibly-unwanted jars.
+                    // Don't clean up the jar if it's a current version.
                     continue
                 }
 
                 // Delete versions of the plugin that aren't the same as declared version.
                 if (!jar.file.delete()) throw RuntimeException("Failed to delete ${jar.file.path}")
-                log.info("Cleaned up ${jar.file.path}")
+                log.info("Deleted ${jar.file.path} (old version: ${jar.manifest.version})")
             }
 
             if (!hasCurrentVersion) {
