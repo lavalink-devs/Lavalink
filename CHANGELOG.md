@@ -3,6 +3,11 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v4.0.3
+* Fixed plugins not registering (introduced in [`4.0.2`](https://github.com/lavalink-devs/Lavalink/releases/tag/4.0.2))
+* Fixed some issues where plugins would be redownloaded everytime lavalink started (introduced in [`4.0.1`](https://github.com/lavalink-devs/Lavalink/releases/tag/4.0.1))
+
+
 ## v4.0.2
 * Fixed issue where all plugins get deleted when already present (introduced in [`v4.0.1`](https://github.com/lavalink-devs/Lavalink/releases/tag/4.0.1))
 * Always include plugin info & user data when serializing (introduced in [`v4.0.1`](https://github.com/lavalink-devs/Lavalink/releases/tag/4.0.1))
