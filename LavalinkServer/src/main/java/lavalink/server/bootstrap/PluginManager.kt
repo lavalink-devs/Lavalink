@@ -60,7 +60,9 @@ class PluginManager(val config: PluginsConfig) {
         }.distinctBy { "${it.group}:${it.name}" }
 
         for (declaration in declarations) {
-            val jars = pluginJars.filter { it.manifest.name == declaration.name }
+            val jars = pluginJars.filter { it.manifest.name == declaration.name }.takeIf { it.isNotEmpty() }
+                ?: pluginJars.filter { matchName(it, declaration.name) }
+
             var hasCurrentVersion = false
 
             for (jar in jars) {
@@ -112,10 +114,10 @@ class PluginManager(val config: PluginsConfig) {
             javaClass.classLoader
         )
 
-        return jarsToLoad.flatMap { loadJar(it, classLoader as URLClassLoader) }
+        return jarsToLoad.flatMap { loadJar(it, classLoader) }
     }
 
-    private fun loadJar(file: File, cl: URLClassLoader): List<PluginManifest> {
+    private fun loadJar(file: File, cl: ClassLoader): List<PluginManifest> {
         val jar = JarFile(file)
         val manifests = loadPluginManifests(jar)
         var classCount = 0
@@ -157,6 +159,18 @@ class PluginManager(val config: PluginsConfig) {
         val path = props.getProperty("path") ?: throw RuntimeException("Manifest is missing 'path'")
         val version = props.getProperty("version") ?: throw RuntimeException("Manifest is missing 'version'")
         return PluginManifest(name, path, version)
+    }
+
+    private fun matchName(jar: PluginJar, name: String): Boolean {
+        // removeSuffix removes names ending with "-v", such as -v1.0.0
+        // and then the subsequent removeSuffix call removes trailing "-", which
+        // usually precedes a version number, such as my-plugin-1.0.0.
+        // We strip these to produce the name of the jar's file.
+        val jarName = jar.file.nameWithoutExtension.takeWhile { !it.isDigit() }
+            .removeSuffix("-v")
+            .removeSuffix("-")
+
+        return name == jarName
     }
 
     private data class PluginJar(val manifest: PluginManifest, val file: File)
