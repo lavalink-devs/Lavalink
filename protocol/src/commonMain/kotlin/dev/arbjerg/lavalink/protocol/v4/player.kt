@@ -1,9 +1,8 @@
 package dev.arbjerg.lavalink.protocol.v4
 
-import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
+import kotlinx.serialization.json.JsonNames
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.serializer
 import kotlin.jvm.JvmInline
 
 inline fun <reified T> JsonObject.deserialize(): T =
@@ -31,7 +30,9 @@ data class Player(
 data class Track(
     val encoded: String,
     val info: TrackInfo,
+    @EncodeDefault
     val pluginInfo: JsonObject = JsonObject(emptyMap()),
+    @EncodeDefault
     val userData: JsonObject = JsonObject(emptyMap())
 ) : LoadResult.Data {
 
