@@ -58,10 +58,11 @@ class PluginManager(val config: PluginsConfig) {
 
         for (declaration in declarations) {
             val jars = pluginJars.filter { it.manifest.name == declaration.name }
-            val hasCurrentVersion = jars.any { it.manifest.version == declaration.version }
+            var hasCurrentVersion = false
 
             for (jar in jars) {
                 if (jar.manifest.version == declaration.version) {
+                    hasCurrentVersion = true
                     // Don't clean up the jar if it's a current version.
                     continue
                 }
