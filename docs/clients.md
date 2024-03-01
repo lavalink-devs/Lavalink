@@ -9,6 +9,7 @@ description: A list of Lavalink client libraries.
 | [Lavalink-Client](https://github.com/lavalink-devs/Lavalink-Client) | Java/Kotlin/JVM | JDA/Discord4J/**Any**                      | Uses reactor                   |
 | [Lavalink.kt](https://github.com/DRSchlaubi/Lavalink.kt)            | Kotlin          | Kord/JDA/**Any**                           | Kotlin Coroutines              |
 | [DisGoLink](https://github.com/disgoorg/disgolink)                  | Go              | **Any**                                    |                                |
+| [hikari-ongaku](https://github.com/MPlatypus/hikari-ongaku)         | Python          | Hikari                                     | `asyncio`-based                |
 | [lavalink.py](https://github.com/devoxin/lavalink.py)               | Python          | **Any**                                    |                                |
 | [Mafic](https://github.com/ooliver1/mafic)                          | Python          | discord.py **V2**/nextcord/disnake/py-cord |                                |
 | [Wavelink](https://github.com/PythonistaGuild/Wavelink)             | Python          | discord.py **V2**                          |                                |
@@ -25,7 +26,6 @@ description: A list of Lavalink client libraries.
 | [Nomia](https://github.com/DHCPCD9/Nomia)                           | .NET            | DSharpPlus                                 |                                |
 | [Coglink](https://github.com/PerformanC/Coglink)                    | C               | Concord                                    |                                |
 | [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)             | Rust, Python    | **Any**                                    | `tokio`-based, `asyncio`-based |
-| [hikari-ongaku](https://github.com/MPlatypus/hikari-ongaku)         | Python          | Hikari                                     | `asyncio`-based                |
 | [lavalink](https://github.com/nyxx-discord/nyxx_lavalink)           | Dart            | nyxx/**Any**                               |                                |
 
 <details markdown="1">
