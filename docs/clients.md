@@ -25,6 +25,7 @@ description: A list of Lavalink client libraries.
 | [Nomia](https://github.com/DHCPCD9/Nomia)                           | .NET            | DSharpPlus                                 |                                |
 | [Coglink](https://github.com/PerformanC/Coglink)                    | C               | Concord                                    |                                |
 | [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)             | Rust, Python    | **Any**                                    | `tokio`-based, `asyncio`-based |
+| [hikari-ongaku](https://github.com/MPlatypus/hikari-ongaku)         | Python          | Hikari                                     | `asyncio`-based                |
 | [lavalink](https://github.com/nyxx-discord/nyxx_lavalink)           | Dart            | nyxx/**Any**                               |                                |
 
 <details markdown="1">
