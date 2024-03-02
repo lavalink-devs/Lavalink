@@ -13,6 +13,7 @@ description: A list of Lavalink client libraries.
 | [Mafic](https://github.com/ooliver1/mafic)                          | Python          | discord.py **V2**/nextcord/disnake/py-cord |                                |
 | [Wavelink](https://github.com/PythonistaGuild/Wavelink)             | Python          | discord.py **V2**                          |                                |
 | [Pomice](https://github.com/cloudwithax/pomice)                     | Python          | discord.py **V2**                          |                                |
+| [hikari-ongaku](https://github.com/MPlatypus/hikari-ongaku)         | Python          | Hikari                                     | `asyncio`-based                |
 | [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)            | Node.js         | **Any**                                    |                                |
 | [Magmastream](https://github.com/Blackfort-Hosting/magmastream)     | Node.js         | **Any**                                    |                                |
 | [Lavacord](https://github.com/lavacord/Lavacord)                    | Node.js         | **Any**                                    |                                |
