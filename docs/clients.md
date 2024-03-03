@@ -22,7 +22,7 @@ description: A list of Lavalink client libraries.
 | [FastLink](https://github.com/PerformanC/FastLink)                  | Node.js         | **Any**                                    |                                |
 | [Riffy](https://github.com/riffy-team/riffy)                        | Node.js         | **Any**                                    |                                |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp)       | .NET            | DisCatSharp                                | v10.4.2+                       |
-| [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)        | .NET            | Discord.Net/DSharpPlus/Remora              | v4+                            |
+| [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)        | .NET            | Discord.Net/DSharpPlus/Remora/NetCord      | v4+                            |
 | [Nomia](https://github.com/DHCPCD9/Nomia)                           | .NET            | DSharpPlus                                 |                                |
 | [Coglink](https://github.com/PerformanC/Coglink)                    | C               | Concord                                    |                                |
 | [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)             | Rust, Python    | **Any**                                    | `tokio`-based, `asyncio`-based |
