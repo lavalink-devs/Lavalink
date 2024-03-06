@@ -53,10 +53,10 @@ When Lavalink encounters an error, it will respond with a JSON object containing
 
 #### Track
 
-| Field      | Type                             | Description                                                                   |
-|------------|----------------------------------|-------------------------------------------------------------------------------|
-| encoded    | string                           | The base64 encoded track data                                                 |
-| info       | [Track Info](#track-info) object | Info about the track                                                          |
+| Field      | Type                             | Description                                                                     |
+|------------|----------------------------------|---------------------------------------------------------------------------------|
+| encoded    | string                           | The base64 encoded track data                                                   |
+| info       | [Track Info](#track-info) object | Info about the track                                                            |
 | pluginInfo | object                           | Additional track info provided by plugins                                       |
 | userData   | object                           | Additional track data provided via the [Update Player](#update-player) endpoint |
 
