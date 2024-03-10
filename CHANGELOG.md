@@ -3,6 +3,11 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v3.7.11
+* Fixed not being able to seek when player is paused 
+* Update Oshi to `6.4.3`
+* Update Lavaplayer to `1.5.3`
+
 ## v3.7.10
 * Update lavaplayer to [`1.5.2`](https://github.com/lavalink-devs/lavaplayer/releases/tag/1.5.2) - Fixed NPE on missing author in playlist tracks in YouTube
 
