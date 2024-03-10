@@ -17,24 +17,24 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 * `v4` uses the `sessionId` instead of the `resumeKey` for resuming.
 * `v4` now returns the tracks `artworkUrl` and `isrc` if the source supports it.
 * removal of deprecated json fields like `track`.
-* addition of `artworkUrl` and `isrc` fields to the [Track Info](#track-info) object.
-* addition of the full [Track](#track) object in [TrackStartEvent](#trackstartevent), [TrackEndEvent](#trackendevent), [TrackExceptionEvent](#trackexceptionevent) and [TrackStuckEvent](#trackstuckevent).
-* updated capitalization of [Track End Reason](#track-end-reason) and [Severity](#severity)
-* reworked [Load Result](#track-loading-result) object
+* addition of `artworkUrl` and `isrc` fields to the [Track Info](../api/rest.md#track-info) object.
+* addition of the full [Track](../api/rest.md#track) object in [TrackStartEvent](../api/websocket.md#trackstartevent), [TrackEndEvent](../api/websocket.md#trackendevent), [TrackExceptionEvent](../api/websocket.md#trackexceptionevent) and [TrackStuckEvent](../api/websocket.md#trackstuckevent).
+* updated capitalization of [Track End Reason](../api/websocket.md#track-end-reason) and [Severity](../api/websocket.md#severity)
+* reworked [Load Result](../api/rest.md#track-loading-result) object
 * allow setting user data on tracks in the REST API. For more info see [here](https://lavalink.dev/api/rest.html#update-player-track)
 
 
 All websocket ops are removed as of `v4.0.0` and replaced with the following endpoints and json fields:
 
-* `play` -> [Update Player Endpoint](#update-player) `track`->`encoded` or `track`->`identifier` field
-* `stop` -> [Update Player Endpoint](#update-player) `encodedTrack` field with `null`
-* `pause` -> [Update Player Endpoint](#update-player) `pause` field
-* `seek` -> [Update Player Endpoint](#update-player) `position` field
-* `volume` -> [Update Player Endpoint](#update-player) `volume` field
-* `filters` -> [Update Player Endpoint](#update-player) `filters` field
-* `destroy` -> [Destroy Player Endpoint](#destroy-player)
-* `voiceUpdate` -> [Update Player Endpoint](#update-player) `voice` field
-* `configureResuming` -> [Update Session Endpoint](#update-session)
+* `play` -> [Update Player Endpoint](../api/rest.md#update-player) `track`->`encoded` or `track`->`identifier` field
+* `stop` -> [Update Player Endpoint](../api/rest.md#update-player) `encodedTrack` field with `null`
+* `pause` -> [Update Player Endpoint](../api/rest.md#update-player) `pause` field
+* `seek` -> [Update Player Endpoint](../api/rest.md#update-player) `position` field
+* `volume` -> [Update Player Endpoint](../api/rest.md#update-player) `volume` field
+* `filters` -> [Update Player Endpoint](../api/rest.md#update-player) `filters` field
+* `destroy` -> [Destroy Player Endpoint](../api/rest.md#destroy-player)
+* `voiceUpdate` -> [Update Player Endpoint](../api/rest.md#update-player) `voice` field
+* `configureResuming` -> [Update Session Endpoint](../api/rest.md#update-session)
 
 </details>
 
@@ -46,8 +46,8 @@ All websocket ops are removed as of `v4.0.0` and replaced with the following end
 * WebSocket handshakes should be done with `/v3/websocket`. Handshakes on `/` are now deprecated.
 * Deprecation of all client-to-server messages (play, stop, pause, seek, volume, filters, destroy, voiceUpdate & configureResuming).
 * Addition of REST endpoints intended to replace client requests.
-* Addition of new WebSocket dispatch [Ready OP](#ready-op) to get `sessionId` and `resume` status.
-* Addition of new [Session](#update-session)/[Player](#get-player) REST API.
+* Addition of new WebSocket dispatch [Ready OP](../api/websocket.md#ready-op) to get `sessionId` and `resume` status.
+* Addition of new [Session](../api/rest.md#update-session)/[Player](../api/rest.md#get-player) REST API.
 * Addition of `/v3/info`, replaces `/plugins`.
 * Deprecation of `Track.track` in existing endpoints. Use `Track.encoded` instead.
 * Deprecation of `TrackXEvent.track` in WebSocket dispatches. Use `TrackXEvent.encodedTrack` instead.
@@ -55,15 +55,15 @@ All websocket ops are removed as of `v4.0.0` and replaced with the following end
 
 All websocket ops are deprecated as of `v3.7.0` and replaced with the following endpoints and json fields:
 
-* `play` -> [Update Player Endpoint](#update-player) `track` or `identifier` field
-* `stop` -> [Update Player Endpoint](#update-player) `track` field with `null`
-* `pause` -> [Update Player Endpoint](#update-player) `pause` field
-* `seek` -> [Update Player Endpoint](#update-player) `position` field
-* `volume` -> [Update Player Endpoint](#update-player) `volume` field
-* `filters` -> [Update Player Endpoint](#update-player) `filters` field
-* `destroy` -> [Destroy Player Endpoint](#destroy-player)
-* `voiceUpdate` -> [Update Player Endpoint](#update-player) `voice` field
-* `configureResuming` -> [Update Session Endpoint](#update-session)
+* `play` -> [Update Player Endpoint](../api/rest.md#update-player) `track` or `identifier` field
+* `stop` -> [Update Player Endpoint](../api/rest.md#update-player) `track` field with `null`
+* `pause` -> [Update Player Endpoint](../api/rest.md#update-player) `pause` field
+* `seek` -> [Update Player Endpoint](../api/rest.md#update-player) `position` field
+* `volume` -> [Update Player Endpoint](../api/rest.md#update-player) `volume` field
+* `filters` -> [Update Player Endpoint](../api/rest.md#update-player) `filters` field
+* `destroy` -> [Destroy Player Endpoint](../api/rest.md#destroy-player)
+* `voiceUpdate` -> [Update Player Endpoint](../api/rest.md#update-player) `voice` field
+* `configureResuming` -> [Update Session Endpoint](../api/rest.md#update-session)
 
 </details>
 
@@ -72,7 +72,7 @@ All websocket ops are deprecated as of `v3.7.0` and replaced with the following 
 
 * Added filters
 * The `error` string on the `TrackExceptionEvent` has been deprecated and replaced by
-  the [Exception](#exception-object) object following the same structure as the `LOAD_FAILED` error on [`/loadtracks`](#track-loading).
+  the [Exception](../api/websocket.md#exception-object) object following the same structure as the `LOAD_FAILED` error on [`/loadtracks`](../api/rest.md#track-loading).
 * Added the `connected` boolean to player updates.
 * Added source name to REST api track objects
 * Clients are now requested to make their name known during handshake

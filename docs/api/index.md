@@ -22,7 +22,7 @@ What happens after your client disconnects is dependent on whether the session h
 * If resuming is disabled all voice connections are closed immediately.
 * If resuming is enabled all music will continue playing. You will then be able to resume your session, allowing you to control the players again.
 
-To enable resuming, you must call the [Update Session](#update-session) endpoint with the `resuming` and `timeout`.
+To enable resuming, you must call the [Update Session](../api/rest.md#update-session) endpoint with the `resuming` and `timeout`.
 
 To resume a session, specify the session id in your WebSocket handshake request headers:
 
@@ -36,7 +36,7 @@ You can tell if your session was resumed by looking at the handshake response he
 Session-Resumed: true
 ```
 
-In case your websocket library doesn't support reading headers you can listen for the [ready op](#ready-op) and check the `resumed` field.
+In case your websocket library doesn't support reading headers you can listen for the [ready op](../api/websocket.md#ready-op) and check the `resumed` field.
 
 When a session is paused, any events that would normally have been sent are queued up. When the session is resumed, this
 queue is then emptied and the events are replayed.
