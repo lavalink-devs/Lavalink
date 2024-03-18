@@ -20,7 +20,8 @@ description: A list of Lavalink client libraries.
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                       | Node.js         | **Any**                                    |                                |
 | [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client)    | Node.js         | **Any**                                    |                                |
 | [FastLink](https://github.com/PerformanC/FastLink)                  | Node.js         | **Any**                                    |                                |
-| [Riffy](https://github.com/riffy-team/riffy)                        | Node.js         | **Any**                                    |                                |
+| [Riffy](https://github.com/DarkslayerHaos/ruvyrias)                 | Node.js         | **Any**                                    |                                |
+| [Ruvyrias](https://github.com/riffy-team/riffy)                     | Node.js         | **Any**                                    |                                |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp)       | .NET            | DisCatSharp                                | v10.4.2+                       |
 | [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)        | .NET            | Discord.Net/DSharpPlus/Remora/NetCord      | v4+                            |
 | [Nomia](https://github.com/DHCPCD9/Nomia)                           | .NET            | DSharpPlus                                 |                                |
