@@ -40,6 +40,8 @@ logging:
     lavalink: DEBUG
     # Set this to TRACE to see all WebSocket messages
     lavalink.server.io.SocketContext: TRACE
+    # Log all track exceptions (COMMON, SUSPICIOUS & FAULT)
+    com.sedmelluq.discord.lavaplayer.tools.ExceptionTools: DEBUG
 
   # This will log all requests to the REST API
   request:
