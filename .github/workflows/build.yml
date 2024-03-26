@@ -33,7 +33,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # TODO: revert to ubuntu once https://youtrack.jetbrains.com/issue/KT-52666/ gets fixed
+    runs-on: macos-latest
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}

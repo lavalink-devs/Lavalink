@@ -66,13 +66,13 @@ fun VersionCatalogBuilder.metrics() {
 }
 
 fun VersionCatalogBuilder.common() {
-    version("kotlin", "1.8.22")
+    version("kotlin", "1.9.22")
 
     library("kotlin-reflect",     "org.jetbrains.kotlin", "kotlin-reflect").versionRef("kotlin")
     library("kotlin-stdlib-jdk8", "org.jetbrains.kotlin", "kotlin-stdlib-jdk8").versionRef("kotlin")
 
-    library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.5.1")
-    library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime").version("0.4.0")
+    library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.6.2")
+    library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime").version("0.5.0")
 
     library("logback",        "ch.qos.logback",       "logback-classic").version("1.4.7")
     library("sentry-logback", "io.sentry",            "sentry-logback").version("6.22.0")
@@ -83,7 +83,7 @@ fun VersionCatalogBuilder.other() {
     library("jda",             "net.dv8tion",         "JDA").version("4.1.1_135")
     library("lavalink-client", "com.github.FredBoat", "Lavalink-Client").version("8d9b660")
 
-    val mavenPublishPlugin = version("maven-publish-plugin", "0.25.3")
+    val mavenPublishPlugin = version("maven-publish-plugin", "0.27.0")
 
     plugin("maven-publish", "com.vanniktech.maven.publish").versionRef(mavenPublishPlugin)
     plugin("maven-publish-base", "com.vanniktech.maven.publish.base").versionRef(mavenPublishPlugin)

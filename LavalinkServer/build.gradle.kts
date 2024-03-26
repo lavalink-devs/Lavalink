@@ -91,7 +91,7 @@ tasks {
         filter(ReplaceTokens::class, mapOf("tokens" to tokens))
         copy {
             from("application.yml.example")
-            into("$buildDir/resources/main")
+            into(layout.buildDirectory.dir("resources/main"))
         }
     }
 
