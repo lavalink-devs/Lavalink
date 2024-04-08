@@ -123,9 +123,9 @@ tasks {
         archiveClassifier = "musl"
     }
 
-
     withType<BootJar> {
         archiveFileName = "Lavalink.jar"
+        duplicatesStrategy = DuplicatesStrategy.WARN
 
         if (findProperty("targetPlatform") == "musl") {
             archiveFileName = "Lavalink-musl.jar"
@@ -153,6 +153,14 @@ tasks {
 
             jvmArgs?.addAll(args)
         }
+    }
+
+    withType<Tar> {
+        duplicatesStrategy = DuplicatesStrategy.WARN
+    }
+
+    withType<Zip> {
+        duplicatesStrategy = DuplicatesStrategy.WARN
     }
 }
 
