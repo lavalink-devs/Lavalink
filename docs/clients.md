@@ -14,7 +14,6 @@ description: A list of Lavalink client libraries.
 | [Wavelink](https://github.com/PythonistaGuild/Wavelink)             | Python          | discord.py **V2**                          |                                |
 | [Pomice](https://github.com/cloudwithax/pomice)                     | Python          | discord.py **V2**                          |                                |
 | [hikari-ongaku](https://github.com/MPlatypus/hikari-ongaku)         | Python          | Hikari                                     | `asyncio`-based                |
-| [lavaclient](https://npmjs.com/lavaclient)                          | Node.js         | **Any**                                    | v5+                            |
 | [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)            | Node.js         | **Any**                                    |                                |
 | [Magmastream](https://github.com/Blackfort-Hosting/magmastream)     | Node.js         | **Any**                                    |                                |
 | [Lavacord](https://github.com/lavacord/Lavacord)                    | Node.js         | **Any**                                    |                                |
@@ -22,6 +21,7 @@ description: A list of Lavalink client libraries.
 | [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client)    | Node.js         | **Any**                                    |                                |
 | [FastLink](https://github.com/PerformanC/FastLink)                  | Node.js         | **Any**                                    |                                |
 | [Riffy](https://github.com/riffy-team/riffy)                        | Node.js         | **Any**                                    |                                |
+| [lavaclient](https://npmjs.com/lavaclient)                          | Node.js         | **Any**                                    | v5+                            |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp)       | .NET            | DisCatSharp                                | v10.4.2+                       |
 | [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)        | .NET            | Discord.Net/DSharpPlus/Remora/NetCord      | v4+                            |
 | [Nomia](https://github.com/DHCPCD9/Nomia)                           | .NET            | DSharpPlus                                 |                                |
