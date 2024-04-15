@@ -18,6 +18,7 @@ description: A list of Lavalink client libraries.
 | [Magmastream](https://github.com/Blackfort-Hosting/magmastream)     | Node.js         | **Any**                                    |                                |
 | [Lavacord](https://github.com/lavacord/Lavacord)                    | Node.js         | **Any**                                    |                                |
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                       | Node.js         | **Any**                                    |                                |
+| [TsumiLink](https://github.com/Fyphen1223/TsumiLink)                | Node.js         | **Any**                                    |                                |
 | [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client)    | Node.js         | **Any**                                    |                                |
 | [FastLink](https://github.com/PerformanC/FastLink)                  | Node.js         | **Any**                                    |                                |
 | [Riffy](https://github.com/riffy-team/riffy)                        | Node.js         | **Any**                                    |                                |
