@@ -22,7 +22,8 @@ description: A list of Lavalink client libraries.
 | [FastLink](https://github.com/PerformanC/FastLink)                  | Node.js         | **Any**                                    |                                |
 | [Riffy](https://github.com/riffy-team/riffy)                        | Node.js         | **Any**                                    |                                |
 | [lavaclient](https://npmjs.com/lavaclient)                          | Node.js         | **Any**                                    | v5+                            |
-| [Blue.ts](https://github.com/ftrapture/blue.ts/tree/v1.2)           | Node.js         | Discord.js/Eris/OceanicJs                 |                                |
+| [TsumiLink](https://github.com/Fyphen1223/TsumiLink)                | Node.js         | **Any**                                    |                                |
+| [Blue.ts](https://github.com/ftrapture/blue.ts)                     | Node.js         | Discord.js/Eris/OceanicJs                  |                                |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp)       | .NET            | DisCatSharp                                | v10.4.2+                       |
 | [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)        | .NET            | Discord.Net/DSharpPlus/Remora/NetCord      | v4+                            |
 | [Nomia](https://github.com/DHCPCD9/Nomia)                           | .NET            | DSharpPlus                                 |                                |
