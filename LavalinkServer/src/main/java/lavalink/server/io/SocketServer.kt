@@ -24,6 +24,7 @@ package lavalink.server.io
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
+import dev.arbjerg.lavalink.api.ISocketServer
 import dev.arbjerg.lavalink.api.PluginEventHandler
 import dev.arbjerg.lavalink.protocol.v4.Message
 import dev.arbjerg.lavalink.protocol.v4.PlayerState
@@ -46,11 +47,11 @@ final class SocketServer(
     koeOptions: KoeOptions,
     private val eventHandlers: List<PluginEventHandler>,
     private val pluginInfoModifiers: List<AudioPluginInfoModifier>
-) : TextWebSocketHandler() {
+) : TextWebSocketHandler(), ISocketServer {
 
     // sessionID <-> Session
-    val contextMap = ConcurrentHashMap<String, SocketContext>()
-    private val resumableSessions = mutableMapOf<String, SocketContext>()
+    override val sessions = ConcurrentHashMap<String, SocketContext>()
+    override val resumableSessions = mutableMapOf<String, SocketContext>()
     private val koe = Koe.koe(koeOptions)
     private val statsCollector = StatsCollector(this)
     private val charPool = ('a'..'z') + ('0'..'9')
@@ -81,12 +82,12 @@ final class SocketServer(
         var sessionId: String
         do {
             sessionId = List(16) { charPool.random() }.joinToString("")
-        } while (contextMap[sessionId] != null)
+        } while (sessions[sessionId] != null)
         return sessionId
     }
 
     val contexts: Collection<SocketContext>
-        get() = contextMap.values
+        get() = sessions.values
 
     @Suppress("UastIncorrectHttpHeaderInspection")
     override fun afterConnectionEstablished(session: WebSocketSession) {
@@ -100,7 +101,7 @@ final class SocketServer(
 
         if (resumable != null) {
             session.attributes["sessionId"] = resumable.sessionId
-            contextMap[resumable.sessionId] = resumable
+            sessions[resumable.sessionId] = resumable
             resumable.resume(session)
             log.info("Resumed session with id $sessionId")
             resumable.eventEmitter.onWebSocketOpen(true)
@@ -123,7 +124,7 @@ final class SocketServer(
             eventHandlers,
             pluginInfoModifiers
         )
-        contextMap[sessionId] = socketContext
+        sessions[sessionId] = socketContext
         socketContext.sendMessage(Message.Serializer, Message.ReadyEvent(false, sessionId))
         socketContext.eventEmitter.onWebSocketOpen(false)
         if (clientName != null) {
@@ -140,7 +141,7 @@ final class SocketServer(
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
-        val context = contextMap.remove(session.attributes["sessionId"]) ?: return
+        val context = sessions.remove(session.attributes["sessionId"]) ?: return
         if (context.resumable) {
             resumableSessions.remove(context.sessionId)?.let { removed ->
                 log.warn(
