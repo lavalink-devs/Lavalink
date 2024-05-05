@@ -34,7 +34,7 @@ A [basic example bot](Testbot) is available.
 ## Features
 * Powered by Lavaplayer
 * Minimal CPU/memory footprint
-* Twitch/YouTube stream support
+* Twitch/YouTube (via [this](https://github.com/lavalink-devs/youtube-source#plugin) plugin) stream support
 * Event system
 * Seeking
 * Volume control
