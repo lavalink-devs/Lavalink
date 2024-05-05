@@ -14,6 +14,7 @@ data class AudioSourcesConfig(
     var isSoundcloud: Boolean = true,
     var isTwitch: Boolean = true,
     var isVimeo: Boolean = true,
+    var isNico: Boolean = false,
     var isHttp: Boolean = true,
     var isLocal: Boolean = false,
 )

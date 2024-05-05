@@ -23,7 +23,8 @@ lavalink:
       soundcloud: true
       twitch: true
       vimeo: true
-      http: true
+      nico: true
+      http: true # warning: keeping HTTP enabled without a proxy configured could expose your server's IP address.
       local: false
     filters: # All filters are enabled by default
       volume: true

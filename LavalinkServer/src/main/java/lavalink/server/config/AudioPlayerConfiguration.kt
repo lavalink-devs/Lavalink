@@ -9,6 +9,7 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.source.nico.NicoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.*
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
@@ -102,6 +103,14 @@ class AudioPlayerConfiguration {
         val mcr: MediaContainerRegistry = MediaContainerRegistry.extended(*mediaContainerProbes.toTypedArray())
 
         if (sources.isYoutube) {
+            log.warn(
+                """
+                    The default Youtube source is now deprecated and won't receive further updates.
+                    You should use the new Youtube source plugin instead.
+                    https://github.com/lavalink-devs/youtube-source#plugin.
+                    To disable this warning, set 'lavalink.server.sources.youtube' to false in your application.yml.
+                """.trimIndent()
+            )
             val youtubeConfig = serverConfig.youtubeConfig
             val youtube: YoutubeAudioSourceManager
             if (youtubeConfig != null) {
@@ -155,6 +164,7 @@ class AudioPlayerConfiguration {
         if (sources.isBandcamp) audioPlayerManager.registerSourceManager(BandcampAudioSourceManager())
         if (sources.isTwitch) audioPlayerManager.registerSourceManager(TwitchStreamAudioSourceManager())
         if (sources.isVimeo) audioPlayerManager.registerSourceManager(VimeoAudioSourceManager())
+        if (sources.isNico) audioPlayerManager.registerSourceManager(NicoAudioSourceManager())
         if (sources.isLocal) audioPlayerManager.registerSourceManager(LocalAudioSourceManager(mcr))
 
         audioSourceManagers.forEach {
