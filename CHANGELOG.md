@@ -3,6 +3,13 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v3.7.12
+* Updated Lavaplayer to [`1.5.4`](https://github.com/lavalink-devs/lavaplayer/releases/tag/1.5.4)
+* Updated Koe to [`2.0.1`](https://github.com/KyokoBot/koe/releases/tag/2.0.1) (fixes the `IndexOutOfBoundsException` when playing a YouTube track)
+
+> [!WARNING]
+> The default Youtube source is now deprecated and won't receive further updates. Please use https://github.com/lavalink-devs/youtube-source#plugin instead.
+
 ## v3.7.11
 * Fixed not being able to seek when player is paused 
 * Update Oshi to `6.4.3`
