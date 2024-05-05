@@ -103,6 +103,14 @@ class AudioPlayerConfiguration {
         val mcr: MediaContainerRegistry = MediaContainerRegistry.extended(*mediaContainerProbes.toTypedArray())
 
         if (sources.isYoutube) {
+            log.warn(
+                """
+                    The default Youtube source is now deprecated and won't receive further updates.
+                    You should use the new Youtube source plugin instead.
+                    https://github.com/lavalink-devs/youtube-source#plugin.
+                    To disable this warning, set 'lavalink.server.sources.youtube' to false in your application.yml.
+                """.trimIndent()
+            )
             val youtubeConfig = serverConfig.youtubeConfig
             val youtube: YoutubeAudioSourceManager
             if (youtubeConfig != null) {
