@@ -129,3 +129,6 @@ plugins:
         color: "#FFFFFF"
   - git-revision-date-localized
   - markdownextradata
+  - redirects:
+      redirect_maps:
+        discord/index.html: 'https://discord.gg/BTHvsc7WsT'

@@ -12,8 +12,6 @@ Install [Docker](https://docs.docker.com/engine/install/) & [Docker Compose](htt
 Create a `docker-compose.yml` with the following content:
 
 ```yaml title="docker-compose.yml"
-version: "3.8"
-
 services:
   lavalink:
     # pin the image version to Lavalink v4
