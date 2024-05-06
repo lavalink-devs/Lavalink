@@ -14,13 +14,14 @@ for instructions.
 | Plugin                                                                   | Description                                                                                            |
 |--------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
 | [YouTube Plugin](https://github.com/lavalink-devs/youtube-source#plugin) | YouTube source plugin for Lavalink                                                                     |
-| [Google Cloud TTS plugin](https://github.com/DuncteBot/tts-plugin)       | A text to speech plugin using the [google cloud tts api](https://cloud.google.com/text-to-speech/docs) |
-| [SponsorBlock plugin](https://github.com/topi314/Sponsorblock-Plugin)    | Skip sponsor segments in YouTube videos & return YouTube video chapter information                     |
-| [LavaSrc plugin](https://github.com/topi314/LavaSrc)                     | Spotify, Apple Music & Deezer(native play) support                                                     |
-| [LavaSearch plugin](https://github.com/topi314/LavaSearch)               | Advanced search functionality including playlists, albums, artists, tracks & terms                     |
-| [DuncteBot plugin](https://github.com/DuncteBot/skybot-lavalink-plugin)  | Additional source managers that are not widely used                                                    |
-| [XM plugin](https://github.com/esmBot/lava-xm-plugin)                    | Support for various [music tracker module](https://en.wikipedia.org/wiki/Module_file) formats          |
-| [Lyrics.kt plugin](https://github.com/DRSchlaubi/lyrics.kt)              | Plugin that fetches timestamped lyrics from YouTube                                                    |
+| [Google Cloud TTS Plugin](https://github.com/DuncteBot/tts-plugin)       | A text to speech plugin using the [google cloud tts api](https://cloud.google.com/text-to-speech/docs) |
+| [SponsorBlock Plugin](https://github.com/topi314/Sponsorblock-Plugin)    | Skip sponsor segments in YouTube videos & return YouTube video chapter information                     |
+| [LavaSrc Plugin](https://github.com/topi314/LavaSrc)                     | Spotify, Apple Music & Deezer(native play) support                                                     |
+| [LavaSearch Plugin](https://github.com/topi314/LavaSearch)               | Advanced search functionality including playlists, albums, artists, tracks & terms                     |
+| [LavaLyrics Plugin](https://github.com/topi314/LavaSearch)               | Lyrics API which can be used by other plugins                                                          |
+| [DuncteBot Plugin](https://github.com/DuncteBot/skybot-lavalink-plugin)  | Additional source managers that are not widely used                                                    |
+| [XM Plugin](https://github.com/esmBot/lava-xm-plugin)                    | Support for various [music tracker module](https://en.wikipedia.org/wiki/Module_file) formats          |
+| [Lyrics.kt Plugin](https://github.com/DRSchlaubi/lyrics.kt)              | Plugin that fetches timestamped lyrics from YouTube                                                    |
 | [Java Timed Lyrics](https://github.com/DuncteBot/java-timed-lyrics)      | Timestamped lyrics from YouTube with Genius fallback, supports IP-rotation                             |
 | [LavaDSPX Audio Filters](https://github.com/Devoxin/LavaDSPX-Plugin)     | Additional audio filters for Lavalink                                                                  |
 
