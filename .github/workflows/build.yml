@@ -60,9 +60,9 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Execute Gradle build
-        run: ./gradlew build
+        run: ./gradlew clean build
 
-      - name: Execute Gradle build
+      - name: Execute Gradle build (musl)
         run: ./gradlew build -PtargetPlatform=musl
 
       - name: Publish to Maven
