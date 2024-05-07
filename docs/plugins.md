@@ -18,7 +18,7 @@ for instructions.
 | [SponsorBlock Plugin](https://github.com/topi314/Sponsorblock-Plugin)    | Skip sponsor segments in YouTube videos & return YouTube video chapter information                     |
 | [LavaSrc Plugin](https://github.com/topi314/LavaSrc)                     | Spotify, Apple Music & Deezer(native play) support                                                     |
 | [LavaSearch Plugin](https://github.com/topi314/LavaSearch)               | Advanced search functionality including playlists, albums, artists, tracks & terms                     |
-| [LavaLyrics Plugin](https://github.com/topi314/LavaSearch)               | Lyrics API which can be used by other plugins                                                          |
+| [LavaLyrics Plugin](https://github.com/topi314/LavaLyrics)               | Lyrics API which can be used by other plugins                                                          |
 | [DuncteBot Plugin](https://github.com/DuncteBot/skybot-lavalink-plugin)  | Additional source managers that are not widely used                                                    |
 | [XM Plugin](https://github.com/esmBot/lava-xm-plugin)                    | Support for various [music tracker module](https://en.wikipedia.org/wiki/Module_file) formats          |
 | [Lyrics.kt Plugin](https://github.com/DRSchlaubi/lyrics.kt)              | Plugin that fetches timestamped lyrics from YouTube                                                    |
