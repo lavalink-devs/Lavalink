@@ -629,7 +629,7 @@ GET /v4/sessions/{sessionId}/players/{guildId}
 
 Response:
 
-[Player](#Player) object
+[Player](#player) object
 
 <details markdown="1">
 <summary>Example Payload</summary>
