@@ -25,6 +25,7 @@ nav:
       - Systemd: configuration/systemd.md
       - Docker: configuration/docker.md
       - RoutePlanner: configuration/routeplanner.md
+      - IPv6 Setup: configuration/ipv6setup.md
   - Clients: clients.md
   - Plugins: plugins.md
   - API:
