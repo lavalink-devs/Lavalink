@@ -31,7 +31,7 @@ Then we need to enable nonlocal bind: `sysctl -w net.ipv6.ip_nonlocal_bind=1`
 
 And `echo 'net.ipv6.ip_nonlocal_bind=1' >> /etc/sysctl.conf` (So you do not need to adjust sysctl settings again when rebooting the server.)
 
-Then `ip -6 route replace local the-ipv6-you-copied::/64 dev lo` (Don't forget to remove the '1' from the address 'you-want-to-copy-this-one::1/64', the '1' after '::'.)
+Then `ip -6 route replace local the-ipv6-you-copied::/64 dev lo` (Don't forget to remove the '1' from the address that you copy from, for example 'you-want-to-copy-this-one::1/64', the '1' after '::'.)
 
 Test your IPv6
 ```

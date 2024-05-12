@@ -26,8 +26,11 @@ nav:
       - Docker: configuration/docker.md
       - RoutePlanner: configuration/routeplanner.md
       - IPv6 Setup:
+        - Do I have IPv6: configuration/ipv6setup/doihaveipv6.md
+        - Ubuntu/Debian: configuration/ipv6setup/ubuntudebian.md
         - Hetzner: configuration/ipv6setup/hetzner.md
         - Contabo: configuration/ipv6setup/contabo.md
+        - DigitalOcean: configuration/ipv6setup/digitalocean.md
   - Clients: clients.md
   - Plugins: plugins.md
   - API:
