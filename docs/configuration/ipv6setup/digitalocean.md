@@ -2,7 +2,11 @@
 description: How to configure IPv6 on your DigitalOcean VPS.
 ---
 
+
+
 As the IPv6 rotation plan suggests, it is recommended to use a block size larger than /64. However, with DigitalOcean, IPv6 only provides you with 16 IPv6 addresses. If you prefer to use an IPv6 /64 or /48 block size for your DigitalOcean VPS, consider this alternative instead. [Using Tunnelbroker to make Lavalink balance its requests over many IPv6 addresses](https://blog.arbjerg.dev/2020/3/tunnelbroker-with-lavalink)
+
+As of now, if you want to use Tunnelbroker with DigitalOcean, you might encounter a block when trying to create a tunnel for your DigitalOcean IP. You may need to contact them to unblock your server.
 
 This how-to may depend on your system's OS, but it has already been tested on `Ubuntu` and `Debian`.
 
