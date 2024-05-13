@@ -44,7 +44,6 @@ description: A list of Lavalink client libraries.
 | [Pomice](https://github.com/cloudwithax/pomice)               | Python   | discord.py **V2**                          |                                 |
 | [Lavacord](https://github.com/lavacord/lavacord)              | Node.js  | **Any**                                    |                                 |
 | [Poru](https://github.com/parasop/poru)                       | Node.js  | **Any**                                    |                                 |
-| [Rainlink](https://github.com/RainyXeon/Rainlink)             | Node.js  | **Any**                                    | use `lavalink/v3/koto` driver   |
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                 | Node.js  | **Any**                                    |                                 |
 | [Cosmicord.js](https://github.com/SudhanPlayz/Cosmicord.js)   | Node.js  | **Any**                                    |                                 |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp) | .NET     | DisCatSharp                                | Only prior v10.4.1              |
