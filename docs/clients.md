@@ -21,6 +21,7 @@ description: A list of Lavalink client libraries.
 | [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client)    | Node.js         | **Any**                                    |                                |
 | [FastLink](https://github.com/PerformanC/FastLink)                  | Node.js         | **Any**                                    |                                |
 | [Riffy](https://github.com/riffy-team/riffy)                        | Node.js         | **Any**                                    |                                |
+| [Rainlink](https://github.com/RainyXeon/Rainlink)                   | Node.js         | **Any**                                    |                                |
 | [lavaclient](https://npmjs.com/lavaclient)                          | Node.js         | **Any**                                    | v5+                            |
 | [TsumiLink](https://github.com/Fyphen1223/TsumiLink)                | Node.js         | **Any**                                    |                                |
 | [Blue.ts](https://github.com/ftrapture/blue.ts)                     | Node.js         | Discord.js/Eris/OceanicJs                  |                                |
@@ -43,6 +44,7 @@ description: A list of Lavalink client libraries.
 | [Pomice](https://github.com/cloudwithax/pomice)               | Python   | discord.py **V2**                          |                                 |
 | [Lavacord](https://github.com/lavacord/lavacord)              | Node.js  | **Any**                                    |                                 |
 | [Poru](https://github.com/parasop/poru)                       | Node.js  | **Any**                                    |                                 |
+| [Rainlink](https://github.com/RainyXeon/Rainlink)             | Node.js  | **Any**                                    | use `lavalink/v3/koto` driver   |
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                 | Node.js  | **Any**                                    |                                 |
 | [Cosmicord.js](https://github.com/SudhanPlayz/Cosmicord.js)   | Node.js  | **Any**                                    |                                 |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp) | .NET     | DisCatSharp                                | Only prior v10.4.1              |
