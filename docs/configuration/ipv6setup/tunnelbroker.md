@@ -177,4 +177,4 @@ or if you are using /48
 ping6 -I 2001:470:xxxx:dead::beef google.com
 ```
 
-Now can you use your new IPv6 `2001:470:xxxx:xxx::/64` or `2001:470:xxxx::/48` to put in your Lavalink configuration.
+Now you can use your new IPv6 `2001:470:xxxx:xxx::/64` or `2001:470:xxxx::/48` to put in your Lavalink configuration.
