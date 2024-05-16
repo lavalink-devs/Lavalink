@@ -58,8 +58,7 @@ dependencies {
         exclude(group = "com.sedmelluq", module = "lava-common")
     }
 
-    implementation("com.github.botlabs-gg:lavaplayer:895b7cd")
-    //implementation(libs.lavaplayer)
+    implementation(libs.lavaplayer)
     implementation(libs.lavaplayer.ip.rotator)
 
     implementation(libs.lavadsp)
