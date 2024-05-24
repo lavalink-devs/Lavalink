@@ -12,6 +12,8 @@ hide:
 
 ## Features
 
+lol
+
 ::cards::
 
 - title: Powered by Lavaplayer
