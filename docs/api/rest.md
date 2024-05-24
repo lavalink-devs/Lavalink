@@ -917,7 +917,7 @@ Parsed [Semantic Versioning 2.0.0](https://semver.org/)
 ```json
 {
   "version": {
-    "string": "3.7.0-rc.1+test",
+    "semver": "3.7.0-rc.1+test",
     "major": 3,
     "minor": 7,
     "patch": 0,
