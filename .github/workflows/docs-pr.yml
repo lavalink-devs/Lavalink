@@ -38,7 +38,7 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: 'site'
-      - uses: cloudflare/pages-action@v1
+      - uses: topi314/pages-action@989c0bd3a707c425c05f802dd9984387be67e82b
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -46,3 +46,4 @@ jobs:
           directory: site
           branch: pr-${{ github.event.pull_request.number }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          deploymentRef: ${{ github.event.pull_request.merge_commit_sha }}
