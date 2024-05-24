@@ -1072,7 +1072,11 @@ Additionally, there are a few REST endpoints for the ip rotation extension.
 GET /v4/routeplanner/status
 ```
 
-Response:
+Responses:
+
+204 - No Content: This means the RoutePlanner is not enabled on the server.
+
+200 - Content: This means that the RoutePlanner has been enabled, and will give the following information.
 
 | Field   | Type                                        | Description                                                           |
 |---------|---------------------------------------------|-----------------------------------------------------------------------|
