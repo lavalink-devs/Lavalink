@@ -5,6 +5,7 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 
 ## v4.0.6
 * Updated Lavaplayer to [`2.2.0`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.2.0)
+* Updated Koe to [`2.0.2`](https://github.com/KyokoBot/koe/releases/tag/2.0.2)
 
 ## v4.0.5
 * Updated Lavaplayer to [`2.1.2`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.1.2)
