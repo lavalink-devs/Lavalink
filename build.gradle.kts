@@ -70,7 +70,7 @@ subprojects {
                 coordinates(group.toString(), project.the<BasePluginExtension>().archivesName.get(), version.toString())
 
                 if (findProperty("mavenCentralUsername") != null && findProperty("mavenCentralPassword") != null) {
-                    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, false)
+                    publishToMavenCentral(SonatypeHost.S01, false)
                     if (!(version as String).endsWith("-SNAPSHOT")) {
                         signAllPublications()
                     }
