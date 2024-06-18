@@ -1,0 +1,71 @@
+public abstract interface class dev/arbjerg/lavalink/api/AudioFilterExtension {
+	public fun build (Lkotlinx/serialization/json/JsonElement;Lcom/sedmelluq/discord/lavaplayer/format/AudioDataFormat;Lcom/sedmelluq/discord/lavaplayer/filter/FloatPcmAudioFilter;)Lcom/sedmelluq/discord/lavaplayer/filter/FloatPcmAudioFilter;
+	public abstract fun getName ()Ljava/lang/String;
+	public fun isEnabled (Lkotlinx/serialization/json/JsonElement;)Z
+}
+
+public abstract interface class dev/arbjerg/lavalink/api/AudioPlayerManagerConfiguration {
+	public abstract fun configure (Lcom/sedmelluq/discord/lavaplayer/player/AudioPlayerManager;)Lcom/sedmelluq/discord/lavaplayer/player/AudioPlayerManager;
+}
+
+public abstract interface class dev/arbjerg/lavalink/api/AudioPluginInfoModifier {
+	public fun modifyAudioPlaylistPluginInfo (Lcom/sedmelluq/discord/lavaplayer/track/AudioPlaylist;)Lkotlinx/serialization/json/JsonObject;
+	public fun modifyAudioTrackPluginInfo (Lcom/sedmelluq/discord/lavaplayer/track/AudioTrack;)Lkotlinx/serialization/json/JsonObject;
+}
+
+public abstract interface class dev/arbjerg/lavalink/api/IPlayer {
+	public abstract fun getAudioPlayer ()Lcom/sedmelluq/discord/lavaplayer/player/AudioPlayer;
+	public abstract fun getGuildId ()J
+	public abstract fun getSocketContext ()Ldev/arbjerg/lavalink/api/ISocketContext;
+	public abstract fun getTrack ()Lcom/sedmelluq/discord/lavaplayer/track/AudioTrack;
+	public abstract fun isPlaying ()Z
+	public abstract fun play (Lcom/sedmelluq/discord/lavaplayer/track/AudioTrack;)V
+	public abstract fun seekTo (J)V
+	public fun seekTo-LRDsOJo (J)V
+	public abstract fun setPause (Z)V
+	public abstract fun setVolume (I)V
+	public abstract fun stop ()V
+}
+
+public abstract interface class dev/arbjerg/lavalink/api/ISocketContext {
+	public abstract fun closeWebSocket ()V
+	public abstract fun closeWebSocket (I)V
+	public abstract fun closeWebSocket (ILjava/lang/String;)V
+	public abstract fun destroyPlayer (J)V
+	public abstract fun getClientName ()Ljava/lang/String;
+	public abstract fun getPlayer (J)Ldev/arbjerg/lavalink/api/IPlayer;
+	public abstract fun getPlayers ()Ljava/util/Map;
+	public abstract fun getSessionId ()Ljava/lang/String;
+	public abstract fun getState ()Ldev/arbjerg/lavalink/api/ISocketContext$State;
+	public abstract fun getUserId ()J
+	public abstract fun sendMessage (Lkotlinx/serialization/SerializationStrategy;Ljava/lang/Object;)V
+	public fun sendMessage (Lkotlinx/serialization/json/JsonElement;)V
+}
+
+public final class dev/arbjerg/lavalink/api/ISocketContext$State : java/lang/Enum {
+	public static final field DESTROYED Ldev/arbjerg/lavalink/api/ISocketContext$State;
+	public static final field OPEN Ldev/arbjerg/lavalink/api/ISocketContext$State;
+	public static final field RESUMABLE Ldev/arbjerg/lavalink/api/ISocketContext$State;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ldev/arbjerg/lavalink/api/ISocketContext$State;
+	public static fun values ()[Ldev/arbjerg/lavalink/api/ISocketContext$State;
+}
+
+public abstract interface class dev/arbjerg/lavalink/api/ISocketServer {
+	public abstract fun getResumableSessions ()Ljava/util/Map;
+	public abstract fun getSessions ()Ljava/util/Map;
+}
+
+public abstract class dev/arbjerg/lavalink/api/PluginEventHandler {
+	public fun <init> ()V
+	public fun onDestroyPlayer (Ldev/arbjerg/lavalink/api/ISocketContext;Ldev/arbjerg/lavalink/api/IPlayer;)V
+	public fun onNewPlayer (Ldev/arbjerg/lavalink/api/ISocketContext;Ldev/arbjerg/lavalink/api/IPlayer;)V
+	public fun onSocketContextDestroyed (Ldev/arbjerg/lavalink/api/ISocketContext;)V
+	public fun onSocketContextPaused (Ldev/arbjerg/lavalink/api/ISocketContext;)V
+	public fun onWebSocketMessageOut (Ldev/arbjerg/lavalink/api/ISocketContext;Ljava/lang/String;)V
+	public fun onWebSocketOpen (Ldev/arbjerg/lavalink/api/ISocketContext;Z)V
+}
+
+public abstract interface class dev/arbjerg/lavalink/api/RestInterceptor : org/springframework/web/servlet/HandlerInterceptor {
+}
+

@@ -9,6 +9,7 @@ plugins {
     kotlin("plugin.serialization")
     id("org.jetbrains.dokka")
     alias(libs.plugins.maven.publish.base)
+    alias(libs.plugins.kotlinx.binary.compatibilty.validator)
 }
 
 val archivesBaseName = "protocol"

@@ -3,6 +3,8 @@ import com.vanniktech.maven.publish.SonatypeHost
 import org.ajoberstar.grgit.Grgit
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import kotlinx.validation.ApiValidationExtension
+import kotlinx.validation.ExperimentalBCVApi
 
 plugins {
     id("org.jetbrains.dokka") version "1.8.20" apply false
@@ -15,6 +17,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.allopen") version "2.0.0"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0" apply false
     alias(libs.plugins.maven.publish.base) apply false
+    alias(libs.plugins.kotlinx.binary.compatibilty.validator) apply false
 }
 
 allprojects {
@@ -48,6 +51,14 @@ subprojects {
     }
 
     afterEvaluate {
+        plugins.withId(libs.plugins.kotlinx.binary.compatibilty.validator.get().pluginId) {
+            @OptIn(ExperimentalBCVApi::class)
+            configure<ApiValidationExtension> {
+                klib {
+                    enabled = true
+                }
+            }
+        }
         plugins.withId(libs.plugins.maven.publish.base.get().pluginId) {
             configure<PublishingExtension> {
                 if (findProperty("MAVEN_PASSWORD") != null && findProperty("MAVEN_USERNAME") != null) {
