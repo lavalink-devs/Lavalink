@@ -25,13 +25,13 @@ nav:
       - Systemd: configuration/systemd.md
       - Docker: configuration/docker.md
       - RoutePlanner: configuration/routeplanner.md
-      - IPv6 Setup:
-        - Do I have IPv6: configuration/ipv6setup/doihaveipv6.md
-        - Tunnelbroker: configuration/ipv6setup/tunnelbroker.md
-        - Ubuntu/Debian: configuration/ipv6setup/ubuntudebian.md
-        - Hetzner: configuration/ipv6setup/hetzner.md
-        - Contabo: configuration/ipv6setup/contabo.md
-        - DigitalOcean: configuration/ipv6setup/digitalocean.md
+      - IPv6:
+        - configuration/ipv6/index.md
+        - Tunnelbroker: configuration/ipv6/tunnelbroker.md
+        - Ubuntu/Debian: configuration/ipv6/ubuntudebian.md
+        - Hetzner: configuration/ipv6/hetzner.md
+        - Contabo: configuration/ipv6/contabo.md
+        - DigitalOcean: configuration/ipv6/digitalocean.md
   - Clients: clients.md
   - Plugins: plugins.md
   - API:
