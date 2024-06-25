@@ -19,3 +19,5 @@ Here are some guides for some popular server providers:
 If your server provider is not listed above, you can use you can check out the general [Debian/Ubuntu](/docs/configuration/ipv6/ubuntudebian.md) guide on how to configure IPv6 on your server.
 
 If your server provider does not provide IPv6 or your IPv6 block size is less than `/64`, you can use [Tunnelbroker](/docs/configuration/ipv6/tunnelbroker.md) instead.
+
+Sometimes, using Tunnelbroker will result in videos that are geo-blocked in every country except the US and Canada, even if the IPv6 address is based in European countries. It may also result in videos that are geo-blocked in the US and Canada, even if the IPv6 address is based in the US.
