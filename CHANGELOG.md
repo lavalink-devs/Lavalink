@@ -3,6 +3,12 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v4.0.7
+* Updated Lavaplayer to [`2.2.1`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.2.1)
+* Updated spring-boot to `3.3.0` & spring-websocket to `6.1.9`
+* Updated kotlin to `2.0.0` & kotlinx-serialization-json to `1.7.0`
+* Updated logback to `1.5.6` & sentry-logback to `7.10.0`
+
 ## v4.0.6
 * Updated Lavaplayer to [`2.2.0`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.2.0)
 * Updated Koe to [`2.0.2`](https://github.com/KyokoBot/koe/releases/tag/2.0.2)
