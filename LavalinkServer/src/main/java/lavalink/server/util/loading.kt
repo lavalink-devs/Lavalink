@@ -8,8 +8,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioItem
 /**
  * Loads an audio item from the specified [identifier].
  *
- * This method wraps any exceptions thrown by the [AudioPlayerManager.loadItem] method in a [FriendlyException] and
- * returns `null` if an exception is thrown. This is meant to keep consistent behavior when loading audio items.
+ * This method wraps any exceptions thrown by the [AudioPlayerManager.loadItem] method in a [FriendlyException]. 
+ * This is meant to maintain the behavior from callback-style item loading.
  */
 fun loadAudioItem(manager: AudioPlayerManager, identifier: String): AudioItem? = try {
     manager.loadItemSync(identifier)
