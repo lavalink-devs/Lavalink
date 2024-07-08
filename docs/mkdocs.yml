@@ -25,6 +25,13 @@ nav:
       - Systemd: configuration/systemd.md
       - Docker: configuration/docker.md
       - RoutePlanner: configuration/routeplanner.md
+      - IPv6:
+        - configuration/ipv6/index.md
+        - Tunnelbroker: configuration/ipv6/tunnelbroker.md
+        - Ubuntu/Debian: configuration/ipv6/ubuntudebian.md
+        - Hetzner: configuration/ipv6/hetzner.md
+        - Contabo: configuration/ipv6/contabo.md
+        - DigitalOcean: configuration/ipv6/digitalocean.md
   - Clients: clients.md
   - Plugins: plugins.md
   - API:
