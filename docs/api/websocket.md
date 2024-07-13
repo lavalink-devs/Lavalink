@@ -106,7 +106,7 @@ Dispatched every x seconds (configurable in `application.yml`) with the current 
 ```json
 {
   "op": "playerUpdate",
-  "guildId": "...",
+  "guildId": "1082302532421943407",
   "state": {
     "time": 1500467109,
     "position": 60000,
@@ -243,7 +243,7 @@ Dispatched when a track starts playing.
 {
   "op": "event",
   "type": "TrackStartEvent",
-  "guildId": "...",
+  "guildId": "1082302532421943407",
   "track": {
     "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
     "info": {
@@ -259,7 +259,8 @@ Dispatched when a track starts playing.
       "isrc": null,
       "sourceName": "youtube"
     },
-    "pluginInfo": {}
+    "pluginInfo": {},
+    "userData": {}
   }
 }
 ```
@@ -294,7 +295,7 @@ Dispatched when a track ends.
 {
   "op": "event",
   "type": "TrackEndEvent",
-  "guildId": "...",
+  "guildId": "1082302532421943407",
   "track": {
     "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
     "info": {
@@ -310,7 +311,8 @@ Dispatched when a track ends.
       "isrc": null,
       "sourceName": "youtube"
     },
-    "pluginInfo": {}
+    "pluginInfo": {},
+    "userData": {}
   },
   "reason": "finished"
 }
@@ -352,7 +354,7 @@ Dispatched when a track throws an exception.
 {
   "op": "event",
   "type": "TrackExceptionEvent",
-  "guildId": "...",
+  "guildId": "1082302532421943407",
   "track": {
     "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
     "info": {
@@ -368,7 +370,8 @@ Dispatched when a track throws an exception.
       "isrc": null,
       "sourceName": "youtube"
     },
-    "pluginInfo": {}
+    "pluginInfo": {},
+    "userData": {}
   },
   "exception": {
     "message": "...",
@@ -398,7 +401,7 @@ Dispatched when a track gets stuck while playing.
 {
   "op": "event",
   "type": "TrackStuckEvent",
-  "guildId": "...",
+  "guildId": "1082302532421943407",
   "track": {
     "encoded": "QAAAjQIAJVJpY2sgQXN0bGV5IC0gTmV2ZXIgR29ubmEgR2l2ZSBZb3UgVXAADlJpY2tBc3RsZXlWRVZPAAAAAAADPCAAC2RRdzR3OVdnWGNRAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9ZFF3NHc5V2dYY1EAB3lvdXR1YmUAAAAAAAAAAA==",
     "info": {
@@ -414,7 +417,8 @@ Dispatched when a track gets stuck while playing.
       "isrc": null,
       "sourceName": "youtube"
     },
-    "pluginInfo": {}
+    "pluginInfo": {},
+    "userData": {}
   },
   "thresholdMs": 123456789
 }
@@ -444,7 +448,7 @@ See the [Discord Docs](https://discord.com/developers/docs/topics/opcodes-and-st
 {
   "op": "event",
   "type": "WebSocketClosedEvent",
-  "guildId": "...",
+  "guildId": "1082302532421943407",
   "code": 4006,
   "reason": "Your session is no longer valid.",
   "byRemote": true
