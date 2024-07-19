@@ -2,6 +2,8 @@
 description: How to configure IPv6 on your Hetzner VPS.
 ---
 
+# US locations for hetzner blockeds ipv6 rotation 
+
 Setting up IPv6 for Lavalink on a Hetzner VPS is just 3 commands. The VPS comes with a /64 address to use and already has IPv6 enabled for you.
 
 This how-to may depend on your system's OS, but it has already been tested on `Ubuntu` and `Debian`.
