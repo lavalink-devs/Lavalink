@@ -751,7 +751,7 @@ When `identifier` is used, Lavalink will try to resolve the identifier as a sing
 
 Response:
 
-[Player](#Player) object
+[Player](#player) object
 
 <details markdown="1">
 <summary>Example Payload</summary>
