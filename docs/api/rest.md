@@ -98,6 +98,7 @@ This endpoint is used to resolve audio tracks for use with the [Update Player](#
 
     Plugins may also implement prefixes to allow for more search engines to be utilised.
 
+    You can find more about sources [here](./sources.md)
 
 ```
 GET /v4/loadtracks?identifier=dQw4w9WgXcQ

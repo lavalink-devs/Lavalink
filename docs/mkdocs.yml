@@ -39,6 +39,7 @@ nav:
       - Websocket: api/websocket.md
       - Rest: api/rest.md
       - Plugins: api/plugins.md
+      - Sources: api/sources.md
   - Changelog:
       - changelog/index.md
       - v4: changelog/v4.md
