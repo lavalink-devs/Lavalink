@@ -24,5 +24,6 @@ for instructions.
 | [Lyrics.kt Plugin](https://github.com/DRSchlaubi/lyrics.kt)                | Plugin that fetches timestamped lyrics from YouTube                                                                                        |
 | [Java Timed Lyrics Plugin](https://github.com/DuncteBot/java-timed-lyrics) | Timestamped lyrics from YouTube with Genius fallback, supports IP-rotation (supports: [LavaLyrics](https://github.com/topi314/LavaLyrics)) |
 | [LavaDSPX Plugin](https://github.com/Devoxin/LavaDSPX-Plugin)              | Additional audio filters for Lavalink                                                                                                      |
+| [JioSaavn Plugin](https://github.com/appujet/jiosaavn-plugin)              | JioSaavn source plugin for Lavalink                                                                                                        |
 
 If you want to make your own plugin see [here](api/plugins.md)
