@@ -20,4 +20,4 @@ If your server provider is not listed above, you can use you can check out the g
 
 If your server provider does not provide IPv6 or your IPv6 block size is less than `/64`, you can use [Tunnelbroker](/docs/configuration/ipv6/tunnelbroker.md) instead.
 
-Sometimes, using Tunnelbroker will result in videos that are geo-blocked in every country except the US and Canada, even if the IPv6 address is based in European countries. It may also result in videos that are geo-blocked in the US and Canada, even if the IPv6 address is based in the US.
+Beware, when using Tunnelbroker, it will use the country you provided in your account's personal information to feed Google's GeoIP database for your tunnel subnet. That's why sometimes it appears that your tunnel is in the US, but the GeoIP location appears to be in other countries.
