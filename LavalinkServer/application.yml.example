@@ -12,7 +12,8 @@ lavalink:
   server:
     password: "youshallnotpass"
     sources:
-      youtube: true
+      # The default Youtube source is now deprecated and won't receive further updates. Please use https://github.com/lavalink-devs/youtube-source#plugin instead.
+      youtube: false
       bandcamp: true
       soundcloud: true
       twitch: true
