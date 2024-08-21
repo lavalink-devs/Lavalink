@@ -51,7 +51,7 @@ dependencies {
         exclude(group = "org.slf4j", module = "slf4j-api")
     }
     implementation(libs.koe.udpqueue) {
-        exclude(module="udp-queue")
+        exclude(module = "lava-common")
     }
     implementation(libs.bundles.udpqueue.natives) {
         exclude(group = "com.sedmelluq", module = "lava-common")

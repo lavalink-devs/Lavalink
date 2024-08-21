@@ -16,7 +16,6 @@ dependencyResolutionManagement {
             voice()
             metrics()
             common()
-            other()
         }
     }
 }
@@ -42,8 +41,8 @@ fun VersionCatalogBuilder.voice() {
     library("lavaplayer-ip-rotator", "dev.arbjerg", "lavaplayer-ext-youtube-rotator").versionRef("lavaplayer")
     library("lavadsp",               "dev.arbjerg", "lavadsp").version("0.7.8")
 
-    library("koe",          "moe.kyokobot.koe", "core").version("2.0.2")
-    library("koe-udpqueue", "moe.kyokobot.koe", "ext-udpqueue").version("2.0.2")
+    library("koe",          "moe.kyokobot.koe", "core").version("2.0.3-rc2")
+    library("koe-udpqueue", "moe.kyokobot.koe", "ext-udpqueue").version("2.0.3-rc2")
 
     version("udpqueue", "0.2.7")
     val platforms = listOf("linux-x86-64", "linux-x86", "linux-aarch64", "linux-arm", "linux-musl-x86-64", "linux-musl-aarch64", "win-x86-64", "win-x86", "darwin")
@@ -77,10 +76,4 @@ fun VersionCatalogBuilder.common() {
     library("json",           "org.json",             "json").version("20180813")
 
     library("spotbugs", "com.github.spotbugs", "spotbugs-annotations").version("3.1.6")
-}
-
-
-fun VersionCatalogBuilder.other() {
-    library("jda",             "net.dv8tion",         "JDA").version("4.1.1_135")
-    library("lavalink-client", "com.github.FredBoat", "Lavalink-Client").version("8d9b660")
 }
