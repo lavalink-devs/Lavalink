@@ -83,4 +83,5 @@ fun VersionCatalogBuilder.other() {
 
     plugin("maven-publish", "com.vanniktech.maven.publish").versionRef(mavenPublishPlugin)
     plugin("maven-publish-base", "com.vanniktech.maven.publish.base").versionRef(mavenPublishPlugin)
+    plugin("kotlinx-binary-compatibilty-validator", "org.jetbrains.kotlinx.binary-compatibility-validator").version("0.15.0-Beta.2")
 }
