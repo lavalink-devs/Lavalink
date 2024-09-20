@@ -3,6 +3,13 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v3.7.13
+> [!CAUTION]
+> This is the last Lavalink v3 release, see: https://github.com/lavalink-devs/Lavalink/discussions/1100
+
+* Updated Lavaplayer to [`1.5.6`](https://github.com/lavalink-devs/lavaplayer/releases/tag/1.5.6)
+* Updated koe to [`2.0.3-rc2`](https://github.com/KyokoBot/koe/releases/tag/2.0.3-rc2) & use voice gateway v8 in https://github.com/lavalink-devs/Lavalink/pull/1098
+
 ## v3.7.12
 * Updated Lavaplayer to [`1.5.4`](https://github.com/lavalink-devs/lavaplayer/releases/tag/1.5.4)
 * Updated Koe to [`2.0.1`](https://github.com/KyokoBot/koe/releases/tag/2.0.1) (fixes the `IndexOutOfBoundsException` when playing a YouTube track)
