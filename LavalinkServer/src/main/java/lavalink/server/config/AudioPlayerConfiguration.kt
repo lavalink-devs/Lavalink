@@ -14,6 +14,7 @@ import com.sedmelluq.discord.lavaplayer.source.soundcloud.*
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.track.playback.NonAllocatingAudioFrameBuffer
 import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup
 import com.sedmelluq.lava.extensions.youtuberotator.planner.*
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv4Block
@@ -53,6 +54,11 @@ class AudioPlayerConfiguration {
 
         if (serverConfig.isGcWarnings) {
             audioPlayerManager.enableGcMonitoring()
+        }
+
+        if (serverConfig.isNonAllocatingFrameBuffer) {
+            log.info("Using a non-allocating frame buffer")
+            audioPlayerManager.configuration.setFrameBufferFactory(::NonAllocatingAudioFrameBuffer)
         }
 
         val defaultFrameBufferDuration = audioPlayerManager.frameBufferDuration

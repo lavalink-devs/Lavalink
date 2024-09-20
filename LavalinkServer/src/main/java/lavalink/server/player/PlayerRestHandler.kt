@@ -1,8 +1,6 @@
 package lavalink.server.player
 
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker
 import dev.arbjerg.lavalink.api.AudioFilterExtension
@@ -18,7 +16,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
-import java.util.concurrent.CompletableFuture
 
 @RestController
 class PlayerRestHandler(
@@ -60,7 +57,10 @@ class PlayerRestHandler(
         val context = socketContext(socketServer, sessionId)
 
         if (playerUpdate.track.isPresent() && (playerUpdate.encodedTrack is Omissible.Present || playerUpdate.identifier is Omissible.Present)) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot specify both track and encodedTrack/identifier")
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Cannot specify both track and encodedTrack/identifier"
+            )
         }
 
         val track = if (playerUpdate.track.isPresent()) {
@@ -180,44 +180,19 @@ class PlayerRestHandler(
                     decodeTrack(context.audioPlayerManager, it)
                 }
             } else {
-                val trackFuture = CompletableFuture<AudioTrack>()
-                context.audioPlayerManager.loadItemSync(
-                    (identifier as Omissible.Present).value,
-                    object : AudioLoadResultHandler {
-                        override fun trackLoaded(track: AudioTrack) {
-                            trackFuture.complete(track)
-                        }
+                val item = try {
+                    loadAudioItem(context.audioPlayerManager, (identifier as Omissible.Present).value)
+                    // Safety: loadAudioItem ONLY throws FriendlyException
+                } catch (ex: FriendlyException) {
+                    throw ResponseStatusException(HttpStatus.BAD_REQUEST, ex.message, getRootCause(ex))
+                }
 
-                        override fun playlistLoaded(playlist: AudioPlaylist) {
-                            trackFuture.completeExceptionally(
-                                ResponseStatusException(
-                                    HttpStatus.BAD_REQUEST,
-                                    "Cannot play a playlist or search result"
-                                )
-                            )
-                        }
+                if (item !is AudioTrack) throw ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    if (item == null) "No matches found for identifier" else "Cannot play a playlist or search result"
+                )
 
-                        override fun noMatches() {
-                            trackFuture.completeExceptionally(
-                                ResponseStatusException(
-                                    HttpStatus.BAD_REQUEST,
-                                    "No matches found for identifier"
-                                )
-                            )
-                        }
-
-                        override fun loadFailed(exception: FriendlyException) {
-                            trackFuture.completeExceptionally(
-                                ResponseStatusException(
-                                    HttpStatus.INTERNAL_SERVER_ERROR,
-                                    exception.message,
-                                    getRootCause(exception)
-                                )
-                            )
-                        }
-                    })
-
-                trackFuture.join()
+                item
             }
 
             newTrack?.let {

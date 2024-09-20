@@ -22,20 +22,21 @@
 package lavalink.server.player
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
+import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.protocol.v4.EncodedTracks
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.arbjerg.lavalink.protocol.v4.Tracks
 import jakarta.servlet.http.HttpServletRequest
-import lavalink.server.util.decodeTrack
-import lavalink.server.util.toTrack
+import lavalink.server.util.*
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
-import java.util.concurrent.CompletionStage
 
 @RestController
 class AudioLoaderRestHandler(
@@ -53,7 +54,43 @@ class AudioLoaderRestHandler(
         @RequestParam identifier: String
     ): ResponseEntity<LoadResult> {
         log.info("Got request to load for identifier \"${identifier}\"")
-        return ResponseEntity.ok(AudioLoader(audioPlayerManager, pluginInfoModifiers).load(identifier))
+
+        val item = try {
+            loadAudioItem(audioPlayerManager, identifier)
+        } catch (ex: FriendlyException) {
+            log.error("Failed to load track", ex)
+            return ResponseEntity.ok(LoadResult.loadFailed(ex))
+        }
+
+        val result = when (item) {
+            null -> LoadResult.NoMatches()
+
+            is AudioTrack -> {
+                log.info("Loaded track ${item.info.title}")
+                LoadResult.trackLoaded(item.toTrack(audioPlayerManager, pluginInfoModifiers))
+            }
+
+            is AudioPlaylist -> {
+                log.info("Loaded playlist ${item.name}")
+
+                val tracks = item.tracks.map { it.toTrack(audioPlayerManager, pluginInfoModifiers) }
+                if (item.isSearchResult) {
+                    LoadResult.searchResult(tracks)
+                } else {
+                    LoadResult.playlistLoaded(item.toPlaylistInfo(), item.toPluginInfo(pluginInfoModifiers), tracks)
+                }
+            }
+
+            else -> {
+                log.error("Unknown item type: ${item.javaClass}")
+                throw ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Identifier returned unknown audio item type: ${item.javaClass.canonicalName}"
+                )
+            }
+        }
+
+        return ResponseEntity.ok(result)
     }
 
     @GetMapping("/v4/decodetrack")
@@ -62,7 +99,12 @@ class AudioLoaderRestHandler(
             HttpStatus.BAD_REQUEST,
             "No track to decode provided"
         )
-        return ResponseEntity.ok(decodeTrack(audioPlayerManager, trackToDecode).toTrack(trackToDecode, pluginInfoModifiers))
+        return ResponseEntity.ok(
+            decodeTrack(audioPlayerManager, trackToDecode).toTrack(
+                trackToDecode,
+                pluginInfoModifiers
+            )
+        )
     }
 
     @PostMapping("/v4/decodetracks")
