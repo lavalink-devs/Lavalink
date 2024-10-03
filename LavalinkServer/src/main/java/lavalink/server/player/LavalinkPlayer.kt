@@ -21,12 +21,14 @@
  */
 package lavalink.server.player
 
+import com.sedmelluq.discord.lavaplayer.format.StandardAudioDataFormats
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame
+import com.sedmelluq.discord.lavaplayer.track.playback.MutableAudioFrame
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.api.IPlayer
 import io.netty.buffer.ByteBuf
@@ -36,6 +38,7 @@ import lavalink.server.io.SocketServer.Companion.sendPlayerUpdate
 import lavalink.server.player.filters.FilterChain
 import moe.kyokobot.koe.MediaConnection
 import moe.kyokobot.koe.media.OpusAudioFrameProvider
+import java.nio.ByteBuffer
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
@@ -46,6 +49,9 @@ class LavalinkPlayer(
     audioPlayerManager: AudioPlayerManager,
     pluginInfoModifiers: List<AudioPluginInfoModifier>
 ) : AudioEventAdapter(), IPlayer {
+    private val buffer = ByteBuffer.allocate(StandardAudioDataFormats.DISCORD_OPUS.maximumChunkSize())
+    private val mutableFrame = MutableAudioFrame().apply { setBuffer(buffer) }
+
     val audioLossCounter = AudioLossCounter()
     var endMarkerHit = false
     var filters: FilterChain = FilterChain()
@@ -117,21 +123,15 @@ class LavalinkPlayer(
     }
 
     private inner class Provider(connection: MediaConnection?) : OpusAudioFrameProvider(connection) {
-        private var lastFrame: AudioFrame? = null
-
-        override fun canProvide(): Boolean {
-            lastFrame = audioPlayer.provide()
-            return if (lastFrame == null) {
+        override fun canProvide() = audioPlayer.provide(mutableFrame).also { provided ->
+            if (!provided) {
                 audioLossCounter.onLoss()
-                false
-            } else {
-                true
             }
         }
 
         override fun retrieveOpusFrame(buf: ByteBuf) {
             audioLossCounter.onSuccess()
-            buf.writeBytes(lastFrame!!.data)
+            buf.writeBytes(buffer.flip())
         }
     }
 }

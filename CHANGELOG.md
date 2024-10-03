@@ -3,6 +3,12 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v4.0.8
+* Updated koe to [`2.0.3-rc2`](https://github.com/KyokoBot/koe/releases/tag/2.0.3-rc2) & use voice gateway `v8` in https://github.com/lavalink-devs/Lavalink/pull/1097
+* Updated Lavaplayer to [`2.2.2`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.2.2) in https://github.com/lavalink-devs/Lavalink/pull/1105
+* Allow usage of non-allocating frame buffers in https://github.com/lavalink-devs/Lavalink/pull/1095
+* Added shutdown handling to close sessions cleanly in https://github.com/lavalink-devs/Lavalink/pull/1102
+
 ## v4.0.7
 * Updated Lavaplayer to [`2.2.1`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.2.1)
 * Updated spring-boot to `3.3.0` & spring-websocket to `6.1.9`

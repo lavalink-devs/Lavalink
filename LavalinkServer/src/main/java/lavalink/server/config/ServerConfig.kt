@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component
 @Component
 class ServerConfig {
     var password: String? = null
+    var isNonAllocatingFrameBuffer = false
     var bufferDurationMs: Int? = null
     var frameBufferDurationMs: Int? = null
     var opusEncodingQuality: Int? = null

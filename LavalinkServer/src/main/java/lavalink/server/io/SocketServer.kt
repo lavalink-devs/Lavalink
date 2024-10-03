@@ -56,6 +56,10 @@ final class SocketServer(
     private val statsCollector = StatsCollector(this)
     private val charPool = ('a'..'z') + ('0'..'9')
 
+    init {
+        Runtime.getRuntime().addShutdownHook(ShutdownHandler(this))
+    }
+
     companion object {
         private val log = LoggerFactory.getLogger(SocketServer::class.java)
 

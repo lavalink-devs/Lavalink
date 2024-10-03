@@ -5,6 +5,7 @@ import com.sedmelluq.lava.common.natives.architecture.DefaultOperatingSystemType
 import com.sedmelluq.lava.common.natives.architecture.SystemType
 import moe.kyokobot.koe.KoeOptions
 import moe.kyokobot.koe.codec.udpqueue.UdpQueueFramePollerFactory
+import moe.kyokobot.koe.gateway.GatewayVersion
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
@@ -32,6 +33,8 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
 
     @Bean
     fun koeOptions(): KoeOptions = KoeOptions.builder().apply {
+        setGatewayVersion(GatewayVersion.V8)
+
         val systemType: SystemType? = try {
             SystemType(DefaultArchitectureTypes.detect(), DefaultOperatingSystemTypes.detect())
         } catch (e: IllegalArgumentException) {
