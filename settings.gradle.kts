@@ -21,7 +21,7 @@ dependencyResolutionManagement {
 }
 
 fun VersionCatalogBuilder.spring() {
-    version("spring-boot", "3.3.0")
+    version("spring-boot", "3.3.5")
 
     library("spring-websocket", "org.springframework", "spring-websocket").version("6.1.9")
 
