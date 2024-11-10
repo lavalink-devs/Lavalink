@@ -1,5 +1,7 @@
 package lavalink.server.bootstrap
 
+import dev.arbjerg.lavalink.api.PluginSystem
+import org.pf4j.PluginManager
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -14,17 +16,17 @@ import kotlin.io.path.createDirectories
 import kotlin.io.path.div
 
 @SpringBootApplication
-class PluginManager(val config: PluginsConfig, val loader: PluginLoader) {
+class PluginSystemImpl(val config: PluginsConfig, override val manager: PluginManager) : PluginSystem {
     val httpClient = HttpClient.newHttpClient()
 
     companion object {
-        private val log: Logger = LoggerFactory.getLogger(PluginManager::class.java)
+        private val log: Logger = LoggerFactory.getLogger(PluginSystemImpl::class.java)
     }
 
     init {
-        loader.loadPlugins()
+        manager.loadPlugins()
         manageDownloads()
-        loader.startPlugins()
+        manager.startPlugins()
     }
 
     @OptIn(ExperimentalPathApi::class)
@@ -46,20 +48,20 @@ class PluginManager(val config: PluginsConfig, val loader: PluginLoader) {
             Declaration(fragments[0], fragments[1], fragments[2], "${repository.removeSuffix("/")}/")
         }.distinctBy { "${it.group}:${it.name}" }
 
-        val pluginManifests = loader.plugins.map { it.descriptor as LavalinkPluginDescriptor }
+        val pluginManifests = manager.plugins.map { it.descriptor as LavalinkPluginDescriptor }
 
         for (declaration in declarations) {
             val manifest = pluginManifests.firstOrNull { it.pluginId == declaration.name }
 
             if (manifest?.version != declaration.version) {
                 if (manifest != null) {
-                    loader.deletePlugin(manifest.pluginId)
+                    manager.deletePlugin(manifest.pluginId)
                 }
 
                 val url = declaration.url
                 val file = directory / declaration.canonicalJarName
                 if (downloadJar(file, url)) {
-                    loader.loadPlugin(file)
+                    manager.loadPlugin(file)
                 }
             }
         }

@@ -84,4 +84,5 @@ fun VersionCatalogBuilder.other() {
     plugin("maven-publish", "com.vanniktech.maven.publish").versionRef(mavenPublishPlugin)
     plugin("maven-publish-base", "com.vanniktech.maven.publish.base").versionRef(mavenPublishPlugin)
     library("pf4j", "org.pf4j", "pf4j").version("3.12.1")
+    library("pf4j-spring", "org.pf4j", "pf4j-spring").version("0.9.0")
 }
