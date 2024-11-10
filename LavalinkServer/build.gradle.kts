@@ -41,6 +41,7 @@ dependencies {
     implementation(projects.pluginApi) {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
     }
+    implementation("org.pf4j", "pf4j", "3.12.1")
 
     implementation(libs.bundles.metrics)
     implementation(libs.bundles.spring) {

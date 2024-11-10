@@ -45,8 +45,9 @@ class InfoRestHandler(
         PlayerLibrary.VERSION,
         audioPlayerManager.sourceManagers.map { it.sourceName },
         enabledFilers,
-        Plugins(pluginManager.pluginManifests.map {
-            Plugin(it.name, it.version)
+        Plugins(pluginManager.loader.plugins.map {
+            val descriptor = it.descriptor
+            Plugin(descriptor.pluginId, descriptor.version)
         })
     )
     private val version = appInfo.versionBuild

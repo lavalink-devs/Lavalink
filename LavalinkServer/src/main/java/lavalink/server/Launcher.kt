@@ -23,6 +23,8 @@
 package lavalink.server
 
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary
+import lavalink.server.bootstrap.LavalinkPluginDescriptor
+import lavalink.server.bootstrap.PluginComponentClassLoader
 import lavalink.server.bootstrap.PluginManager
 import lavalink.server.info.AppInfo
 import lavalink.server.info.GitRepoState
@@ -126,7 +128,7 @@ object Launcher {
         launchMain(parent, args)
     }
 
-    private fun launchPluginBootstrap() = SpringApplication(PluginManager::class.java).run {
+    private fun launchPluginBootstrap() = SpringApplication(AppInfo::class.java, PluginManager::class.java).run {
         setBannerMode(Banner.Mode.OFF)
         webApplicationType = WebApplicationType.NONE
         run()
@@ -135,7 +137,8 @@ object Launcher {
     private fun launchMain(parent: ConfigurableApplicationContext, args: Array<String>) {
         val pluginManager = parent.getBean(PluginManager::class.java)
         val properties = Properties()
-        properties["componentScan"] = pluginManager.pluginManifests.map { it.path }
+        properties["componentScan"] = pluginManager.loader.plugins
+            .map { (it.descriptor as LavalinkPluginDescriptor).path }
             .toMutableList().apply { add("lavalink.server") }
 
         SpringApplicationBuilder()
@@ -143,7 +146,7 @@ object Launcher {
             .properties(properties)
             .web(WebApplicationType.SERVLET)
             .bannerMode(Banner.Mode.OFF)
-            .resourceLoader(DefaultResourceLoader(pluginManager.classLoader))
+            .resourceLoader(DefaultResourceLoader(PluginComponentClassLoader(pluginManager.loader)))
             .listeners(
                 ApplicationListener { event: Any ->
                     when (event) {
