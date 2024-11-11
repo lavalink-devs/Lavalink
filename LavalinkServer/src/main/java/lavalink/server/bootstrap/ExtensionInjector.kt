@@ -5,14 +5,11 @@ import org.pf4j.ExtensionDescriptor
 import org.pf4j.ExtensionFactory
 import org.pf4j.ExtensionWrapper
 import org.pf4j.spring.ExtensionsInjector
-import org.pf4j.spring.SpringPlugin
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Configurable
 import org.springframework.beans.factory.getBean
 import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConfigurationPropertiesBindingPostProcessor
-import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.web.bind.annotation.RestController
 import kotlin.reflect.full.hasAnnotation
 
