@@ -61,9 +61,9 @@ class LavalinkExtensionInjector(pluginManager: PluginLoader, factory: AbstractAu
     }
 
     override fun registerExtension(extensionClass: Class<*>) {
-        val extensionBeanMap = springPluginManager.applicationContext.getBeansOfType(extensionClass);
+        val extensionBeanMap = springPluginManager.applicationContext.getBeansOfType(extensionClass)
         if (extensionBeanMap.isEmpty()) {
-            val extension = springPluginManager.getExtensionFactory().create(extensionClass);
+            val extension = springPluginManager.getExtensionFactory().create(extensionClass)
 
             if (extensionClass.kotlin.hasAnnotation<ConfigurationProperties>()) {
                 val configBinder =
@@ -71,8 +71,8 @@ class LavalinkExtensionInjector(pluginManager: PluginLoader, factory: AbstractAu
                 configBinder.postProcessBeforeInitialization(extension, extensionClass.getName())
             }
 
-            this.beanFactory.registerSingleton(extensionClass.getName(), extension);
-            this.beanFactory.autowireBean(extension);
+            this.beanFactory.registerSingleton(extensionClass.getName(), extension)
+            this.beanFactory.autowireBean(extension)
 
             if (extension::class.hasAnnotation<RestController>()) {
                 log.debug(
@@ -85,7 +85,7 @@ class LavalinkExtensionInjector(pluginManager: PluginLoader, factory: AbstractAu
                 mapping.registerExtension(extension)
             }
         } else {
-            log.debug("Bean registeration aborted! Extension '{}' already existed as bean!", extensionClass.getName());
+            log.debug("Bean registeration aborted! Extension '{}' already existed as bean!", extensionClass.getName())
         }
 
     }
