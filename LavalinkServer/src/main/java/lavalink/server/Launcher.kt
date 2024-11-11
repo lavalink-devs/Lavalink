@@ -25,10 +25,13 @@ package lavalink.server
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary
 import lavalink.server.bootstrap.LavalinkPluginDescriptor
 import lavalink.server.bootstrap.PluginComponentClassLoader
-import lavalink.server.bootstrap.PluginManager
+import lavalink.server.bootstrap.PluginDescriptor
+import lavalink.server.bootstrap.PluginSystemImpl
 import lavalink.server.info.AppInfo
 import lavalink.server.info.GitRepoState
+import org.pf4j.PluginManager
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.getBean
 import org.springframework.boot.Banner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.WebApplicationType
@@ -37,6 +40,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent
 import org.springframework.boot.context.event.ApplicationFailedEvent
 import org.springframework.boot.context.event.ApplicationReadyEvent
+import org.springframework.boot.runApplication
 import org.springframework.context.ApplicationListener
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.annotation.ComponentScan
@@ -49,10 +53,10 @@ import java.util.*
 
 
 @Suppress("SpringComponentScan")
-@SpringBootApplication
+@SpringBootApplication()
 @ComponentScan(
     value = ["\${componentScan}"],
-    excludeFilters = [ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = [PluginManager::class])]
+    excludeFilters = [ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = [PluginSystemImpl::class])]
 )
 class LavalinkApplication
 
@@ -103,11 +107,11 @@ object Launcher {
         val defaultC = "[0m"
 
         var vanity = ("g       .  r _                  _ _       _    g__ _ _\n"
-                + "g      /\\\\ r| | __ ___   ____ _| (_)_ __ | | __g\\ \\ \\ \\\n"
-                + "g     ( ( )r| |/ _` \\ \\ / / _` | | | '_ \\| |/ /g \\ \\ \\ \\\n"
-                + "g      \\\\/ r| | (_| |\\ V / (_| | | | | | |   < g  ) ) ) )\n"
-                + "g       '  r|_|\\__,_| \\_/ \\__,_|_|_|_| |_|_|\\_\\g / / / /\n"
-                + "d    =========================================g/_/_/_/d")
+            + "g      /\\\\ r| | __ ___   ____ _| (_)_ __ | | __g\\ \\ \\ \\\n"
+            + "g     ( ( )r| |/ _` \\ \\ / / _` | | | '_ \\| |/ /g \\ \\ \\ \\\n"
+            + "g      \\\\/ r| | (_| |\\ V / (_| | | | | | |   < g  ) ) ) )\n"
+            + "g       '  r|_|\\__,_| \\_/ \\__,_|_|_|_| |_|_|\\_\\g / / / /\n"
+            + "d    =========================================g/_/_/_/d")
 
         vanity = vanity.replace("r".toRegex(), red)
         vanity = vanity.replace("g".toRegex(), green)
@@ -128,33 +132,40 @@ object Launcher {
         launchMain(parent, args)
     }
 
-    private fun launchPluginBootstrap() = SpringApplication(AppInfo::class.java, PluginManager::class.java).run {
-        setBannerMode(Banner.Mode.OFF)
-        webApplicationType = WebApplicationType.NONE
-        run()
-    }
+    private fun launchPluginBootstrap() = runApplication<PluginSystemImpl> {
+            setBannerMode(Banner.Mode.OFF)
+            webApplicationType = WebApplicationType.NONE
+        }
 
     private fun launchMain(parent: ConfigurableApplicationContext, args: Array<String>) {
-        val pluginManager = parent.getBean(PluginManager::class.java)
+        val pluginManager = parent.getBean<PluginSystemImpl>()
         val properties = Properties()
-        properties["componentScan"] = pluginManager.loader.plugins
+        properties["componentScan"] = pluginManager.manager.plugins
+            .asSequence()
+            .filter { (it.descriptor as LavalinkPluginDescriptor).manifestVersion == PluginDescriptor.Version.V1 }
             .map { (it.descriptor as LavalinkPluginDescriptor).path }
-            .toMutableList().apply { add("lavalink.server") }
+            .toList() + "lavalink.server"
 
         SpringApplicationBuilder()
+            .parent(parent)
             .sources(LavalinkApplication::class.java)
             .properties(properties)
             .web(WebApplicationType.SERVLET)
             .bannerMode(Banner.Mode.OFF)
-            .resourceLoader(DefaultResourceLoader(PluginComponentClassLoader(pluginManager.loader)))
+            .resourceLoader(DefaultResourceLoader(PluginComponentClassLoader(pluginManager.manager)))
             .listeners(
                 ApplicationListener { event: Any ->
                     when (event) {
                         is ApplicationEnvironmentPreparedEvent -> {
                             log.info(getVersionInfo())
+
                         }
 
                         is ApplicationReadyEvent -> {
+                            pluginManager.manager.applicationContext = event.applicationContext
+                            pluginManager.manager.startPlugins()
+                            pluginManager.manager.injector.injectExtensions()
+
                             log.info("Lavalink is ready to accept connections.")
                         }
 
@@ -163,7 +174,7 @@ object Launcher {
                         }
                     }
                 }
-            ).parent(parent)
+            )
             .run(*args)
     }
 }

@@ -4,7 +4,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.protocol.v4.*
-import lavalink.server.bootstrap.PluginManager
+import lavalink.server.bootstrap.PluginSystemImpl
 import lavalink.server.config.ServerConfig
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
@@ -17,7 +17,7 @@ class InfoRestHandler(
     appInfo: AppInfo,
     gitRepoState: GitRepoState,
     audioPlayerManager: AudioPlayerManager,
-    pluginManager: PluginManager,
+    pluginManager: PluginSystemImpl,
     serverConfig: ServerConfig,
     filterExtensions: List<AudioFilterExtension>
 ) {
@@ -45,7 +45,7 @@ class InfoRestHandler(
         PlayerLibrary.VERSION,
         audioPlayerManager.sourceManagers.map { it.sourceName },
         enabledFilers,
-        Plugins(pluginManager.loader.plugins.map {
+        Plugins(pluginManager.manager.plugins.map {
             val descriptor = it.descriptor
             Plugin(descriptor.pluginId, descriptor.version)
         })

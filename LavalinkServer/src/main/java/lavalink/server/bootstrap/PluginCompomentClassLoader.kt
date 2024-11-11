@@ -66,6 +66,7 @@ class PluginComponentClassLoader(pluginLoader: PluginLoader) : ClassLoader() {
     )
 
     private val cache = pluginLoader.plugins
+        .filter { (it.descriptor as LavalinkPluginDescriptor).manifestVersion == PluginDescriptor.Version.V1 }
         .associateBy { (it.descriptor as LavalinkPluginDescriptor).path.replace('.', '/') }
         .toMutableMap()
 

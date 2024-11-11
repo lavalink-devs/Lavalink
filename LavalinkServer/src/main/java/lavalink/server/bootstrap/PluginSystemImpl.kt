@@ -1,10 +1,12 @@
 package lavalink.server.bootstrap
 
 import dev.arbjerg.lavalink.api.PluginSystem
-import org.pf4j.PluginManager
+import lavalink.server.info.AppInfo
+import org.pf4j.spring.ExtensionsInjector
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.context.annotation.Import
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -15,8 +17,12 @@ import kotlin.io.path.Path
 import kotlin.io.path.createDirectories
 import kotlin.io.path.div
 
+@Import(AppInfo::class)
 @SpringBootApplication
-class PluginSystemImpl(val config: PluginsConfig, override val manager: PluginManager) : PluginSystem {
+class PluginSystemImpl(
+    val config: PluginsConfig,
+    override val manager: PluginLoader,
+) : PluginSystem {
     val httpClient = HttpClient.newHttpClient()
 
     companion object {
@@ -26,7 +32,6 @@ class PluginSystemImpl(val config: PluginsConfig, override val manager: PluginMa
     init {
         manager.loadPlugins()
         manageDownloads()
-        manager.startPlugins()
     }
 
     @OptIn(ExperimentalPathApi::class)

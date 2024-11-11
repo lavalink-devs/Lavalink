@@ -11,6 +11,7 @@ import org.pf4j.PluginDescriptor as BasePluginDescriptor
 interface PluginDescriptor : BasePluginDescriptor {
     val path: String
     val manifestVersion: Version
+    val springConfigurationFiles: List<String>
     override fun getVersion(): String
     override fun getPluginId(): String
     override fun getPluginClass(): Nothing? = null
@@ -31,6 +32,7 @@ interface PluginDescriptor : BasePluginDescriptor {
 class LavalinkPluginDescriptor(override val manifestVersion: PluginDescriptor.Version) : DefaultPluginDescriptor(),
     PluginDescriptor {
     override lateinit var path: String
+    override lateinit var springConfigurationFiles: List<String>
     override fun getPluginClass(): Nothing? = super<PluginDescriptor>.getPluginClass()
     override fun setPluginClass(pluginClassName: String?): BasePluginDescriptor = this
     public override fun setPluginVersion(version: String): DefaultPluginDescriptor = super.setPluginVersion(version)
@@ -41,9 +43,13 @@ object LavalinkDescriptorFinder : PropertiesPluginDescriptorFinder() {
         LavalinkPluginDescriptor(PluginDescriptor.Version.V2)
 
     override fun createPluginDescriptor(properties: Properties): BasePluginDescriptor {
-        return (super.createPluginDescriptor(properties) as LavalinkPluginDescriptor).apply {
-            val path = properties.getProperty("path") ?: error("'path' is not specified in plugin properties")
-            this.path = path
+        return super.createPluginDescriptor(properties).apply {
+            val configurations = properties.getProperty("plugin.configurations")
+            (this as LavalinkPluginDescriptor).springConfigurationFiles = if (configurations != null) {
+                configurations.split(",\\s*".toRegex())
+            } else {
+                emptyList()
+            }
         }
     }
 }
