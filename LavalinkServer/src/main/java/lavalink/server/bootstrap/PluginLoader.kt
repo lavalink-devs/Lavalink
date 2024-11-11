@@ -31,6 +31,7 @@ class PluginLoader(pluginsConfig: PluginsConfig, private val appInfo: AppInfo) :
         )
     }
 
+    val extensionFinder get() = super.extensionFinder
     override fun getSystemVersion(): String = appInfo.versionBuild
     override fun createPluginFactory(): PluginFactory = LavalinkPluginFactory
     override fun createPluginLoader(): BasePluginLoader = CompoundPluginLoader()
