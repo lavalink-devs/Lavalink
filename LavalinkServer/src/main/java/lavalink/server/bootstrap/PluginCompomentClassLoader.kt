@@ -45,7 +45,6 @@ class PluginComponentClassLoader(pluginLoader: PluginLoader) : ClassLoader() {
         "org/apache/jasper",
         "org/aspectj",
         "com/fasterxml/jackson/",
-        "javax",
         "com/hazelcast",
         "com/couchbase",
         "org/infinispan/spring",
