@@ -47,14 +47,7 @@ class LavalinkExtensionInjector(pluginManager: PluginLoader, factory: AbstractAu
     fun List<ExtensionWrapper<*>>.register() = forEach { extensionWrapper ->
         log.debug("Register extension '{}' as bean", extensionWrapper.descriptor.extensionClass.name)
         try {
-            if (extensionWrapper is PluginExtensionWrapper<*> && extensionWrapper.descriptor.extensionClass.kotlin.hasAnnotation<Configurable>()) {
-                val context =
-                    (springPluginManager.getPlugin(extensionWrapper.pluginId).plugin as SpringPlugin).applicationContext as AnnotationConfigApplicationContext
-                context.register(extensionWrapper.descriptor.extensionClass)
-                context.refresh()
-            } else {
-                registerExtension(extensionWrapper.descriptor.extensionClass)
-            }
+            registerExtension(extensionWrapper.descriptor.extensionClass)
         } catch (e: ClassNotFoundException) {
             log.error(e.message, e)
         }
