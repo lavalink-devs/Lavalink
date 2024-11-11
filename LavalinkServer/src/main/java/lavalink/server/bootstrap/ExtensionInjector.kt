@@ -18,6 +18,12 @@ class LavalinkExtensionInjector(pluginManager: SpringPluginManager, factory: Abs
         if (extensionBeanMap.isEmpty()) {
             val extension = springPluginManager.getExtensionFactory().create(extensionClass);
 
+            if (extensionClass.kotlin.hasAnnotation<ConfigurationProperties>()) {
+                val configBinder =
+                    springPluginManager.applicationContext.getBean<ConfigurationPropertiesBindingPostProcessor>()
+                configBinder.postProcessBeforeInitialization(extension, extensionClass.getName())
+            }
+
             this.beanFactory.registerSingleton(extensionClass.getName(), extension);
             this.beanFactory.autowireBean(extension);
 
