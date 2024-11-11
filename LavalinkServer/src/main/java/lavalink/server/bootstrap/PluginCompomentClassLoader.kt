@@ -25,7 +25,7 @@ class PluginComponentClassLoader(pluginLoader: PluginLoader) : ClassLoader() {
         "javax",
         "lavalink",
         "kotlin",
-        "koltinx",
+        "kotlinx",
         "jarkarte",
         "git",
         "org/springframework",
