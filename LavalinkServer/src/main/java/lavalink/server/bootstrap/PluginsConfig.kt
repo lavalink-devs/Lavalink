@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component
 class PluginsConfig {
     var plugins: List<PluginDeclaration> = emptyList()
     var pluginsDir: String = "./plugins"
+    var developmentMode: Boolean = false
     var defaultPluginRepository: String = "https://maven.lavalink.dev/releases"
     var defaultPluginSnapshotRepository: String = "https://maven.lavalink.dev/snapshots"
 }

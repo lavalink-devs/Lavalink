@@ -11,6 +11,7 @@ import org.pf4j.PluginClassLoader
 import org.pf4j.PluginDescriptor
 import org.pf4j.PluginDescriptorFinder
 import org.pf4j.PluginFactory
+import org.pf4j.RuntimeMode
 import org.pf4j.VersionManager
 import org.pf4j.spring.SpringExtensionFactory
 import org.pf4j.spring.SpringPluginManager
@@ -22,7 +23,7 @@ import kotlin.io.path.extension
 import org.pf4j.PluginLoader as BasePluginLoader
 
 @Component
-class PluginLoader(pluginsConfig: PluginsConfig, private val appInfo: AppInfo) :
+class PluginLoader(private val pluginsConfig: PluginsConfig, private val appInfo: AppInfo) :
     SpringPluginManager(Path(pluginsConfig.pluginsDir)) {
 
     val injector by lazy {
@@ -33,6 +34,9 @@ class PluginLoader(pluginsConfig: PluginsConfig, private val appInfo: AppInfo) :
     }
 
     val extensionFinder get() = super.extensionFinder
+
+    override fun getRuntimeMode(): RuntimeMode =
+        if (pluginsConfig.developmentMode) RuntimeMode.DEVELOPMENT else RuntimeMode.DEPLOYMENT
 
     override fun createVersionManager(): VersionManager = FlexibleVersionManager()
     override fun getSystemVersion(): String = appInfo.versionBuild
