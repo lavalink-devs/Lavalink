@@ -11,6 +11,7 @@ import org.pf4j.PluginClassLoader
 import org.pf4j.PluginDescriptor
 import org.pf4j.PluginDescriptorFinder
 import org.pf4j.PluginFactory
+import org.pf4j.VersionManager
 import org.pf4j.spring.SpringExtensionFactory
 import org.pf4j.spring.SpringPluginManager
 import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory
@@ -32,6 +33,7 @@ class PluginLoader(pluginsConfig: PluginsConfig, private val appInfo: AppInfo) :
     }
 
     val extensionFinder get() = super.extensionFinder
+    override fun createVersionManager(): VersionManager = FlexibleVersionManager()
     override fun getSystemVersion(): String = appInfo.versionBuild
     override fun createPluginFactory(): PluginFactory = LavalinkPluginFactory
     override fun createPluginLoader(): BasePluginLoader = CompoundPluginLoader()
