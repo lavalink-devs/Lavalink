@@ -5,7 +5,6 @@ import org.pf4j.ClassLoadingStrategy
 import org.pf4j.CompoundPluginDescriptorFinder
 import org.pf4j.CompoundPluginLoader
 import org.pf4j.DefaultPluginLoader
-import org.pf4j.DevelopmentPluginLoader
 import org.pf4j.ExtensionFactory
 import org.pf4j.PluginClassLoader
 import org.pf4j.PluginDescriptor
