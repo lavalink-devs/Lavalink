@@ -29,11 +29,10 @@ import lavalink.server.bootstrap.PluginDescriptor
 import lavalink.server.bootstrap.PluginSystemImpl
 import lavalink.server.info.AppInfo
 import lavalink.server.info.GitRepoState
-import org.pf4j.PluginManager
+import org.pf4j.Extension
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.getBean
 import org.springframework.boot.Banner
-import org.springframework.boot.SpringApplication
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
@@ -56,7 +55,11 @@ import java.util.*
 @SpringBootApplication()
 @ComponentScan(
     value = ["\${componentScan}"],
-    excludeFilters = [ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = [PluginSystemImpl::class])]
+    excludeFilters = [
+        ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = [PluginSystemImpl::class]),
+        // These are registered manually
+        ComponentScan.Filter(type = FilterType.ANNOTATION, classes = [Extension::class])
+    ]
 )
 class LavalinkApplication
 

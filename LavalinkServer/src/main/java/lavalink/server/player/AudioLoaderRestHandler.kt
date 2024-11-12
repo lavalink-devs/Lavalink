@@ -32,12 +32,14 @@ import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.arbjerg.lavalink.protocol.v4.Tracks
 import jakarta.servlet.http.HttpServletRequest
 import lavalink.server.util.*
+import org.pf4j.Extension
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
+@Extension(ordinal = Int.MAX_VALUE) // Register this last, as we need to load plugin configuration contributors first
 @RestController
 class AudioLoaderRestHandler(
     private val audioPlayerManager: AudioPlayerManager,
