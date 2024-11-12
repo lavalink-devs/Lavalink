@@ -33,6 +33,7 @@ class PluginLoader(pluginsConfig: PluginsConfig, private val appInfo: AppInfo) :
     }
 
     val extensionFinder get() = super.extensionFinder
+
     override fun createVersionManager(): VersionManager = FlexibleVersionManager()
     override fun getSystemVersion(): String = appInfo.versionBuild
     override fun createPluginFactory(): PluginFactory = LavalinkPluginFactory
@@ -56,6 +57,8 @@ class PluginLoader(pluginsConfig: PluginsConfig, private val appInfo: AppInfo) :
         override fun loadPlugin(pluginPath: Path, pluginDescriptor: PluginDescriptor): ClassLoader? {
             val pluginClassLoader = PluginClassLoader(
                 this@PluginLoader, pluginDescriptor, javaClass.getClassLoader(),
+                // This is required because the old distribution format can contain classes that the server contains
+                // as well, so we need the server classes to take priority
                 ClassLoadingStrategy.APD
             )
             pluginClassLoader.addFile(pluginPath.toFile())
