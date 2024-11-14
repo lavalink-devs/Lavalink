@@ -1,17 +1,8 @@
 package lavalink.server.bootstrap
 
 import lavalink.server.info.AppInfo
-import org.pf4j.ClassLoadingStrategy
-import org.pf4j.CompoundPluginDescriptorFinder
-import org.pf4j.CompoundPluginLoader
-import org.pf4j.DefaultPluginLoader
-import org.pf4j.ExtensionFactory
-import org.pf4j.PluginClassLoader
+import org.pf4j.*
 import org.pf4j.PluginDescriptor
-import org.pf4j.PluginDescriptorFinder
-import org.pf4j.PluginFactory
-import org.pf4j.RuntimeMode
-import org.pf4j.VersionManager
 import org.pf4j.spring.SpringExtensionFactory
 import org.pf4j.spring.SpringPluginManager
 import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory
@@ -44,6 +35,10 @@ class PluginLoader(private val pluginsConfig: PluginsConfig, private val appInfo
         .add(DevelopmentPluginLoader(this), this::isDevelopment)
         .add(DefaultPluginLoader(this))
         .add(LegacyPluginLoader())
+
+    override fun createExtensionFinder(): ExtensionFinder = LegacyExtensionFinder(this).apply {
+        isCheckForExtensionDependencies = true
+    }
 
     // Add auto-wiring support to extensions
     override fun createExtensionFactory(): ExtensionFactory = SpringExtensionFactory(this)

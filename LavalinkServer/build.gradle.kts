@@ -42,6 +42,7 @@ dependencies {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
     }
     implementation(libs.pf4j.spring)
+    implementation(libs.asm)
 
     implementation(libs.bundles.metrics)
     implementation(libs.bundles.spring) {
@@ -122,7 +123,6 @@ tasks {
         archiveBaseName = "lavaplayer-natives"
         archiveClassifier = "musl"
     }
-
 
     withType<BootJar> {
         archiveFileName = "Lavalink.jar"
