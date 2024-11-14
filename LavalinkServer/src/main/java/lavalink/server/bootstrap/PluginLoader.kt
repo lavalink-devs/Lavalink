@@ -52,7 +52,7 @@ class PluginLoader(private val pluginsConfig: PluginsConfig, private val appInfo
 
     private inner class LegacyPluginLoader : BasePluginLoader {
         override fun isApplicable(pluginPath: Path): Boolean = pluginPath.extension == "jar"
-        override fun loadPlugin(pluginPath: Path, pluginDescriptor: PluginDescriptor): ClassLoader? {
+        override fun loadPlugin(pluginPath: Path, pluginDescriptor: PluginDescriptor): ClassLoader {
             val pluginClassLoader = PluginClassLoader(
                 this@PluginLoader, pluginDescriptor, javaClass.getClassLoader(),
                 // This is required because the old distribution format can contain classes that the server contains
