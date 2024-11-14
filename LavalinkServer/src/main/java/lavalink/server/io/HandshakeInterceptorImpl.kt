@@ -1,6 +1,7 @@
 package lavalink.server.io
 
 import lavalink.server.config.ServerConfig
+import org.pf4j.Extension
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.socket.WebSocketHandler
 import org.springframework.web.socket.server.HandshakeInterceptor
 
+@Extension(ordinal = Int.MAX_VALUE) // Register this last, as we need to load plugin configuration contributors first
 @Controller
 class HandshakeInterceptorImpl @Autowired
 constructor(private val serverConfig: ServerConfig, private val socketServer: SocketServer) : HandshakeInterceptor {

@@ -24,12 +24,14 @@ package lavalink.server.io
 import dev.arbjerg.lavalink.protocol.v4.*
 import lavalink.server.Launcher
 import lavalink.server.player.AudioLossCounter
+import org.pf4j.Extension
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import oshi.SystemInfo
 import kotlin.Exception
 
+@Extension(ordinal = Int.MAX_VALUE) // Register this last, as we need to load plugin configuration contributors first
 @RestController
 class StatsCollector(val socketServer: SocketServer) {
     companion object {
