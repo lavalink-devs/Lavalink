@@ -12,4 +12,4 @@ USER lavalink
 
 COPY LavalinkServer/build/libs/Lavalink.jar Lavalink.jar
 
-ENTRYPOINT ["java", "-Djdk.tls.client.protocols=TLSv1.1,TLSv1.2,TLSv1.3", "-jar", "Lavalink.jar"]
+ENTRYPOINT ["java", "-jar", "Lavalink.jar"]
