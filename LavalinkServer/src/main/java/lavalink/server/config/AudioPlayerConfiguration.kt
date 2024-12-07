@@ -56,18 +56,18 @@ class AudioPlayerConfiguration {
         serverConfig.timeouts?.let {
             HttpClientTools.setDefaultRequestConfig(
                 RequestConfig.custom()
-                    .setConnectTimeout(serverConfig.timeouts!!.connectTimeoutMs)
-                    .setConnectionRequestTimeout(serverConfig.timeouts!!.connectionRequestTimeoutMs)
-                    .setSocketTimeout(serverConfig.timeouts!!.socketTimeoutMs)
+                    .setConnectTimeout(it.connectTimeoutMs)
+                    .setConnectionRequestTimeout(it.connectionRequestTimeoutMs)
+                    .setSocketTimeout(it.socketTimeoutMs)
                     .setCookieSpec(CookieSpecs.STANDARD)
                     .build()
             )
 
             HttpClientTools.setNoCookiesRequestConfig(
                 RequestConfig.custom()
-                    .setConnectTimeout(serverConfig.timeouts!!.connectTimeoutMs)
-                    .setConnectionRequestTimeout(serverConfig.timeouts!!.connectionRequestTimeoutMs)
-                    .setSocketTimeout(serverConfig.timeouts!!.socketTimeoutMs)
+                    .setConnectTimeout(it.connectTimeoutMs)
+                    .setConnectionRequestTimeout(it.connectionRequestTimeoutMs)
+                    .setSocketTimeout(it.socketTimeoutMs)
                     .setCookieSpec(CookieSpecs.IGNORE_COOKIES)
                     .build()
             )
