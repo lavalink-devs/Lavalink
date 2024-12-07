@@ -46,4 +46,11 @@ class ServerConfig {
     var youtubeConfig: YoutubeConfig? = null
     var httpConfig: HttpConfig? = null
     var filters: Map<String, Boolean> = mapOf()
+    var timeouts: TimeoutsConfig? = null
+}
+
+class TimeoutsConfig {
+    var connectTimeoutMs: Int = 3000
+    var connectionRequestTimeoutMs: Int = 3000
+    var socketTimeoutMs: Int = 3000
 }

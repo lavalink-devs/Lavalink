@@ -64,6 +64,10 @@ lavalink:
       #proxyPort: 3128 # Proxy port, 3128 is the default for squidProxy
       #proxyUser: "" # Optional user for basic authentication fields, leave blank if you don't use basic auth
       #proxyPassword: "" # Password for basic authentication
+    timeouts:
+      connectTimeoutMs: 3000
+      connectionRequestTimeoutMs: 3000
+      socketTimeoutMs: 3000
 
 metrics:
   prometheus:

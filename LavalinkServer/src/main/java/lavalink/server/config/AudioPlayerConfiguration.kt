@@ -14,6 +14,7 @@ import com.sedmelluq.discord.lavaplayer.source.soundcloud.*
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.tools.io.HttpClientTools
 import com.sedmelluq.discord.lavaplayer.track.playback.NonAllocatingAudioFrameBuffer
 import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup
 import com.sedmelluq.lava.extensions.youtuberotator.planner.*
@@ -24,6 +25,8 @@ import org.apache.http.HttpHost
 import org.apache.http.auth.AuthScope
 import org.apache.http.auth.UsernamePasswordCredentials
 import org.apache.http.client.CredentialsProvider
+import org.apache.http.client.config.CookieSpecs
+import org.apache.http.client.config.RequestConfig
 import org.apache.http.impl.client.BasicCredentialsProvider
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
@@ -50,6 +53,26 @@ class AudioPlayerConfiguration {
         audioPlayerManagerConfigurations: Collection<AudioPlayerManagerConfiguration>,
         mediaContainerProbes: Collection<MediaContainerProbe>
     ): AudioPlayerManager {
+        serverConfig.timeouts?.let {
+            HttpClientTools.setDefaultRequestConfig(
+                RequestConfig.custom()
+                    .setConnectTimeout(serverConfig.timeouts!!.connectTimeoutMs)
+                    .setConnectionRequestTimeout(serverConfig.timeouts!!.connectionRequestTimeoutMs)
+                    .setSocketTimeout(serverConfig.timeouts!!.socketTimeoutMs)
+                    .setCookieSpec(CookieSpecs.STANDARD)
+                    .build()
+            )
+
+            HttpClientTools.setNoCookiesRequestConfig(
+                RequestConfig.custom()
+                    .setConnectTimeout(serverConfig.timeouts!!.connectTimeoutMs)
+                    .setConnectionRequestTimeout(serverConfig.timeouts!!.connectionRequestTimeoutMs)
+                    .setSocketTimeout(serverConfig.timeouts!!.socketTimeoutMs)
+                    .setCookieSpec(CookieSpecs.IGNORE_COOKIES)
+                    .build()
+            )
+        }
+
         val audioPlayerManager = DefaultAudioPlayerManager()
 
         if (serverConfig.isGcWarnings) {
