@@ -100,7 +100,8 @@ class PluginManager(val config: PluginsConfig) {
 
         val connection = URL(basePath).openConnection() as HttpURLConnection
         connection.inputStream.bufferedReader().use {
-            for(line in it.readLines()) {
+            val lines = it.readLines()
+            for(line in lines) {
                 val regex = "<latest>(.*?)</latest>".toRegex()
                 val match = regex.find(line)
                 val latest = match?.groups?.get(1)?.value
