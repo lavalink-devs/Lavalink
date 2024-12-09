@@ -70,7 +70,6 @@ dependencies {
         // This version of SLF4J does not recognise Logback 1.2.3
         exclude(group = "org.slf4j", module = "slf4j-api")
     }
-    
     testImplementation(libs.spring.boot.test)
 }
 
