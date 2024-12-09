@@ -65,11 +65,12 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.logback)
     implementation(libs.sentry.logback)
+    implementation("io.github.z4kn4fein:semver:2.0.0")
     implementation(libs.oshi) {
         // This version of SLF4J does not recognise Logback 1.2.3
         exclude(group = "org.slf4j", module = "slf4j-api")
     }
-
+    
     testImplementation(libs.spring.boot.test)
 }
 
