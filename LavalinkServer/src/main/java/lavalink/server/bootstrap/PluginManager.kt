@@ -94,27 +94,24 @@ class PluginManager(val config: PluginsConfig) {
         val splitPath = declaration.url.split('/')
 
         val baseSplitPath = splitPath.dropLast(2)
-        var basePath = baseSplitPath.joinToString("/")
-
-        basePath += "/maven-metadata.xml"
+        val basePath = baseSplitPath.joinToString("/") + "/maven-metadata.xml"
 
         val connection = URL(basePath).openConnection() as HttpURLConnection
         connection.inputStream.bufferedReader().use {
             val lines = it.readLines()
-            for(line in lines) {
+            for (line in lines) {
                 val regex = "<latest>(.*?)</latest>".toRegex()
                 val match = regex.find(line)
                 val latest = match?.groups?.get(1)?.value
                 if (latest != null) {
                     val latestVersion = latest.toVersion()
-                    //val latest2 = "1.10.3".toVersion()
                     val currentVersion = declaration.version.toVersion()
 
                     if(latestVersion > currentVersion) {
                         log.warn("A newer version of ${declaration.name} was found: $latestVersion. " +
                                 "The current version is $currentVersion.")
                     } else {
-                        log.info("Plugin {} is up to date", declaration.name)
+                        log.info("Plugin ${declaration.name} is up to date")
                     }
                     break
                 }
