@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.logback)
     implementation(libs.sentry.logback)
+    implementation(libs.semver)
     implementation(libs.oshi) {
         // This version of SLF4J does not recognise Logback 1.2.3
         exclude(group = "org.slf4j", module = "slf4j-api")
