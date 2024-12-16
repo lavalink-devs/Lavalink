@@ -22,8 +22,8 @@ allprojects {
     version = versionFromTag()
 
     repositories {
-        mavenCentral() // main maven repo
         mavenLocal()   // useful for developing
+        mavenCentral() // main maven repo
         maven("https://m2.dv8tion.net/releases")
         maven("https://maven.lavalink.dev/releases")
         jcenter()
