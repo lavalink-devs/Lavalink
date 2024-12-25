@@ -13,7 +13,7 @@ import java.net.HttpURLConnection
 import java.nio.channels.Channels
 import java.util.*
 import java.util.jar.JarFile
-import io.github.z4kn4fein.semver.toVersion
+import dev.arbjerg.lavalink.protocol.v4.Version
 
 @SpringBootApplication
 class PluginManager(val config: PluginsConfig) {
@@ -104,12 +104,11 @@ class PluginManager(val config: PluginsConfig) {
                 val match = regex.find(line)
                 val latest = match?.groups?.get(1)?.value
                 if (latest != null) {
-                    val latestVersion = latest.toVersion()
-                    val currentVersion = declaration.version.toVersion()
-
+                    val latestVersion = Version.fromSemver(latest)
+                    val currentVersion = Version.fromSemver(declaration.version)
                     if(latestVersion > currentVersion) {
-                        log.warn("A newer version of ${declaration.name} was found: $latestVersion. " +
-                                "The current version is $currentVersion.")
+                        log.warn("A newer version of ${declaration.name} was found: $latestVersion, " +
+                                "The current version is $currentVersion")
                     } else {
                         log.info("Plugin ${declaration.name} is up to date")
                     }
