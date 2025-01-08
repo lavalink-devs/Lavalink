@@ -13,6 +13,7 @@ description: A list of Lavalink client libraries.
 | [Mafic](https://github.com/ooliver1/mafic)                          | Python          | discord.py **V2**/nextcord/disnake/py-cord |                                |
 | [Wavelink](https://github.com/PythonistaGuild/Wavelink)             | Python          | discord.py **V2**                          |                                |
 | [Pomice](https://github.com/cloudwithax/pomice)                     | Python          | discord.py **V2**                          |                                |
+| [lavaplay.py](https://github.com/HazemMeqdad/lavaplay.py)           | Python          | **Any\***                                  | *`asyncio`-based libraries only version 1.0.13a>|
 | [hikari-ongaku](https://github.com/MPlatypus/hikari-ongaku)         | Python          | Hikari                                     | `asyncio`-based                |
 | [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)            | Node.js         | **Any**                                    |                                |
 | [Magmastream](https://github.com/Blackfort-Hosting/magmastream)     | Node.js         | **Any**                                    |                                |
@@ -38,7 +39,7 @@ description: A list of Lavalink client libraries.
 | Client                                                        | Platform | Compatible With                            | Additional Information          |
 |---------------------------------------------------------------|----------|--------------------------------------------|---------------------------------|
 | [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt)      | Kotlin   | JDA/Kord/**Any**                           | Kotlin Coroutines               |
-| [lavaplay.py](https://github.com/HazemMeqdad/lavaplay.py)     | Python   | **Any\***                                  | *`asyncio`-based libraries only |
+| [lavaplay.py](https://github.com/HazemMeqdad/lavaplay.py)     | Python   | **Any\***                                  | *`asyncio`-based libraries only version 1.0.12a>|
 | [Mafic](https://github.com/ooliver1/mafic)                    | Python   | discord.py **V2**/nextcord/disnake/py-cord |                                 |
 | [Wavelink](https://github.com/PythonistaGuild/Wavelink)       | Python   | discord.py **V2**                          | Version >=2, <3                 |
 | [Pomice](https://github.com/cloudwithax/pomice)               | Python   | discord.py **V2**                          |                                 |
