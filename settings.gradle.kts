@@ -73,6 +73,9 @@ fun VersionCatalogBuilder.common() {
     library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.7.0")
     library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime").version("0.6.0")
 
+    library("xmlutil-jdk", "io.github.pdvrieze.xmlutil", "core-jdk").version("0.90.3")
+    library("xmlutil-serialization", "io.github.pdvrieze.xmlutil", "serialization-jvm").version("0.90.3")
+
     library("logback",        "ch.qos.logback",       "logback-classic").version("1.5.6")
     library("sentry-logback", "io.sentry",            "sentry-logback").version("7.10.0")
     library("oshi",           "com.github.oshi",      "oshi-core").version("6.4.11")

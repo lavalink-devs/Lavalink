@@ -1,5 +1,8 @@
 package lavalink.server.bootstrap
 
+import dev.arbjerg.lavalink.protocol.v4.Version
+import nl.adaptivity.xmlutil.core.KtXmlReader
+import nl.adaptivity.xmlutil.serialization.XML
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -7,6 +10,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLClassLoader
 import java.nio.channels.Channels
@@ -44,7 +48,7 @@ class PluginManager(val config: PluginsConfig) {
                     loadPluginManifests(jar).map { manifest -> PluginJar(manifest, file) }
                 }
             }
-            ?.onEach { log.info("Found plugin '${it.manifest.name}' version ${it.manifest.version}") }
+            ?.onEach { log.info("Found plugin '${it.manifest.name}' version '${it.manifest.version}'") }
             ?: return
 
         val declarations = config.plugins.map { declaration ->
@@ -83,6 +87,44 @@ class PluginManager(val config: PluginsConfig) {
                 val file = File(directory, declaration.canonicalJarName)
                 downloadJar(file, url)
             }
+
+            checkPluginForUpdates(declaration)
+        }
+    }
+
+    private fun checkPluginForUpdates(declaration: Declaration) {
+        val baseSplitPath = declaration.url.split('/').dropLast(2)
+        val metadataUrl = baseSplitPath.joinToString("/") + "/maven-metadata.xml"
+
+        val url = URL(metadataUrl)
+        val conn = url.openConnection() as HttpURLConnection
+
+        if (conn.responseCode != HttpURLConnection.HTTP_OK) {
+            log.warn("Failed to check for updates for ${declaration.name}: ${conn.responseMessage}")
+            return
+        }
+
+        val metadata: Metadata
+        conn.inputStream.use {
+            metadata = XML.decodeFromReader(Metadata.serializer(), KtXmlReader(it))
+        }
+
+        val current = Version.fromSemver(declaration.version)
+        var latest = metadata.versioning.latest
+        if (latest.isEmpty()) {
+            latest = metadata.versioning.release
+        }
+        if (latest.isEmpty()) {
+            latest = (metadata.versioning.versions.lastOrNull() ?: "").toString()
+        }
+
+        if (latest.isEmpty()) {
+            return
+        }
+
+        val latestVersion = Version.fromSemver(latest)
+        if (latestVersion > current) {
+            log.warn("A newer version of '${declaration.name}' was found: '$latestVersion', The current version is '$current' please update the version in your configuration.")
         }
     }
 
@@ -98,7 +140,7 @@ class PluginManager(val config: PluginsConfig) {
         return PathMatchingResourcePatternResolver()
             .getResources("classpath*:lavalink-plugins/*.properties")
             .map { parsePluginManifest(it.inputStream) }
-            .onEach { log.info("Found plugin '${it.name}' version ${it.version}") }
+            .onEach { log.info("Found plugin '${it.name}' version '${it.version}'") }
     }
 
     private fun loadJars(): List<PluginManifest> {
@@ -132,14 +174,15 @@ class PluginManager(val config: PluginsConfig) {
             for (entry in it.entries()) {
                 if (entry.isDirectory ||
                     !entry.name.endsWith(".class") ||
-                    allowedPaths.none(entry.name::startsWith)) continue
+                    allowedPaths.none(entry.name::startsWith)
+                ) continue
 
                 cl.loadClass(entry.name.dropLast(6).replace("/", "."))
                 classCount++
             }
         }
 
-        log.info("Loaded ${file.name} ($classCount classes)")
+        log.info("Loaded '${file.name}' ($classCount classes)")
         return manifests
     }
 
