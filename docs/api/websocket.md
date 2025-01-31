@@ -331,11 +331,12 @@ Dispatched when a track throws an exception.
 
 ##### Exception Object
 
-| Field    | Type                  | Description                   |
-|----------|-----------------------|-------------------------------|
-| message  | ?string               | The message of the exception  |
-| severity | [Severity](#severity) | The severity of the exception |
-| cause    | string                | The cause of the exception    |
+| Field           | Type                  | Description                       |
+|-----------------|-----------------------|-----------------------------------|
+| message         | ?string               | The message of the exception      |
+| severity        | [Severity](#severity) | The severity of the exception     |
+| cause           | string                | The cause of the exception        |
+| causeStackTrace | string                | The full stack trace of the cause |
 
 ##### Severity
 
@@ -373,7 +374,8 @@ Dispatched when a track throws an exception.
   "exception": {
     "message": "...",
     "severity": "common",
-    "cause": "..."
+    "cause": "...",
+    "causeStackTrace": "..."
   }
 }
 ```

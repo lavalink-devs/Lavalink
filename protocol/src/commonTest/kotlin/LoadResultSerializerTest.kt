@@ -70,7 +70,8 @@ class LoadResultSerializerTest {
               "data": {
                 "message": "The uploader has not made this video available in your country.",
                 "severity": "common",
-                "cause": "com.sedmelluq.discord.lavaplayer.tools.FriendlyException: This video is not available in your country."
+                "cause": "com.sedmelluq.discord.lavaplayer.tools.FriendlyException: This video is not available in your country.",
+                "causeStackTrace": "com.sedmelluq.discord.lavaplayer.tools.FriendlyException: This video is not available in your country.\n\nblabla"
               }
             }
         """.trimIndent()
@@ -83,6 +84,7 @@ class LoadResultSerializerTest {
                 message shouldBe "The uploader has not made this video available in your country."
                 severity shouldBe Exception.Severity.COMMON
                 cause shouldBe "com.sedmelluq.discord.lavaplayer.tools.FriendlyException: This video is not available in your country."
+                causeStackTrace shouldBe "com.sedmelluq.discord.lavaplayer.tools.FriendlyException: This video is not available in your country.\n\nblabla"
             }
         }
     }

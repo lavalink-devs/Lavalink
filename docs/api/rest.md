@@ -46,10 +46,9 @@ When Lavalink encounters an error, it will respond with a JSON object containing
 
 </details>
 
-
 ## Track API
 
-### Common Types  ### {: #track-api-types }
+### Common Types ### {: #track-api-types }
 
 #### Track
 
@@ -89,15 +88,13 @@ When Lavalink encounters an error, it will respond with a JSON object containing
 
 This endpoint is used to resolve audio tracks for use with the [Update Player](#update-player) endpoint.
 
-
 !!! tip
-    
+
     Lavalink supports searching via YouTube, YouTube Music, and Soundcloud. To search, you must prefix your identifier with `ytsearch:`, `ytmsearch:` or `scsearch:` respectively.
     
     When a search prefix is used, the returned `loadType` will be `search`. Note that disabling the respective source managers renders these search prefixes useless.
 
     Plugins may also implement prefixes to allow for more search engines to be utilised.
-
 
 ```
 GET /v4/loadtracks?identifier=dQw4w9WgXcQ
@@ -203,7 +200,7 @@ Empty object.
 ```yaml
 {
   "loadType": "empty",
-  "data": {}
+  "data": { }
 }
 ```
 
@@ -219,10 +216,11 @@ Empty object.
 ```yaml
 {
   "loadType": "error",
-  "data": { 
+  "data": {
     "message": "Something went wrong",
     "severity": "fault",
-    "cause": "..."
+    "cause": "...",
+    "causeStackTrace": "...",
   }
 }
 ```
@@ -330,7 +328,7 @@ Array of [Track](#track) objects
 
 ## Player API
 
-### Common Types  ### {: #player-api-types }
+### Common Types ### {: #player-api-types }
 
 #### Player
 
@@ -355,7 +353,6 @@ Array of [Track](#track) objects
 `token`, `endpoint`, and `sessionId` are the 3 required values for connecting to one of Discord's voice servers.
 `sessionId` is provided by the Voice State Update event sent by Discord, whereas the `endpoint` and `token` are provided
 with the Voice Server Update. Please refer to https://discord.com/developers/docs/topics/gateway-events#voice
-
 
 #### Filters
 
@@ -731,7 +728,7 @@ When `identifier` is used, Lavalink will try to resolve the identifier as a sing
 {
   "track": {
     "encoded": "...",
-    "identifier": "...",       
+    "identifier": "...",
     "userData": { ... }
   },
   "endTime": 0,
@@ -781,7 +778,7 @@ Response:
     "time": 1500467109,
     "position": 60000,
     "connected": true,
-    "ping": 50         
+    "ping": 50
   },
   "voice": {
     "token": "...",
@@ -1017,7 +1014,6 @@ Response:
 ## RoutePlanner API
 
 Additionally, there are a few REST endpoints for the ip rotation extension.
-
 
 ### Common Types ### {: #route-planner-api-types }
 
