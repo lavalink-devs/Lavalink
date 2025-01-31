@@ -1,5 +1,8 @@
 package lavalink.server.bootstrap
 
+import dev.arbjerg.lavalink.protocol.v4.Version
+import nl.adaptivity.xmlutil.core.KtXmlReader
+import nl.adaptivity.xmlutil.serialization.XML
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -7,14 +10,12 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLClassLoader
-import java.net.HttpURLConnection
 import java.nio.channels.Channels
 import java.util.*
 import java.util.jar.JarFile
-import javax.xml.parsers.DocumentBuilderFactory
-import dev.arbjerg.lavalink.protocol.v4.Version
 
 @SpringBootApplication
 class PluginManager(val config: PluginsConfig) {
@@ -47,7 +48,7 @@ class PluginManager(val config: PluginsConfig) {
                     loadPluginManifests(jar).map { manifest -> PluginJar(manifest, file) }
                 }
             }
-            ?.onEach { log.info("Found plugin '${it.manifest.name}' version ${it.manifest.version}") }
+            ?.onEach { log.info("Found plugin '${it.manifest.name}' version '${it.manifest.version}'") }
             ?: return
 
         val declarations = config.plugins.map { declaration ->
@@ -92,28 +93,38 @@ class PluginManager(val config: PluginsConfig) {
     }
 
     private fun checkPluginForUpdates(declaration: Declaration) {
-        val splitPath = declaration.url.split('/')
+        val baseSplitPath = declaration.url.split('/').dropLast(2)
+        val metadataUrl = baseSplitPath.joinToString("/") + "/maven-metadata.xml"
 
-        val baseSplitPath = splitPath.dropLast(2)
-        val basePath = baseSplitPath.joinToString("/") + "/maven-metadata.xml"
-        val documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-        val document = documentBuilder.parse(basePath)
+        val url = URL(metadataUrl)
+        val conn = url.openConnection() as HttpURLConnection
 
-        var elements = document.getElementsByTagName("latest")
-        if(elements.length == 0) {
-            elements = document.getElementsByTagName("release")
+        if (conn.responseCode != HttpURLConnection.HTTP_OK) {
+            log.warn("Failed to check for updates for ${declaration.name}: ${conn.responseMessage}")
+            return
         }
 
-        if (elements.length > 0) {
-            val latest = elements.item(0).textContent
-            val latestVersion = Version.fromSemver(latest)
-            val currentVersion = Version.fromSemver(declaration.version)
-            if(latestVersion > currentVersion) {
-                log.warn("A newer version of ${declaration.name} was found: $latestVersion, " +
-                        "The current version is $currentVersion")
-            } else {
-                log.info("Plugin ${declaration.name} is up to date")
-            }
+        val metadata: Metadata
+        conn.inputStream.use {
+            metadata = XML.decodeFromReader(Metadata.serializer(), KtXmlReader(it))
+        }
+
+        val current = Version.fromSemver(declaration.version)
+        var latest = metadata.versioning.latest
+        if (latest.isEmpty()) {
+            latest = metadata.versioning.release
+        }
+        if (latest.isEmpty()) {
+            latest = (metadata.versioning.versions.lastOrNull() ?: "").toString()
+        }
+
+        if (latest.isEmpty()) {
+            return
+        }
+
+        val latestVersion = Version.fromSemver(latest)
+        if (latestVersion > current) {
+            log.warn("A newer version of '${declaration.name}' was found: '$latestVersion', The current version is '$current' please update the version in your configuration.")
         }
     }
 
@@ -129,7 +140,7 @@ class PluginManager(val config: PluginsConfig) {
         return PathMatchingResourcePatternResolver()
             .getResources("classpath*:lavalink-plugins/*.properties")
             .map { parsePluginManifest(it.inputStream) }
-            .onEach { log.info("Found plugin '${it.name}' version ${it.version}") }
+            .onEach { log.info("Found plugin '${it.name}' version '${it.version}'") }
     }
 
     private fun loadJars(): List<PluginManifest> {
@@ -163,14 +174,15 @@ class PluginManager(val config: PluginsConfig) {
             for (entry in it.entries()) {
                 if (entry.isDirectory ||
                     !entry.name.endsWith(".class") ||
-                    allowedPaths.none(entry.name::startsWith)) continue
+                    allowedPaths.none(entry.name::startsWith)
+                ) continue
 
                 cl.loadClass(entry.name.dropLast(6).replace("/", "."))
                 classCount++
             }
         }
 
-        log.info("Loaded ${file.name} ($classCount classes)")
+        log.info("Loaded '${file.name}' ($classCount classes)")
         return manifests
     }
 
