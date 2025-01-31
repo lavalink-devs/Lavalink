@@ -28,6 +28,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Lazy
 import java.net.InetAddress
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -41,6 +42,7 @@ class AudioPlayerConfiguration {
 
     private val log = LoggerFactory.getLogger(AudioPlayerConfiguration::class.java)
 
+    @Lazy // Only create an AudioPlayerManager after all config contributors were loaded
     @Bean
     fun audioPlayerManagerSupplier(
         sources: AudioSourcesConfig,
