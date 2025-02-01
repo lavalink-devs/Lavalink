@@ -25,23 +25,23 @@ fun VersionCatalogBuilder.spring() {
 
     library("spring-websocket", "org.springframework", "spring-websocket").version("6.1.9")
 
-    library("spring-boot",          "org.springframework.boot", "spring-boot").versionRef("spring-boot")
-    library("spring-boot-web",      "org.springframework.boot", "spring-boot-starter-web").versionRef("spring-boot")
-    library("spring-boot-undertow", "org.springframework.boot", "spring-boot-starter-undertow") .versionRef("spring-boot")
-    library("spring-boot-test",     "org.springframework.boot", "spring-boot-starter-test") .versionRef("spring-boot")
+    library("spring-boot", "org.springframework.boot", "spring-boot").versionRef("spring-boot")
+    library("spring-boot-web", "org.springframework.boot", "spring-boot-starter-web").versionRef("spring-boot")
+    library("spring-boot-undertow", "org.springframework.boot", "spring-boot-starter-undertow").versionRef("spring-boot")
+    library("spring-boot-test", "org.springframework.boot", "spring-boot-starter-test").versionRef("spring-boot")
 
     bundle("spring", listOf("spring-websocket", "spring-boot-web", "spring-boot-undertow"))
 }
 
 fun VersionCatalogBuilder.voice() {
-    version("lavaplayer", "2.2.2")
+    version("lavaplayer", "2.2.3")
     version("koe", "2.0.3-rc2")
 
-    library("lavaplayer",            "dev.arbjerg", "lavaplayer").versionRef("lavaplayer")
+    library("lavaplayer", "dev.arbjerg", "lavaplayer").versionRef("lavaplayer")
     library("lavaplayer-ip-rotator", "dev.arbjerg", "lavaplayer-ext-youtube-rotator").versionRef("lavaplayer")
-    library("lavadsp",               "dev.arbjerg", "lavadsp").version("0.7.8")
+    library("lavadsp", "dev.arbjerg", "lavadsp").version("0.7.8")
 
-    library("koe",          "moe.kyokobot.koe", "core").versionRef("koe")
+    library("koe", "moe.kyokobot.koe", "core").versionRef("koe")
     library("koe-udpqueue", "moe.kyokobot.koe", "ext-udpqueue").versionRef("koe")
 
     version("udpqueue", "0.2.7")
@@ -56,7 +56,7 @@ fun VersionCatalogBuilder.voice() {
 fun VersionCatalogBuilder.metrics() {
     version("prometheus", "0.16.0")
 
-    library("metrics",         "io.prometheus", "simpleclient").versionRef("prometheus")
+    library("metrics", "io.prometheus", "simpleclient").versionRef("prometheus")
     library("metrics-hotspot", "io.prometheus", "simpleclient_hotspot").versionRef("prometheus")
     library("metrics-logback", "io.prometheus", "simpleclient_logback").versionRef("prometheus")
     library("metrics-servlet", "io.prometheus", "simpleclient_servlet").versionRef("prometheus")
@@ -67,7 +67,7 @@ fun VersionCatalogBuilder.metrics() {
 fun VersionCatalogBuilder.common() {
     version("kotlin", "2.0.0")
 
-    library("kotlin-reflect",     "org.jetbrains.kotlin", "kotlin-reflect").versionRef("kotlin")
+    library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").versionRef("kotlin")
     library("kotlin-stdlib-jdk8", "org.jetbrains.kotlin", "kotlin-stdlib-jdk8").versionRef("kotlin")
 
     library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.7.0")
@@ -76,9 +76,9 @@ fun VersionCatalogBuilder.common() {
     library("xmlutil-jdk", "io.github.pdvrieze.xmlutil", "core-jdk").version("0.90.3")
     library("xmlutil-serialization", "io.github.pdvrieze.xmlutil", "serialization-jvm").version("0.90.3")
 
-    library("logback",        "ch.qos.logback",       "logback-classic").version("1.5.6")
-    library("sentry-logback", "io.sentry",            "sentry-logback").version("7.10.0")
-    library("oshi",           "com.github.oshi",      "oshi-core").version("6.4.11")
+    library("logback", "ch.qos.logback", "logback-classic").version("1.5.6")
+    library("sentry-logback", "io.sentry", "sentry-logback").version("7.10.0")
+    library("oshi", "com.github.oshi", "oshi-core").version("6.4.11")
 }
 
 fun VersionCatalogBuilder.other() {
