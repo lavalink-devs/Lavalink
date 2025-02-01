@@ -107,6 +107,23 @@ jobs:
             type=semver,pattern={{major}}
             type=sha,prefix=
 
+      - name: Docker Meta Distroless
+        id: meta-distroless
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/${{ github.repository }}
+            ${{ env.DOCKER_IMAGE }}
+          flavor: |
+            suffix=-distroless,onlatest=true
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha,prefix=
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -147,3 +164,13 @@ jobs:
           push: true
           tags: ${{ steps.meta-alpine.outputs.tags }}
           labels: ${{ steps.meta-alpine.outputs.labels }}
+
+      - name: Build Distroless and Push
+        uses: docker/build-push-action@v5
+        with:
+          file: LavalinkServer/docker/distroless.Dockerfile
+          context: .
+          platforms: linux/amd64,linux/arm64/v8
+          push: true
+          tags: ${{ steps.meta-distroless.outputs.tags }}
+          labels: ${{ steps.meta-distroless.outputs.labels }}
