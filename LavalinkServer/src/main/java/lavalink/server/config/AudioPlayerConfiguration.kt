@@ -25,8 +25,6 @@ import org.apache.http.HttpHost
 import org.apache.http.auth.AuthScope
 import org.apache.http.auth.UsernamePasswordCredentials
 import org.apache.http.client.CredentialsProvider
-import org.apache.http.client.config.CookieSpecs
-import org.apache.http.client.config.RequestConfig
 import org.apache.http.impl.client.BasicCredentialsProvider
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
@@ -54,23 +52,7 @@ class AudioPlayerConfiguration {
         mediaContainerProbes: Collection<MediaContainerProbe>
     ): AudioPlayerManager {
         serverConfig.timeouts?.let {
-            HttpClientTools.setDefaultRequestConfig(
-                RequestConfig.custom()
-                    .setConnectTimeout(it.connectTimeoutMs)
-                    .setConnectionRequestTimeout(it.connectionRequestTimeoutMs)
-                    .setSocketTimeout(it.socketTimeoutMs)
-                    .setCookieSpec(CookieSpecs.STANDARD)
-                    .build()
-            )
-
-            HttpClientTools.setNoCookiesRequestConfig(
-                RequestConfig.custom()
-                    .setConnectTimeout(it.connectTimeoutMs)
-                    .setConnectionRequestTimeout(it.connectionRequestTimeoutMs)
-                    .setSocketTimeout(it.socketTimeoutMs)
-                    .setCookieSpec(CookieSpecs.IGNORE_COOKIES)
-                    .build()
-            )
+            HttpClientTools.setDefaultRequestTimeout(it.connectTimeoutMs, it.connectionRequestTimeoutMs, it.socketTimeoutMs)
         }
 
         val audioPlayerManager = DefaultAudioPlayerManager()
