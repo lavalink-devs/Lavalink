@@ -61,7 +61,9 @@ jobs:
             ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
             ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
             ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
-        if: env.MAVEN_USERNAME != '' && env.MAVEN_PASSWORD != '' && env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.SIGNING_IN_MEMORY_KEY != '' && env.SIGNING_IN_MEMORY_KEY_PASSWORD != ''
+        if: | 
+          (env.ORG_GRADLE_PROJECT_MAVEN_USERNAME != '' && env.ORG_GRADLE_PROJECT_MAVEN_PASSWORD != '')  || 
+          (env.ORG_GRADLE_PROJECT_mavenCentralUsername != '' && env.ORG_GRADLE_PROJECT_mavenCentralPassword != '' && env.ORG_GRADLE_PROJECT_signingInMemoryKey != '' && env.ORG_GRADLE_PROJECT_signingInMemoryKeyPassword != '')
         run: ./gradlew publish
 
       - name: Upload Lavalink.jar
