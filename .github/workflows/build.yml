@@ -23,7 +23,7 @@ on:
       MAVEN_PASSWORD:
         required: false
       MAVEN_CENTRAL_USERNAME:
-          required: false
+        required: false
       MAVEN_CENTRAL_PASSWORD:
         required: false
       SIGNING_IN_MEMORY_KEY:
@@ -55,13 +55,13 @@ jobs:
 
       - name: Publish to Maven
         env:
-            ORG_GRADLE_PROJECT_MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-            ORG_GRADLE_PROJECT_MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-            ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-            ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-            ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
-            ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
-        if: | 
+          ORG_GRADLE_PROJECT_MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          ORG_GRADLE_PROJECT_MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
+        if: |
           (env.ORG_GRADLE_PROJECT_MAVEN_USERNAME != '' && env.ORG_GRADLE_PROJECT_MAVEN_PASSWORD != '')  || 
           (env.ORG_GRADLE_PROJECT_mavenCentralUsername != '' && env.ORG_GRADLE_PROJECT_mavenCentralPassword != '' && env.ORG_GRADLE_PROJECT_signingInMemoryKey != '' && env.ORG_GRADLE_PROJECT_signingInMemoryKeyPassword != '')
         run: ./gradlew publish
@@ -103,12 +103,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: Lavalink.jar
+          path: LavalinkServer/build/libs/Lavalink.jar
 
       - name: Download Lavalink-musl.jar
         if: ${{ matrix.name == 'Alpine' }}
         uses: actions/download-artifact@v4
         with:
           name: Lavalink-musl.jar
+          path: LavalinkServer/build/libs/Lavalink-musl.jar
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
