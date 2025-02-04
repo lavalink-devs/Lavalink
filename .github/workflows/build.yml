@@ -158,7 +158,7 @@ jobs:
       - name: Docker Build ${{ matrix.name }} and Push
         uses: docker/build-push-action@v6
         with:
-          file: LavalinkServer/docker/Dockerfile
+          file: ${{ matrix.dockerfile }}
           context: .
           platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           push: true
