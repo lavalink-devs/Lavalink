@@ -9,11 +9,11 @@ Install [Docker](https://docs.docker.com/engine/install/) & [Docker Compose](htt
 
 ## Docker Image Variants
 
-| Variant      | Description                                  | User  | Group | Example                                       |
-|--------------|----------------------------------------------|-------|-------|-----------------------------------------------|
-| `Ubuntu`     | Default variant, based on Ubuntu             | 322   | 322   | `ghcr.io/lavalink-devs/lavalink:4`            |
-| `Alpine`     | Smaller image size, based on Alpine          | 322   | 322   | `ghcr.io/lavalink-devs/lavalink:4-alpine`     |
-| `Distroless` | Even smaller image size, based on Distroless | 65534 | 65534 | `ghcr.io/lavalink-devs/lavalink:4-distroless` |
+| Variant      | Description                                  | Java Version | User  | Group | Example                                       |
+|--------------|----------------------------------------------|--------------|-------|-------|-----------------------------------------------|
+| `Ubuntu`     | Default variant, based on Ubuntu             | 18           | 322   | 322   | `ghcr.io/lavalink-devs/lavalink:4`            |
+| `Alpine`     | Smaller image size, based on Alpine          | 21           | 322   | 322   | `ghcr.io/lavalink-devs/lavalink:4-alpine`     |
+| `Distroless` | Even smaller image size, based on Distroless | 21           | 65534 | 65534 | `ghcr.io/lavalink-devs/lavalink:4-distroless` |
 
 Create a `docker-compose.yml` with the following content:
 
