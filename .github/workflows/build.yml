@@ -89,31 +89,26 @@ jobs:
             dockerfile: LavalinkServer/docker/Dockerfile
             suffix: ''
             platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
+            artifact: Lavalink.jar
           - name: Alpine
             dockerfile: LavalinkServer/docker/alpine.Dockerfile
             suffix: '-alpine'
             platforms: linux/amd64,linux/arm64/v8
+            artifact: Lavalink-musl.jar
           - name: Distroless
             dockerfile: LavalinkServer/docker/distroless.Dockerfile
             suffix: '-distroless'
             platforms: linux/amd64,linux/arm64/v8
+            artifact: Lavalink.jar
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download Lavalink.jar
-        if: ${{ matrix.name == 'Ubuntu' || matrix.name == 'Distroless' }}
+      - name: Download ${{ matrix.artifact }}
         uses: actions/download-artifact@v4
         with:
-          name: Lavalink.jar
-          path: LavalinkServer/build/libs/Lavalink.jar
-
-      - name: Download Lavalink-musl.jar
-        if: ${{ matrix.name == 'Alpine' }}
-        uses: actions/download-artifact@v4
-        with:
-          name: Lavalink-musl.jar
-          path: LavalinkServer/build/libs/Lavalink-musl.jar
+          name: ${{ matrix.artifact }}
+          path: LavalinkServer/build/libs/
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
