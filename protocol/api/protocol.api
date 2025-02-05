@@ -1,0 +1,2226 @@
+public final class dev/arbjerg/lavalink/protocol/v4/Band {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Band$Companion;
+	public fun <init> (IF)V
+	public synthetic fun <init> (IFILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()F
+	public final fun copy (IF)Ldev/arbjerg/lavalink/protocol/v4/Band;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Band;IFILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Band;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBand ()I
+	public final fun getGain ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Band$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Band$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Band;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Band;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Band$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/ChannelMix {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/ChannelMix$Companion;
+	public fun <init> ()V
+	public fun <init> (FFFF)V
+	public synthetic fun <init> (FFFFILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()F
+	public final fun component2 ()F
+	public final fun component3 ()F
+	public final fun component4 ()F
+	public final fun copy (FFFF)Ldev/arbjerg/lavalink/protocol/v4/ChannelMix;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/ChannelMix;FFFFILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/ChannelMix;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLeftToLeft ()F
+	public final fun getLeftToRight ()F
+	public final fun getRightToLeft ()F
+	public final fun getRightToRight ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/ChannelMix$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/ChannelMix$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/ChannelMix;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/ChannelMix;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/ChannelMix$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Cpu {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Cpu$Companion;
+	public fun <init> (IDD)V
+	public final fun component1 ()I
+	public final fun component2 ()D
+	public final fun component3 ()D
+	public final fun copy (IDD)Ldev/arbjerg/lavalink/protocol/v4/Cpu;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Cpu;IDDILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Cpu;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCores ()I
+	public final fun getLavalinkLoad ()D
+	public final fun getSystemLoad ()D
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Cpu$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Cpu$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Cpu;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Cpu;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Cpu$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Distortion {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Distortion$Companion;
+	public fun <init> ()V
+	public fun <init> (FFFFFFFF)V
+	public synthetic fun <init> (FFFFFFFFILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()F
+	public final fun component2 ()F
+	public final fun component3 ()F
+	public final fun component4 ()F
+	public final fun component5 ()F
+	public final fun component6 ()F
+	public final fun component7 ()F
+	public final fun component8 ()F
+	public final fun copy (FFFFFFFF)Ldev/arbjerg/lavalink/protocol/v4/Distortion;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Distortion;FFFFFFFFILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Distortion;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCosOffset ()F
+	public final fun getCosScale ()F
+	public final fun getOffset ()F
+	public final fun getScale ()F
+	public final fun getSinOffset ()F
+	public final fun getSinScale ()F
+	public final fun getTanOffset ()F
+	public final fun getTanScale ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Distortion$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Distortion$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Distortion;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Distortion;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Distortion$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/EncodedTracks {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/EncodedTracks$Companion;
+	public static final synthetic fun box-impl (Ljava/util/ArrayList;)Ldev/arbjerg/lavalink/protocol/v4/EncodedTracks;
+	public static fun constructor-impl (Ljava/util/ArrayList;)Ljava/util/ArrayList;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/util/ArrayList;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/util/ArrayList;Ljava/util/ArrayList;)Z
+	public final fun getTracks ()Ljava/util/ArrayList;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/util/ArrayList;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/util/ArrayList;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/util/ArrayList;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/EncodedTracks$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/EncodedTracks$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize-YwKvfEs (Lkotlinx/serialization/encoding/Decoder;)Ljava/util/ArrayList;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize-EeTE9X0 (Lkotlinx/serialization/encoding/Encoder;Ljava/util/ArrayList;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/EncodedTracks$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Error {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Error$Companion;
+	public fun <init> (Lkotlinx/datetime/Instant;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Lkotlinx/datetime/Instant;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lkotlinx/datetime/Instant;
+	public final fun component2 ()I
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Lkotlinx/datetime/Instant;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/Error;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Error;Lkotlinx/datetime/Instant;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Error;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getError ()Ljava/lang/String;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getPath ()Ljava/lang/String;
+	public final fun getStatus ()I
+	public final fun getTimestamp ()Lkotlinx/datetime/Instant;
+	public final fun getTrace ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Error$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Error$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Error;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Error;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Error$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Exception : dev/arbjerg/lavalink/protocol/v4/LoadResult$Data {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Exception$Companion;
+	public fun <init> (Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Exception$Severity;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/Exception$Severity;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Exception$Severity;Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/Exception;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Exception;Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Exception$Severity;Ljava/lang/String;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Exception;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCause ()Ljava/lang/String;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getSeverity ()Ldev/arbjerg/lavalink/protocol/v4/Exception$Severity;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Exception$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Exception$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Exception;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Exception;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Exception$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Exception$Severity : java/lang/Enum {
+	public static final field COMMON Ldev/arbjerg/lavalink/protocol/v4/Exception$Severity;
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Exception$Severity$Companion;
+	public static final field FAULT Ldev/arbjerg/lavalink/protocol/v4/Exception$Severity;
+	public static final field SUSPICIOUS Ldev/arbjerg/lavalink/protocol/v4/Exception$Severity;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/Exception$Severity;
+	public static fun values ()[Ldev/arbjerg/lavalink/protocol/v4/Exception$Severity;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Exception$Severity$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Filters {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Filters$Companion;
+	public fun <init> ()V
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ljava/util/Map;)V
+	public synthetic fun <init> (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component10 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component11 ()Ljava/util/Map;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component3 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component4 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component5 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component6 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component7 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component8 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component9 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ljava/util/Map;)Ldev/arbjerg/lavalink/protocol/v4/Filters;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Filters;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ljava/util/Map;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Filters;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChannelMix ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getDistortion ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getEqualizer ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getKaraoke ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getLowPass ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getPluginFilters ()Ljava/util/Map;
+	public final fun getRotation ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getTimescale ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getTremolo ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getVibrato ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getVolume ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public final fun validate (Ljava/util/List;)Ljava/util/List;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Filters$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Filters$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Filters;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Filters;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Filters$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/FrameStats {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/FrameStats$Companion;
+	public fun <init> (III)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun copy (III)Ldev/arbjerg/lavalink/protocol/v4/FrameStats;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/FrameStats;IIIILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/FrameStats;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDeficit ()I
+	public final fun getNulled ()I
+	public final fun getSent ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/FrameStats$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/FrameStats$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/FrameStats;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/FrameStats;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/FrameStats$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Git {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Git$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;J)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()J
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;J)Ldev/arbjerg/lavalink/protocol/v4/Git;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Git;Ljava/lang/String;Ljava/lang/String;JILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Git;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBranch ()Ljava/lang/String;
+	public final fun getCommit ()Ljava/lang/String;
+	public final fun getCommitTime ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Git$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Git$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Git;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Git;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Git$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Info {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Info$Companion;
+	public synthetic fun <init> (Ldev/arbjerg/lavalink/protocol/v4/Version;JLdev/arbjerg/lavalink/protocol/v4/Git;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/Version;
+	public final fun component2 ()J
+	public final fun component3 ()Ldev/arbjerg/lavalink/protocol/v4/Git;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/util/List;
+	public final fun component7 ()Ljava/util/List;
+	public final fun component8-ZVrDAyc ()Ljava/util/List;
+	public final fun copy-vRutLyc (Ldev/arbjerg/lavalink/protocol/v4/Version;JLdev/arbjerg/lavalink/protocol/v4/Git;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/List;)Ldev/arbjerg/lavalink/protocol/v4/Info;
+	public static synthetic fun copy-vRutLyc$default (Ldev/arbjerg/lavalink/protocol/v4/Info;Ldev/arbjerg/lavalink/protocol/v4/Version;JLdev/arbjerg/lavalink/protocol/v4/Git;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Info;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBuildTime ()J
+	public final fun getFilters ()Ljava/util/List;
+	public final fun getGit ()Ldev/arbjerg/lavalink/protocol/v4/Git;
+	public final fun getJvm ()Ljava/lang/String;
+	public final fun getLavaplayer ()Ljava/lang/String;
+	public final fun getPlugins-ZVrDAyc ()Ljava/util/List;
+	public final fun getSourceManagers ()Ljava/util/List;
+	public final fun getVersion ()Ldev/arbjerg/lavalink/protocol/v4/Version;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Info$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Info$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Info;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Info;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Info$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Karaoke {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Karaoke$Companion;
+	public fun <init> ()V
+	public fun <init> (FFFF)V
+	public synthetic fun <init> (FFFFILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()F
+	public final fun component2 ()F
+	public final fun component3 ()F
+	public final fun component4 ()F
+	public final fun copy (FFFF)Ldev/arbjerg/lavalink/protocol/v4/Karaoke;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Karaoke;FFFFILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Karaoke;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFilterBand ()F
+	public final fun getFilterWidth ()F
+	public final fun getLevel ()F
+	public final fun getMonoLevel ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Karaoke$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Karaoke$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Karaoke;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Karaoke;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Karaoke$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class dev/arbjerg/lavalink/protocol/v4/LoadResult {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/LoadResult$Companion;
+	public abstract fun getData ()Ldev/arbjerg/lavalink/protocol/v4/LoadResult$Data;
+	public abstract fun getLoadType ()Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LoadResult$Companion {
+	public final fun loadFailed (Ldev/arbjerg/lavalink/protocol/v4/Exception;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$LoadFailed;
+	public final fun playlistLoaded (Ldev/arbjerg/lavalink/protocol/v4/PlaylistInfo;Lkotlinx/serialization/json/JsonObject;Ljava/util/List;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$PlaylistLoaded;
+	public final fun searchResult (Ljava/util/List;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public final fun trackLoaded (Ldev/arbjerg/lavalink/protocol/v4/Track;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$TrackLoaded;
+}
+
+public abstract interface class dev/arbjerg/lavalink/protocol/v4/LoadResult$Data {
+}
+
+public abstract interface class dev/arbjerg/lavalink/protocol/v4/LoadResult$HasTracks {
+	public abstract fun getTracks ()Ljava/util/List;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LoadResult$LoadFailed : dev/arbjerg/lavalink/protocol/v4/LoadResult {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/LoadResult$LoadFailed$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/Exception;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/Exception;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;Ldev/arbjerg/lavalink/protocol/v4/Exception;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$LoadFailed;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/LoadResult$LoadFailed;Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;Ldev/arbjerg/lavalink/protocol/v4/Exception;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$LoadFailed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getData ()Ldev/arbjerg/lavalink/protocol/v4/Exception;
+	public synthetic fun getData ()Ldev/arbjerg/lavalink/protocol/v4/LoadResult$Data;
+	public fun getLoadType ()Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/LoadResult$LoadFailed$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/LoadResult$LoadFailed$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$LoadFailed;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/LoadResult$LoadFailed;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LoadResult$LoadFailed$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public class dev/arbjerg/lavalink/protocol/v4/LoadResult$NoMatches : dev/arbjerg/lavalink/protocol/v4/LoadResult {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/LoadResult$NoMatches$Companion;
+	public synthetic fun <init> (ILdev/arbjerg/lavalink/protocol/v4/ResultStatus;Ldev/arbjerg/lavalink/protocol/v4/LoadResult$Data;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getData ()Ldev/arbjerg/lavalink/protocol/v4/LoadResult$Data;
+	public fun getLoadType ()Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Ldev/arbjerg/lavalink/protocol/v4/LoadResult$NoMatches;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/LoadResult$NoMatches$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/LoadResult$NoMatches$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$NoMatches;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/LoadResult$NoMatches;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LoadResult$NoMatches$Companion {
+	public final fun invoke ()Ldev/arbjerg/lavalink/protocol/v4/LoadResult$NoMatches;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LoadResult$PlaylistLoaded : dev/arbjerg/lavalink/protocol/v4/LoadResult {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/LoadResult$PlaylistLoaded$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/Playlist;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/Playlist;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;Ldev/arbjerg/lavalink/protocol/v4/Playlist;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$PlaylistLoaded;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/LoadResult$PlaylistLoaded;Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;Ldev/arbjerg/lavalink/protocol/v4/Playlist;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$PlaylistLoaded;
+	public fun equals (Ljava/lang/Object;)Z
+	public synthetic fun getData ()Ldev/arbjerg/lavalink/protocol/v4/LoadResult$Data;
+	public fun getData ()Ldev/arbjerg/lavalink/protocol/v4/Playlist;
+	public fun getLoadType ()Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/LoadResult$PlaylistLoaded$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/LoadResult$PlaylistLoaded$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$PlaylistLoaded;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/LoadResult$PlaylistLoaded;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LoadResult$PlaylistLoaded$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult : dev/arbjerg/lavalink/protocol/v4/LoadResult {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult;Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult;
+	public fun equals (Ljava/lang/Object;)Z
+	public synthetic fun getData ()Ldev/arbjerg/lavalink/protocol/v4/LoadResult$Data;
+	public fun getData ()Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data;
+	public fun getLoadType ()Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data : dev/arbjerg/lavalink/protocol/v4/LoadResult$Data, dev/arbjerg/lavalink/protocol/v4/LoadResult$HasTracks {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data$Companion;
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data;Ljava/util/List;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getTracks ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data$Serializer : kotlinx/serialization/KSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data$Serializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/LoadResult$SearchResult$Data;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LoadResult$Serializer : kotlinx/serialization/json/JsonContentPolymorphicSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/LoadResult$Serializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LoadResult$TrackLoaded : dev/arbjerg/lavalink/protocol/v4/LoadResult {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/LoadResult$TrackLoaded$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/Track;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;Ldev/arbjerg/lavalink/protocol/v4/Track;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$TrackLoaded;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/LoadResult$TrackLoaded;Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;Ldev/arbjerg/lavalink/protocol/v4/Track;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$TrackLoaded;
+	public fun equals (Ljava/lang/Object;)Z
+	public synthetic fun getData ()Ldev/arbjerg/lavalink/protocol/v4/LoadResult$Data;
+	public fun getData ()Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public fun getLoadType ()Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/LoadResult$TrackLoaded$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/LoadResult$TrackLoaded$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/LoadResult$TrackLoaded;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/LoadResult$TrackLoaded;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LoadResult$TrackLoaded$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LowPass {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/LowPass$Companion;
+	public fun <init> ()V
+	public fun <init> (F)V
+	public synthetic fun <init> (FILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()F
+	public final fun copy (F)Ldev/arbjerg/lavalink/protocol/v4/LowPass;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/LowPass;FILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/LowPass;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSmoothing ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/LowPass$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/LowPass$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/LowPass;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/LowPass;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/LowPass$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Mapper {
+	public static final fun getJson ()Lkotlinx/serialization/json/Json;
+	public static final fun getLavalinkSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Memory {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Memory$Companion;
+	public fun <init> (JJJJ)V
+	public final fun component1 ()J
+	public final fun component2 ()J
+	public final fun component3 ()J
+	public final fun component4 ()J
+	public final fun copy (JJJJ)Ldev/arbjerg/lavalink/protocol/v4/Memory;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Memory;JJJJILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Memory;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAllocated ()J
+	public final fun getFree ()J
+	public final fun getReservable ()J
+	public final fun getUsed ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Memory$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Memory$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Memory;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Memory;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Memory$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class dev/arbjerg/lavalink/protocol/v4/Message {
+	public static final field Serializer Ldev/arbjerg/lavalink/protocol/v4/Message$Serializer;
+	public abstract fun getOp ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+}
+
+public abstract interface class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent : dev/arbjerg/lavalink/protocol/v4/Message {
+	public static final field Serializer Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Serializer;
+	public abstract fun getGuildId ()Ljava/lang/String;
+	public abstract fun getType ()Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Serializer : kotlinx/serialization/json/JsonContentPolymorphicSerializer {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent : dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$Companion;
+	public fun <init> (Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public final fun component5 ()Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/Message$Op;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent;Ldev/arbjerg/lavalink/protocol/v4/Message$Op;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getGuildId ()Ljava/lang/String;
+	public fun getOp ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun getReason ()Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason;
+	public final fun getTrack ()Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public fun getType ()Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason : java/lang/Enum {
+	public static final field CLEANUP Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason;
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason$Companion;
+	public static final field FINISHED Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason;
+	public static final field LOAD_FAILED Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason;
+	public static final field REPLACED Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason;
+	public static final field STOPPED Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getMayStartNext ()Z
+	public static fun valueOf (Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason;
+	public static fun values ()[Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$AudioTrackEndReason$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackEndEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackExceptionEvent : dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackExceptionEvent$Companion;
+	public fun <init> (Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;Ldev/arbjerg/lavalink/protocol/v4/Exception;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public final fun component5 ()Ldev/arbjerg/lavalink/protocol/v4/Exception;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/Message$Op;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;Ldev/arbjerg/lavalink/protocol/v4/Exception;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackExceptionEvent;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackExceptionEvent;Ldev/arbjerg/lavalink/protocol/v4/Message$Op;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;Ldev/arbjerg/lavalink/protocol/v4/Exception;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackExceptionEvent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getException ()Ldev/arbjerg/lavalink/protocol/v4/Exception;
+	public fun getGuildId ()Ljava/lang/String;
+	public fun getOp ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun getTrack ()Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public fun getType ()Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackExceptionEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackExceptionEvent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackExceptionEvent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackExceptionEvent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackExceptionEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStartEvent : dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStartEvent$Companion;
+	public fun <init> (Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/Message$Op;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStartEvent;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStartEvent;Ldev/arbjerg/lavalink/protocol/v4/Message$Op;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStartEvent;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getGuildId ()Ljava/lang/String;
+	public fun getOp ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun getTrack ()Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public fun getType ()Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStartEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStartEvent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStartEvent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStartEvent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStartEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStuckEvent : dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStuckEvent$Companion;
+	public fun <init> (Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;J)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public final fun component5 ()J
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/Message$Op;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;J)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStuckEvent;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStuckEvent;Ldev/arbjerg/lavalink/protocol/v4/Message$Op;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;JILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStuckEvent;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getGuildId ()Ljava/lang/String;
+	public fun getOp ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun getThreshold-UwyO8pc ()J
+	public final fun getThresholdMs ()J
+	public final fun getTrack ()Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public fun getType ()Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStuckEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStuckEvent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStuckEvent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStuckEvent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$TrackStuckEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type : java/lang/Enum {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type$Companion;
+	public static final field TrackEnd Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public static final field TrackException Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public static final field TrackStart Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public static final field TrackStuck Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public static final field WebSocketClosed Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public static fun values ()[Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public final fun valueOfIgnoreCase (Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$WebSocketClosedEvent : dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$WebSocketClosedEvent$Companion;
+	public fun <init> (Ljava/lang/String;ILjava/lang/String;Z)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()I
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Z
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/Message$Op;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;Ljava/lang/String;ILjava/lang/String;Z)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$WebSocketClosedEvent;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$WebSocketClosedEvent;Ldev/arbjerg/lavalink/protocol/v4/Message$Op;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;Ljava/lang/String;ILjava/lang/String;ZILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$WebSocketClosedEvent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getByRemote ()Z
+	public final fun getCode ()I
+	public fun getGuildId ()Ljava/lang/String;
+	public fun getOp ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun getReason ()Ljava/lang/String;
+	public fun getType ()Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$Type;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$WebSocketClosedEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$WebSocketClosedEvent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$WebSocketClosedEvent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$WebSocketClosedEvent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$EmittedEvent$WebSocketClosedEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$Op : java/lang/Enum {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Message$Op$Companion;
+	public static final field Event Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public static final field PlayerUpdate Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public static final field Ready Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public static final field Stats Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public static fun values ()[Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$Op$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public final fun valueOfIgnoreCase (Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$PlayerUpdateEvent : dev/arbjerg/lavalink/protocol/v4/Message {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Message$PlayerUpdateEvent$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/PlayerState;Ljava/lang/String;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/PlayerState;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/Message$Op;Ldev/arbjerg/lavalink/protocol/v4/PlayerState;Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/Message$PlayerUpdateEvent;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Message$PlayerUpdateEvent;Ldev/arbjerg/lavalink/protocol/v4/Message$Op;Ldev/arbjerg/lavalink/protocol/v4/PlayerState;Ljava/lang/String;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Message$PlayerUpdateEvent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getGuildId ()Ljava/lang/String;
+	public fun getOp ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun getState ()Ldev/arbjerg/lavalink/protocol/v4/PlayerState;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Message$PlayerUpdateEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Message$PlayerUpdateEvent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Message$PlayerUpdateEvent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Message$PlayerUpdateEvent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$PlayerUpdateEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$ReadyEvent : dev/arbjerg/lavalink/protocol/v4/Message {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Message$ReadyEvent$Companion;
+	public fun <init> (ZLjava/lang/String;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun component2 ()Z
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/Message$Op;ZLjava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/Message$ReadyEvent;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Message$ReadyEvent;Ldev/arbjerg/lavalink/protocol/v4/Message$Op;ZLjava/lang/String;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Message$ReadyEvent;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getOp ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun getResumed ()Z
+	public final fun getSessionId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Message$ReadyEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Message$ReadyEvent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Message$ReadyEvent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Message$ReadyEvent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$ReadyEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$Serializer : kotlinx/serialization/json/JsonContentPolymorphicSerializer {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$StatsEvent : dev/arbjerg/lavalink/protocol/v4/Message, dev/arbjerg/lavalink/protocol/v4/Stats {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Message$StatsEvent$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/Stats;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/FrameStats;
+	public final fun component3 ()I
+	public final fun component4 ()I
+	public final fun component5 ()J
+	public final fun component6 ()Ldev/arbjerg/lavalink/protocol/v4/Memory;
+	public final fun component7 ()Ldev/arbjerg/lavalink/protocol/v4/Cpu;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/Message$Op;Ldev/arbjerg/lavalink/protocol/v4/FrameStats;IIJLdev/arbjerg/lavalink/protocol/v4/Memory;Ldev/arbjerg/lavalink/protocol/v4/Cpu;)Ldev/arbjerg/lavalink/protocol/v4/Message$StatsEvent;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Message$StatsEvent;Ldev/arbjerg/lavalink/protocol/v4/Message$Op;Ldev/arbjerg/lavalink/protocol/v4/FrameStats;IIJLdev/arbjerg/lavalink/protocol/v4/Memory;Ldev/arbjerg/lavalink/protocol/v4/Cpu;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Message$StatsEvent;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCpu ()Ldev/arbjerg/lavalink/protocol/v4/Cpu;
+	public fun getFrameStats ()Ldev/arbjerg/lavalink/protocol/v4/FrameStats;
+	public fun getMemory ()Ldev/arbjerg/lavalink/protocol/v4/Memory;
+	public fun getOp ()Ldev/arbjerg/lavalink/protocol/v4/Message$Op;
+	public fun getPlayers ()I
+	public fun getPlayingPlayers ()I
+	public fun getUptime ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Message$StatsEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Message$StatsEvent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Message$StatsEvent;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Message$StatsEvent;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Message$StatsEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/OmissableSerializer : kotlinx/serialization/KSerializer {
+	public fun <init> (Lkotlinx/serialization/KSerializer;)V
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Omissible;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+}
+
+public abstract interface class dev/arbjerg/lavalink/protocol/v4/Omissible {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Omissible$Companion;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Omissible$Companion {
+	public final fun invoke-QruQRtQ (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun of-QruQRtQ (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun omitted ()Ldev/arbjerg/lavalink/protocol/v4/Omissible$Omitted;
+	public final fun omittedIfNull (Ljava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun serializer (Lkotlinx/serialization/KSerializer;)Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Omissible$Omitted : dev/arbjerg/lavalink/protocol/v4/Omissible {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Omissible$Omitted$Companion;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Omissible$Omitted$Companion {
+	public final fun invoke ()Ldev/arbjerg/lavalink/protocol/v4/Omissible$Omitted;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Omissible$Present : dev/arbjerg/lavalink/protocol/v4/Omissible {
+	public static final synthetic fun box-impl (Ljava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Omissible$Present;
+	public static fun constructor-impl (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/Object;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/Object;Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/Object;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/Object;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/Object;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/OmissibleKt {
+	public static final fun ifPresent (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun ifPresentAndNotNull (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun isOmitted (Ldev/arbjerg/lavalink/protocol/v4/Omissible;)Z
+	public static final fun isPresent (Ldev/arbjerg/lavalink/protocol/v4/Omissible;)Z
+	public static final fun map (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Lkotlin/jvm/functions/Function1;)Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public static final fun takeIfPresent (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static synthetic fun takeIfPresent$default (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun toOmissible (Ljava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Player {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Player$Companion;
+	public fun <init> (Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;IZLdev/arbjerg/lavalink/protocol/v4/PlayerState;Ldev/arbjerg/lavalink/protocol/v4/VoiceState;Ldev/arbjerg/lavalink/protocol/v4/Filters;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public final fun component3 ()I
+	public final fun component4 ()Z
+	public final fun component5 ()Ldev/arbjerg/lavalink/protocol/v4/PlayerState;
+	public final fun component6 ()Ldev/arbjerg/lavalink/protocol/v4/VoiceState;
+	public final fun component7 ()Ldev/arbjerg/lavalink/protocol/v4/Filters;
+	public final fun copy (Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;IZLdev/arbjerg/lavalink/protocol/v4/PlayerState;Ldev/arbjerg/lavalink/protocol/v4/VoiceState;Ldev/arbjerg/lavalink/protocol/v4/Filters;)Ldev/arbjerg/lavalink/protocol/v4/Player;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Player;Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/Track;IZLdev/arbjerg/lavalink/protocol/v4/PlayerState;Ldev/arbjerg/lavalink/protocol/v4/VoiceState;Ldev/arbjerg/lavalink/protocol/v4/Filters;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Player;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFilters ()Ldev/arbjerg/lavalink/protocol/v4/Filters;
+	public final fun getGuildId ()Ljava/lang/String;
+	public final fun getPaused ()Z
+	public final fun getState ()Ldev/arbjerg/lavalink/protocol/v4/PlayerState;
+	public final fun getTrack ()Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public final fun getVoice ()Ldev/arbjerg/lavalink/protocol/v4/VoiceState;
+	public final fun getVolume ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Player$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Player$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Player;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Player;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Player$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/PlayerKt {
+	public static final fun deserialize (Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/DeserializationStrategy;)Ljava/lang/Object;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/PlayerState {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/PlayerState$Companion;
+	public fun <init> (JJZJ)V
+	public final fun component1 ()J
+	public final fun component2 ()J
+	public final fun component3 ()Z
+	public final fun component4 ()J
+	public final fun copy (JJZJ)Ldev/arbjerg/lavalink/protocol/v4/PlayerState;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/PlayerState;JJZJILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/PlayerState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getConnected ()Z
+	public final fun getPing ()J
+	public final fun getPosition ()J
+	public final fun getTime ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/PlayerState$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/PlayerState$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/PlayerState;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/PlayerState;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/PlayerState$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/PlayerUpdate {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/PlayerUpdate$Companion;
+	public fun <init> ()V
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;)V
+	public synthetic fun <init> (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component3 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component4 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component5 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component6 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component7 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component8 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component9 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;)Ldev/arbjerg/lavalink/protocol/v4/PlayerUpdate;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/PlayerUpdate;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/PlayerUpdate;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEncodedTrack ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getEndTime ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getFilters ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getIdentifier ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getPaused ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getPosition ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getTrack ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getVoice ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getVolume ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/PlayerUpdate$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/PlayerUpdate$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/PlayerUpdate;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/PlayerUpdate;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/PlayerUpdate$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/PlayerUpdateTrack {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/PlayerUpdateTrack$Companion;
+	public fun <init> ()V
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;)V
+	public synthetic fun <init> (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component3 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;)Ldev/arbjerg/lavalink/protocol/v4/PlayerUpdateTrack;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/PlayerUpdateTrack;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/PlayerUpdateTrack;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEncoded ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getIdentifier ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getUserData ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/PlayerUpdateTrack$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/PlayerUpdateTrack$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/PlayerUpdateTrack;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/PlayerUpdateTrack;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/PlayerUpdateTrack$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Players {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Players$Companion;
+	public static final synthetic fun box-impl (Ljava/util/List;)Ldev/arbjerg/lavalink/protocol/v4/Players;
+	public static fun constructor-impl (Ljava/util/List;)Ljava/util/List;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/util/List;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/util/List;Ljava/util/List;)Z
+	public final fun getPlayers ()Ljava/util/List;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/util/List;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/util/List;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/util/List;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Players$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Players$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize-xJan0jU (Lkotlinx/serialization/encoding/Decoder;)Ljava/util/List;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize-BSMEnwY (Lkotlinx/serialization/encoding/Encoder;Ljava/util/List;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Players$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Playlist : dev/arbjerg/lavalink/protocol/v4/LoadResult$Data {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Playlist$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/PlaylistInfo;Lkotlinx/serialization/json/JsonObject;Ljava/util/List;)V
+	public synthetic fun <init> (Ldev/arbjerg/lavalink/protocol/v4/PlaylistInfo;Lkotlinx/serialization/json/JsonObject;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/PlaylistInfo;
+	public final fun component2 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/PlaylistInfo;Lkotlinx/serialization/json/JsonObject;Ljava/util/List;)Ldev/arbjerg/lavalink/protocol/v4/Playlist;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Playlist;Ldev/arbjerg/lavalink/protocol/v4/PlaylistInfo;Lkotlinx/serialization/json/JsonObject;Ljava/util/List;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Playlist;
+	public final fun deserializePluginInfo (Lkotlinx/serialization/DeserializationStrategy;)Ljava/lang/Object;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getInfo ()Ldev/arbjerg/lavalink/protocol/v4/PlaylistInfo;
+	public final fun getPluginInfo ()Lkotlinx/serialization/json/JsonObject;
+	public final fun getTracks ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Playlist$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Playlist$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Playlist;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Playlist;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Playlist$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/PlaylistInfo {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/PlaylistInfo$Companion;
+	public fun <init> (Ljava/lang/String;I)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()I
+	public final fun copy (Ljava/lang/String;I)Ldev/arbjerg/lavalink/protocol/v4/PlaylistInfo;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/PlaylistInfo;Ljava/lang/String;IILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/PlaylistInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getSelectedTrack ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/PlaylistInfo$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/PlaylistInfo$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/PlaylistInfo;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/PlaylistInfo;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/PlaylistInfo$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Plugin {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Plugin$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/Plugin;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Plugin;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Plugin;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Plugin$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Plugin$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Plugin;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Plugin;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Plugin$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Plugins {
+	public static final field Serializer Ldev/arbjerg/lavalink/protocol/v4/Plugins$Serializer;
+	public static final synthetic fun box-impl (Ljava/util/List;)Ldev/arbjerg/lavalink/protocol/v4/Plugins;
+	public static fun constructor-impl (Ljava/util/List;)Ljava/util/List;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/util/List;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/util/List;Ljava/util/List;)Z
+	public final fun getPlugins ()Ljava/util/List;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/util/List;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/util/List;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/util/List;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Plugins$Serializer : kotlinx/serialization/KSerializer {
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize-ZCo4IM8 (Lkotlinx/serialization/encoding/Decoder;)Ljava/util/List;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize-1z2O8pQ (Lkotlinx/serialization/encoding/Encoder;Ljava/util/List;)V
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/ResultStatus : java/lang/Enum {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/ResultStatus$Companion;
+	public static final field ERROR Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public static final field NONE Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public static final field PLAYLIST Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public static final field SEARCH Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public static final field TRACK Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+	public static fun values ()[Ldev/arbjerg/lavalink/protocol/v4/ResultStatus;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/ResultStatus$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Rotation {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Rotation$Companion;
+	public fun <init> ()V
+	public fun <init> (D)V
+	public synthetic fun <init> (DILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()D
+	public final fun copy (D)Ldev/arbjerg/lavalink/protocol/v4/Rotation;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Rotation;DILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Rotation;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRotationHz ()D
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Rotation$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Rotation$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Rotation;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Rotation;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Rotation$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerFreeAddress {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerFreeAddress$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerFreeAddress;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerFreeAddress;Ljava/lang/String;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerFreeAddress;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAddress ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/RoutePlannerFreeAddress$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerFreeAddress$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerFreeAddress;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerFreeAddress;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerFreeAddress$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Companion;
+	public abstract fun getClass ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Class;
+	public abstract fun getDetails ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Details;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus : dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getClass ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Class;
+	public fun getDetails ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details;
+	public synthetic fun getDetails ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Details;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details : dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Details {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;Ljava/util/List;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;Ljava/util/List;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;Ljava/util/List;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getFailingAddresses ()Ljava/util/List;
+	public fun getIpBlock ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$BalancingIpRoutePlannerStatus$Details$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Class : java/lang/Enum {
+	public static final field BALANCING_IP_ROUTE_PLANNER Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Class;
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Class$Companion;
+	public static final field NANO_IP_ROUTE_PLANNER Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Class;
+	public static final field ROTATING_IP_ROUTE_PLANNER Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Class;
+	public static final field ROTATING_NANO_IP_ROUTE_PLANNER Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Class;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Class;
+	public static fun values ()[Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Class;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Class$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Details {
+	public abstract fun getFailingAddresses ()Ljava/util/List;
+	public abstract fun getIpBlock ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$FailingAddress {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$FailingAddress$Companion;
+	public fun <init> (Ljava/lang/String;JLjava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()J
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;JLjava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$FailingAddress;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$FailingAddress;Ljava/lang/String;JLjava/lang/String;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$FailingAddress;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFailingAddress ()Ljava/lang/String;
+	public final fun getFailingTime ()Ljava/lang/String;
+	public final fun getFailingTimestamp ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$FailingAddress$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$FailingAddress$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$FailingAddress;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$FailingAddress;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$FailingAddress$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Type;Ljava/lang/String;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Type;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Type;Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Type;Ljava/lang/String;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSize ()Ljava/lang/String;
+	public final fun getType ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Type;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Type : java/lang/Enum {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Type$Companion;
+	public static final field INET_4_ADDRESS Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Type;
+	public static final field INET_6_ADDRESS Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Type;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Type;
+	public static fun values ()[Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Type;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Type$Companion {
+	public final fun fromName (Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus$Type;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus : dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getClass ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Class;
+	public synthetic fun getDetails ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Details;
+	public fun getDetails ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details : dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Details {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;Ljava/util/List;Ljava/lang/String;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;Ljava/util/List;Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCurrentAddressIndex ()Ljava/lang/String;
+	public fun getFailingAddresses ()Ljava/util/List;
+	public fun getIpBlock ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$NanoIpRoutePlannerStatus$Details$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus : dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getClass ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Class;
+	public synthetic fun getDetails ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Details;
+	public fun getDetails ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details : dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Details {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCurrentAddress ()Ljava/lang/String;
+	public fun getFailingAddresses ()Ljava/util/List;
+	public fun getIpBlock ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;
+	public final fun getIpIndex ()Ljava/lang/String;
+	public final fun getRotateIndex ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingIpRoutePlannerStatus$Details$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus : dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getClass ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Class;
+	public synthetic fun getDetails ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Details;
+	public fun getDetails ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details : dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$Details {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBlockIndex ()Ljava/lang/String;
+	public final fun getCurrentAddressIndex ()Ljava/lang/String;
+	public fun getFailingAddresses ()Ljava/util/List;
+	public fun getIpBlock ()Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$IpBlockStatus;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RoutePlannerStatus$RotatingNanoIpRoutePlannerStatus$Details$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/RouteplannerKt {
+	public static final fun getRoutePlannerModule ()Lkotlinx/serialization/modules/SerializersModule;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Session {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Session$Companion;
+	public fun <init> (ZJ)V
+	public final fun component1 ()Z
+	public final fun component2 ()J
+	public final fun copy (ZJ)Ldev/arbjerg/lavalink/protocol/v4/Session;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Session;ZJILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Session;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getResuming ()Z
+	public final fun getTimeout-UwyO8pc ()J
+	public final fun getTimeoutSeconds ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Session$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Session$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Session;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Session;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Session$Companion {
+	public final fun invoke-HG0u8IE (ZJ)Ldev/arbjerg/lavalink/protocol/v4/Session;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/SessionUpdate {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/SessionUpdate$Companion;
+	public fun <init> ()V
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;)V
+	public synthetic fun <init> (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;)Ldev/arbjerg/lavalink/protocol/v4/SessionUpdate;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/SessionUpdate;Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/SessionUpdate;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getResuming ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getTimeout ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public final fun getTimeoutSeconds ()Ldev/arbjerg/lavalink/protocol/v4/Omissible;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/SessionUpdate$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/SessionUpdate$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/SessionUpdate;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/SessionUpdate;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/SessionUpdate$Companion {
+	public final fun invoke (Ldev/arbjerg/lavalink/protocol/v4/Omissible;Ldev/arbjerg/lavalink/protocol/v4/Omissible;)Ldev/arbjerg/lavalink/protocol/v4/SessionUpdate;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class dev/arbjerg/lavalink/protocol/v4/Stats {
+	public abstract fun getCpu ()Ldev/arbjerg/lavalink/protocol/v4/Cpu;
+	public abstract fun getFrameStats ()Ldev/arbjerg/lavalink/protocol/v4/FrameStats;
+	public abstract fun getMemory ()Ldev/arbjerg/lavalink/protocol/v4/Memory;
+	public abstract fun getPlayers ()I
+	public abstract fun getPlayingPlayers ()I
+	public abstract fun getUptime ()J
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/StatsData : dev/arbjerg/lavalink/protocol/v4/Stats {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/StatsData$Companion;
+	public fun <init> (Ldev/arbjerg/lavalink/protocol/v4/FrameStats;IIJLdev/arbjerg/lavalink/protocol/v4/Memory;Ldev/arbjerg/lavalink/protocol/v4/Cpu;)V
+	public synthetic fun <init> (Ldev/arbjerg/lavalink/protocol/v4/FrameStats;IIJLdev/arbjerg/lavalink/protocol/v4/Memory;Ldev/arbjerg/lavalink/protocol/v4/Cpu;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ldev/arbjerg/lavalink/protocol/v4/FrameStats;
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()J
+	public final fun component5 ()Ldev/arbjerg/lavalink/protocol/v4/Memory;
+	public final fun component6 ()Ldev/arbjerg/lavalink/protocol/v4/Cpu;
+	public final fun copy (Ldev/arbjerg/lavalink/protocol/v4/FrameStats;IIJLdev/arbjerg/lavalink/protocol/v4/Memory;Ldev/arbjerg/lavalink/protocol/v4/Cpu;)Ldev/arbjerg/lavalink/protocol/v4/StatsData;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/StatsData;Ldev/arbjerg/lavalink/protocol/v4/FrameStats;IIJLdev/arbjerg/lavalink/protocol/v4/Memory;Ldev/arbjerg/lavalink/protocol/v4/Cpu;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/StatsData;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCpu ()Ldev/arbjerg/lavalink/protocol/v4/Cpu;
+	public fun getFrameStats ()Ldev/arbjerg/lavalink/protocol/v4/FrameStats;
+	public fun getMemory ()Ldev/arbjerg/lavalink/protocol/v4/Memory;
+	public fun getPlayers ()I
+	public fun getPlayingPlayers ()I
+	public fun getUptime ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/StatsData$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/StatsData$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/StatsData;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/StatsData;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/StatsData$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Timescale {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Timescale$Companion;
+	public fun <init> ()V
+	public fun <init> (DDD)V
+	public synthetic fun <init> (DDDILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()D
+	public final fun component2 ()D
+	public final fun component3 ()D
+	public final fun copy (DDD)Ldev/arbjerg/lavalink/protocol/v4/Timescale;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Timescale;DDDILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Timescale;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPitch ()D
+	public final fun getRate ()D
+	public final fun getSpeed ()D
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Timescale$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Timescale$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Timescale;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Timescale;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Timescale$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Track : dev/arbjerg/lavalink/protocol/v4/LoadResult$Data {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Track$Companion;
+	public fun <init> (Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/TrackInfo;Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/json/JsonObject;)V
+	public synthetic fun <init> (Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/TrackInfo;Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/json/JsonObject;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ldev/arbjerg/lavalink/protocol/v4/TrackInfo;
+	public final fun component3 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun component4 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun copy (Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/TrackInfo;Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/json/JsonObject;)Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Track;Ljava/lang/String;Ldev/arbjerg/lavalink/protocol/v4/TrackInfo;Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/json/JsonObject;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public final fun copyWithUserData (Lkotlinx/serialization/json/JsonObject;)Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public final fun deserializePluginInfo (Lkotlinx/serialization/DeserializationStrategy;)Ljava/lang/Object;
+	public final fun deserializeUserData (Lkotlinx/serialization/DeserializationStrategy;)Ljava/lang/Object;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEncoded ()Ljava/lang/String;
+	public final fun getInfo ()Ldev/arbjerg/lavalink/protocol/v4/TrackInfo;
+	public final fun getPluginInfo ()Lkotlinx/serialization/json/JsonObject;
+	public final fun getUserData ()Lkotlinx/serialization/json/JsonObject;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Track$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Track$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Track;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Track;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Track$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/TrackInfo {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/TrackInfo$Companion;
+	public fun <init> (Ljava/lang/String;ZLjava/lang/String;JZJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component10 ()Ljava/lang/String;
+	public final fun component11 ()Ljava/lang/String;
+	public final fun component2 ()Z
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()J
+	public final fun component5 ()Z
+	public final fun component6 ()J
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Ljava/lang/String;
+	public final fun component9 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;ZLjava/lang/String;JZJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/TrackInfo;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/TrackInfo;Ljava/lang/String;ZLjava/lang/String;JZJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/TrackInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getArtworkUrl ()Ljava/lang/String;
+	public final fun getAuthor ()Ljava/lang/String;
+	public final fun getIdentifier ()Ljava/lang/String;
+	public final fun getIsrc ()Ljava/lang/String;
+	public final fun getLength ()J
+	public final fun getPosition ()J
+	public final fun getSourceName ()Ljava/lang/String;
+	public final fun getTitle ()Ljava/lang/String;
+	public final fun getUri ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun isSeekable ()Z
+	public final fun isStream ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/TrackInfo$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/TrackInfo$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/TrackInfo;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/TrackInfo;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/TrackInfo$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Tracks {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Tracks$Companion;
+	public static final synthetic fun box-impl (Ljava/util/List;)Ldev/arbjerg/lavalink/protocol/v4/Tracks;
+	public static fun constructor-impl (Ljava/util/List;)Ljava/util/List;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/util/List;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/util/List;Ljava/util/List;)Z
+	public final fun getTracks ()Ljava/util/List;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/util/List;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/util/List;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/util/List;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Tracks$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Tracks$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize-AsiqD6c (Lkotlinx/serialization/encoding/Decoder;)Ljava/util/List;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize-UM3vyJ4 (Lkotlinx/serialization/encoding/Encoder;Ljava/util/List;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Tracks$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Tremolo {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Tremolo$Companion;
+	public fun <init> ()V
+	public fun <init> (FF)V
+	public synthetic fun <init> (FFILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()F
+	public final fun component2 ()F
+	public final fun copy (FF)Ldev/arbjerg/lavalink/protocol/v4/Tremolo;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Tremolo;FFILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Tremolo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDepth ()F
+	public final fun getFrequency ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Tremolo$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Tremolo$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Tremolo;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Tremolo;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Tremolo$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Version {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Version$Companion;
+	public fun <init> (Ljava/lang/String;IIILjava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()I
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;IIILjava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/Version;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Version;Ljava/lang/String;IIILjava/lang/String;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Version;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMajor ()I
+	public final fun getMinor ()I
+	public final fun getPatch ()I
+	public final fun getPreRelease ()Ljava/lang/String;
+	public final fun getSemver ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Version$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Version$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Version;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Version;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Version$Companion {
+	public final fun fromSemver (Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/Version;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Vibrato {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/Vibrato$Companion;
+	public fun <init> ()V
+	public fun <init> (FF)V
+	public synthetic fun <init> (FFILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()F
+	public final fun component2 ()F
+	public final fun copy (FF)Ldev/arbjerg/lavalink/protocol/v4/Vibrato;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/Vibrato;FFILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/Vibrato;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDepth ()F
+	public final fun getFrequency ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/Vibrato$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/Vibrato$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/Vibrato;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/Vibrato;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/Vibrato$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/VoiceState {
+	public static final field Companion Ldev/arbjerg/lavalink/protocol/v4/VoiceState$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ldev/arbjerg/lavalink/protocol/v4/VoiceState;
+	public static synthetic fun copy$default (Ldev/arbjerg/lavalink/protocol/v4/VoiceState;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ldev/arbjerg/lavalink/protocol/v4/VoiceState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEndpoint ()Ljava/lang/String;
+	public final fun getSessionId ()Ljava/lang/String;
+	public final fun getToken ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class dev/arbjerg/lavalink/protocol/v4/VoiceState$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/VoiceState$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ldev/arbjerg/lavalink/protocol/v4/VoiceState;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ldev/arbjerg/lavalink/protocol/v4/VoiceState;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/VoiceState$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class dev/arbjerg/lavalink/protocol/v4/serialization/TimestampSerializer : kotlinx/serialization/KSerializer {
+	public static final field INSTANCE Ldev/arbjerg/lavalink/protocol/v4/serialization/TimestampSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkotlinx/datetime/Instant;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lkotlinx/datetime/Instant;)V
+}
+
