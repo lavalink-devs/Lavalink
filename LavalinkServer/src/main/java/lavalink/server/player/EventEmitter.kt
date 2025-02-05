@@ -76,12 +76,14 @@ class EventEmitter(
 
     // These exceptions are already logged by Lavaplayer
     override fun onTrackException(player: AudioPlayer, track: AudioTrack, exception: FriendlyException) {
+        val rootCause = getRootCause(exception)
+
         this.player.socketContext.sendMessage(
             Message.Serializer,
             Message.EmittedEvent.TrackExceptionEvent(
                 this.player.guildId.toString(),
                 track.toTrack(audioPlayerManager, pluginInfoModifiers),
-                Exception(exception.message, exception.severity.toLavalink(), getRootCause(exception).toString())
+                Exception(exception.message, exception.severity.toLavalink(), rootCause.toString(), rootCause.stackTraceToString())
             )
         )
     }
