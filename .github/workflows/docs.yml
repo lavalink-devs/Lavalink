@@ -8,8 +8,8 @@ on:
       - '.github/workflows/docs.yml'
 
 concurrency:
-    group: pages-${{ github.ref }}
-    cancel-in-progress: true
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   deploy:
@@ -33,7 +33,7 @@ jobs:
             mkdocs-material-
       - run: pip install -r requirements.txt
         working-directory: docs
-#      - run: mkdocs build --verbose --strict
+      #      - run: mkdocs build --verbose --strict
       - run: mkdocs build --verbose
         working-directory: docs
       - uses: actions/upload-pages-artifact@v3
