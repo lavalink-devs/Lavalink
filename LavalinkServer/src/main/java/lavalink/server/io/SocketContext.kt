@@ -211,9 +211,9 @@ class SocketContext(
         players.values.forEach {
             this.destroyPlayer(it.guildId)
         }
-        MDC.remove("userAgent")
         koe.close()
         eventEmitter.onSocketContextDestroyed()
+        MDC.remove("userAgent")
     }
 
     override fun closeWebSocket(closeCode: Int, reason: String?) {
