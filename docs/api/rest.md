@@ -6,9 +6,11 @@ description: Lavalink REST API documentation.
 
 Lavalink exposes a REST API to allow for easy control of the players.
 Most routes require the `Authorization` header with the configured password.
+An aditional `User-Agent` header can be set to easily identify the client on the server logs.
 
 ```
 Authorization: youshallnotpass
+User-Agent: TestBot/1.0.0
 ```
 
 Routes are prefixed with `/v3` as of `v3.7.0` and `/v4` as of `v4.0.0`. Routes without an API prefix were removed in v4 (except `/version`).
