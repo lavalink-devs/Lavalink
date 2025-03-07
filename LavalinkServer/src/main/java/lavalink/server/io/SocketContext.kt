@@ -196,8 +196,9 @@ class SocketContext(
     }
 
     internal fun shutdown() {
-        if (userAgent != null)
+        if (userAgent != null) {
             MDC.put("userAgent", userAgent)
+        }
 
         log.info("Shutting down ${playingPlayers.size} playing players for session $sessionId")
 

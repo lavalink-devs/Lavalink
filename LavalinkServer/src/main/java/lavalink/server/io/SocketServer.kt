@@ -103,9 +103,8 @@ final class SocketServer(
 
         if (userAgent != null) {
             session.attributes["userAgent"] = userAgent
+            MDC.put("userAgent", userAgent)
         }
-
-        MDC.put("userAgent", userAgent)
 
         var resumable: SocketContext? = null
         if (sessionId != null) resumable = resumableSessions.remove(sessionId)
@@ -156,8 +155,9 @@ final class SocketServer(
         val context = sessions.remove(session.attributes["sessionId"]) ?: return
         val userAgent = session.attributes["userAgent"] as? String
 
-        if (userAgent != null)
+        if (userAgent != null) {
             MDC.put("userAgent", userAgent)
+            }
 
         if (context.resumable) {
             resumableSessions.remove(context.sessionId)?.let { removed ->
