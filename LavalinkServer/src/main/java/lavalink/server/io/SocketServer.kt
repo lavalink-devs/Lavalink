@@ -157,7 +157,7 @@ final class SocketServer(
 
         if (userAgent != null) {
             MDC.put("userAgent", userAgent)
-            }
+        }
 
         if (context.resumable) {
             resumableSessions.remove(context.sessionId)?.let { removed ->

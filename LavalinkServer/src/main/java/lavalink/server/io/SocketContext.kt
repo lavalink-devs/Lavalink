@@ -161,6 +161,10 @@ class SocketContext(
             return
         }
 
+        if (userAgent != null) {
+            MDC.put("userAgent", userAgent)
+        }
+
         if (!session.isOpen) return
 
         val undertowSession = (session as StandardWebSocketSession).nativeSession as UndertowSession
@@ -207,6 +211,7 @@ class SocketContext(
         players.values.forEach {
             this.destroyPlayer(it.guildId)
         }
+        MDC.remove("userAgent")
         koe.close()
         eventEmitter.onSocketContextDestroyed()
     }
