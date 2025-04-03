@@ -17,7 +17,6 @@ build/*
 /plugin-api/out/
 /protocol/build/
 /protocol/out/
-gradle.properties
 application.yml
 LavalinkServer/plugins
 .cache/
