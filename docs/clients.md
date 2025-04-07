@@ -11,7 +11,7 @@ description: A list of Lavalink client libraries.
 | [DisGoLink](https://github.com/disgoorg/disgolink)                  | Go              | **Any**                                    |                                    |
 | [lavalink.py](https://github.com/devoxin/lavalink.py)               | Python          | **Any**                                    |                                    |
 | [Mafic](https://github.com/ooliver1/mafic)                          | Python          | discord.py **V2**/nextcord/disnake/py-cord |                                    |
-| [Wavelink](https://github.com/PythonistaGuild/Wavelink)             | Python          | discord.py **V2**                          |                                    |
+| [Wavelink](https://github.com/PythonistaGuild/Wavelink)             | Python          | discord.py **V2**                          | `Unmaintained`                     |
 | [Pomice](https://github.com/cloudwithax/pomice)                     | Python          | discord.py **V2**                          |                                    |
 | [hikari-ongaku](https://github.com/MPlatypus/hikari-ongaku)         | Python          | Hikari                                     | `asyncio`-based                    |
 | [lavaplay.py](https://github.com/HazemMeqdad/lavaplay.py)           | Python          | **Any**                                    | `asyncio`-based libraries 1.0.13a+ |
@@ -41,7 +41,7 @@ description: A list of Lavalink client libraries.
 | [Lavalink.kt](https://github.com/DRSchlaubi/lavalink.kt)      | Kotlin   | JDA/Kord/**Any**                           | Kotlin Coroutines                  |
 | [lavaplay.py](https://github.com/HazemMeqdad/lavaplay.py)     | Python   | **Any\***                                  | `asyncio`-based libraries 1.0.12a> |
 | [Mafic](https://github.com/ooliver1/mafic)                    | Python   | discord.py **V2**/nextcord/disnake/py-cord |                                    |
-| [Wavelink](https://github.com/PythonistaGuild/Wavelink)       | Python   | discord.py **V2**                          | Version >=2, <3                    |
+| [Wavelink](https://github.com/PythonistaGuild/Wavelink)       | Python   | discord.py **V2**                          | `Unmaintained`, Version >=2, <3    |
 | [Pomice](https://github.com/cloudwithax/pomice)               | Python   | discord.py **V2**                          |                                    |
 | [Lavacord](https://github.com/lavacord/lavacord)              | Node.js  | **Any**                                    |                                    |
 | [Poru](https://github.com/parasop/poru)                       | Node.js  | **Any**                                    |                                    |
