@@ -11,12 +11,14 @@ import lavalink.server.io.SocketServer
 import lavalink.server.player.filters.FilterChain
 import lavalink.server.util.*
 import moe.kyokobot.koe.VoiceServerInfo
+import org.pf4j.Extension
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
+@Extension(ordinal = Int.MAX_VALUE) // Register this last, as we need to load plugin configuration contributors first
 @RestController
 class PlayerRestHandler(
     private val socketServer: SocketServer,

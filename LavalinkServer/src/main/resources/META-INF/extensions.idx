@@ -1,0 +1,9 @@
+lavalink.server.io.SessionRestHandler
+lavalink.server.io.SocketServer
+lavalink.server.io.SessionRestHandler
+lavalink.server.io.HandshakeInterceptorImpl
+lavalink.server.info.InfoRestHandler
+lavalink.server.config.WebsocketConfig
+lavalink.server.player.AudioLoaderRestHandler
+lavalink.server.player.PlayerRestHandler
+lavalink.server.io.StatsCollector

@@ -32,6 +32,7 @@ import lavalink.server.config.ServerConfig
 import lavalink.server.player.LavalinkPlayer
 import moe.kyokobot.koe.Koe
 import moe.kyokobot.koe.KoeOptions
+import org.pf4j.Extension
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.socket.CloseStatus
@@ -40,6 +41,9 @@ import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 import java.util.concurrent.ConcurrentHashMap
 
+// Register this second-to-last, as we need to load plugin configuration contributors first
+// Move it up by 1 as other things depend on this
+@Extension(ordinal = Int.MAX_VALUE - 1)
 @Service
 final class SocketServer(
     private val serverConfig: ServerConfig,
@@ -68,8 +72,8 @@ final class SocketServer(
 
             val connection = socketContext.getMediaConnection(player).gatewayConnection
             socketContext.sendMessage(
-                    Message.Serializer,
-                    Message.PlayerUpdateEvent(
+                Message.Serializer,
+                Message.PlayerUpdateEvent(
                     PlayerState(
                         System.currentTimeMillis(),
                         player.audioPlayer.playingTrack?.position ?: 0,
@@ -150,7 +154,7 @@ final class SocketServer(
             resumableSessions.remove(context.sessionId)?.let { removed ->
                 log.warn(
                     "Shutdown resumable session with id ${removed.sessionId} because it has the same id as a " +
-                            "newly disconnected resumable session."
+                        "newly disconnected resumable session."
                 )
                 removed.shutdown()
             }
@@ -159,7 +163,7 @@ final class SocketServer(
             context.pause()
             log.info(
                 "Connection closed from ${session.remoteAddress} with status $status -- " +
-                        "Session can be resumed within the next ${context.resumeTimeout} seconds with id ${context.sessionId}",
+                    "Session can be resumed within the next ${context.resumeTimeout} seconds with id ${context.sessionId}",
             )
             return
         }

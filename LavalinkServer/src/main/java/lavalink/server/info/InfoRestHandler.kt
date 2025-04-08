@@ -4,20 +4,23 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary
 import dev.arbjerg.lavalink.api.AudioFilterExtension
 import dev.arbjerg.lavalink.protocol.v4.*
-import lavalink.server.bootstrap.PluginManager
+import lavalink.server.bootstrap.PluginSystemImpl
 import lavalink.server.config.ServerConfig
+import org.pf4j.Extension
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 /**
  * Created by napster on 08.03.19.
  */
+
+@Extension(ordinal = Int.MAX_VALUE) // Register this last, as we need to load plugin configuration contributors first
 @RestController
 class InfoRestHandler(
     appInfo: AppInfo,
     gitRepoState: GitRepoState,
     audioPlayerManager: AudioPlayerManager,
-    pluginManager: PluginManager,
+    pluginManager: PluginSystemImpl,
     serverConfig: ServerConfig,
     filterExtensions: List<AudioFilterExtension>
 ) {
@@ -45,8 +48,9 @@ class InfoRestHandler(
         PlayerLibrary.VERSION,
         audioPlayerManager.sourceManagers.map { it.sourceName },
         enabledFilers,
-        Plugins(pluginManager.pluginManifests.map {
-            Plugin(it.name, it.version)
+        Plugins(pluginManager.manager.plugins.map {
+            val descriptor = it.descriptor
+            Plugin(descriptor.pluginId, descriptor.version)
         })
     )
     private val version = appInfo.versionBuild
