@@ -11,9 +11,9 @@ plugins {
     id("org.springframework.boot") version "3.1.0" apply false
     id("org.sonarqube") version "4.2.0.3129"
     id("com.adarshr.test-logger") version "3.2.0"
-    id("org.jetbrains.kotlin.jvm") version "2.0.0"
-    id("org.jetbrains.kotlin.plugin.allopen") version "2.0.0"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0" apply false
+    id("org.jetbrains.kotlin.jvm") version "2.1.20"
+    id("org.jetbrains.kotlin.plugin.allopen") version "2.1.20"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.20" apply false
     alias(libs.plugins.maven.publish.base) apply false
 }
 
@@ -26,7 +26,7 @@ allprojects {
         mavenLocal()   // useful for developing
         maven("https://m2.dv8tion.net/releases")
         maven("https://maven.lavalink.dev/releases")
-        jcenter()
+        maven("https://maven.lavalink.dev/snapshots")
         maven("https://jitpack.io") // build projects directly from GitHub
     }
 }

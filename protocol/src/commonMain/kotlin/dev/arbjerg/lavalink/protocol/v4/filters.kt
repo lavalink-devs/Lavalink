@@ -1,5 +1,6 @@
 package dev.arbjerg.lavalink.protocol.v4
 
+import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
@@ -59,63 +60,89 @@ data class Filters(
 @Serializable
 data class Band(
     val band: Int,
+    @EncodeDefault
     val gain: Float = 1.0f
 )
 
 @Serializable
 data class Karaoke(
+    @EncodeDefault
     val level: Float = 1.0f,
+    @EncodeDefault
     val monoLevel: Float = 1.0f,
+    @EncodeDefault
     val filterBand: Float = 220.0f,
+    @EncodeDefault
     val filterWidth: Float = 100.0f
 )
 
 @Serializable
 data class Timescale(
+    @EncodeDefault
     val speed: Double = 1.0,
+    @EncodeDefault
     val pitch: Double = 1.0,
+    @EncodeDefault
     val rate: Double = 1.0
 )
 
 @Serializable
 data class Tremolo(
+    @EncodeDefault
     val frequency: Float = 2.0f,
+    @EncodeDefault
     val depth: Float = 0.5f
 )
 
 @Serializable
 data class Vibrato(
+    @EncodeDefault
     val frequency: Float = 2.0f,
+    @EncodeDefault
     val depth: Float = 0.5f
 )
 
 @Serializable
-data class Distortion(
-    val sinOffset: Float = 0.0f,
-    val sinScale: Float = 1.0f,
-    val cosOffset: Float = 0.0f,
-    val cosScale: Float = 1.0f,
-    val tanOffset: Float = 0.0f,
-    val tanScale: Float = 1.0f,
-    val offset: Float = 0.0f,
-    val scale: Float = 1.0f
-)
-
-@Serializable
 data class Rotation(
+    @EncodeDefault
     val rotationHz: Double = 0.0
 )
 
 @Serializable
+data class Distortion(
+    @EncodeDefault
+    val sinOffset: Float = 0.0f,
+    @EncodeDefault
+    val sinScale: Float = 1.0f,
+    @EncodeDefault
+    val cosOffset: Float = 0.0f,
+    @EncodeDefault
+    val cosScale: Float = 1.0f,
+    @EncodeDefault
+    val tanOffset: Float = 0.0f,
+    @EncodeDefault
+    val tanScale: Float = 1.0f,
+    @EncodeDefault
+    val offset: Float = 0.0f,
+    @EncodeDefault
+    val scale: Float = 1.0f
+)
+
+@Serializable
 data class ChannelMix(
+    @EncodeDefault
     val leftToLeft: Float = 1.0f,
+    @EncodeDefault
     val leftToRight: Float = 0.0f,
+    @EncodeDefault
     val rightToLeft: Float = 0.0f,
+    @EncodeDefault
     val rightToRight: Float = 1.0f
 
 )
 
 @Serializable
 data class LowPass(
+    @EncodeDefault
     val smoothing: Float = 20.0f
 )

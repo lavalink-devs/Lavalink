@@ -151,7 +151,8 @@ data class Playlist(
 data class Exception(
     val message: String?,
     val severity: Severity,
-    val cause: String
+    val cause: String,
+    val causeStackTrace: String
 ) : LoadResult.Data {
 
     /**
