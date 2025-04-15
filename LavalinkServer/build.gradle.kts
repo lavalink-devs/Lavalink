@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.xmlutil.serialization)
 
     implementation(libs.bundles.metrics)
+    implementation(libs.spring.cloud.config)
     implementation(libs.bundles.spring) {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
     }

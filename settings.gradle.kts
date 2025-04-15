@@ -25,6 +25,8 @@ fun VersionCatalogBuilder.spring() {
 
     library("spring-websocket", "org.springframework", "spring-websocket").version("6.1.9")
 
+    library("spring-cloud-config", "org.springframework.cloud", "spring-cloud-starter-config").version("4.2.2")
+
     library("spring-boot", "org.springframework.boot", "spring-boot").versionRef("spring-boot")
     library("spring-boot-web", "org.springframework.boot", "spring-boot-starter-web").versionRef("spring-boot")
     library("spring-boot-undertow", "org.springframework.boot", "spring-boot-starter-undertow").versionRef("spring-boot")
