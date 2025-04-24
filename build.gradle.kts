@@ -1,8 +1,8 @@
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import com.vanniktech.maven.publish.SonatypeHost
 import org.ajoberstar.grgit.Grgit
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.jetbrains.dokka") version "1.8.20" apply false
@@ -17,9 +17,12 @@ plugins {
     alias(libs.plugins.maven.publish.base) apply false
 }
 
+val (gitVersion, release) = versionFromGit()
+logger.lifecycle("Version: $gitVersion (release: $release)")
+
 allprojects {
     group = "lavalink"
-    version = versionFromTag()
+    version = gitVersion
 
     repositories {
         mavenCentral() // main maven repo
@@ -50,15 +53,17 @@ subprojects {
     afterEvaluate {
         plugins.withId(libs.plugins.maven.publish.base.get().pluginId) {
             configure<PublishingExtension> {
-                if (findProperty("MAVEN_PASSWORD") != null && findProperty("MAVEN_USERNAME") != null) {
+                val mavenUsername = findProperty("MAVEN_USERNAME") as String?
+                val mavenPassword = findProperty("MAVEN_PASSWORD") as String?
+                if (!mavenUsername.isNullOrEmpty() && !mavenPassword.isNullOrEmpty()) {
                     repositories {
                         val snapshots = "https://maven.lavalink.dev/snapshots"
                         val releases = "https://maven.lavalink.dev/releases"
 
-                        maven(if ((version as String).endsWith("-SNAPSHOT")) snapshots else releases) {
+                        maven(if (release) releases else snapshots) {
                             credentials {
-                                password = findProperty("MAVEN_PASSWORD") as String?
-                                username = findProperty("MAVEN_USERNAME") as String?
+                                username = mavenUsername
+                                password = mavenPassword
                             }
                         }
                     }
@@ -68,10 +73,11 @@ subprojects {
             }
             configure<MavenPublishBaseExtension> {
                 coordinates(group.toString(), project.the<BasePluginExtension>().archivesName.get(), version.toString())
-
-                if (findProperty("mavenCentralUsername") != null && findProperty("mavenCentralPassword") != null) {
+                val mavenCentralUsername = findProperty("mavenCentralUsername") as String?
+                val mavenCentralPassword = findProperty("mavenCentralPassword") as String?
+                if (!mavenCentralUsername.isNullOrEmpty() && !mavenCentralPassword.isNullOrEmpty()) {
                     publishToMavenCentral(SonatypeHost.S01, false)
-                    if (!(version as String).endsWith("-SNAPSHOT")) {
+                    if (release) {
                         signAllPublications()
                     }
                 } else {
@@ -108,7 +114,7 @@ subprojects {
 }
 
 @SuppressWarnings("GrMethodMayBeStatic")
-fun versionFromTag(): String {
+fun versionFromGit(): Pair<String, Boolean> {
     Grgit.open(mapOf("currentDir" to project.rootDir)).use { git ->
         val headTag = git.tag
             .list()
@@ -116,9 +122,9 @@ fun versionFromTag(): String {
 
         val clean = git.status().isClean || System.getenv("CI") != null
         if (!clean) {
-            println("Git state is dirty, setting version as snapshot.")
+            logger.lifecycle("Git state is dirty, version is a snapshot.")
         }
 
-        return if (headTag != null && clean) headTag.name else "${git.head().id}-SNAPSHOT"
+        return if (headTag != null && clean) headTag.name to true else "${git.head().id}-SNAPSHOT" to false
     }
 }
