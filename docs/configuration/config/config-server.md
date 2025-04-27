@@ -93,7 +93,10 @@ spring:
           defaultLabel: main
         # See: https://docs.spring.io/spring-cloud-config/docs/current/reference/html/#_file_system_backend
         native:
-          searchLocations: "file:config/{application"
+          # when using the native backend, the searchLocations supports the following placeholders: {application}, {profile} & {label}
+          # make sure to tell the lavalink config server a specific config location via spring.config.location=application.yml
+          # or else it will try to load its own config from any subdirectory your lavalink server configs might be in
+          searchLocations: "file:config/{application}"
 
 server:
   port: 8888
