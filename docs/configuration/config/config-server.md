@@ -78,7 +78,7 @@ spring:
         # See: https://docs.spring.io/spring-cloud-config/docs/current/reference/html/#_git_backend
         git:
           # The uri supports the following placeholders: {application}, {profile} & {label}
-          uri: "https://github.com/lavalink-devs/Lavalink-Config-Server"
+          uri: "https://github.com/lavalink-devs/Lavalink-Example-Configs"
           # set this to {application} if you group your configs by application
           search-paths: "{application}"
           skipSslValidation: false
@@ -88,11 +88,12 @@ spring:
           deleteUntrackedBranches: false
           refreshRate: 0
           # username: trolley
+          # for GitHub, use a personal access token
           # password: strongpassword
-          defaultLabel: master
+          defaultLabel: main
         # See: https://docs.spring.io/spring-cloud-config/docs/current/reference/html/#_file_system_backend
         native:
-          searchLocations: "file:config/{application}"
+          searchLocations: "file:config/{application"
 
 server:
   port: 8888
