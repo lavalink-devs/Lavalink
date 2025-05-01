@@ -111,22 +111,24 @@ class PlayerRestHandler(
         val player = context.getPlayer(guildId)
 
         playerUpdate.voice.ifPresent {
-            val oldConn = context.koe.getConnection(guildId)
-            if (oldConn == null ||
-                oldConn.gatewayConnection?.isOpen == false ||
-                oldConn.voiceServerInfo == null ||
-                oldConn.voiceServerInfo?.endpoint != it.endpoint ||
-                oldConn.voiceServerInfo?.token != it.token ||
-                oldConn.voiceServerInfo?.sessionId != it.sessionId
-            ) {
-                //clear old connection
-                context.koe.destroyConnection(guildId)
+            synchronized(player) {
+                val oldConn = context.koe.getConnection(guildId)
+                if (oldConn == null ||
+                    oldConn.gatewayConnection?.isOpen == false ||
+                    oldConn.voiceServerInfo == null ||
+                    oldConn.voiceServerInfo?.endpoint != it.endpoint ||
+                    oldConn.voiceServerInfo?.token != it.token ||
+                    oldConn.voiceServerInfo?.sessionId != it.sessionId
+                ) {
+                    //clear old connection
+                    context.koe.destroyConnection(guildId)
 
-                val conn = context.getMediaConnection(player)
-                conn.connect(VoiceServerInfo(it.sessionId, it.endpoint, it.token)).exceptionally {
-                    throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to connect to voice server")
-                }.toCompletableFuture().join()
-                player.provideTo(conn)
+                    val conn = context.getMediaConnection(player)
+                    conn.connect(VoiceServerInfo(it.sessionId, it.endpoint, it.token)).exceptionally {
+                        throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to connect to voice server")
+                    }.toCompletableFuture().join()
+                    player.provideTo(conn)
+                }
             }
         }
 

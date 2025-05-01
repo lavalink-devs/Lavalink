@@ -1,8 +1,10 @@
 FROM squidfunk/mkdocs-material
 
-COPY requirements.txt /tmp/requirements.txt
+COPY docs/requirements.txt /tmp/requirements.txt
 
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+WORKDIR /docs/docs
 
 # Start development server by default
 ENTRYPOINT ["mkdocs"]

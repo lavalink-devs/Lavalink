@@ -122,14 +122,14 @@ object Launcher {
             return
         }
 
-        val parent = launchPluginBootstrap()
+        val parent = launchPluginBootstrap(args)
         launchMain(parent, args)
     }
 
-    private fun launchPluginBootstrap() = SpringApplication(PluginManager::class.java).run {
+    private fun launchPluginBootstrap(args: Array<String>) = SpringApplication(PluginManager::class.java).run {
         setBannerMode(Banner.Mode.OFF)
         webApplicationType = WebApplicationType.NONE
-        run()
+        run(*args)
     }
 
     private fun launchMain(parent: ConfigurableApplicationContext, args: Array<String>) {

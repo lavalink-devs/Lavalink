@@ -154,7 +154,8 @@ fun FriendlyException.Severity.toLavalink() = when (this) {
 fun Exception.Companion.fromFriendlyException(e: FriendlyException) = Exception(
     e.message,
     Exception.Severity.fromFriendlyException(e.severity),
-    e.toString()
+    e.toString(),
+    e.stackTraceToString()
 )
 
 fun AudioTrackEndReason.toLavalink() = when (this) {
