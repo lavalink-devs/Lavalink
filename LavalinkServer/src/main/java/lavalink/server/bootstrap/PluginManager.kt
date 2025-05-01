@@ -2,7 +2,6 @@ package lavalink.server.bootstrap
 
 import dev.arbjerg.lavalink.protocol.v4.Version
 import nl.adaptivity.xmlutil.core.KtXmlReader
-import nl.adaptivity.xmlutil.serialization.XML
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -106,7 +105,7 @@ class PluginManager(val config: PluginsConfig) {
 
         val metadata: Metadata
         conn.inputStream.use {
-            metadata = XML.decodeFromReader(Metadata.serializer(), KtXmlReader(it))
+            metadata = xml.decodeFromReader(Metadata.serializer(), KtXmlReader(it))
         }
 
         val current = Version.fromSemver(declaration.version)
@@ -115,7 +114,7 @@ class PluginManager(val config: PluginsConfig) {
             latest = metadata.versioning.release
         }
         if (latest.isEmpty()) {
-            latest = (metadata.versioning.versions.lastOrNull() ?: "").toString()
+            latest = (metadata.versioning.versions.lastOrNull() ?: "")
         }
 
         if (latest.isEmpty()) {
