@@ -3,6 +3,9 @@ spring:
     version: "1.0"
     formatted-version: "(v1.0)"
     name: "Lavalink"
+  cloud:
+    config:
+      enabled: false
 server:
   error:
     include-message: ALWAYS
