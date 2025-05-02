@@ -9,3 +9,6 @@ server:
     include-binding-errors: ALWAYS
     include-stacktrace: ON_PARAM
     include-exception: false
+logging:
+  pattern:
+    console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(%replace(%X{userAgent}){'^(.+)$',' ($1):'}){magenta} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
