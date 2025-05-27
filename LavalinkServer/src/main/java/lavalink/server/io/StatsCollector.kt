@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import oshi.SystemInfo
-import java.util.concurrent.locks.ReentrantLock
 import kotlin.Exception
 
 @RestController
@@ -48,7 +47,7 @@ class StatsCollector(val socketServer: SocketServer) {
     private var cachedCpu: Cpu? = null
     @Volatile
     private var lastCpuCalcTime: Long = 0L
-    private val cpuStatsCalculationLock = ReentrantLock()
+    private val cpuStatsCalculationLock = Any()
 
     private val CPU_STATS_REFRESH_INTERVAL_MS = 30000
 
@@ -68,22 +67,18 @@ class StatsCollector(val socketServer: SocketServer) {
         }
 
         // Cache miss or stale, so update
-        cpuStatsCalculationLock.lock()
-        try {
+        synchronized(cpuStatsCalculationLock) {
             // Check if another thread updated the cache while this thread waited for the lock.
             if (cachedCpu == null || (System.currentTimeMillis() - lastCpuCalcTime > CPU_STATS_REFRESH_INTERVAL_MS)) {
                 cachedCpu = performCpuStatsCalculation()
                 lastCpuCalcTime = System.currentTimeMillis()
             }
             return cachedCpu!!
-        } finally {
-            cpuStatsCalculationLock.unlock()
         }
     }
 
     /**
      * Calculate of system and process CPU load.
-     * Should only be called with lock ticksLock acquired
      */
     private fun performCpuStatsCalculation(): Cpu {
         val systemLoad: Double
