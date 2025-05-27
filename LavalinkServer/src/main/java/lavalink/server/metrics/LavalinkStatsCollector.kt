@@ -14,6 +14,30 @@ class LavalinkStatsCollector(
     private val statsProvider: StatsCollector
 ) : Collector(), Collector.Describable {
 
+    companion object {
+        private val log = LoggerFactory.getLogger(LavalinkStatsCollector::class.java)
+
+        private const val PREFIX = "lavalink_" // prefix for all ll metrics
+
+        private const val PLAYERS_METRIC_NAME = PREFIX + "players_total"
+        private const val PLAYERS_HELP = "Total number of players connected."
+        private const val PLAYING_PLAYERS_METRIC_NAME = PREFIX + "playing_players_total"
+        private const val PLAYING_PLAYERS_HELP = "Number of players currently playing audio."
+        private const val UPTIME_METRIC_NAME = PREFIX + "uptime_milliseconds"
+        private const val UPTIME_HELP = "Uptime of the node in milliseconds."
+
+        private const val MEMORY_FREE_METRIC_NAME = PREFIX + "memory_free_bytes"
+        private const val MEMORY_USED_METRIC_NAME = PREFIX + "memory_used_bytes"
+        private const val MEMORY_ALLOCATED_METRIC_NAME = PREFIX + "memory_allocated_bytes"
+        private const val MEMORY_RESERVABLE_METRIC_NAME = PREFIX + "memory_reservable_bytes"
+        private const val MEMORY_HELP = "Memory statistics in bytes."
+
+        private const val CPU_CORES_METRIC_NAME = PREFIX + "cpu_cores"
+        private const val CPU_SYSTEM_LOAD_METRIC_NAME = PREFIX + "cpu_system_load_percentage"
+        private const val CPU_LAVALINK_LOAD_METRIC_NAME = PREFIX + "cpu_lavalink_load_percentage"
+        private const val CPU_HELP = "CPU statistics."
+    }
+
     init {
         // Register with the default Prometheus registry
         this.register<LavalinkStatsCollector>()
@@ -21,7 +45,7 @@ class LavalinkStatsCollector(
     }
 
     override fun collect(): MutableList<MetricFamilySamples> {
-        val mfs: MutableList<MetricFamilySamples> = ArrayList<MetricFamilySamples>()
+        val mfs = mutableListOf<MetricFamilySamples>()
 
         // Since we don't have a context, framestats will be null and we can ignore them
         val stats = statsProvider.retrieveStats(null)
@@ -113,7 +137,7 @@ class LavalinkStatsCollector(
 
     override fun describe(): MutableList<MetricFamilySamples> {
         // Used by prometheus for validation
-        return listOf<MetricFamilySamples>(
+        return mutableListOf(
             GaugeMetricFamily(PLAYERS_METRIC_NAME, PLAYERS_HELP, mutableListOf<String?>()),
             GaugeMetricFamily(PLAYING_PLAYERS_METRIC_NAME, PLAYING_PLAYERS_HELP, mutableListOf<String?>()),
             GaugeMetricFamily(UPTIME_METRIC_NAME, UPTIME_HELP, mutableListOf<String?>()),
@@ -124,30 +148,6 @@ class LavalinkStatsCollector(
             GaugeMetricFamily(CPU_CORES_METRIC_NAME, "$CPU_HELP (Cores)", mutableListOf<String?>()),
             GaugeMetricFamily(CPU_SYSTEM_LOAD_METRIC_NAME, "$CPU_HELP (System Load)", mutableListOf<String?>()),
             GaugeMetricFamily(CPU_LAVALINK_LOAD_METRIC_NAME, "$CPU_HELP (Lavalink Load)", mutableListOf<String?>())
-        ) as MutableList<MetricFamilySamples>
-    }
-
-    companion object {
-        private val log = LoggerFactory.getLogger(LavalinkStatsCollector::class.java)
-
-        private const val PREFIX = "lavalink_" // prefix for all ll metrics
-
-        private const val PLAYERS_METRIC_NAME = PREFIX + "players_total"
-        private const val PLAYERS_HELP = "Total number of players connected."
-        private const val PLAYING_PLAYERS_METRIC_NAME = PREFIX + "playing_players_total"
-        private const val PLAYING_PLAYERS_HELP = "Number of players currently playing audio."
-        private const val UPTIME_METRIC_NAME = PREFIX + "uptime_milliseconds"
-        private const val UPTIME_HELP = "Uptime of the node in milliseconds."
-
-        private const val MEMORY_FREE_METRIC_NAME = PREFIX + "memory_free_bytes"
-        private const val MEMORY_USED_METRIC_NAME = PREFIX + "memory_used_bytes"
-        private const val MEMORY_ALLOCATED_METRIC_NAME = PREFIX + "memory_allocated_bytes"
-        private const val MEMORY_RESERVABLE_METRIC_NAME = PREFIX + "memory_reservable_bytes"
-        private const val MEMORY_HELP = "Memory statistics in bytes."
-
-        private const val CPU_CORES_METRIC_NAME = PREFIX + "cpu_cores"
-        private const val CPU_SYSTEM_LOAD_METRIC_NAME = PREFIX + "cpu_system_load_percentage"
-        private const val CPU_LAVALINK_LOAD_METRIC_NAME = PREFIX + "cpu_lavalink_load_percentage"
-        private const val CPU_HELP = "CPU statistics."
+        )
     }
 }
