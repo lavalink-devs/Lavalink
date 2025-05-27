@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import oshi.SystemInfo
+import java.util.concurrent.locks.ReentrantLock
 import kotlin.Exception
 
 @RestController
@@ -40,33 +41,93 @@ class StatsCollector(val socketServer: SocketServer) {
         private val os get() = si.operatingSystem
 
         private var prevTicks: LongArray? = null
+        private val ticksLock = Any()
     }
 
-    private var uptime = 0.0
-    private var cpuTime = 0.0
+    @Volatile
+    private var cachedCpu: Cpu? = null
+    @Volatile
+    private var lastCpuCalcTime: Long = 0L
+    private val cpuStatsCalculationLock = ReentrantLock()
 
-    // Record for next invocation
-    private val processRecentCpuUsage: Double
-        get() {
-            val p = os.getProcess(os.processId)
-            if (p == null) {
-                log.warn("Failed to get process stats. Process was null.")
-                return 0.0
-            }
+    private val CPU_STATS_REFRESH_INTERVAL_MS = 30000
 
-            val output: Double = if (cpuTime != 0.0) {
-                val uptimeDiff = p.upTime - uptime
-                val cpuDiff = p.kernelTime + p.userTime - cpuTime
-                cpuDiff / uptimeDiff
-            } else {
-                (p.kernelTime + p.userTime).toDouble() / p.userTime.toDouble()
-            }
+    // Baseline for cpu stats calcs
+    private var prevUpTimeMs: Long = 0L
+    private var prevCpuTimeMs: Long = 0L
 
-            // Record for next invocation
-            uptime = p.upTime.toDouble()
-            cpuTime = (p.kernelTime + p.userTime).toDouble()
-            return output / hal.processor.logicalProcessorCount
+    /**
+     * Gets or updates the cached CPU stats, depending on last update and cpu stats refresh interval
+     */
+    private fun getOrUpdateCpuStats(): Cpu {
+        val currentCachedCpu = cachedCpu
+        val currentLastCalcTime = lastCpuCalcTime
+
+        if (currentCachedCpu != null && (System.currentTimeMillis() - currentLastCalcTime <= CPU_STATS_REFRESH_INTERVAL_MS)) {
+            return currentCachedCpu
         }
+
+        // Cache miss or stale, so update
+        cpuStatsCalculationLock.lock()
+        try {
+            // Check if another thread updated the cache while this thread waited for the lock.
+            if (cachedCpu == null || (System.currentTimeMillis() - lastCpuCalcTime > CPU_STATS_REFRESH_INTERVAL_MS)) {
+                cachedCpu = performCpuStatsCalculation()
+                lastCpuCalcTime = System.currentTimeMillis()
+            }
+            return cachedCpu!!
+        } finally {
+            cpuStatsCalculationLock.unlock()
+        }
+    }
+
+    /**
+     * Calculate of system and process CPU load.
+     * Should only be called with lock ticksLock acquired
+     */
+    private fun performCpuStatsCalculation(): Cpu {
+        val systemLoad: Double
+        synchronized(ticksLock) {
+            val currentSystemTicks = hal.processor.systemCpuLoadTicks
+            systemLoad = if (prevTicks == null) {
+                0.0
+            } else {
+                hal.processor.getSystemCpuLoadBetweenTicks(prevTicks!!)
+            }
+            prevTicks = currentSystemTicks
+        }
+
+        var processLoadNormalized = 0.0
+        val process = os.getProcess(os.processId)
+        if (process == null) {
+            log.warn("Cannot calculate CPU load: process is null for PID {}.", os.processId)
+            // If process info is null, load will be 0 for this interval.
+        } else {
+            val currentProcessUptimeMs = process.upTime
+            val currentProcessTotalCpuTimeMs = process.kernelTime + process.userTime
+
+            // The first load of this will always be 0 and skip since we don't have a baseline yet
+            if (prevUpTimeMs > 0L) {
+                val uptimeDiffMs = currentProcessUptimeMs - prevUpTimeMs
+                val cpuTimeDiffMs = currentProcessTotalCpuTimeMs - prevCpuTimeMs
+
+                if (uptimeDiffMs > 0) {
+                    // Process load relative to a single core
+                    val singleCoreProcessLoad = cpuTimeDiffMs.toDouble() / uptimeDiffMs.toDouble()
+                    processLoadNormalized = singleCoreProcessLoad / hal.processor.logicalProcessorCount.toDouble()
+                }
+            }
+
+            prevUpTimeMs = currentProcessUptimeMs
+            prevCpuTimeMs = currentProcessTotalCpuTimeMs
+        }
+
+        return Cpu(
+            cores = hal.processor.logicalProcessorCount,
+            systemLoad = systemLoad.coerceIn(0.0, 1.0).takeIf { it.isFinite() } ?: 0.0,
+            lavalinkLoad = processLoadNormalized.coerceIn(0.0, 1.0).takeIf { it.isFinite() } ?: 0.0
+        )
+    }
 
     fun createTask(context: SocketContext): Runnable = Runnable {
         try {
@@ -81,6 +142,8 @@ class StatsCollector(val socketServer: SocketServer) {
     fun getStats() = retrieveStats()
 
     fun retrieveStats(context: SocketContext? = null): Stats {
+        val cpu = getOrUpdateCpuStats()
+
         val playersTotal = intArrayOf(0)
         val playersPlaying = intArrayOf(0)
         socketServer.contexts.forEach { socketContext ->
@@ -98,20 +161,6 @@ class StatsCollector(val socketServer: SocketServer) {
             allocated = runtime.totalMemory(),
             reservable = runtime.maxMemory()
         )
-
-        // prevTicks will be null so set it to a value.
-        if (prevTicks == null) {
-            prevTicks = hal.processor.systemCpuLoadTicks
-        }
-
-        val cpu = Cpu(
-            runtime.availableProcessors(),
-            systemLoad = hal.processor.getSystemCpuLoadBetweenTicks(prevTicks),
-            lavalinkLoad = processRecentCpuUsage.takeIf { it.isFinite() } ?: 0.0
-        )
-
-        // Set new prevTicks to current value for more accurate baseline, and checks in the next schedule.
-        prevTicks = hal.processor.systemCpuLoadTicks
 
         var frameStats: FrameStats? = null
         if (context != null) {
