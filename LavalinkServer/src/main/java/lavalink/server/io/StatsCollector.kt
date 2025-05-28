@@ -41,6 +41,8 @@ class StatsCollector(val socketServer: SocketServer) {
 
         private var prevTicks: LongArray? = null
         private val ticksLock = Any()
+
+        private val CPU_STATS_REFRESH_INTERVAL_MS = 30000
     }
 
     @Volatile
@@ -49,7 +51,6 @@ class StatsCollector(val socketServer: SocketServer) {
     private var lastCpuCalcTime: Long = 0L
     private val cpuStatsCalculationLock = Any()
 
-    private val CPU_STATS_REFRESH_INTERVAL_MS = 30000
 
     // Baseline for cpu stats calcs
     private var prevUpTimeMs: Long = 0L
