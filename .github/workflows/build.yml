@@ -48,10 +48,10 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build Lavalink
-        run: ./gradlew build -x test
+        run: ./gradlew build
 
       - name: Build Lavalink musl
-        run: ./gradlew build -PtargetPlatform=musl -x test
+        run: ./gradlew build -PtargetPlatform=musl
 
       - name: Publish to Maven
         env:
