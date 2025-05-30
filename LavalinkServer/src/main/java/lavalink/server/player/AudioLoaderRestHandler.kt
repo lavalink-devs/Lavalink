@@ -58,7 +58,7 @@ class AudioLoaderRestHandler(
         val item = try {
             loadAudioItem(audioPlayerManager, identifier)
         } catch (ex: FriendlyException) {
-            log.error("Failed to load track", ex)
+            log.error("Failed to load track for identifier $identifier", ex)
             return ResponseEntity.ok(LoadResult.loadFailed(ex))
         }
 

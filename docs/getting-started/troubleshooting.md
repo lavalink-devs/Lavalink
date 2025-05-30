@@ -34,14 +34,15 @@ In general there are 6 log levels: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR` and
 ```yaml title="application.yml"
 logging:
   level:
-    # Set this to DEBUG to enable more detailed logging. Please note that this will log probably spam your console.
     root: INFO
     # Set this to DEBUG to enable more detailed logging from Lavalink
     lavalink: DEBUG
-    # Set this to TRACE to see all WebSocket messages
+    # Set this to TRACE to see all WebSocket messages sent
     lavalink.server.io.SocketContext: TRACE
     # Log all track exceptions (COMMON, SUSPICIOUS & FAULT)
     com.sedmelluq.discord.lavaplayer.tools.ExceptionTools: DEBUG
+    # Log YouTube Plugin stuff (only needed if you have issues with YouTube)
+    dev.lavalink.youtube: DEBUG
 
   # This will log all requests to the REST API
   request:
