@@ -1,5 +1,10 @@
+spring:
+  cloud:
+    config:
+      enabled: false
+
 lavalink:
   server:
     password: "youshallnotpass"
 
-componentScan: []
+componentScan: [ ]
