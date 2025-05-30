@@ -35,15 +35,15 @@ class StatsCollector(val socketServer: SocketServer) {
     companion object {
         private val log = LoggerFactory.getLogger(StatsCollector::class.java)
 
-        private val si = SystemInfo()
-        private val hal get() = si.hardware
-        private val os get() = si.operatingSystem
-
-        private var prevTicks: LongArray? = null
-        private val ticksLock = Any()
-
-        private val CPU_STATS_REFRESH_INTERVAL_MS = 30000
+        private const val CPU_STATS_REFRESH_INTERVAL_MS = 30000
     }
+
+    private val si = SystemInfo()
+    private val hal get() = si.hardware
+    private val os get() = si.operatingSystem
+
+    private var prevTicks: LongArray? = null
+    private val ticksLock = Any()
 
     @Volatile
     private var cachedCpu: Cpu? = null
