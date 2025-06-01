@@ -22,6 +22,8 @@ SPRING_APPLICATION_NAME
 SPRING_CLOUD_CONFIG_PROFILE
 SPRING_CLOUD_CONFIG_LABEL
 SPRING_CLOUD_CONFIG_FAIL_FAST
+SPRING_CLOUD_CONFIG_USERNAME
+SPRING_CLOUD_CONFIG_PASSWORD
 
 SPRING_CONFIG_IMPORT
 ```
@@ -67,9 +69,17 @@ The Lavalink Config Server can be configured to use a git repository or a local 
 
 ```yaml title="application.yml"
 spring:
+  security:
+    # Enable basic authentication for the config server
+    enabled: true
+    user:
+      # Set the username to access the config server
+      name: admin
+      # Set the password to access the config server
+      password: "youshallnotpass"
   profiles:
     # Set to native to use a local filesystem/static url
-    active: git
+    active: native
   cloud:
     config:
       server:
@@ -106,6 +116,7 @@ logging:
   level:
     root: INFO
     org.springframework.cloud.config: DEBUG
+
 ```
 
 Alternatively, this can also be done via environment variables:
@@ -114,6 +125,10 @@ Alternatively, this can also be done via environment variables:
 <summary>Environment Variables</summary>
 
 ```bash
+SPRING_SECURITY_ENABLED
+SPRING_SECURITY_USER_NAME
+SPRING_SECURITY_USER_PASSWORD
+
 SPRING_PROFILES_ACTIVE
 
 SPRING_CLOUD_CONFIG_SERVER_ACCEPT_EMPTY
