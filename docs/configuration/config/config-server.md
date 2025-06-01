@@ -151,7 +151,7 @@ The config repository should have the following structure:
 
 ```text
 .
-├── lavalink
+├── Lavalink
 │   ├── application.yml
 │   └── application-{profile}.yml
 ```
