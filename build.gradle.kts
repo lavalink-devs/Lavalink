@@ -76,7 +76,7 @@ subprojects {
                 val mavenCentralUsername = findProperty("mavenCentralUsername") as String?
                 val mavenCentralPassword = findProperty("mavenCentralPassword") as String?
                 if (!mavenCentralUsername.isNullOrEmpty() && !mavenCentralPassword.isNullOrEmpty()) {
-                    publishToMavenCentral(SonatypeHost.S01, false)
+                    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, false)
                     if (release) {
                         signAllPublications()
                     }
