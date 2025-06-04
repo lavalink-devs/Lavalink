@@ -2,9 +2,12 @@
 description: How to configure Lavalink
 ---
 
-# Configuration
+# Environment Variables
 
-The server configuration is done in `application.yml`. You can find an example below.
+You can also use environment variables to configure the server. The environment variables are named the same as the keys in the `application.yml` file, but in uppercase and with `.` replaced with `_`. For example, `server.port` becomes `SERVER_PORT`.
+For arrays, the index is appended to the key, starting at 0. For example, `LAVALINK_PLUGINS_0_DEPENDENCY` refers to the `dependency` key of the first plugin.
+
+You can also use a combination of both. Environment variables take precedence over the `application.yml` file.
 
 ## Example application.yml
 
@@ -17,13 +20,7 @@ The server configuration is done in `application.yml`. You can find an example b
 
 </details>
 
-Alternatively, you can also use environment variables to configure the server. The environment variables are named the same as the keys in the `application.yml` file, but in uppercase and with `.` replaced with `_`. For example, `server.port` becomes `SERVER_PORT`.
-For arrays, the index is appended to the key, starting at 0. For example, `LAVALINK_PLUGINS_0_DEPENDENCY` refers to the `dependency` key of the first plugin.
-
 ## Example environment variables
-
-<details markdown="1">
-<summary>environment variables</summary>
 
 ```env title="enviroment variables"
 SERVER_PORT
@@ -88,6 +85,10 @@ LAVALINK_SERVER_HTTP_CONFIG_PROXY_PORT
 LAVALINK_SERVER_HTTP_CONFIG_PROXY_USER
 LAVALINK_SERVER_HTTP_CONFIG_PROXY_PASSWORD
 
+LAVALINK_SERVER_TIMEOUTS_CONNECT_TIMEOUT_MS
+LAVALINK_SERVER_TIMEOUTS_CONNECTION_REQUEST_TIMEOUT_MS
+LAVALINK_SERVER_TIMEOUTS_SOCKET_TIMEOUT_MS
+
 METRICS_PROMETHEUS_ENABLED
 METRICS_PROMETHEUS_ENDPOINT
 
@@ -110,7 +111,3 @@ LOGGING_REQUEST_MAX_PAYLOAD_LENGTH
 LOGGING_LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE
 LOGGING_LOGBACK_ROLLINGPOLICY_MAX_HISTORY
 ```
-
-</details>
-
-You can also use a combination of both. Environment variables take precedence over the `application.yml` file.

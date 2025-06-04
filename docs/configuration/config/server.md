@@ -6,7 +6,7 @@ description: How to configure Lavalink with the Config Server
 
 ## Example Lavalink application.yml
 
-To configure Lavalink to pull it's configuration from a [Lavalink Config Server](https://github.com/lavalink-devs/Lavalink-Config-Server) you need to put the following in your `application.yml` file:
+To configure Lavalink to pull its configuration from a [Lavalink Config Server](https://github.com/lavalink-devs/Lavalink-Config-Server) you need to put the following in your `application.yml` file:
 
 ```yaml title="application.yml"
 --8<-- "LavalinkServer/application.yml.cloud-example"
@@ -18,7 +18,8 @@ Alternatively, this can also be done via environment variables:
 <summary>Environment Variables</summary>
 
 ```bash
-SPRING_APPLICATION_NAME
+SPRING_CLOUD_CONFIG_ENABLED
+SPRING_CLOUD_CONFIG_NAME
 SPRING_CLOUD_CONFIG_PROFILE
 SPRING_CLOUD_CONFIG_LABEL
 SPRING_CLOUD_CONFIG_FAIL_FAST
@@ -34,9 +35,9 @@ SPRING_CONFIG_IMPORT
 
 To run the Lavalink Config Server, you can use the docker image located at [`ghcr.io/lavalink-devs/lavalink-config-server`](https://github.com/lavalink-devs/Lavalink-Config-Server/pkgs/container/lavalink-config-server)
 
-### Example docker-compose.yml
+### Example compose.yml
 
-```yaml
+```yaml title="compose.yml"
 services:
   lavalink-config-server:
     image: ghcr.io/lavalink-devs/lavalink-config-server:master
@@ -173,4 +174,4 @@ The config repository should have the following structure:
 
 The `application.yml` file is the default configuration file.
 The `application-{profile}.yml` file is the configuration file for the specified profile and overrides the config entries in the default configuration file.
-The profile name can be set in the [`application.yml`](#example-applicationyml) file of the Lavalink server.
+The profile name can be set in the [`application.yml`](file.md#example-applicationyml) file of the Lavalink server.

@@ -15,9 +15,9 @@ Install [Docker](https://docs.docker.com/engine/install/) & [Docker Compose](htt
 | `Alpine`     | Smaller image size, based on Alpine          | 21           | 322   | 322   | `ghcr.io/lavalink-devs/lavalink:4-alpine`     |
 | `Distroless` | Even smaller image size, based on Distroless | 21           | 65534 | 65534 | `ghcr.io/lavalink-devs/lavalink:4-distroless` |
 
-Create a `docker-compose.yml` with the following content:
+Create a `compose.yml` with the following content:
 
-```yaml title="docker-compose.yml"
+```yaml title="compose.yml"
 services:
   lavalink:
     # pin the image version to Lavalink v4 and use the alpine variant for a smaller image size
@@ -52,7 +52,7 @@ networks:
     name: lavalink
 ```
 
-Create an `application.yml` file in the same directory as the `docker-compose.yml` file. ([Example here](index.md#example-applicationyml)) or use environment variables ([Example here](index.md#example-environment-variables))
+Create an `application.yml` file in the same directory as the `compose.yml` file. ([Example here](../configuration/config/file.md#example-applicationyml)) or use environment variables ([Example here](../configuration/config/environment-variables.md#example-environment-variables))
 
 Run `docker compose up -d`. See [Docker Compose Up](https://docs.docker.com/engine/reference/commandline/compose_up/)
 
