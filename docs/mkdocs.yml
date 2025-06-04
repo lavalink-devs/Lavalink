@@ -25,9 +25,9 @@ nav:
   - Configuration:
       - configuration/index.md
       - Config:
-          - Config File: configuration/config/config-file.md
+          - File: configuration/config/config.md
           - Environment Variables: configuration/config/environment-variables.md
-          - Config Server: configuration/config/config-server.md
+          - Server: configuration/config/server.md
       - RoutePlanner: configuration/routeplanner.md
       - IPv6:
           - configuration/ipv6/index.md
