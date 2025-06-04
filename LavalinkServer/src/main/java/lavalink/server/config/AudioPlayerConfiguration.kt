@@ -14,6 +14,7 @@ import com.sedmelluq.discord.lavaplayer.source.soundcloud.*
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
+import com.sedmelluq.discord.lavaplayer.tools.io.HttpClientTools
 import com.sedmelluq.discord.lavaplayer.track.playback.NonAllocatingAudioFrameBuffer
 import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup
 import com.sedmelluq.lava.extensions.youtuberotator.planner.*
@@ -50,6 +51,10 @@ class AudioPlayerConfiguration {
         audioPlayerManagerConfigurations: Collection<AudioPlayerManagerConfiguration>,
         mediaContainerProbes: Collection<MediaContainerProbe>
     ): AudioPlayerManager {
+        serverConfig.timeouts?.let {
+            HttpClientTools.setDefaultRequestTimeout(it.connectTimeoutMs, it.connectionRequestTimeoutMs, it.socketTimeoutMs)
+        }
+
         val audioPlayerManager = DefaultAudioPlayerManager()
 
         if (serverConfig.isGcWarnings) {

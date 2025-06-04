@@ -1,4 +1,4 @@
-FROM azul/zulu-openjdk-alpine:17-jre-headless-latest
+FROM azul/zulu-openjdk-alpine:21-jre-headless-latest
 
 RUN apk add --no-cache libgcc
 
@@ -14,4 +14,4 @@ USER lavalink
 
 COPY LavalinkServer/build/libs/Lavalink-musl.jar Lavalink.jar
 
-ENTRYPOINT ["java", "-Djdk.tls.client.protocols=TLSv1.1,TLSv1.2", "-jar", "Lavalink.jar"]
+ENTRYPOINT ["java", "-jar", "Lavalink.jar"]

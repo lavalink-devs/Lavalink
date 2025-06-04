@@ -1,7 +1,7 @@
 import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.KotlinMultiplatform
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsPlugin.Companion.kotlinNodeJsEnvSpec
 import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
 
 plugins {
@@ -15,11 +15,11 @@ val archivesBaseName = "protocol"
 group = "dev.arbjerg.lavalink"
 
 kotlin {
+    applyDefaultHierarchyTemplate()
+
     jvm {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "17"
-            }
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_17
         }
     }
 
@@ -36,6 +36,30 @@ kotlin {
                 }
             }
         }
+    }
+
+    linuxX64()
+    linuxArm64()
+
+    mingwX64()
+
+    macosArm64()
+    macosX64()
+
+    iosArm64()
+    iosSimulatorArm64()
+    iosSimulatorArm64()
+
+    watchosArm64()
+    watchosSimulatorArm64()
+    watchosX64()
+
+    tvosArm64()
+    tvosSimulatorArm64()
+    tvosX64()
+
+    compilerOptions {
+        freeCompilerArgs.add("-Xconsistent-data-class-copy-visibility")
     }
 
     sourceSets {
@@ -87,7 +111,7 @@ tasks {
 
 // Use system Node.Js on NixOS
 if (System.getenv("NIX_PROFILES") != null) {
-    rootProject.plugins.withType<NodeJsRootPlugin> {
-        rootProject.the<NodeJsRootExtension>().download = false
+    kotlinNodeJsEnvSpec.apply {
+        download = false
     }
 }

@@ -62,6 +62,70 @@ data class Version(
             return Version(semver, major.toInt(), minor.toInt(), patch.toInt(), preRelease)
         }
     }
+
+    override fun toString(): String {
+        var baseSemver = "${major}.${minor}.${patch}"
+
+        if(!preRelease.isNullOrEmpty())
+            baseSemver += "-${preRelease}"
+
+        return baseSemver
+    }
+
+    operator fun compareTo(other: Version): Int {
+        // Compare major, minor, and patch
+        val majorDiff = major - other.major
+        if (majorDiff != 0) return majorDiff
+
+        val minorDiff = minor - other.minor
+        if (minorDiff != 0) return minorDiff
+
+        val patchDiff = patch - other.patch
+        if (patchDiff != 0) return patchDiff
+
+        // Compare prerelease (null means no prerelease and is greater)
+        return when {
+            preRelease.isNullOrEmpty() && other.preRelease.isNullOrEmpty() -> 0
+            preRelease.isNullOrEmpty() && !other.preRelease.isNullOrEmpty() -> 1
+            !preRelease.isNullOrEmpty() && other.preRelease.isNullOrEmpty() -> -1
+            !preRelease.isNullOrEmpty() && !other.preRelease.isNullOrEmpty() -> comparePreRelease(preRelease, other.preRelease)
+            else -> 0
+        }
+    }
+
+    private fun comparePreRelease(part1: String, part2: String): Int {
+        val components1 = part1.split(".")
+        val components2 = part2.split(".")
+        val maxLength = maxOf(components1.size, components2.size)
+
+        for (i in 0 until maxLength) {
+            val comp1 = components1.getOrNull(i)
+            val comp2 = components2.getOrNull(i)
+
+            if (comp1 == null) return -1 // `part1` is shorter and considered smaller
+            if (comp2 == null) return 1  // `part2` is shorter and considered smaller
+
+            val isNumeric1 = comp1.all { it.isDigit() }
+            val isNumeric2 = comp2.all { it.isDigit() }
+
+            when {
+                isNumeric1 && isNumeric2 -> {
+                    // Compare numerically
+                    val diff = comp1.toInt() - comp2.toInt()
+                    if (diff != 0) return diff
+                }
+                isNumeric1 -> return -1 // Numeric parts come before string parts
+                isNumeric2 -> return 1  // String parts come after numeric parts
+                else -> {
+                    // Compare lexicographically
+                    val diff = comp1.compareTo(comp2)
+                    if (diff != 0) return diff
+                }
+            }
+        }
+
+        return 0 // Parts are equal
+    }
 }
 
 @Serializable

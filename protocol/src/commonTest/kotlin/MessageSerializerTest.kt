@@ -246,7 +246,8 @@ class MessageSerializerTest {
               "exception": {
                 "message": "...",
                 "severity": "common",
-                "cause": "..."
+                "cause": "...",
+                "causeStackTrace": "..."
               }
             }
         """.trimIndent()
@@ -275,6 +276,7 @@ class MessageSerializerTest {
                     message shouldBe "..."
                     severity shouldBe Exception.Severity.COMMON
                     cause shouldBe "..."
+                    causeStackTrace shouldBe "..."
                 }
             }
         }

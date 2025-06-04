@@ -8,6 +8,7 @@ plugins {
     application
     kotlin("jvm")
     id("org.jetbrains.dokka")
+    kotlin("plugin.serialization")
     alias(libs.plugins.maven.publish.base)
 }
 
@@ -30,6 +31,15 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
 }
 
+kotlin {
+    sourceSets {
+        all {
+            languageSettings.optIn("kotlinx.serialization.ExperimentalSerializationApi")
+            languageSettings.optIn("nl.adaptivity.xmlutil.ExperimentalXmlUtilApi")
+        }
+    }
+}
+
 configurations {
     compileOnly {
         extendsFrom(annotationProcessor.get())
@@ -42,7 +52,11 @@ dependencies {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
     }
 
+    implementation(libs.xmlutil.jdk)
+    implementation(libs.xmlutil.serialization)
+
     implementation(libs.bundles.metrics)
+    implementation(libs.spring.cloud.config)
     implementation(libs.bundles.spring) {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
     }

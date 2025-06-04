@@ -4,24 +4,23 @@ description: How to configure Lavalink
 
 # Configuration
 
-There are mainly 3 different ways to configure Lavalink:
+The server configuration is done in `application.yml`. You can find an example below.
 
-## Config File
+## Example application.yml
 
-This is the easiest way to configure Lavalink. You create a file called `application.yml` where you start your Lavalink server.
-See the [application.yml](config/application-yml.md) documentation for more information.
+<details markdown="1">
+<summary>application.yml</summary>
 
-## Config Server
+```yaml title="application.yml"
+--8<-- "LavalinkServer/application.yml.example"
+```
 
-> **WARNING:** This is an advanced feature geared towards big deployments.
+</details>
 
-You can run the [Lavalink Config Server](https://github.com/lavalink-devs/Lavalink-Config-Server) to manage the configuration of multiple Lavalink servers at one place.
-See the [Config Server](config/config-server.md) documentation for more information.
+Alternatively, you can also use environment variables to configure the server. The environment variables are named the same as the keys in the `application.yml` file, but in uppercase and with `.` replaced with `_`. For example, `server.port` becomes `SERVER_PORT`.
+For arrays, the index is appended to the key, starting at 0. For example, `LAVALINK_PLUGINS_0_DEPENDENCY` refers to the `dependency` key of the first plugin.
 
-## Environment Variables
-
-You can also configure Lavalink using environment variables.
-See the [environment variables](config/environment-variables.md) documentation for more information.
+## Example environment variables
 
 <details markdown="1">
 <summary>environment variables</summary>
@@ -33,11 +32,9 @@ SERVER_HTTP2_ENABLED
 
 LAVALINK_PLUGINS_0_DEPENDENCY
 LAVALINK_PLUGINS_0_REPOSITORY
-LAVALINK_PLUGINS_0_SNAPSHOT
 
 LAVALINK_PLUGINS_1_DEPENDENCY
 LAVALINK_PLUGINS_1_REPOSITORY
-LAVALINK_PLUGINS_1_SNAPSHOT
 
 LAVALINK_PLUGINS_DIR
 LAVALINK_DEFAULT_PLUGIN_REPOSITORY
@@ -49,8 +46,8 @@ LAVALINK_SERVER_SOURCES_BANDCAMP
 LAVALINK_SERVER_SOURCES_SOUNDCLOUD
 LAVALINK_SERVER_SOURCES_TWITCH
 LAVALINK_SERVER_SOURCES_VIMEO
-LAVALINK_SERVER_SOURCES_NICO
 LAVALINK_SERVER_SOURCES_HTTP
+LAVALINK_SERVER_SOURCES_NICO
 LAVALINK_SERVER_SOURCES_LOCAL
 
 LAVALINK_SERVER_FILTERS_VOLUME
@@ -64,7 +61,6 @@ LAVALINK_SERVER_FILTERS_ROTATION
 LAVALINK_SERVER_FILTERS_CHANNEL_MIX
 LAVALINK_SERVER_FILTERS_LOW_PASS
 
-LAVALINK_SERVER_NON_ALLOCATING_FRAME_BUFFER
 LAVALINK_SERVER_BUFFER_DURATION_MS
 LAVALINK_SERVER_FRAME_BUFFER_DURATION_MS
 LAVALINK_SERVER_OPUS_ENCODING_QUALITY
@@ -73,7 +69,6 @@ LAVALINK_SERVER_TRACK_STUCK_THRESHOLD_MS
 LAVALINK_SERVER_USE_SEEK_GHOSTING
 
 LAVALINK_SERVER_PLAYER_UPDATE_INTERVAL
-LAVALINK_SERVER_YOUTUBE_PLAYLIST_LOAD_LIMIT
 LAVALINK_SERVER_YOUTUBE_SEARCH_ENABLED
 LAVALINK_SERVER_SOUNDCLOUD_SEARCH_ENABLED
 
