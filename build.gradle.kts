@@ -71,41 +71,42 @@ subprojects {
                     logger.lifecycle("Not publishing to maven.lavalink.dev because credentials are not set")
                 }
             }
-            configure<MavenPublishBaseExtension> {
-                coordinates(group.toString(), project.the<BasePluginExtension>().archivesName.get(), version.toString())
-                val mavenCentralUsername = findProperty("mavenCentralUsername") as String?
-                val mavenCentralPassword = findProperty("mavenCentralPassword") as String?
-                if (!mavenCentralUsername.isNullOrEmpty() && !mavenCentralPassword.isNullOrEmpty()) {
-                    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, false)
-                    if (release) {
+            // only publish releases to central portal
+            if (release) {
+                configure<MavenPublishBaseExtension> {
+                    coordinates(group.toString(), project.the<BasePluginExtension>().archivesName.get(), version.toString())
+                    val mavenCentralUsername = findProperty("mavenCentralUsername") as String?
+                    val mavenCentralPassword = findProperty("mavenCentralPassword") as String?
+                    if (!mavenCentralUsername.isNullOrEmpty() && !mavenCentralPassword.isNullOrEmpty()) {
+                        publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, false)
                         signAllPublications()
+                    } else {
+                        logger.lifecycle("Not publishing to OSSRH due to missing credentials")
                     }
-                } else {
-                    logger.lifecycle("Not publishing to OSSRH due to missing credentials")
-                }
 
-                pom {
-                    url = "https://github.com/lavalink-devs/Lavalink"
+                    pom {
+                        url = "https://github.com/lavalink-devs/Lavalink"
 
-                    licenses {
-                        license {
-                            name = "MIT License"
-                            url = "https://github.com/lavalink-devs/Lavalink/blob/main/LICENSE"
+                        licenses {
+                            license {
+                                name = "MIT License"
+                                url = "https://github.com/lavalink-devs/Lavalink/blob/main/LICENSE"
+                            }
                         }
-                    }
 
-                    developers {
-                        developer {
-                            id = "freyacodes"
-                            name = "Freya Arbjerg"
-                            url = "https://www.arbjerg.dev"
+                        developers {
+                            developer {
+                                id = "freyacodes"
+                                name = "Freya Arbjerg"
+                                url = "https://www.arbjerg.dev"
+                            }
                         }
-                    }
 
-                    scm {
-                        url = "https://github.com/lavalink-devs/Lavalink/"
-                        connection = "scm:git:git://github.com/lavalink-devs/Lavalink.git"
-                        developerConnection = "scm:git:ssh://git@github.com/lavalink-devs/Lavalink.git"
+                        scm {
+                            url = "https://github.com/lavalink-devs/Lavalink/"
+                            connection = "scm:git:git://github.com/lavalink-devs/Lavalink.git"
+                            developerConnection = "scm:git:ssh://git@github.com/lavalink-devs/Lavalink.git"
+                        }
                     }
                 }
             }
