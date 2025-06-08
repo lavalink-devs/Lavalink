@@ -17,7 +17,7 @@ description: A list of Lavalink client libraries.
 | [lavaplay.py](https://github.com/HazemMeqdad/lavaplay.py)           | Python          | **Any**                                    | `asyncio`-based libraries 1.0.13a+ |
 | [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)            | Node.js         | **Any**                                    |                                    |
 | [Magmastream](https://github.com/Blackfort-Hosting/magmastream)     | Node.js         | **Any**                                    |                                    |
-| [Lavacord](https://github.com/lavacord/Lavacord)                    | Node.js         | **Any**                                    |                                    |
+| [Lavacord](https://github.com/lavacord/Lavacord)                    | Node.js         | Discord.js/Eris/Cloudstorm/Oceanic/**Any** | TS, CJS & ESM Support              |
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                       | Node.js         | **Any**                                    |                                    |
 | [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client)    | Node.js         | **Any**                                    |                                    |
 | [FastLink](https://github.com/PerformanC/FastLink)                  | Node.js         | **Any**                                    |                                    |
@@ -43,7 +43,7 @@ description: A list of Lavalink client libraries.
 | [Mafic](https://github.com/ooliver1/mafic)                    | Python   | discord.py **V2**/nextcord/disnake/py-cord |                                    |
 | [Wavelink](https://github.com/PythonistaGuild/Wavelink)       | Python   | discord.py **V2**                          | `Unmaintained`, Version >=2, <3    |
 | [Pomice](https://github.com/cloudwithax/pomice)               | Python   | discord.py **V2**                          |                                    |
-| [Lavacord](https://github.com/lavacord/lavacord)              | Node.js  | **Any**                                    |                                    |
+| [Lavacord](https://github.com/lavacord/lavacord)              | Node.js  | Discord.js/Eris/Cloudstorm/Oceanic/**Any** | < v3                               |
 | [Poru](https://github.com/parasop/poru)                       | Node.js  | **Any**                                    |                                    |
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                 | Node.js  | **Any**                                    |                                    |
 | [Cosmicord.js](https://github.com/SudhanPlayz/Cosmicord.js)   | Node.js  | **Any**                                    |                                    |
