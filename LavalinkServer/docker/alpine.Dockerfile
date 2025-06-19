@@ -1,4 +1,4 @@
-FROM azul/zulu-openjdk-alpine:21-jre-headless-latest
+FROM azul/zulu-openjdk-alpine:17-jre-headless-latest
 
 RUN apk add --no-cache libgcc
 

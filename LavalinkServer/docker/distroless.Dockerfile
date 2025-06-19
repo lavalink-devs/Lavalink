@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/java21-debian12:nonroot
+FROM gcr.io/distroless/java17-debian12:nonroot
 
 WORKDIR /opt/Lavalink
 
