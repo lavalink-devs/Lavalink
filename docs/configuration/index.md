@@ -13,7 +13,9 @@ See the [application.yml](config/application-yml.md) documentation for more info
 
 ## Config Server
 
-> **WARNING:** This is an advanced feature geared towards big deployments.
+!!! warning
+
+    This is an advanced feature geared towards big deployments.
 
 You can run the [Lavalink Config Server](https://github.com/lavalink-devs/Lavalink-Config-Server) to manage the configuration of multiple Lavalink servers at one place.
 See the [Config Server](config/config-server.md) documentation for more information.

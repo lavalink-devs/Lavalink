@@ -104,10 +104,11 @@ The most noteworthy of these, as well as any features and breaking changes, are 
 * Update to the [Protocol Module](protocol) to support Kotlin/JS
 * Removal of all `/v3` endpoints except `/version`. All other endpoints are now under `/v4`
 
-> **Warning**
-> This is a beta release, and as such, may contain bugs. Please report any bugs you find to the [issue tracker](https://github.com/lavalink-devs/Lavalink/issues/new/choose).
-> For more info on the changes in this release, see [here](https://lavalink.dev/changelog/index.html#significant-changes)
-> If you have any question regarding the changes in this release, please ask in the [support server](https://discord.gg/ZW4s47Ppw4) or [GitHub discussions](https://github.com/lavalink-devs/Lavalink/discussions/categories/q-a)
+!!! warning
+
+    This is a beta release, and as such, may contain bugs. Please report any bugs you find to the [issue tracker](https://github.com/lavalink-devs/Lavalink/issues/new/choose).
+    For more info on the changes in this release, see [here](https://lavalink.dev/changelog/index.html#significant-changes)
+    If you have any question regarding the changes in this release, please ask in the [support server](https://discord.gg/ZW4s47Ppw4) or [GitHub discussions](https://github.com/lavalink-devs/Lavalink/discussions/categories/q-a)
 
 Contributors:
 [@topi314](https://github.com/topi314), [@freyacodes](https://github.com/freyacodes), [@DRSchlaubi](https://github.com/DRSchlaubi) and [@melike2d](https://github.com/melike2d)
@@ -151,8 +152,9 @@ Contributors:
 * Fix errors when doing multiple session resumes
 * Update lavaplayer to `1.4.0` see [here](https://github.com/Walkyst/lavaplayer-fork/releases/tag/1.4.0) for more info
 
-> **Note**
-> Lavalink Docker images are now found in the GitHub Container Registry instead of DockerHub
+!!! note
+
+    Lavalink Docker images are now found in the GitHub Container Registry instead of DockerHub
 
 ## 3.7.4
 * Fix an issue where Lavalink would not destroy a session when a client disconnects
