@@ -9,7 +9,7 @@ There are mainly 3 different ways to configure Lavalink:
 ## Config File
 
 This is the easiest way to configure Lavalink. You create a file called `application.yml` where you start your Lavalink server.
-See the [application.yml](config/application-yml.md) documentation for more information.
+See the [application.yml](config/file.md) documentation for more information.
 
 ## Config Server
 
