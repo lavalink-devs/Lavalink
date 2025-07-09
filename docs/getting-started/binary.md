@@ -17,7 +17,7 @@ Create a new directory and place the `Lavalink.jar` file inside it. This will be
 ## Configuration
 
 Check out the [configuration](../configuration/index.md) page to learn how to configure Lavalink.
-The recommended way would be to use a [Config File](../configuration/config-file.md).
+The recommended way would be to use a [Config File](../configuration/config/file.md).
 
 ## Running Lavalink
 
