@@ -106,7 +106,9 @@ class LavalinkPlayer(
     }
 
     override fun onTrackEnd(player: AudioPlayer, track: AudioTrack, endReason: AudioTrackEndReason) {
-        updateFuture!!.cancel(false)
+        // 2025-07-31 changed from !! to ? due to possible race condition (or general condition) where
+        // updateFuture has not be initialised yet somehow.
+        updateFuture?.cancel(false)
     }
 
     override fun onTrackStart(player: AudioPlayer, track: AudioTrack) {
