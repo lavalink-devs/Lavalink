@@ -15,6 +15,7 @@ data class RequestLoggingConfig(
     var includeQueryString: Boolean = true,
     var includePayload: Boolean = true,
     var maxPayloadLength: Int = 10000,
+    var beforeRequest: Boolean = false,
 ) {
 
     @Bean
