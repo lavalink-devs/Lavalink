@@ -18,6 +18,7 @@ description: A list of Lavalink client libraries.
 | [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)            | Node.js            | **Any**                                    |                                    |
 | [Magmastream](https://github.com/Blackfort-Hosting/magmastream)     | Node.js            | **Any**                                    |                                    |
 | [Lavacord](https://github.com/lavacord/Lavacord)                    | Node.js/TypeScript | **Any**                                    |                                    |
+| [Aqualink](https://github.com/ToddyTheNoobDud/AquaLink)             | Node.js/TypeScript | **Any**                                    |                                    |
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                       | Node.js            | **Any**                                    |                                    |
 | [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client)    | Node.js            | **Any**                                    |                                    |
 | [FastLink](https://github.com/PerformanC/FastLink)                  | Node.js            | **Any**                                    |                                    |
