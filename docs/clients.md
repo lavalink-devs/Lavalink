@@ -30,6 +30,7 @@ description: A list of Lavalink client libraries.
 | [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)        | .NET               | Discord.Net/DSharpPlus/Remora/NetCord      | v4+                                |
 | [Nomia](https://github.com/DHCPCD9/Nomia)                           | .NET               | DSharpPlus                                 |                                    |
 | [Coglink](https://github.com/PerformanC/Coglink)                    | C                  | Concord                                    |                                    |
+| [Anchorage](https://github.com/Deivu/Anchorage)                     | Rust               | **Any**                                    | `tokio`-based                      |
 | [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)             | Rust, Python       | **Any**                                    | `tokio`-based, `asyncio`-based     |
 | [lavalink](https://github.com/nyxx-discord/nyxx_lavalink)           | Dart               | nyxx/**Any**                               |                                    |
 
