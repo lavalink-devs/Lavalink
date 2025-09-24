@@ -11,7 +11,6 @@ plugins {
     alias(libs.plugins.maven.publish.base)
 }
 
-val archivesBaseName = "protocol"
 group = "dev.arbjerg.lavalink"
 
 kotlin {
@@ -60,13 +59,13 @@ kotlin {
 
     compilerOptions {
         freeCompilerArgs.add("-Xconsistent-data-class-copy-visibility")
+        optIn.addAll(
+            "kotlinx.serialization.ExperimentalSerializationApi",
+            "kotlin.time.ExperimentalTime"
+        )
     }
 
     sourceSets {
-        all {
-            languageSettings.optIn("kotlinx.serialization.ExperimentalSerializationApi")
-        }
-
         commonMain {
             dependencies {
                 api(libs.kotlinx.serialization.json)
@@ -81,13 +80,13 @@ kotlin {
             }
         }
 
-        named("jsTest") {
+        jsTest {
             dependencies {
                 implementation(kotlin("test-js"))
             }
         }
 
-        named("jvmTest") {
+        jvmTest {
             dependencies {
                 implementation(kotlin("test-junit5"))
             }
@@ -96,7 +95,7 @@ kotlin {
 }
 
 mavenPublishing {
-    configure(KotlinMultiplatform(JavadocJar.Dokka("dokkaHtml")))
+    configure(KotlinMultiplatform(JavadocJar.Dokka("dokkaGeneratePublicationHtml")))
     pom {
         name = "Lavalink Protocol"
         description = "Protocol for Lavalink Client development"

@@ -5,15 +5,15 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.jetbrains.dokka") version "1.8.20" apply false
-    id("com.gorylenko.gradle-git-properties") version "2.4.1"
-    id("org.ajoberstar.grgit") version "5.2.0"
-    id("org.springframework.boot") version "3.1.0" apply false
-    id("org.sonarqube") version "4.2.0.3129"
-    id("com.adarshr.test-logger") version "3.2.0"
-    id("org.jetbrains.kotlin.jvm") version "2.1.20"
-    id("org.jetbrains.kotlin.plugin.allopen") version "2.1.20"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.20" apply false
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.gradle.git.properties)
+    alias(libs.plugins.grgit)
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.sonarqube)
+    alias(libs.plugins.test.logger)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.allopen)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.maven.publish.base) apply false
 }
 
