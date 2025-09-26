@@ -98,5 +98,5 @@ fun VersionCatalogBuilder.other() {
     plugin("test-logger", "com.adarshr.test-logger").version("3.2.0")
     plugin("sonarqube", "org.sonarqube").version("4.2.0.3129")
     plugin("grgit", "org.ajoberstar.grgit").version("5.2.0")
-    plugin("gradle-git-properties", "com.gorylenko.gradle-git-properties").version("2.4.1")
+    plugin("gradle-git-properties", "com.gorylenko.gradle-git-properties").version("2.5.3")
 }
