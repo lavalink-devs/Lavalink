@@ -15,7 +15,6 @@ plugins {
 apply(plugin = "org.springframework.boot")
 apply(plugin = "com.gorylenko.gradle-git-properties")
 apply(plugin = "org.ajoberstar.grgit")
-apply(plugin = "com.adarshr.test-logger")
 apply(plugin = "kotlin")
 apply(plugin = "kotlin-spring")
 

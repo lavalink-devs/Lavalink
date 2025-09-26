@@ -23,9 +23,9 @@ dependencyResolutionManagement {
 fun VersionCatalogBuilder.spring() {
     version("spring-boot", "3.5.6")
 
-    library("spring-websocket", "org.springframework", "spring-websocket").version("6.1.9")
+    library("spring-websocket", "org.springframework", "spring-websocket").version("6.2.11")
 
-    library("spring-cloud-config", "org.springframework.cloud", "spring-cloud-starter-config").version("4.1.5")
+    library("spring-cloud-config", "org.springframework.cloud", "spring-cloud-starter-config").version("4.3.0")
 
     library("spring-boot", "org.springframework.boot", "spring-boot").versionRef("spring-boot")
     library("spring-boot-web", "org.springframework.boot", "spring-boot-starter-web").versionRef("spring-boot")
