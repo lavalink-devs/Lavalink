@@ -137,7 +137,6 @@ tasks {
 
     withType<BootJar> {
         archiveFileName = "Lavalink.jar"
-        mainClass = "lavalink.server.Launcher"
 
         if (findProperty("targetPlatform") == "musl") {
             archiveFileName = "Lavalink-musl.jar"
