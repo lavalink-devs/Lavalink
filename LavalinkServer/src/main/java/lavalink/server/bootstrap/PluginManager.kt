@@ -133,6 +133,23 @@ class PluginManager(val config: PluginsConfig) {
         Channels.newChannel(URL(url).openStream()).use {
             FileOutputStream(output).channel.transferFrom(it, 0, Long.MAX_VALUE)
         }
+
+        if (output.length() == 0L) {
+            log.warn("Downloaded plugin is empty, re-downloading...")
+            if (!output.delete()) {
+                throw RuntimeException("Failed to delete empty plugin file: ${output.path}")
+            }
+            Channels.newChannel(URL(url).openStream()).use {
+                FileOutputStream(output).channel.transferFrom(it, 0, Long.MAX_VALUE)
+            }
+
+            if (output.length() == 0L) {
+                if (!output.delete()) {
+                    throw RuntimeException("Failed to delete empty plugin file: ${output.path}")
+                }
+                throw RuntimeException("Failed to download plugin from $url")
+            }
+        }
     }
 
     private fun readClasspathManifests(): List<PluginManifest> {
@@ -147,6 +164,17 @@ class PluginManager(val config: PluginsConfig) {
             ?: return emptyList()
 
         val jarsToLoad = directory.listFiles()?.filter { it.isFile && it.extension == "jar" }
+            ?.filter {
+                if (it.length() == 0L) {
+                    log.warn("Plugin jar is empty, deleting...: ${it.path}")
+                    if (!it.delete()) {
+                        log.error("Failed to delete empty plugin jar: ${it.path}")
+                    }
+                    false
+                } else {
+                    true
+                }
+            }
             ?.takeIf { it.isNotEmpty() }
             ?: return emptyList()
 
