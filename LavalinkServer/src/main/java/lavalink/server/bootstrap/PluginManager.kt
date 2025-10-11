@@ -127,28 +127,28 @@ class PluginManager(val config: PluginsConfig) {
         }
     }
 
-    private fun downloadJar(output: File, url: String) {
-        log.info("Downloading $url")
+    private fun downloadJar(output: File, url: String, isRetry: Boolean = false) {
+        if (!isRetry) {
+            log.info("Downloading $url")
+        }
 
         Channels.newChannel(URL(url).openStream()).use {
             FileOutputStream(output).channel.transferFrom(it, 0, Long.MAX_VALUE)
         }
 
         if (output.length() == 0L) {
+            if (isRetry) {
+                if (!output.delete()) {
+                    log.warn("Could not delete empty plugin file: ${output.path}")
+                }
+                throw RuntimeException("Failed to download plugin from $url")
+            }
+
             log.warn("Downloaded plugin is empty, re-downloading...")
             if (!output.delete()) {
                 throw RuntimeException("Failed to delete empty plugin file: ${output.path}")
             }
-            Channels.newChannel(URL(url).openStream()).use {
-                FileOutputStream(output).channel.transferFrom(it, 0, Long.MAX_VALUE)
-            }
-
-            if (output.length() == 0L) {
-                if (!output.delete()) {
-                    throw RuntimeException("Failed to delete empty plugin file: ${output.path}")
-                }
-                throw RuntimeException("Failed to download plugin from $url")
-            }
+            downloadJar(output, url, true)
         }
     }
 
