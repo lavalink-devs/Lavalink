@@ -10,6 +10,7 @@ description: A list of Lavalink client libraries.
 | [Lavalink.kt](https://github.com/DRSchlaubi/Lavalink.kt)            | Kotlin             | Kord/JDA/**Any**                           | Kotlin Coroutines                  |
 | [DisGoLink](https://github.com/disgoorg/disgolink)                  | Go                 | **Any**                                    |                                    |
 | [lavalink.py](https://github.com/devoxin/lavalink.py)               | Python             | **Any**                                    |                                    |
+| [salada](https://github.com/ToddyTheNoobDud/Salad)                  | Python             | **Any**                                    |                                    |
 | [Mafic](https://github.com/ooliver1/mafic)                          | Python             | discord.py **V2**/nextcord/disnake/py-cord |                                    |
 | [Wavelink](https://github.com/PythonistaGuild/Wavelink)             | Python             | discord.py **V2**                          | `Unmaintained`                     |
 | [Pomice](https://github.com/cloudwithax/pomice)                     | Python             | discord.py **V2**                          |                                    |
