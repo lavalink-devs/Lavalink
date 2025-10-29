@@ -17,7 +17,7 @@ If Lavalink won't start, check the following:
 - If you're using Docker, make sure you have configured Docker correctly.
   Check out the [Docker](../configuration/docker.md) page for more information.
 
-- If you're using Systemd, make sure you have configured Systemd correctly. 
+- If you're using Systemd, make sure you have configured Systemd correctly.
   Check out the [Systemd](../configuration/systemd.md) page for more information.
 
 - If you are using a firewall, make sure you have opened the port you configured Lavalink to use.
@@ -29,7 +29,6 @@ If Lavalink won't start, check the following:
 If you are having issues with Lavalink, you can enable more detailed logging by adding the following to your `application.yml`:
 
 In general there are 6 log levels: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR` and `OFF`.
-
 
 ```yaml title="application.yml"
 logging:
@@ -55,4 +54,4 @@ logging:
 
 ## Lavalink won't connect to Discord / Play Audio
 
-If Lavalink doesn't connect to Discord, make sure you forward the `sessionId`, `token` and `enpoint` to Lavalink via the [player update endpoint](../api/rest.md#update-player).
+If Lavalink doesn't connect to Discord, make sure you forward the `sessionId`, `token` and `endpoint` to Lavalink via the [player update endpoint](../api/rest.md#update-player).
