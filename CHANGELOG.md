@@ -4,7 +4,7 @@ Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
 ## v4.1.2
-* Updated Lavaplayer to [`2.2.5`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.2.5)
+* Updated Lavaplayer to [`2.2.6`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.2.6)
 * Updated Koe to [`2.2.0-rc2`](https://github.com/KyokoBot/koe/releases/tag/2.2.0-rc2)
 * Downgrade docker images to Java `17` in https://github.com/lavalink-devs/Lavalink/pull/1162
 * Added before request logging configuration option in https://github.com/lavalink-devs/Lavalink/pull/1170
