@@ -35,6 +35,7 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
     fun koeOptions(): KoeOptions = KoeOptions.builder().apply {
         setGatewayVersion(GatewayVersion.V8)
         setDeafened(true)
+        setEnableWSSPortOverride(false)
 
         val systemType: SystemType? = try {
             SystemType(DefaultArchitectureTypes.detect(), DefaultOperatingSystemTypes.detect())

@@ -36,8 +36,8 @@ fun VersionCatalogBuilder.spring() {
 }
 
 fun VersionCatalogBuilder.voice() {
-    version("lavaplayer", "2.2.3")
-    version("koe", "2.1.1")
+    version("lavaplayer", "2.2.6")
+    version("koe", "2.2.0-rc2")
 
     library("lavaplayer", "dev.arbjerg", "lavaplayer").versionRef("lavaplayer")
     library("lavaplayer-ip-rotator", "dev.arbjerg", "lavaplayer-ext-youtube-rotator").versionRef("lavaplayer")
@@ -84,7 +84,7 @@ fun VersionCatalogBuilder.common() {
 }
 
 fun VersionCatalogBuilder.other() {
-    val mavenPublishPlugin = version("maven-publish-plugin", "0.28.0")
+    val mavenPublishPlugin = version("maven-publish-plugin", "0.32.0")
 
     plugin("maven-publish", "com.vanniktech.maven.publish").versionRef(mavenPublishPlugin)
     plugin("maven-publish-base", "com.vanniktech.maven.publish.base").versionRef(mavenPublishPlugin)

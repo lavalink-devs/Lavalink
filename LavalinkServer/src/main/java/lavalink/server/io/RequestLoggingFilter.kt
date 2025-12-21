@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.web.filter.AbstractRequestLoggingFilter
 
 class RequestLoggingFilter(
-    requestLoggingConfig: RequestLoggingConfig
+    private val requestLoggingConfig: RequestLoggingConfig
 ) : AbstractRequestLoggingFilter() {
 
     companion object {
@@ -19,11 +19,18 @@ class RequestLoggingFilter(
         isIncludeQueryString = requestLoggingConfig.includeQueryString
         isIncludePayload = requestLoggingConfig.includePayload
         maxPayloadLength = requestLoggingConfig.maxPayloadLength
+        setBeforeMessagePrefix(">> ")
+        setBeforeMessageSuffix("")
         setAfterMessagePrefix("")
         setAfterMessageSuffix("")
     }
 
-    override fun beforeRequest(request: HttpServletRequest, message: String) {}
+    override fun beforeRequest(request: HttpServletRequest, message: String) {
+        if (!requestLoggingConfig.beforeRequest) {
+            return
+        }
+        log.info(message)
+    }
 
     override fun afterRequest(request: HttpServletRequest, message: String) {
         log.info(message)

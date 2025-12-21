@@ -71,42 +71,42 @@ subprojects {
                     logger.lifecycle("Not publishing to maven.lavalink.dev because credentials are not set")
                 }
             }
-            // only publish releases to central portal
-            if (release) {
-                configure<MavenPublishBaseExtension> {
-                    coordinates(group.toString(), project.the<BasePluginExtension>().archivesName.get(), version.toString())
-                    val mavenCentralUsername = findProperty("mavenCentralUsername") as String?
-                    val mavenCentralPassword = findProperty("mavenCentralPassword") as String?
-                    if (!mavenCentralUsername.isNullOrEmpty() && !mavenCentralPassword.isNullOrEmpty()) {
-                        publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, false)
+
+            configure<MavenPublishBaseExtension> {
+                coordinates(group.toString(), project.the<BasePluginExtension>().archivesName.get(), version.toString())
+                val mavenCentralUsername = findProperty("mavenCentralUsername") as String?
+                val mavenCentralPassword = findProperty("mavenCentralPassword") as String?
+                if (!mavenCentralUsername.isNullOrEmpty() && !mavenCentralPassword.isNullOrEmpty()) {
+                    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, false)
+                    if (release) {
                         signAllPublications()
-                    } else {
-                        logger.lifecycle("Not publishing to OSSRH due to missing credentials")
+                    }
+                } else {
+                    logger.lifecycle("Not publishing to OSSRH due to missing credentials")
+                }
+
+                pom {
+                    url = "https://github.com/lavalink-devs/Lavalink"
+
+                    licenses {
+                        license {
+                            name = "MIT License"
+                            url = "https://github.com/lavalink-devs/Lavalink/blob/main/LICENSE"
+                        }
                     }
 
-                    pom {
-                        url = "https://github.com/lavalink-devs/Lavalink"
-
-                        licenses {
-                            license {
-                                name = "MIT License"
-                                url = "https://github.com/lavalink-devs/Lavalink/blob/main/LICENSE"
-                            }
+                    developers {
+                        developer {
+                            id = "freyacodes"
+                            name = "Freya Arbjerg"
+                            url = "https://www.arbjerg.dev"
                         }
+                    }
 
-                        developers {
-                            developer {
-                                id = "freyacodes"
-                                name = "Freya Arbjerg"
-                                url = "https://www.arbjerg.dev"
-                            }
-                        }
-
-                        scm {
-                            url = "https://github.com/lavalink-devs/Lavalink/"
-                            connection = "scm:git:git://github.com/lavalink-devs/Lavalink.git"
-                            developerConnection = "scm:git:ssh://git@github.com/lavalink-devs/Lavalink.git"
-                        }
+                    scm {
+                        url = "https://github.com/lavalink-devs/Lavalink/"
+                        connection = "scm:git:git://github.com/lavalink-devs/Lavalink.git"
+                        developerConnection = "scm:git:ssh://git@github.com/lavalink-devs/Lavalink.git"
                     }
                 }
             }
@@ -114,7 +114,6 @@ subprojects {
     }
 }
 
-@SuppressWarnings("GrMethodMayBeStatic")
 fun versionFromGit(): Pair<String, Boolean> {
     Grgit.open(mapOf("currentDir" to project.rootDir)).use { git ->
         val headTag = git.tag
