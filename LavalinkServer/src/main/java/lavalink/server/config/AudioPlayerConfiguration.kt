@@ -168,7 +168,8 @@ class AudioPlayerConfiguration {
                     dataReader,
                     dataLoader,
                     formatHandler,
-                    DefaultSoundCloudPlaylistLoader(dataLoader, dataReader, formatHandler)
+                    DefaultSoundCloudPlaylistLoader(dataLoader, dataReader, formatHandler),
+                    serverConfig.soundcloudFilterOutPreviewTracks
                 )
             )
         }

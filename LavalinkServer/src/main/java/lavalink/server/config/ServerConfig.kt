@@ -42,6 +42,7 @@ class ServerConfig {
     var isGcWarnings = true
     var isYoutubeSearchEnabled = true
     var isSoundcloudSearchEnabled = true
+    var soundcloudFilterOutPreviewTracks = false
     var ratelimit: RateLimitConfig? = null
     var youtubeConfig: YoutubeConfig? = null
     var httpConfig: HttpConfig? = null
