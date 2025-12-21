@@ -10,6 +10,7 @@ description: A list of Lavalink client libraries.
 | [Lavalink.kt](https://github.com/DRSchlaubi/Lavalink.kt)            | Kotlin             | Kord/JDA/**Any**                           | Kotlin Coroutines                  |
 | [DisGoLink](https://github.com/disgoorg/disgolink)                  | Go                 | **Any**                                    |                                    |
 | [lavalink.py](https://github.com/devoxin/lavalink.py)               | Python             | **Any**                                    |                                    |
+| [salada](https://github.com/ToddyTheNoobDud/Salad)                  | Python             | **Any**                                    |                                    |
 | [Mafic](https://github.com/ooliver1/mafic)                          | Python             | discord.py **V2**/nextcord/disnake/py-cord |                                    |
 | [Wavelink](https://github.com/PythonistaGuild/Wavelink)             | Python             | discord.py **V2**                          | `Unmaintained`                     |
 | [Pomice](https://github.com/cloudwithax/pomice)                     | Python             | discord.py **V2**                          |                                    |
@@ -19,7 +20,7 @@ description: A list of Lavalink client libraries.
 | [Magmastream](https://github.com/Blackfort-Hosting/magmastream)     | Node.js            | **Any**                                    |                                    |
 | [Lavacord](https://github.com/lavacord/Lavacord)                    | Node.js/TypeScript | **Any**                                    |                                    |
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                       | Node.js            | **Any**                                    |                                    |
-| [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client)    | Node.js            | **Any**                                    |                                    |
+| [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client)    | Node.js            | discord.js/DiscordDeno/Eris/**Any**        | `async`                            |
 | [FastLink](https://github.com/PerformanC/FastLink)                  | Node.js            | **Any**                                    |                                    |
 | [Riffy](https://github.com/riffy-team/riffy)                        | Node.js            | **Any**                                    |                                    |
 | [lavaclient](https://npmjs.com/lavaclient)                          | Node.js            | **Any**                                    | v5+                                |
