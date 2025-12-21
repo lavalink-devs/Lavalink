@@ -3,6 +3,30 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v4.1.2
+* Updated Lavaplayer to [`2.2.5`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.2.5)
+* Updated Koe to [`2.2.0-rc2`](https://github.com/KyokoBot/koe/releases/tag/2.2.0-rc2)
+* Downgrade docker images to Java `17` in https://github.com/lavalink-devs/Lavalink/pull/1162
+* Added before request logging configuration option in https://github.com/lavalink-devs/Lavalink/pull/1170
+* Added check for empty plugin files and redownload/delete them in https://github.com/lavalink-devs/Lavalink/pull/1178
+
+## v4.1.1
+* Updated Koe to [`2.1.1`](https://github.com/KyokoBot/koe/releases/tag/2.1.1) fixing voice gateway not connecting in https://github.com/lavalink-devs/Lavalink/commit/6f594a9154b48d1b72b1a6d65446c667f65ac986
+
+## v4.1.0
+* Added plugin update checker on start in https://github.com/lavalink-devs/Lavalink/pull/1121
+* Added full cause stack trace in exception object in https://github.com/lavalink-devs/Lavalink/pull/1128
+* Allow overriding default request timeouts in https://github.com/lavalink-devs/Lavalink/pull/1117
+* Added new docker image based on [`distroless`](https://github.com/GoogleContainerTools/distroless) & updated alpine variant to java 21 in https://github.com/lavalink-devs/Lavalink/pull/1131
+* Added custom Lavalink metrics prometheus collector in https://github.com/lavalink-devs/Lavalink/pull/1150
+* Added support for spring cloud config in https://github.com/lavalink-devs/Lavalink/pull/1144
+* Updated Koe to `2.1.0` & set `deafened` to true (This should lower the incoming traffic for Lavalink) in https://github.com/lavalink-devs/Lavalink/commit/5b0d139652fbd8d60d323c7c05b5b66d3665dc97
+* Fixed race condition when creating media connection and setting up playback in https://github.com/lavalink-devs/Lavalink/commit/588ca40c8b768cbe7c5748a94cfd8e8f1c97a2c4
+* Fixed filter values being omitted when default value is used in https://github.com/lavalink-devs/Lavalink/pull/1141
+* Fixed wrong CPU stats when spamming `/v4/stats` endpoint in https://github.com/lavalink-devs/Lavalink/pull/1151
+* Fixed plugin manager ignoring cmd args in https://github.com/lavalink-devs/Lavalink/pull/1129
+* Removed tls flags in dockerfile preventing tls 1.3 from working in https://github.com/lavalink-devs/Lavalink/pull/1118
+
 ## v4.0.8
 * Updated koe to [`2.0.3-rc2`](https://github.com/KyokoBot/koe/releases/tag/2.0.3-rc2) & use voice gateway `v8` in https://github.com/lavalink-devs/Lavalink/pull/1097
 * Updated Lavaplayer to [`2.2.2`](https://github.com/lavalink-devs/lavaplayer/releases/tag/2.2.2) in https://github.com/lavalink-devs/Lavalink/pull/1105
