@@ -22,6 +22,7 @@ description: A list of Lavalink client libraries.
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                       | Node.js            | **Any**                                    |                                    |
 | [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client)    | Node.js            | discord.js/DiscordDeno/Eris/**Any**        | `async`                            |
 | [FastLink](https://github.com/PerformanC/FastLink)                  | Node.js            | **Any**                                    |                                    |
+| [Framelink](https://github.com/ramkrishna-js/framelink) | Node.js | **Any** | Built-in filters, Queue, Plugins, v4 Resumin LavaSrc support 
 | [Riffy](https://github.com/riffy-team/riffy)                        | Node.js            | **Any**                                    |                                    |
 | [lavaclient](https://npmjs.com/lavaclient)                          | Node.js            | **Any**                                    | v5+                                |
 | [TsumiLink](https://github.com/Fyphen1223/TsumiLink)                | Node.js            | **Any**                                    |                                    |
@@ -34,7 +35,6 @@ description: A list of Lavalink client libraries.
 | [Anchorage](https://github.com/Deivu/Anchorage)                     | Rust               | **Any**                                    | `tokio`-based                      |
 | [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)             | Rust, Python       | **Any**                                    | `tokio`-based, `asyncio`-based     |
 | [lavalink](https://github.com/nyxx-discord/nyxx_lavalink)           | Dart               | nyxx/**Any**                               |                                    |
-
 <details markdown="1">
 <summary>v3.7 supporting Client Libraries</summary>
 
@@ -49,6 +49,7 @@ description: A list of Lavalink client libraries.
 | [Poru](https://github.com/parasop/poru)                       | Node.js  | **Any**                                    |                                    |
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                 | Node.js  | **Any**                                    |                                    |
 | [Cosmicord.js](https://github.com/SudhanPlayz/Cosmicord.js)   | Node.js  | **Any**                                    |                                    |
+| [Framelink](https://github.com/ramkrishna-js/framelink) | Node.js | **Any** | v3.7 & v4 Support, Advanced filters & Queue |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp) | .NET     | DisCatSharp                                | Only prior v10.4.1                 |
 | [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)  | .NET     | Discord.Net/DSharpPlus                     | < v4                               |
 | [DisGoLink](https://github.com/disgoorg/disgolink)            | Go       | **Any**                                    |                                    |
