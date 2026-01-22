@@ -31,6 +31,7 @@ import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.arbjerg.lavalink.protocol.v4.Tracks
 import jakarta.servlet.http.HttpServletRequest
+import lavalink.server.metrics.SearchMetrics
 import lavalink.server.util.*
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -41,7 +42,8 @@ import org.springframework.web.server.ResponseStatusException
 @RestController
 class AudioLoaderRestHandler(
     private val audioPlayerManager: AudioPlayerManager,
-    private val pluginInfoModifiers: List<AudioPluginInfoModifier>
+    private val pluginInfoModifiers: List<AudioPluginInfoModifier>,
+    private val searchMetrics: SearchMetrics? = null  // Optional - only present if prometheus enabled
 ) {
 
     companion object {
@@ -54,6 +56,7 @@ class AudioLoaderRestHandler(
         @RequestParam identifier: String
     ): ResponseEntity<LoadResult> {
         log.info("Got request to load for identifier \"${identifier}\"")
+        searchMetrics?.recordSearch(extractSourceType(identifier))
 
         val item = try {
             loadAudioItem(audioPlayerManager, identifier)
@@ -115,5 +118,25 @@ class AudioLoaderRestHandler(
         return ResponseEntity.ok(Tracks(encodedTracks.tracks.map {
             decodeTrack(audioPlayerManager, it).toTrack(it, pluginInfoModifiers)
         }))
+    }
+
+    private fun extractSourceType(identifier: String): String {
+        return when {
+            identifier.startsWith("http://") || identifier.startsWith("https://") -> {
+                try {
+                    java.net.URI(identifier).host ?: "http"
+                } catch (e: Exception) {
+                    "http"
+                }
+            }
+            else -> {
+                val colonIndex = identifier.indexOf(':')
+                if (colonIndex in 1..19) {
+                    identifier.substring(0, colonIndex).lowercase()
+                } else {
+                    "direct"
+                }
+            }
+        }
     }
 }

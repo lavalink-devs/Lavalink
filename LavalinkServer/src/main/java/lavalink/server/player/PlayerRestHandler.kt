@@ -23,6 +23,7 @@ class PlayerRestHandler(
     private val filterExtensions: List<AudioFilterExtension>,
     private val pluginInfoModifiers: List<AudioPluginInfoModifier>,
     serverConfig: ServerConfig,
+    private val searchMetrics: lavalink.server.metrics.SearchMetrics? = null
 ) {
 
     companion object {
@@ -221,6 +222,7 @@ class PlayerRestHandler(
                 }
 
                 player.play(newTrack)
+                searchMetrics?.recordPlay(newTrack.sourceManager?.sourceName ?: "unknown")
                 player.provideTo(context.getMediaConnection(player))
             } ?: player.stop()
         }
