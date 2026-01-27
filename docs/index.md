@@ -44,7 +44,7 @@ hide:
   url: https://prometheus.io/
 - title: Docker images
   icon: ':simple-docker:'
-  url: configuration/docker.md
+  url: getting-started/docker.md
 - title: Plugin support
   icon: ':material-power-plug-outline:'
   url: plugins.md
