@@ -10,7 +10,7 @@ class SearchMetrics {
     
     companion object {
         private val searchCounter: Counter = Counter.build()
-            .name("lavalink_searches_total")
+            .name("lavalink_track_loads_total")
             .help("Total number of tracks searched by source")
             .labelNames("source")
             .register()
@@ -18,7 +18,7 @@ class SearchMetrics {
         private val playCounter: Counter = Counter.build()
             .name("lavalink_tracks_played_total")
             .help("Total number of tracks played by source")
-            .labelNames("source")
+            .labelNames("source", "guild_id")
             .register()
     }
     
@@ -26,8 +26,8 @@ class SearchMetrics {
         searchCounter.labels(source).inc()
     }
 
-    fun recordPlay(source: String) {
-        playCounter.labels(source).inc()
+    fun recordPlay(source: String, guildId: String) {
+        playCounter.labels(source, guildId).inc()
     }
 }
 

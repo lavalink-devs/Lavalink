@@ -56,7 +56,6 @@ class AudioLoaderRestHandler(
         @RequestParam identifier: String
     ): ResponseEntity<LoadResult> {
         log.info("Got request to load for identifier \"${identifier}\"")
-        searchMetrics?.recordSearch(extractSourceType(identifier))
 
         val item = try {
             loadAudioItem(audioPlayerManager, identifier)
@@ -93,6 +92,7 @@ class AudioLoaderRestHandler(
             }
         }
 
+        searchMetrics?.recordSearch(extractSourceType(item, identifier))
         return ResponseEntity.ok(result)
     }
 
@@ -120,7 +120,17 @@ class AudioLoaderRestHandler(
         }))
     }
 
-    private fun extractSourceType(identifier: String): String {
+    private fun extractSourceType(item: Any?, identifier: String): String {
+        val itemSource = when (item) {
+            is AudioTrack -> item.sourceManager?.sourceName
+            is AudioPlaylist -> item.tracks.firstOrNull()?.sourceManager?.sourceName
+            else -> null
+        }
+
+        if (!itemSource.isNullOrBlank()) {
+            return itemSource
+        }
+
         return when {
             identifier.startsWith("http://") || identifier.startsWith("https://") -> {
                 try {
