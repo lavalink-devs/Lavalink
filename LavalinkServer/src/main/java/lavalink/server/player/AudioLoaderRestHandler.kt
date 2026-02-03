@@ -61,15 +61,16 @@ class AudioLoaderRestHandler(
             loadAudioItem(audioPlayerManager, identifier)
         } catch (ex: FriendlyException) {
             log.error("Failed to load track for identifier $identifier", ex)
+            searchMetrics?.recordLoadResult(extractSourceType(null, identifier), "load_failed")
             return ResponseEntity.ok(LoadResult.loadFailed(ex))
         }
 
-        val result = when (item) {
-            null -> LoadResult.NoMatches()
+        val (result, resultType) = when (item) {
+            null -> LoadResult.NoMatches() to "no_matches"
 
             is AudioTrack -> {
                 log.info("Loaded track ${item.info.title}")
-                LoadResult.trackLoaded(item.toTrack(audioPlayerManager, pluginInfoModifiers))
+                LoadResult.trackLoaded(item.toTrack(audioPlayerManager, pluginInfoModifiers)) to "track"
             }
 
             is AudioPlaylist -> {
@@ -77,14 +78,15 @@ class AudioLoaderRestHandler(
 
                 val tracks = item.tracks.map { it.toTrack(audioPlayerManager, pluginInfoModifiers) }
                 if (item.isSearchResult) {
-                    LoadResult.searchResult(tracks)
+                    LoadResult.searchResult(tracks) to "search"
                 } else {
-                    LoadResult.playlistLoaded(item.toPlaylistInfo(), item.toPluginInfo(pluginInfoModifiers), tracks)
+                    LoadResult.playlistLoaded(item.toPlaylistInfo(), item.toPluginInfo(pluginInfoModifiers), tracks) to "playlist"
                 }
             }
 
             else -> {
                 log.error("Unknown item type: ${item.javaClass}")
+                searchMetrics?.recordLoadResult(extractSourceType(item, identifier), "error")
                 throw ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Identifier returned unknown audio item type: ${item.javaClass.canonicalName}"
@@ -92,7 +94,9 @@ class AudioLoaderRestHandler(
             }
         }
 
-        searchMetrics?.recordSearch(extractSourceType(item, identifier))
+        val source = extractSourceType(item, identifier)
+        searchMetrics?.recordSearch(source)
+        searchMetrics?.recordLoadResult(source, resultType)
         return ResponseEntity.ok(result)
     }
 
