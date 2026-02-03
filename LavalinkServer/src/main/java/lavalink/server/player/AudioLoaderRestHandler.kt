@@ -125,32 +125,34 @@ class AudioLoaderRestHandler(
     }
 
     private fun extractSourceType(item: Any?, identifier: String): String {
-        val itemSource = when (item) {
-            is AudioTrack -> item.sourceManager?.sourceName
-            is AudioPlaylist -> item.tracks.firstOrNull()?.sourceManager?.sourceName
-            else -> null
-        }
+        return runCatching {
+            val itemSource = when (item) {
+                is AudioTrack -> item.sourceManager?.sourceName
+                is AudioPlaylist -> item.tracks.firstOrNull()?.sourceManager?.sourceName
+                else -> null
+            }
 
-        if (!itemSource.isNullOrBlank()) {
-            return itemSource
-        }
+            if (!itemSource.isNullOrBlank()) {
+                return@runCatching itemSource
+            }
 
-        return when {
-            identifier.startsWith("http://") || identifier.startsWith("https://") -> {
-                try {
-                    java.net.URI(identifier).host ?: "http"
-                } catch (e: Exception) {
-                    "http"
+            when {
+                identifier.startsWith("http://") || identifier.startsWith("https://") -> {
+                    try {
+                        java.net.URI(identifier).host ?: "http"
+                    } catch (e: Exception) {
+                        "http"
+                    }
+                }
+                else -> {
+                    val colonIndex = identifier.indexOf(':')
+                    if (colonIndex in 1..19) {
+                        identifier.substring(0, colonIndex).lowercase()
+                    } else {
+                        "direct"
+                    }
                 }
             }
-            else -> {
-                val colonIndex = identifier.indexOf(':')
-                if (colonIndex in 1..19) {
-                    identifier.substring(0, colonIndex).lowercase()
-                } else {
-                    "direct"
-                }
-            }
-        }
+        }.getOrElse { "unknown" }
     }
 }
