@@ -61,7 +61,7 @@ class AudioLoaderRestHandler(
             loadAudioItem(audioPlayerManager, identifier)
         } catch (ex: FriendlyException) {
             log.error("Failed to load track for identifier $identifier", ex)
-            searchMetrics?.recordLoadResult(extractSourceType(null, identifier), "load_failed")
+            searchMetrics?.recordLoadResult(extractSourceType(null), "load_failed")
             return ResponseEntity.ok(LoadResult.loadFailed(ex))
         }
 
@@ -86,7 +86,7 @@ class AudioLoaderRestHandler(
 
             else -> {
                 log.error("Unknown item type: ${item.javaClass}")
-                searchMetrics?.recordLoadResult(extractSourceType(item, identifier), "error")
+                searchMetrics?.recordLoadResult(extractSourceType(item), "error")
                 throw ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Identifier returned unknown audio item type: ${item.javaClass.canonicalName}"
@@ -94,7 +94,7 @@ class AudioLoaderRestHandler(
             }
         }
 
-        val source = extractSourceType(item, identifier)
+        val source = extractSourceType(item)
         searchMetrics?.recordLoadResult(source, resultType)
         return ResponseEntity.ok(result)
     }
@@ -123,35 +123,17 @@ class AudioLoaderRestHandler(
         }))
     }
 
-    private fun extractSourceType(item: Any?, identifier: String): String {
-        return runCatching {
-            val itemSource = when (item) {
-                is AudioTrack -> item.sourceManager?.sourceName
-                is AudioPlaylist -> item.tracks.firstOrNull()?.sourceManager?.sourceName
-                else -> null
-            }
+    private fun extractSourceType(item: Any?): String {
+        val source = when (item) {
+            is AudioTrack -> item.sourceManager?.sourceName
+            is AudioPlaylist -> item.tracks.firstOrNull()?.sourceManager?.sourceName
+            else -> null
+        }
 
-            if (!itemSource.isNullOrBlank()) {
-                return@runCatching itemSource
-            }
-
-            when {
-                identifier.startsWith("http://") || identifier.startsWith("https://") -> {
-                    try {
-                        java.net.URI(identifier).host ?: "http"
-                    } catch (e: Exception) {
-                        "http"
-                    }
-                }
-                else -> {
-                    val colonIndex = identifier.indexOf(':')
-                    if (colonIndex in 1..19) {
-                        identifier.substring(0, colonIndex).lowercase()
-                    } else {
-                        "direct"
-                    }
-                }
-            }
-        }.getOrElse { "unknown" }
+        return if (source.isNullOrBlank()) {
+            "unknown"
+        } else {
+            source
+        }
     }
 }
