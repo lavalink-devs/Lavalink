@@ -95,7 +95,6 @@ class AudioLoaderRestHandler(
         }
 
         val source = extractSourceType(item, identifier)
-        searchMetrics?.recordSearch(source)
         searchMetrics?.recordLoadResult(source, resultType)
         return ResponseEntity.ok(result)
     }

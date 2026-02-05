@@ -9,12 +9,6 @@ import org.springframework.stereotype.Component
 class SearchMetrics {
     
     companion object {
-        private val searchCounter: Counter = Counter.build()
-            .name("lavalink_track_loads_total")
-            .help("Total number of tracks searched by source")
-            .labelNames("source")
-            .register()
-
         private val playCounter: Counter = Counter.build()
             .name("lavalink_tracks_played_total")
             .help("Total number of tracks played by source")
@@ -28,10 +22,6 @@ class SearchMetrics {
             .register()
     }
     
-    fun recordSearch(source: String) {
-        searchCounter.labels(source).inc()
-    }
-
     fun recordPlay(source: String, guildId: String) {
         playCounter.labels(source, guildId).inc()
     }
