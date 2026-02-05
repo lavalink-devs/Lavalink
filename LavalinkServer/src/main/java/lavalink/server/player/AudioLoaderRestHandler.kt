@@ -61,12 +61,12 @@ class AudioLoaderRestHandler(
             loadAudioItem(audioPlayerManager, identifier)
         } catch (ex: FriendlyException) {
             log.error("Failed to load track for identifier $identifier", ex)
-            searchMetrics?.recordLoadResult(extractSourceType(null), "load_failed")
+            searchMetrics?.recordLoadResult("unknown", "error")
             return ResponseEntity.ok(LoadResult.loadFailed(ex))
         }
 
         val (result, resultType) = when (item) {
-            null -> LoadResult.NoMatches() to "no_matches"
+            null -> LoadResult.NoMatches() to "empty"
 
             is AudioTrack -> {
                 log.info("Loaded track ${item.info.title}")
@@ -86,7 +86,7 @@ class AudioLoaderRestHandler(
 
             else -> {
                 log.error("Unknown item type: ${item.javaClass}")
-                searchMetrics?.recordLoadResult(extractSourceType(item), "error")
+                searchMetrics?.recordLoadResult("unknown", "unknown")
                 throw ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Identifier returned unknown audio item type: ${item.javaClass.canonicalName}"
@@ -94,8 +94,7 @@ class AudioLoaderRestHandler(
             }
         }
 
-        val source = extractSourceType(item)
-        searchMetrics?.recordLoadResult(source, resultType)
+        searchMetrics?.recordLoadResult(extractSourceType(item), resultType)
         return ResponseEntity.ok(result)
     }
 
