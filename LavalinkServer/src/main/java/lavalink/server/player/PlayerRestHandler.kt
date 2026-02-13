@@ -216,7 +216,7 @@ class PlayerRestHandler(
 
                 player.play(newTrack)
                 searchMetrics?.recordPlay(
-                    newTrack.sourceManager?.sourceName ?: "unknown",
+                    newTrack.sourceManager?.sourceName ?: "",
                     guildId.toString()
                 )
                 player.provideTo(context.getMediaConnection(player))
