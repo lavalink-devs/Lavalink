@@ -86,7 +86,7 @@ class AudioLoaderRestHandler(
 
             else -> {
                 log.error("Unknown item type: ${item.javaClass}")
-                searchMetrics?.recordLoadResult("unknown", "unknown")
+                searchMetrics?.recordLoadResult("", "unknown")
                 throw ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Identifier returned unknown audio item type: ${item.javaClass.canonicalName}"
@@ -130,7 +130,7 @@ class AudioLoaderRestHandler(
         }
 
         return if (source.isNullOrBlank()) {
-            "unknown"
+            ""
         } else {
             source
         }
