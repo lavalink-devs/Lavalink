@@ -61,7 +61,7 @@ class AudioLoaderRestHandler(
             loadAudioItem(audioPlayerManager, identifier)
         } catch (ex: FriendlyException) {
             log.error("Failed to load track for identifier $identifier", ex)
-            searchMetrics?.recordLoadResult("unknown", "error")
+            searchMetrics?.recordLoadResult("", "error")
             return ResponseEntity.ok(LoadResult.loadFailed(ex))
         }
 
