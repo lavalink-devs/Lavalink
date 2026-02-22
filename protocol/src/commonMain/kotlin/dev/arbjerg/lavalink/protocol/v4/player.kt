@@ -98,7 +98,7 @@ data class VoiceState(
     val token: String,
     val endpoint: String,
     val sessionId: String,
-    val channelId: String
+    val channelId: String? = null
 )
 
 @Serializable

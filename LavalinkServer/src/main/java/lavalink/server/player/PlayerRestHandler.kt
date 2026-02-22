@@ -111,6 +111,9 @@ class PlayerRestHandler(
         val player = context.getPlayer(guildId)
 
         playerUpdate.voice.ifPresent {
+            if (it.token.isBlank() || it.endpoint.isBlank() || it.sessionId.isBlank() || it.channelId.isNullOrBlank()) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "token, endpoint, sessionId and channelId must be provided in voice state")
+            }
             synchronized(player) {
                 val oldConn = context.koe.getConnection(guildId)
                 if (oldConn == null ||
@@ -119,7 +122,7 @@ class PlayerRestHandler(
                     oldConn.voiceServerInfo?.endpoint != it.endpoint ||
                     oldConn.voiceServerInfo?.token != it.token ||
                     oldConn.voiceServerInfo?.sessionId != it.sessionId ||
-                    oldConn.voiceServerInfo?.channelId != it.channelId.toLong()
+                    oldConn.voiceServerInfo?.channelId != it.channelId!!.toLong()
                 ) {
                     //clear old connection
                     context.koe.destroyConnection(guildId)
@@ -128,9 +131,9 @@ class PlayerRestHandler(
                     conn.connect(
                         VoiceServerInfo.builder()
                             .setSessionId(it.sessionId)
-                            .setEndpoint(it.sessionId)
-                            .setToken(it.sessionId)
-                            .setChannelId(it.channelId.toLong())
+                            .setEndpoint(it.endpoint)
+                            .setToken(it.token)
+                            .setChannelId(it.channelId!!.toLong())
                             .build()
                     ).exceptionally {
                         throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to connect to voice server")

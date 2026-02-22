@@ -107,7 +107,7 @@ fun LavalinkPlayer.toPlayer(context: SocketContext, pluginInfoModifiers: List<Au
             voiceServerInfo?.token ?: "",
             voiceServerInfo?.endpoint ?: "",
             voiceServerInfo?.sessionId ?: "",
-            voiceServerInfo?.channelId?.toString() ?: ""
+            voiceServerInfo?.channelId?.toString()
         ),
         filters.toFilters(),
     )
