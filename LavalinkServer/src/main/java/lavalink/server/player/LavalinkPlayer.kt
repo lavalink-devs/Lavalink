@@ -27,7 +27,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
-import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame
 import com.sedmelluq.discord.lavaplayer.track.playback.MutableAudioFrame
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.api.IPlayer
@@ -37,7 +36,8 @@ import lavalink.server.io.SocketContext
 import lavalink.server.io.SocketServer.Companion.sendPlayerUpdate
 import lavalink.server.player.filters.FilterChain
 import moe.kyokobot.koe.MediaConnection
-import moe.kyokobot.koe.media.OpusAudioFrameProvider
+import moe.kyokobot.koe.codec.CodecInstance
+import moe.kyokobot.koe.media.AudioFrameProvider
 import java.nio.ByteBuffer
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
@@ -79,7 +79,7 @@ class LavalinkPlayer(
     }
 
     fun provideTo(connection: MediaConnection) {
-        connection.audioSender = Provider(connection)
+        connection.audioSender = Provider()
     }
 
 
@@ -124,16 +124,21 @@ class LavalinkPlayer(
         )
     }
 
-    private inner class Provider(connection: MediaConnection?) : OpusAudioFrameProvider(connection) {
+    private inner class Provider : AudioFrameProvider {
+        override fun onCodecChanged(codec: CodecInstance) {}
+
+        override fun dispose() {}
+
         override fun canProvide() = audioPlayer.provide(mutableFrame).also { provided ->
             if (!provided) {
                 audioLossCounter.onLoss()
             }
         }
 
-        override fun retrieveOpusFrame(buf: ByteBuf) {
+        override fun provideFrame(buf: ByteBuf): Boolean {
             audioLossCounter.onSuccess()
             buf.writeBytes(buffer.flip())
+            return true
         }
     }
 }
