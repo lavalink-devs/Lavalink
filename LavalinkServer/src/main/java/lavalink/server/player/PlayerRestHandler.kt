@@ -97,8 +97,8 @@ class PlayerRestHandler(
 
         playerUpdate.voice.ifPresent {
             // Discord sometimes sends a partial voice server update missing the endpoint, which can be ignored.
-            if (it.endpoint.isEmpty() || it.token.isEmpty() || it.sessionId.isEmpty()) {
-                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Partial Lavalink voice state: $it")
+            if (it.token.isBlank() || it.endpoint.isBlank() || it.sessionId.isBlank() || it.channelId.isNullOrBlank()) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "token, endpoint, sessionId and channelId must be provided in voice state")
             }
         }
 
@@ -111,9 +111,7 @@ class PlayerRestHandler(
         val player = context.getPlayer(guildId)
 
         playerUpdate.voice.ifPresent {
-            if (it.token.isBlank() || it.endpoint.isBlank() || it.sessionId.isBlank() || it.channelId.isNullOrBlank()) {
-                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "token, endpoint, sessionId and channelId must be provided in voice state")
-            }
+
             synchronized(player) {
                 val oldConn = context.koe.getConnection(guildId)
                 if (oldConn == null ||

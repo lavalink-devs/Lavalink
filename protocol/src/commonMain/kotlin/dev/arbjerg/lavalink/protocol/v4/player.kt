@@ -1,7 +1,6 @@
 package dev.arbjerg.lavalink.protocol.v4
 
 import kotlinx.serialization.*
-import kotlinx.serialization.json.JsonNames
 import kotlinx.serialization.json.JsonObject
 import kotlin.jvm.JvmInline
 
@@ -98,7 +97,7 @@ data class VoiceState(
     val token: String,
     val endpoint: String,
     val sessionId: String,
-    val channelId: String? = null
+    val channelId: String?
 )
 
 @Serializable
