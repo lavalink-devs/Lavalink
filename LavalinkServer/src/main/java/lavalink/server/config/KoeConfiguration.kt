@@ -4,7 +4,6 @@ import com.sedmelluq.lava.common.natives.architecture.DefaultArchitectureTypes
 import com.sedmelluq.lava.common.natives.architecture.DefaultOperatingSystemTypes
 import com.sedmelluq.lava.common.natives.architecture.SystemType
 import moe.kyokobot.koe.KoeOptions
-import moe.kyokobot.koe.gateway.GatewayVersion
 import moe.kyokobot.koe.poller.udpqueue.QueueManagerPool
 import moe.kyokobot.koe.poller.udpqueue.UdpQueueFramePollerFactory
 import org.slf4j.Logger
@@ -14,10 +13,6 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class KoeConfiguration(val serverConfig: ServerConfig) {
-
-    companion object {
-        private const val DEFAULT_BUFFER_DURATION = 400;
-    }
 
     private val log: Logger = LoggerFactory.getLogger(KoeConfiguration::class.java)
     private val supportedSystems = listOf(
@@ -38,7 +33,6 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
 
     @Bean
     fun koeOptions(): KoeOptions = KoeOptions.builder().apply {
-        setGatewayVersion(GatewayVersion.V8)
         setDeafened(true)
         setEnableWSSPortOverride(false)
 
@@ -49,27 +43,29 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
         }
         log.info("OS: ${systemType?.osType ?: "unknown"}, Arch: ${systemType?.architectureType ?: "unknown"}")
 
-        var bufferSize = serverConfig.bufferDurationMs ?: DEFAULT_BUFFER_DURATION
+        var bufferSize = serverConfig.bufferDurationMs ?: QueueManagerPool.DEFAULT_BUFFER_DURATION
         if (bufferSize <= 0) {
             log.info("JDA-NAS is disabled! GC pauses may cause your bot to stutter during playback.")
             return@apply
         }
 
-        val nasSupported = supportedSystems.any { it.osType == systemType?.osType && it.architectureType == systemType?.architectureType }
+        val nasSupported = supportedSystems.any { it.osType == systemType?.osType && it.architectureType == systemType.architectureType }
 
         if (nasSupported) {
             log.info("Enabling JDA-NAS")
             if (bufferSize < 40) {
-                log.warn("Buffer size of ${bufferSize}ms is illegal. Defaulting to ${DEFAULT_BUFFER_DURATION}ms")
-                bufferSize = DEFAULT_BUFFER_DURATION
+                log.warn("Buffer size of ${bufferSize}ms is illegal. Defaulting to ${QueueManagerPool.DEFAULT_BUFFER_DURATION}ms")
+                bufferSize = QueueManagerPool.DEFAULT_BUFFER_DURATION
             }
             try {
-                val queuePool = QueueManagerPool(
-                    Runtime.getRuntime().availableProcessors(),
-                    bufferSize
+                setFramePollerFactory(
+                    UdpQueueFramePollerFactory(
+                        QueueManagerPool(
+                            Runtime.getRuntime().availableProcessors(),
+                            bufferSize
+                        )
+                    )
                 )
-
-                setFramePollerFactory(UdpQueueFramePollerFactory(queuePool))
             } catch (e: Throwable) {
                 log.warn("Failed to enable JDA-NAS! GC pauses may cause your bot to stutter during playback.", e)
             }

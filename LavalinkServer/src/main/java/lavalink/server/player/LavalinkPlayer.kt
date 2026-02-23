@@ -37,7 +37,6 @@ import lavalink.server.io.SocketServer.Companion.sendPlayerUpdate
 import lavalink.server.player.filters.FilterChain
 import moe.kyokobot.koe.MediaConnection
 import moe.kyokobot.koe.codec.CodecInstance
-import moe.kyokobot.koe.codec.OpusCodecInfo
 import moe.kyokobot.koe.media.AudioFrameProvider
 import java.nio.ByteBuffer
 import java.util.concurrent.ScheduledFuture
@@ -50,6 +49,8 @@ class LavalinkPlayer(
     audioPlayerManager: AudioPlayerManager,
     pluginInfoModifiers: List<AudioPluginInfoModifier>
 ) : AudioEventAdapter(), IPlayer {
+    private val buffer = ByteBuffer.allocate(StandardAudioDataFormats.DISCORD_OPUS.maximumChunkSize())
+    private val mutableFrame = MutableAudioFrame().apply { setBuffer(buffer) }
 
     val audioLossCounter = AudioLossCounter()
     var endMarkerHit = false
@@ -78,7 +79,7 @@ class LavalinkPlayer(
     }
 
     fun provideTo(connection: MediaConnection) {
-        connection.audioSender = Provider(audioPlayer)
+        connection.audioSender = Provider()
     }
 
 
@@ -123,30 +124,22 @@ class LavalinkPlayer(
         )
     }
 
-    private inner class Provider(
-        private val player: AudioPlayer
-    ) : AudioFrameProvider {
-
-        private val frameBuffer = ByteBuffer.allocate(StandardAudioDataFormats.DISCORD_OPUS.maximumChunkSize())
-        private val frame = MutableAudioFrame().also {
-            it.setBuffer(frameBuffer)
-            it.format = StandardAudioDataFormats.DISCORD_OPUS
-        }
-        private var isOpus = false
+    private inner class Provider : AudioFrameProvider {
 
         override fun onCodecChanged(codec: CodecInstance) {
-            this.isOpus = OpusCodecInfo.isInstanceOf(codec)
         }
 
         override fun dispose() {}
 
-        override fun canProvide(): Boolean {
-            if (!isOpus) return false
-            return player.provide(frame)
+        override fun canProvide() = audioPlayer.provide(mutableFrame).also { provided ->
+            if (!provided) {
+                audioLossCounter.onLoss()
+            }
         }
 
         override fun provideFrame(buf: ByteBuf): Boolean {
-            buf.writeBytes(frameBuffer.array(), 0, frame.dataLength)
+            audioLossCounter.onSuccess()
+            buf.writeBytes(buffer.flip())
             return true
         }
     }
