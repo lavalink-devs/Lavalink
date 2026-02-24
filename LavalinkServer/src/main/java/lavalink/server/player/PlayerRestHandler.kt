@@ -111,7 +111,6 @@ class PlayerRestHandler(
         val player = context.getPlayer(guildId)
 
         playerUpdate.voice.ifPresent {
-
             synchronized(player) {
                 val oldConn = context.koe.getConnection(guildId)
                 if (oldConn == null ||
