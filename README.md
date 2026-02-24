@@ -15,8 +15,7 @@ A [basic example bot](https://github.com/lavalink-devs/lavalink-client/tree/main
 > Lavalink v4 is now **out** of beta! See [the changelog](CHANGELOG.md) for more information.
 
 ## Getting started
-* Pick one of the [up-to-date clients](https://lavalink.dev/clients). Advanced users can create their own using the [API documentation
-](https://lavalink.dev/api/)
+* Pick one of the [up-to-date clients](https://lavalink.dev/clients). Advanced users can create their own using the [API documentation](https://lavalink.dev/api/)
 * See the [server configuration documentation](https://lavalink.dev/configuration/) for configuring your Lavalink server
 * Explore [available plugins](https://lavalink.dev/plugins) for extra features
 * See also our [FAQ](https://lavalink.dev/getting-started/faq)
@@ -32,6 +31,7 @@ A [basic example bot](https://github.com/lavalink-devs/lavalink-client/tree/main
 </details>
 
 ## Features
+* Support for [DAVE](https://daveprotocol.com)
 * Powered by Lavaplayer
 * Minimal CPU/memory footprint
 * Twitch/YouTube (via [this](https://github.com/lavalink-devs/youtube-source#plugin) plugin) stream support
@@ -57,20 +57,21 @@ Support for other JVMs is also best-effort. Periodic CPU utilization stats are p
 Lavalink also runs on other hardware, but support is best-effort.
 Here is a list of known working hardware:
 
-| Operating System | Architecture | Lavaplayer | JDA-NAS | Timescale | AVX2 |
-|------------------|--------------|------------|---------|-----------|------|
-| linux            | x86-64       | ✅          | ✅       | ✅         | ✅    |
-| linux            | x86          | ✅          | ✅       | ✅         | ✅    |
-| linux            | arm          | ✅          | ✅       | ✅         | ❌    |
-| linux            | armhf        | ✅          | ❌       | ❌         | ❌    |
-| linux            | aarch32      | ✅          | ❌       | ❌         | ❌    |
-| linux            | aarch64      | ✅          | ✅       | ✅         | ❌    |
-| linux-musl       | x86-64       | ✅          | ✅       | ✅         | ✅    |
-| linux-musl       | aarch64      | ✅          | ✅       | ✅         | ❌    |
-| windows          | x86-64       | ✅          | ✅       | ✅         | ✅    |
-| Windows          | x86          | ✅          | ✅       | ✅         | ✅    |
-| darwin           | x86-64       | ✅          | ✅       | ✅         | ✅    |
-| darwin           | aarch64e     | ✅          | ✅       | ✅         | ❌    |
+| Operating System | Architecture | DAVE | Lavaplayer | JDA-NAS | Timescale | AVX2 |
+|------------------|--------------|------|------------|---------|-----------|------|
+| linux            | x86-64       | ✅    | ✅          | ✅       | ✅         | ✅    |
+| linux            | x86          | ✅    | ✅          | ✅       | ✅         | ✅    |
+| linux            | arm          | ✅    | ✅          | ✅       | ✅         | ❌    |
+| linux            | armhf        | ✅    | ✅          | ❌       | ❌         | ❌    |
+| linux            | aarch32      | ✅    | ✅          | ❌       | ❌         | ❌    |
+| linux            | aarch64      | ✅    | ✅          | ✅       | ✅         | ❌    |
+| linux-musl       | x86-64       | ✅    | ✅          | ✅       | ✅         | ✅    |
+| linux-musl       | aarch64      | ✅    | ✅          | ✅       | ✅         | ❌    |
+| windows          | x86-64       | ✅    | ✅          | ✅       | ✅         | ✅    |
+| Windows          | x86          | ✅    | ✅          | ✅       | ✅         | ✅    |
+| Windows          | aarch64      | ❌    | ❌          | ❌       | ❌         | ✅    |
+| darwin           | x86-64       | ✅    | ✅          | ✅       | ✅         | ✅    |
+| darwin           | aarch64e     | ✅    | ✅          | ✅       | ✅         | ❌    |
 
 ## Changelog
 
