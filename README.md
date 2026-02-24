@@ -75,6 +75,9 @@ Here is a list of known working hardware:
 
 [^1]: Windows on ARM is not natively supported, but seems to work fine with x86-64 JVMs & emulation.
 
+> [!NOTE]
+> The minium supported version for glibc in DAVE is 2.35 (Ubuntu 22.04).
+
 ## Changelog
 
 Please see [here](CHANGELOG.md)
