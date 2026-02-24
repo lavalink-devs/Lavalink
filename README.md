@@ -57,21 +57,23 @@ Support for other JVMs is also best-effort. Periodic CPU utilization stats are p
 Lavalink also runs on other hardware, but support is best-effort.
 Here is a list of known working hardware:
 
-| Operating System | Architecture | DAVE | Lavaplayer | JDA-NAS | Timescale | AVX2 |
-|------------------|--------------|------|------------|---------|-----------|------|
-| linux            | x86-64       | ✅    | ✅          | ✅       | ✅         | ✅    |
-| linux            | x86          | ✅    | ✅          | ✅       | ✅         | ✅    |
-| linux            | arm          | ✅    | ✅          | ✅       | ✅         | ❌    |
-| linux            | armhf        | ✅    | ✅          | ❌       | ❌         | ❌    |
-| linux            | aarch32      | ✅    | ✅          | ❌       | ❌         | ❌    |
-| linux            | aarch64      | ✅    | ✅          | ✅       | ✅         | ❌    |
-| linux-musl       | x86-64       | ✅    | ✅          | ✅       | ✅         | ✅    |
-| linux-musl       | aarch64      | ✅    | ✅          | ✅       | ✅         | ❌    |
-| windows          | x86-64       | ✅    | ✅          | ✅       | ✅         | ✅    |
-| Windows          | x86          | ✅    | ✅          | ✅       | ✅         | ✅    |
-| Windows          | aarch64      | ❌    | ❌          | ❌       | ❌         | ✅    |
-| darwin           | x86-64       | ✅    | ✅          | ✅       | ✅         | ✅    |
-| darwin           | aarch64e     | ✅    | ✅          | ✅       | ✅         | ❌    |
+| Operating System | Architecture | DAVE | Lavaplayer | JDA-NAS | Timescale | AVX2  |
+|------------------|--------------|------|------------|---------|-----------|-------|
+| linux            | x86-64       | ✅    | ✅          | ✅       | ✅         | ✅     |
+| linux            | x86          | ✅    | ✅          | ✅       | ✅         | ✅     |
+| linux            | arm          | ✅    | ✅          | ✅       | ✅         | ❌     |
+| linux            | armhf        | ✅    | ✅          | ❌       | ❌         | ❌     |
+| linux            | aarch32      | ✅    | ✅          | ❌       | ❌         | ❌     |
+| linux            | aarch64      | ✅    | ✅          | ✅       | ✅         | ❌     |
+| linux-musl       | x86-64       | ✅    | ✅          | ✅       | ✅         | ✅     |
+| linux-musl       | aarch64      | ✅    | ✅          | ✅       | ✅         | ❌     |
+| windows          | x86-64       | ✅    | ✅          | ✅       | ✅         | ✅     |
+| Windows          | x86          | ✅    | ✅          | ✅       | ✅         | ✅     |
+| Windows          | aarch64      | ✅    | ❌[^1]      | ✅       | ❌[^1]     | ❌[^1] |
+| darwin           | x86-64       | ✅    | ✅          | ✅       | ✅         | ✅     |
+| darwin           | aarch64e     | ✅    | ✅          | ✅       | ✅         | ❌     |
+
+[^1]: Windows on ARM is not natively supported, but seems to work fine with x86-64 JVMs & emulation.
 
 ## Changelog
 

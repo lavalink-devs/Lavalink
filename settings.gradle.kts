@@ -46,16 +46,17 @@ fun VersionCatalogBuilder.voice() {
     library("koe", "moe.kyokobot.koe", "core").versionRef("koe")
     library("koe-udpqueue", "moe.kyokobot.koe", "ext-udpqueue").versionRef("koe")
 
-	val platforms = listOf("linux-x86-64", "linux-x86", "linux-aarch64", "linux-arm", "linux-musl-x86-64", "linux-musl-aarch64", "win-x86-64", "win-x86", "darwin")
 
-	version("libdave", "5f254c1fd")
-	platforms.forEach {
+	version("libdave", "5e67f6b43")
+	val libDavePlatforms = listOf("linux-x86-64", "linux-x86", "linux-aarch64", "linux-arm", "linux-musl-x86-64", "linux-musl-aarch64", "win-x86-64", "win-x86", "darwin")
+	libDavePlatforms.forEach {
         library("libdave-natives-$it", "moe.kyokobot.libdave", "natives-$it").versionRef("libdave")
     }
-    bundle("libdave-natives", platforms.map { "libdave-natives-$it" })
+    bundle("libdave-natives", libDavePlatforms.map { "libdave-natives-$it" })
 
-    version("udpqueue", "0.2.7")
-    platforms.forEach {
+    version("udpqueue", "0.2.12")
+	val platforms = listOf("linux-x86-64", "linux-x86", "linux-aarch64", "linux-arm", "linux-musl-x86-64", "linux-musl-aarch64", "win-x86-64", "win-x86", "win-aarch64", "darwin")
+	platforms.forEach {
         library("udpqueue-native-$it", "club.minnced", "udpqueue-native-$it").versionRef("udpqueue")
     }
     bundle("udpqueue-natives", platforms.map { "udpqueue-native-$it" })
