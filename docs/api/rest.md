@@ -344,15 +344,19 @@ Array of [Track](#track) objects
 
 #### Voice State
 
-| Field     | Type   | Description                                       |
-|-----------|--------|---------------------------------------------------|
-| token     | string | The Discord voice token to authenticate with      |
-| endpoint  | string | The Discord voice endpoint to connect to          |
-| sessionId | string | The Discord voice session id to authenticate with |
+| Field     | Type        | Description                                           |
+|-----------|-------------|-------------------------------------------------------|
+| token     | string      | The Discord voice token to authenticate with          |
+| endpoint  | string      | The Discord voice endpoint to connect to              |
+| sessionId | string      | The Discord voice session id to authenticate with     |
+| channelId | ?string[^1] | The Discord voice channel id the bot is connecting to |
 
-`token`, `endpoint`, and `sessionId` are the 3 required values for connecting to one of Discord's voice servers.
-`sessionId` is provided by the Voice State Update event sent by Discord, whereas the `endpoint` and `token` are provided
-with the Voice Server Update. Please refer to https://discord.com/developers/docs/topics/gateway-events#voice
+[^1]: `channelId` is not nullable when updating the player.
+
+`token`, `endpoint`, `sessionId` and `channelId` are the 4 required values for connecting to one of Discord's voice servers.
+`sessionId` & `channelId` are provided by the Voice State Update event sent by Discord, whereas the `endpoint` and `token` are provided
+with the Voice Server Update.
+Please refer to https://docs.discord.com/developers/events/gateway-events#voice-state-update & https://docs.discord.com/developers/events/gateway-events#voice-server-update
 
 #### Filters
 
