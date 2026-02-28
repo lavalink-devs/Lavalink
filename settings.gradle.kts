@@ -47,7 +47,7 @@ fun VersionCatalogBuilder.voice() {
     library("koe-udpqueue", "moe.kyokobot.koe", "ext-udpqueue").versionRef("koe")
 
 
-	version("libdave", "1662a65a8")
+	version("libdave", "4afcde442")
 	val libDavePlatforms = listOf("linux-x86-64", "linux-x86", "linux-aarch64", "linux-arm", "linux-musl-x86-64", "linux-musl-aarch64", "win-x86-64", "win-x86", "darwin")
 	libDavePlatforms.forEach {
         library("libdave-natives-$it", "moe.kyokobot.libdave", "natives-$it").versionRef("libdave")
