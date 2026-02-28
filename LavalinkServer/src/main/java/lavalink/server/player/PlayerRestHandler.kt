@@ -48,6 +48,7 @@ class PlayerRestHandler(
 
     @PatchMapping("/v4/sessions/{sessionId}/players/{guildId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Suppress("DEPRECATION")
     private fun patchPlayer(
         @RequestBody playerUpdate: PlayerUpdate,
         @PathVariable sessionId: String,
