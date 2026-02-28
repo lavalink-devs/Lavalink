@@ -8,6 +8,7 @@ import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.protocol.v4.*
 import lavalink.server.config.ServerConfig
 import lavalink.server.io.SocketServer
+import lavalink.server.metrics.SearchMetrics
 import lavalink.server.player.filters.FilterChain
 import lavalink.server.util.*
 import moe.kyokobot.koe.VoiceServerInfo
@@ -23,6 +24,7 @@ class PlayerRestHandler(
     private val filterExtensions: List<AudioFilterExtension>,
     private val pluginInfoModifiers: List<AudioPluginInfoModifier>,
     serverConfig: ServerConfig,
+    private val searchMetrics: SearchMetrics? = null
 ) {
 
     companion object {
@@ -221,6 +223,10 @@ class PlayerRestHandler(
                 }
 
                 player.play(newTrack)
+                searchMetrics?.recordPlay(
+                    newTrack.sourceManager?.sourceName ?: "",
+                    guildId.toString()
+                )
                 player.provideTo(context.getMediaConnection(player))
             } ?: player.stop()
         }
