@@ -36,8 +36,7 @@ private const val json = """
       "token": "...",
       "endpoint": "...",
       "sessionId": "...",
-      "connected": true,
-      "ping": 10
+      "channelId": "..."
     },
     "state": {
         "time":  1,
@@ -63,7 +62,8 @@ const val updateJson = """
   "voice": {
     "token": "...",
     "endpoint": "...",
-    "sessionId": "..."
+    "sessionId": "...",
+    "channelId": "..."
   }
 }
 """
@@ -97,6 +97,7 @@ class PlayerSerializerTest {
                     token shouldBe "..."
                     endpoint shouldBe "..."
                     sessionId shouldBe "..."
+                    channelId shouldBe "..."
                 }
                 state {
                     time shouldBe 1
@@ -150,6 +151,7 @@ class PlayerSerializerTest {
                 token shouldBe "..."
                 endpoint shouldBe "..."
                 sessionId shouldBe "..."
+                channelId shouldBe "..."
             }
         }
     }
