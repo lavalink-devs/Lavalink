@@ -21,11 +21,11 @@ dependencyResolutionManagement {
 }
 
 fun VersionCatalogBuilder.spring() {
-    version("spring-boot", "3.3.0")
+    version("spring-boot", "3.5.6")
 
-    library("spring-websocket", "org.springframework", "spring-websocket").version("6.1.9")
+    library("spring-websocket", "org.springframework", "spring-websocket").version("6.2.11")
 
-    library("spring-cloud-config", "org.springframework.cloud", "spring-cloud-starter-config").version("4.1.5")
+    library("spring-cloud-config", "org.springframework.cloud", "spring-cloud-starter-config").version("4.3.0")
 
     library("spring-boot", "org.springframework.boot", "spring-boot").versionRef("spring-boot")
     library("spring-boot-web", "org.springframework.boot", "spring-boot-starter-web").versionRef("spring-boot")
@@ -33,6 +33,7 @@ fun VersionCatalogBuilder.spring() {
     library("spring-boot-test", "org.springframework.boot", "spring-boot-starter-test").versionRef("spring-boot")
 
     bundle("spring", listOf("spring-websocket", "spring-boot-web", "spring-boot-undertow"))
+    plugin("spring-boot", "org.springframework.boot").versionRef("spring-boot")
 }
 
 fun VersionCatalogBuilder.voice() {
@@ -74,13 +75,13 @@ fun VersionCatalogBuilder.metrics() {
 }
 
 fun VersionCatalogBuilder.common() {
-    version("kotlin", "2.1.20")
+    version("kotlin", "2.2.20")
 
     library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").versionRef("kotlin")
     library("kotlin-stdlib-jdk8", "org.jetbrains.kotlin", "kotlin-stdlib-jdk8").versionRef("kotlin")
 
     library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.7.0")
-    library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime").version("0.6.0")
+    library("kotlinx-datetime", "org.jetbrains.kotlinx", "kotlinx-datetime").version("0.7.1-0.6.x-compat")
 
     library("xmlutil-jdk", "io.github.pdvrieze.xmlutil", "core-jdk").version("0.90.3")
     library("xmlutil-serialization", "io.github.pdvrieze.xmlutil", "serialization-jvm").version("0.90.3")
@@ -88,6 +89,12 @@ fun VersionCatalogBuilder.common() {
     library("logback", "ch.qos.logback", "logback-classic").version("1.5.6")
     library("sentry-logback", "io.sentry", "sentry-logback").version("7.10.0")
     library("oshi", "com.github.oshi", "oshi-core").version("6.4.11")
+
+    plugin("kotlin-jvm", "org.jetbrains.kotlin.jvm").versionRef("kotlin")
+    plugin("kotlin-multiplatform", "org.jetbrains.kotlin.multiplatform").versionRef("kotlin")
+    plugin("kotlin-allopen", "org.jetbrains.kotlin.plugin.allopen").versionRef("kotlin")
+    plugin("kotlin-serialization", "org.jetbrains.kotlin.plugin.serialization").versionRef("kotlin")
+    plugin("dokka", "org.jetbrains.dokka").version("2.0.0")
 }
 
 fun VersionCatalogBuilder.other() {
@@ -95,4 +102,8 @@ fun VersionCatalogBuilder.other() {
 
     plugin("maven-publish", "com.vanniktech.maven.publish").versionRef(mavenPublishPlugin)
     plugin("maven-publish-base", "com.vanniktech.maven.publish.base").versionRef(mavenPublishPlugin)
+    plugin("test-logger", "com.adarshr.test-logger").version("3.2.0")
+    plugin("sonarqube", "org.sonarqube").version("4.2.0.3129")
+    plugin("grgit", "org.ajoberstar.grgit").version("5.2.0")
+    plugin("gradle-git-properties", "com.gorylenko.gradle-git-properties").version("2.5.3")
 }
