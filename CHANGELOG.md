@@ -3,6 +3,10 @@
 Each release usually includes various fixes and improvements.
 The most noteworthy of these, as well as any features and breaking changes, are listed here.
 
+## v4.2.1
+* Updated koe to version [`3.0.0-pre5`](https://github.com/KyokoBot/koe/releases/tag/3.0.0-pre5)
+* Updated libdave to version [`0.1.0`](https://github.com/KyokoBot/libdave-jvm/releases/tag/0.1.0)
+
 ## v4.2.0
 > [!IMPORTANT]
 > This is the first Lavalink release with [DAVE](https://daveprotocol.com/) (E2EE voice) support.
