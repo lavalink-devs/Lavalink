@@ -33,6 +33,7 @@ import lavalink.server.player.LavalinkPlayer
 import moe.kyokobot.koe.Koe
 import moe.kyokobot.koe.KoeOptions
 import org.slf4j.LoggerFactory
+import org.slf4j.MDC
 import org.springframework.stereotype.Service
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
@@ -68,8 +69,8 @@ final class SocketServer(
 
             val connection = socketContext.getMediaConnection(player).gatewayConnection
             socketContext.sendMessage(
-                    Message.Serializer,
-                    Message.PlayerUpdateEvent(
+                Message.Serializer,
+                Message.PlayerUpdateEvent(
                     PlayerState(
                         System.currentTimeMillis(),
                         player.audioPlayer.playingTrack?.position ?: 0,
@@ -100,6 +101,11 @@ final class SocketServer(
         val clientName = session.handshakeHeaders.getFirst("Client-Name")
         val userAgent = session.handshakeHeaders.getFirst("User-Agent")
 
+        if (userAgent != null) {
+            session.attributes["userAgent"] = userAgent
+            MDC.put("userAgent", userAgent)
+        }
+
         var resumable: SocketContext? = null
         if (sessionId != null) resumable = resumableSessions.remove(sessionId)
 
@@ -124,6 +130,7 @@ final class SocketServer(
             statsCollector,
             userId,
             clientName,
+            userAgent,
             koe.newClient(userId),
             eventHandlers,
             pluginInfoModifiers
@@ -146,6 +153,12 @@ final class SocketServer(
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
         val context = sessions.remove(session.attributes["sessionId"]) ?: return
+        val userAgent = session.attributes["userAgent"] as? String
+
+        if (userAgent != null) {
+            MDC.put("userAgent", userAgent)
+        }
+
         if (context.resumable) {
             resumableSessions.remove(context.sessionId)?.let { removed ->
                 log.warn(

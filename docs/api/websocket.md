@@ -15,6 +15,7 @@ When opening a websocket connection, you must supply 3 required headers:
 | `Authorization` | The password you set in your Lavalink config    |
 | `User-Id`       | The user id of the bot                          |
 | `Client-Name`   | The name of the client in `NAME/VERSION` format |
+| `User-Agent`? * | Information about the connecting client         |
 | `Session-Id`? * | The id of the previous session to resume        |
 
 **\*For more information on resuming see [Resuming](index.md#resuming)**
@@ -26,6 +27,7 @@ When opening a websocket connection, you must supply 3 required headers:
 Authorization: youshallnotpass
 User-Id: 170939974227541168
 Client-Name: lavalink-client/2.0.0
+User-Agent: TestBot/1.0.0
 ```
 
 </details>

@@ -23,6 +23,11 @@ interface ISocketContext {
     val clientName: String?
 
     /**
+     * The User Agent of the Client if specified.
+     */
+    val userAgent: String?
+
+    /**
      * A read-only map of all players associated by their guild.
      */
     val players: Map<Long, IPlayer>

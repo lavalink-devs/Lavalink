@@ -39,6 +39,7 @@ import moe.kyokobot.koe.KoeClient
 import moe.kyokobot.koe.KoeEventAdapter
 import moe.kyokobot.koe.MediaConnection
 import org.slf4j.LoggerFactory
+import org.slf4j.MDC
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.adapter.standard.StandardWebSocketSession
@@ -55,6 +56,7 @@ class SocketContext(
     statsCollector: StatsCollector,
     override val userId: Long,
     override val clientName: String?,
+    override val userAgent: String?,
     val koe: KoeClient,
     eventHandlers: Collection<PluginEventHandler>,
     private val pluginInfoModifiers: List<AudioPluginInfoModifier>,
@@ -159,6 +161,10 @@ class SocketContext(
             return
         }
 
+        if (userAgent != null) {
+            MDC.put("userAgent", userAgent)
+        }
+
         if (!session.isOpen) return
 
         val undertowSession = (session as StandardWebSocketSession).nativeSession as UndertowSession
@@ -194,7 +200,12 @@ class SocketContext(
     }
 
     internal fun shutdown() {
-        log.info("Shutting down ${playingPlayers.size} playing players.")
+        if (userAgent != null) {
+            MDC.put("userAgent", userAgent)
+        }
+
+        log.info("Shutting down ${playingPlayers.size} playing players for session $sessionId")
+
         executor.shutdown()
         playerUpdateService.shutdown()
         players.values.forEach {
@@ -202,6 +213,7 @@ class SocketContext(
         }
         koe.close()
         eventEmitter.onSocketContextDestroyed()
+        MDC.remove("userAgent")
     }
 
     override fun closeWebSocket(closeCode: Int, reason: String?) {
