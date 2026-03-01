@@ -35,7 +35,7 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
     @Bean
     fun koeOptions(): KoeOptions = KoeOptions.builder().apply {
         setDeafened(true)
-        setEnableWSSPortOverride(false)
+        setEnableDAVELogSink(true)
 
         val systemType: SystemType? = try {
             SystemType(DefaultArchitectureTypes.detect(), DefaultOperatingSystemTypes.detect())
