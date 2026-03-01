@@ -42,6 +42,9 @@ logging:
     com.sedmelluq.discord.lavaplayer.tools.ExceptionTools: DEBUG
     # Log YouTube Plugin stuff (only needed if you have issues with YouTube)
     dev.lavalink.youtube: DEBUG
+    # Log Koe internals (only needed if you have issues with Koe/DAVE)
+    moe.kyokobot.koe.internal.dave: TRACE
+    moe.kyokobot.koe.internal.gateway: TRACE
 
   # This will log all requests to the REST API
   request:
