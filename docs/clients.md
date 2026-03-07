@@ -15,6 +15,7 @@ description: A list of Lavalink client libraries.
 | [hikari-ongaku](https://github.com/MPlatypus/hikari-ongaku)         | Python             | Hikari                                     | ✅            | `asyncio`-based                    |
 | [lavaplay.py](https://github.com/HazemMeqdad/lavaplay.py)           | Python             | **Any**                                    | ✅            | `asyncio`-based libraries 1.0.13a+ |
 | [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)            | Node.js            | **Any**                                    | ✅            |                                    |
+| [Magmastream](https://gitryx.com/MagmaStream/magmastream)           | Node.js            | **Any**                                    | ✅            |                                    |
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                       | Node.js            | **Any**                                    | ✅            |                                    |
 | [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client)    | Node.js            | discord.js/DiscordDeno/Eris/**Any**        | ✅            | `async`                            |
 | [FastLink](https://github.com/PerformanC/FastLink)                  | Node.js            | **Any**                                    | ✅            |                                    |
@@ -33,7 +34,6 @@ description: A list of Lavalink client libraries.
 | Client                                                          | Platform           | Compatible With           | DAVE Support | Additional Information |
 |-----------------------------------------------------------------|--------------------|---------------------------|--------------|------------------------|
 | [salada](https://github.com/ToddyTheNoobDud/Salad)              | Python             | **Any**                   | ❌            | `Unmaintained`         |
-| [Magmastream](https://github.com/Blackfort-Hosting/magmastream) | Node.js            | **Any**                   | ❌            | `Unmaintained`         |
 | [Lavacord](https://github.com/lavacord/Lavacord)                | Node.js/TypeScript | **Any**                   | ❌            | `Unmaintained`         |
 | [TsumiLink](https://github.com/Fyphen1223/TsumiLink)            | Node.js            | **Any**                   | ❌            | `Unmaintained`         |
 | [Blue.ts](https://github.com/ftrapture/blue.ts)                 | Node.js            | Discord.js/Eris/OceanicJs | ❌            | `Unmaintained`         |
