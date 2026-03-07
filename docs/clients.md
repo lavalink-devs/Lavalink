@@ -15,13 +15,13 @@ description: A list of Lavalink client libraries.
 | [hikari-ongaku](https://github.com/MPlatypus/hikari-ongaku)         | Python             | Hikari                                     | ✅            | `asyncio`-based                    |
 | [lavaplay.py](https://github.com/HazemMeqdad/lavaplay.py)           | Python             | **Any**                                    | ✅            | `asyncio`-based libraries 1.0.13a+ |
 | [Moonlink.js](https://github.com/1Lucas1apk/moonlink.js)            | Node.js            | **Any**                                    | ✅            |                                    |
+| [Magmastream](https://gitryx.com/MagmaStream/magmastream)           | Node.js            | **Any**                                    | ✅            |                                    |
 | [Shoukaku](https://github.com/Deivu/Shoukaku)                       | Node.js            | **Any**                                    | ✅            |                                    |
 | [Lavalink-Client](https://github.com/tomato6966/Lavalink-Client)    | Node.js            | discord.js/DiscordDeno/Eris/**Any**        | ✅            | `async`                            |
 | [FastLink](https://github.com/PerformanC/FastLink)                  | Node.js            | **Any**                                    | ✅            |                                    |
 | [Riffy](https://github.com/riffy-team/riffy)                        | Node.js            | **Any**                                    | ✅            |                                    |
 | [lavaclient](https://github.com/lavaclient/lavaclient)              | Node.js            | **Any**                                    | ✅            | v5+                                |
 | [Rainlink](https://github.com/RainyXeon/Rainlink)                   | Node.js            | **Any**                                    | ✅            |                                    |
-| [Magmastream](https://gitryx.com/MagmaStream/magmastream)           | Node.js            | **Any**                                    | ✅            |                                    |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp)       | .NET               | DisCatSharp                                | ✅            | v10.4.2+                           |
 | [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)        | .NET               | Discord.Net/DSharpPlus/Remora/NetCord      | ✅            | v4+                                |
 | [Coglink](https://github.com/PerformanC/Coglink)                    | C                  | Concord                                    | ✅            |                                    |
