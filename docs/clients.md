@@ -21,6 +21,7 @@ description: A list of Lavalink client libraries.
 | [Riffy](https://github.com/riffy-team/riffy)                        | Node.js            | **Any**                                    | ✅            |                                    |
 | [lavaclient](https://github.com/lavaclient/lavaclient)              | Node.js            | **Any**                                    | ✅            | v5+                                |
 | [Rainlink](https://github.com/RainyXeon/Rainlink)                   | Node.js            | **Any**                                    | ✅            |                                    |
+| [Magmastream](https://gitryx.com/MagmaStream/magmastream)           | Node.js            | **Any**                                    | ✅            |                                    |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp)       | .NET               | DisCatSharp                                | ✅            | v10.4.2+                           |
 | [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)        | .NET               | Discord.Net/DSharpPlus/Remora/NetCord      | ✅            | v4+                                |
 | [Coglink](https://github.com/PerformanC/Coglink)                    | C                  | Concord                                    | ✅            |                                    |
@@ -33,7 +34,6 @@ description: A list of Lavalink client libraries.
 | Client                                                          | Platform           | Compatible With           | DAVE Support | Additional Information |
 |-----------------------------------------------------------------|--------------------|---------------------------|--------------|------------------------|
 | [salada](https://github.com/ToddyTheNoobDud/Salad)              | Python             | **Any**                   | ❌            | `Unmaintained`         |
-| [Magmastream](https://github.com/Blackfort-Hosting/magmastream) | Node.js            | **Any**                   | ❌            | `Unmaintained`         |
 | [Lavacord](https://github.com/lavacord/Lavacord)                | Node.js/TypeScript | **Any**                   | ❌            | `Unmaintained`         |
 | [TsumiLink](https://github.com/Fyphen1223/TsumiLink)            | Node.js            | **Any**                   | ❌            | `Unmaintained`         |
 | [Blue.ts](https://github.com/ftrapture/blue.ts)                 | Node.js            | Discord.js/Eris/OceanicJs | ❌            | `Unmaintained`         |
