@@ -27,7 +27,7 @@ description: A list of Lavalink client libraries.
 | [Coglink](https://github.com/PerformanC/Coglink)                    | C                  | Concord                                    | ✅            |                                    |
 | [Anchorage](https://github.com/Deivu/Anchorage)                     | Rust               | **Any**                                    | ✅            | `tokio`-based                      |
 | [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)             | Rust, Python       | **Any**                                    | ✅            | `tokio`-based, `asyncio`-based     |
-| [lavalink](https://github.com/nyxx-discord/nyxx_lavalink)           | Dart               | nyxx/**Any**                               | ✅            |                                    |
+| [nyxx_lavalink](https://github.com/nyxx-discord/nyxx_lavalink)      | Dart               | nyxx/**Any**                               | ✅            |                                    |
 
 <details markdown="1">¶
 <summary>Not DAVE supporting Client Libraries</summary>
