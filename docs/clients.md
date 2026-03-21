@@ -29,12 +29,11 @@ description: A list of Lavalink client libraries.
 | [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)             | Rust, Python       | **Any**                                    | ✅            | `tokio`-based, `asyncio`-based     |
 | [nyxx_lavalink](https://github.com/nyxx-discord/nyxx_lavalink)      | Dart               | nyxx/**Any**                               | ✅            |                                    |
 
-<details markdown="1">¶
+<details markdown="1">
 <summary>Not DAVE supporting Client Libraries</summary>
 
 | Client                                                          | Platform           | Compatible With           | DAVE Support | Additional Information |
 |-----------------------------------------------------------------|--------------------|---------------------------|--------------|------------------------|
-| [salada](https://github.com/ToddyTheNoobDud/Salad)              | Python             | **Any**                   | ❌            | `Unmaintained`         |
 | [Lavacord](https://github.com/lavacord/Lavacord)                | Node.js/TypeScript | **Any**                   | ❌            | `Unmaintained`         |
 | [TsumiLink](https://github.com/Fyphen1223/TsumiLink)            | Node.js            | **Any**                   | ❌            | `Unmaintained`         |
 | [Blue.ts](https://github.com/ftrapture/blue.ts)                 | Node.js            | Discord.js/Eris/OceanicJs | ❌            | `Unmaintained`         |
