@@ -16,8 +16,8 @@ class SearchMetrics {
             .register()
 
         private val loadResultCounter: Counter = Counter.build()
-            .name("lavalink_track_load_results_total")
-            .help("Total number of track load results by source and result type")
+            .name("lavalink_item_load_results_total")
+            .help("Total number of audio item load results by source and result type")
             .labelNames("source", "result")
             .register()
     }
