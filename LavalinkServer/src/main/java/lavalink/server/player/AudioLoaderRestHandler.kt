@@ -122,17 +122,9 @@ class AudioLoaderRestHandler(
         }))
     }
 
-    private fun extractSourceType(item: Any?): String {
-        val source = when (item) {
-            is AudioTrack -> item.sourceManager?.sourceName
-            is AudioPlaylist -> item.tracks.firstOrNull()?.sourceManager?.sourceName
-            else -> null
-        }
-
-        return if (source.isNullOrBlank()) {
-            ""
-        } else {
-            source
-        }
-    }
+    private fun extractSourceType(item: Any?): String = when (item) {
+        is AudioTrack -> item.sourceManager?.sourceName
+        is AudioPlaylist -> item.tracks.firstOrNull()?.sourceManager?.sourceName
+        else -> null
+    }.takeUnless { it.isNullOrBlank() } ?: ""
 }
