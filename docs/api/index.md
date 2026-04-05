@@ -68,7 +68,7 @@ queue is then emptied and the events are replayed.
 
 Admittedly Lavalink isn't inherently the most intuitive thing ever, and people tend to run into the same mistakes over again. Please double-check the following if you run into problems developing your client, and you can't connect to a voice channel or play audio:
 
-1. Check that you are intercepting `VOICE_SERVER_UPDATE`s and `VOICE_STATE_UPDATE`s to **Lavalink**. You only need the `endpoint`, `token`, and `session_id`.
+1. Check that you are intercepting `VOICE_SERVER_UPDATE`s and `VOICE_STATE_UPDATE`s to **Lavalink**. You need the `endpoint`, `token`, `session_id`, and `channel_id`.
 2. Check that you aren't expecting to hear audio when you have forgotten to queue something up OR forgotten to join a voice channel.
 3. Check that you are not trying to create a voice connection with your Discord library.
 4. When in doubt, check the debug logfile at `/logs/debug.log`.
