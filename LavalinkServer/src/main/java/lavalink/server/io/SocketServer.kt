@@ -51,7 +51,7 @@ final class SocketServer(
 
     // sessionID <-> Session
     override val sessions = ConcurrentHashMap<String, SocketContext>()
-    override val resumableSessions = mutableMapOf<String, SocketContext>()
+    override val resumableSessions = ConcurrentHashMap<String, SocketContext>()
     private val koe = Koe.koe(koeOptions)
     private val statsCollector = StatsCollector(this)
     private val charPool = ('a'..'z') + ('0'..'9')
