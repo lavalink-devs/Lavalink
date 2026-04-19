@@ -23,6 +23,7 @@ description: A list of Lavalink client libraries.
 | [Riffy](https://github.com/riffy-team/riffy)                        | Node.js         | **Any**                                    | ✅            |                                    |
 | [lavaclient](https://github.com/lavaclient/lavaclient)              | Node.js         | **Any**                                    | ✅            | v5+                                |
 | [Rainlink](https://github.com/RainyXeon/Rainlink)                   | Node.js         | **Any**                                    | ✅            |                                    |
+| [Lunacord.js](https://github.com/NotWrench/Lunacord.js)              | Node.js | discord.js/**Any**                      | ✅            | Lavalink v4, ESM, `MusicKit`       |
 | [DisCatSharp](https://github.com/Aiko-IT-Systems/DisCatSharp)       | .NET            | DisCatSharp                                | ✅            | v10.7.0+                           |
 | [Lavalink4NET](https://github.com/angelobreuer/Lavalink4NET)        | .NET            | Discord.Net/DSharpPlus/Remora/NetCord      | ✅            | v4+                                |
 | [Coglink](https://github.com/PerformanC/Coglink)                    | C               | Concord                                    | ✅            |                                    |
