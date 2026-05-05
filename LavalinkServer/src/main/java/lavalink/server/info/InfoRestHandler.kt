@@ -22,7 +22,7 @@ class InfoRestHandler(
     filterExtensions: List<AudioFilterExtension>
 ) {
 
-    private val enabledFilers = (listOf(
+    private val enabledFilters = (listOf(
         "volume",
         "equalizer",
         "karaoke",
@@ -44,7 +44,7 @@ class InfoRestHandler(
         System.getProperty("java.version"),
         PlayerLibrary.VERSION,
         audioPlayerManager.sourceManagers.map { it.sourceName },
-        enabledFilers,
+        enabledFilters,
         Plugins(pluginManager.pluginManifests.map {
             Plugin(it.name, it.version)
         })
