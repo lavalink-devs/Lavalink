@@ -22,7 +22,7 @@ class EventEmitter(private val context: SocketContext, private val listeners: Co
         listeners.forEach {
             try {
                 func(it)
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 log.error("Error handling event", e)
             }
         }
