@@ -104,10 +104,10 @@ Response:
 
 #### Track Loading Result
 
-| Field    | Type                                | Description            |       
-|----------|-------------------------------------|------------------------|
-| loadType | [LoadResultType](#load-result-type) | The type of the result | 
-| data     | [LoadResultData](#load-result-data) | The data of the result |
+| Field    | Type                                 | Description            |       
+|----------|--------------------------------------|------------------------|
+| loadType | [LoadResultType](#load-result-type)  | The type of the result | 
+| data     | ?[LoadResultData](#load-result-data) | The data of the result |
 
 #### Load Result Type
 
