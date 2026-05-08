@@ -192,7 +192,7 @@ Array of [Track](#track) objects from the search result.
 
 ##### Empty Result Data
 
-Empty object.
+`null`.
 
 <details markdown="1">
 <summary>Example Payload</summary>
@@ -200,7 +200,7 @@ Empty object.
 ```yaml
 {
   "loadType": "empty",
-  "data": { }
+  "data": null
 }
 ```
 
