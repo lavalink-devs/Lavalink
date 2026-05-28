@@ -104,10 +104,10 @@ Response:
 
 #### Track Loading Result
 
-| Field    | Type                                | Description            |       
-|----------|-------------------------------------|------------------------|
-| loadType | [LoadResultType](#load-result-type) | The type of the result | 
-| data     | [LoadResultData](#load-result-data) | The data of the result |
+| Field    | Type                                 | Description            |       
+|----------|--------------------------------------|------------------------|
+| loadType | [LoadResultType](#load-result-type)  | The type of the result | 
+| data     | ?[LoadResultData](#load-result-data) | The data of the result |
 
 #### Load Result Type
 
@@ -192,7 +192,7 @@ Array of [Track](#track) objects from the search result.
 
 ##### Empty Result Data
 
-Empty object.
+`null`.
 
 <details markdown="1">
 <summary>Example Payload</summary>
@@ -200,7 +200,7 @@ Empty object.
 ```yaml
 {
   "loadType": "empty",
-  "data": { }
+  "data": null
 }
 ```
 
