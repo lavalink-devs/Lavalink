@@ -92,7 +92,7 @@ The version number is composed of the following parts:
     MINOR new backwards compatible features
     PATCH backwards compatible bug fixes
     PRERELEASE pre-release version
-    BUILD additional build metadata
+    BUILD additional build metadata.
 
 Version numbers can come in different combinations, depending on the release type:
 
