@@ -28,7 +28,7 @@ See the [environment variables](config/environment-variables.md) documentation f
 <details markdown="1">
 <summary>environment variables</summary>
 
-```env title="enviroment variables"
+```env title="environment variables"
 SERVER_PORT
 SERVER_ADDRESS
 SERVER_HTTP2_ENABLED

@@ -22,7 +22,7 @@ You can also use a combination of both. Environment variables take precedence ov
 
 ## Example environment variables
 
-```env title="enviroment variables"
+```env title="environment variables"
 SERVER_PORT
 SERVER_ADDRESS
 SERVER_HTTP2_ENABLED

@@ -14,7 +14,7 @@ Now you can start writing your plugin. You can test your plugin against Lavalink
 `:runLavalink` Gradle task. The [Gradle plugin documentation](https://github.com/lavalink-devs/lavalink-gradle-plugin#running-the-plugin) might be helpful.
 
 Lavalink has a [plugin API](https://javadoc.io/doc/dev.arbjerg.lavalink/plugin-api/latest/dev/arbjerg/lavalink/api/package-summary.html) which you can integrate with. The API is
-provided [as an artifact](https://central.sonatype.com/artifact/dev.arbjerg.lavalink/plugin-api) and is used by the template. It is also possible to integrate with internal parts og Lavalink,
+provided [as an artifact](https://central.sonatype.com/artifact/dev.arbjerg.lavalink/plugin-api) and is used by the template. It is also possible to integrate with internal parts of Lavalink,
 but this is not recommended. Instead, open an issue or pull-request to change the API.
 
 Lavalink is configured by plugins using the Spring Boot framework using Spring annotations.

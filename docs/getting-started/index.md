@@ -8,7 +8,7 @@ Welcome to the Lavalink Getting Started guide. If you're new to Lavalink, follow
 
 ## Prerequisites
 
-Before you start, make sure you have picked an uptodate Lavalink client. You can find a list of clients on the [clients](../clients.md) page.
+Before you start, make sure you have picked an up-to-date Lavalink client. You can find a list of clients on the [clients](../clients.md) page.
 
 ## Running Lavalink
 

@@ -21,7 +21,7 @@ It is recommended for IPv4 blocks or IPv6 blocks with a bitmask lower than 64.
 
 ## LoadBalance Strategy
 This strategy is the `BalancingIpRoutePlanner`.
-It selects random addresses from the given IP block. Some services ban IPs from when you do just a few automated
+It selects random addresses from the given IP block. Some services ban IPs even when you do just a few automated
 requests per day. Due to this you should have a bigger block to effectively use this strategy.
 
 ## NanoSwitch Strategy

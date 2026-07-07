@@ -33,7 +33,7 @@ description: A list of Lavalink client libraries.
 | [lavalink.lua](https://github.com/filispeen/lavalink.lua)           | Lua             | Luvit/**Any**                              | ✅            | Luvit-based                        |
 
 <details markdown="1">
-<summary>Not DAVE supporting Client Libraries</summary>
+<summary>Client Libraries Without DAVE Support</summary>
 
 | Client                                               | Platform           | Compatible With           | DAVE Support | Additional Information |
 |------------------------------------------------------|--------------------|---------------------------|--------------|------------------------|
@@ -46,4 +46,4 @@ description: A list of Lavalink client libraries.
 
 Or alternatively, you can create your own client library, following the [implementation documentation](api/index.md).
 Any client libraries marked with `Unmaintained` have been marked as such as their repositories have not received any commits for at least 1 year since time of checking,
-however they are listed as they may still support Lavalink, and/or have not needed maintenance, however keep in mind that compatibility and full feature support is not guaranteed.
+however they are listed as they may still support Lavalink, and/or have not needed maintenance. Keep in mind that compatibility and full feature support is not guaranteed.

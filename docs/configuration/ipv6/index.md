@@ -16,6 +16,6 @@ Here are some guides for some popular server providers:
  - [Hetzner](hetzner.md)
 
 
-If your server provider is not listed above, you can use you can check out the general [Debian/Ubuntu](ubuntudebian.md) guide on how to configure IPv6 on your server.
+If your server provider is not listed above, you can check out the general [Debian/Ubuntu](ubuntudebian.md) guide on how to configure IPv6 on your server.
 
 If your server provider does not provide IPv6 or your IPv6 block size is less than `/64`, you can use [Tunnelbroker](tunnelbroker.md) instead.

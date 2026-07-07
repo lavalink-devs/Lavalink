@@ -2,7 +2,7 @@
 description: Lavalink troubleshooting steps.
 ---
 
-# Trouble Shooting
+# Troubleshooting
 
 ## Lavalink won't start
 

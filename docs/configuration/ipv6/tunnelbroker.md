@@ -2,7 +2,7 @@
 description: How to configure IPv6 using Tunnelbroker on your VPS.
 ---
 
-This how-to is for super-newbie and may depend on your system's OS, but it has already been tested on `Ubuntu (22, 23 and 24)` with `netplan`.
+This how-to is for super-newbies and may depend on your system's OS, but it has already been tested on `Ubuntu (22, 23 and 24)` with `netplan`.
 
 ### Hello Tunnelbroker!
 
@@ -74,7 +74,7 @@ network:
 ### [Optional] You already had IPv6 but still want to use Tunnelbroker.
 Most hosting providers will have an OS image that is generated configuration called `50-cloud-init.yaml`.
 
-Start edit that file: `nano 50-cloud-init.yaml`
+Start editing that file: `nano 50-cloud-init.yaml`
 
 Example configuration from 50-cloud-init.yaml
 ```
@@ -147,7 +147,7 @@ network:
 
 ### Applying netplan and checking your IPv6
 
-Let try our new configuration: `netplan try`
+Let's try our new configuration: `netplan try`
 
 Ignore the warning and if there is no error then just press enter to accept new configuration.
 

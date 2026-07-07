@@ -438,7 +438,7 @@ server and port. Port is specified by `server.port`.
 ## v3.0
 * **Breaking:** The minimum required Java version to run the server is now Java 10.   
 **Please note**: Java 10 will be obsolete
-as of [September 2018 with the release of Java 11](http://www.java-countdown.xyz/). Expect a Lavalink major version release that will be targetting
+as of [September 2018 with the release of Java 11](http://www.java-countdown.xyz/). Expect a Lavalink major version release that will be targeting
 Java 11 by that time.
 * **Breaking:** Changes to the output of the /loadtracks endpoint. [\#91](https://github.com/lavalink-devs/Lavalink/pull/91), [\#114](https://github.com/lavalink-devs/Lavalink/pull/114), [\#116](https://github.com/lavalink-devs/Lavalink/pull/116)
 * **Breaking:** The Java client has been moved to a [new repository](https://github.com/lavalink-devs/Lavalink-Client).

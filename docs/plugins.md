@@ -25,4 +25,4 @@ for instructions.
 | [Java Timed Lyrics Plugin](https://github.com/DuncteBot/java-timed-lyrics) | Timestamped lyrics from YouTube with Genius fallback, supports IP-rotation (supports: [LavaLyrics](https://github.com/topi314/LavaLyrics)) |
 | [LavaDSPX Plugin](https://github.com/Devoxin/LavaDSPX-Plugin)              | Additional audio filters for Lavalink                                                                                                      |
 
-If you want to make your own plugin see [here](api/plugins.md)
+If you want to make your own plugin, see [here](api/plugins.md).

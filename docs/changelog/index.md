@@ -103,7 +103,7 @@ With the release of v2.0 many unnecessary ops were removed:
 * `sendWS`
 
 With Lavalink 1.x the server had the responsibility of handling Discord `VOICE_SERVER_UPDATE`s as well as its own internal ratelimiting.
-This remote handling makes things unnecessarily complicated and adds a lot og points where things could go wrong.
+This remote handling makes things unnecessarily complicated and adds a lot of points where things could go wrong.
 One problem we noticed is that since JDA is unaware of ratelimits on the bot's gateway connection, it would keep adding
 to the ratelimit queue to the gateway. With this update this is now the responsibility of the Lavalink client or the
 Discord client.
