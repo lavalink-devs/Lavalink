@@ -1,0 +1,8 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "java -Xmx512m -Xms256m -jar Lavalink.jar"
+restartPolicyMaxRetries = 5
+restartPolicyWindowSeconds = 600
