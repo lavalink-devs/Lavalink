@@ -1,0 +1,16 @@
+.git
+.gitignore
+.gradle
+.idea
+build
+*.jar
+*.exe
+*.log
+.DS_Store
+node_modules
+.env
+.env.local
+README.md
+CHANGELOG.md
+docs
+LavalinkServer/docker
