@@ -115,16 +115,32 @@ subprojects {
 }
 
 fun versionFromGit(): Pair<String, Boolean> {
-    Grgit.open(mapOf("currentDir" to project.rootDir)).use { git ->
-        val headTag = git.tag
-            .list()
-            .find { it.commit.id == git.head().id }
+    // Cek apakah .git folder ada
+    val gitDir = File(project.rootDir, ".git")
+    if (!gitDir.exists()) {
+        // Gunakan environment variable atau versi default untuk Railway
+        val envVersion = System.getenv("GIT_COMMIT") ?: System.getenv("RAILWAY_GIT_COMMIT_SHA") ?: "unknown"
+        logger.lifecycle("Git directory not found. Using version: $envVersion-SNAPSHOT")
+        return "$envVersion-SNAPSHOT" to false
+    }
 
-        val clean = git.status().isClean || System.getenv("CI") != null
-        if (!clean) {
-            logger.lifecycle("Git state is dirty, version is a snapshot.")
+    return try {
+        Grgit.open(mapOf("currentDir" to project.rootDir)).use { git ->
+            val headTag = git.tag
+                .list()
+                .find { it.commit.id == git.head().id }
+
+            val clean = git.status().isClean || System.getenv("CI") != null
+            if (!clean) {
+                logger.lifecycle("Git state is dirty, version is a snapshot.")
+            }
+
+            if (headTag != null && clean) headTag.name to true else "${git.head().id}-SNAPSHOT" to false
         }
-
-        return if (headTag != null && clean) headTag.name to true else "${git.head().id}-SNAPSHOT" to false
+    } catch (e: Exception) {
+        // Fallback jika Grgit gagal
+        logger.lifecycle("Failed to get git version: ${e.message}. Using fallback version.")
+        val envVersion = System.getenv("GIT_COMMIT") ?: System.getenv("RAILWAY_GIT_COMMIT_SHA") ?: "unknown"
+        "$envVersion-SNAPSHOT" to false
     }
 }
