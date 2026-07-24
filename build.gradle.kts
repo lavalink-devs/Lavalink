@@ -115,13 +115,21 @@ subprojects {
 }
 
 fun versionFromGit(): Pair<String, Boolean> {
+    // Try environment variables first (Railway/CI environments)
+    val envVersion = System.getenv("RAILWAY_GIT_COMMIT_SHA") 
+        ?: System.getenv("GIT_COMMIT") 
+        ?: System.getenv("GIT_SHA")
+    
+    if (!envVersion.isNullOrBlank()) {
+        logger.lifecycle("Using Git version from environment: $envVersion-SNAPSHOT")
+        return "$envVersion-SNAPSHOT" to false
+    }
+
     // Cek apakah .git folder ada
     val gitDir = File(project.rootDir, ".git")
     if (!gitDir.exists()) {
-        // Gunakan environment variable atau versi default untuk Railway
-        val envVersion = System.getenv("GIT_COMMIT") ?: System.getenv("RAILWAY_GIT_COMMIT_SHA") ?: "unknown"
-        logger.lifecycle("Git directory not found. Using version: $envVersion-SNAPSHOT")
-        return "$envVersion-SNAPSHOT" to false
+        logger.lifecycle("No .git directory found. Using fallback version: dev-SNAPSHOT")
+        return "dev-SNAPSHOT" to false
     }
 
     return try {
@@ -139,8 +147,7 @@ fun versionFromGit(): Pair<String, Boolean> {
         }
     } catch (e: Exception) {
         // Fallback jika Grgit gagal
-        logger.lifecycle("Failed to get git version: ${e.message}. Using fallback version.")
-        val envVersion = System.getenv("GIT_COMMIT") ?: System.getenv("RAILWAY_GIT_COMMIT_SHA") ?: "unknown"
-        "$envVersion-SNAPSHOT" to false
+        logger.lifecycle("Failed to get git version: ${e.message}. Using fallback version: dev-SNAPSHOT")
+        "dev-SNAPSHOT" to false
     }
 }
