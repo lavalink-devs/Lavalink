@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import java.util.concurrent.TimeUnit
 
 @RestController
 class PlayerRestHandler(
@@ -110,7 +111,7 @@ class PlayerRestHandler(
 
         val player = context.getPlayer(guildId)
 
-        playerUpdate.voice.ifPresent {
+                playerUpdate.voice.ifPresent {
             synchronized(player) {
                 val oldConn = context.koe.getConnection(guildId)
                 if (oldConn == null ||
@@ -132,9 +133,10 @@ class PlayerRestHandler(
                             .setToken(it.token)
                             .setChannelId(it.channelId!!.toLong())
                             .build()
-                    ).exceptionally {
+                    ).toCompletableFuture().orTimeout(15, TimeUnit.SECONDS).exceptionally {
+                        context.koe.destroyConnection(guildId)
                         throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to connect to voice server")
-                    }.toCompletableFuture().join()
+                    }.join()
                     player.provideTo(conn)
                 }
             }
