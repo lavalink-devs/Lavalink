@@ -23,7 +23,7 @@ class PlayerRestHandler(
     private val socketServer: SocketServer,
     private val filterExtensions: List<AudioFilterExtension>,
     private val pluginInfoModifiers: List<AudioPluginInfoModifier>,
-    serverConfig: ServerConfig,
+    private val serverConfig: ServerConfig,
 ) {
 
     companion object {
@@ -126,6 +126,7 @@ class PlayerRestHandler(
                     context.koe.destroyConnection(guildId)
 
                     val conn = context.getMediaConnection(player)
+                    val timeout = serverConfig.timeouts?.connectTimeoutMs?.toLong() ?: 3000
                     conn.connect(
                         VoiceServerInfo.builder()
                             .setSessionId(it.sessionId)
@@ -133,7 +134,7 @@ class PlayerRestHandler(
                             .setToken(it.token)
                             .setChannelId(it.channelId!!.toLong())
                             .build()
-                    ).toCompletableFuture().orTimeout(15, TimeUnit.SECONDS).exceptionally {
+                    ).toCompletableFuture().orTimeout(timeout, TimeUnit.MILLISECONDS).exceptionally {
                         context.koe.destroyConnection(guildId)
                         throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to connect to voice server")
                     }.join()
@@ -236,5 +237,3 @@ class PlayerRestHandler(
         socketContext(socketServer, sessionId).destroyPlayer(guildId)
     }
 }
-
-
