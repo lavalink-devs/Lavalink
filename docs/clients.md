@@ -30,6 +30,7 @@ description: A list of Lavalink client libraries.
 | [Anchorage](https://github.com/Deivu/Anchorage)                     | Rust            | **Any**                                    | ✅            | `tokio`-based                      |
 | [lavalink-rs](https://gitlab.com/vicky5124/lavalink-rs)             | Rust, Python    | **Any**                                    | ✅            | `tokio`-based, `asyncio`-based     |
 | [nyxx_lavalink](https://github.com/nyxx-discord/nyxx_lavalink)      | Dart            | nyxx/**Any**                               | ✅            |                                    |
+| [lavalink.lua](https://github.com/filispeen/lavalink.lua)           | Lua             | Luvit/**Any**                              | ✅            | Luvit-based                        |
 
 <details markdown="1">
 <summary>Client Libraries Without DAVE Support</summary>
