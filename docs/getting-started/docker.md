@@ -26,7 +26,7 @@ services:
     restart: unless-stopped
     environment:
       # set Java options here (6GB heap size)
-      - _JAVA_OPTIONS=-Xmx6G
+      - JAVA_TOOL_OPTIONS=-Xmx6G
       # set lavalink server port
       # - SERVER_PORT=2333
       # set password for lavalink
