@@ -171,9 +171,9 @@ class PlayerRestHandler(
                 }
             }
 
-        playerUpdate.endTime.takeIfPresent { encodedTrack is Omissible.Omitted && identifier is Omissible.Omitted }
-            ?.let { endTime ->
-                val marker = TrackMarker(endTime, TrackEndMarkerHandler(player))
+        playerUpdate.endTime.takeIf { it.isPresent() && encodedTrack is Omissible.Omitted && identifier is Omissible.Omitted }
+            ?.let {
+                val marker = (it as Omissible.Present).value?.let { endTime -> TrackMarker(endTime, TrackEndMarkerHandler(player)) }
                 player.track?.setMarker(marker)
             }
 
