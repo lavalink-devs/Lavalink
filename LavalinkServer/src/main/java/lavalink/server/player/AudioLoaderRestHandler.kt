@@ -62,32 +62,48 @@ class AudioLoaderRestHandler(
             return ResponseEntity.ok(LoadResult.loadFailed(ex))
         }
 
-        val result = when (item) {
-            null -> LoadResult.NoMatches()
+        val result = try {
+            when (item) {
+                null -> LoadResult.NoMatches()
 
-            is AudioTrack -> {
-                log.info("Loaded track ${item.info.title}")
-                LoadResult.trackLoaded(item.toTrack(audioPlayerManager, pluginInfoModifiers))
-            }
+                is AudioTrack -> {
+                    log.info("Loaded track ${item.info.title}")
+                    LoadResult.trackLoaded(item.toTrack(audioPlayerManager, pluginInfoModifiers))
+                }
 
-            is AudioPlaylist -> {
-                log.info("Loaded playlist ${item.name}")
+                is AudioPlaylist -> {
+                    log.info("Loaded playlist ${item.name}")
 
-                val tracks = item.tracks.map { it.toTrack(audioPlayerManager, pluginInfoModifiers) }
-                if (item.isSearchResult) {
-                    LoadResult.searchResult(tracks)
-                } else {
-                    LoadResult.playlistLoaded(item.toPlaylistInfo(), item.toPluginInfo(pluginInfoModifiers), tracks)
+                    val tracks = item.tracks.map { it.toTrack(audioPlayerManager, pluginInfoModifiers) }
+                    if (item.isSearchResult) {
+                        LoadResult.searchResult(tracks)
+                    } else {
+                        LoadResult.playlistLoaded(item.toPlaylistInfo(), item.toPluginInfo(pluginInfoModifiers), tracks)
+                    }
+                }
+
+                else -> {
+                    log.error("Unknown item type: ${item.javaClass}")
+                    throw ResponseStatusException(
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Identifier returned unknown audio item type: ${item.javaClass.canonicalName}"
+                    )
                 }
             }
-
-            else -> {
-                log.error("Unknown item type: ${item.javaClass}")
-                throw ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Identifier returned unknown audio item type: ${item.javaClass.canonicalName}"
-                )
+        } catch (ex: Exception) {
+            if (ex is ResponseStatusException) {
+                throw ex
             }
+            log.error("Failed to serialize track or playlist for identifier $identifier", ex)
+            return ResponseEntity.ok(
+                LoadResult.loadFailed(
+                    FriendlyException(
+                        ex.message ?: "Failed to serialize track or playlist",
+                        FriendlyException.Severity.FAULT,
+                        ex
+                    )
+                )
+            )
         }
 
         return ResponseEntity.ok(result)
