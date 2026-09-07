@@ -115,6 +115,10 @@ object Launcher {
 
     @JvmStatic
     fun main(args: Array<String>) {
+        if (System.getProperty("java.net.preferIPv6Addresses") == null) {
+            System.setProperty("java.net.preferIPv6Addresses", "system")
+        }
+
         if (args.isNotEmpty() &&
             (args[0].equals("-v", ignoreCase = true) || args[0].equals("--version", ignoreCase = true))
         ) {
