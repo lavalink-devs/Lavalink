@@ -12,6 +12,8 @@ RUN chown -R lavalink:lavalink /opt/Lavalink
 
 USER lavalink
 
+RUN mkdir -p plugins
+
 COPY LavalinkServer/build/libs/Lavalink-musl.jar Lavalink.jar
 
 ENTRYPOINT ["java", "-jar", "Lavalink.jar"]
