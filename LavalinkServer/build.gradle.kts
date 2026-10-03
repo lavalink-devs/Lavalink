@@ -15,11 +15,9 @@ plugins {
 apply(plugin = "org.springframework.boot")
 apply(plugin = "com.gorylenko.gradle-git-properties")
 apply(plugin = "org.ajoberstar.grgit")
-apply(plugin = "com.adarshr.test-logger")
 apply(plugin = "kotlin")
 apply(plugin = "kotlin-spring")
 
-val archivesBaseName = "Lavalink"
 group = "dev.arbjerg.lavalink"
 description = "Play audio to discord voice channels"
 
@@ -123,7 +121,7 @@ tasks {
         useJUnitPlatform()
     }
 
-    val nativesJar = create<Jar>("lavaplayerNativesJar") {
+    val nativesJar = register<Jar>("lavaplayerNativesJar") {
         // Only add musl natives
         from(configurations.runtimeClasspath.get().find { it.name.contains("lavaplayer-natives") }?.let { file ->
             zipTree(file).matching {
@@ -149,7 +147,7 @@ tasks {
             }
 
             // Add custom jar
-            classpath(nativesJar.outputs)
+            classpath(nativesJar.map { it.outputs })
             dependsOn(nativesJar)
         }
     }
@@ -171,7 +169,7 @@ tasks {
 }
 
 mavenPublishing {
-    configure(KotlinJvm(JavadocJar.Dokka("dokkaHtml")))
+    configure(KotlinJvm(JavadocJar.Dokka("dokkaGeneratePublicationHtml")))
     pom {
         name = "Lavalink Server"
         description = "Lavalink Server"
