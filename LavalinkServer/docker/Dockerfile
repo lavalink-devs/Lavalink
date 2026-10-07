@@ -1,4 +1,4 @@
-FROM eclipse-temurin:18-jre-jammy
+FROM eclipse-temurin:17-jre-jammy
 
 # Run as non-root user
 RUN groupadd -g 322 lavalink && \

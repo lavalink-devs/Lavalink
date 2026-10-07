@@ -69,6 +69,26 @@ lavalink:
       connectTimeoutMs: 3000
       connectionRequestTimeoutMs: 3000
       socketTimeoutMs: 3000
+    #koeTunables: # (Advanced) Tunables for Koe. Do not change these unless you know what you're doing.
+      # Selects the policy for negotiating the encryption mode between Lavalink and Discord voice servers.
+      # This may either decrease or increase the CPU usage of your node, depending on your hardware and JVM configuration.
+      #
+      # ChaCha20 mode works with zero allocations, but is roughly 4x to 10x slower than AES mode if hardware acceleration is available.
+      # If AES hardware acceleration is not available, ChaCha20 mode is roughly 2.5x faster than AES mode.
+      #
+      # heuristic: The default policy, which will prefer AES modes over ChaCha20/Salsa20 if AES/NI or similar hardware acceleration is available on your hardware and JVM configuration. This is the best option for most users.
+      # serverOrder: Selects the first mode preferred by the Discord voice server, which may not be optimal.
+      # preferring: Uses the modes explicitly specified in 'ciphers' option in order from highest to lowest preference.
+      # benchmark: Benchmarks all available modes at startup and selects the fastest one. Experimental and may produce suboptimal preference order in some cases.
+      #cipherPreferencePolicy: "heuristic"
+      #ciphers: ["aead_aes256_gcm_rtpsize", "aead_xchacha20_poly1305_rtpsize"]
+      #daveEnabled: true # Enable E2EE encryption. Mandatory, unless you want to be restricted to using only stage channels.
+      #daveLogging: true # Enables logging of the underlying libdave library. Has a negligible effect on performance in real world usage, but it's recommended to leave it on for eventual debugging purposes.
+      #sendSpeakingStop: false # Whether to send speaking=false when no audio is being sent. May cause cut-off of audio when the buffer is empty.
+      #gatewayConnectTimeoutMs: 10000 # The timeout for connecting to the Discord voice gateway.
+      #highPacketPriority: true # Whether to set IP_TOS flag on the UDP sockets to reduce latency.
+      #enableWSSPortOverride: false # Whether to override the endpoint port explicitly sent by Discord from 80 to 443. Likely not needed anymore.
+      #verifyWSSHostname: true # Whether to verify the certificate hostname of WebSocket connections.
 
 metrics:
   prometheus:

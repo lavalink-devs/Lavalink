@@ -72,6 +72,13 @@ dependencies {
     implementation(libs.bundles.udpqueue.natives) {
         exclude(group = "com.sedmelluq", module = "lava-common")
     }
+    runtimeOnly(libs.libdave.ffm) {
+        attributes {
+            // The bytecode is not compatible with project's target (Java 17).
+            // Koe loads the classes via reflection on compatible JVM versions.
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 22)
+        }
+    }
 
     implementation(libs.lavaplayer)
     implementation(libs.lavaplayer.ip.rotator)
