@@ -48,6 +48,7 @@ class ServerConfig {
     var httpConfig: HttpConfig? = null
     var filters: Map<String, Boolean> = mapOf()
     var timeouts: TimeoutsConfig? = null
+    var koeTunables: KoeTunablesConfig = KoeTunablesConfig()
 }
 
 class TimeoutsConfig {

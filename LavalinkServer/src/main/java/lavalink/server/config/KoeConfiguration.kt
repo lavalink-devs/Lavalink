@@ -4,6 +4,9 @@ import com.sedmelluq.lava.common.natives.architecture.DefaultArchitectureTypes
 import com.sedmelluq.lava.common.natives.architecture.DefaultOperatingSystemTypes
 import com.sedmelluq.lava.common.natives.architecture.SystemType
 import moe.kyokobot.koe.KoeOptions
+import moe.kyokobot.koe.codec.DefaultCodecRegistry
+import moe.kyokobot.koe.experimental.KoeOptionsExperimental
+import moe.kyokobot.koe.experimental.crypto.CipherPreferencePolicy
 import moe.kyokobot.koe.poller.udpqueue.QueueManagerPool
 import moe.kyokobot.koe.poller.udpqueue.UdpQueueFramePollerFactory
 import org.slf4j.Logger
@@ -33,9 +36,20 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
     )
 
     @Bean
-    fun koeOptions(): KoeOptions = KoeOptions.builder().apply {
+    fun koeOptions(): KoeOptions = KoeOptionsExperimental.builder().apply {
+        val tunables = serverConfig.koeTunables
+
+        // The experimental builder registers video codecs by default, Lavalink only sends audio
+        setCodecRegistry(DefaultCodecRegistry())
         setDeafened(true)
-        setEnableDAVELogSink(true)
+        setCipherPreferencePolicy(createCipherPreferencePolicy(tunables))
+        setDAVEEnabled(tunables.daveEnabled)
+        setEnableDAVELogSink(tunables.daveLogging)
+        setSendSpeakingStop(tunables.sendSpeakingStop)
+        setGatewayConnectTimeout(tunables.gatewayConnectTimeoutMs)
+        setHighPacketPriority(tunables.highPacketPriority)
+        setEnableWSSPortOverride(tunables.enableWSSPortOverride)
+        setVerifyWSSHostname(tunables.verifyWSSHostname)
 
         val systemType: SystemType? = try {
             SystemType(DefaultArchitectureTypes.detect(), DefaultOperatingSystemTypes.detect())
@@ -77,4 +91,19 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
             )
         }
     }.create()
+
+    private fun createCipherPreferencePolicy(tunables: KoeTunablesConfig): CipherPreferencePolicy {
+        log.info("Using ${tunables.cipherPreferencePolicy} cipher preference policy")
+        return when (tunables.cipherPreferencePolicy) {
+            CipherPreferencePolicyType.HEURISTIC -> CipherPreferencePolicy.heuristic()
+            CipherPreferencePolicyType.SERVER_ORDER -> CipherPreferencePolicy.serverOrder()
+            CipherPreferencePolicyType.PREFERRING -> {
+                if (tunables.ciphers.isEmpty()) {
+                    log.warn("No ciphers specified for the preferring cipher preference policy, falling back to server order")
+                }
+                CipherPreferencePolicy.preferring(tunables.ciphers)
+            }
+            CipherPreferencePolicyType.BENCHMARK -> CipherPreferencePolicy.benchmark()
+        }
+    }
 }
