@@ -65,33 +65,42 @@ class AudioLoaderRestHandler(
             return ResponseEntity.ok(LoadResult.loadFailed(ex))
         }
 
-        val (result, resultType) = when (item) {
-            null -> LoadResult.NoMatches() to "empty"
+        val (result, resultType) = try {
+            when (item) {
+                null -> LoadResult.NoMatches() to "empty"
 
-            is AudioTrack -> {
-                log.info("Loaded track ${item.info.title}")
-                LoadResult.trackLoaded(item.toTrack(audioPlayerManager, pluginInfoModifiers)) to "track"
-            }
-
-            is AudioPlaylist -> {
-                log.info("Loaded playlist ${item.name}")
-
-                val tracks = item.tracks.map { it.toTrack(audioPlayerManager, pluginInfoModifiers) }
-                if (item.isSearchResult) {
-                    LoadResult.searchResult(tracks) to "search"
-                } else {
-                    LoadResult.playlistLoaded(item.toPlaylistInfo(), item.toPluginInfo(pluginInfoModifiers), tracks) to "playlist"
+                is AudioTrack -> {
+                    log.info("Loaded track ${item.info.title}")
+                    LoadResult.trackLoaded(item.toTrack(audioPlayerManager, pluginInfoModifiers)) to "track"
                 }
-            }
 
-            else -> {
-                log.error("Unknown item type: ${item.javaClass}")
-                searchMetrics?.recordLoadResult("", "unknown")
-                throw ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
+                is AudioPlaylist -> {
+                    log.info("Loaded playlist ${item.name}")
+
+                    val tracks = item.tracks.map { it.toTrack(audioPlayerManager, pluginInfoModifiers) }
+                    if (item.isSearchResult) {
+                        LoadResult.searchResult(tracks) to "search"
+                    } else {
+                        LoadResult.playlistLoaded(item.toPlaylistInfo(), item.toPluginInfo(pluginInfoModifiers), tracks) to "playlist"
+                    }
+                }
+
+                else -> throw IllegalStateException(
                     "Identifier returned unknown audio item type: ${item.javaClass.canonicalName}"
                 )
             }
+        } catch (ex: Exception) {
+            log.error("Failed to process loaded item for identifier $identifier", ex)
+            searchMetrics?.recordLoadResult(extractSourceType(item), "error")
+            return ResponseEntity.ok(
+                LoadResult.loadFailed(
+                    ex as? FriendlyException ?: FriendlyException(
+                        ex.message,
+                        FriendlyException.Severity.FAULT,
+                        ex
+                    )
+                )
+            )
         }
 
         searchMetrics?.recordLoadResult(extractSourceType(item), resultType)
