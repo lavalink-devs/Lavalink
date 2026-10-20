@@ -1,5 +1,6 @@
 FROM gcr.io/distroless/java17-debian12:nonroot
 
+WORKDIR /opt/Lavalink/plugins
 WORKDIR /opt/Lavalink
 
 COPY LavalinkServer/build/libs/Lavalink.jar Lavalink.jar
