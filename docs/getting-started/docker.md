@@ -13,7 +13,7 @@ Install [Docker](https://docs.docker.com/engine/install/) & [Docker Compose](htt
 |--------------|----------------------------------------------|--------------|-------|-------|-----------------------------------------------|
 | `Ubuntu`     | Default variant, based on Ubuntu             | 18           | 322   | 322   | `ghcr.io/lavalink-devs/lavalink:4`            |
 | `Alpine`     | Smaller image size, based on Alpine          | 17           | 322   | 322   | `ghcr.io/lavalink-devs/lavalink:4-alpine`     |
-| `Distroless` | Even smaller image size, based on Distroless | 17           | 65534 | 65534 | `ghcr.io/lavalink-devs/lavalink:4-distroless` |
+| `Distroless` | Even smaller image size, based on Distroless | 17           | 65532 | 65532 | `ghcr.io/lavalink-devs/lavalink:4-distroless` |
 
 Create a `compose.yml` with the following content:
 
