@@ -32,7 +32,7 @@ tasks.withType<KotlinCompile> {
 }
 
 mavenPublishing {
-    configure(KotlinJvm(JavadocJar.Dokka("dokkaJavadoc")))
+    configure(KotlinJvm(JavadocJar.Dokka("dokkaGeneratePublicationJavadoc")))
     pom {
         name = "Lavalink Plugin API"
         description = "API for Lavalink plugin development"

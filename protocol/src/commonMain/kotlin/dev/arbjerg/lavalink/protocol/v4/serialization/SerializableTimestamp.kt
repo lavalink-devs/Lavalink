@@ -1,6 +1,6 @@
 package dev.arbjerg.lavalink.protocol.v4.serialization
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
