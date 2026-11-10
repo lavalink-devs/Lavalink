@@ -47,7 +47,8 @@ class LavalinkPlayer(
     override val guildId: Long,
     private val serverConfig: ServerConfig,
     audioPlayerManager: AudioPlayerManager,
-    pluginInfoModifiers: List<AudioPluginInfoModifier>
+    pluginInfoModifiers: List<AudioPluginInfoModifier>,
+    private val audioFrameDispatcher: AudioFrameDispatcher
 ) : AudioEventAdapter(), IPlayer {
     private val buffer = ByteBuffer.allocate(StandardAudioDataFormats.DISCORD_OPUS.maximumChunkSize())
     private val mutableFrame = MutableAudioFrame().apply { setBuffer(buffer) }
@@ -139,7 +140,18 @@ class LavalinkPlayer(
 
         override fun provideFrame(buf: ByteBuf): Boolean {
             audioLossCounter.onSuccess()
-            buf.writeBytes(buffer.flip())
+            buffer.flip()
+
+            if (audioFrameDispatcher.hasListeners) {
+                audioFrameDispatcher.frame(
+                    guildId,
+                    socketContext.sessionId,
+                    audioPlayer.playingTrack?.position ?: 0L,
+                    buffer
+                )
+            }
+
+            buf.writeBytes(buffer)
             return true
         }
     }

@@ -23,12 +23,14 @@
 package lavalink.server.io
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
+import dev.arbjerg.lavalink.api.AudioFrameListener
 import dev.arbjerg.lavalink.api.AudioPluginInfoModifier
 import dev.arbjerg.lavalink.api.ISocketServer
 import dev.arbjerg.lavalink.api.PluginEventHandler
 import dev.arbjerg.lavalink.protocol.v4.Message
 import dev.arbjerg.lavalink.protocol.v4.PlayerState
 import lavalink.server.config.ServerConfig
+import lavalink.server.player.AudioFrameDispatcher
 import lavalink.server.player.LavalinkPlayer
 import moe.kyokobot.koe.Koe
 import moe.kyokobot.koe.KoeOptions
@@ -46,7 +48,8 @@ final class SocketServer(
     val audioPlayerManager: AudioPlayerManager,
     koeOptions: KoeOptions,
     private val eventHandlers: List<PluginEventHandler>,
-    private val pluginInfoModifiers: List<AudioPluginInfoModifier>
+    private val pluginInfoModifiers: List<AudioPluginInfoModifier>,
+    audioFrameListeners: List<AudioFrameListener>
 ) : TextWebSocketHandler(), ISocketServer {
 
     // sessionID <-> Session
@@ -54,6 +57,7 @@ final class SocketServer(
     override val resumableSessions = mutableMapOf<String, SocketContext>()
     private val koe = Koe.koe(koeOptions)
     private val statsCollector = StatsCollector(this)
+    private val audioFrameDispatcher = AudioFrameDispatcher(audioFrameListeners)
     private val charPool = ('a'..'z') + ('0'..'9')
 
     init {
@@ -126,7 +130,8 @@ final class SocketServer(
             clientName,
             koe.newClient(userId),
             eventHandlers,
-            pluginInfoModifiers
+            pluginInfoModifiers,
+            audioFrameDispatcher
         )
         sessions[sessionId] = socketContext
         socketContext.sendMessage(Message.Serializer, Message.ReadyEvent(false, sessionId))
