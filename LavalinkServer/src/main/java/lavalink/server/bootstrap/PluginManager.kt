@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -82,9 +83,15 @@ class PluginManager(val config: PluginsConfig) {
             }
 
             if (!hasCurrentVersion) {
-                val url = declaration.url
                 val file = File(directory, declaration.canonicalJarName)
-                downloadJar(file, url)
+                try {
+                    downloadJar(file, declaration.url)
+                } catch (e: FileNotFoundException) {
+                    if (!declaration.version.endsWith("-SNAPSHOT")) throw e
+                    val url = resolveSnapshotUrl(declaration.url, declaration.name, declaration.version)
+                    if (url == declaration.url) throw e
+                    downloadJar(file, url)
+                }
             }
 
             checkPluginForUpdates(declaration)
@@ -132,8 +139,10 @@ class PluginManager(val config: PluginsConfig) {
             log.info("Downloading $url")
         }
 
-        Channels.newChannel(URL(url).openStream()).use {
-            FileOutputStream(output).channel.transferFrom(it, 0, Long.MAX_VALUE)
+        Channels.newChannel(URL(url).openStream()).use { input ->
+            FileOutputStream(output).use {
+                it.channel.transferFrom(input, 0, Long.MAX_VALUE)
+            }
         }
 
         if (output.length() == 0L) {
