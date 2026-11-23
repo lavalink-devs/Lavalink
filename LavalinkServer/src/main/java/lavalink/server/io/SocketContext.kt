@@ -34,6 +34,7 @@ import io.undertow.websockets.core.WebSockets
 import io.undertow.websockets.jsr.UndertowSession
 import kotlinx.serialization.SerializationStrategy
 import lavalink.server.config.ServerConfig
+import lavalink.server.player.AudioFrameDispatcher
 import lavalink.server.player.LavalinkPlayer
 import moe.kyokobot.koe.KoeClient
 import moe.kyokobot.koe.KoeEventAdapter
@@ -58,6 +59,7 @@ class SocketContext(
     val koe: KoeClient,
     eventHandlers: Collection<PluginEventHandler>,
     private val pluginInfoModifiers: List<AudioPluginInfoModifier>,
+    private val audioFrameDispatcher: AudioFrameDispatcher,
 ) : ISocketContext {
 
     companion object {
@@ -107,7 +109,14 @@ class SocketContext(
     }
 
     override fun getPlayer(guildId: Long) = players.computeIfAbsent(guildId) {
-        val player = LavalinkPlayer(this, guildId, serverConfig, audioPlayerManager, pluginInfoModifiers)
+        val player = LavalinkPlayer(
+            this,
+            guildId,
+            serverConfig,
+            audioPlayerManager,
+            pluginInfoModifiers,
+            audioFrameDispatcher
+        )
         eventEmitter.onNewPlayer(player)
         player
     }

@@ -70,6 +70,25 @@ class TestAudioPluginInfoModifier implements AudioPluginInfoModifier {
 }
 ```
 
+To observe the encoded audio frames Lavalink sends to Discord, you can implement the `AudioFrameListener` interface:
+
+```java
+import java.nio.ByteBuffer;
+import org.springframework.stereotype.Service;
+import dev.arbjerg.lavalink.api.AudioFrameListener;
+
+@Service
+class TestAudioFrameListener implements AudioFrameListener {
+	@Override
+	public void onAudioFrame(long guildId, String sessionId, long positionMs, ByteBuffer frame) {
+		// Called on the audio thread: do not block or perform I/O.
+		// frame is read-only and only valid during this call; copy it if you need it afterwards.
+	}
+}
+```
+
+Lavalink passes the exact Opus payload it writes to Discord, without changing or consuming it. A listener that throws cannot stop the audio path; failures are logged at most once every 30 seconds.
+
 # Distributing your plugin
 
 The official plugin repository is hosted on https://maven.lavalink.dev. If you want to publish your plugin there, please reach out to us via [Discord](https://discord.gg/ZW4s47Ppw4) for credentials.
