@@ -37,19 +37,14 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
 
     @Bean
     fun koeOptions(): KoeOptions = KoeOptionsExperimental.builder().apply {
-        val tunables = serverConfig.koeTunables
+        val koe = serverConfig.koe
 
         // The experimental builder registers video codecs by default, Lavalink only sends audio
         setCodecRegistry(DefaultCodecRegistry())
         setDeafened(true)
-        setCipherPreferencePolicy(createCipherPreferencePolicy(tunables))
-        setDAVEEnabled(tunables.daveEnabled)
-        setEnableDAVELogSink(tunables.daveLogging)
-        setSendSpeakingStop(tunables.sendSpeakingStop)
-        setGatewayConnectTimeout(tunables.gatewayConnectTimeoutMs)
-        setHighPacketPriority(tunables.highPacketPriority)
-        setEnableWSSPortOverride(tunables.enableWSSPortOverride)
-        setVerifyWSSHostname(tunables.verifyWSSHostname)
+        setCipherPreferencePolicy(createCipherPreferencePolicy(koe))
+        setEnableDAVELogSink(koe.daveLogging)
+        setGatewayConnectTimeout(koe.gatewayConnectTimeoutMs)
 
         val systemType: SystemType? = try {
             SystemType(DefaultArchitectureTypes.detect(), DefaultOperatingSystemTypes.detect())
@@ -92,16 +87,16 @@ class KoeConfiguration(val serverConfig: ServerConfig) {
         }
     }.create()
 
-    private fun createCipherPreferencePolicy(tunables: KoeTunablesConfig): CipherPreferencePolicy {
-        log.info("Using ${tunables.cipherPreferencePolicy} cipher preference policy")
-        return when (tunables.cipherPreferencePolicy) {
+    private fun createCipherPreferencePolicy(koe: KoeConfig): CipherPreferencePolicy {
+        log.info("Using ${koe.cipherPreferencePolicy} cipher preference policy")
+        return when (koe.cipherPreferencePolicy) {
             CipherPreferencePolicyType.HEURISTIC -> CipherPreferencePolicy.heuristic()
             CipherPreferencePolicyType.SERVER_ORDER -> CipherPreferencePolicy.serverOrder()
             CipherPreferencePolicyType.PREFERRING -> {
-                if (tunables.ciphers.isEmpty()) {
+                if (koe.ciphers.isEmpty()) {
                     log.warn("No ciphers specified for the preferring cipher preference policy, falling back to server order")
                 }
-                CipherPreferencePolicy.preferring(tunables.ciphers)
+                CipherPreferencePolicy.preferring(koe.ciphers)
             }
             CipherPreferencePolicyType.BENCHMARK -> CipherPreferencePolicy.benchmark()
         }
