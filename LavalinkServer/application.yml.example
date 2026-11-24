@@ -69,6 +69,21 @@ lavalink:
       connectTimeoutMs: 3000
       connectionRequestTimeoutMs: 3000
       socketTimeoutMs: 3000
+    #koe: # (Advanced) Tunables for Koe. Do not change these unless you know what you're doing.
+      # Selects the policy for negotiating the encryption mode between Lavalink and Discord voice servers.
+      # This may either decrease or increase the CPU usage of your node, depending on your hardware and JVM configuration.
+      #
+      # ChaCha20 mode works with zero allocations, but is roughly 4x to 10x slower than AES mode if hardware acceleration is available.
+      # If AES hardware acceleration is not available, ChaCha20 mode is roughly 2.5x faster than AES mode.
+      #
+      # heuristic: The default policy, which will prefer AES modes over ChaCha20/Salsa20 if AES/NI or similar hardware acceleration is available on your hardware and JVM configuration. This is the best option for most users.
+      # serverOrder: Selects the first mode preferred by the Discord voice server, which may not be optimal.
+      # preferring: Uses the modes explicitly specified in 'ciphers' option in order from highest to lowest preference.
+      # benchmark: Benchmarks all available modes at startup and selects the fastest one. Experimental and may produce suboptimal preference order in some cases.
+      #cipherPreferencePolicy: "heuristic"
+      #ciphers: ["aead_aes256_gcm_rtpsize", "aead_xchacha20_poly1305_rtpsize"]
+      #daveLogging: true # Enables logging of the underlying libdave library. Has a negligible effect on performance in real world usage, but it's recommended to leave it on for eventual debugging purposes.
+      #gatewayConnectTimeoutMs: 10000 # The timeout for connecting to the Discord voice gateway.
 
 metrics:
   prometheus:
