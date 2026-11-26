@@ -4,7 +4,6 @@ import com.sedmelluq.discord.lavaplayer.container.MediaContainerProbe
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerRegistry
 import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager
@@ -21,6 +20,7 @@ import com.sedmelluq.lava.extensions.youtuberotator.planner.*
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv4Block
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block
 import dev.arbjerg.lavalink.api.AudioPlayerManagerConfiguration
+import lavalink.server.player.SharedLiveStreamPlayerManager
 import org.apache.http.HttpHost
 import org.apache.http.auth.AuthScope
 import org.apache.http.auth.UsernamePasswordCredentials
@@ -55,7 +55,7 @@ class AudioPlayerConfiguration {
             HttpClientTools.setDefaultRequestTimeout(it.connectTimeoutMs, it.connectionRequestTimeoutMs, it.socketTimeoutMs)
         }
 
-        val audioPlayerManager = DefaultAudioPlayerManager()
+        val audioPlayerManager = SharedLiveStreamPlayerManager()
 
         if (serverConfig.isGcWarnings) {
             audioPlayerManager.enableGcMonitoring()
