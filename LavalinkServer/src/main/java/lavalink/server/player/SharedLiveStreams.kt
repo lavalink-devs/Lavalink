@@ -159,7 +159,7 @@ internal class SharedLiveStreams(private val playback: Executor) : AutoCloseable
             null
         }
 
-        private fun publish() = synchronized(lock) {
+        private fun publish(): Unit = synchronized(lock) {
             if (ended) return
             try {
                 val input = upstream
